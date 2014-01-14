@@ -131,13 +131,15 @@
         [self.messageTextbox becomeFirstResponder];
     }
     
+    [self.session.unreadMessageArray removeAllObjects];
+    
     [super viewWillAppear:animated];
 }
 
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    [self.session.unreadMessageArray removeAllObjects];
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated

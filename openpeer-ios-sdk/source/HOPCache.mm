@@ -33,6 +33,7 @@
 #import <openpeer/core/ICache.h>
 #import "HOPCache_Internal.h"
 #import "OpenPeerCacheDelegate.h"
+#import "HOPModelManager.h"
 
 using namespace openpeer;
 using namespace openpeer::core;
@@ -83,13 +84,22 @@ using namespace openpeer::core;
 - (void) store:(NSString*) stringToStore expireDate:(NSDate*) expireDate cookieNamePath:(NSString*) cookieNamePath
 {
     if ([stringToStore length] > 0 && [cookieNamePath length] > 0)
-        cachePtr->store([stringToStore UTF8String], boost::posix_time::from_time_t([expireDate timeIntervalSince1970]), [cookieNamePath UTF8String]);
+    {
+        if (expireDate)
+            cachePtr->store([cookieNamePath UTF8String], boost::posix_time::from_time_t([expireDate timeIntervalSince1970]), [stringToStore UTF8String]);
+        else
+            cachePtr->store([cookieNamePath UTF8String], boost::posix_time::ptime(), [stringToStore UTF8String]);
+    }
 }
 
-- (void) clearForCookieNamePath:(NSString*) cookieNamePath
+- (void) removeCookieWithNamePath:(NSString*) cookieNamePath
 {
     if ([cookieNamePath length] > 0)
         cachePtr->clear([cookieNamePath UTF8String]);
 }
 
+- (void) removeExpiredCookies
+{
+    [[HOPModelManager sharedModelManager] removeExpiredCookies];
+}
 @end

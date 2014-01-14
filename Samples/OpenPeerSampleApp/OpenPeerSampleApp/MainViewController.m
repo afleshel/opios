@@ -268,7 +268,7 @@
         {
             sessionViewContorller = [[SessionViewController_iPhone alloc] initWithSession:session];
             [self.sessionViewControllersDictionary setObject:sessionViewContorller forKey:sessionId];
-            [sessionViewContorller.chatViewController refreshViewWithData];
+            //[sessionViewContorller.chatViewController refreshViewWithData];
             
             [self showNotification:[NSString stringWithFormat:@"New message from %@",title]];
         }
@@ -276,6 +276,7 @@
             
         case EXISITNG_SESSION_SWITCH:
             sessionViewContorller = [self.sessionViewControllersDictionary objectForKey:sessionId];
+            sessionViewContorller.hidesBottomBarWhenPushed = YES;
             [sessionViewContorller.chatViewController refreshViewWithData];
             [navigationController popToRootViewControllerAnimated:NO];
             [navigationController pushViewController:sessionViewContorller animated:YES];
@@ -284,6 +285,8 @@
             
         case EXISTING_SESSION_REFRESH_NOT_VISIBLE_CHAT:
             [self showNotification:[NSString stringWithFormat:@"New message from %@",title]];
+            break;
+            
         case EXISTING_SESSION_REFRESH_CHAT:
             sessionViewContorller = [self.sessionViewControllersDictionary objectForKey:sessionId];
             [sessionViewContorller.chatViewController refreshViewWithData];

@@ -36,6 +36,8 @@
 #import "HOPPublicPeerFile.h"
 #import "HOPAvatar.h"
 #import "HOPHomeUser.h"
+#import "HOPAPNSData.h"
+#import "HOPCacheData.h"
 #import "OpenPeerConstants.h"
 #import <CoreData/CoreData.h>
 
@@ -48,6 +50,7 @@
 @implementation HOPModelManager
 
 @synthesize managedObjectContext = _managedObjectContext;
+@synthesize backgroundManagedObjectContext = _backgroundManagedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
@@ -93,6 +96,24 @@
     return _managedObjectContext;
 }
 
+- (NSManagedObjectContext *)backgroundManagedObjectContext
+{
+    if (_backgroundManagedObjectContext != nil)
+    {
+        return _backgroundManagedObjectContext;
+    }
+    
+    NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
+    
+    if (coordinator != nil)
+    {
+        _backgroundManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+        [_backgroundManagedObjectContext setPersistentStoreCoordinator:coordinator];
+    }
+    
+    return _backgroundManagedObjectContext;
+}
+
 // Returns the managed object model for the application.
 // If the model doesn't already exist, it is created from the application's model.
 - (NSManagedObjectModel *)managedObjectModel
@@ -103,7 +124,12 @@
     }
     NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"OpenPeerDataModel" ofType:@"bundle"];
     NSURL *modelURL = [[NSBundle bundleWithPath:bundlePath] URLForResource:@"OpenPeerModel" withExtension:@"momd"];
-    _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+    NSManagedObjectModel* modelData = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+    
+    NSURL *modelURL2 = [[NSBundle bundleWithPath:bundlePath] URLForResource:@"OpenPeerCacheModel" withExtension:@"momd"];
+    NSManagedObjectModel* modelCache = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL2];
+    
+    _managedObjectModel = [NSManagedObjectModel modelByMergingModels:@[modelData,modelCache]];
     
     return _managedObjectModel;
 }
@@ -445,4 +471,169 @@
     
     return ret;
 }
+
+- (NSArray*) getAPNSDataForPeerURI:(NSString*) peerURI
+{
+    NSMutableArray* ret = nil;
+     NSArray* apnsData = [self getResultsForEntity:@"HOPAPNSData" withPredicateString:[NSString stringWithFormat:@"(publicPeer.peerURI MATCHES '%@')",peerURI] orderDescriptors:nil];
+    
+    if ([apnsData count] > 0)
+    {
+        ret = [[NSMutableArray alloc] init];
+        for (HOPAPNSData* data in apnsData)
+        {
+            [ret addObject:data.deviceToken];
+        }
+    }
+    return ret;
+}
+
+- (void) setAPNSData:(NSString*) deviceToken PeerURI:(NSString*) peerURI
+{
+    if ([[self getAPNSDataForPeerURI:peerURI] count] == 0)
+    {
+        HOPPublicPeerFile* publicPeerFile = [self getPublicPeerFileForPeerURI:peerURI];
+        if (publicPeerFile)
+        {
+            HOPAPNSData* apnsData = (HOPAPNSData*)[self createObjectForEntity:@"HOPAPNSData"];
+            apnsData.deviceToken = deviceToken;
+            apnsData.publicPeer = publicPeerFile;
+            [self saveContext];
+        }
+    }
+}
+
+- (NSManagedObject*) createObjectInBackgroundForEntity:(NSString*) entityName
+{
+    NSManagedObject* ret = [NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:self.backgroundManagedObjectContext];
+    return ret;
+}
+
+- (void)saveBackgroundContext
+{
+    NSError *error = nil;
+    if (self.backgroundManagedObjectContext != nil)
+    {
+        if ([self.backgroundManagedObjectContext hasChanges] && ![self.backgroundManagedObjectContext save:&error])
+        {
+            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            abort();
+        }
+    }
+}
+
+- (NSArray*) getResultsInBackgroundForEntity:(NSString*) entityName withPredicateString:(NSString*) predicateString orderDescriptors:(NSArray*) orderDescriptors
+{
+    __block NSArray* ret = nil;
+    
+    if ([entityName length] > 0)
+    {
+        //[self.backgroundManagedObjectContext performBlockAndWait:
+        //^{
+                NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+                NSEntityDescription *entity = [NSEntityDescription entityForName:entityName inManagedObjectContext:self.backgroundManagedObjectContext];
+                [fetchRequest setEntity:entity];
+                
+                if ([predicateString length] > 0)
+                {
+                    NSPredicate *predicate = [NSPredicate predicateWithFormat:predicateString];
+                    [fetchRequest setPredicate:predicate];
+                }
+                
+                if ([orderDescriptors count] > 0)
+                    [fetchRequest setSortDescriptors:orderDescriptors];
+                
+                NSError *error;
+                NSArray *fetchedObjects  = [self.backgroundManagedObjectContext executeFetchRequest:fetchRequest error:&error];
+                
+                if (!error)
+                {
+                    if([fetchedObjects count] > 0)
+                    {
+                        ret = fetchedObjects;
+                    }
+                }
+        //}];
+    }
+    return ret;
+}
+
+- (HOPCacheData*) getCacheDataForPath:(NSString*) path withExpireCheck:(BOOL) expireCheck
+{
+    HOPCacheData* ret = nil;
+    
+    NSArray* results = nil;
+    
+    if (expireCheck)
+        results = [self getResultsInBackgroundForEntity:@"HOPCacheData" withPredicateString:[NSString stringWithFormat:@"(path MATCHES '%@') AND ( (expire == nil) || (expire >= %f))", path, [[NSDate date] timeIntervalSince1970]] orderDescriptors:nil];
+    else
+        results = [self getResultsInBackgroundForEntity:@"HOPCacheData" withPredicateString:[NSString stringWithFormat:@"(path MATCHES '%@')", path] orderDescriptors:nil];
+    
+    ret = [results count] > 0 ? ((HOPCacheData*)results[0]) : nil;
+    
+    return ret;
+}
+
+- (void) setCookie:(NSString*) data withPath:(NSString*) path expires:(NSDate*) expires
+{
+    if ([path length] > 0)
+    {
+        [self.backgroundManagedObjectContext performBlockAndWait:
+         ^{
+            HOPCacheData* cacheData = [self getCacheDataForPath:path withExpireCheck:NO];
+
+            if (!cacheData)
+                cacheData = (HOPCacheData*)[self createObjectInBackgroundForEntity:@"HOPCacheData"];
+            
+            cacheData.data = data;
+            cacheData.path = path;
+            cacheData.expire = [NSNumber numberWithDouble:[expires timeIntervalSince1970]];
+             
+             [self saveBackgroundContext];
+         }];
+    }
+}
+
+- (NSString*) getCookieWithPath:(NSString*) path
+{
+    __block NSString* ret = nil;
+    
+    [self.backgroundManagedObjectContext performBlockAndWait:
+     ^{
+         HOPCacheData* cacheData = [self getCacheDataForPath:path withExpireCheck:YES];
+         ret = cacheData.data;
+
+     }];
+    return ret;
+}
+
+- (void) removeExpiredCookies
+{
+    [self.backgroundManagedObjectContext performBlock:
+     ^{
+        NSArray* objectsToDelete = [self getResultsInBackgroundForEntity:@"HOPCacheData" withPredicateString:[NSString stringWithFormat:@" (expire < %f)", [[NSDate date] timeIntervalSince1970]] orderDescriptors:nil];
+        
+        for (NSManagedObject* object in objectsToDelete)
+            [self.backgroundManagedObjectContext deleteObject:object];
+         
+         [self saveBackgroundContext];
+     }];
+}
+
+- (void) removeCookieForPath:(NSString*) path
+{
+    if ([path length] > 0)
+    {
+        [self.backgroundManagedObjectContext performBlockAndWait:
+         ^{
+            HOPCacheData* cacheData = [self getCacheDataForPath:path withExpireCheck:NO];
+            if (cacheData)
+                [self.backgroundManagedObjectContext deleteObject:cacheData];
+            
+            [self saveBackgroundContext];
+        }];
+    }
+}
 @end
+
+

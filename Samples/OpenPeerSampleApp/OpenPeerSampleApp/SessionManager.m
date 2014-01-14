@@ -119,6 +119,17 @@
         {
             NSArray* participants = [NSArray arrayWithObject:[contact getCoreContact]];
             [conversationThread addContacts:participants];
+#ifdef APNS_ENABLED
+            for (HOPContact* coreContact in participants)
+            {
+                NSArray* apnsData = [[HOPModelManager sharedModelManager]getAPNSDataForPeerURI:[coreContact getPeerURI]];
+                if ([apnsData count] == 0)
+                {
+                    HOPMessage* apnsMessage = [[MessageManager sharedMessageManager] createSystemMessageWithType:SystemMessage_APNS_Request andText:[[OpenPeer sharedOpenPeer]deviceToken] andRecipient:contact];
+                    [conversationThread sendMessage:apnsMessage];
+                }
+            }
+#endif
         }
         
         if (ret)
@@ -126,6 +137,8 @@
             //Store session object in dictionary
             [self.sessionsDictionary setObject:ret forKey:[conversationThread getThreadId]];
         }
+        
+        
     }
     
     return ret;
@@ -290,6 +303,7 @@
     if (!inSession.currentCall)
     {
         NSLog(@"Make call for sesison - making call");
+        [[MessageManager sharedMessageManager]sendSystemMessageToCheckAvailability:inSession];
         //Currently we are not supporting group conferences, so only one participant is possible
         HOPContact* contact = [[[inSession participantsArray] objectAtIndex:0] getCoreContact];
         
@@ -510,7 +524,8 @@
         //If call is droped because user is a busy at the moment, show notification to caller.
         if ([session.currentCall getClosedReason] == HOPCallClosedReasonBusy)
         {
-            NSString* contactName = [[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser] getFullName];
+            HOPRolodexContact* contact = [session.participantsArray objectAtIndex:0];
+            NSString* contactName = contact.name;
             [[[OpenPeer sharedOpenPeer] mainViewController] showNotification:[NSString stringWithFormat:@"%@ is busy.",contactName]];
          }
     }
@@ -561,7 +576,7 @@
     return self.sessionWithActiveCall != nil;
 }
 
-- (void) makeCallForContact:(HOPRolodexContact*) contact includeVideo:(BOOL) includeVideo
+/*- (void) makeCallForContact:(HOPRolodexContact*) contact includeVideo:(BOOL) includeVideo
 {
     Session* session = [self createSessionForContact:contact];
     
@@ -579,7 +594,7 @@
         }
         
     }
-}
+}*/
 
 
 - (void) recreateExistingSessions

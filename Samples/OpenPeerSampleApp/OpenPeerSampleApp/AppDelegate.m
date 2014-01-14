@@ -33,6 +33,11 @@
 #import "OpenPeer.h"
 #import "MainViewController.h"
 #import "LoginManager.h"
+#import "Utility.h"
+
+#ifdef APNS_ENABLED
+#import "APNSManager.h"
+#endif
 
 @implementation AppDelegate
 
@@ -53,6 +58,15 @@
     [[OpenPeer sharedOpenPeer] setMainViewController:mainViewController];
     [[OpenPeer sharedOpenPeer] setup];
     
+#ifdef APNS_ENABLED
+    [[APNSManager sharedAPNSManager] prepareUrbanAirShip];
+    NSDictionary *apnsInfo = [launchOptions valueForKey:@"UIApplicationLaunchOptionsRemoteNotificationKey"];
+    
+    if ([apnsInfo count] > 0)
+    {
+        [[APNSManager sharedAPNSManager] handleAPNS:apnsInfo];
+    }
+#endif
     return YES;
 }
 
@@ -91,6 +105,36 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
+#ifdef APNS_ENABLED
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+    NSString* hexString = [Utility hexadecimalStringForData:deviceToken];
+    
+    NSLog(@"deviceToken result:%@",hexString);
 
+    [[APNSManager sharedAPNSManager] registerDeviceToken:deviceToken];
+    [[APNSManager sharedAPNSManager] setDeviceToken:hexString];
+    [[OpenPeer sharedOpenPeer] setDeviceToken:hexString];
+}
 
+- (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
+    NSLog(@"Error in registration. Error: %@", err.description);
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+{
+    NSLog(@"Received push notification with userInfo:%@", userInfo);
+    NSDictionary *apnsInfo = [userInfo valueForKey:@"UIApplicationLaunchOptionsRemoteNotificationKey"];
+    
+    if ([apnsInfo count] > 0)
+    {
+        [[APNSManager sharedAPNSManager] handleAPNS:apnsInfo];
+    }
+}
+- (void)handleNotification:(NSDictionary *)notification applicationState:(UIApplicationState)state
+{
+    NSLog(@"Received push notification with notification:%@", notification);
+}
+
+#endif
 @end

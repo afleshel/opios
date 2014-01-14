@@ -111,4 +111,4 @@ extern NSString * const moduleServicesTransport;
 extern NSString * const moduleZsLib;
 extern NSString * const moduleJavaScript;
 
-
+extern NSString* const CacheDatabaseName;

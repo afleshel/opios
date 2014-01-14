@@ -123,6 +123,11 @@
     [inSession.conversationThread sendMessage:hopMessage];
 }
 
+- (void) sendSystemMessageToCheckAvailability:(Session*) inSession
+{
+    HOPMessage* hopMessage = [self createSystemMessageWithType:SystemMessage_CheckAvailability andText:systemMessageRequest andRecipient:[[inSession participantsArray] objectAtIndex:0]];
+    [inSession.conversationThread sendMessage:hopMessage];
+}
 - (void) parseSystemMessage:(HOPMessage*) inMessage forSession:(Session*) inSession
 {
     if ([inMessage.type isEqualToString:messageTypeSystem])
@@ -158,7 +163,25 @@
                     [[SessionManager sharedSessionManager] redialCallForSession:inSession];
                 }
                 break;
+#ifdef APNS_ENABLED
+                case SystemMessage_APNS_Request:
+                {
+                    if ([messageText length] > 0 && [[inMessage.contact getPeerURI] length] > 0)
+                        [[HOPModelManager sharedModelManager] setAPNSData:messageText PeerURI: [inMessage.contact getPeerURI]];
                     
+                    HOPMessage* message = [self createSystemMessageWithType:SystemMessage_APNS_Response andText:[[OpenPeer sharedOpenPeer] deviceToken] andRecipient:[[inSession participantsArray] objectAtIndex:0]];
+                    if (message)
+                        [inSession.conversationThread sendMessage:message];
+                }
+                break;
+                    
+                case SystemMessage_APNS_Response:
+                {
+                    if ([messageText length] > 0 && [[inMessage.contact getPeerURI] length] > 0)
+                        [[HOPModelManager sharedModelManager] setAPNSData:messageText PeerURI: [inMessage.contact getPeerURI]];
+                }
+                break;
+#endif
                 default:
                     break;
             }
@@ -220,5 +243,19 @@
     {
         [self parseSystemMessage:message forSession:session];
     }
+}
+
+- (SystemMessageTypes) getTypeForSystemMessage:(HOPMessage*) message
+{
+    SystemMessageTypes ret = SystemMessage_None;
+    if ([message.type isEqualToString:messageTypeSystem])
+    {
+        RXMLElement *eventElement = [RXMLElement elementFromXMLString:message.text encoding:NSUTF8StringEncoding];
+        if ([eventElement.tag isEqualToString:TagEvent])
+        {
+            ret = (SystemMessageTypes) [[eventElement child:TagId].text intValue];
+        }
+    }
+    return ret;
 }
 @end

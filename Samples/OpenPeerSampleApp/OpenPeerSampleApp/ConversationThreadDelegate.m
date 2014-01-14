@@ -33,10 +33,18 @@
 #import "SessionManager.h"
 #import "ContactsManager.h"
 #import "MessageManager.h"
+#import "AppConsts.h"
 
 #import <OpenpeerSDK/HOPConversationThread.h>
 #import <OpenpeerSDK/HOPContact.h>
 #import <OpenpeerSDK/HOPRolodexContact.h>
+#import <OpenpeerSDK/HOPMessage.h>
+#import <OpenpeerSDK/HOPModelManager.h>
+
+#ifdef APNS_ENABLED
+#import "APNSManager.h"
+#import <OpenpeerSDK/HOPModelManager.h>
+#endif
 
 @implementation ConversationThreadDelegate
 
@@ -85,11 +93,41 @@
 - (void) onConversationThreadMessageDeliveryStateChanged:(HOPConversationThread*) conversationThread messageID:(NSString*) messageID messageDeliveryStates:(HOPConversationThreadMessageDeliveryStates) messageDeliveryStates
 {
     NSLog(@"onConversationThreadMessageDeliveryStateChanged: %d",messageDeliveryStates);
-    dispatch_async(dispatch_get_main_queue(), ^{
-    });
 }
 - (void) onConversationThreadPushMessage:(HOPConversationThread*) conversationThread messageID:(NSString*) messageID contact:(HOPContact*) contact
 {
+#ifdef APNS_ENABLED
+    //if (messageDeliveryStates == HOPConversationThreadMessageDeliveryStateUserNotAvailable)
+    {
+        NSArray* contacts = [conversationThread getContacts];
+        if ([contacts count] > 0)
+        {
+            BOOL missedCall = NO;
+            HOPMessage* message = [conversationThread getMessageForID:messageID];
+            HOPContact* coreContact = [contacts objectAtIndex:0];
+            if (coreContact)
+            {
+                HOPRolodexContact* contact  = [[[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:[coreContact getPeerURI]] objectAtIndex:0];
+                if (contact)
+                {
+                    NSString* messageText = nil;
+                    //if ([message.type isEqualToString:messageTypeSystem])
+                    if ([[MessageManager sharedMessageManager] getTypeForSystemMessage:message] == SystemMessage_CheckAvailability)
+                    {
+                        messageText  = [NSString stringWithFormat:@"%@ \n %@",[contact name],@"Missed call"];
+                        missedCall = YES;
+                    }
+                    else
+                    {
+                        messageText  = [NSString stringWithFormat:@"%@ \n %@",[contact name],message.text];
+                    }
+                    [[APNSManager sharedAPNSManager] sendPushNotificationForContact:coreContact message:messageText missedCall:missedCall];
+                }
+            }
+        }
+    }
+#endif
+    
     dispatch_async(dispatch_get_main_queue(), ^{
     });
 }

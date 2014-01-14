@@ -31,6 +31,7 @@
 
 #import "OpenPeerCacheDelegate.h"
 #import "OpenPeerUtility.h"
+#import "HOPModelManager.h"
 
 OpenPeerCacheDelegate::OpenPeerCacheDelegate(id<HOPCacheDelegate> inCacheDelegate)
 {
@@ -48,7 +49,7 @@ String OpenPeerCacheDelegate::fetch(const char *cookieNamePath)
     NSString* path = [NSString stringWithUTF8String:cookieNamePath];
     if (path)
     {
-        NSString* cookie = [cacheDelegate fetchCookieWithPath:path];
+        NSString* cookie = [[HOPModelManager sharedModelManager] getCookieWithPath:path];//[cacheDelegate fetchCookieWithPath:path];
         if ([cookie length] > 0)
             ret = [cookie UTF8String];
     }
@@ -61,11 +62,13 @@ void OpenPeerCacheDelegate::store(const char *cookieNamePath,Time expires,const 
     NSString* path = [NSString stringWithUTF8String:cookieNamePath];
     NSDate* date = [OpenPeerUtility convertPosixTimeToDate:expires];
     
-    [cacheDelegate storeCookie:cookie cookieNamePath:path expireTime:date];
+    //[cacheDelegate storeCookie:cookie cookieNamePath:path expireTime:date];
+    [[HOPModelManager sharedModelManager]setCookie:cookie withPath:path expires:date];
 }
 
 void OpenPeerCacheDelegate::clear(const char *cookieNamePath)
 {
     NSString* path = [NSString stringWithUTF8String:cookieNamePath];
-    [cacheDelegate clearCookieWithPath:path];
+    [[HOPModelManager sharedModelManager] removeCookieForPath:path];
+    //[cacheDelegate clearCookieWithPath:path];
 }
