@@ -199,14 +199,9 @@
 		87A1086A1802C116001F705D /* Logger.m in Sources */ = {isa = PBXBuildFile; fileRef = 87A108691802C116001F705D /* Logger.m */; };
 		87A1086C1802CBDC001F705D /* logger.png in Resources */ = {isa = PBXBuildFile; fileRef = 87A1086B1802CBDC001F705D /* logger.png */; };
 		87A1086E1802CD92001F705D /* logger@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 87A1086D1802CD92001F705D /* logger@2x.png */; };
-		87A3F09E18762B6B00717E83 /* CacheModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 87A3F09C18762B6B00717E83 /* CacheModel.xcdatamodeld */; };
-		87A3F0B718762C2400717E83 /* Cache.m in Sources */ = {isa = PBXBuildFile; fileRef = 87A3F0B618762C2400717E83 /* Cache.m */; };
-		87A3F0BA18762C6300717E83 /* CoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87A3F0B918762C6300717E83 /* CoreDataManager.m */; };
 		87B5EAC318683E4300D25C3B /* APNSManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87B5EABF18683E3B00D25C3B /* APNSManager.m */; };
 		87B5EAEE1868715400D25C3B /* AirshipConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = 87D4BDEF18683ACB008C2D30 /* AirshipConfig.plist */; };
 		87BFEDBA183A885C00A48821 /* AppConsts.m in Sources */ = {isa = PBXBuildFile; fileRef = 87BFEDB8183A885C00A48821 /* AppConsts.m */; };
-		87C568EF187EDAB700108034 /* CoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87A3F0B918762C6300717E83 /* CoreDataManager.m */; };
-		87C568F0187EDC6700108034 /* CacheModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 87A3F09C18762B6B00717E83 /* CacheModel.xcdatamodeld */; };
 		87D4BCDC18675368008C2D30 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 87272838166CBF9B0089CBB6 /* main.m */; };
 		87D4BCDD18675368008C2D30 /* AppLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 874FE10D17FD7FF0007A791B /* AppLog.m */; };
 		87D4BCDE18675368008C2D30 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8757E1CA1827E85700D7BDA1 /* TTTAttributedLabel.m */; };
@@ -796,11 +791,6 @@
 		87A108691802C116001F705D /* Logger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Logger.m; sourceTree = "<group>"; };
 		87A1086B1802CBDC001F705D /* logger.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logger.png; sourceTree = "<group>"; };
 		87A1086D1802CD92001F705D /* logger@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logger@2x.png"; sourceTree = "<group>"; };
-		87A3F09D18762B6B00717E83 /* CacheModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CacheModel.xcdatamodel; sourceTree = "<group>"; };
-		87A3F0B518762C2400717E83 /* Cache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cache.h; sourceTree = "<group>"; };
-		87A3F0B618762C2400717E83 /* Cache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cache.m; sourceTree = "<group>"; };
-		87A3F0B818762C6300717E83 /* CoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataManager.h; sourceTree = "<group>"; };
-		87A3F0B918762C6300717E83 /* CoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataManager.m; sourceTree = "<group>"; };
 		87B5EABE18683E3B00D25C3B /* APNSManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APNSManager.h; sourceTree = "<group>"; };
 		87B5EABF18683E3B00D25C3B /* APNSManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APNSManager.m; sourceTree = "<group>"; };
 		87BFEDB8183A885C00A48821 /* AppConsts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppConsts.m; sourceTree = "<group>"; };
@@ -1026,8 +1016,6 @@
 				87091143184762F300E65465 /* ImageManager.m */,
 				87B5EABE18683E3B00D25C3B /* APNSManager.h */,
 				87B5EABF18683E3B00D25C3B /* APNSManager.m */,
-				87A3F0B818762C6300717E83 /* CoreDataManager.h */,
-				87A3F0B918762C6300717E83 /* CoreDataManager.m */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -1317,7 +1305,6 @@
 		87272832166CBF9B0089CBB6 /* OpenPeerSampleApp */ = {
 			isa = PBXGroup;
 			children = (
-				87A3F09918762B4900717E83 /* Cache */,
 				8711BE1D1861EF1300DBF8B5 /* templates */,
 				8712BE8517D8CC9900665F42 /* Settings */,
 				87FC39F81709BB66002030D1 /* Session */,
@@ -1394,16 +1381,6 @@
 			name = TTTAttributedLabel;
 			path = 3rdParties/TTTAttributedLabel;
 			sourceTree = SOURCE_ROOT;
-		};
-		87A3F09918762B4900717E83 /* Cache */ = {
-			isa = PBXGroup;
-			children = (
-				87A3F09C18762B6B00717E83 /* CacheModel.xcdatamodeld */,
-				87A3F0B518762C2400717E83 /* Cache.h */,
-				87A3F0B618762C2400717E83 /* Cache.m */,
-			);
-			name = Cache;
-			sourceTree = "<group>";
 		};
 		87D4BDFD18683BED008C2D30 /* Airship */ = {
 			isa = PBXGroup;
@@ -2076,11 +2053,9 @@
 				874408CB182FE873004AD8FC /* IncomingCallViewController.m in Sources */,
 				87FC3A191709BD8D002030D1 /* SBJsonStreamParserAdapter.m in Sources */,
 				870059EE184F563800B6B826 /* UIBadgeView.m in Sources */,
-				87A3F0B718762C2400717E83 /* Cache.m in Sources */,
 				87FC3A1A1709BD8D002030D1 /* SBJsonStreamParserState.m in Sources */,
 				87FC3A1B1709BD8D002030D1 /* SBJsonStreamTokeniser.m in Sources */,
 				87FC3A1C1709BD8D002030D1 /* SBJsonStreamWriter.m in Sources */,
-				87A3F0BA18762C6300717E83 /* CoreDataManager.m in Sources */,
 				87FC3A1D1709BD8D002030D1 /* SBJsonStreamWriterAccumulator.m in Sources */,
 				8706DE02186359060032E39C /* CustomerSpecific.m in Sources */,
 				87FC3A1E1709BD8D002030D1 /* SBJsonStreamWriterState.m in Sources */,
@@ -2088,7 +2063,6 @@
 				87FC3A201709BD8D002030D1 /* RXMLElement.m in Sources */,
 				87F09EE3171EBB1B0045F6A6 /* ChatViewController.m in Sources */,
 				87F09EE4171EBB1B0045F6A6 /* ChatMessageCell.m in Sources */,
-				87A3F09E18762B6B00717E83 /* CacheModel.xcdatamodeld in Sources */,
 				87F09EE7171EBB2A0045F6A6 /* Message.m in Sources */,
 				87E3CCE7172A814F00084D2F /* IdentityLookupDelegate.m in Sources */,
 				87224733182D02F30027DA50 /* AudioCallViewController.m in Sources */,
@@ -2151,7 +2125,6 @@
 				87D4BD0618675368008C2D30 /* CustomerSpecific.m in Sources */,
 				87D4BD0718675368008C2D30 /* SBJsonStreamWriterState.m in Sources */,
 				87D4BD0818675368008C2D30 /* SBJsonWriter.m in Sources */,
-				87C568F0187EDC6700108034 /* CacheModel.xcdatamodeld in Sources */,
 				87D4BD0918675368008C2D30 /* RXMLElement.m in Sources */,
 				87D4BD0A18675368008C2D30 /* ChatViewController.m in Sources */,
 				87D4BD0B18675368008C2D30 /* ChatMessageCell.m in Sources */,
@@ -2160,7 +2133,6 @@
 				87D4BD0E18675368008C2D30 /* AudioCallViewController.m in Sources */,
 				87D4BD0F18675368008C2D30 /* CacheDelegate.m in Sources */,
 				87D4BD1018675368008C2D30 /* ContactTableViewCell.m in Sources */,
-				87C568EF187EDAB700108034 /* CoreDataManager.m in Sources */,
 				87D4BD1118675368008C2D30 /* SettingsViewController.m in Sources */,
 				87D4BD1218675368008C2D30 /* LoggerSettingsViewController.m in Sources */,
 				87D4BD1318675368008C2D30 /* InfoViewController.m in Sources */,
@@ -2445,19 +2417,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		87A3F09C18762B6B00717E83 /* CacheModel.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				87A3F09D18762B6B00717E83 /* CacheModel.xcdatamodel */,
-			);
-			currentVersion = 87A3F09D18762B6B00717E83 /* CacheModel.xcdatamodel */;
-			path = CacheModel.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 8727281F166CBF9B0089CBB6 /* Project object */;
 }

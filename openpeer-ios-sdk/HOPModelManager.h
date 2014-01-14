@@ -48,6 +48,7 @@
 //These properties are not marked as readonly because it is left possibility for app developer to integrate its own .xcdatamodel file with OpenPeerModel.xcdatamodel and to use one model object, one context object and one persistent storage. In this case NSManagedObjectModel objects need to be initiated and merged at the application startup and right after that, directly from application, to set managedObjectContext, managedObjectModel and persistentStoreCoordinator properties.
 
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (readonly, strong, nonatomic) NSManagedObjectContext *backgroundManagedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
@@ -206,4 +207,9 @@
  @param peerURI NSString* contacts peer uri
  */
 - (void) setAPNSData:(NSString*) deviceToken PeerURI:(NSString*) peerURI;
+
+- (NSString*) getCookieWithPath:(NSString*) path;
+- (void) setCookie:(NSString*) data withPath:(NSString*) path expires:(NSDate*) expires;
+- (void) removeExpiredCookies;
+- (void) removeCookieForPath:(NSString*) path;
 @end

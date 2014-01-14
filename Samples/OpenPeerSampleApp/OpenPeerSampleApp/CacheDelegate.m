@@ -30,25 +30,24 @@
  */
 
 #import "CacheDelegate.h"
-#import "CoreDataManager.h"
 
 
 @implementation CacheDelegate
 
 - (NSString*) fetchCookieWithPath:(NSString*) cookieNamePath
 {
-    NSString* ret = [[CoreDataManager sharedCoreDataManager] getCookieWithPath:cookieNamePath];
+    NSString* ret = nil;
     return ret;
 }
 
 - (void) storeCookie:(NSString*) cookie cookieNamePath:(NSString*) cookieNamePath expireTime:(NSDate*) expireTime
 {
-    [[CoreDataManager sharedCoreDataManager] setCookie:cookie withPath:cookieNamePath expires:expireTime];
+    
 }
 
 - (void) clearCookieWithPath:(NSString*) cookieNamePath
 {
-    [[CoreDataManager sharedCoreDataManager] removeCookieForPath:cookieNamePath];
+    
 }
 
 @end

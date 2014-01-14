@@ -67,4 +67,6 @@
  @param cookieNamePath NSString path
  */
 - (void) clearForCookieNamePath:(NSString*) cookieNamePath;
+
+- (void) clearExpiredCookies;
 @end
