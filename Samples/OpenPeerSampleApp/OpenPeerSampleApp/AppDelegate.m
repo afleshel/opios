@@ -57,7 +57,7 @@
 
     [[OpenPeer sharedOpenPeer] setMainViewController:mainViewController];
     [[OpenPeer sharedOpenPeer] setup];
-    
+
 #ifdef APNS_ENABLED
     [[APNSManager sharedAPNSManager] prepareUrbanAirShip];
     NSDictionary *apnsInfo = [launchOptions valueForKey:@"UIApplicationLaunchOptionsRemoteNotificationKey"];
@@ -110,20 +110,21 @@
 {
     NSString* hexString = [Utility hexadecimalStringForData:deviceToken];
     
-    NSLog(@"deviceToken result:%@",hexString);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Push notification deviceToken:%@",hexString);
 
     [[APNSManager sharedAPNSManager] registerDeviceToken:deviceToken];
     [[APNSManager sharedAPNSManager] setDeviceToken:hexString];
     [[OpenPeer sharedOpenPeer] setDeviceToken:hexString];
 }
 
-- (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
-    NSLog(@"Error in registration. Error: %@", err.description);
+- (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err
+{
+    OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Error in registration. Error: %@", err.description);
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    NSLog(@"Received push notification with userInfo:%@", userInfo);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Received push notification with userInfo:%@", userInfo);
     NSDictionary *apnsInfo = [userInfo valueForKey:@"UIApplicationLaunchOptionsRemoteNotificationKey"];
     
     if ([apnsInfo count] > 0)
@@ -133,7 +134,7 @@
 }
 - (void)handleNotification:(NSDictionary *)notification applicationState:(UIApplicationState)state
 {
-    NSLog(@"Received push notification with notification:%@", notification);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Received push notification with notification:%@", notification);
 }
 
 #endif

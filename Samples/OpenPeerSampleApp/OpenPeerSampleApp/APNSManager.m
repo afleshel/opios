@@ -93,7 +93,8 @@
     [UAirship takeOff:config];
     
     // Print out the application configuration for debugging (optional)
-    UA_LDEBUG(@"Config:\n%@", [config description]);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"UrbanAirship config: %@",[config description]);
+
     
     // Set the icon badge to zero on startup (optional)
     [[UAPush shared] resetBadge];
@@ -111,14 +112,14 @@
         [request setHTTPBody:pushdata];
         
         [NSURLConnection connectionWithRequest:request delegate:self];
-        
-        NSLog(@"Push notification sent.");
     }
 }
 
 - (void) sendPushNotificationForDeviceToken:(NSString*) deviceToken message:(NSString*) message
 {
     NSDictionary * dataToPush = @{@"device_tokens":@[deviceToken], @"aps":@{@"alert":message, @"sound":@"calling"}};
+    
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Sending push notification: %@",message);
     
     [self pushData:dataToPush];
 }
@@ -148,8 +149,7 @@
 - (void) connection:(NSURLConnection *) connection didReceiveResponse:(NSURLResponse *) response
 {
     NSHTTPURLResponse * res = (NSHTTPURLResponse *) response;
-    NSLog(@"response: %@",res);
-    NSLog(@"res %i\n",res.statusCode);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Response code %i: response: %@",res.statusCode, res);
 }
 
 - (void) sendPushNotificationForContact:(HOPContact*) contact message:(NSString*) message missedCall:(BOOL) missedCall
@@ -178,6 +178,8 @@
 
                 NSDictionary * dataToPush = @{@"device_tokens":deviceTokens, @"aps":messageDictionary};
                 
+                OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Sending push notification: %@",message);
+                
                 [self pushData:dataToPush];
                 
                 [self.apnsHisotry setObject:[NSDate date] forKey:peerURI];
@@ -185,12 +187,12 @@
         }
         else
         {
-            NSLog(@"Cannot send push notification because it passes less than hour since last push");
+            OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Cannot send push notification because it passes less than %d seconds since last push",timeBetweenPushNotificationsInSeconds);
         }
     }
     else
     {
-        NSLog(@"Cannot send push notification because of invalid peerURI");
+        OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Cannot send push notification because of invalid peerURI");
     }
 }
 
@@ -209,7 +211,7 @@
 {
     NSDictionary *apsInfo = [apnsInfo objectForKey:@"aps"];
     NSString *alert = [apsInfo objectForKey:@"alert"];
-    NSLog(@"Received Push Alert: %@", alert);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Received Push Alert: %@", alert);
     NSString *peerURI = [apnsInfo objectForKey:@"peerURI"];
     NSString *locationID = [apnsInfo objectForKey:@"location"];
     

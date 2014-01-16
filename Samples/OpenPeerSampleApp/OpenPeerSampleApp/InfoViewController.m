@@ -70,7 +70,7 @@ typedef enum
 {
     [super viewDidLoad];
 
-    self.tableView.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"iPhone_background_navigation_mode.png"]];
+    //self.tableView.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"iPhone_background_navigation_mode.png"]];
     
     self.homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
     

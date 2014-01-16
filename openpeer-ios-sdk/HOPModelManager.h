@@ -202,14 +202,34 @@
 - (NSArray*) getAPNSDataForPeerURI:(NSString*) peerURI;
 
 /**
- Set device token for specific peer URI
+ Sets device token for specific peer URI.
  @param deviceToken NSString* device token used for sending push notification
  @param peerURI NSString* contacts peer uri
  */
 - (void) setAPNSData:(NSString*) deviceToken PeerURI:(NSString*) peerURI;
 
+/**
+ Gets cookie for path.
+ @param path NSString* cookie path
+ */
 - (NSString*) getCookieWithPath:(NSString*) path;
+
+/**
+ Sets cookie data.
+ @param data NSString* cookie data
+ @param path NSString* cookie path
+ @param expires NSString* cookie expire date
+ */
 - (void) setCookie:(NSString*) data withPath:(NSString*) path expires:(NSDate*) expires;
+
+/**
+ Removes all expired cookies.
+ */
 - (void) removeExpiredCookies;
+
+/**
+ Removes cookie with path.
+ @param path NSString* cookie path
+ */
 - (void) removeCookieForPath:(NSString*) path;
 @end

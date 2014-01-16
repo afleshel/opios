@@ -246,16 +246,12 @@
 #pragma mark - UIActionSheetDelegate
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex;
 {
-    NSLog(@"index: %d", buttonIndex);
-    
     switch (buttonIndex)
     {
         case 0:
-            //[self startAudioSession:NO];
             [[SessionManager sharedSessionManager] makeCallForSession:self.session includeVideo:NO isRedial:NO];
             break;
         case 1:
-            //[self startCallWithVideo:YES];
             [[SessionManager sharedSessionManager] makeCallForSession:self.session includeVideo:YES isRedial:NO];
             break;
         case 2:

@@ -115,7 +115,6 @@
     
     self.labelCaller.text = rolodexContact.name;
     
-    //rolodexContact.profileURL = @"http://www.blic.rs";
     if ([rolodexContact.profileURL length] > 0)
     {
         NSURL* url = [NSURL URLWithString:rolodexContact.profileURL];
@@ -159,7 +158,7 @@
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
-    NSLog(@"Error: %@", [error description]);
+    OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelTrace, @"Failed loading a caller web profile with an error: %@", [error description]);
 }
 
 

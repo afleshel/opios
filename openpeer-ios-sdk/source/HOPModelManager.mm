@@ -40,6 +40,12 @@
 #import "HOPCacheData.h"
 #import "OpenPeerConstants.h"
 #import <CoreData/CoreData.h>
+#import <openpeer/core/IHelper.h>
+
+ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
+
+using namespace openpeer;
+using namespace openpeer::core;
 
 @interface HOPModelManager()
 
@@ -183,7 +189,8 @@
          Lightweight migration will only work for a limited set of schema changes; consult "Core Data Model Versioning and Data Migration Programming Guide" for details.
          
          */
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        NSString* str = [NSString stringWithFormat:@"Unresolved error %@, %@", error, [error userInfo]];
+        ZS_LOG_ERROR(Debug, [self log:str]);
         abort();
     }
     
@@ -207,7 +214,8 @@
     {
         if ([self.managedObjectContext hasChanges] && ![self.managedObjectContext save:&error])
         {
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            NSString* str = [NSString stringWithFormat:@"Unresolved error %@, %@", error, [error userInfo]];
+            ZS_LOG_ERROR(Debug, [self log:str]);
             abort();
         }
     }
@@ -516,7 +524,8 @@
     {
         if ([self.backgroundManagedObjectContext hasChanges] && ![self.backgroundManagedObjectContext save:&error])
         {
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            NSString* str = [NSString stringWithFormat:@"Unresolved error %@, %@", error, [error userInfo]];
+            ZS_LOG_ERROR(Debug, [self log:str]);
             abort();
         }
     }
@@ -633,6 +642,11 @@
             [self saveBackgroundContext];
         }];
     }
+}
+
+- (String) log:(NSString*) message
+{
+    return String("HOPModelManager: ") + [message UTF8String];
 }
 @end
 

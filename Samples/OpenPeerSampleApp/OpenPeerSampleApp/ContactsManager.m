@@ -126,7 +126,14 @@
     // import local contacts
     if(accessGranted)
     {
-        ABAddressBookRef addressBookRef = ABAddressBookCreate();
+        CFErrorRef error = nil;
+        ABAddressBookRef addressBookRef = ABAddressBookCreateWithOptions(NULL, &error);
+        if (error)
+        {
+            OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Unable to read the contacts from the address book.");
+            return;
+        }
+        
         if (addressBookRef)
         {
             CFArrayRef allPeopleRef = ABAddressBookCopyArrayOfAllPeople(addressBookRef);
@@ -201,6 +208,7 @@
             }
             CFRelease(addressBookRef);
         }
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Finished loading contacts from the address book.");
     }
     
     HOPIdentityLookup* identityLookup = [[HOPIdentityLookup alloc] initWithDelegate:(id<HOPIdentityLookupDelegate>)[[OpenPeer sharedOpenPeer] identityLookupDelegate] identityLookupInfos:contactsForIdentityLookup identityServiceDomain:identityProviderDomain];
@@ -213,8 +221,7 @@
  */
 - (void) loadContacts
 {
-    NSLog(@"loadContacts");
-    //[[[OpenPeer sharedOpenPeer] mainViewController] showTabBarController];
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Init loading contacts");
     
     //For the first login and association it should be performed contacts download on just associated identity
     NSArray* associatedIdentities = [[HOPAccount sharedAccount] getAssociatedIdentities];
@@ -228,7 +235,6 @@
             dispatch_queue_t taskQ = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
             dispatch_async(taskQ, ^{
                 [self loadAddressBookContacts];
-                NSLog(@"loadContacts - loadAddressBookContacts");
             });
         }
         else if ([[identity getBaseIdentityURI] isEqualToString:identityFacebookBaseURI])
@@ -241,9 +247,8 @@
                 [[[OpenPeer sharedOpenPeer] mainViewController] onContactsLoadingStarted];
             }
             
-            NSLog(@"startRolodexDownload - identity URI: - Version: %@",[identity getIdentityURI], associatedIdentity.downloadedVersion);
             [identity startRolodexDownload:associatedIdentity.downloadedVersion];
-            NSLog(@"loadContacts - startRolodexDownload");
+            OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Start rolodex contacts download - identity URI: - Version: %@",[identity getIdentityURI], associatedIdentity.downloadedVersion);
         }
     }
     
@@ -370,7 +375,7 @@
     
     if (! jsonData)
     {
-        NSLog(@"Got an error: %@", error);
+        OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"JSON data serialization has failed with an error: %@", error);
     } else
     {
         ret = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];

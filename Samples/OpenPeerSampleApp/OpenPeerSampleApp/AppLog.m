@@ -51,7 +51,7 @@ void AppLog(NSString* functionName, NSString* filePath, unsigned long lineNumber
 
 void AppLog2(NSString* functionName, NSString* filePath, unsigned long lineNumber, HOPLoggerSeverities severity, HOPLoggerLevels level, NSString* format,...)
 {
-    if ([[Settings sharedSettings] getLoggerLevelForAppModuleKey:moduleApplication] == level)
+    if ([[Settings sharedSettings] getLoggerLevelForAppModuleKey:moduleApplication] >= level)
     {
         va_list argumentList;
         va_start(argumentList, format);

@@ -52,7 +52,7 @@
 		873A1FC917F74DBB0002296C /* HOPAssociatedIdentity.h in Headers */ = {isa = PBXBuildFile; fileRef = 873A1FC717F74DBB0002296C /* HOPAssociatedIdentity.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		873A1FCA17F74DBB0002296C /* HOPAssociatedIdentity.m in Sources */ = {isa = PBXBuildFile; fileRef = 873A1FC817F74DBB0002296C /* HOPAssociatedIdentity.m */; };
 		8758405A17B17CB0006B9A21 /* HOPModelManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 8758405917B17CB0006B9A21 /* HOPModelManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8758405C17B17CD0006B9A21 /* HOPModelManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8758405B17B17CD0006B9A21 /* HOPModelManager.m */; };
+		8758405C17B17CD0006B9A21 /* HOPModelManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8758405B17B17CD0006B9A21 /* HOPModelManager.mm */; };
 		875FD1361806AF74001A5BEA /* HOPHomeUser+External.h in Headers */ = {isa = PBXBuildFile; fileRef = 875FD1341806AF74001A5BEA /* HOPHomeUser+External.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		875FD1371806AF74001A5BEA /* HOPHomeUser+External.m in Sources */ = {isa = PBXBuildFile; fileRef = 875FD1351806AF74001A5BEA /* HOPHomeUser+External.m */; };
 		8765B8FC17ED837F0045094E /* HOPRolodexContact.h in Headers */ = {isa = PBXBuildFile; fileRef = 8765B8FA17ED837F0045094E /* HOPRolodexContact.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -341,7 +341,7 @@
 		874F657C1652652A00E580F0 /* HOPMediaEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HOPMediaEngine.h; sourceTree = "<group>"; };
 		874F65A716528FCF00E580F0 /* HOPProtocols.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HOPProtocols.h; sourceTree = "<group>"; };
 		8758405917B17CB0006B9A21 /* HOPModelManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HOPModelManager.h; sourceTree = "<group>"; };
-		8758405B17B17CD0006B9A21 /* HOPModelManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = HOPModelManager.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		8758405B17B17CD0006B9A21 /* HOPModelManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = HOPModelManager.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		875FD1341806AF74001A5BEA /* HOPHomeUser+External.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HOPHomeUser+External.h"; sourceTree = "<group>"; };
 		875FD1351806AF74001A5BEA /* HOPHomeUser+External.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "HOPHomeUser+External.m"; sourceTree = "<group>"; };
 		8765B8FA17ED837F0045094E /* HOPRolodexContact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HOPRolodexContact.h; sourceTree = "<group>"; };
@@ -761,7 +761,7 @@
 				87A5B19516EDE5EB007E825A /* HOPMediaEngine.mm */,
 				87A5B19616EDE5EB007E825A /* HOPMediaEngineRtpRtcpStatistics.m */,
 				87A5B19716EDE5EB007E825A /* HOPMessage.m */,
-				8758405B17B17CD0006B9A21 /* HOPModelManager.m */,
+				8758405B17B17CD0006B9A21 /* HOPModelManager.mm */,
 				87A5B19E16EDE5EB007E825A /* HOPStack.mm */,
 				87A5B19F16EDE5EB007E825A /* OpenPeerLoggerDelegate.mm */,
 				876D1F771823BD120024D30C /* HOPUtility.m */,
@@ -1195,7 +1195,7 @@
 				8783859217A84FAB003C6EEA /* HOPRolodexContact+External.mm in Sources */,
 				872BDBAA188490230032CD39 /* OpenPeerCacheModel.xcdatamodeld in Sources */,
 				87DD73E017AFD1BE0086C295 /* OpenPeerConstants.m in Sources */,
-				8758405C17B17CD0006B9A21 /* HOPModelManager.m in Sources */,
+				8758405C17B17CD0006B9A21 /* HOPModelManager.mm in Sources */,
 				87FCB15517B8D85C00E913AD /* HOPIdentityContact.m in Sources */,
 				87FCB15E17B8D85D00E913AD /* HOPAvatar.m in Sources */,
 				87098FCA17C20739007C9093 /* OpenPeerModel.xcdatamodeld in Sources */,

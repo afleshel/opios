@@ -220,7 +220,7 @@
         [ms1 replaceOccurrencesOfString:@"(ci)" withString:@"\ue30e" options:NSLiteralSearch range:NSMakeRange(0, [ms1 length])];
         
         _unicodeMessageText = [NSString stringWithString:ms1];
-        //NSLog(@"******************setUnicodeChars: _unicodeMessageText:%@",_unicodeMessageText);
+        //OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"******************setUnicodeChars: _unicodeMessageText:%@",_unicodeMessageText);
     }
 }
 
