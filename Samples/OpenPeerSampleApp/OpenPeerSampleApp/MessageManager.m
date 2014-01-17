@@ -69,6 +69,8 @@
 
 - (HOPMessage*) createSystemMessageWithType:(SystemMessageTypes) type andText:(NSString*) text andRecipient:(HOPRolodexContact*) contact
 {
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Creating system message with type %d, text:%@ recipient:%@",type,text,contact.name);
+    
     HOPMessage* hopMessage = nil;
     XMLWriter *xmlWriter = [[XMLWriter alloc] init];
     
@@ -95,6 +97,12 @@
     if (messageBody)
     {
         hopMessage = [[HOPMessage alloc] initWithMessageId:[Utility getGUIDstring] andMessage:messageBody andContact:[contact getCoreContact] andMessageType:messageTypeSystem andMessageDate:[NSDate date]];
+        
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Created system messsage with id:%@ %@\n",hopMessage.messageID,messageBody);
+    }
+    else
+    {
+        OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Failed creating a system messsage");
     }
     
     return hopMessage;
@@ -136,6 +144,8 @@
         if ([eventElement.tag isEqualToString:TagEvent])
         {
             SystemMessageTypes type = (SystemMessageTypes) [[eventElement child:TagId].text intValue];
+            OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Parsing system message with type %d",type);
+            
             NSString* messageText =  [eventElement child:TagText].text;
             switch (type)
             {
@@ -192,7 +202,7 @@
 
 - (void) sendMessage:(NSString*) message forSession:(Session*) inSession
 {
-    NSLog(@"Send message");
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Sending message: %@ - for session with id: %@",message,[inSession.conversationThread getThreadId]);
     
     //Currently it is not available group chat, so we can have only one message recipients
     HOPRolodexContact* contact = [[inSession participantsArray] objectAtIndex:0];
@@ -212,25 +222,29 @@
  */
 - (void) onMessageReceived:(HOPMessage*) message forSessionId:(NSString*) sessionId
 {
-    NSLog(@"Message received");
+    BOOL isTextMessage = [message.type isEqualToString:messageTypeText];
+    NSString* messageType = isTextMessage ? @"Text" : @"System";
     
     if ([sessionId length] == 0)
     {
-        NSLog(@"Message received with invalid session id");
+        OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"%@ message received with invalid session id", messageType);
         return;
     }
+ 
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Received %@ message with id: %@ for session:%@",[messageType lowercaseString],message.messageID,sessionId);
     
     Session* session = [[SessionManager sharedSessionManager] getSessionForSessionId:sessionId];
     
     if (session == nil)
     {
-        NSLog(@"Message received - unable to get session for provided session id %@.",sessionId);
-        NSLog(@"Message received - further message handling is canceled.");
+        OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"%@ message received - unable to get session for provided session id %@.",messageType,sessionId);
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"%@ message received - further message handling is canceled.",messageType);
         return;
     }
     
-    if ([message.type isEqualToString:messageTypeText])
+    if (isTextMessage)
     {
+        
         HOPRolodexContact* contact  = [[[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:[message.contact getPeerURI]] objectAtIndex:0];
         Message* messageObj = [[Message alloc] initWithMessageText:message.text senderContact:contact];
         [session.messageArray addObject:messageObj];
