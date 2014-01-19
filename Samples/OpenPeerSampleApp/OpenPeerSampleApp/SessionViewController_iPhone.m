@@ -133,9 +133,9 @@
     UIView* titleView = [[ UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 200.0, 44.0)];
     titleView.backgroundColor = [UIColor clearColor];
     
-    self.labelTitle = [[UILabel alloc] initWithFrame:CGRectMake(10.0, 3.0, 180.0, 24.0)];
+    self.labelTitle = [[UILabel alloc] initWithFrame:CGRectMake(15.0, 3.0, 170.0, 24.0)];
     self.labelTitle.text = [[[self.session participantsArray]objectAtIndex:0] name];
-    [self.labelTitle setFont:[UIFont fontWithName:@"Helvetica-Bold" size:22.0]];
+    [self.labelTitle setFont:[UIFont fontWithName:@"Helvetica-Bold" size:20.0]];
     self.labelTitle.textColor = [UIColor whiteColor];
     self.labelTitle.textAlignment = NSTextAlignmentCenter;
     
@@ -246,16 +246,12 @@
 #pragma mark - UIActionSheetDelegate
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex;
 {
-    NSLog(@"index: %d", buttonIndex);
-    
     switch (buttonIndex)
     {
         case 0:
-            //[self startAudioSession:NO];
             [[SessionManager sharedSessionManager] makeCallForSession:self.session includeVideo:NO isRedial:NO];
             break;
         case 1:
-            //[self startCallWithVideo:YES];
             [[SessionManager sharedSessionManager] makeCallForSession:self.session includeVideo:YES isRedial:NO];
             break;
         case 2:

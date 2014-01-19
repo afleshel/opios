@@ -320,6 +320,7 @@ using namespace openpeer::core;
             hopMessage.type = [NSString stringWithUTF8String:messageType];
             hopMessage.text = [NSString stringWithUTF8String:message];
             hopMessage.date = [OpenPeerUtility convertPosixTimeToDate:messageTime];
+            hopMessage.messageID = messageID;
         }
     }
     else

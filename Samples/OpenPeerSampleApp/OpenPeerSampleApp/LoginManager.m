@@ -162,7 +162,7 @@
 {
     if (![self.associatingIdentitiesDictionary objectForKey:identityURI])
     {
-        NSLog(@"Identity login started for uri: %@",identityURI);
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Identity login started for uri: %@",identityURI);
         [[[OpenPeer sharedOpenPeer] mainViewController] onStartLoginWithidentityURI];
         
         NSString* redirectAfterLoginCompleteURL = [NSString stringWithFormat:@"%@?reload=true",outerFrameURL];
@@ -174,7 +174,7 @@
         HOPIdentity* hopIdentity = [HOPIdentity loginWithDelegate:(id<HOPIdentityDelegate>)[[OpenPeer sharedOpenPeer] identityDelegate] identityProviderDomain:identityProviderDomain  identityURIOridentityBaseURI:identityURI outerFrameURLUponReload:redirectAfterLoginCompleteURL];
         
         if (!hopIdentity)
-            NSLog(@"Identity login failed");
+            OPLog(HOPLoggerSeverityError, HOPLoggerLevelTrace, @"Identity login has failed for uri: %@",identityURI);
         else
             [self.associatingIdentitiesDictionary setObject:hopIdentity forKey:identityURI];
     }
@@ -186,7 +186,7 @@
 - (void) startRelogin
 {
     BOOL reloginStarted = NO;
-    NSLog(@"Relogin started");
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Relogin started");
     [[[OpenPeer sharedOpenPeer] mainViewController] onRelogin];
     
     HOPHomeUser* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
@@ -198,7 +198,7 @@
     }
     
     if (!reloginStarted)
-        NSLog(@"Relogin failed");
+        OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Relogin has failed");
 }
 
 - (void) preloadLoginWebPage
@@ -223,7 +223,7 @@
     
     if ([relogininfo length] > 0)
     {;
-        NSLog(@"onIdentityAssociationFinished - identityURI: %@  - accountStableId: %@", [identity getIdentityURI], [[HOPAccount sharedAccount] getStableID]);
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Identity association finished - identityURI: %@  - accountStableId: %@", [identity getIdentityURI], [[HOPAccount sharedAccount] getStableID]);
         HOPHomeUser* homeUser = [[HOPModelManager sharedModelManager] getHomeUserByStableID:[[HOPAccount sharedAccount] getStableID]];
         
         if (!homeUser)
@@ -259,10 +259,10 @@
 
 - (void) attachDelegateForIdentity:(HOPIdentity*) identity forceAttach:(BOOL) forceAttach
 {
-    NSLog(@"attachDelegateForIdentity - identityURI: %@", [identity getIdentityURI]);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Attach delegate for identity with URI: %@", [identity getIdentityURI]);
     if (![identity isDelegateAttached] || forceAttach)
     {
-        NSLog(@"attachDelegateForIdentity - attaching delegate - identityURI: %@", [identity getIdentityURI]);
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Attaching delegate for identity with URI: %@", [identity getIdentityURI]);
         //Create core data record if it is not already in the db    
         [self onIdentityAssociationFinished:identity];
         
@@ -277,12 +277,12 @@
  */
 - (void) onUserLoggedIn
 {
-    NSLog(@"onUserLoggedIn");
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"onUserLoggedIn");
 
     //Wait till identity association is not completed
     if ([[HOPAccount sharedAccount] getState].state == HOPAccountStateReady && [self.associatingIdentitiesDictionary count] == 0)
     {
-        NSLog(@"onUserLoggedIn - Ready");
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"User is successfully logged in.");
         
         if (![[OpenPeer sharedOpenPeer] appEnteredForeground])
         {
@@ -351,9 +351,9 @@
     {
         int o = [self.associatingIdentitiesDictionary count];
         if (o > 0)
-            NSLog(@"onUserLoggedIn - NOT Ready because of associatingIdentitiesDictionary is not empty: %d",o);
+            OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"onUserLoggedIn - NOT Ready because of associatingIdentitiesDictionary is not empty: %d",o);
         else
-            NSLog(@"onUserLoggedIn - NOT Ready because account is not in ready state");
+            OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"onUserLoggedIn - NOT Ready because account is not in ready state");
     }
 }
 

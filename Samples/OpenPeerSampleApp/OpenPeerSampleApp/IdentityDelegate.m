@@ -83,7 +83,7 @@
 {
     WebLoginViewController* ret = nil;
     
-    NSLog(@"<%p> Identity - getLoginWebViewForIdentityObjectId:%d", identity, [[identity getObjectId] intValue]);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"<%p> Identity - Get login web view for identity objectId:%d", identity, [[identity getObjectId] intValue]);
     
     ret = [self.loginWebViewsDictionary objectForKey:[identity getObjectId]];
  
@@ -93,22 +93,21 @@
         //if (!ret)
         {
             ret= [[WebLoginViewController alloc] initWithCoreObject:identity];
-            NSLog(@"<%p> Identity - Created web view: %p \nidentity uri: %@ \nidentity object id:%d",identity, ret,[identity getIdentityURI],[[identity getObjectId] intValue]);
+            OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"<%p> Identity - Created web view: %p \nidentity uri: %@ \nidentity object id:%d",identity, ret,[identity getIdentityURI],[[identity getObjectId] intValue]);
         }
         ret.view.hidden = YES;
         ret.coreObject = identity;
         [self.loginWebViewsDictionary setObject:ret forKey:[identity getObjectId]];
         //[[LoginManager sharedLoginManager] setPreloadedWebLoginViewController:nil];
-        NSLog(@"<%p> Identity - getLoginWebViewForIdentity - CREATED:%d", identity, [[identity getObjectId] intValue]);
     }
     else
     {
         if (ret)
         {
-            NSLog(@"<%p> Identity - getLoginWebViewForIdentity - RETRIEVED EXISTING:%p - %d", identity, ret, [[identity getObjectId] intValue]);
+            OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"<%p> Identity - Retrieved exisitng web view:%p for identity objectId:%d", identity, ret, [[identity getObjectId] intValue]);
         }
         else
-            NSLog(@"<%p> Identity - getLoginWebViewForIdentity - NO VALID WEB VIEW:%p - %d", identity, ret, [[identity getObjectId] intValue]);
+            OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelTrace, @"<%p> Identity - getLoginWebViewForIdentity - NO VALID WEB VIEW:%p - %d", identity, ret, [[identity getObjectId] intValue]);
     }
     return ret;
 }
@@ -120,15 +119,15 @@
 
 - (void)identity:(HOPIdentity *)identity stateChanged:(HOPIdentityStates)state
 {
-    NSLog(@"<%p> Identity login state: %@ - identityURI: %@",identity, [HOPIdentity stringForIdentityState:state], [identity getIdentityURI]);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"<%p> Identity login state has changed to: %@ - identityURI: %@",identity, [HOPIdentity stringForIdentityState:state], [identity getIdentityURI]);
     
-    //Prevent to have to web views visible at the time
+    //Prevent to have two web views visible at the time
     if (state == HOPIdentityStateWaitingForBrowserWindowToBeMadeVisible)
     {
-        NSLog(@"<%p> Identity %@ tries to obtain web view visibility mutex. ObjectId: %d",identity,[identity getIdentityURI], [[identity getObjectId] integerValue]);
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"<%p> Identity tries to obtain web view visibility mutex. identityURI: %@ identityObjectId: %d",identity,[identity getIdentityURI], [[identity getObjectId] integerValue]);
         pthread_mutex_lock(&mutexVisibleWebView);
         self.identityMutexOwner = identity;
-        NSLog(@"<%p> Identity %@ owns web view visibility mutex. ObjectId: %d",identity,[identity getIdentityURI],[[identity getObjectId] integerValue]);
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"<%p> Identity owns web view visibility mutex. identityURI: %@ identityObjectId: %d",identity,[identity getIdentityURI],[[identity getObjectId] integerValue]);
     }
     
     dispatch_async(dispatch_get_main_queue(), ^
@@ -188,7 +187,7 @@
                 if ([[self.identityMutexOwner getObjectId] intValue] == [[identity getObjectId] intValue])
                 {
                     self.identityMutexOwner = nil;
-                    NSLog(@"<%p> Identity %@ releases web view visibility mutex",identity,[identity getIdentityURI]);
+                    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"<%p> Identity releases web view visibility mutex. identityURI: %@",identity,[identity getIdentityURI]);
                     pthread_mutex_unlock(&mutexVisibleWebView);
                 }
             }
@@ -217,7 +216,7 @@
 
 - (void)onIdentityPendingMessageForInnerBrowserWindowFrame:(HOPIdentity *)identity
 {
-    NSLog(@"<%p> Identity - onIdentityPendingMessageForInnerBrowserWindowFrame",identity);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"<%p> Identity: pending message for inner browser window frame.",identity);
     
     dispatch_async(dispatch_get_main_queue(), ^
     {
@@ -226,7 +225,7 @@
         if (webLoginViewController)
         {
             NSString* jsMethod = [NSString stringWithFormat:@"sendBundleToJS(\'%@\')", [identity getNextMessageForInnerBrowerWindowFrame]];
-            //NSLog(@"\n\nSent to inner frame: %@\n\n",jsMethod);
+
             //Pass JSON message to java script
             [webLoginViewController passMessageToJS:jsMethod];
         }
@@ -235,14 +234,13 @@
 
 - (void)onIdentityRolodexContactsDownloaded:(HOPIdentity *)identity
 {
-    NSLog(@"<%p> Identity - onIdentityRolodexContactsDownloaded",identity);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"<%p> Identity rolodex contacts are downloaded.",identity);
     //Remove activity indicator
     [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:NO withText:nil inView:nil];
     if (identity)
     {
         HOPHomeUser* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
         HOPAssociatedIdentity* associatedIdentity = [[HOPModelManager sharedModelManager] getAssociatedIdentityBaseIdentityURI:[identity getBaseIdentityURI] homeUserStableId:homeUser.stableId];
-        //[[[[OpenPeer sharedOpenPeer] mainViewController] contactsTableViewController] onContactsLoaded];
         
         BOOL flushAllRolodexContacts;
         NSString* downloadedVersion;
@@ -251,7 +249,7 @@
         //Get downloaded rolodex contacts
         BOOL rolodexContactsObtained = [identity getDownloadedRolodexContacts:&flushAllRolodexContacts outVersionDownloaded:&downloadedVersion outRolodexContacts:&rolodexContacts];
         
-        NSLog(@"onIdentityRolodexContactsDownloaded - Identity URI: %@ - Total number of roldex contacts: %d",[identity getIdentityURI], [rolodexContacts count]);
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Identity URI: %@ - Total number of roldex contacts: %d",[identity getIdentityURI], [rolodexContacts count]);
         
         if ([downloadedVersion length] > 0)
             associatedIdentity.downloadedVersion = downloadedVersion;
@@ -290,7 +288,7 @@
 
 - (void) onNewIdentity:(HOPIdentity*) identity
 {
-    NSLog(@"<%p> Identity - onNewIdentity for identity uri:%@", identity,[identity getIdentityURI]);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"<%p> Identity: Handling a new identity with the uri:%@", identity,[identity getIdentityURI]);
     [[LoginManager sharedLoginManager] attachDelegateForIdentity:identity forceAttach:YES];
 }
 @end

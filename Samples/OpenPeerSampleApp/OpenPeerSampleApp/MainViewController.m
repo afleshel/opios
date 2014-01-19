@@ -188,7 +188,7 @@
 {
     if (webLoginViewController)
     {
-        NSLog(@"Displayed WebLoginViewController");
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Show WebLoginViewController <%p>",webLoginViewController);
         webLoginViewController.view.frame = self.view.bounds;
         webLoginViewController.view.hidden = NO;
         [webLoginViewController.view setAlpha:0];
@@ -206,12 +206,11 @@
 {
     if (webLoginViewController)
     {
-        NSLog(@"Close WebLoginViewController");
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Close WebLoginViewController <%p>",webLoginViewController);
         
         [UIView animateWithDuration:1 animations:^
          {
              [webLoginViewController.view setAlpha:0];
-             //[self.view addSubview:webLoginViewController.view];
          }
         completion:^(BOOL finished)
         {
@@ -236,7 +235,7 @@
     
     NSString* title = [[[session participantsArray] objectAtIndex:0] name];
     
-    NSLog(@"Transition %d for session with id:%@ and for participant:%@",transition,[session.conversationThread getThreadId],title);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Transition %d for session with id:%@ and for participant:%@",transition,[session.conversationThread getThreadId],title);
     UINavigationController* navigationController = (UINavigationController*)[[self.tabBarController viewControllers] objectAtIndex:0];
     switch (transition)
     {
@@ -268,7 +267,7 @@
         {
             sessionViewContorller = [[SessionViewController_iPhone alloc] initWithSession:session];
             [self.sessionViewControllersDictionary setObject:sessionViewContorller forKey:sessionId];
-            [sessionViewContorller.chatViewController refreshViewWithData];
+            //[sessionViewContorller.chatViewController refreshViewWithData];
             
             [self showNotification:[NSString stringWithFormat:@"New message from %@",title]];
         }
@@ -276,6 +275,7 @@
             
         case EXISITNG_SESSION_SWITCH:
             sessionViewContorller = [self.sessionViewControllersDictionary objectForKey:sessionId];
+            sessionViewContorller.hidesBottomBarWhenPushed = YES;
             [sessionViewContorller.chatViewController refreshViewWithData];
             [navigationController popToRootViewControllerAnimated:NO];
             [navigationController pushViewController:sessionViewContorller animated:YES];
@@ -284,6 +284,8 @@
             
         case EXISTING_SESSION_REFRESH_NOT_VISIBLE_CHAT:
             [self showNotification:[NSString stringWithFormat:@"New message from %@",title]];
+            break;
+            
         case EXISTING_SESSION_REFRESH_CHAT:
             sessionViewContorller = [self.sessionViewControllersDictionary objectForKey:sessionId];
             [sessionViewContorller.chatViewController refreshViewWithData];
@@ -495,7 +497,7 @@
 
 - (void) onLoginFinished
 {
-    NSLog(@"onLoginFinished");
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Updating main view controller on successfull login.");
     [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:NO withText:nil inView:nil];
     [self removeSplashScreen];
     [self showTabBarController];
@@ -514,7 +516,7 @@
 
 - (void) onIdentityLoginError:(NSString*) error
 {
-    NSLog(@"Identity login error: %@",error);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Identity login error: %@",error);
     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"Identity login error: %@",error] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
     [alert show];
     
@@ -527,7 +529,7 @@
 
 - (void) onAccountLoginError:(NSString *)error
 {
-    NSLog(@"Account login error: %@",error);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Account login error: %@",error);
     
     if ([self.splashViewController.infoView superview])
         [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:YES withText:@"Error. Please restart the application" inView:self.splashViewController.infoView];

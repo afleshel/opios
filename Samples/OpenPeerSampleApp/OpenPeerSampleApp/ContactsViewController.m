@@ -91,8 +91,7 @@
     NSError *error;
     if (![self.fetchedResultsController performFetch:&error])
     {
-		// Update to handle the error appropriately.
-		NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+		OPLog(HOPLoggerSeverityFatal, HOPLoggerLevelDebug, @"Fetching contacts has failed with an error: %@, error description: %@", error, [error userInfo]);
 		exit(-1);  // Fail
 	}
     
@@ -114,10 +113,6 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [self registerForNotifications:YES];
-    
-//    CGRect rect = self.navigationController.navigationBar.frame;
-//    rect.size.height = 70.0;
-//    self.navigationController.navigationBar.frame = rect;
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -336,9 +331,8 @@
     NSError *error;
 	if (![self.fetchedResultsController performFetch:&error])
     {
-		// Update to handle the error appropriately.
-		NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-		exit(-1);  // Fail
+		OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Fetching contacts for search, has failed with an error: %@, error description: %@", error, [error userInfo]);
+		//exit(-1);  // Fail
 	}
     
     [self.contactsTableView reloadData];
@@ -352,13 +346,12 @@
 
 - (void) onContactsLoaded
 {
-    NSLog(@"onContactsLoaded");
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Handles contacts loaded event");
     NSError *error;
 	if (![self.fetchedResultsController performFetch:&error])
     {
-		// Update to handle the error appropriately.
-		NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-		exit(-1);  // Fail
+		OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Fetching contacts has failed with an error: %@, error description: %@", error, [error userInfo]);
+		//exit(-1);  // Fail
 	}
     
     [self.contactsTableView reloadData];
@@ -420,7 +413,6 @@
     
     // set initial size, chat view
     CGRect contactsTableViewRect = self.contactsTableView.frame;
-    //contactsTableViewRect.origin.y = 0.0;//topSessionView.frame.size.height;
     
     if (!self.keyboardIsHidden)
         contactsTableViewRect.size.height = self.view.frame.size.height - self.searchBar.viewForBaselineLayout.frame.size.height - keyboardHeight + self.tabBarController.tabBar.frame.size.height;

@@ -112,6 +112,7 @@
     //Created all delegates required for openpeer stack initialization.
     [self createDelegates];
     
+    [[HOPCache sharedCache] removeExpiredCookies];
     //Init cache singleton
     [[HOPCache sharedCache] setDelegate:self.cacheDelegate];
     

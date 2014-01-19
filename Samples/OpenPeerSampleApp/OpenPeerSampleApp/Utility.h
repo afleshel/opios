@@ -46,4 +46,5 @@
 + (NSString*) getParametersNameForRequest:(NSString*) requestString;
 + (UIBarButtonItem*) createNavigationBackButtonForTarget:(id) target;
 + (NSString *)formatedMessageTimeStampForDate:(NSDate*) inDate;
++ (NSString *)hexadecimalStringForData:(NSData *)data;
 @end

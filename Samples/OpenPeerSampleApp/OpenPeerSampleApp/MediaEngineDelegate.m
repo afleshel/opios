@@ -50,7 +50,7 @@
 
 - (void) onMediaEngineVideoCaptureRecordStopped
 {
-    NSLog(@"Video file saved.");
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Video capture record has stopped.");
     dispatch_async(dispatch_get_main_queue(), ^{
     });
 }

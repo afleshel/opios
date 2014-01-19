@@ -119,6 +119,17 @@
         {
             NSArray* participants = [NSArray arrayWithObject:[contact getCoreContact]];
             [conversationThread addContacts:participants];
+#ifdef APNS_ENABLED
+            for (HOPContact* coreContact in participants)
+            {
+                NSArray* apnsData = [[HOPModelManager sharedModelManager]getAPNSDataForPeerURI:[coreContact getPeerURI]];
+                if ([apnsData count] == 0)
+                {
+                    HOPMessage* apnsMessage = [[MessageManager sharedMessageManager] createSystemMessageWithType:SystemMessage_APNS_Request andText:[[OpenPeer sharedOpenPeer]deviceToken] andRecipient:contact];
+                    [conversationThread sendMessage:apnsMessage];
+                }
+            }
+#endif
         }
         
         if (ret)
@@ -126,6 +137,8 @@
             //Store session object in dictionary
             [self.sessionsDictionary setObject:ret forKey:[conversationThread getThreadId]];
         }
+        
+        
     }
     
     return ret;
@@ -159,7 +172,7 @@
     
     if (rolodexContact)
     {
-        NSLog(@"%@ initiating a session with %@", [[rolodexContacts objectAtIndex:0] name], [[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser] getFullName]);
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"%@ initiating a session with %@", [[rolodexContacts objectAtIndex:0] name], [[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser] getFullName]);
         
         ret = [[Session alloc] initWithContacts:rolodexContacts conversationThread:inConversationThread];
         
@@ -289,7 +302,9 @@
 {
     if (!inSession.currentCall)
     {
-        NSLog(@"Make call for sesison - making call");
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Making a call for the session <%p>", inSession);
+        
+        [[MessageManager sharedMessageManager]sendSystemMessageToCheckAvailability:inSession];
         //Currently we are not supporting group conferences, so only one participant is possible
         HOPContact* contact = [[[inSession participantsArray] objectAtIndex:0] getCoreContact];
         
@@ -300,7 +315,7 @@
     }
     else
     {
-        NSLog(@"Make call for sesison - already made");
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Call is already in a progress");
     }
 }
 
@@ -310,7 +325,7 @@
  */
 - (void) answerCallForSession:(Session*) inSession
 {
-    NSLog(@"Answer call for session");
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Answer a call for the session <%p>", inSession);
     //Answer an incoming call
     [[inSession currentCall] answer];
 }
@@ -321,7 +336,7 @@
  */
 - (void) endCallForSession:(Session*) inSession
 {
-    NSLog(@"End call for sesison");
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"End the call for the session <%p>", inSession);
     //Hangup current active call
     [[inSession currentCall] hangup:HOPCallClosedReasonUser];
     //Set flag that there is no active call
@@ -364,9 +379,11 @@
  */
 - (void) onCallIncoming:(HOPCall*) call
 {
-    NSLog(@"Handle incoming call for sesison");
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Handle incoming call <%p>", call);
     NSString* sessionId = [[call getConversationThread] getThreadId];
     Session* session = [[[SessionManager sharedSessionManager] sessionsDictionary] objectForKey:sessionId];
+    
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Incoming a call for the session <%p>", session);
     
     //Set current call
     BOOL callFlagIsSet = [self setActiveCallSession:session callActive:YES];
@@ -510,7 +527,8 @@
         //If call is droped because user is a busy at the moment, show notification to caller.
         if ([session.currentCall getClosedReason] == HOPCallClosedReasonBusy)
         {
-            NSString* contactName = [[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser] getFullName];
+            HOPRolodexContact* contact = [session.participantsArray objectAtIndex:0];
+            NSString* contactName = contact.name;
             [[[OpenPeer sharedOpenPeer] mainViewController] showNotification:[NSString stringWithFormat:@"%@ is busy.",contactName]];
          }
     }
@@ -532,7 +550,7 @@
  */
 - (void) startVideoRecording
 {
-    NSLog(@"Video recording started.");
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Video recording is started");
     NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"dd-MM-yyyy-HH-mm"];
     
@@ -547,7 +565,7 @@
  */
 - (void) stopVideoRecording
 {
-    NSLog(@"Video recording stopped.");
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Video recording is stopped");
     //Stop video recording
     [[HOPMediaEngine sharedInstance] stopRecordVideoCapture];
 }
@@ -559,26 +577,6 @@
 - (BOOL) isCallInProgress
 {
     return self.sessionWithActiveCall != nil;
-}
-
-- (void) makeCallForContact:(HOPRolodexContact*) contact includeVideo:(BOOL) includeVideo
-{
-    Session* session = [self createSessionForContact:contact];
-    
-    if (session)
-    {
-        if (!session.currentCall)
-        {
-            [self makeCallForSession:session includeVideo:includeVideo isRedial:NO];
-            [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForSession:session forIncomingCall:NO forIncomingMessage:NO];
-        }
-        else
-        {
-            [self endCallForSession:session];
-            [self makeCallForSession:session includeVideo:includeVideo isRedial:NO];
-        }
-        
-    }
 }
 
 

@@ -66,5 +66,10 @@
  Removes data from cache for specified path
  @param cookieNamePath NSString path
  */
-- (void) clearForCookieNamePath:(NSString*) cookieNamePath;
+- (void) removeCookieWithNamePath:(NSString*) cookieNamePath;
+
+/**
+ Removes all expired cookies.
+ */
+- (void) removeExpiredCookies;
 @end

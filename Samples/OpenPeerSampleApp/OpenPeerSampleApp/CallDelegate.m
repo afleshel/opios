@@ -47,7 +47,7 @@
 
 - (void) onCallStateChanged:(HOPCall*) call callState:(HOPCallStates) callState
 {
-    NSLog(@"Call state: %@", [Utility getCallStateAsString:[call getState]]);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Call state: %@", [Utility getCallStateAsString:[call getState]]);
     
     NSString* sessionId = [[call getConversationThread] getThreadId];
     dispatch_async(dispatch_get_main_queue(), ^{

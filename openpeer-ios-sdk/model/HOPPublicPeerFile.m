@@ -30,6 +30,7 @@
  */
 
 #import "HOPPublicPeerFile.h"
+#import "HOPAPNSData.h"
 #import "HOPIdentityContact.h"
 
 
@@ -38,5 +39,6 @@
 @dynamic peerFile;
 @dynamic peerURI;
 @dynamic identityContacts;
+@dynamic apnsData;
 
 @end

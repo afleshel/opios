@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3396" systemVersion="13A603" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3396" systemVersion="13B42" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="HOPAPNSData" representedClassName="HOPAPNSData" syncable="YES">
+        <attribute name="deviceToken" attributeType="String" syncable="YES"/>
+        <relationship name="publicPeer" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HOPPublicPeerFile" inverseName="apnsData" inverseEntity="HOPPublicPeerFile" syncable="YES"/>
+    </entity>
     <entity name="HOPAssociatedIdentity" representedClassName="HOPAssociatedIdentity" syncable="YES">
         <attribute name="baseIdentityURI" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="domain" attributeType="String" syncable="YES"/>
@@ -41,6 +45,7 @@
     <entity name="HOPPublicPeerFile" representedClassName="HOPPublicPeerFile" syncable="YES">
         <attribute name="peerFile" attributeType="String" syncable="YES"/>
         <attribute name="peerURI" attributeType="String" indexed="YES" syncable="YES"/>
+        <relationship name="apnsData" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HOPAPNSData" inverseName="publicPeer" inverseEntity="HOPAPNSData" syncable="YES"/>
         <relationship name="identityContacts" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="HOPIdentityContact" inverseName="peerFile" inverseEntity="HOPIdentityContact" syncable="YES"/>
     </entity>
     <entity name="HOPRolodexContact" representedClassName="HOPRolodexContact" syncable="YES">
@@ -60,7 +65,8 @@
         <element name="HOPHomeUser" positionX="70" positionY="248" width="128" height="103"/>
         <element name="HOPIdentityContact" positionX="-380" positionY="-28" width="128" height="163"/>
         <element name="HOPImage" positionX="279" positionY="45" width="128" height="88"/>
-        <element name="HOPPublicPeerFile" positionX="-387" positionY="225" width="128" height="88"/>
+        <element name="HOPPublicPeerFile" positionX="-387" positionY="225" width="128" height="103"/>
         <element name="HOPRolodexContact" positionX="-155" positionY="-13" width="128" height="178"/>
+        <element name="HOPAPNSData" positionX="-378" positionY="386" width="128" height="73"/>
     </elements>
 </model>
