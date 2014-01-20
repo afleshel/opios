@@ -42,6 +42,7 @@
 + (void) removeCookiesAndClearCredentials;
 + (NSString *) getGUIDstring;
 + (NSString*) getCallStateAsString:(HOPCallStates) callState;
++ (NSString*) getMessageDeliveryStateAsString:(HOPConversationThreadMessageDeliveryStates) messageState;
 + (NSString*) getFunctionNameForRequest:(NSString*) requestString;
 + (NSString*) getParametersNameForRequest:(NSString*) requestString;
 + (UIBarButtonItem*) createNavigationBackButtonForTarget:(id) target;

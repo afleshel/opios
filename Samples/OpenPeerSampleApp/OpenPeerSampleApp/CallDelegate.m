@@ -84,6 +84,7 @@
                 [[SessionManager sharedSessionManager] onCallOpened:call];
                 [[SoundManager sharedSoundsManager] stopCallingSound];
                 [[SoundManager sharedSoundsManager] stopRingingSound];
+                [sessionViewController startTimer];
                 break;
                 
             case HOPCallStateActive:                //Currently not in use
@@ -96,9 +97,10 @@
                 break;
                 
             case HOPCallStateClosing:               //Receives both parties
-                 [[SessionManager sharedSessionManager] onCallClosing:call];
+                [[SessionManager sharedSessionManager] onCallClosing:call];
                 [[SoundManager sharedSoundsManager] stopCallingSound];
                 [[SoundManager sharedSoundsManager] stopRingingSound];
+                [sessionViewController stopTimer];
                 break;
                 
             case HOPCallStateClosed:                //Receives both parties

@@ -114,14 +114,6 @@
     
     [self.containerView addConstraint:[NSLayoutConstraint constraintWithItem:self.chatViewController.view attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:self.containerView attribute:NSLayoutAttributeTrailing multiplier:1.0 constant:0]];
     
-    // Lightning button
-    /*self.menuButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.menuButton setImage:[UIImage imageNamed:@"iPhone_lightning_bolt.png"] forState:UIControlStateNormal];
-    [self.menuButton addTarget:self action:@selector(actionCallMenu) forControlEvents:UIControlEventTouchUpInside];
-    [self.menuButton setFrame:CGRectMake(0.0, 0.0, 40.0, 40.0)];
-    UIBarButtonItem *navBarMenuButton = [[UIBarButtonItem alloc] initWithCustomView: self.menuButton];
-    self.navigationItem.rightBarButtonItem = navBarMenuButton;*/
-    
     [self setRightBarButtonWithEndCall:NO forWaitingView:NO];
     
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -331,7 +323,6 @@
         
         [self setRightBarButtonWithEndCall:YES forWaitingView:NO];
     }
-    [callViewController callStarted];
     [[SessionManager sharedSessionManager] makeCallForSession:self.session includeVideo:videoCall isRedial:NO];
 }
 
@@ -473,29 +464,6 @@
     
     self.navigationItem.rightBarButtonItem = nil;
     self.navigationItem.rightBarButtonItem = rightBarButtonItem;
-    /*// Lightning button
-    self.menuButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.menuButton setImage:[UIImage imageNamed:@"iPhone_lightning_bolt.png"] forState:UIControlStateNormal];
-    [self.menuButton addTarget:self action:@selector(actionCallMenu) forControlEvents:UIControlEventTouchUpInside];
-    [self.menuButton setFrame:CGRectMake(0.0, 0.0, 40.0, 40.0)];
-    UIBarButtonItem *navBarMenuButton = [[UIBarButtonItem alloc] initWithCustomView: self.menuButton];
-    self.navigationItem.rightBarButtonItem = navBarMenuButton;
-    
-    UIButton* btn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    UIImage* img =[UIImage imageNamed:@"iPhone_Button-end-baritem.png"];
-    //[btn setBackgroundImage:img forState:UIControlStateNormal];
-    //[btn setImage:img forState:UIControlStateNormal];
-    btn.titleLabel.textColor = [UIColor whiteColor];
-    btn.titleLabel.text = @"End";
-    [btn addTarget:self action:@selector(actionCallMenu) forControlEvents:UIControlEventTouchUpInside];
-    [btn setFrame:CGRectMake(20.0, 0.0, 30.0, 40.0)];
-    [btn addTarget:self.videoCallViewController action:@selector(callHangup:) forControlEvents:UIControlEventTouchUpInside];
-     UIBarButtonItem* endCallButton = [[UIBarButtonItem alloc] initWithCustomView:btn];//[[UIBarButtonItem alloc] initWithTitle:@"End" style:UIBarButtonItemStylePlain target:self.videoCallViewController action:@selector(callHangup:)];
-    [endCallButton setBackgroundImage:img forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-    endCallButton.tintColor = [UIColor whiteColor];
-    //endCallButton.width = 30.0;
-    self.navigationItem.rightBarButtonItem = nil;
-    self.navigationItem.rightBarButtonItem = endCallButton;*/
 }
 @end
 

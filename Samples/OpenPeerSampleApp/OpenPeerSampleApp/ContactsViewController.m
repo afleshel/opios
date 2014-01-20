@@ -346,7 +346,7 @@
 
 - (void) onContactsLoaded
 {
-    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Handles contacts loaded event");
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Handling loaded contacts.");
     NSError *error;
 	if (![self.fetchedResultsController performFetch:&error])
     {

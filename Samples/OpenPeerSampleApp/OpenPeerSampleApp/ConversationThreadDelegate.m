@@ -34,6 +34,7 @@
 #import "ContactsManager.h"
 #import "MessageManager.h"
 #import "AppConsts.h"
+#import "Utility.h"
 
 #import <OpenpeerSDK/HOPConversationThread.h>
 #import <OpenpeerSDK/HOPContact.h>
@@ -96,7 +97,7 @@
 
 - (void) onConversationThreadMessageDeliveryStateChanged:(HOPConversationThread*) conversationThread messageID:(NSString*) messageID messageDeliveryStates:(HOPConversationThreadMessageDeliveryStates) messageDeliveryStates
 {
-    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Conversation thread message with id %@ delivery state has changed to: %d",messageID, messageDeliveryStates);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Conversation thread message with id %@ delivery state has changed to: %@",messageID, [Utility getMessageDeliveryStateAsString:messageDeliveryStates]);
 }
 
 - (void) onConversationThreadPushMessage:(HOPConversationThread*) conversationThread messageID:(NSString*) messageID contact:(HOPContact*) contact
