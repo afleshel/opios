@@ -54,7 +54,8 @@
 //@property (nonatomic, strong) UIButton *menuButton;
 @property (nonatomic, strong) UIBarButtonItem* menuRightbarButton;
 @property (nonatomic, strong) UIBarButtonItem* endCallRightbarButton;
-@property (nonatomic) int callDuration;
+//@property (nonatomic) int callDuration;
+@property (nonatomic, strong) NSDate* callStartedTime;
 - (void) actionCallMenu;
 - (void) updateCallDuration;
 - (void) setRightBarButtonWithEndCall:(BOOL) withEndCall forWaitingView:(BOOL)forWaitingView ;
@@ -388,7 +389,7 @@
 
 - (void)startTimer
 {
-    self.callDuration = 0;
+    self.callStartedTime = [NSDate date];
     [self updateCallDuration];
     self.callTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateCallDuration) userInfo:nil repeats:YES];
 }
@@ -402,10 +403,12 @@
 
 -(void)updateCallDuration
 {
-    self.callDuration++;
-    NSInteger secs =    self.callDuration % 60;
-    NSInteger mins = (self.callDuration / 60) % 60;
-    NSInteger hrs = (self.callDuration / 3600);
+    NSDate* currentTime = [NSDate date];
+    
+    NSInteger callDuration = (NSInteger)[currentTime timeIntervalSinceDate:self.callStartedTime];
+    NSInteger secs =    callDuration % 60;
+    NSInteger mins = (callDuration / 60) % 60;
+    NSInteger hrs = (callDuration / 3600);
     
     self.labelDuration.text = [NSString stringWithFormat:@"%@: %02i:%02i:%02i", NSLocalizedString(@"Duration", @""), hrs, mins, secs];
     

@@ -52,7 +52,6 @@
 - (void) onLoginWebViewVisible:(WebLoginViewController*) webLoginViewController;
 
 - (void) onRelogin;
-- (void) onLoginError;
 - (void) onLoginFinished;
 
 - (void) onIdentityLoginWebViewClose:(WebLoginViewController*) webLoginViewController forIdentityURI:(NSString*) identityURI;

@@ -71,7 +71,6 @@ typedef  enum
 @property (nonatomic, strong) LoginViewController *loginViewController;
 @property (nonatomic, strong) ContactsViewController *contactsTableViewController;
 @property (nonatomic, strong) UITabBarController *tabBarController;
-//@property (nonatomic, strong) UINavigationController *contactsNavigationController;
 
 @property (nonatomic, strong) NSMutableDictionary *sessionViewControllersDictionary;
 
@@ -80,7 +79,6 @@ typedef  enum
 - (void) showTabBarController;
 - (void) showWebLoginView:(WebLoginViewController*) webLoginViewController;
 - (void) closeWebLoginView:(WebLoginViewController*) webLoginViewController;
-//- (void) showContactsTable;
 
 - (void) showSessionViewControllerForSession:(Session*) session forIncomingCall:(BOOL) incomingCall forIncomingMessage:(BOOL) incomingMessage;
 - (void) removeSessionViewControllerForSession:(NSString*) sessionId;

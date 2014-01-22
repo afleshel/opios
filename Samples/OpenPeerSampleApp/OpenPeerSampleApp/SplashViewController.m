@@ -30,64 +30,23 @@
  */
 
 #import "SplashViewController.h"
-#import "OpenPeer.h"
 #import "Logger.h"
-#import <OpenPeerSDK/HOPModelManager.h>
-
-@interface SplashViewController ()
-
-- (void) removeSplashScreen;
-
-@end
-
-@interface SplashViewController ()
-
-@property (strong, nonatomic) NSTimer* closingTimer;
-
-- (IBAction)actionStartLogger:(id)sender;
-
-@end
 
 @implementation SplashViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
+    if (self)
+    {
+
     }
     return self;
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    
-    //if ([[HOPModelManager sharedModelManager] getLastLoggedInHomeUser])
-    
-//    else
-//        self.closingTimer = [NSTimer scheduledTimerWithTimeInterval:3.5 target:self.presentingViewController /*[UIApplication sharedApplication].delegate*/ selector:@selector(removeSplashScreen) userInfo:nil repeats:NO];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    //self.closingTimer = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(removeSplashScreen) userInfo:nil repeats:NO];
-}
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-
 }
 
 - (IBAction)actionStartLogger:(id)sender
 {
     [Logger startTelnetLoggerOnStartUp];
-    
-    
 }
 
-- (void) removeSplashScreen
-{
-    //[self.view removeFromSuperview];
-}
 @end

@@ -131,6 +131,9 @@
         if (error)
         {
             OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Unable to read the contacts from the address book.");
+            if (addressBookRef)
+                CFRelease(addressBookRef);
+            
             return;
         }
         
@@ -177,30 +180,33 @@
                                     identityURI = [NSString stringWithFormat:@"%@%@",identityFederateBaseURI,[username lowercaseString]];
                             }
                         }
+                        CFRelease(social);
                     }
 
                     if ([identityURI length] > 0)
                     {
                         //Execute core data manipulation on main thread to prevent app freezing. 
-                        dispatch_sync(dispatch_get_main_queue(), ^{
-                        HOPRolodexContact* rolodexContact = [[HOPModelManager sharedModelManager] getRolodexContactByIdentityURI:identityURI];
-                        if (!rolodexContact)
+                        dispatch_sync(dispatch_get_main_queue(), ^
                         {
-                            //Create a new menaged object for new rolodex contact
-                            NSManagedObject* managedObject = [[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPRolodexContact"];
-                            if ([managedObject isKindOfClass:[HOPRolodexContact class]])
+                            HOPRolodexContact* rolodexContact = [[HOPModelManager sharedModelManager] getRolodexContactByIdentityURI:identityURI];
+                            if (!rolodexContact)
                             {
-                                rolodexContact = (HOPRolodexContact*)managedObject;
-                                HOPHomeUser* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
-                                HOPAssociatedIdentity* associatedIdentity = [[HOPModelManager sharedModelManager] getAssociatedIdentityBaseIdentityURI:identityFederateBaseURI homeUserStableId:homeUser.stableId];
-                                rolodexContact.associatedIdentity = associatedIdentity;
-                                rolodexContact.identityURI = identityURI;
-                                rolodexContact.name = fullNameTemp;
-                                [[HOPModelManager sharedModelManager] saveContext];
+                                //Create a new menaged object for new rolodex contact
+                                NSManagedObject* managedObject = [[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPRolodexContact"];
+                                if ([managedObject isKindOfClass:[HOPRolodexContact class]])
+                                {
+                                    rolodexContact = (HOPRolodexContact*)managedObject;
+                                    HOPHomeUser* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
+                                    HOPAssociatedIdentity* associatedIdentity = [[HOPModelManager sharedModelManager] getAssociatedIdentityBaseIdentityURI:identityFederateBaseURI homeUserStableId:homeUser.stableId];
+                                    rolodexContact.associatedIdentity = associatedIdentity;
+                                    rolodexContact.identityURI = identityURI;
+                                    rolodexContact.name = fullNameTemp;
+                                    [[HOPModelManager sharedModelManager] saveContext];
+                                }
                             }
-                        }
                         
-                        [contactsForIdentityLookup addObject:rolodexContact];
+                            if (rolodexContact)
+                                [contactsForIdentityLookup addObject:rolodexContact];
                         });
                     }
                 }

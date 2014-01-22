@@ -281,7 +281,7 @@
             UILabel *labelSeparator = [[UILabel alloc] initWithFrame:CGRectMake(headerLabelXpos, TOP_SPACE, 10.0, labelHeight)];
             labelSeparator.backgroundColor =[UIColor clearColor];
             labelSeparator.textColor = [UIColor whiteColor];
-            labelSeparator.textAlignment = UITextAlignmentCenter;
+            labelSeparator.textAlignment = NSTextAlignmentCenter;
             labelSeparator.font = self.chatTimestampFont;
             labelSeparator.text = @" | ";
             
@@ -345,7 +345,7 @@
             _messageLabel.dataDetectorTypes = NSTextCheckingTypeLink;
             _messageLabel.backgroundColor = [UIColor clearColor];
             _messageLabel.font = [UIFont systemFontOfSize:14.0];
-            _messageLabel.lineBreakMode = UILineBreakModeWordWrap;
+            _messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
             _messageLabel.text = _unicodeMessageText;
             _messageLabel.numberOfLines = 0;
             [_messageLabel sizeToFit];
