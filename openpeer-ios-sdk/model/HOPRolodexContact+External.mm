@@ -35,9 +35,29 @@
 #import "HOPContact.h"
 #import "HOPIdentityContact.h"
 #import "HOPPublicPeerFile.h"
+#import "HOPModelManager.h"
+#import "HOPContact.h"
+#import "HOPUtility.h"
+#import "HOPAssociatedIdentity.h"
 
 @implementation HOPRolodexContact (External)
 
+
+- (void) updateWithName:(NSString*) inName identityURI:(NSString*) inIdentityURI identityProviderDomain:(NSString*)identityProviderDomain  homeUserIdentityURI:(NSString*) homeUserIdentityURI
+{
+    NSString* baseIdentityURI = [HOPUtility getBaseIdentityURIFromURI:inIdentityURI];
+    HOPAssociatedIdentity* associated = [[HOPModelManager sharedModelManager] getAssociatedIdentityByDomain:identityProviderDomain identityName:baseIdentityURI homeUserIdentityURI:homeUserIdentityURI];
+    if (!associated)
+    {
+        associated = [NSEntityDescription insertNewObjectForEntityForName:@"HOPAssociatedIdentity" inManagedObjectContext:[[HOPModelManager sharedModelManager]managedObjectContext]];
+        
+        associated.baseIdentityURI = baseIdentityURI;
+        associated.name = baseIdentityURI;
+        associated.domain = identityProviderDomain;
+    }
+    
+    self.name = inName;
+}
 
 - (BOOL) isSelf
 {

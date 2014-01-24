@@ -182,7 +182,9 @@ using namespace openpeer::core;
                         }
                     }
                 }
-                [contactArray addObject:tempContact];
+                
+                if (tempContact)
+                    [contactArray addObject:tempContact];
             }
         }
     }

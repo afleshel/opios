@@ -59,6 +59,8 @@ NSString* const applicationImageURL = @"http://hookflash.com/wp-content/themes/C
 
 // set customer spplication url
 NSString* const applicationURL = @"https://www.openpeer.org/";
+//-----------------------------------------------------------------------------
+
 
 // set outer frame url
 NSString* const outerFrameURL = @"https://app-javascript.hookflash.me/outer.html?view=choose";

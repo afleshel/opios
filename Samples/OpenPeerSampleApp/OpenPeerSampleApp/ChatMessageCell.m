@@ -32,8 +32,10 @@
 #import "ChatMessageCell.h"
 #import "Message.h"
 //#import "OpenPeerUser.h"
-#import <OpenpeerSDK/HOPRolodexContact.h>
+#import <OpenpeerSDK/HOPRolodexContact+External.h>
 #import <OpenpeerSDK/HOPModelManager.h>
+#import <OpenpeerSDK/HOPAvatar.h>
+#import <OpenpeerSDK/HOPImage.h>
 #import <OpenpeerSDK/HOPHomeUser+External.h>
 #import "TTTAttributedLabel.h"
 #import "Utility.h"
@@ -281,7 +283,7 @@
             UILabel *labelSeparator = [[UILabel alloc] initWithFrame:CGRectMake(headerLabelXpos, TOP_SPACE, 10.0, labelHeight)];
             labelSeparator.backgroundColor =[UIColor clearColor];
             labelSeparator.textColor = [UIColor whiteColor];
-            labelSeparator.textAlignment = UITextAlignmentCenter;
+            labelSeparator.textAlignment = NSTextAlignmentCenter;
             labelSeparator.font = self.chatTimestampFont;
             labelSeparator.text = @" | ";
             
@@ -345,23 +347,25 @@
             _messageLabel.dataDetectorTypes = NSTextCheckingTypeLink;
             _messageLabel.backgroundColor = [UIColor clearColor];
             _messageLabel.font = [UIFont systemFontOfSize:14.0];
-            _messageLabel.lineBreakMode = UILineBreakModeWordWrap;
+            _messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
             _messageLabel.text = _unicodeMessageText;
             _messageLabel.numberOfLines = 0;
             [_messageLabel sizeToFit];
             
-            
-            
-#warning TODO: add avatar image
             // show avatar
-            /* if(isHomeUserSender)
-             avat = nil;//[[HomeUser sharedHomeUser].homeUser getAvatarImage];
-             else
-             avat = [_messageOwnerContact getAvatarImage];
-             */
-            avat = [UIImage imageNamed:@"avatar.png"];
+            if(!isHomeUserSender)
+            {
+                 HOPAvatar* avatar = [self.message.contact getAvatarForWidth:@(40.0) height:@(40.0)];
+                if (avatar && avatar.avatarImage && avatar.avatarImage.image)
+                    avat = [UIImage imageWithData: avatar.avatarImage.image];
+            }
+    
+            if (!avat)
+                avat = [UIImage imageNamed:@"avatar.png"];
             
             UIImageView *ivAvat = [[UIImageView alloc] initWithFrame:CGRectMake(avatarXpos, 18, AVATAR_WIDTH, AVATAR_HEIGHT)];
+            ivAvat.clipsToBounds = YES;
+            ivAvat.layer.cornerRadius = 5.0;
             [ivAvat setImage:avat];
             // set bubble image
             float baloonViewH = messageSize.height + 8 < 28.0 ? 28.0 : messageSize.height + 8;

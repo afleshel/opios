@@ -45,7 +45,7 @@
 @property (weak,nonatomic) UIButton *buttonWithAnimation;
 
 - (void) makePulsingAnimationForButton:(UIButton*) button;
-- (void) updateCallDuration;
+
 @end
 
 @implementation CallViewController
@@ -55,7 +55,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self)
     {
-        // Custom initialization
+
     }
     return self;
 }
@@ -68,10 +68,7 @@
 
 - (void) didReceiveMemoryWarning
 {
-    // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
 }
 
 #pragma mark - View lifecycle
@@ -91,7 +88,6 @@
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    // Return YES for supported orientations
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
@@ -114,7 +110,7 @@
     [[SessionManager sharedSessionManager] endCallForSession:self.session];
 }
 
--(IBAction)pauseCall:(id)sender
+- (IBAction) pauseCall:(id)sender
 {
     //BOOL putOnHold = [[ActionManager sharedActionManager] putCallOnHoldForSession:self.session];
     
@@ -122,7 +118,7 @@
     //    [_tmrSessionDuration invalidate];
 }
 
--(IBAction)recordCall:(id)sender
+- (IBAction) recordCall:(id)sender
 {
     ((UIButton*) sender).selected = !((UIButton*) sender).selected;
     if (((UIButton*) sender).selected)
@@ -137,67 +133,20 @@
     }
 }
 
-- (void)callStarted
-{
-//    self.callStartedTime = [NSDate date];
-//    
-//    if (!self.sessionDurationTimer)
-//        self.sessionDurationTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateCallDuration) userInfo:nil repeats:YES];
-}
 
-//Implement on client side
--(void)setDefaults
+//Implemented on client side
+-(void) setDefaults
 {
     
     
 }
 
-//Implement on client side
--(void)handleCallStateChanged
+//Implemented on client side
+- (void) handleCallStateChanged
 {
     
 }
 
-- (void) playSoundForSessionState
-{
-    /*if ([self.session getCall])
-    {
-        switch ([self.session getCall].get()->getState()) {
-                //case ICall::CallState_Placed:
-            case ICall::CallState_Ringback:
-                [[HookflashSoundsManager sharedHookflashSoundsManager] playCallingSound];
-                break;
-            case ICall::CallState_Closed:
-            case ICall::CallState_Open:
-            case ICall::CallState_Active:
-                [[HookflashSoundsManager sharedHookflashSoundsManager] stopCallingSound];
-                break;
-            default:
-                break;
-        }
-    }*/
-}
-
-- (void) endAudioCall
-{
-    /*if (_tmrSessionDuration != nil && [_tmrSessionDuration isValid])
-    {
-        [_tmrSessionDuration invalidate]; 
-        _tmrSessionDuration = nil;
-    }
-    
-    [self playSoundForSessionState];
-    _isCallMuted = NO;
-    _isCallRecording = NO;
-    _sessionDuration = 0;
-    callEnded = YES;*/
-}
-
-
--(void)setControlPositions
-{
-    
-}
 
 - (void) makePulsingAnimationForButton:(UIButton*) button
 {
@@ -211,14 +160,6 @@
     theAnimation.toValue=[NSNumber numberWithFloat:0.1];
     [button.layer addAnimation:theAnimation forKey:@"animateOpacity"];
 }
-/*
-- (void) updateCallDuration
-{
-    NSTimeInterval passedTime = [[NSDate date] timeIntervalSinceDate: self.callStartedTime];
-    
-    NSUInteger seconds = (NSUInteger)round(passedTime);
-    NSString *string = [NSString stringWithFormat:@"%02u:%02u:%02u",
-                        seconds / 3600, (seconds / 60) % 60, seconds % 60];
-    self.callDurationLabel.text = string;
-}*/
+
+
 @end

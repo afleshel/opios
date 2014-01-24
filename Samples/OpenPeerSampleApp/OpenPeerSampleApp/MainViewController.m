@@ -92,8 +92,6 @@
 {
     [super viewDidLoad];
 
-    //[[OpenPeer sharedOpenPeer] setMainViewController:self];
-
     if (self.threeTapGestureRecognizer)
         [self.view addGestureRecognizer:self.threeTapGestureRecognizer];
     
@@ -451,6 +449,7 @@
      completion:^(BOOL finished)
      {
          [self.splashViewController.view removeFromSuperview];
+         self.splashViewController = nil;
      }];
     
 }
