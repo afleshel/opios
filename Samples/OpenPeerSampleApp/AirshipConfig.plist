@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>inProduction</key>
-	<false/>
+	<true/>
 	<key>developmentAppKey</key>
 	<string>lQFUvDz7TT2CueDtZBboZg</string>
 	<key>developmentAppSecret</key>
@@ -12,8 +12,10 @@
 	<string>tXjejZuJTRSV_QbJX1UzNw</string>
 	<key>productionAppSecret</key>
 	<string>lbeRGDGmTJiHnw0Z_rj2zg</string>
-	<key>masterAppSecret</key>
+	<key>masterAppSecretDev</key>
 	<string>3eGbk8-7RfGjcQRk_Cl_DQ</string>
+	<key>masterAppSecret</key>
+	<string>UGBuqwExTvyHV2uGYz9aZg</string>
 	<key>apiPushURL</key>
 	<string>https://go.urbanairship.com/api/push/</string>
 </dict>

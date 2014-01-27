@@ -98,7 +98,9 @@
 {
     [super viewDidLoad];
     
-    self.edgesForExtendedLayout = UIRectEdgeNone;
+    //Check if iOS version is 7 or greater
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
+        self.edgesForExtendedLayout = UIRectEdgeNone;
     
     self.chatViewController = [[ChatViewController alloc] initWithSession:self.session];
     self.chatViewController.delegate = self;
