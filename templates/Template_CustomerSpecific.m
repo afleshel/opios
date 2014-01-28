@@ -79,3 +79,21 @@ NSString* const lockBoxServiceDomain =  @"hcs-javascript.hookflash.me";
 
 // set default outgoing telent server
 NSString * const defaultOutgoingTelnetServer = @"tcp.logger.hookflash.me:8055";
+
+#ifdef APNS_ENABLED
+// To use push notification with urbanairship it is required to set following strings
+
+NSString* const masterAppSecretDev = @"<-- insert master secret (development) here -->";
+
+NSString* const masterAppSecret = @"<-- insert shared secret (production) here -->";
+
+NSString* const developmentAppKey = @"<-- insert development app key here -->";
+
+NSString* const developmentAppSecret = @"<-- insert development app secret here -->";
+
+NSString* const productionAppKey = @"<-- insert production app key here -->";
+
+NSString* const productionAppSecret = @"<-- insert production app secret here -->";
+
+NSString* const apiPushURL = @"https://go.urbanairship.com/api/push/";
+#endif

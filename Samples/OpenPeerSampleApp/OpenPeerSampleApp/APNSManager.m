@@ -33,6 +33,7 @@
 #import "UAirship.h"
 #import "UAConfig.h"
 #import "UAPush.h"
+#import "CustomerSpecific.h"
 
 #import <OpenPeerSDK/HOPRolodexContact.h>
 #import <OpenPeerSDK/HOPContact.h>
@@ -85,13 +86,13 @@
         NSDictionary *plistData = [NSDictionary dictionaryWithContentsOfFile:filePath];
         
 #ifdef DEBUG
-        self.urbanAirshipAppKey = [plistData objectForKey:@"developmentAppKey"];
-        self.urbanAirshipAppSecret = [plistData objectForKey:@"masterAppSecretDev"];
+        self.urbanAirshipAppKey = developmentAppKey;//[plistData objectForKey:@"developmentAppKey"];
+        self.urbanAirshipAppSecret = masterAppSecretDev;//[plistData objectForKey:@"masterAppSecretDev"];
 #else
-        self.urbanAirshipAppKey = [plistData objectForKey:@"productionAppKey"];
-        self.urbanAirshipAppSecret = [plistData objectForKey:@"masterAppSecret"];
+        self.urbanAirshipAppKey = productionAppKey;//[plistData objectForKey:@"productionAppKey"];
+        self.urbanAirshipAppSecret = masterAppSecret;//[plistData objectForKey:@"masterAppSecret"];
 #endif
-        self.apiPushURL = [plistData objectForKey:@"apiPushURL"];
+        self.apiPushURL = apiPushURL;//[plistData objectForKey:@"apiPushURL"];
         self.apnsHisotry = [[NSMutableDictionary alloc] init];
     }
     return self;
