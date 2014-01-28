@@ -200,7 +200,6 @@
 		87A1086C1802CBDC001F705D /* logger.png in Resources */ = {isa = PBXBuildFile; fileRef = 87A1086B1802CBDC001F705D /* logger.png */; };
 		87A1086E1802CD92001F705D /* logger@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 87A1086D1802CD92001F705D /* logger@2x.png */; };
 		87B5EAC318683E4300D25C3B /* APNSManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87B5EABF18683E3B00D25C3B /* APNSManager.m */; };
-		87B5EAEE1868715400D25C3B /* AirshipConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = 87D4BDEF18683ACB008C2D30 /* AirshipConfig.plist */; };
 		87BFEDBA183A885C00A48821 /* AppConsts.m in Sources */ = {isa = PBXBuildFile; fileRef = 87BFEDB8183A885C00A48821 /* AppConsts.m */; };
 		87D4BCDC18675368008C2D30 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 87272838166CBF9B0089CBB6 /* main.m */; };
 		87D4BCDD18675368008C2D30 /* AppLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 874FE10D17FD7FF0007A791B /* AppLog.m */; };
@@ -796,7 +795,6 @@
 		87BFEDB8183A885C00A48821 /* AppConsts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppConsts.m; sourceTree = "<group>"; };
 		87BFEDB9183A885C00A48821 /* AppConsts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppConsts.h; sourceTree = "<group>"; };
 		87D4BDD318675368008C2D30 /* openpeersample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = openpeersample.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		87D4BDEF18683ACB008C2D30 /* AirshipConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = AirshipConfig.plist; sourceTree = SOURCE_ROOT; };
 		87D4BDF318683B16008C2D30 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		87D4BDF518683B38008C2D30 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		87D4BDF718683B4C008C2D30 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
@@ -1325,7 +1323,6 @@
 				87098FDC17C23997007C9093 /* OpenPeerDataModel.bundle */,
 				87272838166CBF9B0089CBB6 /* main.m */,
 				8727283A166CBF9B0089CBB6 /* OpenPeerSampleApp-Prefix.pch */,
-				87D4BDEF18683ACB008C2D30 /* AirshipConfig.plist */,
 				87272834166CBF9B0089CBB6 /* OpenPeerSampleApp-Info.plist */,
 				879F4392186C507000AED5AB /* OpenPeerSampleAppAPNS-Info.plist */,
 				8713363117CCB676008C91F7 /* Default-568h@2x.png */,
@@ -1932,7 +1929,6 @@
 				87D4BD8418675368008C2D30 /* avatar.png in Resources */,
 				87D4BD8518675368008C2D30 /* iPhone_loader_00020.png in Resources */,
 				87D4BD8618675368008C2D30 /* iPhone_video_showMe@2x.png in Resources */,
-				87B5EAEE1868715400D25C3B /* AirshipConfig.plist in Resources */,
 				87D4BD8718675368008C2D30 /* iPhone_loader_00023.png in Resources */,
 				87D4BD8818675368008C2D30 /* iPhone_top_bar_background@2x.png in Resources */,
 				87D4BD8918675368008C2D30 /* iPhone_loader_00009@2x.png in Resources */,
@@ -2353,6 +2349,7 @@
 				GCC_ENABLE_CPP_RTTI = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OpenPeerSampleApp/OpenPeerSampleApp-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = "APNS_ENABLED=1";
 				HEADER_SEARCH_PATHS = (
 					"\"$(SDK_DIR)\"/usr/include/libxml2",
 					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts\"",

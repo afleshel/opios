@@ -33,6 +33,7 @@
 #import "UAirship.h"
 #import "UAConfig.h"
 #import "UAPush.h"
+#import "CustomerSpecific.h"
 
 #import <OpenPeerSDK/HOPRolodexContact.h>
 #import <OpenPeerSDK/HOPContact.h>
@@ -40,13 +41,19 @@
 #import <OpenPeerSDK/HOPAccount.h>
 #import <OpenPeerSDK/HOPPublicPeerFile.h>
 
-#define  timeBetweenPushNotificationsInSeconds 120
+#define  timeBetweenPushNotificationsInSeconds 1
 
 @interface APNSManager ()
 
-@property (nonatomic, strong) NSString* developmentAppKey;
-@property (nonatomic, strong) NSString* masterAppSecret;
+//@property (nonatomic, strong) NSString* developmentAppKey;
+//@property (nonatomic, strong) NSString* developmentAppSecret;
+//@property (nonatomic, strong) NSString* productionAppKey;
+//@property (nonatomic, strong) NSString* productionAppSecret;
+//@property (nonatomic, strong) NSString* masterAppSecret;
 @property (nonatomic, strong) NSString* apiPushURL;
+
+@property (nonatomic, strong) NSString* urbanAirshipAppKey;
+@property (nonatomic, strong) NSString* urbanAirshipAppSecret;
 
 @property (nonatomic, strong) NSMutableDictionary* apnsHisotry;
 
@@ -78,9 +85,14 @@
         NSString *filePath = [[NSBundle mainBundle] pathForResource:@"AirshipConfig" ofType:@"plist"];
         NSDictionary *plistData = [NSDictionary dictionaryWithContentsOfFile:filePath];
         
-        self.developmentAppKey = [plistData objectForKey:@"developmentAppKey"];
-        self.masterAppSecret = [plistData objectForKey:@"masterAppSecret"];
-        self.apiPushURL = [plistData objectForKey:@"apiPushURL"];
+#ifdef DEBUG
+        self.urbanAirshipAppKey = developmentAppKey;//[plistData objectForKey:@"developmentAppKey"];
+        self.urbanAirshipAppSecret = masterAppSecretDev;//[plistData objectForKey:@"masterAppSecretDev"];
+#else
+        self.urbanAirshipAppKey = productionAppKey;//[plistData objectForKey:@"productionAppKey"];
+        self.urbanAirshipAppSecret = masterAppSecret;//[plistData objectForKey:@"masterAppSecret"];
+#endif
+        self.apiPushURL = apiPushURL;//[plistData objectForKey:@"apiPushURL"];
         self.apnsHisotry = [[NSMutableDictionary alloc] init];
     }
     return self;
@@ -138,9 +150,11 @@
 {
     if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodHTTPBasic])
     {
-        if ([self.developmentAppKey length] > 0 || [self.masterAppSecret length] > 0)
+        //if ([self.developmentAppKey length] > 0 || [self.masterAppSecret length] > 0)
+        if ([self.urbanAirshipAppSecret length] > 0 || [self.urbanAirshipAppKey length] > 0)
         {
-            NSURLCredential * credential = [[NSURLCredential alloc] initWithUser:self.developmentAppKey password:self.masterAppSecret persistence:NSURLCredentialPersistenceForSession];
+//            NSURLCredential * credential = [[NSURLCredential alloc] initWithUser:self.developmentAppKey password:self.masterAppSecret persistence:NSURLCredentialPersistenceForSession];
+            NSURLCredential * credential = [[NSURLCredential alloc] initWithUser:self.urbanAirshipAppKey password:self.urbanAirshipAppSecret persistence:NSURLCredentialPersistenceForSession];
             [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
         }
     }
@@ -202,7 +216,7 @@
 
     NSDate* lastPushDate = [self.apnsHisotry objectForKey:peerURI];
     if (lastPushDate)
-        ret = [lastPushDate timeIntervalSinceNow] > timeBetweenPushNotificationsInSeconds ? YES : NO;
+        ret = [[NSDate date] timeIntervalSinceDate:lastPushDate] > timeBetweenPushNotificationsInSeconds ? YES : NO;
     
     return ret;
 }

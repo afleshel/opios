@@ -222,7 +222,7 @@
     NSString* relogininfo = [[HOPAccount sharedAccount] getReloginInformation];
     
     if ([relogininfo length] > 0)
-    {;
+    {
         OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Identity association finished - identityURI: %@  - accountStableId: %@", [identity getIdentityURI], [[HOPAccount sharedAccount] getStableID]);
         HOPHomeUser* homeUser = [[HOPModelManager sharedModelManager] getHomeUserByStableID:[[HOPAccount sharedAccount] getStableID]];
         
