@@ -49,6 +49,7 @@
 #import "ContactsViewController.h"
 #import "ActivityIndicatorViewController.h"
 #import "CustomerSpecific.h"
+#import "Settings.h"
 
 @interface IdentityDelegate()
 {
@@ -161,7 +162,7 @@
                 if ([[LoginManager sharedLoginManager] preloadedWebLoginViewController] != webLoginViewController)
                 {
                     //Open identity login web page
-                    [webLoginViewController openLoginUrl:outerFrameURL];
+                    [webLoginViewController openLoginUrl:[[Settings sharedSettings] getOuterFrameURL]];
                 }
             }
                 break;

@@ -91,4 +91,5 @@ typedef  enum
 - (void) onLogout;
 - (void) onContactsLoadingStarted;
 
+- (void) showQRScanner;
 @end

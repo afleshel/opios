@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2012, SMB Phone Inc.
+ Copyright (c) 2014, SMB Phone Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,32 +29,9 @@
  
  */
 
-#import <Foundation/Foundation.h>
-#import <OpenpeerSDK/HOPTypes.h>
+#import <UIKit/UIKit.h>
+#import "ZXingObjC/ZXingObjC.h"
 
-@class WebLoginViewController;
-@class HOPIdentity;
+@interface QRScannerViewController : UIViewController <ZXCaptureDelegate>
 
-@interface LoginManager : NSObject
-
-@property (nonatomic, strong) WebLoginViewController *preloadedWebLoginViewController;
-@property (nonatomic) BOOL isLogin;
-@property (nonatomic) BOOL isAssociation;
-
-+ (id) sharedLoginManager;
-
-- (void) startLoginUsingIdentityURI:(NSString*) identityURI;
-- (void) startAccount;
-- (void) startLogin;
-- (void) login;
-- (void) logout;
-
-- (void) onIdentityAssociationFinished:(HOPIdentity*) identity;
-- (void) attachDelegateForIdentity:(HOPIdentity*) identity forceAttach:(BOOL) forceAttach;
-
-- (void) onUserLoggedIn;
-
-- (BOOL) isAssociatedIdentity:(NSString*) inBaseIdentityURI;
-
-- (void) preloadLoginWebPage;
 @end

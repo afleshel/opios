@@ -139,15 +139,15 @@
     
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"<%p> WebLoginViewController\nFINISH LOADING - web request: %@", self, requestString);
     
-    if (!self.outerFrameInitialised && [requestString isEqualToString:outerFrameURL])
+    if (!self.outerFrameInitialised && [requestString isEqualToString:[[Settings sharedSettings] getOuterFrameURL]])
     {
-        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"<%p> WebLoginViewController\nFINISH LOADING - outerFrameURL: %@", self,outerFrameURL);
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"<%p> WebLoginViewController\nFINISH LOADING - outerFrameURL: %@", self,[[Settings sharedSettings] getOuterFrameURL]);
         self.outerFrameInitialised = YES;
         [self onOuterFrameLoaded];
     }
-    else if (!self.outerFrameInitialised && [requestString isEqualToString:namespaceGrantServiceURL])
+    else if (!self.outerFrameInitialised && [requestString isEqualToString:[[Settings sharedSettings] getNamespaceGrantServiceURL]])
     {
-        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"<%p> WebLoginViewController\nFINISH LOADING - namespaceGrantServiceURL: %@", self,namespaceGrantServiceURL);
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"<%p> WebLoginViewController\nFINISH LOADING - namespaceGrantServiceURL: %@", self,[[Settings sharedSettings] getNamespaceGrantServiceURL]);
         self.outerFrameInitialised = YES;
         [self onOuterFrameLoaded];
     }
