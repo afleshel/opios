@@ -490,6 +490,7 @@
 		87F11AF017C2854700CFE85D /* OpenPeerDataModel.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 87098FDC17C23997007C9093 /* OpenPeerDataModel.bundle */; };
 		87F24B5F166FF0C900A5389F /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F24B5E166FF0C900A5389F /* Utility.m */; };
 		87F24B62167003F400A5389F /* ContactsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F24B61167003F300A5389F /* ContactsManager.m */; };
+		87F9DAF9189AB7E100D96FF3 /* libZXingObjC-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8774AC7018992D5A006B91FA /* libZXingObjC-iOS.a */; };
 		87FC39F71709BB39002030D1 /* MessageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC39F51709BB36002030D1 /* MessageManager.m */; };
 		87FC3A151709BD8D002030D1 /* XMLWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC39FB1709BD8C002030D1 /* XMLWriter.m */; };
 		87FC3A161709BD8D002030D1 /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC39FF1709BD8C002030D1 /* SBJsonParser.m */; };
@@ -579,6 +580,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 87C9820717BE38A7002B947B;
 			remoteInfo = HOPSDK;
+		};
+		87F9DAF0189AB7C800D96FF3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8774AC6618992D53006B91FA /* ZXingObjC.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 25403CB2166A96FA00E13304;
+			remoteInfo = "ZXingObjC-iOS";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -985,6 +993,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				87F9DAF9189AB7E100D96FF3 /* libZXingObjC-iOS.a in Frameworks */,
 				8774AC4B1897E2F2006B91FA /* ImageIO.framework in Frameworks */,
 				0012C552177D11DB0017FF5E /* libz.dylib in Frameworks */,
 				87FF9862170EDAF10017C627 /* libxml2.dylib in Frameworks */,
@@ -1661,6 +1670,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				87F9DAF1189AB7C800D96FF3 /* PBXTargetDependency */,
 				87098FDA17C2361B007C9093 /* PBXTargetDependency */,
 			);
 			name = OpenPeerSampleApp;
@@ -2279,6 +2289,11 @@
 			isa = PBXTargetDependency;
 			name = HOPSDK;
 			targetProxy = 87D4BCDA18675368008C2D30 /* PBXContainerItemProxy */;
+		};
+		87F9DAF1189AB7C800D96FF3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "ZXingObjC-iOS";
+			targetProxy = 87F9DAF0189AB7C800D96FF3 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

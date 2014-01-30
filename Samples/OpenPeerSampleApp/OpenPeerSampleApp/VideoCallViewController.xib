@@ -7,6 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="VideoCallViewController">
             <connections>
+                <outlet property="buttonSwitchCamera" destination="CYS-hV-a5h" id="0ix-7r-p7F"/>
                 <outlet property="controlView" destination="63g-gH-Eel" id="RR2-KJ-FXg"/>
                 <outlet property="muteButton" destination="vuL-Zm-SeO" id="LWc-nf-riv"/>
                 <outlet property="videoImageView" destination="Zwj-WJ-LMh" id="zAe-p7-jGj"/>
