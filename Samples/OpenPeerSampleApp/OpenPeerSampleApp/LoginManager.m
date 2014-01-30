@@ -36,6 +36,7 @@
 //Utility
 #import "Utility.h"
 #import "AppConsts.h"
+#import "Settings.h"
 //Managers
 #import "ContactsManager.h"
 #import "SessionManager.h"
@@ -108,8 +109,7 @@
     //If peer file doesn't exists, show login view, otherwise start relogin
     if (![[HOPModelManager sharedModelManager] getLastLoggedInHomeUser])
     {
-        [self startLoginUsingIdentityURI:identityFederateBaseURI];
-        self.isLogin = YES;
+        [[[OpenPeer sharedOpenPeer] mainViewController] showQRScanner];
     }
     else
     {
@@ -152,8 +152,15 @@
 
 - (void) startAccount
 {
-    [[HOPAccount sharedAccount] loginWithAccountDelegate:(id<HOPAccountDelegate>)[[OpenPeer sharedOpenPeer] accountDelegate] conversationThreadDelegate:(id<HOPConversationThreadDelegate>) [[OpenPeer sharedOpenPeer] conversationThreadDelegate]  callDelegate:(id<HOPCallDelegate>) [[OpenPeer sharedOpenPeer] callDelegate]  namespaceGrantOuterFrameURLUponReload:outerFrameURL grantID:[[OpenPeer sharedOpenPeer] deviceId] lockboxServiceDomain:identityProviderDomain forceCreateNewLockboxAccount:NO];
+    [[HOPAccount sharedAccount] loginWithAccountDelegate:(id<HOPAccountDelegate>)[[OpenPeer sharedOpenPeer] accountDelegate] conversationThreadDelegate:(id<HOPConversationThreadDelegate>) [[OpenPeer sharedOpenPeer] conversationThreadDelegate]  callDelegate:(id<HOPCallDelegate>) [[OpenPeer sharedOpenPeer] callDelegate]  namespaceGrantOuterFrameURLUponReload:[[Settings sharedSettings] getOuterFrameURL] grantID:[[OpenPeer sharedOpenPeer] deviceId] lockboxServiceDomain:[[Settings sharedSettings] getIdentityProviderDomain] forceCreateNewLockboxAccount:NO];
 }
+
+- (void) startLogin
+{
+    [self startLoginUsingIdentityURI:[[Settings sharedSettings] getIdentityFederateBaseURI]];
+    self.isLogin = YES;
+}
+
 /**
  Starts user login for specific identity URI. Activity indicator is displayed and identity login started.
  @param identityURI NSString identity uri (e.g. identity://facebook.com/)
@@ -165,13 +172,13 @@
         OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Identity login started for uri: %@",identityURI);
         [[[OpenPeer sharedOpenPeer] mainViewController] onStartLoginWithidentityURI];
         
-        NSString* redirectAfterLoginCompleteURL = [NSString stringWithFormat:@"%@?reload=true",outerFrameURL];
+        NSString* redirectAfterLoginCompleteURL = [NSString stringWithFormat:@"%@?reload=true",[[Settings sharedSettings] getOuterFrameURL]];
 
         if (![[HOPAccount sharedAccount] isCoreAccountCreated] || [[HOPAccount sharedAccount] getState].state == HOPAccountStateShutdown)
             [self startAccount];
         
         //For identity login it is required to pass identity delegate, URL that will be requested upon successful login, identity URI and identity provider domain. This is 
-        HOPIdentity* hopIdentity = [HOPIdentity loginWithDelegate:(id<HOPIdentityDelegate>)[[OpenPeer sharedOpenPeer] identityDelegate] identityProviderDomain:identityProviderDomain  identityURIOridentityBaseURI:identityURI outerFrameURLUponReload:redirectAfterLoginCompleteURL];
+        HOPIdentity* hopIdentity = [HOPIdentity loginWithDelegate:(id<HOPIdentityDelegate>)[[OpenPeer sharedOpenPeer] identityDelegate] identityProviderDomain:[[Settings sharedSettings] getIdentityProviderDomain]  identityURIOridentityBaseURI:identityURI outerFrameURLUponReload:redirectAfterLoginCompleteURL];
         
         if (!hopIdentity)
             OPLog(HOPLoggerSeverityError, HOPLoggerLevelTrace, @"Identity login has failed for uri: %@",identityURI);
@@ -194,7 +201,7 @@
     if (homeUser && [homeUser.reloginInfo length] > 0)
     {
         //To start relogin procedure it is required to pass account, conversation thread and call delegates. Also, private peer file and secret, received on previous login procedure, are required.
-        reloginStarted = [[HOPAccount sharedAccount] reloginWithAccountDelegate:(id<HOPAccountDelegate>) [[OpenPeer sharedOpenPeer] accountDelegate] conversationThreadDelegate:(id<HOPConversationThreadDelegate>)[[OpenPeer sharedOpenPeer] conversationThreadDelegate]  callDelegate:(id<HOPCallDelegate>)[[OpenPeer sharedOpenPeer] callDelegate] lockboxOuterFrameURLUponReload:outerFrameURL reloginInformation:homeUser.reloginInfo];
+        reloginStarted = [[HOPAccount sharedAccount] reloginWithAccountDelegate:(id<HOPAccountDelegate>) [[OpenPeer sharedOpenPeer] accountDelegate] conversationThreadDelegate:(id<HOPConversationThreadDelegate>)[[OpenPeer sharedOpenPeer] conversationThreadDelegate]  callDelegate:(id<HOPCallDelegate>)[[OpenPeer sharedOpenPeer] callDelegate] lockboxOuterFrameURLUponReload:[[Settings sharedSettings] getOuterFrameURL] reloginInformation:homeUser.reloginInfo];
     }
     
     if (!reloginStarted)
@@ -210,7 +217,7 @@
             self.preloadedWebLoginViewController.view.hidden = YES;
     }
     
-    [self.preloadedWebLoginViewController openLoginUrl:outerFrameURL];
+    [self.preloadedWebLoginViewController openLoginUrl:[[Settings sharedSettings] getOuterFrameURL]];
 }
 
 /**
@@ -266,7 +273,7 @@
         //Create core data record if it is not already in the db    
         [self onIdentityAssociationFinished:identity];
         
-        NSString* redirectAfterLoginCompleteURL = [NSString stringWithFormat:@"%@?reload=true",outerFrameURL];
+        NSString* redirectAfterLoginCompleteURL = [NSString stringWithFormat:@"%@?reload=true",[[Settings sharedSettings] getOuterFrameURL]];
         
         [identity attachDelegate:(id<HOPIdentityDelegate>)[[OpenPeer sharedOpenPeer] identityDelegate]  redirectionURL:redirectAfterLoginCompleteURL];
     }
@@ -291,7 +298,7 @@
             {
                 if (![identity isDelegateAttached])
                 {
-                    NSString* redirectAfterLoginCompleteURL = [NSString stringWithFormat:@"%@?reload=true",outerFrameURL];
+                    NSString* redirectAfterLoginCompleteURL = [NSString stringWithFormat:@"%@?reload=true",[[Settings sharedSettings] getOuterFrameURL]];
                     
                     [identity attachDelegate:(id<HOPIdentityDelegate>)[[OpenPeer sharedOpenPeer] identityDelegate]  redirectionURL:redirectAfterLoginCompleteURL];
                 }
@@ -389,7 +396,7 @@
         
         if ([[identity getBaseIdentityURI] isEqualToString:identityFacebookBaseURI])
         {
-            [[LoginManager sharedLoginManager] startLoginUsingIdentityURI:identityFederateBaseURI];
+            [[LoginManager sharedLoginManager] startLoginUsingIdentityURI:[[Settings sharedSettings] getIdentityFederateBaseURI]];
         }
         else
         {

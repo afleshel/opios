@@ -34,6 +34,7 @@
 #import "OpenPeer.h"
 #import "Logger.h"
 #import "CustomerSpecific.h"
+#import "SBJsonParser.h"
 
 @interface Settings ()
 
@@ -102,6 +103,18 @@
             self.outgoingTelnetLoggerSettings = [[NSMutableDictionary alloc] init];
             [self.outgoingTelnetLoggerSettings setObject:defaultOutgoingTelnetServer forKey:@"server"];
             [self.outgoingTelnetLoggerSettings setObject:[NSNumber numberWithBool:YES] forKey:@"colorized"];
+        }
+        
+        self.loginSettings = [[[NSUserDefaults standardUserDefaults] objectForKey:archiveLoginSettings] mutableCopy];
+        if (!self.loginSettings)
+        {
+            self.loginSettings = [[NSMutableDictionary alloc] init];
+            /*[self.loginSettings setObject:outerFrameURL forKey:@"outerFrameURL"];
+            [self.loginSettings setObject:namespaceGrantServiceURL forKey:@"namespaceGrantServiceURL"];
+            [self.loginSettings setObject:identityProviderDomain forKey:@"identityProviderDomain"];
+            [self.loginSettings setObject:identityFederateBaseURI forKey:@"identityFederateBaseURI"];
+            [self.loginSettings setObject:lockBoxServiceDomain forKey:@"lockBoxServiceDomain"];
+            //[self.loginSettings setObject:defaultOutgoingTelnetServer forKey:@"defaultOutgoingTelnetServer"];*/
         }
     }
     return self;
@@ -538,4 +551,103 @@
     [self enable:YES logger:LOGGER_OUTGOING_TELNET];
 }
 
+- (void) setOuterFrameURL:(NSString*) inOuterFrameURL
+{
+    if ([inOuterFrameURL length] > 0)
+    {
+        [self.loginSettings setObject:inOuterFrameURL forKey:@"outerFrameURL"];
+        [self saveLoginSettings];
+    }
+}
+
+- (NSString*) getOuterFrameURL
+{
+    return [self.loginSettings objectForKey:@"outerFrameURL"];
+}
+
+- (void) setNamespaceGrantServiceURL:(NSString*) inNamespaceGrantServiceURL
+{
+    [self.loginSettings setObject:inNamespaceGrantServiceURL forKey:@"namespaceGrantServiceURL"];
+    [self saveLoginSettings];
+}
+
+- (NSString*) getNamespaceGrantServiceURL
+{
+    return [self.loginSettings objectForKey:@"namespaceGrantServiceURL"];
+}
+
+- (void) setIdentityProviderDomain:(NSString*) inIdentityProviderDomain
+{
+    [self.loginSettings setObject:inIdentityProviderDomain forKey:@"identityProviderDomain"];
+    [self saveLoginSettings];
+}
+
+- (NSString*) getIdentityProviderDomain
+{
+    return [self.loginSettings objectForKey:@"identityProviderDomain"];
+}
+
+- (void) setIdentityFederateBaseURI:(NSString*) inIdentityFederateBaseURI
+{
+    [self.loginSettings setObject:inIdentityFederateBaseURI forKey:@"identityFederateBaseURI"];
+    [self saveLoginSettings];
+}
+
+- (NSString*) getIdentityFederateBaseURI
+{
+    return [self.loginSettings objectForKey:@"identityFederateBaseURI"];
+}
+
+- (void) setLockBoxServiceDomain:(NSString*) inLockBoxServiceDomain
+{
+    [self.loginSettings setObject:inLockBoxServiceDomain forKey:@"lockBoxServiceDomain"];
+    [self saveLoginSettings];
+}
+
+- (NSString*) getLockBoxServiceDomain
+{
+    return [self.loginSettings objectForKey:@"lockBoxServiceDomain"];
+}
+
+//- (void) setDefaultOutgoingTelnetServer:(NSString*) inDefaultOutgoingTelnetServer
+//{
+//    [self.loginSettings setObject:inDefaultOutgoingTelnetServer forKey:@"defaultOutgoingTelnetServer"];
+//    [self saveLoginSettings];
+//}
+//
+//- (NSString*) getDefaultOutgoingTelnetServer
+//{
+//    return [self.loginSettings objectForKey:@"defaultOutgoingTelnetServer"];
+//}
+
+- (void) saveLoginSettings
+{
+    [[NSUserDefaults standardUserDefaults] setObject:self.loginSettings forKey:archiveLoginSettings];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (BOOL) setLoginSettingsFromJSON:(NSString *)loginSettingsJSON
+{
+    BOOL ret = NO;
+    SBJsonParser* parser = [[SBJsonParser alloc] init];
+    NSDictionary* inputDictionary = [parser objectWithString: loginSettingsJSON];
+    if ([inputDictionary count] > 0)
+    {
+        [self setOuterFrameURL:[inputDictionary objectForKey:@"outerFrameURL"]];
+        [self setNamespaceGrantServiceURL:[inputDictionary objectForKey:@"namespaceGrantServiceURL"]];
+        [self setIdentityProviderDomain:[inputDictionary objectForKey:@"identityProviderDomain"]];
+        [self setIdentityFederateBaseURI:[inputDictionary objectForKey:@"identityFederateBaseURI"]];
+        [self setLockBoxServiceDomain:[inputDictionary objectForKey:@"lockBoxServiceDomain"]];
+        //[self setDefaultOutgoingTelnetServer:[inputDictionary objectForKey:@"defaultOutgoingTelnetServer"]];
+        [self setServerOrPort:[inputDictionary objectForKey:@"defaultOutgoingTelnetServer"] logger:LOGGER_OUTGOING_TELNET];
+        
+        ret = YES;
+    }
+    
+    return ret;
+}
+- (BOOL) isLoginSettingsSet
+{
+    return [self.loginSettings count] > 0;
+}
 @end

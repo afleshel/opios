@@ -80,7 +80,7 @@
                 break;
                 
             case HOPAccountWaitingForBrowserWindowToBeLoaded:
-                [self.webLoginViewController openLoginUrl:namespaceGrantServiceURL];
+                [self.webLoginViewController openLoginUrl:[[Settings sharedSettings] getNamespaceGrantServiceURL]];
                 break;
                 
             case HOPAccountWaitingForBrowserWindowToBeMadeVisible:

@@ -40,6 +40,7 @@
 #import "Utility.h"
 #import <OpenPeerSDK/HOPCall.h>
 
+
 @interface SessionViewController_iPhone ()
 
 @property (nonatomic, weak) IBOutlet UIView* containerView;
@@ -219,7 +220,8 @@
             //int i = 0;
             
             [buttonTitles addObject:NSLocalizedString(@"Audio Call", @"")];
-            [buttonTitles addObject:NSLocalizedString(@"Video Call", @"")];
+            if ([Utility hasCamera])
+                [buttonTitles addObject:NSLocalizedString(@"Video Call", @"")];
             //[buttonTitles addObject:NSLocalizedString(@"Close session", @"")];
             [buttonTitles addObject:NSLocalizedString(@"Cancel", @"")];
             
@@ -247,7 +249,8 @@
             [[SessionManager sharedSessionManager] makeCallForSession:self.session includeVideo:NO isRedial:NO];
             break;
         case 1:
-            [[SessionManager sharedSessionManager] makeCallForSession:self.session includeVideo:YES isRedial:NO];
+            if ([Utility hasCamera])
+                [[SessionManager sharedSessionManager] makeCallForSession:self.session includeVideo:YES isRedial:NO];
             break;
         case 2:
             //[self closeSession:nil];

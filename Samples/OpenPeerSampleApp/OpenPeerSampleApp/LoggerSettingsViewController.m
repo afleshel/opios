@@ -237,7 +237,7 @@ typedef enum
                     if ([server length] > 0)
                         textField.text = server;
                     else
-                        textField.text = indexPath.section == SECTION_LOGGER_TELNET ? defaultTelnetPort : defaultOutgoingTelnetServer;
+                        textField.text = indexPath.section == SECTION_LOGGER_TELNET ? defaultTelnetPort : [[Settings sharedSettings] getDefaultOutgoingTelnetServer];
                         
                     
                 }

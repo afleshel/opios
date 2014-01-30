@@ -48,4 +48,6 @@
 + (UIBarButtonItem*) createNavigationBackButtonForTarget:(id) target;
 + (NSString *)formatedMessageTimeStampForDate:(NSDate*) inDate;
 + (NSString *)hexadecimalStringForData:(NSData *)data;
++ (int) getNumberOfDeviceCameras;
++ (BOOL) hasCamera;
 @end

@@ -87,6 +87,8 @@
 		87272850166CC1810089CBB6 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8727284E166CC1810089CBB6 /* MainViewController.m */; };
 		87272851166CC1810089CBB6 /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8727284F166CC1810089CBB6 /* MainViewController.xib */; };
 		87272859166CC45B0089CBB6 /* LoginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87272858166CC45B0089CBB6 /* LoginManager.m */; };
+		872D7E9E1897E19A005D8335 /* QRScannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D7E9C1897E19A005D8335 /* QRScannerViewController.m */; };
+		872D7E9F1897E19A005D8335 /* QRScannerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 872D7E9D1897E19A005D8335 /* QRScannerViewController.xib */; };
 		8730D6E31832601C008D1D37 /* VideoCallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8730D6E11832601C008D1D37 /* VideoCallViewController.m */; };
 		8730D6E41832601C008D1D37 /* VideoCallViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8730D6E21832601C008D1D37 /* VideoCallViewController.xib */; };
 		8730D6FE18328D6A008D1D37 /* iPhone_switch_camera.png in Resources */ = {isa = PBXBuildFile; fileRef = 8730D6FC18328D6A008D1D37 /* iPhone_switch_camera.png */; };
@@ -194,13 +196,20 @@
 		875CD7E2167A14810037396B /* SessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 875CD7E1167A14810037396B /* SessionManager.m */; };
 		875CD7E5167A14960037396B /* Session.m in Sources */ = {isa = PBXBuildFile; fileRef = 875CD7E4167A14960037396B /* Session.m */; };
 		876CBCBB16F20A88004D542B /* IdentityDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 876CBCBA16F20A88004D542B /* IdentityDelegate.m */; };
+		8774AC4B1897E2F2006B91FA /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8774AC4A1897E2F2006B91FA /* ImageIO.framework */; };
+		8774AC4E1897E305006B91FA /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8774AC4A1897E2F2006B91FA /* ImageIO.framework */; };
+		8774AC6518981094006B91FA /* QRScannerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 872D7E9D1897E19A005D8335 /* QRScannerViewController.xib */; };
+		8774AC7B18992D86006B91FA /* libZXingObjC-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8774AC7018992D5A006B91FA /* libZXingObjC-iOS.a */; };
+		8774AC7D18995DE8006B91FA /* defaultLoginSettings.json in Resources */ = {isa = PBXBuildFile; fileRef = 8774AC7C18995DE8006B91FA /* defaultLoginSettings.json */; };
+		8774AC7E18995DF3006B91FA /* defaultLoginSettings.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8774AC7C18995DE8006B91FA /* defaultLoginSettings.json */; };
+		8774AC7F189961EB006B91FA /* defaultLoginSettings.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8774AC7C18995DE8006B91FA /* defaultLoginSettings.json */; };
 		879D7B9717FB1224008C78E2 /* LoggerSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 879D7B9617FB1224008C78E2 /* LoggerSettingsViewController.m */; };
 		879F4393186C507000AED5AB /* OpenPeerSampleAppAPNS-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 879F4392186C507000AED5AB /* OpenPeerSampleAppAPNS-Info.plist */; };
 		87A1086A1802C116001F705D /* Logger.m in Sources */ = {isa = PBXBuildFile; fileRef = 87A108691802C116001F705D /* Logger.m */; };
 		87A1086C1802CBDC001F705D /* logger.png in Resources */ = {isa = PBXBuildFile; fileRef = 87A1086B1802CBDC001F705D /* logger.png */; };
 		87A1086E1802CD92001F705D /* logger@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 87A1086D1802CD92001F705D /* logger@2x.png */; };
+		87B541D11897E2440038D427 /* QRScannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D7E9C1897E19A005D8335 /* QRScannerViewController.m */; };
 		87B5EAC318683E4300D25C3B /* APNSManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87B5EABF18683E3B00D25C3B /* APNSManager.m */; };
-		87B5EAEE1868715400D25C3B /* AirshipConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = 87D4BDEF18683ACB008C2D30 /* AirshipConfig.plist */; };
 		87BFEDBA183A885C00A48821 /* AppConsts.m in Sources */ = {isa = PBXBuildFile; fileRef = 87BFEDB8183A885C00A48821 /* AppConsts.m */; };
 		87D4BCDC18675368008C2D30 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 87272838166CBF9B0089CBB6 /* main.m */; };
 		87D4BCDD18675368008C2D30 /* AppLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 874FE10D17FD7FF0007A791B /* AppLog.m */; };
@@ -481,6 +490,7 @@
 		87F11AF017C2854700CFE85D /* OpenPeerDataModel.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 87098FDC17C23997007C9093 /* OpenPeerDataModel.bundle */; };
 		87F24B5F166FF0C900A5389F /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F24B5E166FF0C900A5389F /* Utility.m */; };
 		87F24B62167003F400A5389F /* ContactsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F24B61167003F300A5389F /* ContactsManager.m */; };
+		87F9DAF9189AB7E100D96FF3 /* libZXingObjC-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8774AC7018992D5A006B91FA /* libZXingObjC-iOS.a */; };
 		87FC39F71709BB39002030D1 /* MessageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC39F51709BB36002030D1 /* MessageManager.m */; };
 		87FC3A151709BD8D002030D1 /* XMLWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC39FB1709BD8C002030D1 /* XMLWriter.m */; };
 		87FC3A161709BD8D002030D1 /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC39FF1709BD8C002030D1 /* SBJsonParser.m */; };
@@ -515,6 +525,48 @@
 			remoteGlobalIDString = 8792E86816519CFF00DEAC58;
 			remoteInfo = OpenpeerSDK;
 		};
+		8774AC6F18992D5A006B91FA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8774AC6618992D53006B91FA /* ZXingObjC.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 25403CB3166A96FA00E13304;
+			remoteInfo = "ZXingObjC-iOS";
+		};
+		8774AC7118992D5A006B91FA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8774AC6618992D53006B91FA /* ZXingObjC.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 25403CC4166A96FA00E13304;
+			remoteInfo = "ZXingObjCTests-iOS";
+		};
+		8774AC7318992D5A006B91FA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8774AC6618992D53006B91FA /* ZXingObjC.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 25404166166AADAC00E13304;
+			remoteInfo = "ZXingObjC-osx";
+		};
+		8774AC7518992D5A006B91FA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8774AC6618992D53006B91FA /* ZXingObjC.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 25404178166AADAC00E13304;
+			remoteInfo = "ZXingObjCTests-osx";
+		};
+		8774AC7718992D5A006B91FA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8774AC6618992D53006B91FA /* ZXingObjC.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2540439E166ABA0A00E13304;
+			remoteInfo = "OS X Framework";
+		};
+		8774AC7918992D6C006B91FA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8774AC6618992D53006B91FA /* ZXingObjC.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 25403CB2166A96FA00E13304;
+			remoteInfo = "ZXingObjC-iOS";
+		};
 		87C9821117BE38C0002B947B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 872729CF166CDF530089CBB6 /* openpeer-ios-sdk.xcodeproj */;
@@ -529,24 +581,33 @@
 			remoteGlobalIDString = 87C9820717BE38A7002B947B;
 			remoteInfo = HOPSDK;
 		};
+		87F9DAF0189AB7C800D96FF3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8774AC6618992D53006B91FA /* ZXingObjC.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 25403CB2166A96FA00E13304;
+			remoteInfo = "ZXingObjC-iOS";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		87098FD017C20DAB007C9093 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 8;
 			dstPath = "";
-			dstSubfolderSpec = 7;
+			dstSubfolderSpec = 16;
 			files = (
+				8774AC7E18995DF3006B91FA /* defaultLoginSettings.json in CopyFiles */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 		};
 		87D4BDCF18675368008C2D30 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
+				8774AC7F189961EB006B91FA /* defaultLoginSettings.json in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -654,6 +715,9 @@
 		87272857166CC45A0089CBB6 /* LoginManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginManager.h; sourceTree = "<group>"; };
 		87272858166CC45B0089CBB6 /* LoginManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginManager.m; sourceTree = "<group>"; };
 		872729CF166CDF530089CBB6 /* openpeer-ios-sdk.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "openpeer-ios-sdk.xcodeproj"; path = "../../openpeer-ios-sdk.xcodeproj"; sourceTree = "<group>"; };
+		872D7E9B1897E19A005D8335 /* QRScannerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRScannerViewController.h; sourceTree = "<group>"; };
+		872D7E9C1897E19A005D8335 /* QRScannerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRScannerViewController.m; sourceTree = "<group>"; };
+		872D7E9D1897E19A005D8335 /* QRScannerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QRScannerViewController.xib; sourceTree = "<group>"; };
 		8730D6E01832601C008D1D37 /* VideoCallViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoCallViewController.h; sourceTree = "<group>"; };
 		8730D6E11832601C008D1D37 /* VideoCallViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoCallViewController.m; sourceTree = "<group>"; };
 		8730D6E21832601C008D1D37 /* VideoCallViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VideoCallViewController.xib; sourceTree = "<group>"; };
@@ -784,6 +848,9 @@
 		875CD7E4167A14960037396B /* Session.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Session.m; sourceTree = "<group>"; };
 		876CBCB916F20A88004D542B /* IdentityDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdentityDelegate.h; sourceTree = "<group>"; };
 		876CBCBA16F20A88004D542B /* IdentityDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdentityDelegate.m; sourceTree = "<group>"; };
+		8774AC4A1897E2F2006B91FA /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		8774AC6618992D53006B91FA /* ZXingObjC.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZXingObjC.xcodeproj; path = ../../../libs/ZXingObjC/ZXingObjC.xcodeproj; sourceTree = "<group>"; };
+		8774AC7C18995DE8006B91FA /* defaultLoginSettings.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = defaultLoginSettings.json; sourceTree = "<group>"; };
 		879D7B9517FB1224008C78E2 /* LoggerSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoggerSettingsViewController.h; sourceTree = "<group>"; };
 		879D7B9617FB1224008C78E2 /* LoggerSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = LoggerSettingsViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		879F4392186C507000AED5AB /* OpenPeerSampleAppAPNS-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "OpenPeerSampleAppAPNS-Info.plist"; sourceTree = SOURCE_ROOT; };
@@ -796,7 +863,6 @@
 		87BFEDB8183A885C00A48821 /* AppConsts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppConsts.m; sourceTree = "<group>"; };
 		87BFEDB9183A885C00A48821 /* AppConsts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppConsts.h; sourceTree = "<group>"; };
 		87D4BDD318675368008C2D30 /* openpeersample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = openpeersample.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		87D4BDEF18683ACB008C2D30 /* AirshipConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = AirshipConfig.plist; sourceTree = SOURCE_ROOT; };
 		87D4BDF318683B16008C2D30 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		87D4BDF518683B38008C2D30 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		87D4BDF718683B4C008C2D30 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
@@ -927,6 +993,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				87F9DAF9189AB7E100D96FF3 /* libZXingObjC-iOS.a in Frameworks */,
+				8774AC4B1897E2F2006B91FA /* ImageIO.framework in Frameworks */,
 				0012C552177D11DB0017FF5E /* libz.dylib in Frameworks */,
 				87FF9862170EDAF10017C627 /* libxml2.dylib in Frameworks */,
 				87EE5FE9166E917B002C5FA3 /* libresolv.dylib in Frameworks */,
@@ -955,6 +1023,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8774AC7B18992D86006B91FA /* libZXingObjC-iOS.a in Frameworks */,
+				8774AC4E1897E305006B91FA /* ImageIO.framework in Frameworks */,
 				87D4BDFC18683B65008C2D30 /* CoreLocation.framework in Frameworks */,
 				87D4BDFA18683B59008C2D30 /* CoreTelephony.framework in Frameworks */,
 				87D4BDF818683B4C008C2D30 /* libsqlite3.dylib in Frameworks */,
@@ -991,6 +1061,10 @@
 		870C5E181672345A00A3AA4F /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				8774AC6618992D53006B91FA /* ZXingObjC.xcodeproj */,
+				872D7E9B1897E19A005D8335 /* QRScannerViewController.h */,
+				872D7E9C1897E19A005D8335 /* QRScannerViewController.m */,
+				872D7E9D1897E19A005D8335 /* QRScannerViewController.xib */,
 				87D4BDFD18683BED008C2D30 /* Airship */,
 				870059EC184F563800B6B826 /* UIBadgeView.h */,
 				870059ED184F563800B6B826 /* UIBadgeView.m */,
@@ -1078,6 +1152,7 @@
 		8711BE1D1861EF1300DBF8B5 /* templates */ = {
 			isa = PBXGroup;
 			children = (
+				8774AC7C18995DE8006B91FA /* defaultLoginSettings.json */,
 				8711BE1F1861EF1300DBF8B5 /* Template_CustomerSpecific.m */,
 			);
 			name = templates;
@@ -1270,6 +1345,7 @@
 		8727282B166CBF9B0089CBB6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8774AC4A1897E2F2006B91FA /* ImageIO.framework */,
 				87D4BDFB18683B65008C2D30 /* CoreLocation.framework */,
 				87D4BDF918683B59008C2D30 /* CoreTelephony.framework */,
 				87D4BDF718683B4C008C2D30 /* libsqlite3.dylib */,
@@ -1325,7 +1401,6 @@
 				87098FDC17C23997007C9093 /* OpenPeerDataModel.bundle */,
 				87272838166CBF9B0089CBB6 /* main.m */,
 				8727283A166CBF9B0089CBB6 /* OpenPeerSampleApp-Prefix.pch */,
-				87D4BDEF18683ACB008C2D30 /* AirshipConfig.plist */,
 				87272834166CBF9B0089CBB6 /* OpenPeerSampleApp-Info.plist */,
 				879F4392186C507000AED5AB /* OpenPeerSampleAppAPNS-Info.plist */,
 				8713363117CCB676008C91F7 /* Default-568h@2x.png */,
@@ -1381,6 +1456,18 @@
 			name = TTTAttributedLabel;
 			path = 3rdParties/TTTAttributedLabel;
 			sourceTree = SOURCE_ROOT;
+		};
+		8774AC6718992D53006B91FA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8774AC7018992D5A006B91FA /* libZXingObjC-iOS.a */,
+				8774AC7218992D5A006B91FA /* ZXingObjCTests-iOS.octest */,
+				8774AC7418992D5A006B91FA /* libZXingObjC-osx.a */,
+				8774AC7618992D5A006B91FA /* ZXingObjCTests-osx.octest */,
+				8774AC7818992D5A006B91FA /* ZXingObjC.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
 		};
 		87D4BDFD18683BED008C2D30 /* Airship */ = {
 			isa = PBXGroup;
@@ -1583,6 +1670,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				87F9DAF1189AB7C800D96FF3 /* PBXTargetDependency */,
 				87098FDA17C2361B007C9093 /* PBXTargetDependency */,
 			);
 			name = OpenPeerSampleApp;
@@ -1602,6 +1690,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				8774AC7A18992D6C006B91FA /* PBXTargetDependency */,
 				87D4BCD918675368008C2D30 /* PBXTargetDependency */,
 			);
 			name = OpenPeerSampleAPNSApp;
@@ -1639,6 +1728,10 @@
 					ProductGroup = 870E0B6C175C93BF00C93CC1 /* Products */;
 					ProjectRef = 872729CF166CDF530089CBB6 /* openpeer-ios-sdk.xcodeproj */;
 				},
+				{
+					ProductGroup = 8774AC6718992D53006B91FA /* Products */;
+					ProjectRef = 8774AC6618992D53006B91FA /* ZXingObjC.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -1654,6 +1747,41 @@
 			fileType = archive.ar;
 			path = libOpenpeerSDK.a;
 			remoteRef = 870E0B6F175C93BF00C93CC1 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		8774AC7018992D5A006B91FA /* libZXingObjC-iOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libZXingObjC-iOS.a";
+			remoteRef = 8774AC6F18992D5A006B91FA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		8774AC7218992D5A006B91FA /* ZXingObjCTests-iOS.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "ZXingObjCTests-iOS.octest";
+			remoteRef = 8774AC7118992D5A006B91FA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		8774AC7418992D5A006B91FA /* libZXingObjC-osx.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libZXingObjC-osx.a";
+			remoteRef = 8774AC7318992D5A006B91FA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		8774AC7618992D5A006B91FA /* ZXingObjCTests-osx.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "ZXingObjCTests-osx.octest";
+			remoteRef = 8774AC7518992D5A006B91FA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		8774AC7818992D5A006B91FA /* ZXingObjC.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = ZXingObjC.framework;
+			remoteRef = 8774AC7718992D5A006B91FA /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		87C9821217BE38C0002B947B /* OpenpeerDataModel.bundle */ = {
@@ -1696,6 +1824,7 @@
 				8730D7BF1833A63D008D1D37 /* iPhone_loader_00010.png in Resources */,
 				8730D7AC1833A63D008D1D37 /* iPhone_loader_00000@2x.png in Resources */,
 				870F3380168376450090A97F /* ActivityIndicatorViewController.xib in Resources */,
+				8774AC7D18995DE8006B91FA /* defaultLoginSettings.json in Resources */,
 				87F09EE2171EBB1B0045F6A6 /* ChatViewController.xib in Resources */,
 				8730D7BB1833A63D008D1D37 /* iPhone_loader_00008.png in Resources */,
 				87355FE517CCA7E3006151E7 /* Default.png in Resources */,
@@ -1797,6 +1926,7 @@
 				8730D75D183398A5008D1D37 /* iPhone_Button-end-baritem@2x.png in Resources */,
 				8712BE7C17D8CC7C00665F42 /* iPhone_tabBar_contacts_inactive.png in Resources */,
 				8730D7E11833A63D008D1D37 /* iPhone_loader_00027.png in Resources */,
+				872D7E9F1897E19A005D8335 /* QRScannerViewController.xib in Resources */,
 				874408D4182FFE43004AD8FC /* handset_accept_icon.png in Resources */,
 				8730D7DD1833A63D008D1D37 /* iPhone_loader_00025.png in Resources */,
 				8730D7C11833A63D008D1D37 /* iPhone_loader_00011.png in Resources */,
@@ -1932,7 +2062,6 @@
 				87D4BD8418675368008C2D30 /* avatar.png in Resources */,
 				87D4BD8518675368008C2D30 /* iPhone_loader_00020.png in Resources */,
 				87D4BD8618675368008C2D30 /* iPhone_video_showMe@2x.png in Resources */,
-				87B5EAEE1868715400D25C3B /* AirshipConfig.plist in Resources */,
 				87D4BD8718675368008C2D30 /* iPhone_loader_00023.png in Resources */,
 				87D4BD8818675368008C2D30 /* iPhone_top_bar_background@2x.png in Resources */,
 				87D4BD8918675368008C2D30 /* iPhone_loader_00009@2x.png in Resources */,
@@ -2000,6 +2129,7 @@
 				87D4BDC718675368008C2D30 /* chat_bubble_left.png in Resources */,
 				87D4BDC818675368008C2D30 /* chat-bottom@2x.png in Resources */,
 				87D4BDC918675368008C2D30 /* iPhone_loader_00026.png in Resources */,
+				8774AC6518981094006B91FA /* QRScannerViewController.xib in Resources */,
 				87D4BDCA18675368008C2D30 /* iPhone_loader_00025@2x.png in Resources */,
 				87D4BDCB18675368008C2D30 /* iPhone_tabBar_bkgd.png in Resources */,
 				87D4BDCC18675368008C2D30 /* iPhone_back_button@2x.png in Resources */,
@@ -2053,6 +2183,7 @@
 				874408CB182FE873004AD8FC /* IncomingCallViewController.m in Sources */,
 				87FC3A191709BD8D002030D1 /* SBJsonStreamParserAdapter.m in Sources */,
 				870059EE184F563800B6B826 /* UIBadgeView.m in Sources */,
+				872D7E9E1897E19A005D8335 /* QRScannerViewController.m in Sources */,
 				87FC3A1A1709BD8D002030D1 /* SBJsonStreamParserState.m in Sources */,
 				87FC3A1B1709BD8D002030D1 /* SBJsonStreamTokeniser.m in Sources */,
 				87FC3A1C1709BD8D002030D1 /* SBJsonStreamWriter.m in Sources */,
@@ -2108,6 +2239,7 @@
 				87D4BCF618675368008C2D30 /* ActivityIndicatorViewController.m in Sources */,
 				87B5EAC318683E4300D25C3B /* APNSManager.m in Sources */,
 				87D4BCF718675368008C2D30 /* IdentityDelegate.m in Sources */,
+				87B541D11897E2440038D427 /* QRScannerViewController.m in Sources */,
 				87D4BCF818675368008C2D30 /* MessageManager.m in Sources */,
 				87D4BCF918675368008C2D30 /* XMLWriter.m in Sources */,
 				87D4BCFA18675368008C2D30 /* SessionViewController_iPhone.m in Sources */,
@@ -2148,10 +2280,20 @@
 			name = HOPSDK;
 			targetProxy = 87098FD917C2361B007C9093 /* PBXContainerItemProxy */;
 		};
+		8774AC7A18992D6C006B91FA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "ZXingObjC-iOS";
+			targetProxy = 8774AC7918992D6C006B91FA /* PBXContainerItemProxy */;
+		};
 		87D4BCD918675368008C2D30 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = HOPSDK;
 			targetProxy = 87D4BCDA18675368008C2D30 /* PBXContainerItemProxy */;
+		};
+		87F9DAF1189AB7C800D96FF3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "ZXingObjC-iOS";
+			targetProxy = 87F9DAF0189AB7C800D96FF3 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -2313,7 +2455,10 @@
 					"$(inherited)",
 					"APNS_ENABLED=1",
 				);
-				HEADER_SEARCH_PATHS = "$(inherited)";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"../../libs/ZXingObjC/**",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/OpenPeerSampleAppAPNS-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LIBRARY_SEARCH_PATHS = (
@@ -2357,6 +2502,7 @@
 				HEADER_SEARCH_PATHS = (
 					"\"$(SDK_DIR)\"/usr/include/libxml2",
 					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts\"",
+					"../../libs/ZXingObjC/**",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/OpenPeerSampleAppAPNS-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;

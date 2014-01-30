@@ -45,3 +45,13 @@ extern NSString* const identityProviderDomain;
 extern NSString* const identityFederateBaseURI;
 extern NSString* const lockBoxServiceDomain;
 extern NSString* const defaultOutgoingTelnetServer;
+
+#ifdef APNS_ENABLED
+extern NSString* const masterAppSecretDev;
+extern NSString* const masterAppSecret;
+extern NSString* const developmentAppKey;
+extern NSString* const developmentAppSecret;
+extern NSString* const productionAppKey;
+extern NSString* const productionAppSecret;
+extern NSString* const apiPushURL;
+#endif

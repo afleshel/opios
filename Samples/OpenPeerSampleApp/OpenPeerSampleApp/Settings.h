@@ -91,6 +91,7 @@ typedef enum
 @property (strong, nonatomic) NSMutableDictionary* appModulesLoggerLevel;
 @property (strong, nonatomic) NSMutableDictionary* telnetLoggerSettings;
 @property (strong, nonatomic) NSMutableDictionary* outgoingTelnetLoggerSettings;
+@property (strong, nonatomic) NSMutableDictionary* loginSettings;
 
 
 
@@ -122,4 +123,21 @@ typedef enum
 - (NSString*) getStringForLogLevel:(HOPLoggerLevels) level;
 
 - (void) saveDefaultsLoggerSettings;
+
+- (void) setOuterFrameURL:(NSString*) inOuterFrameURL;
+- (NSString*) getOuterFrameURL;
+- (void) setNamespaceGrantServiceURL:(NSString*) inNamespaceGrantServiceURL;
+- (NSString*) getNamespaceGrantServiceURL;
+- (void) setIdentityProviderDomain:(NSString*) inIdentityProviderDomain;
+- (NSString*) getIdentityProviderDomain;
+- (void) setIdentityFederateBaseURI:(NSString*) inIdentityFederateBaseURI;
+- (NSString*) getIdentityFederateBaseURI;
+- (void) setLockBoxServiceDomain:(NSString*) inLockBoxServiceDomain;
+- (NSString*) getLockBoxServiceDomain;
+- (void) setDefaultOutgoingTelnetServer:(NSString*) inDefaultOutgoingTelnetServer;
+- (NSString*) getDefaultOutgoingTelnetServer;
+
+- (void) saveLoginSettings;
+- (BOOL) setLoginSettingsFromJSON:(NSString *)loginSettingsJSON;
+- (BOOL) isLoginSettingsSet;
 @end
