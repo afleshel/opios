@@ -2332,7 +2332,10 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "\"$(SDK_DIR)\"/usr/include/libxml2";
+				HEADER_SEARCH_PATHS = (
+					"\"$(SDK_DIR)\"/usr/include/libxml2",
+					"../../libs/ZXingObjC/**",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -2356,7 +2359,10 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "\"$(SDK_DIR)\"/usr/include/libxml2";
+				HEADER_SEARCH_PATHS = (
+					"\"$(SDK_DIR)\"/usr/include/libxml2",
+					"../../libs/ZXingObjC/**",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
@@ -2455,10 +2461,7 @@
 					"$(inherited)",
 					"APNS_ENABLED=1",
 				);
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"../../libs/ZXingObjC/**",
-				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "$(SRCROOT)/OpenPeerSampleAppAPNS-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LIBRARY_SEARCH_PATHS = (
@@ -2502,7 +2505,6 @@
 				HEADER_SEARCH_PATHS = (
 					"\"$(SDK_DIR)\"/usr/include/libxml2",
 					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts\"",
-					"../../libs/ZXingObjC/**",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/OpenPeerSampleAppAPNS-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
