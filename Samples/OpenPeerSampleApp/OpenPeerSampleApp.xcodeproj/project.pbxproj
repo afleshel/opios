@@ -2416,7 +2416,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OpenPeerSampleApp/OpenPeerSampleApp-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
-					"\"$(SDK_DIR)\"/usr/include/libxml2",
+					"$(inherited)",
 					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts\"",
 				);
 				INFOPLIST_FILE = "OpenPeerSampleApp/OpenPeerSampleApp-Info.plist";
@@ -2503,7 +2503,7 @@
 				GCC_PREFIX_HEADER = "OpenPeerSampleApp/OpenPeerSampleApp-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "APNS_ENABLED=1";
 				HEADER_SEARCH_PATHS = (
-					"\"$(SDK_DIR)\"/usr/include/libxml2",
+					"$(inherited)",
 					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/OpenPeerSampleAppAPNS-Info.plist";
