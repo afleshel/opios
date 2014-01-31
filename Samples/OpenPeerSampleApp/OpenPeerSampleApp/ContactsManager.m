@@ -177,7 +177,7 @@
                             {
                                 NSString* username = [socialItem objectForKey:(NSString *)kABPersonSocialProfileUsernameKey];
                                 if ([username length] > 0)
-                                    identityURI = [NSString stringWithFormat:@"%@%@",identityFederateBaseURI,[username lowercaseString]];
+                                    identityURI = [NSString stringWithFormat:@"%@%@",[[Settings sharedSettings] getIdentityFederateBaseURI],[username lowercaseString]];
                             }
                         }
                         CFRelease(social);
@@ -197,7 +197,7 @@
                                 {
                                     rolodexContact = (HOPRolodexContact*)managedObject;
                                     HOPHomeUser* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
-                                    HOPAssociatedIdentity* associatedIdentity = [[HOPModelManager sharedModelManager] getAssociatedIdentityBaseIdentityURI:identityFederateBaseURI homeUserStableId:homeUser.stableId];
+                                    HOPAssociatedIdentity* associatedIdentity = [[HOPModelManager sharedModelManager] getAssociatedIdentityBaseIdentityURI:[[Settings sharedSettings] getIdentityFederateBaseURI] homeUserStableId:homeUser.stableId];
                                     rolodexContact.associatedIdentity = associatedIdentity;
                                     rolodexContact.identityURI = identityURI;
                                     rolodexContact.name = fullNameTemp;
@@ -217,7 +217,7 @@
         OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Finished loading contacts from the address book.");
     }
     
-    HOPIdentityLookup* identityLookup = [[HOPIdentityLookup alloc] initWithDelegate:(id<HOPIdentityLookupDelegate>)[[OpenPeer sharedOpenPeer] identityLookupDelegate] identityLookupInfos:contactsForIdentityLookup identityServiceDomain:identityProviderDomain];
+    HOPIdentityLookup* identityLookup = [[HOPIdentityLookup alloc] initWithDelegate:(id<HOPIdentityLookupDelegate>)[[OpenPeer sharedOpenPeer] identityLookupDelegate] identityLookupInfos:contactsForIdentityLookup identityServiceDomain:[[Settings sharedSettings] getIdentityProviderDomain]];
     
     if (identityLookup)
         [self.identityLookupsArray addObject:identityLookup];
@@ -236,7 +236,7 @@
         if (![identity isDelegateAttached])
             [[LoginManager sharedLoginManager] attachDelegateForIdentity:identity forceAttach:NO];
         
-        if ([[identity getBaseIdentityURI] isEqualToString:identityFederateBaseURI])
+        if ([[identity getBaseIdentityURI] isEqualToString:[[Settings sharedSettings] getIdentityFederateBaseURI]])
         {
             dispatch_queue_t taskQ = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
             dispatch_async(taskQ, ^{
@@ -432,7 +432,7 @@
                         associatedIdentity = (HOPAssociatedIdentity*) managedObject;
                         associatedIdentity.baseIdentityURI = baseIdentityURI;
                         associatedIdentity.name = baseIdentityURI;
-                        associatedIdentity.domain = identityProviderDomain;
+                        associatedIdentity.domain = [[Settings sharedSettings] getIdentityProviderDomain];
                         
                         [[HOPModelManager sharedModelManager] saveContext];
                     }
@@ -447,7 +447,7 @@
                     contact.associatedIdentity = associatedIdentity;
                     HOPRolodexContact* homeUserRolodexContact = [[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser] getRolodexContactForIdentityBaseURI:[HOPUtility getBaseIdentityURIFromURI:identityURI]];
                     NSString* homeUserIdentityURI = homeUserRolodexContact ? homeUserRolodexContact.identityURI : nil;
-                    [contact updateWithName:name identityURI:identityURI identityProviderDomain:identityProviderDomain homeUserIdentityURI:homeUserIdentityURI];
+                    [contact updateWithName:name identityURI:identityURI identityProviderDomain:[[Settings sharedSettings] getIdentityProviderDomain] homeUserIdentityURI:homeUserIdentityURI];
                     
                     [[HOPModelManager sharedModelManager] saveContext];
                 }

@@ -112,4 +112,5 @@ NSString * const moduleServicesTransport = @"openpeer_services_transport_stream"
 NSString * const moduleZsLib = @"zsLib";
 NSString * const moduleJavaScript = @"openpeer_javascript";
 
-NSString* const CacheDatabaseName = @"Cache.sqlite";
+//login settings
+NSString * const archiveLoginSettings = @"archiveLoginSettings";

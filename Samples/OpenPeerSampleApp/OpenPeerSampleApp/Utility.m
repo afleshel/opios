@@ -32,7 +32,7 @@
 #import "Utility.h"
 #include <sys/types.h>
 #include <sys/sysctl.h>
-
+#import <AVFoundation/AVFoundation.h>
 
 @implementation Utility
 
@@ -423,5 +423,14 @@ static const short _base64DecodingTable[256] = {
         [hexString appendString:[NSString stringWithFormat:@"%02lx", (unsigned long)dataBuffer[i]]];
     
     return [NSString stringWithString:hexString];
+}
+
++ (int) getNumberOfDeviceCameras
+{
+    return [[AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo] count];
+}
++ (BOOL) hasCamera
+{
+    return [[AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo] count] > 0;
 }
 @end

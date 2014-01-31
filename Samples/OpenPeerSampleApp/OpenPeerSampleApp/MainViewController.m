@@ -53,6 +53,9 @@
 #import "SettingsViewController.h"
 #import "SplashViewController.h"
 #import "ActivityIndicatorViewController.h"
+
+#import "QRScannerViewController.h"
+
 //Private methods
 @interface MainViewController ()
 
@@ -60,6 +63,7 @@
 @property (nonatomic) BOOL showSplash;
 @property (strong, nonatomic) SplashViewController* splashViewController;
 @property (strong, nonatomic) NSTimer* closingTimer;
+@property (strong, nonatomic) QRScannerViewController* qrScannerViewController;
 
 - (void) removeAllSubViews;
 - (SessionTransitionStates) determineViewControllerTransitionStateForSession:(NSString*) sessionId forIncomingCall:(BOOL) incomingCall forIncomingMessage:(BOOL) incomingMessage;
@@ -542,5 +546,12 @@
 {
     [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:nil withText:nil inView:nil];
     [self closeWebLoginView:webLoginViewController];
+}
+
+- (void) showQRScanner
+{
+    self.qrScannerViewController = [[QRScannerViewController alloc] initWithNibName:@"QRScannerViewController" bundle:nil];
+    self.qrScannerViewController.view.frame = self.view.bounds;
+    [self.view addSubview:self.qrScannerViewController.view];
 }
 @end
