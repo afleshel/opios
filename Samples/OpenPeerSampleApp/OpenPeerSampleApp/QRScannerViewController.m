@@ -32,6 +32,7 @@
 #import "QRScannerViewController.h"
 #import "LoginManager.h"
 #import "Settings.h"
+#import "Utility.h"
 
 @interface QRScannerViewController ()
 
@@ -90,9 +91,13 @@
         
         NSString* str = result.text;
 
-        if ([str length] > 0)
+        if ([str length] > 0 && ([str rangeOfString:@"{...}"].location != NSNotFound))
         {
             [self loadSettingsfromURL:str];
+        }
+        else
+        {
+            [self actionProceedWithlogin:nil];
         }
     }
     
@@ -128,11 +133,18 @@
     if (!isSet)
     {
         NSError* error = nil;
-        NSString *filePath = [[NSBundle mainBundle] pathForResource:@"defaultLoginSettings" ofType:@"json"];
+        NSString *filePath = [[NSBundle mainBundle] pathForResource:@"loginSettings" ofType:@"json"];
         NSString* strJSON = [NSString stringWithContentsOfFile:filePath encoding:NSASCIIStringEncoding error:&error];
         
         if ([strJSON length] > 0)
+        {
+            if ([strJSON rangeOfString:@"insert "].location != NSNotFound && [strJSON rangeOfString:@"here"].location != NSNotFound)
+            {
+                OPLog(HOPLoggerSeverityFatal, HOPLoggerLevelBasic, @"It is required to set propper login values in loginSettings.json file.");
+                abort();
+            }
             isSet = [[Settings sharedSettings] setLoginSettingsFromJSON:strJSON];
+        }
     }
     
     if (isSet)
@@ -151,17 +163,45 @@
     }
 }
 
+- (void) saveSettingsInJSON:(NSString*) settingsInJSON
+{
+    NSError* error = nil;
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"loginSettings" ofType:@"json"];
+    [settingsInJSON writeToFile:filePath atomically:YES encoding:NSASCIIStringEncoding error:&error];
+    if (error)
+    {
+        OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Failed saving settings file. Error: %@", error);
+    }
+}
 - (void) loadSettingsfromURL:(NSString*) url
 {
+    NSString* jsonURL = nil;
+    if ([url rangeOfString:@"&post=base64"].location != NSNotFound)
+    {
+        NSArray* arrayOfStrings = [url componentsSeparatedByString:@"&post=base64"];
+        if ([arrayOfStrings count] > 0)
+        {
+            jsonURL = [Utility decodeBase64:[arrayOfStrings objectAtIndex:0]];
+        }
+    }
+    else
+        jsonURL = url;
+    
+    if ([jsonURL length] == 0)
+    {
+        
+        [self actionProceedWithlogin:nil];
+        return;
+    }
+    
     // Create the request.
-    NSURLRequest *theRequest=[NSURLRequest requestWithURL:[NSURL URLWithString:url]
+    NSURLRequest *theRequest=[NSURLRequest requestWithURL:[NSURL URLWithString:jsonURL]
                                               cachePolicy:NSURLRequestUseProtocolCachePolicy
                                           timeoutInterval:20.0];
 
     self.receivedData = [NSMutableData dataWithCapacity: 0];
     
-    // create the connection with the request
-    // and start loading the data
+    // create the connection with the request and start loading the data
     self.urlConnection = [[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
     if (!self.urlConnection)
     {
@@ -218,8 +258,10 @@
         
         if (isSet)
         {
+            [self saveSettingsInJSON:strJSON];
             [self.view removeFromSuperview];
             [[LoginManager sharedLoginManager] startLogin];
+
         }
         else
         {

@@ -284,6 +284,7 @@
             //[[HOPModelManager sharedModelManager] saveContext];
         }
         [[HOPModelManager sharedModelManager] saveContext];
+        ((ContactsManager*)[ContactsManager sharedContactsManager]).isContactsDownloadInProgress = NO;
     }
 }
 

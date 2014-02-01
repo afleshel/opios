@@ -94,6 +94,7 @@
     if (self)
     {
         self.identityLookupsArray = [[NSMutableArray alloc] init];
+        self.isContactsDownloadInProgress = NO;
     }
     return self;
 }
@@ -227,10 +228,14 @@
  */
 - (void) loadContacts
 {
+    BOOL downloadedEnded = NO;
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Init loading contacts");
     
     //For the first login and association it should be performed contacts download on just associated identity
     NSArray* associatedIdentities = [[HOPAccount sharedAccount] getAssociatedIdentities];
+    
+    self.isContactsDownloadInProgress = [associatedIdentities count] > 0;
+    
     for (HOPIdentity* identity in associatedIdentities)
     {
         if (![identity isDelegateAttached])

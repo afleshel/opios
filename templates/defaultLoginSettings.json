@@ -1,8 +1,8 @@
 {
-    "outerFrameURL": "https://app-javascript.hookflash.me/outer.html?view=choose&dev=true",
-    "identityProviderDomain": "idprovider-javascript.hookflash.me",
-    "identityFederateBaseURI": "identity://idprovider-javascript.hookflash.me/",
-"namespaceGrantServiceURL": "https://app-javascript.hookflash.me/outernamespacegrant.html",
-    "lockBoxServiceDomain": "hcs-javascript.hookflash.me",
-    "defaultOutgoingTelnetServer": "tcp.logger.hookflash.me:8055"
+    "outerFrameURL": "<-- insert outer frame URL here -->",
+    "identityProviderDomain": "<-- insert identity provider here -->",
+    "identityFederateBaseURI": "<-- insert federate base URI here -->",
+    "namespaceGrantServiceURL": "<-- insert namespace grant service URL here -->",
+    "lockBoxServiceDomain": "<-- insert lockBox service domain here -->",
+    "defaultOutgoingTelnetServer": "<-- insert defaul outgoing telnet server here -->"
 }

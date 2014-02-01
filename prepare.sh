@@ -10,6 +10,9 @@
 : ${CREDENTIALSHEADER:=CustomerSpecific.h}
 : ${CREDENTIALSSOURCE:=CustomerSpecific.m}
 
+: ${CREDENTIALSTEMPLATEJSON:=defaultLoginSettings.json}
+: ${CREDENTIALJSON:=loginSettings.json}
+
 #Runs curl build script
 if [ -f "$PATHTOCURLSCRIPT/build_ios.sh" ]; then
 	pushd $PATHTOCURLSCRIPT
@@ -64,4 +67,20 @@ if [ ! -f "$PATHTOCREDENTIALSDESTINATION/$CREDENTIALSSOURCE" ]; then
 	fi
 else
 	echo Using existing $CREDENTIALSSOURCE...
+fi
+
+#Checks if login settings file already exists in the destination folder. If doesn't exist, copies the template cource in the destiantion folder, renames it and update name of the imported header.
+if [ ! -f "$PATHTOCREDENTIALSDESTINATION/$CREDENTIALJSON" ]; then
+	if [ -d $PATHTOCREDENTIALSTEMPLATE ]; then
+		if [ -f "$PATHTOCREDENTIALSTEMPLATE/$CREDENTIALSTEMPLATEJSON" ]; then
+			cp -r "$PATHTOCREDENTIALSTEMPLATE/$CREDENTIALSTEMPLATEJSON" "$PATHTOCREDENTIALSDESTINATION/$CREDENTIALJSON"
+			echo Created $CREDENTIALJSON
+		else
+			echo "Error. Template $CREDENTIALSTEMPLATEJSON doesnt exist!"
+		fi
+	else
+		echo Error. Invalid template directory!
+	fi
+else
+	echo Using existing $CREDENTIALJSON...
 fi

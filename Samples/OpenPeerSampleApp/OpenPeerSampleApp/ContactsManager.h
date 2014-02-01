@@ -39,6 +39,7 @@
 @interface ContactsManager : NSObject<UIWebViewDelegate>
 
 @property (strong) NSMutableArray *identityLookupsArray;
+@property BOOL isContactsDownloadInProgress;
 
 + (id) sharedContactsManager;
 

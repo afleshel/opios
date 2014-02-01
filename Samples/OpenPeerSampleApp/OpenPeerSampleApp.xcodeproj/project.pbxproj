@@ -201,8 +201,6 @@
 		8774AC6518981094006B91FA /* QRScannerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 872D7E9D1897E19A005D8335 /* QRScannerViewController.xib */; };
 		8774AC7B18992D86006B91FA /* libZXingObjC-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8774AC7018992D5A006B91FA /* libZXingObjC-iOS.a */; };
 		8774AC7D18995DE8006B91FA /* defaultLoginSettings.json in Resources */ = {isa = PBXBuildFile; fileRef = 8774AC7C18995DE8006B91FA /* defaultLoginSettings.json */; };
-		8774AC7E18995DF3006B91FA /* defaultLoginSettings.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8774AC7C18995DE8006B91FA /* defaultLoginSettings.json */; };
-		8774AC7F189961EB006B91FA /* defaultLoginSettings.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8774AC7C18995DE8006B91FA /* defaultLoginSettings.json */; };
 		879D7B9717FB1224008C78E2 /* LoggerSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 879D7B9617FB1224008C78E2 /* LoggerSettingsViewController.m */; };
 		879F4393186C507000AED5AB /* OpenPeerSampleAppAPNS-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 879F4392186C507000AED5AB /* OpenPeerSampleAppAPNS-Info.plist */; };
 		87A1086A1802C116001F705D /* Logger.m in Sources */ = {isa = PBXBuildFile; fileRef = 87A108691802C116001F705D /* Logger.m */; };
@@ -491,6 +489,9 @@
 		87F24B5F166FF0C900A5389F /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F24B5E166FF0C900A5389F /* Utility.m */; };
 		87F24B62167003F400A5389F /* ContactsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F24B61167003F300A5389F /* ContactsManager.m */; };
 		87F9DAF9189AB7E100D96FF3 /* libZXingObjC-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8774AC7018992D5A006B91FA /* libZXingObjC-iOS.a */; };
+		87F9DAFB189B0BD500D96FF3 /* loginSettings.json in Resources */ = {isa = PBXBuildFile; fileRef = 87F9DAFA189B0BD500D96FF3 /* loginSettings.json */; };
+		87F9DAFC189B0BE800D96FF3 /* loginSettings.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 87F9DAFA189B0BD500D96FF3 /* loginSettings.json */; };
+		87F9DAFD189B0BF200D96FF3 /* loginSettings.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 87F9DAFA189B0BD500D96FF3 /* loginSettings.json */; };
 		87FC39F71709BB39002030D1 /* MessageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC39F51709BB36002030D1 /* MessageManager.m */; };
 		87FC3A151709BD8D002030D1 /* XMLWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC39FB1709BD8C002030D1 /* XMLWriter.m */; };
 		87FC3A161709BD8D002030D1 /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC39FF1709BD8C002030D1 /* SBJsonParser.m */; };
@@ -597,7 +598,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
-				8774AC7E18995DF3006B91FA /* defaultLoginSettings.json in CopyFiles */,
+				87F9DAFC189B0BE800D96FF3 /* loginSettings.json in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
@@ -607,7 +608,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
-				8774AC7F189961EB006B91FA /* defaultLoginSettings.json in CopyFiles */,
+				87F9DAFD189B0BF200D96FF3 /* loginSettings.json in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -955,6 +956,7 @@
 		87F24B5E166FF0C900A5389F /* Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utility.m; sourceTree = "<group>"; };
 		87F24B60167003F300A5389F /* ContactsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactsManager.h; sourceTree = "<group>"; };
 		87F24B61167003F300A5389F /* ContactsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactsManager.m; sourceTree = "<group>"; };
+		87F9DAFA189B0BD500D96FF3 /* loginSettings.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loginSettings.json; sourceTree = "<group>"; };
 		87FC39F51709BB36002030D1 /* MessageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageManager.m; sourceTree = "<group>"; };
 		87FC39F61709BB37002030D1 /* MessageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageManager.h; sourceTree = "<group>"; };
 		87FC39FA1709BD8C002030D1 /* XMLWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMLWriter.h; sourceTree = "<group>"; };
@@ -1398,6 +1400,7 @@
 		87272833166CBF9B0089CBB6 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				87F9DAFA189B0BD500D96FF3 /* loginSettings.json */,
 				87098FDC17C23997007C9093 /* OpenPeerDataModel.bundle */,
 				87272838166CBF9B0089CBB6 /* main.m */,
 				8727283A166CBF9B0089CBB6 /* OpenPeerSampleApp-Prefix.pch */,
@@ -1827,6 +1830,7 @@
 				8774AC7D18995DE8006B91FA /* defaultLoginSettings.json in Resources */,
 				87F09EE2171EBB1B0045F6A6 /* ChatViewController.xib in Resources */,
 				8730D7BB1833A63D008D1D37 /* iPhone_loader_00008.png in Resources */,
+				87F9DAFB189B0BD500D96FF3 /* loginSettings.json in Resources */,
 				87355FE517CCA7E3006151E7 /* Default.png in Resources */,
 				8730D7CF1833A63D008D1D37 /* iPhone_loader_00018.png in Resources */,
 				8722475B182D165A0027DA50 /* audio-call-speaker-active.png in Resources */,
@@ -2332,7 +2336,10 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "\"$(SDK_DIR)\"/usr/include/libxml2";
+				HEADER_SEARCH_PATHS = (
+					"\"$(SDK_DIR)\"/usr/include/libxml2",
+					"../../libs/ZXingObjC/**",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -2356,7 +2363,10 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "\"$(SDK_DIR)\"/usr/include/libxml2";
+				HEADER_SEARCH_PATHS = (
+					"\"$(SDK_DIR)\"/usr/include/libxml2",
+					"../../libs/ZXingObjC/**",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
@@ -2455,10 +2465,7 @@
 					"$(inherited)",
 					"APNS_ENABLED=1",
 				);
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"../../libs/ZXingObjC/**",
-				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "$(SRCROOT)/OpenPeerSampleAppAPNS-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LIBRARY_SEARCH_PATHS = (
@@ -2502,7 +2509,6 @@
 				HEADER_SEARCH_PATHS = (
 					"\"$(SDK_DIR)\"/usr/include/libxml2",
 					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts\"",
-					"../../libs/ZXingObjC/**",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/OpenPeerSampleAppAPNS-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
