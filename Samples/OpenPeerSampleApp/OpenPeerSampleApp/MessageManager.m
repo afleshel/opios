@@ -51,6 +51,13 @@
 #import <OpenpeerSDK/HOPContact.h>
 #import <OpenpeerSDK/HOPModelManager.h>
 
+@interface MessageManager ()
+
+@property (nonatomic, strong) NSComparator comparator;
+
+- (id) initSingleton;
+@end
+
 @implementation MessageManager
 
 /**
@@ -62,9 +69,22 @@
     static dispatch_once_t pred = 0;
     __strong static id _sharedObject = nil;
     dispatch_once(&pred, ^{
-        _sharedObject = [[self alloc] init];
+        _sharedObject = [[self alloc] initSingleton];
     });
     return _sharedObject;
+}
+
+- (id)initSingleton
+{
+    self = [super init];
+    if (self)
+    {
+        _comparator = ^NSComparisonResult(Message* message1, Message* message2)
+        {
+            return [message1.date compare:message2.date];
+        };
+    }
+    return self;
 }
 
 - (HOPMessage*) createSystemMessageWithType:(SystemMessageTypes) type andText:(NSString*) text andRecipient:(HOPRolodexContact*) contact
@@ -212,8 +232,11 @@
     //Send message
     [inSession.conversationThread sendMessage:hopMessage];
     
-    Message* messageObj = [[Message alloc] initWithMessageText:message senderContact:nil];
-    [inSession.messageArray addObject:messageObj];
+    Message* messageObj = [[Message alloc] initWithMessageText:message senderContact:nil sentTime:hopMessage.date];
+    //[inSession.messageArray addObject:messageObj];
+
+    NSUInteger addedIndex = [inSession.messageArray indexOfObject:messageObj inSortedRange:NSMakeRange(0, inSession.messageArray.count) options:NSBinarySearchingInsertionIndex usingComparator:self.comparator];
+    [inSession.messageArray insertObject:messageObj atIndex:addedIndex];
 }
 
 /**
@@ -247,8 +270,12 @@
     {
         
         HOPRolodexContact* contact  = [[[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:[message.contact getPeerURI]] objectAtIndex:0];
-        Message* messageObj = [[Message alloc] initWithMessageText:message.text senderContact:contact];
-        [session.messageArray addObject:messageObj];
+        Message* messageObj = [[Message alloc] initWithMessageText:message.text senderContact:contact sentTime:message.date];
+   
+        NSUInteger addedIndex = [session.messageArray indexOfObject:messageObj inSortedRange:NSMakeRange(0, session.messageArray.count) options:NSBinarySearchingInsertionIndex usingComparator:self.comparator];
+            [session.messageArray insertObject:messageObj atIndex:addedIndex];
+
+        //[session.messageArray addObject:messageObj];
         [session.unreadMessageArray addObject:messageObj];
 
         //If session view controller with message sender is not yet shown, show it

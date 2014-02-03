@@ -439,21 +439,19 @@
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-    if ([[ContactsManager sharedContactsManager] isContactsDownloadInProgress]) return;
     self.isDragging = NO;
     if (scrollView.contentOffset.y <= -TABLE_CELL_HEIGHT)
     {
         // Released above the header
-        [[ContactsManager sharedContactsManager] loadContacts];
+        [[ContactsManager sharedContactsManager] refreshRolodexContacts];
         self.refreshLabel.text = @"";
-        ((ContactsManager*)[ContactsManager sharedContactsManager]).isContactsDownloadInProgress = NO;
     }
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
 
-    if (![[ContactsManager sharedContactsManager] isContactsDownloadInProgress] && scrollView.contentOffset.y < 0)
+    if (scrollView.contentOffset.y < 0)
     {
         // Update the arrow direction and label
         [UIView beginAnimations:nil context:NULL];

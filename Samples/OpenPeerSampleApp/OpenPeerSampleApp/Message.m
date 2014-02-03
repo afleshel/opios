@@ -34,7 +34,7 @@
 
 @implementation Message
 
-- (id) initWithMessageText:(NSString*) messageText senderContact:(HOPRolodexContact*) senderContact
+- (id) initWithMessageText:(NSString*) messageText senderContact:(HOPRolodexContact*) senderContact  sentTime:(NSDate*) sentTime
 {
     self = [super init];
     
@@ -42,7 +42,7 @@
     {
         self.text = messageText;
         self.contact = senderContact;
-        self.date = [NSDate date];
+        self.date = sentTime == nil ? [NSDate date] : sentTime;
     }
     return self;
 }

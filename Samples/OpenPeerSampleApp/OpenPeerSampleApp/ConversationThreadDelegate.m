@@ -73,13 +73,17 @@
 
 - (void) onConversationThreadContactsChanged:(HOPConversationThread*) conversationThread
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Conversation thread <%@> contact changed.",conversationThread);
+    dispatch_async(dispatch_get_main_queue(), ^
+    {
     });
 }
 
 - (void) onConversationThreadContactStateChanged:(HOPConversationThread*) conversationThread contact:(HOPContact*) contact contactState:(HOPConversationThreadContactStates) contactState
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Conversation thread <%@> contact <%@> state: %@",conversationThread, contact,[HOPConversationThread stringForContactState:contactState]);
+    dispatch_async(dispatch_get_main_queue(), ^
+    {
     });
 }
 
@@ -97,7 +101,6 @@
 
 - (void) onConversationThreadMessageDeliveryStateChanged:(HOPConversationThread*) conversationThread messageID:(NSString*) messageID messageDeliveryStates:(HOPConversationThreadMessageDeliveryStates) messageDeliveryStates
 {
-    //OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Conversation thread message with id %@ delivery state has changed to: %@",messageID, [Utility getMessageDeliveryStateAsString:messageDeliveryStates]);
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Conversation thread message with id %@ delivery state has changed to: %@",messageID, [HOPConversationThread stringForMessageDeliveryState:messageDeliveryStates]);
 }
 
