@@ -46,6 +46,9 @@
 		872BDBAE188492420032CD39 /* HOPCacheData.m in Sources */ = {isa = PBXBuildFile; fileRef = 872BDBAC188492420032CD39 /* HOPCacheData.m */; };
 		872BDBB118849D540032CD39 /* OpenPeerCacheModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 872BDBA8188490230032CD39 /* OpenPeerCacheModel.xcdatamodeld */; };
 		872DA9E6175CEC9C000CCA76 /* HOPCache.mm in Sources */ = {isa = PBXBuildFile; fileRef = 872DA9E5175CEC9C000CCA76 /* HOPCache.mm */; };
+		87320E6418A0F15D007F16B1 /* HOPSettings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 87320E6218A0F15D007F16B1 /* HOPSettings.mm */; };
+		87320E6A18A0F7B4007F16B1 /* OpenPeerSettingsDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 87320E6818A0F7B4007F16B1 /* OpenPeerSettingsDelegate.mm */; };
+		87320E7818A168A1007F16B1 /* HOPSettings.h in Headers */ = {isa = PBXBuildFile; fileRef = 87320E6118A0F13C007F16B1 /* HOPSettings.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		87325EF316F07D550099C0D3 /* HOPAccount.h in Headers */ = {isa = PBXBuildFile; fileRef = 8740FFD316E88A37008016C0 /* HOPAccount.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		87325EF416F07D550099C0D3 /* HOPIdentityLookup.h in Headers */ = {isa = PBXBuildFile; fileRef = 87A5B20816EDE656007E825A /* HOPIdentityLookup.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		87343EDC165A50D60070E6E0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87343EDB165A50D60070E6E0 /* UIKit.framework */; };
@@ -59,6 +62,7 @@
 		8765B8FD17ED837F0045094E /* HOPRolodexContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 8765B8FB17ED837F0045094E /* HOPRolodexContact.m */; };
 		876D1F761823BD000024D30C /* HOPUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 876D1F751823BD000024D30C /* HOPUtility.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		876D1F781823BD120024D30C /* HOPUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 876D1F771823BD120024D30C /* HOPUtility.m */; };
+		877038F018A27D4A000B7AA1 /* boost.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 00C82C3F18320855005B87E0 /* boost.framework */; };
 		8783859117A84FAB003C6EEA /* HOPRolodexContact+External.h in Headers */ = {isa = PBXBuildFile; fileRef = 8783858F17A84FAA003C6EEA /* HOPRolodexContact+External.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8783859217A84FAB003C6EEA /* HOPRolodexContact+External.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8783859017A84FAA003C6EEA /* HOPRolodexContact+External.mm */; };
 		8792E86C16519CFF00DEAC58 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8792E86B16519CFF00DEAC58 /* Foundation.framework */; };
@@ -303,8 +307,9 @@
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "include/${PRODUCT_NAME}";
-			dstSubfolderSpec = 7;
+			dstSubfolderSpec = 10;
 			files = (
+				877038F018A27D4A000B7AA1 /* boost.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -329,6 +334,11 @@
 		872DA9E5175CEC9C000CCA76 /* HOPCache.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HOPCache.mm; sourceTree = "<group>"; };
 		872DA9E7175CECB1000CCA76 /* HOPCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HOPCache.h; sourceTree = "<group>"; };
 		872E40771653CFE2006ECA60 /* HOPTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HOPTypes.h; sourceTree = "<group>"; };
+		87320E6118A0F13C007F16B1 /* HOPSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HOPSettings.h; sourceTree = "<group>"; };
+		87320E6218A0F15D007F16B1 /* HOPSettings.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HOPSettings.mm; sourceTree = "<group>"; };
+		87320E6618A0F628007F16B1 /* HOPSettings_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HOPSettings_Internal.h; sourceTree = "<group>"; };
+		87320E6718A0F7A3007F16B1 /* OpenPeerSettingsDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenPeerSettingsDelegate.h; sourceTree = "<group>"; };
+		87320E6818A0F7B4007F16B1 /* OpenPeerSettingsDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenPeerSettingsDelegate.mm; sourceTree = "<group>"; };
 		87343EDB165A50D60070E6E0 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		87343FE9165E4B0C0070E6E0 /* HOPMediaEngineRtpRtcpStatistics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HOPMediaEngineRtpRtcpStatistics.h; sourceTree = "<group>"; };
 		873A1FC717F74DBB0002296C /* HOPAssociatedIdentity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HOPAssociatedIdentity.h; sourceTree = "<group>"; };
@@ -718,6 +728,7 @@
 				872E40771653CFE2006ECA60 /* HOPTypes.h */,
 				876D1F751823BD000024D30C /* HOPUtility.h */,
 				8792E86E16519CFF00DEAC58 /* Supporting Files */,
+				87320E6118A0F13C007F16B1 /* HOPSettings.h */,
 			);
 			path = "openpeer-ios-sdk";
 			sourceTree = "<group>";
@@ -765,6 +776,7 @@
 				87A5B19E16EDE5EB007E825A /* HOPStack.mm */,
 				87A5B19F16EDE5EB007E825A /* OpenPeerLoggerDelegate.mm */,
 				876D1F771823BD120024D30C /* HOPUtility.m */,
+				87320E6218A0F15D007F16B1 /* HOPSettings.mm */,
 			);
 			path = source;
 			sourceTree = "<group>";
@@ -795,6 +807,8 @@
 				87A5B1CD16EDE5F9007E825A /* OpenPeerStackDelegate.h */,
 				87A5B1CE16EDE5F9007E825A /* OpenPeerStorageManager.h */,
 				87A5B1CF16EDE5F9007E825A /* OpenPeerUtility.h */,
+				87320E6618A0F628007F16B1 /* HOPSettings_Internal.h */,
+				87320E6718A0F7A3007F16B1 /* OpenPeerSettingsDelegate.h */,
 			);
 			path = internal;
 			sourceTree = "<group>";
@@ -813,6 +827,7 @@
 				87A5B1DD16EDE5F9007E825A /* OpenPeerUtility.mm */,
 				87D91AA51767509700E46B66 /* OpenPeerCacheDelegate.mm */,
 				87DD73DE17AFD1BE0086C295 /* OpenPeerConstants.m */,
+				87320E6818A0F7B4007F16B1 /* OpenPeerSettingsDelegate.mm */,
 			);
 			path = source;
 			sourceTree = "<group>";
@@ -938,6 +953,7 @@
 				873A1FC917F74DBB0002296C /* HOPAssociatedIdentity.h in Headers */,
 				8765B8FC17ED837F0045094E /* HOPRolodexContact.h in Headers */,
 				875FD1361806AF74001A5BEA /* HOPHomeUser+External.h in Headers */,
+				87320E7818A168A1007F16B1 /* HOPSettings.h in Headers */,
 				876D1F761823BD000024D30C /* HOPUtility.h in Headers */,
 				8798231C186B181A0089D34C /* HOPPublicPeerFile.h in Headers */,
 				872BDBAD188492420032CD39 /* HOPCacheData.h in Headers */,
@@ -1187,6 +1203,7 @@
 				87A5B20716EDE648007E825A /* HOPIdentityLookup.mm in Sources */,
 				87E3CD21172A859600084D2F /* HOPIdentityLookupInfo.mm in Sources */,
 				875FD1371806AF74001A5BEA /* HOPHomeUser+External.m in Sources */,
+				87320E6418A0F15D007F16B1 /* HOPSettings.mm in Sources */,
 				872DA9E6175CEC9C000CCA76 /* HOPCache.mm in Sources */,
 				87D91AA71767509700E46B66 /* OpenPeerCacheDelegate.mm in Sources */,
 				87CEF2ED179D5CD0003770EE /* HOPRolodexContact_Internal.mm in Sources */,
@@ -1195,6 +1212,7 @@
 				8783859217A84FAB003C6EEA /* HOPRolodexContact+External.mm in Sources */,
 				872BDBAA188490230032CD39 /* OpenPeerCacheModel.xcdatamodeld in Sources */,
 				87DD73E017AFD1BE0086C295 /* OpenPeerConstants.m in Sources */,
+				87320E6A18A0F7B4007F16B1 /* OpenPeerSettingsDelegate.mm in Sources */,
 				8758405C17B17CD0006B9A21 /* HOPModelManager.mm in Sources */,
 				87FCB15517B8D85C00E913AD /* HOPIdentityContact.m in Sources */,
 				87FCB15E17B8D85D00E913AD /* HOPAvatar.m in Sources */,

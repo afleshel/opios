@@ -56,7 +56,6 @@
 #import "MainViewController.h"
 #import "ActivityIndicatorViewController.h"
 #import "WebLoginViewController.h"
-#import "CustomerSpecific.h"
 
 @interface LoginManager ()
 
@@ -109,7 +108,8 @@
     //If peer file doesn't exists, show login view, otherwise start relogin
     if (![[HOPModelManager sharedModelManager] getLastLoggedInHomeUser])
     {
-        [[[OpenPeer sharedOpenPeer] mainViewController] showQRScanner];
+        [self startLogin];
+        //[[[OpenPeer sharedOpenPeer] mainViewController] showQRScanner];
     }
     else
     {

@@ -41,18 +41,40 @@ or sample project with included SDK project
 
 opios/Samples/OpenPeerSampleApp/OpenPeerSampleApp.xcodeproj
 
-3) If you open OpenPeerSampleApp project, it is required to update file CustomerSpecific.m with propper values for:
-	NSString* const applicationId = @"<-- insert application ID here (e.g. com.domain.appName) -->";
-	NSString* const applicationIdSharedSecret = @"<-- insert shared secret here -->"; (Get it from the https://fly.hookflash.me/apps)
-	NSString* const applicationName = @"<-- enter application name here (e.g. OpenPeerSampleApp) -->";
-	NSString* const applicationImageURL = @"<-- enter application image url (e.g. http://hookflash.com/wp-content/themes/CleanSpace/images/logo.png) -->";
-	NSString* const applicationURL = @"<-- enter application url (e.g. www.openpeer.org) -->";
-	NSString* const outerFrameURL = @"<-- enter outer frame url here (e.g. https://app-javascript.hookflash.me/outer.html?view=choose) -->";
-	NSString* const namespaceGrantServiceURL = @"<-- enter outer namespace grant service url here (e.g. https://app-javascript.hookflash.me/outernamespacegrant.html) -->";
-	NSString* const identityProviderDomain = @"<-- enter identity provider domain here (e.g. idprovider-javascript.hookflash.me) -->";
-	NSString* const identityFederateBaseURI = @"<-- enter federated identity base uri here (e.g. identity://idprovider-javascript.hookflash.me/) -->";
-	NSString* const lockBoxServiceDomain =  @"<-- enter lockbox service domain here (e.g. hcs-javascript.hookflash.me) -->";
-	NSString * const defaultOutgoingTelnetServer = @"<-- enter outgoing telnet server here (e.g. tcp.logger.hookflash.me:8055) -->";
+3) If you open OpenPeerSampleApp project, it is required to update following files:
+
+	CustomerSpecific.plist (this file is added in git.ignore)
+		applicationId = @"<-- insert application ID here (e.g. com.domain.appName) -->";
+		applicationIdSharedSecret = @"<-- insert shared secret here -->"; (Get it from the https://fly.hookflash.me/apps)
+		applicationName = @"<-- enter application name here (e.g. OpenPeerSampleApp) -->";
+		applicationImageURL = @"<-- enter application image url (e.g. http://hookflash.com/wp-content/themes/CleanSpace/images/logo.png) -->";
+		applicationURL = @"<-- enter application url (e.g. www.openpeer.org) -->";
+
+	DefaultSettings.plist (this file contains valid settings that can be used until you set your developer environment)
+		outerFrameURL = @"<-- enter outer frame url here (e.g. https://app-javascript.hookflash.me/outer.html?view=choose) -->";
+		namespaceGrantServiceURL = @"<-- enter outer namespace grant service url here (e.g. https://app-javascript.hookflash.me/outernamespacegrant.html) -->";
+		identityProviderDomain = @"<-- enter identity provider domain here (e.g. idprovider-javascript.hookflash.me) -->";
+		identityFederateBaseURI = @"<-- enter federated identity base uri here (e.g. identity://idprovider-javascript.hookflash.me/) -->";
+		lockBoxServiceDomain =  @"<-- enter lockbox service domain here (e.g. hcs-javascript.hookflash.me) -->";
+		defaultOutgoingTelnetServer = @"<-- enter outgoing telnet server here (e.g. tcp.logger.hookflash.me:8055) -->";
+		
+		
+	If you want to change your application data or login settings, you can create a QR code with URL of json file(e.g. www.my_test_server.com/settings.json) that contains desired data. 
+	JSON file format is: 
+	
+	
+	{"root":
+		{
+			"outerFrameURL": "<-- enter outer frame url here (e.g. https://app-javascript.hookflash.me/outer.html?view=choose) -->",
+			"identityProviderDomain": "<-- enter identity provider domain here (e.g. idprovider-javascript.hookflash.me) -->",
+			"identityFederateBaseURI": "<-- enter federated identity base uri here (e.g. identity://idprovider-javascript.hookflash.me/) -->",
+			"namespaceGrantServiceURL": "<-- enter outer namespace grant service url here (e.g. https://app-javascript.hookflash.me/outernamespacegrant.html) -->",
+			"lockBoxServiceDomain": "<-- enter lockbox service domain here (e.g. hcs-javascript.hookflash.me) -->",
+			"defaultOutgoingTelnetServer": "<-- enter outgoing telnet server here (e.g. tcp.logger.hookflash.me:8055) -->"
+		}
+	}
+	
+	
 
 4) Select HOPSDK > iOS Device (builds only SDK) or OpenPeerSampleApp (builds SDK and sample app) schema and then build
 
@@ -75,6 +97,7 @@ AssetLibrary
 AudioToolbox
 AVFoundation
 Security
+Boost
 UIKIT
 libresolve.dylib
 libz.dylib

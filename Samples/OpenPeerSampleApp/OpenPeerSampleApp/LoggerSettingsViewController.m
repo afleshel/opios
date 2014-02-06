@@ -37,7 +37,6 @@
 #import "MainViewController.h"
 #import "Utility.h"
 #import <OpenPeerSDK/HOPTypes.h>
-#import "CustomerSpecific.h"
 
 typedef enum
 {

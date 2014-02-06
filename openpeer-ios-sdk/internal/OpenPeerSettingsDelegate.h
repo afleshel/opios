@@ -29,25 +29,48 @@
  
  */
 
-#import "CacheDelegate.h"
 
+#import <Foundation/Foundation.h>
+#include <openpeer/core/types.h>
+#include <openpeer/core/ISettings.h>
+#import "HOPProtocols.h"
 
-@implementation CacheDelegate
+using namespace openpeer;
+using namespace openpeer::core;
 
-- (NSString*) fetchCookieWithPath:(NSString*) cookieNamePath
+/**
+ Wrapper Class that creates settings object used in core.
+ */
+class OpenPeerSettingsDelegate : public ISettingsDelegate
 {
-    NSString* ret = nil;
-    return ret;
-}
-
-- (void) storeCookie:(NSString*) cookie cookieNamePath:(NSString*) cookieNamePath expireTime:(NSDate*) expireTime
-{
+protected:
+    id<HOPSettingsDelegate> settingsDelegate;
     
-}
-
-- (void) clearCookieWithPath:(NSString*) cookieNamePath
-{
+    OpenPeerSettingsDelegate(id<HOPSettingsDelegate> settingsDelegate);
     
-}
-
-@end
+public:
+    
+    ~OpenPeerSettingsDelegate();
+    
+    /**
+     Create SettingsDelegateWrapper object packed in boost shared pointer.
+     @returns SettingsDelegateWrapper object boost shared object
+     */
+    static boost::shared_ptr<OpenPeerSettingsDelegate>  create(id<HOPSettingsDelegate> inSettingsDelegate);
+    
+    String getString(const char *key) const;
+    LONG getInt(const char *key) const;
+    ULONG getUInt(const char *key) const;
+    bool getBool(const char *key) const;
+    float getFloat(const char *key) const;
+    double getDouble(const char *key) const;
+    
+    void setString(const char *key,const char *value);
+    void setInt(const char *key,LONG value);
+    void setUInt(const char *key,ULONG value);
+    void setBool(const char *key,bool value);
+    void setFloat(const char *key,float value);
+    void setDouble(const char *key,double value);
+    
+    void clear(const char *key);
+};

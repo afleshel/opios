@@ -29,25 +29,61 @@
  
  */
 
-#import "CacheDelegate.h"
+#import "HOPSettings_Internal.h"
+#import "OpenPeerSettingsDelegate.h"
+#import <zsLib/Log.h>
 
+ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
-@implementation CacheDelegate
+@implementation HOPSettings
 
-- (NSString*) fetchCookieWithPath:(NSString*) cookieNamePath
++ (id)sharedSettings
 {
-    NSString* ret = nil;
+    static dispatch_once_t pred = 0;
+    __strong static id _sharedObject = nil;
+    dispatch_once(&pred, ^{
+        _sharedObject = [[self alloc] init];
+    });
+    return _sharedObject;
+}
+
+- (void) setupWithDelegate:(id<HOPSettingsDelegate>) inDelegate
+{
+    openPeerSettingsDelegatePtr = OpenPeerSettingsDelegate::create(inDelegate);
+    ISettings::setup(openPeerSettingsDelegatePtr);
+}
+
+- (BOOL) applySettings:(NSString*)jsonSettings
+{
+    BOOL ret = NO;
+    if ([jsonSettings length] > 0)
+    {
+        ret = ISettings::apply([jsonSettings UTF8String]);
+    }
+    else
+    {
+        ZS_LOG_ERROR(Debug, [self log:@"Passed empty JSON file."]);
+    }
+    
     return ret;
 }
 
-- (void) storeCookie:(NSString*) cookie cookieNamePath:(NSString*) cookieNamePath expireTime:(NSDate*) expireTime
+- (void) applyDefaults
 {
-    
+    ISettings::applyDefaults();
 }
 
-- (void) clearCookieWithPath:(NSString*) cookieNamePath
+
+- (void) deleteLocalDelegate
 {
-    
+    openPeerSettingsDelegatePtr.reset();
 }
+
+
+- (String) log:(NSString*) message
+{
+    return String("HOPSettings: ") + [message UTF8String];
+}
+
 
 @end

@@ -38,7 +38,6 @@
 #import "MainViewController.h"
 #import "WebLoginViewController.h"
 #import "OpenpeerSDK/HOPLogger.h"
-#import "CustomerSpecific.h"
 
 @interface AccountDelegate()
 @property (nonatomic, strong) WebLoginViewController* webLoginViewController;

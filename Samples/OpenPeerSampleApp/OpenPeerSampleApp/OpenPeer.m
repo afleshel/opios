@@ -32,13 +32,15 @@
 #import "OpenPeer.h"
 #import "Utility.h"
 #import "AppConsts.h"
-#import "CustomerSpecific.h"
 #import "Logger.h"
+#import "Settings.h"
 //SDK
 #import "OpenpeerSDK/HOPStack.h"
 #import "OpenpeerSDK/HOPLogger.h"
 #import "OpenpeerSDK/HOPMediaEngine.h"
 #import "OpenpeerSDK/HOPCache.h"
+#import "OpenpeerSDK/HOPModelManager.h"
+#import "OpenpeerSDK/HOPSettings.h"
 //Managers
 #import "LoginManager.h"
 //Delegates
@@ -52,7 +54,6 @@
 #import "CacheDelegate.h"
 //View controllers
 #import "MainViewController.h"
-
 
 
 //Private methods
@@ -85,7 +86,7 @@
     {
         NSDate* expiry = [[NSDate date] dateByAddingTimeInterval:(30 * 24 * 60 * 60)];
         
-        _authorizedApplicationId = [HOPStack createAuthorizedApplicationID:applicationId applicationIDSharedSecret:applicationIdSharedSecret expires:expiry];
+        _authorizedApplicationId = [HOPStack createAuthorizedApplicationID:[[Settings sharedSettings] getString: @"applicationId"] applicationIDSharedSecret:[[Settings sharedSettings] getString: @"applicationIdSharedSecret"] expires:expiry];
     }
     return _authorizedApplicationId;
 }
@@ -103,14 +104,12 @@
     }
     return _deviceId;
 }
-/**
- Initializes the open peer stack. After initialization succeeds, login screen is displayed, or user relogin started.
- @param inMainViewController MainViewController Input main view controller.
- */
-- (void) setup
+
+- (void) preSetup
 {
-    //Created all delegates required for openpeer stack initialization.
     [self createDelegates];
+    
+    [[HOPSettings sharedSettings] setupWithDelegate:[Settings sharedSettings]];
     
     [[HOPCache sharedCache] removeExpiredCookies];
     //Init cache singleton
@@ -118,9 +117,35 @@
     
     //Set log levels and start logging
     [Logger startAllSelectedLoggers];
+    
+    if (![[HOPModelManager sharedModelManager] getLastLoggedInHomeUser])
+    {
+        [[self mainViewController] showQRScanner];
+    }
+    else
+    {
+        [self setup];
+    }
+}
+
+/**
+ Initializes the open peer stack. After initialization succeeds, login screen is displayed, or user relogin started.
+ @param inMainViewController MainViewController Input main view controller.
+ */
+- (void) setup
+{
+    /*//Created all delegates required for openpeer stack initialization.
+    [self createDelegates];
+    
+    [[HOPCache sharedCache] removeExpiredCookies];
+    //Init cache singleton
+    [[HOPCache sharedCache] setDelegate:self.cacheDelegate];
+    
+    //Set log levels and start logging
+    [Logger startAllSelectedLoggers];*/
 
     //Init openpeer stack and set created delegates
-    [[HOPStack sharedStack] setupWithStackDelegate:self.stackDelegate mediaEngineDelegate:self.mediaEngineDelegate appID: self.authorizedApplicationId appName:applicationName appImageURL:applicationImageURL appURL:applicationURL userAgent:[Utility getUserAgentName] deviceID:self.deviceId deviceOs:[Utility getDeviceOs] system:[Utility getPlatform]];
+    [[HOPStack sharedStack] setupWithStackDelegate:self.stackDelegate mediaEngineDelegate:self.mediaEngineDelegate appID: self.authorizedApplicationId appName:[[Settings sharedSettings] getString: @"applicationName"] appImageURL:[[Settings sharedSettings] getString: @"applicationImageURL"]  appURL:[[Settings sharedSettings] getString: @"applicationURL"] userAgent:[Utility getUserAgentName] deviceID:self.deviceId deviceOs:[Utility getDeviceOs] system:[Utility getPlatform]];
 
     //Start with login procedure and display login view
     [[LoginManager sharedLoginManager] login];

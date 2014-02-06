@@ -1,4 +1,3 @@
 xcuserdata
 .DS_Store
-CustomerSpecific.m
-loginSettings.json
+CustomerSpecific.plist

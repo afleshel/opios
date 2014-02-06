@@ -29,25 +29,23 @@
  
  */
 
-#import "CacheDelegate.h"
 
+#import <Foundation/Foundation.h>
+#import "HOPProtocols.h"
 
-@implementation CacheDelegate
+/**
+ Singleton class to handle various app settings.
+ */
+@interface HOPSettings : NSObject
 
-- (NSString*) fetchCookieWithPath:(NSString*) cookieNamePath
-{
-    NSString* ret = nil;
-    return ret;
-}
+/**
+ Returns singleton object of this class.
+ */
++ (id)sharedSettings;
+- (id) init __attribute__((unavailable("HOPSettings is singleton class.")));
 
-- (void) storeCookie:(NSString*) cookie cookieNamePath:(NSString*) cookieNamePath expireTime:(NSDate*) expireTime
-{
-    
-}
-
-- (void) clearCookieWithPath:(NSString*) cookieNamePath
-{
-    
-}
-
+- (void) setupWithDelegate:(id<HOPSettingsDelegate>) inDelegate;
+- (BOOL) applySettings:(NSString*)jsonSettings;
+- (void) applyDefaults;
+                            
 @end

@@ -56,7 +56,7 @@
     [self.window makeKeyAndVisible];
 
     [[OpenPeer sharedOpenPeer] setMainViewController:mainViewController];
-    [[OpenPeer sharedOpenPeer] setup];
+    [[OpenPeer sharedOpenPeer] preSetup];
 
 #ifdef APNS_ENABLED
     [[APNSManager sharedAPNSManager] prepareUrbanAirShip];

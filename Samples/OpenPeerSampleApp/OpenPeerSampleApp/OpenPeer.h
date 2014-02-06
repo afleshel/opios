@@ -72,6 +72,7 @@
 @property (nonatomic, strong) NSString* deviceToken;
 + (id) sharedOpenPeer;
 
+- (void) preSetup;
 - (void) setup;
 - (void) shutdown;
 @end

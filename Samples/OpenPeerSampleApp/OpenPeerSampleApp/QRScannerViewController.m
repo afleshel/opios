@@ -31,8 +31,10 @@
 
 #import "QRScannerViewController.h"
 #import "LoginManager.h"
+#import "OpenPeer.h"
 #import "Settings.h"
 #import "Utility.h"
+#import <OpenPeerSDK/HOPSettings.h>
 
 @interface QRScannerViewController ()
 
@@ -91,7 +93,7 @@
         
         NSString* str = result.text;
 
-        if ([str length] > 0 && ([str rangeOfString:@"{...}"].location != NSNotFound))
+        if ([str length] > 0 && ([str rangeOfString:@"{...}"].location == NSNotFound))
         {
             [self loadSettingsfromURL:str];
         }
@@ -129,28 +131,34 @@
 
 - (IBAction)actionProceedWithlogin:(id)sender
 {
-    BOOL isSet = [[Settings sharedSettings] isLoginSettingsSet];
-    if (!isSet)
+    BOOL isSetLoginSettings = [[Settings sharedSettings] isLoginSettingsSet];
+    if (!isSetLoginSettings)
     {
-        NSError* error = nil;
-        NSString *filePath = [[NSBundle mainBundle] pathForResource:@"loginSettings" ofType:@"json"];
-        NSString* strJSON = [NSString stringWithContentsOfFile:filePath encoding:NSASCIIStringEncoding error:&error];
-        
-        if ([strJSON length] > 0)
+        NSString *filePath = [[NSBundle mainBundle] pathForResource:@"DefaultSettings" ofType:@"plist"];
+        if ([filePath length] > 0)
         {
-            if ([strJSON rangeOfString:@"insert "].location != NSNotFound && [strJSON rangeOfString:@"here"].location != NSNotFound)
-            {
-                OPLog(HOPLoggerSeverityFatal, HOPLoggerLevelBasic, @"It is required to set propper login values in loginSettings.json file.");
-                abort();
-            }
-            isSet = [[Settings sharedSettings] setLoginSettingsFromJSON:strJSON];
+            [[Settings sharedSettings] storeSettingsFromPath:filePath];
         }
+        
+        isSetLoginSettings = [[Settings sharedSettings] isLoginSettingsSet];
     }
     
-    if (isSet)
+    BOOL isSetAppData = [[Settings sharedSettings] isAppDataSet];
+    if (!isSetAppData)
+    {
+        NSString* filePath = [[NSBundle mainBundle] pathForResource:@"CustomerSpecific" ofType:@"plist"];
+        if ([filePath length] > 0)
+        {
+            [[Settings sharedSettings] storeSettingsFromPath:filePath];
+        }
+        isSetAppData = [[Settings sharedSettings] isAppDataSet];
+    }
+    
+    if (isSetAppData && isSetLoginSettings)
     {
         [self.view removeFromSuperview];
-        [[LoginManager sharedLoginManager] startLogin];
+        [[HOPSettings sharedSettings] applyDefaults];
+        [[OpenPeer sharedOpenPeer] setup];
     }
     else
     {
@@ -163,16 +171,6 @@
     }
 }
 
-- (void) saveSettingsInJSON:(NSString*) settingsInJSON
-{
-    NSError* error = nil;
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"loginSettings" ofType:@"json"];
-    [settingsInJSON writeToFile:filePath atomically:YES encoding:NSASCIIStringEncoding error:&error];
-    if (error)
-    {
-        OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Failed saving settings file. Error: %@", error);
-    }
-}
 - (void) loadSettingsfromURL:(NSString*) url
 {
     NSString* jsonURL = nil;
@@ -189,7 +187,6 @@
     
     if ([jsonURL length] == 0)
     {
-        
         [self actionProceedWithlogin:nil];
         return;
     }
@@ -227,14 +224,12 @@
     [self.receivedData appendData:data];
 }
 
-- (void)connection:(NSURLConnection *)connection
-  didFailWithError:(NSError *)error
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-
     self.urlConnection = nil;
     self.receivedData = nil;
     
-    // inform the user
+    //Inform the user that there was an error with download
     NSLog(@"Connection failed! Error - %@ %@",
           [error localizedDescription],
           [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
@@ -253,15 +248,41 @@
     {
         BOOL isSet = NO;
         NSString* strJSON = [[NSString alloc] initWithData:self.receivedData encoding:NSASCIIStringEncoding];
-        if ([strJSON length] > 0)
-            isSet = [[Settings sharedSettings] setLoginSettingsFromJSON:strJSON];
         
+        //Apply downloaded settings
+        if ([strJSON length] > 0)
+            isSet = [[HOPSettings sharedSettings] applySettings:strJSON];
+        
+        BOOL isSetAppData = [[Settings sharedSettings] isAppDataSet];
+        
+        if (!isSetAppData)
+        {
+            NSString* filePath = [[NSBundle mainBundle] pathForResource:@"CustomerSpecific" ofType:@"plist"];
+            if ([filePath length] > 0)
+            {
+                [[Settings sharedSettings] storeSettingsFromPath:filePath];
+            }
+            isSetAppData = [[Settings sharedSettings] isAppDataSet];
+        }
+
+        BOOL isSetLoginSettings = [[Settings sharedSettings] isLoginSettingsSet];
+        if (!isSetLoginSettings)
+        {
+            NSString *filePath = [[NSBundle mainBundle] pathForResource:@"DefaultSettings" ofType:@"plist"];
+            if ([filePath length] > 0)
+            {
+                [[Settings sharedSettings] storeSettingsFromPath:filePath];
+            }
+            
+            isSetLoginSettings = [[Settings sharedSettings] isLoginSettingsSet];
+        }
+        
+        isSet = isSetAppData && isSetLoginSettings;//[[Settings sharedSettings] isAppDataSet] && [[Settings sharedSettings] isLoginSettingsSet];
+        //If set remove scanner and proceed with app setup
         if (isSet)
         {
-            [self saveSettingsInJSON:strJSON];
             [self.view removeFromSuperview];
-            [[LoginManager sharedLoginManager] startLogin];
-
+            [[OpenPeer sharedOpenPeer] setup];
         }
         else
         {

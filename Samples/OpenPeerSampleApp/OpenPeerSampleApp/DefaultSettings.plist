@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>outerFrameURL</key>
+	<string>https://app-javascript.hookflash.me/outer.html?view=choose&amp;dev=true</string>
+	<key>identityProviderDomain</key>
+	<string>idprovider-javascript.hookflash.me</string>
+	<key>identityFederateBaseURI</key>
+	<string>identity://idprovider-javascript.hookflash.me/</string>
+	<key>namespaceGrantServiceURL</key>
+	<string>https://app-javascript.hookflash.me/outernamespacegrant.html</string>
+	<key>lockBoxServiceDomain</key>
+	<string>hcs-javascript.hookflash.me</string>
+	<key>defaultOutgoingTelnetServer</key>
+	<string>tcp.logger.hookflash.me:8055</string>
+</dict>
+</plist>

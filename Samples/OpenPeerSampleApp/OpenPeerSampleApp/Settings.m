@@ -33,8 +33,14 @@
 #import "AppConsts.h"
 #import "OpenPeer.h"
 #import "Logger.h"
-#import "CustomerSpecific.h"
 #import "SBJsonParser.h"
+
+#define archiveTelnetLogger @"archiveTelnetLogger"
+#define archiveOutgoingTelnetLogger @"archiveOutgoingTelnetLogger"
+#define archiveStdOutLogger @"archiveStdOutLogger"
+#define archiveEnabled @"enabled"
+#define archiveServer @"server"
+#define archiveColorized @"colorized"
 
 @interface Settings ()
 
@@ -82,40 +88,13 @@
         if ([[NSUserDefaults standardUserDefaults] objectForKey:archiveRedialMode])
             self.isRedialModeOn = [[[NSUserDefaults standardUserDefaults] objectForKey:archiveRedialMode] boolValue];
         
-        if ([[NSUserDefaults standardUserDefaults] objectForKey:archiveStdLogger])
-            self.enabledStdLogger = [[[NSUserDefaults standardUserDefaults] objectForKey:archiveStdLogger] boolValue];
+        if ([[NSUserDefaults standardUserDefaults] objectForKey:archiveStdOutLogger])
+            self.enabledStdLogger = [[[NSUserDefaults standardUserDefaults] objectForKey:archiveStdOutLogger] boolValue];
         
         self.appModulesLoggerLevel =[[[NSUserDefaults standardUserDefaults] objectForKey:archiveModulesLogLevels] mutableCopy];
+        
         if (!self.appModulesLoggerLevel)
             self.appModulesLoggerLevel = [[NSMutableDictionary alloc] init];
-        
-        self.telnetLoggerSettings =[[[NSUserDefaults standardUserDefaults] objectForKey:archiveTelnetLogger] mutableCopy];
-        if (!self.telnetLoggerSettings)
-        {
-            self.telnetLoggerSettings = [[NSMutableDictionary alloc] init];
-            [self.telnetLoggerSettings setObject:defaultTelnetPort forKey:@"server"];
-            [self.telnetLoggerSettings setObject:[NSNumber numberWithBool:YES] forKey:@"colorized"];
-        }
-        
-        self.outgoingTelnetLoggerSettings =[[[NSUserDefaults standardUserDefaults] objectForKey:archiveOutgoingTelnetLogger] mutableCopy];
-        if (!self.outgoingTelnetLoggerSettings)
-        {
-            self.outgoingTelnetLoggerSettings = [[NSMutableDictionary alloc] init];
-            [self.outgoingTelnetLoggerSettings setObject:defaultOutgoingTelnetServer forKey:@"server"];
-            [self.outgoingTelnetLoggerSettings setObject:[NSNumber numberWithBool:YES] forKey:@"colorized"];
-        }
-        
-        self.loginSettings = [[[NSUserDefaults standardUserDefaults] objectForKey:archiveLoginSettings] mutableCopy];
-        if (!self.loginSettings)
-        {
-            self.loginSettings = [[NSMutableDictionary alloc] init];
-            /*[self.loginSettings setObject:outerFrameURL forKey:@"outerFrameURL"];
-            [self.loginSettings setObject:namespaceGrantServiceURL forKey:@"namespaceGrantServiceURL"];
-            [self.loginSettings setObject:identityProviderDomain forKey:@"identityProviderDomain"];
-            [self.loginSettings setObject:identityFederateBaseURI forKey:@"identityFederateBaseURI"];
-            [self.loginSettings setObject:lockBoxServiceDomain forKey:@"lockBoxServiceDomain"];
-            //[self.loginSettings setObject:defaultOutgoingTelnetServer forKey:@"defaultOutgoingTelnetServer"];*/
-        }
     }
     return self;
 }
@@ -160,127 +139,106 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-- (void) enable:(BOOL) enable logger:(LoggerTypes) type
+#define archiveTelnetLogger @"archiveTelnetLogger"
+#define archiveOutgoingTelnetLogger @"archiveOutgoingTelnetLogger"
+#define archiveStdOutLogger @"archiveStdOutLogger"
+
+- (NSString *)getArchiveKeyForLoggerType:(LoggerTypes)type
 {
+    NSString *key= nil;
+    
     switch (type)
     {
         case LOGGER_STD_OUT:
-            self.enabledStdLogger = enable;
-            [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:self.enabledStdLogger] forKey:archiveStdLogger];
+            key = archiveStdOutLogger;
             break;
             
         case LOGGER_TELNET:
-            [self.telnetLoggerSettings setObject:[NSNumber numberWithBool:enable] forKey:@"enabled"];
-            [[NSUserDefaults standardUserDefaults] setObject:self.telnetLoggerSettings forKey:archiveTelnetLogger];
+            key = archiveStdOutLogger;
             break;
             
         case LOGGER_OUTGOING_TELNET:
-            [self.outgoingTelnetLoggerSettings setObject:[NSNumber numberWithBool:enable] forKey:@"enabled"];
-            [[NSUserDefaults standardUserDefaults] setObject:self.outgoingTelnetLoggerSettings forKey:archiveOutgoingTelnetLogger];
+            key = archiveStdOutLogger;
             break;
             
         default:
             break;
     }
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    //[Logger start:enable logger:type];
+    return key;
+}
+
+- (void) enable:(BOOL) enable logger:(LoggerTypes) type
+{
+    NSString* key = [self getArchiveKeyForLoggerType:type];
+    
+    if ([key length] > 0)
+    {
+        key = [key stringByAppendingString:archiveEnabled];
+        [self setBool:enable key:key];
+    }
 }
 
 - (BOOL) isLoggerEnabled:(LoggerTypes) type
 {
-    switch (type)
+    BOOL ret = NO;
+    NSString* key = [self getArchiveKeyForLoggerType:type];
+    
+    if ([key length] > 0)
     {
-        case LOGGER_STD_OUT:
-            return self.enabledStdLogger;
-            break;
-            
-        case LOGGER_TELNET:
-            return [[self.telnetLoggerSettings objectForKey:@"enabled"] boolValue];
-            break;
-            
-        case LOGGER_OUTGOING_TELNET:
-            return [[self.outgoingTelnetLoggerSettings objectForKey:@"enabled"] boolValue];
-            break;
-            
-        default:
-            break;
+        key = [key stringByAppendingString:archiveEnabled];
+        ret = [self getBool:key];
     }
-    return NO;
+    
+    return ret;
 }
 
 - (void) setServerOrPort:(NSString*) server logger:(LoggerTypes) type
 {
-    switch (type)
+    NSString* key = [self getArchiveKeyForLoggerType:type];
+    
+    if ([key length] > 0)
     {
-        case LOGGER_TELNET:
-            [self.telnetLoggerSettings setObject:server forKey:@"server"];
-            [[NSUserDefaults standardUserDefaults] setObject:self.telnetLoggerSettings forKey:archiveTelnetLogger];
-            break;
-            
-        case LOGGER_OUTGOING_TELNET:
-            [self.outgoingTelnetLoggerSettings setObject:server forKey:@"server"];
-            [[NSUserDefaults standardUserDefaults] setObject:self.outgoingTelnetLoggerSettings forKey:archiveOutgoingTelnetLogger];
-            
-        default:
-            break;
+        key = [key stringByAppendingString:archiveServer];
+        [self setString:server key:key];
     }
-    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (NSString*) getServerPortForLogger:(LoggerTypes) type
 {
-    switch (type)
+    NSString* ret = nil;
+    NSString* key = [self getArchiveKeyForLoggerType:type];
+    
+    if ([key length] > 0)
     {
-        case LOGGER_TELNET:
-            return [self.telnetLoggerSettings objectForKey:@"server"];
-            break;
-            
-        case LOGGER_OUTGOING_TELNET:
-            return [self.outgoingTelnetLoggerSettings objectForKey:@"server"];
-            break;
-            
-        default:
-            break;
+        key = [key stringByAppendingString:archiveServer];
+        ret = [self getString:key];
     }
-    return nil;
+    
+    return ret;
 }
 
 - (void) setColorizedOutput:(BOOL) colorized logger:(LoggerTypes) type
 {
-    switch (type)
+    NSString* key = [self getArchiveKeyForLoggerType:type];
+    
+    if ([key length] > 0)
     {
-        case LOGGER_TELNET:
-            [self.telnetLoggerSettings setObject:[NSNumber numberWithBool:colorized] forKey:@"colorized"];
-            [[NSUserDefaults standardUserDefaults] setObject:self.telnetLoggerSettings forKey:archiveTelnetLogger];
-            break;
-            
-        case LOGGER_OUTGOING_TELNET:
-            [self.outgoingTelnetLoggerSettings setObject:[NSNumber numberWithBool:colorized] forKey:@"colorized"];
-            [[NSUserDefaults standardUserDefaults] setObject:self.outgoingTelnetLoggerSettings forKey:archiveOutgoingTelnetLogger];
-            break;
-            
-        default:
-            break;
+        key = [key stringByAppendingString:archiveColorized];
+        [self setBool:colorized key:key];
     }
-    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (BOOL) isColorizedOutputForLogger:(LoggerTypes) type
 {
     BOOL ret = NO;
-    switch (type)
+    NSString* key = [self getArchiveKeyForLoggerType:type];
+    
+    if ([key length] > 0)
     {
-        case LOGGER_TELNET:
-            ret = [[self.telnetLoggerSettings objectForKey:@"colorized"] boolValue];
-            break;
-            
-        case LOGGER_OUTGOING_TELNET:
-            ret = [[self.outgoingTelnetLoggerSettings objectForKey:@"colorized"] boolValue];
-            break;
-            
-        default:
-            break;
+        key = [key stringByAppendingString:archiveColorized];
+        ret = [self getBool:key];
     }
+    
     return ret;
 }
 
@@ -551,103 +509,246 @@
     [self enable:YES logger:LOGGER_OUTGOING_TELNET];
 }
 
-- (void) setOuterFrameURL:(NSString*) inOuterFrameURL
-{
-    if ([inOuterFrameURL length] > 0)
-    {
-        [self.loginSettings setObject:inOuterFrameURL forKey:@"outerFrameURL"];
-        [self saveLoginSettings];
-    }
-}
-
 - (NSString*) getOuterFrameURL
 {
-    return [self.loginSettings objectForKey:@"outerFrameURL"];
-}
-
-- (void) setNamespaceGrantServiceURL:(NSString*) inNamespaceGrantServiceURL
-{
-    [self.loginSettings setObject:inNamespaceGrantServiceURL forKey:@"namespaceGrantServiceURL"];
-    [self saveLoginSettings];
+    return [self getString:@"outerFrameURL"];
 }
 
 - (NSString*) getNamespaceGrantServiceURL
 {
-    return [self.loginSettings objectForKey:@"namespaceGrantServiceURL"];
-}
-
-- (void) setIdentityProviderDomain:(NSString*) inIdentityProviderDomain
-{
-    [self.loginSettings setObject:inIdentityProviderDomain forKey:@"identityProviderDomain"];
-    [self saveLoginSettings];
+    return [self getString:@"namespaceGrantServiceURL"];
 }
 
 - (NSString*) getIdentityProviderDomain
 {
-    return [self.loginSettings objectForKey:@"identityProviderDomain"];
-}
-
-- (void) setIdentityFederateBaseURI:(NSString*) inIdentityFederateBaseURI
-{
-    [self.loginSettings setObject:inIdentityFederateBaseURI forKey:@"identityFederateBaseURI"];
-    [self saveLoginSettings];
+    return [self getString:@"identityProviderDomain"];
 }
 
 - (NSString*) getIdentityFederateBaseURI
 {
-    return [self.loginSettings objectForKey:@"identityFederateBaseURI"];
-}
-
-- (void) setLockBoxServiceDomain:(NSString*) inLockBoxServiceDomain
-{
-    [self.loginSettings setObject:inLockBoxServiceDomain forKey:@"lockBoxServiceDomain"];
-    [self saveLoginSettings];
+    return [self getString:@"identityFederateBaseURI"];
 }
 
 - (NSString*) getLockBoxServiceDomain
 {
-    return [self.loginSettings objectForKey:@"lockBoxServiceDomain"];
+    return [self getString:@"lockBoxServiceDomain"];
 }
 
-//- (void) setDefaultOutgoingTelnetServer:(NSString*) inDefaultOutgoingTelnetServer
-//{
-//    [self.loginSettings setObject:inDefaultOutgoingTelnetServer forKey:@"defaultOutgoingTelnetServer"];
-//    [self saveLoginSettings];
-//}
-//
-//- (NSString*) getDefaultOutgoingTelnetServer
-//{
-//    return [self.loginSettings objectForKey:@"defaultOutgoingTelnetServer"];
-//}
-
-- (void) saveLoginSettings
+- (NSString*) getDefaultOutgoingTelnetServer
 {
-    [[NSUserDefaults standardUserDefaults] setObject:self.loginSettings forKey:archiveLoginSettings];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    return [self getString:@"defaultOutgoingTelnetServer"];
 }
 
-- (BOOL) setLoginSettingsFromJSON:(NSString *)loginSettingsJSON
+- (NSString*) getString:(NSString*) key
 {
-    BOOL ret = NO;
-    SBJsonParser* parser = [[SBJsonParser alloc] init];
-    NSDictionary* inputDictionary = [parser objectWithString: loginSettingsJSON];
-    if ([inputDictionary count] > 0)
+    NSString* ret = nil;
+    
+    if ([key length] > 0)
     {
-        [self setOuterFrameURL:[inputDictionary objectForKey:@"outerFrameURL"]];
-        [self setNamespaceGrantServiceURL:[inputDictionary objectForKey:@"namespaceGrantServiceURL"]];
-        [self setIdentityProviderDomain:[inputDictionary objectForKey:@"identityProviderDomain"]];
-        [self setIdentityFederateBaseURI:[inputDictionary objectForKey:@"identityFederateBaseURI"]];
-        [self setLockBoxServiceDomain:[inputDictionary objectForKey:@"lockBoxServiceDomain"]];
-        //[self setDefaultOutgoingTelnetServer:[inputDictionary objectForKey:@"defaultOutgoingTelnetServer"]];
-        [self setServerOrPort:[inputDictionary objectForKey:@"defaultOutgoingTelnetServer"] logger:LOGGER_OUTGOING_TELNET];
-        
-        ret = YES;
+        ret = [[NSUserDefaults standardUserDefaults] stringForKey:key];
     }
     
     return ret;
 }
+
+- (long) getInt:(NSString*) key
+{
+    long ret = 0;
+    
+    if ([key length] > 0)
+    {
+        NSNumber* number = [[NSUserDefaults standardUserDefaults] objectForKey:key];
+        
+        ret = number.longValue;
+    }
+    
+    return ret;
+}
+
+- (unsigned long) getUInt:(NSString*) key
+{
+    unsigned long ret = 0;
+    
+    if ([key length] > 0)
+    {
+        NSNumber* number = [[NSUserDefaults standardUserDefaults] objectForKey:key];
+        
+        ret = number.unsignedLongValue;
+    }
+    
+    return ret;
+}
+
+- (BOOL) getBool:(NSString*) key
+{
+    BOOL ret = NO;
+    
+    if ([key length] > 0)
+    {
+        NSNumber* number = [[NSUserDefaults standardUserDefaults] objectForKey:key];
+        
+        ret = number.boolValue;
+    }
+    
+    return ret;
+}
+
+- (float) getFloat:(NSString*) key
+{
+    float ret = 0.0;
+    
+    if ([key length] > 0)
+    {
+        NSNumber* number = [[NSUserDefaults standardUserDefaults] objectForKey:key];
+        
+        ret = number.floatValue;
+    }
+    
+    return ret;
+}
+
+- (double) getDouble:(NSString*) key
+{
+    double ret = NO;
+    
+    if ([key length] > 0)
+    {
+        NSNumber* number = [[NSUserDefaults standardUserDefaults] objectForKey:key];
+        
+        ret = number.doubleValue;
+    }
+    
+    return ret;
+}
+
+- (void) setString:(NSString*) value key:(NSString*) key
+{
+    if ([key length] > 0 && [value length] > 0)
+    {
+        [[NSUserDefaults standardUserDefaults] setObject:value forKey:key];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+}
+
+- (void) setInt:(long) value key:(NSString*) key
+{
+    if ([key length] > 0)
+    {
+        NSNumber* number = [NSNumber numberWithLong:value];
+        if (number)
+        {
+            [[NSUserDefaults standardUserDefaults] setObject:number forKey:key];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
+    }
+}
+- (void) setUInt:(unsigned long) value key:(NSString*) key
+{
+    if ([key length] > 0)
+    {
+        NSNumber* number = [NSNumber numberWithUnsignedLong:value];
+        if (number)
+        {
+            [[NSUserDefaults standardUserDefaults] setObject:number forKey:key];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
+    }
+}
+- (void) setBool:(BOOL) value key:(NSString*) key
+{
+    if ([key length] > 0)
+    {
+        NSNumber* number = [NSNumber numberWithBool:value];
+        if (number)
+        {
+            [[NSUserDefaults standardUserDefaults] setObject:number forKey:key];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
+    }
+}
+- (void) setFloat:(float) value key:(NSString*) key
+{
+    if ([key length] > 0)
+    {
+        NSNumber* number = [NSNumber numberWithFloat:value];
+        if (number)
+        {
+            [[NSUserDefaults standardUserDefaults] setObject:number forKey:key];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
+    }
+}
+- (void) setDouble:(double) value key:(NSString*) key
+{
+    if ([key length] > 0)
+    {
+        NSNumber* number = [NSNumber numberWithDouble:value];
+        if (number)
+        {
+            [[NSUserDefaults standardUserDefaults] setObject:number forKey:key];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
+    }
+}
+
+- (void) clearForKey:(NSString*) key
+{
+    if ([key length] > 0)
+    {
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+}
+
+- (void) storeSettingsFromPath:(NSString*) path
+{
+    NSDictionary* customerSpecificDict = [NSDictionary dictionaryWithContentsOfFile:path];
+    
+    if ([customerSpecificDict count] > 0)
+    {
+        for (NSString* key in [customerSpecificDict allKeys])
+        {
+            id value = [customerSpecificDict objectForKey:key];
+            if ([value isKindOfClass:[NSDictionary class]])
+            {
+                for (NSString* subKey in [((NSDictionary*)value) allKeys])
+                    [[Settings sharedSettings] setString:[((NSDictionary*)value) objectForKey:subKey] key:subKey];
+            }
+            else if ([value isKindOfClass:[NSString class]])
+            {
+                [[Settings sharedSettings] setString:value key:key];
+            }
+        }
+    }
+}
+
+- (BOOL) isAppDataSet
+{
+    BOOL ret = YES;
+    
+    ret &= [[self getString:archiveAppId] length] != 0;
+    ret &= [[self getString:archiveAppIdSharedSecret] length] != 0;
+    ret &= [[self getString:archiveAppName] length] != 0;
+    ret &= [[self getString:archiveAppURL] length] != 0;
+    ret &= [[self getString:archiveAppImageURL] length] != 0;
+    
+#ifdef APNS_ENABLED
+    ret &= [[self getString:archiveAppImageURL] length] != 0;
+#endif
+    return ret;
+}
+
 - (BOOL) isLoginSettingsSet
 {
-    return [self.loginSettings count] > 0;
+    BOOL ret = YES;
+    
+    ret &= [[self getOuterFrameURL] length] != 0;
+    ret &= [[self getIdentityFederateBaseURI] length] != 0;
+    ret &= [[self getIdentityProviderDomain] length] != 0;
+    ret &= [[self getNamespaceGrantServiceURL] length] != 0;
+    ret &= [[self getLockBoxServiceDomain] length] != 0;
+    ret &= [[self getDefaultOutgoingTelnetServer] length] != 0;
+    
+    return ret;
 }
 @end
