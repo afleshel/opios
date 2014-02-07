@@ -118,8 +118,48 @@
     //Set log levels and start logging
     [Logger startAllSelectedLoggers];
     
+    
     if (![[HOPModelManager sharedModelManager] getLastLoggedInHomeUser])
     {
+        //If not already set, set default login settings
+        BOOL isSetLoginSettings = [[Settings sharedSettings] isLoginSettingsSet];
+        if (!isSetLoginSettings)
+        {
+            [[HOPSettings sharedSettings] applyDefaults];
+            
+            NSString *filePath = [[NSBundle mainBundle] pathForResource:@"DefaultSettings" ofType:@"plist"];
+            if ([filePath length] > 0)
+            {
+                [[Settings sharedSettings] storeSettingsFromPath:filePath];
+            }
+            
+            isSetLoginSettings = [[Settings sharedSettings] isLoginSettingsSet];
+        }
+        
+        //If not already set, set default app data
+        BOOL isSetAppData = [[Settings sharedSettings] isAppDataSet];
+        if (!isSetAppData)
+        {
+            NSString* filePath = [[NSBundle mainBundle] pathForResource:@"CustomerSpecific" ofType:@"plist"];
+            if ([filePath length] > 0)
+            {
+                [[Settings sharedSettings] storeSettingsFromPath:filePath];
+            }
+            isSetAppData = [[Settings sharedSettings] isAppDataSet];
+        }
+        
+        //If some of must to have data is not set, notify the user
+        if (!(isSetAppData && isSetLoginSettings))
+        {
+            UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Local file with local settings is corrupted!"
+                                                                message:@"Please try to scan QR code or reinstall the app."
+                                                               delegate:nil
+                                                      cancelButtonTitle:nil
+                                                      otherButtonTitles:@"Ok",nil];
+            [alertView show];
+        }
+        
+        //Show QR scanner if user wants to change settings by reading QR code
         [[self mainViewController] showQRScanner];
     }
     else

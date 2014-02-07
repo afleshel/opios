@@ -93,9 +93,31 @@
         
         NSString* str = result.text;
 
-        if ([str length] > 0 && ([str rangeOfString:@"{...}"].location == NSNotFound))
+        if ([str length] > 0)
         {
-            [self loadSettingsfromURL:str];
+            if ([Utility isValidURL:str])
+            {
+                [self loadSettingsfromURL:str];
+            }
+            else
+            {
+                //Check if JSON is valid
+                if ([Utility isValidJSON:str])
+                {
+                    [[HOPSettings sharedSettings] applySettings:str];
+                    [self actionProceedWithlogin:nil];
+                }
+                else
+                {
+                    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Invalid login settings!"
+                                                                        message:@"Please, scan another QR code or proceed with already set login settings"
+                                                                       delegate:nil
+                                                              cancelButtonTitle:nil
+                                                              otherButtonTitles:@"Ok",nil];
+                    [alertView show];
+                }
+                
+            }
         }
         else
         {
@@ -131,45 +153,8 @@
 
 - (IBAction)actionProceedWithlogin:(id)sender
 {
-    BOOL isSetLoginSettings = [[Settings sharedSettings] isLoginSettingsSet];
-    if (!isSetLoginSettings)
-    {
-        [[HOPSettings sharedSettings] applyDefaults];
-
-        NSString *filePath = [[NSBundle mainBundle] pathForResource:@"DefaultSettings" ofType:@"plist"];
-        if ([filePath length] > 0)
-        {
-            [[Settings sharedSettings] storeSettingsFromPath:filePath];
-        }
-        
-        isSetLoginSettings = [[Settings sharedSettings] isLoginSettingsSet];
-    }
-
-    BOOL isSetAppData = [[Settings sharedSettings] isAppDataSet];
-    if (!isSetAppData)
-    {
-        NSString* filePath = [[NSBundle mainBundle] pathForResource:@"CustomerSpecific" ofType:@"plist"];
-        if ([filePath length] > 0)
-        {
-            [[Settings sharedSettings] storeSettingsFromPath:filePath];
-        }
-        isSetAppData = [[Settings sharedSettings] isAppDataSet];
-    }
-
-    if (isSetAppData && isSetLoginSettings)
-    {
-        [self.view removeFromSuperview];
-        [[OpenPeer sharedOpenPeer] setup];
-    }
-    else
-    {
-        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Local file with local settings is corrupted!"
-                                                            message:@"Please try to scan QR code or reinstall the app."
-                                                           delegate:nil
-                                                  cancelButtonTitle:nil
-                                                  otherButtonTitles:@"Ok",nil];
-        [alertView show];
-    }
+    [self.view removeFromSuperview];
+    [[OpenPeer sharedOpenPeer] setup];
 }
 
 - (void) loadSettingsfromURL:(NSString*) url
@@ -250,35 +235,10 @@
         BOOL isSet = NO;
         NSString* strJSON = [[NSString alloc] initWithData:self.receivedData encoding:NSASCIIStringEncoding];
         
-        BOOL isSetAppData = [[Settings sharedSettings] isAppDataSet];
-        
-        if (!isSetAppData)
-        {
-            NSString* filePath = [[NSBundle mainBundle] pathForResource:@"CustomerSpecific" ofType:@"plist"];
-            if ([filePath length] > 0)
-            {
-                [[Settings sharedSettings] storeSettingsFromPath:filePath];
-            }
-            isSetAppData = [[Settings sharedSettings] isAppDataSet];
-        }
-        
-        BOOL isSetLoginSettings = [[Settings sharedSettings] isLoginSettingsSet];
-        if (!isSetLoginSettings)
-        {
-            NSString *filePath = [[NSBundle mainBundle] pathForResource:@"DefaultSettings" ofType:@"plist"];
-            if ([filePath length] > 0)
-            {
-                [[Settings sharedSettings] storeSettingsFromPath:filePath];
-            }
-            
-            isSetLoginSettings = [[Settings sharedSettings] isLoginSettingsSet];
-        }
-        
         //Apply downloaded settings
         if ([strJSON length] > 0)
             isSet = [[HOPSettings sharedSettings] applySettings:strJSON];
         
-        isSet = isSetAppData && isSetLoginSettings;//[[Settings sharedSettings] isAppDataSet] && [[Settings sharedSettings] isLoginSettingsSet];
         //If set remove scanner and proceed with app setup
         if (isSet)
         {
