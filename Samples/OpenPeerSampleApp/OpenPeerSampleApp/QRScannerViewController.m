@@ -134,6 +134,8 @@
     BOOL isSetLoginSettings = [[Settings sharedSettings] isLoginSettingsSet];
     if (!isSetLoginSettings)
     {
+        [[HOPSettings sharedSettings] applyDefaults];
+
         NSString *filePath = [[NSBundle mainBundle] pathForResource:@"DefaultSettings" ofType:@"plist"];
         if ([filePath length] > 0)
         {
@@ -142,7 +144,7 @@
         
         isSetLoginSettings = [[Settings sharedSettings] isLoginSettingsSet];
     }
-    
+
     BOOL isSetAppData = [[Settings sharedSettings] isAppDataSet];
     if (!isSetAppData)
     {
@@ -153,11 +155,10 @@
         }
         isSetAppData = [[Settings sharedSettings] isAppDataSet];
     }
-    
+
     if (isSetAppData && isSetLoginSettings)
     {
         [self.view removeFromSuperview];
-        [[HOPSettings sharedSettings] applyDefaults];
         [[OpenPeer sharedOpenPeer] setup];
     }
     else
