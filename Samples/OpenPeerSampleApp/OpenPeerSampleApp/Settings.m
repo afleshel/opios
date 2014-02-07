@@ -35,13 +35,6 @@
 #import "Logger.h"
 #import "SBJsonParser.h"
 
-#define archiveTelnetLogger @"archiveTelnetLogger"
-#define archiveOutgoingTelnetLogger @"archiveOutgoingTelnetLogger"
-#define archiveStdOutLogger @"archiveStdOutLogger"
-#define archiveEnabled @"enabled"
-#define archiveServer @"server"
-#define archiveColorized @"colorized"
-
 @interface Settings ()
 
 - (NSString*) getArchiveStringForModule:(Modules) module;
@@ -139,9 +132,6 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-#define archiveTelnetLogger @"archiveTelnetLogger"
-#define archiveOutgoingTelnetLogger @"archiveOutgoingTelnetLogger"
-#define archiveStdOutLogger @"archiveStdOutLogger"
 
 - (NSString *)getArchiveKeyForLoggerType:(LoggerTypes)type
 {
@@ -154,11 +144,11 @@
             break;
             
         case LOGGER_TELNET:
-            key = archiveStdOutLogger;
+            key = archiveTelnetLogger;
             break;
             
         case LOGGER_OUTGOING_TELNET:
-            key = archiveStdOutLogger;
+            key = archiveOutgoingTelnetLogger;
             break;
             
         default:
@@ -536,7 +526,7 @@
 
 - (NSString*) getDefaultOutgoingTelnetServer
 {
-    return [self getString:@"defaultOutgoingTelnetServer"];
+    return [self getString:@"archiveOutgoingTelnetLoggerServer"];
 }
 
 - (NSString*) getString:(NSString*) key

@@ -62,7 +62,6 @@
 		8765B8FD17ED837F0045094E /* HOPRolodexContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 8765B8FB17ED837F0045094E /* HOPRolodexContact.m */; };
 		876D1F761823BD000024D30C /* HOPUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 876D1F751823BD000024D30C /* HOPUtility.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		876D1F781823BD120024D30C /* HOPUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 876D1F771823BD120024D30C /* HOPUtility.m */; };
-		877038F018A27D4A000B7AA1 /* boost.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 00C82C3F18320855005B87E0 /* boost.framework */; };
 		8783859117A84FAB003C6EEA /* HOPRolodexContact+External.h in Headers */ = {isa = PBXBuildFile; fileRef = 8783858F17A84FAA003C6EEA /* HOPRolodexContact+External.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8783859217A84FAB003C6EEA /* HOPRolodexContact+External.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8783859017A84FAA003C6EEA /* HOPRolodexContact+External.mm */; };
 		8792E86C16519CFF00DEAC58 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8792E86B16519CFF00DEAC58 /* Foundation.framework */; };
@@ -301,19 +300,6 @@
 			remoteInfo = OpenPeerDataModel;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		8792E86616519CFF00DEAC58 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "include/${PRODUCT_NAME}";
-			dstSubfolderSpec = 10;
-			files = (
-				877038F018A27D4A000B7AA1 /* boost.framework in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		00243939178F52D300B79368 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -993,7 +979,6 @@
 			buildPhases = (
 				8792E86416519CFF00DEAC58 /* Sources */,
 				8792E86516519CFF00DEAC58 /* Frameworks */,
-				8792E86616519CFF00DEAC58 /* CopyFiles */,
 				87B013B716611FAA00E8938B /* Headers */,
 				87B013E41661327800E8938B /* ShellScript */,
 			);
@@ -1168,7 +1153,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\n\nFMK_VERSION=C\n\n# Delete old framework folder\nrm -rf \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework\"\n\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Headers\"\n#mkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Resources\"\n\n# Link the \"Current\" version to \"C\"\n/bin/ln -sfh ${FMK_VERSION} \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/Current\"\n/bin/ln -sfh Versions/Current/Headers \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Headers\"\n#/bin/ln -sfh Versions/Current/Resources \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Resources\"\n/bin/ln -sfh \"Versions/Current/${PRODUCT_NAME}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/${PRODUCT_NAME}\"\n\n# The -a ensures that the headers maintain the source modification date so that we don't constantly\n# cause propagating rebuilds of files that import these headers.\n/bin/cp -a \"${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Headers\"\n\n#/bin/cp -R  \"${TARGET_BUILD_DIR}/${PUBLIC_RESOURCES_FOLDER_PATH}/OpenPeerModel.momd\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Resources\"\n\n/bin/cp -a \"${BUILT_PRODUCTS_DIR}/lib${PRODUCT_NAME}.a\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/${PRODUCT_NAME}\"\n";
+			shellScript = "set -e\n\n: ${BOOST_FRAMEWORK_PATH:=./libs/op/libs/ortc-lib/libs/boost/ios/framework/boost.framework}\n: ${CURL_LIB_PATH:=./libs/op/libs/ortc-lib/libs/curl/staging/libcurl.a}\n\nFMK_VERSION=C\n\n# Delete old framework folder\nrm -rf \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework\"\n\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Headers\"\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Frameworks\"\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Libraries\"\n#mkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Resources\"\n\n# Link the \"Current\" version to \"C\"\n/bin/ln -sfh ${FMK_VERSION} \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/Current\"\n/bin/ln -sfh Versions/Current/Headers \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Headers\"\n/bin/ln -sfh Versions/Current/Frameworks \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Frameworks\"\n/bin/ln -sfh Versions/Current/Libraries \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Libraries\"\n#/bin/ln -sfh Versions/Current/Resources \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Resources\"\n/bin/ln -sfh \"Versions/Current/${PRODUCT_NAME}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/${PRODUCT_NAME}\"\n\n# The -a ensures that the headers maintain the source modification date so that we don't constantly\n# cause propagating rebuilds of files that import these headers.\n/bin/cp -a \"${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Headers\"\n\n/bin/cp -a \"${BOOST_FRAMEWORK_PATH}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Frameworks\"\n\n/bin/cp -a \"${CURL_LIB_PATH}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Libraries\"\n\n#/bin/cp -R  \"${TARGET_BUILD_DIR}/${PUBLIC_RESOURCES_FOLDER_PATH}/OpenPeerModel.momd\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Resources\"\n\n/bin/cp -a \"${BUILT_PRODUCTS_DIR}/lib${PRODUCT_NAME}.a\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/${PRODUCT_NAME}\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

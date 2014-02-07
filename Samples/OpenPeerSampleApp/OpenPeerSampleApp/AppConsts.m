@@ -62,7 +62,7 @@ NSString * const archiveTelnetLogger = @"archiveTelnetLogger";
 NSString * const archiveOutgoingTelnetLogger = @"archiveOutgoingTelnetLogger";
 NSString * const archiveStdOutLogger = @"archiveStdOutLogger";
 NSString * const archiveEnabled = @"enabled";
-NSString * const archiveServer = @"server";
+NSString * const archiveServer = @"Server";
 NSString * const archiveColorized = @"colorized";
 
 #ifdef APNS_ENABLED

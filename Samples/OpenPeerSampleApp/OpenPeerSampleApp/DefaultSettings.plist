@@ -12,7 +12,9 @@
 	<string>https://app-javascript.hookflash.me/outernamespacegrant.html</string>
 	<key>lockBoxServiceDomain</key>
 	<string>hcs-javascript.hookflash.me</string>
-	<key>defaultOutgoingTelnetServer</key>
+	<key>archiveOutgoingTelnetLoggerServer</key>
 	<string>tcp.logger.hookflash.me:8055</string>
+	<key>archiveTelnetLoggerServer</key>
+	<string>59999</string>
 </dict>
 </plist>

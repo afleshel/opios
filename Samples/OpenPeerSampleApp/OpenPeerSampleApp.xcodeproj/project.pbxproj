@@ -624,7 +624,6 @@
 		870F337C168376450090A97F /* ActivityIndicatorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityIndicatorViewController.h; sourceTree = "<group>"; };
 		870F337D168376450090A97F /* ActivityIndicatorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityIndicatorViewController.m; sourceTree = "<group>"; };
 		870F337E168376450090A97F /* ActivityIndicatorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ActivityIndicatorViewController.xib; sourceTree = "<group>"; };
-		8711BE1F1861EF1300DBF8B5 /* Template_CustomerSpecific.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Template_CustomerSpecific.m; sourceTree = "<group>"; };
 		8712BE6717D8CC7C00665F42 /* iPhone_top_bar_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone_top_bar_background@2x.png"; sourceTree = "<group>"; };
 		8712BE6817D8CC7C00665F42 /* iPhone_top_bar_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPhone_top_bar_background.png; sourceTree = "<group>"; };
 		8712BE6917D8CC7C00665F42 /* iPhone_tabBar_settings_inactive_Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone_tabBar_settings_inactive_Icon@2x.png"; sourceTree = "<group>"; };
@@ -1148,7 +1147,6 @@
 		8711BE1D1861EF1300DBF8B5 /* templates */ = {
 			isa = PBXGroup;
 			children = (
-				8711BE1F1861EF1300DBF8B5 /* Template_CustomerSpecific.m */,
 				876CD4C618A385900069C296 /* Template_CustomerSpecific.plist */,
 			);
 			name = templates;

@@ -56,7 +56,8 @@ opios/Samples/OpenPeerSampleApp/OpenPeerSampleApp.xcodeproj
 		identityProviderDomain = @"<-- enter identity provider domain here (e.g. idprovider-javascript.hookflash.me) -->";
 		identityFederateBaseURI = @"<-- enter federated identity base uri here (e.g. identity://idprovider-javascript.hookflash.me/) -->";
 		lockBoxServiceDomain =  @"<-- enter lockbox service domain here (e.g. hcs-javascript.hookflash.me) -->";
-		defaultOutgoingTelnetServer = @"<-- enter outgoing telnet server here (e.g. tcp.logger.hookflash.me:8055) -->";
+		archiveOutgoingTelnetLoggerServer = @"<-- enter outgoing telnet server here (e.g. tcp.logger.hookflash.me:8055) -->";
+		archiveTelnetLoggerServer = @"<-- enter outgoing telnet server here (e.g. 59999) -->";
 		
 		
 	If you want to change your application data or login settings, you can create a QR code with URL of json file(e.g. www.my_test_server.com/settings.json) that contains desired data. 
@@ -70,7 +71,8 @@ opios/Samples/OpenPeerSampleApp/OpenPeerSampleApp.xcodeproj
 			"identityFederateBaseURI": "<-- enter federated identity base uri here (e.g. identity://idprovider-javascript.hookflash.me/) -->",
 			"namespaceGrantServiceURL": "<-- enter outer namespace grant service url here (e.g. https://app-javascript.hookflash.me/outernamespacegrant.html) -->",
 			"lockBoxServiceDomain": "<-- enter lockbox service domain here (e.g. hcs-javascript.hookflash.me) -->",
-			"defaultOutgoingTelnetServer": "<-- enter outgoing telnet server here (e.g. tcp.logger.hookflash.me:8055) -->"
+			"archiveOutgoingTelnetLoggerServer": "<-- enter outgoing telnet server here (e.g. tcp.logger.hookflash.me:8055) -->"
+			"archiveTelnetLoggerServer": "<-- enter outgoing telnet server here (e.g. 59999) -->";
 		}
 	}
 	
@@ -81,6 +83,8 @@ opios/Samples/OpenPeerSampleApp/OpenPeerSampleApp.xcodeproj
 The OpenpeerSDK.framework and OpenpeerDataModel.bundle will be built inside:
 project_derived_data_folder/Build/Products/Debug-iphoneos/		- in debug mode
 project_derived_data_folder/Build/Products/Release-iphoneos/	- in release mode
+
+5) In case you just want to add OpenPeerSDK.framework to your project, beside adding frameworks liste below, it is required to add path to boost.framework that is embed in our framework. (e.g. "path_to_OpenPeerSDK_framework"/OpenPeerSDK.framework/Frameworks/)
 
 
 Required frameworks:
