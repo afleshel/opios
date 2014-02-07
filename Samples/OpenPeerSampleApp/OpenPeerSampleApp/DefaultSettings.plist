@@ -16,5 +16,9 @@
 	<string>tcp.logger.hookflash.me:8055</string>
 	<key>archiveTelnetLoggerServer</key>
 	<string>59999</string>
+	<key>openpeer/stack/bootstrapper-force-well-known-over-insecure-http</key>
+	<true/>
+	<key>openpeer/stack/bootstrapper-force-well-known-using-post</key>
+	<true/>
 </dict>
 </plist>

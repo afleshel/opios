@@ -708,6 +708,10 @@
             {
                 [[Settings sharedSettings] setString:value key:key];
             }
+            else if ([value isKindOfClass:[NSNumber class]])
+            {
+              [[Settings sharedSettings] setInt:value key:key];
+            }
         }
     }
 }
