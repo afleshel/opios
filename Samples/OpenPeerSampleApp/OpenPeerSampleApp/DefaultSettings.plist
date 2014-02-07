@@ -17,7 +17,7 @@
 	<key>archiveTelnetLoggerServer</key>
 	<string>59999</string>
 	<key>openpeer/stack/bootstrapper-force-well-known-over-insecure-http</key>
-	<true/>
+	<false/>
 	<key>openpeer/stack/bootstrapper-force-well-known-using-post</key>
 	<true/>
 </dict>

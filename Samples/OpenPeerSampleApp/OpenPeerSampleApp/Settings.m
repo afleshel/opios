@@ -696,8 +696,11 @@
     
     if ([customerSpecificDict count] > 0)
     {
+        Class boolClass = [[NSNumber numberWithBool:YES] class];
+        
         for (NSString* key in [customerSpecificDict allKeys])
         {
+            
             id value = [customerSpecificDict objectForKey:key];
             if ([value isKindOfClass:[NSDictionary class]])
             {
@@ -708,9 +711,13 @@
             {
                 [[Settings sharedSettings] setString:value key:key];
             }
+            else if ([value isKindOfClass:boolClass])
+            {
+                [[Settings sharedSettings] setBool:((NSNumber*)value).boolValue key:key];
+            }
             else if ([value isKindOfClass:[NSNumber class]])
             {
-              [[Settings sharedSettings] setInt:value key:key];
+                [[Settings sharedSettings] setInt:value key:key];
             }
         }
     }

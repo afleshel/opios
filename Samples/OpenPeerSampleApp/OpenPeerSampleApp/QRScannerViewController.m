@@ -250,10 +250,6 @@
         BOOL isSet = NO;
         NSString* strJSON = [[NSString alloc] initWithData:self.receivedData encoding:NSASCIIStringEncoding];
         
-        //Apply downloaded settings
-        if ([strJSON length] > 0)
-            isSet = [[HOPSettings sharedSettings] applySettings:strJSON];
-        
         BOOL isSetAppData = [[Settings sharedSettings] isAppDataSet];
         
         if (!isSetAppData)
@@ -265,7 +261,7 @@
             }
             isSetAppData = [[Settings sharedSettings] isAppDataSet];
         }
-
+        
         BOOL isSetLoginSettings = [[Settings sharedSettings] isLoginSettingsSet];
         if (!isSetLoginSettings)
         {
@@ -277,6 +273,10 @@
             
             isSetLoginSettings = [[Settings sharedSettings] isLoginSettingsSet];
         }
+        
+        //Apply downloaded settings
+        if ([strJSON length] > 0)
+            isSet = [[HOPSettings sharedSettings] applySettings:strJSON];
         
         isSet = isSetAppData && isSetLoginSettings;//[[Settings sharedSettings] isAppDataSet] && [[Settings sharedSettings] isLoginSettingsSet];
         //If set remove scanner and proceed with app setup
