@@ -115,10 +115,6 @@
     //Init cache singleton
     [[HOPCache sharedCache] setDelegate:self.cacheDelegate];
     
-    //Set log levels and start logging
-    [Logger startAllSelectedLoggers];
-    
-    
     if (![[HOPModelManager sharedModelManager] getLastLoggedInHomeUser])
     {
         //If not already set, set default login settings
@@ -159,6 +155,7 @@
             [alertView show];
         }
         
+        
         //Show QR scanner if user wants to change settings by reading QR code
         [[self mainViewController] showQRScanner];
     }
@@ -174,15 +171,8 @@
  */
 - (void) setup
 {
-    /*//Created all delegates required for openpeer stack initialization.
-    [self createDelegates];
-    
-    [[HOPCache sharedCache] removeExpiredCookies];
-    //Init cache singleton
-    [[HOPCache sharedCache] setDelegate:self.cacheDelegate];
-    
     //Set log levels and start logging
-    [Logger startAllSelectedLoggers];*/
+    [Logger startAllSelectedLoggers];
 
     //Init openpeer stack and set created delegates
     [[HOPStack sharedStack] setupWithStackDelegate:self.stackDelegate mediaEngineDelegate:self.mediaEngineDelegate appID: self.authorizedApplicationId appName:[[Settings sharedSettings] getString: @"applicationName"] appImageURL:[[Settings sharedSettings] getString: @"applicationImageURL"]  appURL:[[Settings sharedSettings] getString: @"applicationURL"] userAgent:[Utility getUserAgentName] deviceID:self.deviceId deviceOs:[Utility getDeviceOs] system:[Utility getPlatform]];
