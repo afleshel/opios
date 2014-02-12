@@ -169,6 +169,7 @@
 		874408D1182FFD6D004AD8FC /* handset_decline_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 874408D0182FFD6D004AD8FC /* handset_decline_icon.png */; };
 		874408D4182FFE43004AD8FC /* handset_accept_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 874408D2182FFE43004AD8FC /* handset_accept_icon.png */; };
 		874408D5182FFE43004AD8FC /* video_indicator_white_big.png in Resources */ = {isa = PBXBuildFile; fileRef = 874408D3182FFE43004AD8FC /* video_indicator_white_big.png */; };
+		8744857918A9579600E2E511 /* CustomerSpecific.plist in Resources */ = {isa = PBXBuildFile; fileRef = 876CD4C818A38B370069C296 /* CustomerSpecific.plist */; };
 		87448B0517905FFC00E374EE /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87448B0417905FFC00E374EE /* QuartzCore.framework */; };
 		874AD9D1166CE6540095FE33 /* AccountDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 874AD9D0166CE6540095FE33 /* AccountDelegate.m */; };
 		874AD9D5166CEAFB0095FE33 /* StackDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 874AD9D4166CEAFB0095FE33 /* StackDelegate.m */; };
@@ -2012,6 +2013,7 @@
 				87D4BD5418675368008C2D30 /* tableViewCell@2x.png in Resources */,
 				87D4BD5518675368008C2D30 /* logger@2x.png in Resources */,
 				87D4BD5618675368008C2D30 /* iPhone_loader_00004@2x.png in Resources */,
+				8744857918A9579600E2E511 /* CustomerSpecific.plist in Resources */,
 				87D4BD5718675368008C2D30 /* iPhone_video_showMe.png in Resources */,
 				87D4BD5818675368008C2D30 /* iPhone_Button-end-(small)@2x.png in Resources */,
 				87D4BD5918675368008C2D30 /* iPhone_Button-end-(small).png in Resources */,

@@ -49,6 +49,10 @@ using namespace openpeer::core;
 
 @interface HOPModelManager()
 
+@property (nonatomic, copy) NSString* cachePath;
+@property (copy) NSString* dataPath;
+@property BOOL backupData;
+
 - (id) initSingleton;
 - (NSArray*) getResultsForEntity:(NSString*) entityName withPredicateString:(NSString*) predicateString orderDescriptors:(NSArray*) orderDescriptors;
 @end
@@ -78,6 +82,25 @@ using namespace openpeer::core;
         
     }
     return self;
+}
+
+- (void) setDataPath:(NSString*) path backupData:(BOOL) inBackupData
+{
+    //This value can be set only if persistent store cordindator is not initialized
+    if (_persistentStoreCoordinator == nil)
+    {
+        _dataPath = path;
+        _backupData = inBackupData;
+    }
+}
+
+- (void) setCachePath:(NSString*) path
+{
+    //This value can be set only if persistent store cordindator is not initialized
+    if (_persistentStoreCoordinator == nil)
+    {
+        _cachePath = path;
+    }
 }
 
 #pragma mark - Core Data stack
@@ -130,12 +153,13 @@ using namespace openpeer::core;
     }
     NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"OpenPeerDataModel" ofType:@"bundle"];
     NSURL *modelURL = [[NSBundle bundleWithPath:bundlePath] URLForResource:@"OpenPeerModel" withExtension:@"momd"];
-    NSManagedObjectModel* modelData = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+    _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+    //NSManagedObjectModel* modelData = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
     
-    NSURL *modelURL2 = [[NSBundle bundleWithPath:bundlePath] URLForResource:@"OpenPeerCacheModel" withExtension:@"momd"];
-    NSManagedObjectModel* modelCache = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL2];
-    
-    _managedObjectModel = [NSManagedObjectModel modelByMergingModels:@[modelData,modelCache]];
+//    NSURL *modelURL2 = [[NSBundle bundleWithPath:bundlePath] URLForResource:@"OpenPeerCacheModel" withExtension:@"momd"];
+//    NSManagedObjectModel* modelCache = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL2];
+//    
+//    _managedObjectModel = [NSManagedObjectModel modelByMergingModels:@[modelData,modelCache]];
     
     return _managedObjectModel;
 }
@@ -149,49 +173,130 @@ using namespace openpeer::core;
         return _persistentStoreCoordinator;
     }
     
-    NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
-    NSString *pathDirectory = [libraryPath stringByAppendingPathComponent:databaseDirectory];
+    //Get path for data db path
+    NSString *dataPathDirectory = [self.dataPath length] == 0 ? nil : self.dataPath;
     
-    NSError *error = nil;
-    if (![[NSFileManager defaultManager] createDirectoryAtPath:pathDirectory withIntermediateDirectories:YES attributes:nil error:&error])
+    if ([dataPathDirectory length] == 0)
     {
-        [NSException raise:@"Failed creating directory" format:@"[%@], %@", pathDirectory, error];
+        NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
+        dataPathDirectory = [libraryPath stringByAppendingPathComponent:databaseDirectory];
     }
     
-    NSString *path = [pathDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"/%@",databaseName]];
-    NSURL *storeURL = [NSURL fileURLWithPath:path];
+    //Create a folder if doesn't exists
+    NSError *error = nil;
+    if (![[NSFileManager defaultManager] createDirectoryAtPath:dataPathDirectory withIntermediateDirectories:YES attributes:nil error:&error])
+    {
+        [NSException raise:@"Failed creating directory" format:@"[%@], %@", dataPathDirectory, error];
+    }
+    
+    //Create data store url
+    NSString *pathData = [dataPathDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"/%@",databaseName]];
+    NSURL *storeDataURL = [NSURL fileURLWithPath:pathData];
+    
+    //Set weather data will be backed up or not
+    BOOL success = [storeDataURL setResourceValue: [NSNumber numberWithBool: !self.backupData]
+                                  forKey: NSURLIsExcludedFromBackupKey error: &error];
+    if(!success)
+    {
+        NSString* str = [NSString stringWithFormat:@"Error excluding %@ from backup %@", [storeDataURL lastPathComponent], error];
+        ZS_LOG_ERROR(Debug, [self log:str]);
+    }
+    
+    //Set cache path
+    NSString *cachePathDirectory = [self.dataPath length] == 0 ? nil : self.cachePath;
+    
+    if ([cachePathDirectory length] == 0)
+    {
+        NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
+        cachePathDirectory = [libraryPath stringByAppendingPathComponent:databaseDirectory];
+    }
+    
+    //Create a folder if doesn't exists
+    error = nil;
+    if (![[NSFileManager defaultManager] createDirectoryAtPath:cachePathDirectory withIntermediateDirectories:YES attributes:nil error:&error])
+    {
+        [NSException raise:@"Failed creating directory" format:@"[%@], %@", dataPathDirectory, error];
+    }
+    
+    NSString *pathCache = [cachePathDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"/%@",cacheDatabaseName]];
+    NSURL *storeCacheURL = [NSURL fileURLWithPath:pathCache];
+    
+    success = [storeCacheURL setResourceValue: [NSNumber numberWithBool: YES]
+                                      forKey: NSURLIsExcludedFromBackupKey error: &error];
+    if(!success)
+    {
+        NSString* str = [NSString stringWithFormat:@"Error excluding %@ from backup %@", [storeCacheURL lastPathComponent], error];
+        ZS_LOG_ERROR(Debug, [self log:str]);
+    }
+    
+    //Perform lightweight migration if it is necessary;
+    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
+                             [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
+                             [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, nil];
     
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
     
-    if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error])
+    NSPersistentStore* storeData = [_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:@"Data" URL:storeDataURL options:options error:&error];
+    
+    if (!storeData)
     {
-#warning TODO: remove this comment
-        /*
-         Replace this implementation with code to handle the error appropriately.
-         
-         abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-         
-         Typical reasons for an error here include:
-         * The persistent store is not accessible;
-         * The schema for the persistent store is incompatible with current managed object model.
-         Check the error message to determine what the actual problem was.
-         
-         
-         If the persistent store is not accessible, there is typically something wrong with the file path. Often, a file URL is pointing into the application's resources directory instead of a writeable directory.
-         
-         If you encounter schema incompatibility errors during development, you can reduce their frequency by:
-         * Simply deleting the existing store:
-         [[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil]
-         
-         * Performing automatic lightweight migration by passing the following dictionary as the options parameter:
-         @{NSMigratePersistentStoresAutomaticallyOption:@YES, NSInferMappingModelAutomaticallyOption:@YES}
-         
-         Lightweight migration will only work for a limited set of schema changes; consult "Core Data Model Versioning and Data Migration Programming Guide" for details.
-         
-         */
-        NSString* str = [NSString stringWithFormat:@"Unresolved error %@, %@", error, [error userInfo]];
+        NSString* str = [NSString stringWithFormat:@"Error while creating a data persistent store. Error: %@, %@", error, [error userInfo]];
         ZS_LOG_ERROR(Debug, [self log:str]);
-        abort();
+        
+        //If lightweight migration fails delete the existing store
+        BOOL storeIsDeleted = [[NSFileManager defaultManager] removeItemAtURL:storeDataURL error:nil];
+        
+        if (storeIsDeleted)
+        {
+            ZS_LOG_DEBUG([self log: @"Existing data store is deleted."]);
+            //Try again to add persisiten store
+            storeData = [_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:@"Data" URL:storeDataURL options:options error:&error];
+            
+            if (!storeData)
+            {
+                str = [NSString stringWithFormat:@"Error while creating a data persistent store. Error: %@, %@", error, [error userInfo]];
+                ZS_LOG_ERROR(Debug, [self log:str]);
+            }
+        }
+        else
+        {
+            ZS_LOG_DEBUG([self log: @"Failed to delete data store."]);
+        }
+    }
+    
+    NSPersistentStore* storeCache = [_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:@"Cache" URL:storeCacheURL options:options error:&error];
+    
+    
+    
+    if (!storeCache)
+    {
+        NSString* str = [NSString stringWithFormat:@"Error while creating a cache persistent store. Error: %@, %@", error, [error userInfo]];
+        ZS_LOG_ERROR(Debug, [self log:str]);
+        //If lightweight migration fails delete the existing store
+        BOOL storeIsDeleted = [[NSFileManager defaultManager] removeItemAtURL:storeCacheURL error:nil];
+        
+        if (storeIsDeleted)
+        {
+            ZS_LOG_DEBUG([self log: @"Existing cache store is deleted."]);
+            //Try again to add persisiten store
+            storeCache = [_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:@"Cache" URL:storeDataURL options:options error:&error];
+            
+            if (!storeCache)
+            {
+                str = [NSString stringWithFormat:@"Error while creating a cache persistent store. Error: %@, %@", error, [error userInfo]];
+                ZS_LOG_ERROR(Debug, [self log:str]);
+            }
+        }
+        else
+        {
+            ZS_LOG_DEBUG([self log: @"Failed to delete cache store."]);
+        }
+    }
+    
+    if (!storeData || !storeCache)
+    {
+        ZS_LOG_FATAL(Basic, [self log:@"Persistent store is not created. App is shuting down."]);
+        exit(1);
     }
     
     return _persistentStoreCoordinator;

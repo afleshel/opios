@@ -55,6 +55,8 @@
 + (id)sharedModelManager;
 - (id) init __attribute__((unavailable("HOPModelManager is singleton class.")));
 
+- (void) setCachePath:(NSString*) path;
+- (void) setDataPath:(NSString*) path backupData:(BOOL) inBackupData;
 /**
  Retrieves the URL to the application's Documents directory.
  @return NSURL Documents directory URL

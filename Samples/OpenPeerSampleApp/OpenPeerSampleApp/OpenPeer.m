@@ -109,15 +109,17 @@
 {
     [self createDelegates];
     
+    NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
+    NSString *dataPathDirectory = [libraryPath stringByAppendingPathComponent:@"db"];
+    [[HOPModelManager sharedModelManager] setDataPath:dataPathDirectory backupData:NO];
+    NSString *cachePathDirectory = [libraryPath stringByAppendingPathComponent:@"cache"];
+    [[HOPModelManager sharedModelManager] setCachePath:cachePathDirectory];
+    
     [[HOPSettings sharedSettings] setupWithDelegate:[Settings sharedSettings]];
     
     [[HOPCache sharedCache] removeExpiredCookies];
     //Init cache singleton
     [[HOPCache sharedCache] setDelegate:self.cacheDelegate];
-    
-    //Set log levels and start logging
-    [Logger startAllSelectedLoggers];
-    
     
     if (![[HOPModelManager sharedModelManager] getLastLoggedInHomeUser])
     {
@@ -166,6 +168,9 @@
     {
         [self setup];
     }
+    
+    //Set log levels and start logging
+    [Logger startAllSelectedLoggers];
 }
 
 /**
