@@ -169,6 +169,9 @@
 		874408D4182FFE43004AD8FC /* handset_accept_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 874408D2182FFE43004AD8FC /* handset_accept_icon.png */; };
 		874408D5182FFE43004AD8FC /* video_indicator_white_big.png in Resources */ = {isa = PBXBuildFile; fileRef = 874408D3182FFE43004AD8FC /* video_indicator_white_big.png */; };
 		87448B0517905FFC00E374EE /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87448B0417905FFC00E374EE /* QuartzCore.framework */; };
+		8746093418AD687E002F7DC8 /* CustomerSpecific.plist in Resources */ = {isa = PBXBuildFile; fileRef = 876CD4C818A38B370069C296 /* CustomerSpecific.plist */; };
+		8746093518AD6CB1002F7DC8 /* boost.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87796E8318A8DDA7002F4B43 /* boost.a */; };
+		8746093618AD6CB1002F7DC8 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87796E8418A8DDA7002F4B43 /* libcurl.a */; };
 		874AD9D1166CE6540095FE33 /* AccountDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 874AD9D0166CE6540095FE33 /* AccountDelegate.m */; };
 		874AD9D5166CEAFB0095FE33 /* StackDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 874AD9D4166CEAFB0095FE33 /* StackDelegate.m */; };
 		874AD9D8166CEB390095FE33 /* MediaEngineDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 874AD9D7166CEB390095FE33 /* MediaEngineDelegate.m */; };
@@ -1045,6 +1048,8 @@
 				87D4BD2418675368008C2D30 /* CoreVideo.framework in Frameworks */,
 				87D4BD2518675368008C2D30 /* Foundation.framework in Frameworks */,
 				87D4BD2618675368008C2D30 /* MobileCoreServices.framework in Frameworks */,
+				8746093518AD6CB1002F7DC8 /* boost.a in Frameworks */,
+				8746093618AD6CB1002F7DC8 /* libcurl.a in Frameworks */,
 				87D4BD2718675368008C2D30 /* OpenpeerSDK.framework in Frameworks */,
 				87D4BD2818675368008C2D30 /* QuartzCore.framework in Frameworks */,
 				87D4BD2918675368008C2D30 /* Security.framework in Frameworks */,
@@ -2012,6 +2017,7 @@
 				87D4BD5418675368008C2D30 /* tableViewCell@2x.png in Resources */,
 				87D4BD5518675368008C2D30 /* logger@2x.png in Resources */,
 				87D4BD5618675368008C2D30 /* iPhone_loader_00004@2x.png in Resources */,
+				8746093418AD687E002F7DC8 /* CustomerSpecific.plist in Resources */,
 				87D4BD5718675368008C2D30 /* iPhone_video_showMe.png in Resources */,
 				87D4BD5818675368008C2D30 /* iPhone_Button-end-(small)@2x.png in Resources */,
 				87D4BD5918675368008C2D30 /* iPhone_Button-end-(small).png in Resources */,
@@ -2385,7 +2391,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/system",
-					"$(TARGET_BUILD_DIR)/OpenpeerSDK.framework/Versions/C/Libraries",
+					"$(TARGET_BUILD_DIR)/OpenpeerSDK.framework/Libraries",
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CPLUSPLUSFLAGS = (
@@ -2427,7 +2433,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/system",
-					"$(TARGET_BUILD_DIR)/OpenpeerSDK.framework/Versions/C/Libraries",
+					"$(TARGET_BUILD_DIR)/OpenpeerSDK.framework/Libraries",
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CPLUSPLUSFLAGS = (
@@ -2472,6 +2478,7 @@
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/system",
 					./3rdParties/Airship/,
+					"$(TARGET_BUILD_DIR)/OpenpeerSDK.framework/Libraries",
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "";
@@ -2516,6 +2523,7 @@
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/system",
 					./3rdParties/Airship/,
+					"$(TARGET_BUILD_DIR)/OpenpeerSDK.framework/Libraries",
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CPLUSPLUSFLAGS = (

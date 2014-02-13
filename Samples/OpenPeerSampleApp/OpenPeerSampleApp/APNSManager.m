@@ -33,7 +33,7 @@
 #import "UAirship.h"
 #import "UAConfig.h"
 #import "UAPush.h"
-#import "CustomerSpecific.h"
+#import "Settings.h"
 
 #import <OpenPeerSDK/HOPRolodexContact.h>
 #import <OpenPeerSDK/HOPContact.h>
@@ -82,17 +82,15 @@
     self = [super init];
     if (self)
     {
-        NSString *filePath = [[NSBundle mainBundle] pathForResource:@"AirshipConfig" ofType:@"plist"];
-        NSDictionary *plistData = [NSDictionary dictionaryWithContentsOfFile:filePath];
         
 #ifdef DEBUG
-        self.urbanAirshipAppKey = developmentAppKey;//[plistData objectForKey:@"developmentAppKey"];
-        self.urbanAirshipAppSecret = masterAppSecretDev;//[plistData objectForKey:@"masterAppSecretDev"];
+        self.urbanAirshipAppKey = [[Settings sharedSettings] getString: @"developmentAppKey"]; //developmentAppKey;//[plistData objectForKey:@"developmentAppKey"];
+        self.urbanAirshipAppSecret = [[Settings sharedSettings] getString: @"masterAppSecretDev"];//masterAppSecretDev;//[plistData objectForKey:@"masterAppSecretDev"];
 #else
-        self.urbanAirshipAppKey = productionAppKey;//[plistData objectForKey:@"productionAppKey"];
-        self.urbanAirshipAppSecret = masterAppSecret;//[plistData objectForKey:@"masterAppSecret"];
+        self.urbanAirshipAppKey = [[Settings sharedSettings] getString: @"productionAppKey"];//productionAppKey;//[plistData objectForKey:@"productionAppKey"];
+        self.urbanAirshipAppSecret = [[Settings sharedSettings] getString: @"masterAppSecret"];//masterAppSecret;//[plistData objectForKey:@"masterAppSecret"];
 #endif
-        self.apiPushURL = apiPushURL;//[plistData objectForKey:@"apiPushURL"];
+        self.apiPushURL = [[Settings sharedSettings] getString: @"apiPushURL"];//apiPushURL;//[plistData objectForKey:@"apiPushURL"];
         self.apnsHisotry = [[NSMutableDictionary alloc] init];
     }
     return self;
