@@ -29,9 +29,8 @@
  
  */
 
-#import <AVFoundation/AVAudioPlayer.h>
 #import "SoundsManager.h"
-
+#import <AVFoundation/AVAudioSession.h>
 @interface SoundManager ()
 
 @property (strong, nonatomic) AVAudioPlayer *callingAudioPlayer;
@@ -64,12 +63,14 @@
                                                       ofType:@"wav"]];
         self.callingAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:callingSound error:nil];
         self.callingAudioPlayer.numberOfLoops = -1;
+        self.callingAudioPlayer.delegate = self;
         
         NSURL *ringingSound = [NSURL fileURLWithPath:[[NSBundle mainBundle]
                                                       pathForResource:@"ringing"
                                                       ofType:@"caf"]];
         self.ringingAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:ringingSound error:nil];
         self.ringingAudioPlayer.numberOfLoops = -1;
+        self.ringingAudioPlayer.delegate = self;
     }
     
     return self;
@@ -78,6 +79,8 @@
 
 - (void) playCallingSound
 {
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+    //[[AVAudioSession sharedInstance] setMode:AVAudioSessionModeVoiceChat error:nil];
     if (![self.callingAudioPlayer isPlaying])
         [self.callingAudioPlayer play];
 }
@@ -92,6 +95,8 @@
 
 - (void) playRingingSound
 {
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+    //[[AVAudioSession sharedInstance] setMode:AVAudioSessionModeVoiceChat error:nil];
     if (![self.ringingAudioPlayer isPlaying])
         [self.ringingAudioPlayer play];
 }
@@ -102,4 +107,28 @@
         [self.ringingAudioPlayer stop];
     }
 }
+
+
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
+{
+    
+}
+
+
+- (void)audioPlayerDecodeErrorDidOccur:(AVAudioPlayer *)player error:(NSError *)error
+{
+    
+}
+
+- (void)audioPlayerBeginInterruption:(AVAudioPlayer *)player
+{
+    
+}
+
+
+- (void)audioPlayerEndInterruption:(AVAudioPlayer *)player withOptions:(NSUInteger)flags
+{
+    
+}
+
 @end

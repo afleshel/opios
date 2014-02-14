@@ -397,7 +397,7 @@ static const short _base64DecodingTable[256] = {
        [today year] == [massageDayOfDate year] &&
        [today era] == [massageDayOfDate era])
     {
-        [df setDateFormat:@"hh:mm aa"];
+        [df setDateFormat:@"hh:mm:ss aa"];
     }
     else
     {

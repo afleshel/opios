@@ -51,9 +51,10 @@
         <attribute name="date" attributeType="Date" syncable="YES"/>
         <attribute name="delivered" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="image" optional="YES" attributeType="Binary" syncable="YES"/>
-        <attribute name="message" attributeType="Date" syncable="YES"/>
+        <attribute name="messageID" attributeType="String" syncable="YES"/>
+        <attribute name="text" attributeType="String" syncable="YES"/>
         <attribute name="type" attributeType="String" syncable="YES"/>
-        <relationship name="fromPeer" maxCount="1" deletionRule="Nullify" destinationEntity="HOPPublicPeerFile" syncable="YES"/>
+        <relationship name="fromPeer" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HOPPublicPeerFile" syncable="YES"/>
         <relationship name="session" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HOPSessionRecord" inverseName="messages" inverseEntity="HOPSessionRecord" syncable="YES"/>
     </entity>
     <entity name="HOPPublicPeerFile" representedClassName="HOPPublicPeerFile" syncable="YES">
@@ -77,6 +78,7 @@
     <entity name="HOPSessionRecord" representedClassName="HOPSessionRecord" syncable="YES">
         <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sessionID" attributeType="String" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="messages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HOPMessageRecord" inverseName="session" inverseEntity="HOPMessageRecord" syncable="YES"/>
         <relationship name="participants" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HOPPublicPeerFile" inverseName="sessions" inverseEntity="HOPPublicPeerFile" syncable="YES"/>
@@ -104,9 +106,9 @@
         <element name="HOPHomeUser" positionX="790" positionY="248" width="128" height="103"/>
         <element name="HOPIdentityContact" positionX="340" positionY="-28" width="128" height="163"/>
         <element name="HOPImage" positionX="999" positionY="45" width="128" height="88"/>
-        <element name="HOPMessageRecord" positionX="124" positionY="323" width="128" height="148"/>
+        <element name="HOPMessageRecord" positionX="124" positionY="323" width="128" height="163"/>
         <element name="HOPPublicPeerFile" positionX="333" positionY="225" width="128" height="118"/>
         <element name="HOPRolodexContact" positionX="565" positionY="-13" width="128" height="178"/>
-        <element name="HOPSessionRecord" positionX="144" positionY="146" width="128" height="118"/>
+        <element name="HOPSessionRecord" positionX="144" positionY="146" width="128" height="133"/>
     </elements>
 </model>

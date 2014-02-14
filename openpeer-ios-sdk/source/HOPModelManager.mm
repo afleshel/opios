@@ -38,6 +38,9 @@
 #import "HOPHomeUser.h"
 #import "HOPAPNSData.h"
 #import "HOPCacheData.h"
+#import "HOPSessionRecord.h"
+#import "HOPMessageRecord.h"
+#import "HOPContact.h"
 #import "OpenPeerConstants.h"
 #import <CoreData/CoreData.h>
 #import <openpeer/core/IHelper.h>
@@ -296,7 +299,7 @@ using namespace openpeer::core;
     if (!storeData || !storeCache)
     {
         ZS_LOG_FATAL(Basic, [self log:@"Persistent store is not created. App is shuting down."]);
-        exit(1);
+        exit(-1);
     }
     
     return _persistentStoreCoordinator;
@@ -321,7 +324,6 @@ using namespace openpeer::core;
         {
             NSString* str = [NSString stringWithFormat:@"Unresolved error %@, %@", error, [error userInfo]];
             ZS_LOG_ERROR(Debug, [self log:str]);
-            abort();
         }
     }
 }
@@ -631,7 +633,6 @@ using namespace openpeer::core;
         {
             NSString* str = [NSString stringWithFormat:@"Unresolved error %@, %@", error, [error userInfo]];
             ZS_LOG_ERROR(Debug, [self log:str]);
-            abort();
         }
     }
 }
@@ -752,6 +753,79 @@ using namespace openpeer::core;
 - (String) log:(NSString*) message
 {
     return String("HOPModelManager: ") + [message UTF8String];
+}
+
+
+- (HOPSessionRecord *) getSessionRecordByID:(NSString*) sessionID
+{
+    HOPSessionRecord* ret = nil;
+    
+    NSArray* results = [self getResultsForEntity:@"HOPSessionRecord" withPredicateString:[NSString stringWithFormat:@"(sessionID MATCHES '%@')", sessionID] orderDescriptors:nil];
+    
+    if([results count] > 0)
+    {
+        ret = [results objectAtIndex:0];
+    }
+    
+    return ret;
+}
+
+- (HOPSessionRecord *) getMessageRecordByID:(NSString*) messageID
+{
+    HOPSessionRecord* ret = nil;
+    
+    NSArray* results = [self getResultsForEntity:@"HOPMessageRecord" withPredicateString:[NSString stringWithFormat:@"(messageID MATCHES '%@')", messageID] orderDescriptors:nil];
+    
+    if([results count] > 0)
+    {
+        ret = [results objectAtIndex:0];
+    }
+    
+    return ret;
+}
+
+- (HOPSessionRecord*) addSession:(NSString*) sessionID type:(NSString*) type date:(NSDate*) date name:(NSString*) name participants:(NSArray*) participants
+{
+    HOPSessionRecord* sessionRecord = nil;
+    if ([sessionID length] > 0)
+    {
+        sessionRecord = (HOPSessionRecord*)[self createObjectForEntity:@"HOPSessionRecord"];
+        sessionRecord.sessionID = sessionID;
+        sessionRecord.date = date;
+        sessionRecord.type = type;
+        sessionRecord.name = name;
+        
+        for (HOPRolodexContact* participant in participants)
+        {
+            HOPPublicPeerFile* publicPeerFile = participant.identityContact.peerFile;
+            [sessionRecord addParticipantsObject:publicPeerFile];
+        }
+        [self saveContext];
+    }
+    return sessionRecord;
+}
+
+- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date session:(NSString*) sessionRecordId rolodexContact:(HOPRolodexContact*) rolodexContact messageId:(NSString*)messageId
+{
+    HOPMessageRecord* messageRecord = nil;
+    if ([messageText length] > 0 && [type length] > 0 && date != nil && [sessionRecordId length] > 0 && [messageId length] > 0)
+    {
+        if ([self getMessageRecordByID:messageId] == nil)
+        {
+            HOPSessionRecord* sessionRecord = [self getSessionRecordByID:sessionRecordId];
+            messageRecord = (HOPMessageRecord*)[self createObjectForEntity:@"HOPMessageRecord"];
+            messageRecord.text = messageText;
+            messageRecord.date = date;
+            messageRecord.type = type;
+            messageRecord.fromPeer = rolodexContact.identityContact.peerFile;
+            messageRecord.session = sessionRecord;
+            messageRecord.messageID = messageId;
+        }
+        
+        [self saveContext];
+    }
+    
+    return messageRecord;
 }
 @end
 
