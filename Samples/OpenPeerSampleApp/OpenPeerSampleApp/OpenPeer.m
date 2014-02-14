@@ -107,7 +107,19 @@
 
 - (void) preSetup
 {
+    if (![[Settings sharedSettings] isAppSettingsSetForPath:[[NSBundle mainBundle] pathForResource:@"CustomerSpecific" ofType:@"plist"]])
+    {
+        NSLog(@"Application settings are not set. Please set all required fileds in CustomerSpecific.plist file!!!");
+        exit(-1);
+    }
+    
     [self createDelegates];
+    
+    NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
+    NSString *dataPathDirectory = [libraryPath stringByAppendingPathComponent:@"db"];
+    [[HOPModelManager sharedModelManager] setDataPath:dataPathDirectory backupData:NO];
+    NSString *cachePathDirectory = [libraryPath stringByAppendingPathComponent:@"cache"];
+    [[HOPModelManager sharedModelManager] setCachePath:cachePathDirectory];
     
     [[HOPSettings sharedSettings] setupWithDelegate:[Settings sharedSettings]];
     
@@ -163,6 +175,9 @@
     {
         [self setup];
     }
+    
+    //Set log levels and start logging
+    [Logger startAllSelectedLoggers];
 }
 
 /**

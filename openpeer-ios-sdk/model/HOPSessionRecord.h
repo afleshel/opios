@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2014, SMB Phone Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,37 +29,31 @@
  
  */
 
-#import "HOPAvatar+External.h"
-#import "HOPAvatar_Internal.h"
-#import "HOPImage.h"
+#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
-#import "HOPModelManager.h"
+@class HOPMessageRecord, HOPPublicPeerFile;
 
-#import <UIKit/UIKit.h>
+@interface HOPSessionRecord : NSManagedObject
 
-@implementation HOPAvatar (External)
+@property (nonatomic, retain) NSDate * date;
+@property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) NSString * type;
+@property (nonatomic, retain) NSString * sessionID;
+@property (nonatomic, retain) NSSet *messages;
+@property (nonatomic, retain) NSSet *participants;
+@end
 
-- (UIImage*) getImage
-{
-    UIImage* ret = [UIImage imageWithData:((HOPImage*)self.avatarImage).image];
-    
-    return ret;
-}
+@interface HOPSessionRecord (CoreDataGeneratedAccessors)
 
-- (void) storeImage:(UIImage*) inImage
-{
-    
-    if (inImage)
-    {
-        HOPImage* hopImage = (HOPImage*)[[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPImage"];
-    
-        NSData *imageData = UIImagePNGRepresentation(inImage);
-        hopImage.image = imageData;
-        hopImage.url = self.url;
-        //hopImage.avatar = self;
-        self.avatarImage = hopImage;
-        [[HOPModelManager sharedModelManager] saveContext];
-    }
-}
+- (void)addMessagesObject:(HOPMessageRecord *)value;
+- (void)removeMessagesObject:(HOPMessageRecord *)value;
+- (void)addMessages:(NSSet *)values;
+- (void)removeMessages:(NSSet *)values;
+
+- (void)addParticipantsObject:(HOPPublicPeerFile *)value;
+- (void)removeParticipantsObject:(HOPPublicPeerFile *)value;
+- (void)addParticipants:(NSSet *)values;
+- (void)removeParticipants:(NSSet *)values;
 
 @end

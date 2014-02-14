@@ -322,7 +322,7 @@
             }
             
             //Not yet ready for association
-            if ((self.isLogin || self.isAssociation) && ([associatedIdentites count] < 2))
+            /*if ((self.isLogin || self.isAssociation) && ([associatedIdentites count] < 2))
             {
                 self.isLogin = NO;
                 
@@ -339,7 +339,7 @@
                 
                 [alert show];
             }
-            else
+            else*/
             {
                 [[[OpenPeer sharedOpenPeer] mainViewController] onLoginFinished];
                 //Start loading contacts.

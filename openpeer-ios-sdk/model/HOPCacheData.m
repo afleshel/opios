@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2014, SMB Phone Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -34,8 +34,8 @@
 
 @implementation HOPCacheData
 
-@dynamic path;
 @dynamic data;
 @dynamic expire;
+@dynamic path;
 
 @end

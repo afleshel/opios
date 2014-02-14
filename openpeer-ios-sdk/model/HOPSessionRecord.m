@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2014, SMB Phone Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,37 +29,18 @@
  
  */
 
-#import "HOPAvatar+External.h"
-#import "HOPAvatar_Internal.h"
-#import "HOPImage.h"
+#import "HOPSessionRecord.h"
+#import "HOPMessageRecord.h"
+#import "HOPPublicPeerFile.h"
 
-#import "HOPModelManager.h"
 
-#import <UIKit/UIKit.h>
+@implementation HOPSessionRecord
 
-@implementation HOPAvatar (External)
-
-- (UIImage*) getImage
-{
-    UIImage* ret = [UIImage imageWithData:((HOPImage*)self.avatarImage).image];
-    
-    return ret;
-}
-
-- (void) storeImage:(UIImage*) inImage
-{
-    
-    if (inImage)
-    {
-        HOPImage* hopImage = (HOPImage*)[[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPImage"];
-    
-        NSData *imageData = UIImagePNGRepresentation(inImage);
-        hopImage.image = imageData;
-        hopImage.url = self.url;
-        //hopImage.avatar = self;
-        self.avatarImage = hopImage;
-        [[HOPModelManager sharedModelManager] saveContext];
-    }
-}
+@dynamic date;
+@dynamic name;
+@dynamic type;
+@dynamic sessionID;
+@dynamic messages;
+@dynamic participants;
 
 @end

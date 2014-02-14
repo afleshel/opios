@@ -279,6 +279,7 @@
             sessionViewContorller = [self.sessionViewControllersDictionary objectForKey:sessionId];
             sessionViewContorller.hidesBottomBarWhenPushed = YES;
             [sessionViewContorller.chatViewController refreshViewWithData];
+            [sessionViewContorller.chatViewController.chatTableView reloadData];
             [navigationController popToRootViewControllerAnimated:NO];
             [navigationController pushViewController:sessionViewContorller animated:YES];
             [navigationController.navigationBar.topItem setTitle:title];
@@ -404,6 +405,7 @@
     SessionViewController_iPhone* svc = [self.sessionViewControllersDictionary objectForKey:oldSessionId];
     [self removeSessionViewControllerForSession:oldSessionId];
     [self.sessionViewControllersDictionary setObject:svc forKey:newSesionId];
+    [svc.chatViewController updateFetchControllerForSession:newSesionId];
 }
 /**
  Prepare specific session vire controller for incoming call

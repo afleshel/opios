@@ -50,6 +50,7 @@
 #import <OpenpeerSDK/HOPConversationThread.h>
 #import <OpenpeerSDK/HOPContact.h>
 #import <OpenpeerSDK/HOPModelManager.h>
+#import <OpenPeerSDK/HOPMessageRecord.h>
 
 @interface MessageManager ()
 
@@ -232,11 +233,13 @@
     //Send message
     [inSession.conversationThread sendMessage:hopMessage];
     
-    Message* messageObj = [[Message alloc] initWithMessageText:message senderContact:nil sentTime:hopMessage.date];
+    /*Message* messageObj = [[Message alloc] initWithMessageText:message senderContact:nil sentTime:hopMessage.date];
     //[inSession.messageArray addObject:messageObj];
 
     NSUInteger addedIndex = [inSession.messageArray indexOfObject:messageObj inSortedRange:NSMakeRange(0, inSession.messageArray.count) options:NSBinarySearchingInsertionIndex usingComparator:self.comparator];
-    [inSession.messageArray insertObject:messageObj atIndex:addedIndex];
+    [inSession.messageArray insertObject:messageObj atIndex:addedIndex];*/
+    
+    [[HOPModelManager sharedModelManager] addMessage:message type:messageTypeText date:hopMessage.date session:[inSession.conversationThread getThreadId] rolodexContact:nil messageId:hopMessage.messageID];
 }
 
 /**
@@ -270,16 +273,25 @@
     {
         
         HOPRolodexContact* contact  = [[[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:[message.contact getPeerURI]] objectAtIndex:0];
-        Message* messageObj = [[Message alloc] initWithMessageText:message.text senderContact:contact sentTime:message.date];
+        //Message* messageObj = [[Message alloc] initWithMessageText:message.text senderContact:contact sentTime:message.date];
+        HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:message.text type:messageTypeText date:message.date session:[session.conversationThread getThreadId] rolodexContact:contact messageId:message.messageID];
    
-        NSUInteger addedIndex = [session.messageArray indexOfObject:messageObj inSortedRange:NSMakeRange(0, session.messageArray.count) options:NSBinarySearchingInsertionIndex usingComparator:self.comparator];
-            [session.messageArray insertObject:messageObj atIndex:addedIndex];
+        if (messageObj)
+        {
+            [session.unreadMessageArray addObject:messageObj];
+            /*NSUInteger addedIndex = [session.messageArray indexOfObject:messageObj inSortedRange:NSMakeRange(0, session.messageArray.count) options:NSBinarySearchingInsertionIndex usingComparator:self.comparator];
+                [session.messageArray insertObject:messageObj atIndex:addedIndex];
 
-        //[session.messageArray addObject:messageObj];
-        [session.unreadMessageArray addObject:messageObj];
+            //[session.messageArray addObject:messageObj];
+            [session.unreadMessageArray addObject:messageObj];*/
 
-        //If session view controller with message sender is not yet shown, show it
-        [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForSession:session forIncomingCall:NO forIncomingMessage:YES];
+            //If session view controller with message sender is not yet shown, show it
+            [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForSession:session forIncomingCall:NO forIncomingMessage:YES];
+        }
+        else
+        {
+            OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"%@ message no saved - message id %@ - session id %@",message.messageID,sessionId);
+        }
     }
     else
     {

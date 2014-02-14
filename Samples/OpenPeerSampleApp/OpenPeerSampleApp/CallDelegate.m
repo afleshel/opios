@@ -81,9 +81,9 @@
                 break;
                 
             case HOPCallStateOpen:                  //Receives both parties. Call is established
-                [[SessionManager sharedSessionManager] onCallOpened:call];
                 [[SoundManager sharedSoundsManager] stopCallingSound];
                 [[SoundManager sharedSoundsManager] stopRingingSound];
+                [[SessionManager sharedSessionManager] onCallOpened:call];
                 [sessionViewController startTimer];
                 break;
                 

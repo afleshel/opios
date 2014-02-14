@@ -42,6 +42,8 @@
 @class HOPPublicPeerFile;
 @class HOPHomeUser;
 @class HOPAvatar;
+@class HOPSessionRecord;
+@class HOPMessageRecord;
 
 @interface HOPModelManager : NSObject
 
@@ -55,6 +57,8 @@
 + (id)sharedModelManager;
 - (id) init __attribute__((unavailable("HOPModelManager is singleton class.")));
 
+- (void) setCachePath:(NSString*) path;
+- (void) setDataPath:(NSString*) path backupData:(BOOL) inBackupData;
 /**
  Retrieves the URL to the application's Documents directory.
  @return NSURL Documents directory URL
@@ -232,4 +236,8 @@
  @param path NSString* cookie path
  */
 - (void) removeCookieForPath:(NSString*) path;
+
+- (HOPSessionRecord*) addSession:(NSString*) sessionID type:(NSString*) type date:(NSDate*) date name:(NSString*) name participants:(NSArray*) participants;
+
+- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date session:(NSString*) sessionRecordId rolodexContact:(HOPRolodexContact*) rolodexContact messageId:(NSString*)messageId;
 @end

@@ -130,6 +130,7 @@
                 }
             }
 #endif
+            [[HOPModelManager sharedModelManager] addSession:[conversationThread getThreadId] type:nil date:nil name:nil participants:[NSArray arrayWithObject:contact]];
         }
         
         if (ret)
@@ -179,6 +180,7 @@
         if (ret)
         {
             [self.sessionsDictionary setObject:ret forKey:[inConversationThread getThreadId]];
+            [[HOPModelManager sharedModelManager] addSession:[inConversationThread getThreadId] type:nil date:nil name:nil participants:contactAaray];
         }
     }
     return ret;
@@ -263,6 +265,11 @@
         NSString* newSessionId = [inConversationThread getThreadId];
         
         ret.conversationThread = inConversationThread;
+        [ret.sessionIdsHistory addObject:[inConversationThread getThreadId]];
+        
+        NSArray* contacts = [inConversationThread getContacts];
+        NSArray* contactAaray = [[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:[[contacts objectAtIndex:0] getPeerURI]];
+        [[HOPModelManager sharedModelManager] addSession:[inConversationThread getThreadId] type:nil date:nil name:nil participants:contactAaray];
         
         [self.sessionsDictionary removeObjectForKey:oldSessionId];
         [self.sessionsDictionary setObject:ret forKey:newSessionId];

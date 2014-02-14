@@ -700,7 +700,6 @@
         
         for (NSString* key in [customerSpecificDict allKeys])
         {
-            
             id value = [customerSpecificDict objectForKey:key];
             if ([value isKindOfClass:[NSDictionary class]])
             {
@@ -749,6 +748,24 @@
     ret &= [[self getNamespaceGrantServiceURL] length] != 0;
     ret &= [[self getLockBoxServiceDomain] length] != 0;
     ret &= [[self getDefaultOutgoingTelnetServer] length] != 0;
+    
+    return ret;
+}
+
+- (BOOL) isAppSettingsSetForPath:(NSString*) path
+{
+    BOOL ret = YES;
+    NSDictionary* customerSpecificDict = [NSDictionary dictionaryWithContentsOfFile:path];
+    
+    if ([customerSpecificDict count] > 0)
+    {
+        NSString* appID = [customerSpecificDict objectForKey:archiveAppId];
+        NSString* appSecret = [customerSpecificDict objectForKey:archiveAppIdSharedSecret];
+        NSString* appName = [customerSpecificDict objectForKey:archiveAppName];
+        
+        if ([appID length] == 0 || [appSecret length] == 0 || [appName length] == 0)
+            ret = NO;
+    }
     
     return ret;
 }
