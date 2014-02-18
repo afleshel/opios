@@ -32,10 +32,11 @@
 #import <UIKit/UIKit.h>
 #import "Delegates.h"
 #import <CoreData/CoreData.h>
+#import "TTTAttributedLabel.h"
 
 @class Session;
 
-@interface ChatViewController : UIViewController <UITextViewDelegate,UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate>
+@interface ChatViewController : UIViewController <UITextViewDelegate,UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate,TTTAttributedLabelDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *chatTableView;
 @property (weak, nonatomic) IBOutlet UITextView *messageTextbox;

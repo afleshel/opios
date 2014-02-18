@@ -41,6 +41,8 @@
 #import <OpenPeerSDK/HOPMessageRecord.h>
 #import <OpenPeerSDK/HOPConversationThread.h>
 
+
+
 @interface ChatViewController()
 
 @property (weak, nonatomic) Session* session;
@@ -130,6 +132,8 @@
 		OPLog(HOPLoggerSeverityFatal, HOPLoggerLevelDebug, @"Fetching messages has failed with an error: %@, error description: %@", error, [error userInfo]);
 		exit(-1);  // Fail
 	}
+    
+    self.tapGesture.cancelsTouchesInView = NO;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -341,6 +345,7 @@
     if (msgCell == nil)
     {
         msgCell = [[ChatMessageCell alloc] initWithFrame:CGRectZero];
+        msgCell.messageLabel.delegate = self;
     }
     
     [msgCell setMessage:message];
@@ -423,6 +428,13 @@
 		default:
 			break;
 	}
+}
+
+#pragma mark - TTTAttributedLabelDelegate
+- (void)attributedLabel:(TTTAttributedLabel *)label didSelectLinkWithURL:(NSURL *)url
+{
+    if (url)
+        [[UIApplication sharedApplication] openURL:url];
 }
 @end
 

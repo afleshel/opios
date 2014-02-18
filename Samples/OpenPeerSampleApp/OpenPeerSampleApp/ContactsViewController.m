@@ -54,13 +54,14 @@
 @property (nonatomic, strong) UITapGestureRecognizer *oneTapGestureRecognizer;
 @property (nonatomic,retain) NSMutableArray* listOfSelectedContacts;
 @property (nonatomic) BOOL keyboardIsHidden;
-@property (nonatomic, strong) UILabel *refreshLabel;
-@property (nonatomic, strong) UIActivityIndicatorView* refreshSpinner;
+
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
 
 - (void)registerForNotifications:(BOOL)registerForNotifications;
 - (void)keyboardWillShow:(NSNotification *)notification;
 - (void)keyboardWillHide:(NSNotification *)notification;
 - (void) setFramesSizesForUserInfo:(NSDictionary*) userInfo;
+- (void) stopRefreshController;
 @end
 
 @implementation ContactsViewController
@@ -106,14 +107,12 @@
  
     self.navigationController.navigationBar.titleTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], NSForegroundColorAttributeName, [UIFont fontWithName:@"Helvetica-Bold" size:22.0], NSFontAttributeName, nil];
     
-    self.refreshLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, TABLE_CELL_HEIGHT)];
-    self.refreshLabel.backgroundColor = [UIColor clearColor];
-    self.refreshLabel.font = [UIFont boldSystemFontOfSize:12.0];
-    self.refreshLabel.textAlignment = NSTextAlignmentCenter;
-    //self.refreshLabel.hidden = YES;
-    //[self.view bringSubviewToFront:self.refreshLabel];
-    //[self.contactsTableView addSubview:self.refreshLabel];
-    [self addPullToRefreshHeader];
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.tintColor = [UIColor grayColor];
+    self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Refresh Contacts"];
+    [self.refreshControl addTarget:self action:@selector(startContactsRefresh) forControlEvents:UIControlEventValueChanged];
+    [self.contactsTableView addSubview:self.refreshControl];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -155,6 +154,8 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return [[self.fetchedResultsController sections] count];
+    
+    [self.refreshControl endRefreshing];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -359,6 +360,7 @@
 
 - (void) onContactsLoaded
 {
+    [self stopRefreshController];
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Handling loaded contacts.");
     NSError *error;
 	if (![self.fetchedResultsController performFetch:&error])
@@ -437,54 +439,20 @@
         [UIView commitAnimations];
 }
 
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+- (void) startContactsRefresh
 {
-    self.isDragging = NO;
-    if (scrollView.contentOffset.y <= -TABLE_CELL_HEIGHT)
-    {
-        // Released above the header
-        [[ContactsManager sharedContactsManager] refreshRolodexContacts];
-        self.refreshLabel.text = @"";
-    }
+    [NSTimer scheduledTimerWithTimeInterval:2.0
+                                     target:self
+                                   selector:@selector(stopRefreshController)
+                                   userInfo:nil
+                                    repeats:NO];
+    self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@"Refreshing Contacts"];
+    [[ContactsManager sharedContactsManager] refreshRolodexContacts];
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+- (void) stopRefreshController
 {
-
-    if (scrollView.contentOffset.y < 0)
-    {
-        // Update the arrow direction and label
-        [UIView beginAnimations:nil context:NULL];
-        if (scrollView.contentOffset.y < -TABLE_CELL_HEIGHT)
-        {
-            // User is scrolling above the header
-            self.refreshLabel.text = @"Release to refresh...";
-        }
-        else
-        {
-            // User is scrolling somewhere within the header
-            self.refreshLabel.text = @"Pull down to refresh...";
-            [self.refreshSpinner startAnimating];
-        }
-        [UIView commitAnimations];
-    }
-    else
-    {
-        [self.refreshSpinner stopAnimating];
-    }
-}
-
-- (void)addPullToRefreshHeader
-{
-    UIView* refreshHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0 - TABLE_CELL_HEIGHT, 320, TABLE_CELL_HEIGHT)];
-    refreshHeaderView.backgroundColor = [UIColor clearColor];
-    
-    self.refreshSpinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    self.refreshSpinner.frame = CGRectMake(60.0, (TABLE_CELL_HEIGHT - 20) / 2, 20, 20);
-    self.refreshSpinner.hidesWhenStopped = YES;
-    
-    [refreshHeaderView addSubview:self.refreshLabel];
-    [refreshHeaderView addSubview:self.refreshSpinner];
-    [self.contactsTableView addSubview:refreshHeaderView];
+    [self.refreshControl endRefreshing];
+    self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Refresh Contacts"];
 }
 @end

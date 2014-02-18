@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4510" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4510" systemVersion="13B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment defaultVersion="1552" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
@@ -11,6 +11,7 @@
                 <outlet property="buttonAccept" destination="5" id="t34-ej-wgu"/>
                 <outlet property="buttonDecline" destination="7" id="Zbj-IK-H1X"/>
                 <outlet property="imageViewCallerAvatar" destination="8" id="XlT-Dc-lWm"/>
+                <outlet property="imageViewLogo" destination="1rZ-3a-gYc" id="yGH-ha-wap"/>
                 <outlet property="labelCallType" destination="10" id="Jfj-9a-ik2"/>
                 <outlet property="labelCaller" destination="12" id="InD-gb-hVK"/>
                 <outlet property="view" destination="2" id="15"/>
@@ -22,11 +23,7 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="460"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="iPhone_background_navigation_mode.png" translatesAutoresizingMaskIntoConstraints="NO" id="13">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="460"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                </imageView>
-                <webView clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4">
+                <webView hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4">
                     <rect key="frame" x="20" y="105" width="280" height="273"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -35,6 +32,18 @@
                         <outlet property="delegate" destination="-1" id="Cwb-Cw-X9d"/>
                     </connections>
                 </webView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="iPhone_background_navigation_mode.png" translatesAutoresizingMaskIntoConstraints="NO" id="13">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="460"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="OpenPeerLogo.png" translatesAutoresizingMaskIntoConstraints="NO" id="1rZ-3a-gYc">
+                    <rect key="frame" x="104" y="173" width="114" height="114"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="114" id="6OV-On-6Uo"/>
+                        <constraint firstAttribute="height" constant="114" id="fCt-46-GVq"/>
+                    </constraints>
+                </imageView>
                 <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="3">
                     <rect key="frame" x="142" y="196" width="37" height="37"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -147,17 +156,20 @@
                 <constraint firstItem="13" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="aXP-tR-MlO"/>
                 <constraint firstAttribute="bottom" secondItem="ARM-oy-3kb" secondAttribute="bottom" id="bod-rR-K4T"/>
                 <constraint firstAttribute="trailing" secondItem="13" secondAttribute="trailing" id="dpA-fB-Aj8"/>
+                <constraint firstItem="1rZ-3a-gYc" firstAttribute="centerX" secondItem="3" secondAttribute="centerX" id="gAj-IT-5fQ"/>
                 <constraint firstItem="nWx-Ah-b6a" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="gaD-Ew-1B4"/>
                 <constraint firstItem="ARM-oy-3kb" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="hvp-cz-Atf"/>
                 <constraint firstItem="4" firstAttribute="centerX" secondItem="3" secondAttribute="centerX" constant="-0.5" id="jX0-58-cGH"/>
                 <constraint firstAttribute="trailing" secondItem="4" secondAttribute="trailing" constant="20" id="piy-jE-sOz"/>
                 <constraint firstItem="4" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="20" id="uIk-cz-5dD"/>
+                <constraint firstItem="1rZ-3a-gYc" firstAttribute="centerY" secondItem="13" secondAttribute="centerY" id="w5v-io-9E6"/>
                 <constraint firstItem="4" firstAttribute="top" secondItem="nWx-Ah-b6a" secondAttribute="bottom" constant="6" id="yIw-MZ-JRy"/>
                 <constraint firstItem="ARM-oy-3kb" firstAttribute="top" secondItem="4" secondAttribute="bottom" constant="4" id="zVH-3j-2Vp"/>
             </constraints>
         </view>
     </objects>
     <resources>
+        <image name="OpenPeerLogo.png" width="114" height="114"/>
         <image name="audio_call_incoming_accept_button.png" width="129" height="34"/>
         <image name="audio_call_incoming_decline_button.png" width="129" height="34"/>
         <image name="handset_decline_icon.png" width="32" height="32"/>
