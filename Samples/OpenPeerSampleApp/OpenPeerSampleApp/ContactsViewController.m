@@ -112,6 +112,9 @@
     self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Refresh Contacts"];
     [self.refreshControl addTarget:self action:@selector(startContactsRefresh) forControlEvents:UIControlEventValueChanged];
     [self.contactsTableView addSubview:self.refreshControl];
+    //Hack to position text properly
+    [self.refreshControl beginRefreshing];
+    [self.refreshControl endRefreshing];
 
 }
 
@@ -450,9 +453,25 @@
     [[ContactsManager sharedContactsManager] refreshRolodexContacts];
 }
 
+- (void) resetRefreshTitle
+{
+    self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Refresh Contacts"];
+    //Hack to position text properly
+    [self.refreshControl beginRefreshing];
+    [self.refreshControl endRefreshing];
+}
 - (void) stopRefreshController
 {
-    [self.refreshControl endRefreshing];
-    self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Refresh Contacts"];
+    if ([self.refreshControl isRefreshing])
+    {
+        [self.refreshControl endRefreshing];
+        self.refreshControl.attributedTitle = nil;
+        //self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Refresh Contacts"];
+        [NSTimer scheduledTimerWithTimeInterval:1.0
+                                         target:self
+                                       selector:@selector(resetRefreshTitle)
+                                       userInfo:nil
+                                        repeats:NO];
+    }
 }
 @end
