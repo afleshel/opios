@@ -36,6 +36,7 @@
 @property (strong, nonatomic) AVAudioPlayer *callingAudioPlayer;
 @property (strong, nonatomic) AVAudioPlayer *ringingAudioPlayer;
 
+@property (weak, nonatomic) AVAudioPlayer *interruptudeAudioPlayer;
 - (id) initSingleton;
 @end
 
@@ -91,6 +92,9 @@
     {
         [self.callingAudioPlayer stop];
     }
+    
+    if (self.interruptudeAudioPlayer == self.callingAudioPlayer)
+        self.interruptudeAudioPlayer = nil;
 }
 
 - (void) playRingingSound
@@ -106,29 +110,34 @@
     {
         [self.ringingAudioPlayer stop];
     }
+    if (self.interruptudeAudioPlayer == self.ringingAudioPlayer)
+        self.interruptudeAudioPlayer = nil;
 }
 
 
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
 {
-    
+    [self.interruptudeAudioPlayer stop];
+    self.interruptudeAudioPlayer = nil;
 }
 
 
 - (void)audioPlayerDecodeErrorDidOccur:(AVAudioPlayer *)player error:(NSError *)error
 {
-    
+    [self.interruptudeAudioPlayer stop];
+    self.interruptudeAudioPlayer = nil;
 }
 
 - (void)audioPlayerBeginInterruption:(AVAudioPlayer *)player
 {
-    
+    self.interruptudeAudioPlayer = player;
+    [self.interruptudeAudioPlayer stop];
 }
 
 
 - (void)audioPlayerEndInterruption:(AVAudioPlayer *)player withOptions:(NSUInteger)flags
 {
-    
+     [self.interruptudeAudioPlayer play];
 }
 
 @end
