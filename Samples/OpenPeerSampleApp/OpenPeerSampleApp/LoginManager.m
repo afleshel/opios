@@ -109,7 +109,6 @@
     if (![[HOPModelManager sharedModelManager] getLastLoggedInHomeUser])
     {
         [self startLogin];
-        //[[[OpenPeer sharedOpenPeer] mainViewController] showQRScanner];
     }
     else
     {
@@ -364,6 +363,14 @@
     }
 }
 
+- (void) onUserLogOut
+{
+#ifdef DEBUG
+    [[[OpenPeer sharedOpenPeer] mainViewController] showQRScanner];
+#else
+    [[[OpenPeer sharedOpenPeer] mainViewController] waitForUserGesture];
+#endif
+}
 
 /**
  Retrieves info if an identity with specified URI is associated or not.

@@ -769,4 +769,17 @@
     
     return ret;
 }
+
+- (NSArray*) getMissingAppSettings
+{
+    NSMutableArray* ret = [[NSMutableArray alloc] init];
+    
+    if ([[self getString:archiveAppId] length] == 0)
+        [ret addObject: archiveAppId];
+    
+
+    if ([[self getString:archiveAppIdSharedSecret] length] == 0)
+        [ret addObject: archiveAppIdSharedSecret];
+    return ret;
+}
 @end

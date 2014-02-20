@@ -92,4 +92,6 @@ typedef  enum
 - (void) onContactsLoadingStarted;
 
 - (void) showQRScanner;
+- (void) showSplashScreen;
+- (void) waitForUserGesture;
 @end

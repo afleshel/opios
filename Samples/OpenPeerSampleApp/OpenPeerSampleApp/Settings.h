@@ -137,4 +137,6 @@ typedef enum
 - (BOOL) isAppDataSet;
 - (BOOL) isLoginSettingsSet;
 - (BOOL) isAppSettingsSetForPath:(NSString*) path;
+
+- (NSArray*) getMissingAppSettings;
 @end

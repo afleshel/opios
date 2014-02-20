@@ -128,7 +128,7 @@
                 }
                 else
                 {
-                    [[LoginManager sharedLoginManager] login];
+                    [[LoginManager sharedLoginManager] onUserLogOut];
                 }
             }
                 break;

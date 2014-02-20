@@ -107,24 +107,21 @@
 
 - (void) preSetup
 {
-    if (![[Settings sharedSettings] isAppSettingsSetForPath:[[NSBundle mainBundle] pathForResource:@"CustomerSpecific" ofType:@"plist"]])
-    {
-        NSLog(@"Application settings are not set. Please set all required fileds in CustomerSpecific.plist file!!!");
-        exit(-1);
-    }
-    
+    //Create all delegates required for communication with core
     [self createDelegates];
     
+    //Set persistent stores
     NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
     NSString *dataPathDirectory = [libraryPath stringByAppendingPathComponent:@"db"];
     [[HOPModelManager sharedModelManager] setDataPath:dataPathDirectory backupData:NO];
     NSString *cachePathDirectory = [libraryPath stringByAppendingPathComponent:@"cache"];
     [[HOPModelManager sharedModelManager] setCachePath:cachePathDirectory];
     
+    //Set settigns delegate
     [[HOPSettings sharedSettings] setupWithDelegate:[Settings sharedSettings]];
     
+    //Cleare expired cookies and set delegate
     [[HOPCache sharedCache] removeExpiredCookies];
-    //Init cache singleton
     [[HOPCache sharedCache] setDelegate:self.cacheDelegate];
     
     if (![[HOPModelManager sharedModelManager] getLastLoggedInHomeUser])
@@ -156,28 +153,19 @@
             isSetAppData = [[Settings sharedSettings] isAppDataSet];
         }
         
-        //If some of must to have data is not set, notify the user
-        if (!(isSetAppData && isSetLoginSettings))
-        {
-            UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Local file with local settings is corrupted!"
-                                                                message:@"Please try to scan QR code or reinstall the app."
-                                                               delegate:nil
-                                                      cancelButtonTitle:nil
-                                                      otherButtonTitles:@"Ok",nil];
-            [alertView show];
-        }
-        
-        
+#ifdef DEBUG
         //Show QR scanner if user wants to change settings by reading QR code
         [[self mainViewController] showQRScanner];
+#else
+        [[self mainViewController] waitForUserGesture];
+#endif
     }
     else
     {
         [self setup];
+        //Set log levels and start logging
+        [Logger startAllSelectedLoggers];
     }
-    
-    //Set log levels and start logging
-    [Logger startAllSelectedLoggers];
 }
 
 /**
@@ -186,12 +174,35 @@
  */
 - (void) setup
 {
+#ifdef DEBUG
+    NSArray* missingFields = [[Settings sharedSettings] getMissingAppSettings];
+    
+    if ([missingFields count] > 0)
+    {
+        NSString* strMissingFields = @"";
+        for (NSString* str in missingFields)
+        {
+            if ([strMissingFields length] == 0)
+                strMissingFields = str;
+            else
+                strMissingFields = [strMissingFields stringByAppendingFormat:@", %@",str];
+        }
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Application settings are missing!" message:[NSString stringWithFormat:@"Please set following fields in CustomerSpecific.plist file: %@",strMissingFields] delegate:self cancelButtonTitle:@"I swear, I will enter valid data" otherButtonTitles: nil];
+        
+        [alert show];
+        NSLog(@"Application settings are not set. Please set all required fileds in CustomerSpecific.plist file!");
+        return;
+    }
+#endif
     //Set log levels and start logging
     [Logger startAllSelectedLoggers];
 
-    //Init openpeer stack and set created delegates
-    [[HOPStack sharedStack] setupWithStackDelegate:self.stackDelegate mediaEngineDelegate:self.mediaEngineDelegate appID: self.authorizedApplicationId appName:[[Settings sharedSettings] getString: @"applicationName"] appImageURL:[[Settings sharedSettings] getString: @"applicationImageURL"]  appURL:[[Settings sharedSettings] getString: @"applicationURL"] userAgent:[Utility getUserAgentName] deviceID:self.deviceId deviceOs:[Utility getDeviceOs] system:[Utility getPlatform]];
-
+    if (![[HOPStack sharedStack] isStackReady])
+    {
+        //Init openpeer stack and set created delegates
+        [[HOPStack sharedStack] setupWithStackDelegate:self.stackDelegate mediaEngineDelegate:self.mediaEngineDelegate appID: self.authorizedApplicationId appName:[[Settings sharedSettings] getString: @"applicationName"] appImageURL:[[Settings sharedSettings] getString: @"applicationImageURL"]  appURL:[[Settings sharedSettings] getString: @"applicationURL"] userAgent:[Utility getUserAgentName] deviceID:self.deviceId deviceOs:[Utility getDeviceOs] system:[Utility getPlatform]];
+    }
+    
     //Start with login procedure and display login view
     [[LoginManager sharedLoginManager] login];
     
@@ -227,5 +238,17 @@
     self.identityDelegate.loginDelegate = self.mainViewController;
     self.identityLookupDelegate = [[IdentityLookupDelegate alloc] init];
     self.cacheDelegate = [[CacheDelegate alloc] init];
+}
+
+- (void) closeTheApp
+{
+    exit(-1);
+}
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Closing Application" message:@"Application will be closed in 2 seconds" delegate:self cancelButtonTitle:nil otherButtonTitles: nil];
+    
+    [alert show];
+    [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(closeTheApp) userInfo:nil repeats:NO];
 }
 @end

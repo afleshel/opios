@@ -95,9 +95,24 @@
 
         if ([str length] > 0)
         {
-            if ([Utility isValidURL:str])
+            NSString* jsonURL = nil;
+            NSString* postData = nil;
+            
+            if ([str rangeOfString:@"&post="].location != NSNotFound)
             {
-                [self loadSettingsfromURL:str];
+                NSArray* arrayOfStrings = [str componentsSeparatedByString:@"&post="];
+                if ([arrayOfStrings count] > 1)
+                {
+                    jsonURL = [arrayOfStrings objectAtIndex:0];
+                    postData = [arrayOfStrings objectAtIndex:1];
+                }
+            }
+            else
+                jsonURL = str;
+                
+            if ([Utility isValidURL:jsonURL])
+            {
+                [self loadSettingsfromURL:jsonURL postDate:postData];
             }
             else
             {
@@ -157,19 +172,21 @@
     [[OpenPeer sharedOpenPeer] setup];
 }
 
-- (void) loadSettingsfromURL:(NSString*) url
+- (void) loadSettingsfromURL:(NSString*) jsonURL postDate:(NSString*) postData
 {
-    NSString* jsonURL = nil;
-    if ([url rangeOfString:@"&post=base64"].location != NSNotFound)
-    {
-        NSArray* arrayOfStrings = [url componentsSeparatedByString:@"&post=base64"];
-        if ([arrayOfStrings count] > 0)
-        {
-            jsonURL = [Utility decodeBase64:[arrayOfStrings objectAtIndex:0]];
-        }
-    }
-    else
-        jsonURL = url;
+//    NSString* jsonURL = nil;
+//    NSString* postData = nil;
+//    if ([url rangeOfString:@"&post="].location != NSNotFound)
+//    {
+//        NSArray* arrayOfStrings = [url componentsSeparatedByString:@"?post="];
+//        if ([arrayOfStrings count] > 1)
+//        {
+//            jsonURL = [Utility decodeBase64:[arrayOfStrings objectAtIndex:0]];
+//            postData = [arrayOfStrings objectAtIndex:1];
+//        }
+//    }
+//    else
+//        jsonURL = url;
     
     if ([jsonURL length] == 0)
     {
@@ -178,12 +195,18 @@
     }
     
     // Create the request.
-    NSURLRequest *theRequest=[NSURLRequest requestWithURL:[NSURL URLWithString:jsonURL]
+    NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:jsonURL]
                                               cachePolicy:NSURLRequestUseProtocolCachePolicy
                                           timeoutInterval:20.0];
 
     self.receivedData = [NSMutableData dataWithCapacity: 0];
     
+    if (postData)
+    {
+        [theRequest setHTTPMethod:@"POST"];
+        [theRequest setValue:@"application/x-www-form-urlencoded; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+        [theRequest setHTTPBody:[postData dataUsingEncoding:NSUTF8StringEncoding]];
+    }
     // create the connection with the request and start loading the data
     self.urlConnection = [[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
     if (!self.urlConnection)
