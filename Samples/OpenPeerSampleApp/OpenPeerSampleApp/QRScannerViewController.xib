@@ -98,7 +98,6 @@
     <resources>
         <image name="OpenPeerLogo.png" width="114" height="114"/>
         <image name="audio_call_incoming_accept_button.png" width="129" height="34"/>
-        <image name="audio_call_incoming_accept_button.png" width="129" height="34"/>
         <image name="iPhone_background.png" width="320" height="460"/>
         <image name="logger.png" width="64" height="64"/>
     </resources>
