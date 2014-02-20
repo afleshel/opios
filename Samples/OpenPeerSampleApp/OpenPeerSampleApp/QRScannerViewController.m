@@ -35,6 +35,7 @@
 #import "Settings.h"
 #import "Utility.h"
 #import <OpenPeerSDK/HOPSettings.h>
+#import "Logger.h"
 
 @interface QRScannerViewController ()
 
@@ -44,7 +45,7 @@
 
 - (IBAction)actionReadQRCode:(id)sender;
 - (IBAction)actionProceedWithlogin:(id)sender;
-
+- (IBAction)actionStartLogger:(id)sender;
 @end
 
 @implementation QRScannerViewController
@@ -280,5 +281,10 @@
     }
     self.urlConnection = nil;
     self.receivedData = nil;
+}
+
+- (IBAction)actionStartLogger:(id)sender
+{
+    [Logger startTelnetLoggerOnStartUp];
 }
 @end
