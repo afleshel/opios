@@ -84,13 +84,13 @@
     {
         
 #ifdef DEBUG
-        self.urbanAirshipAppKey = [[Settings sharedSettings] getString: @"developmentAppKey"]; //developmentAppKey;//[plistData objectForKey:@"developmentAppKey"];
-        self.urbanAirshipAppSecret = [[Settings sharedSettings] getString: @"masterAppSecretDev"];//masterAppSecretDev;//[plistData objectForKey:@"masterAppSecretDev"];
+        self.urbanAirshipAppKey = [[NSUserDefaults standardUserDefaults] stringForKey: @"developmentAppKey"]; //developmentAppKey;//[plistData objectForKey:@"developmentAppKey"];
+        self.urbanAirshipAppSecret = [[NSUserDefaults standardUserDefaults] stringForKey: @"masterAppSecretDev"];//masterAppSecretDev;//[plistData objectForKey:@"masterAppSecretDev"];
 #else
-        self.urbanAirshipAppKey = [[Settings sharedSettings] getString: @"productionAppKey"];//productionAppKey;//[plistData objectForKey:@"productionAppKey"];
-        self.urbanAirshipAppSecret = [[Settings sharedSettings] getString: @"masterAppSecret"];//masterAppSecret;//[plistData objectForKey:@"masterAppSecret"];
+        self.urbanAirshipAppKey = [[NSUserDefaults standardUserDefaults] stringForKey: @"productionAppKey"];//productionAppKey;//[plistData objectForKey:@"productionAppKey"];
+        self.urbanAirshipAppSecret = [[NSUserDefaults standardUserDefaults] stringForKey: @"masterAppSecret"];//masterAppSecret;//[plistData objectForKey:@"masterAppSecret"];
 #endif
-        self.apiPushURL = [[Settings sharedSettings] getString: @"apiPushURL"];//apiPushURL;//[plistData objectForKey:@"apiPushURL"];
+        self.apiPushURL = [[NSUserDefaults standardUserDefaults] stringForKey: @"apiPushURL"];//apiPushURL;//[plistData objectForKey:@"apiPushURL"];
         self.apnsHisotry = [[NSMutableDictionary alloc] init];
     }
     return self;

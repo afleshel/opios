@@ -164,7 +164,8 @@
     if ([key length] > 0)
     {
         key = [key stringByAppendingString:archiveEnabled];
-        [self setBool:enable key:key];
+        [[NSUserDefaults standardUserDefaults] setBool:enable forKey:key];
+        [[NSUserDefaults standardUserDefaults] synchronize];
     }
 }
 
@@ -176,7 +177,7 @@
     if ([key length] > 0)
     {
         key = [key stringByAppendingString:archiveEnabled];
-        ret = [self getBool:key];
+        ret = [[NSUserDefaults standardUserDefaults] boolForKey:key];
     }
     
     return ret;
@@ -189,7 +190,8 @@
     if ([key length] > 0)
     {
         key = [key stringByAppendingString:archiveServer];
-        [self setString:server key:key];
+        [[NSUserDefaults standardUserDefaults] setObject:server forKey:key];
+        [[NSUserDefaults standardUserDefaults] synchronize];
     }
 }
 
@@ -201,7 +203,7 @@
     if ([key length] > 0)
     {
         key = [key stringByAppendingString:archiveServer];
-        ret = [self getString:key];
+        ret = [[NSUserDefaults standardUserDefaults] objectForKey:key];
     }
     
     return ret;
@@ -214,7 +216,8 @@
     if ([key length] > 0)
     {
         key = [key stringByAppendingString:archiveColorized];
-        [self setBool:colorized key:key];
+        [[NSUserDefaults standardUserDefaults] setBool:colorized forKey:key];
+        [[NSUserDefaults standardUserDefaults] synchronize];
     }
 }
 
@@ -226,7 +229,7 @@
     if ([key length] > 0)
     {
         key = [key stringByAppendingString:archiveColorized];
-        ret = [self getBool:key];
+        ret = [[NSUserDefaults standardUserDefaults] boolForKey:key];;
     }
     
     return ret;
@@ -501,239 +504,45 @@
 
 - (NSString*) getOuterFrameURL
 {
-    return [self getString:@"outerFrameURL"];
+    return [[NSUserDefaults standardUserDefaults] stringForKey:@"outerFrameURL"];
 }
 
 - (NSString*) getNamespaceGrantServiceURL
 {
-    return [self getString:@"namespaceGrantServiceURL"];
+    return [[NSUserDefaults standardUserDefaults] stringForKey:@"namespaceGrantServiceURL"];
 }
 
 - (NSString*) getIdentityProviderDomain
 {
-    return [self getString:@"identityProviderDomain"];
+    return [[NSUserDefaults standardUserDefaults] stringForKey:@"identityProviderDomain"];
 }
 
 - (NSString*) getIdentityFederateBaseURI
 {
-    return [self getString:@"identityFederateBaseURI"];
+    return [[NSUserDefaults standardUserDefaults] stringForKey:@"identityFederateBaseURI"];
 }
 
 - (NSString*) getLockBoxServiceDomain
 {
-    return [self getString:@"lockBoxServiceDomain"];
+    return [[NSUserDefaults standardUserDefaults] stringForKey:@"lockBoxServiceDomain"];
 }
 
 - (NSString*) getDefaultOutgoingTelnetServer
 {
-    return [self getString:@"archiveOutgoingTelnetLoggerServer"];
+    return [[NSUserDefaults standardUserDefaults] stringForKey:@"archiveOutgoingTelnetLoggerServer"];
 }
-
-- (NSString*) getString:(NSString*) key
-{
-    NSString* ret = nil;
-    
-    if ([key length] > 0)
-    {
-        ret = [[NSUserDefaults standardUserDefaults] stringForKey:key];
-    }
-    
-    return ret;
-}
-
-- (long) getInt:(NSString*) key
-{
-    long ret = 0;
-    
-    if ([key length] > 0)
-    {
-        NSNumber* number = [[NSUserDefaults standardUserDefaults] objectForKey:key];
-        
-        ret = number.longValue;
-    }
-    
-    return ret;
-}
-
-- (unsigned long) getUInt:(NSString*) key
-{
-    unsigned long ret = 0;
-    
-    if ([key length] > 0)
-    {
-        NSNumber* number = [[NSUserDefaults standardUserDefaults] objectForKey:key];
-        
-        ret = number.unsignedLongValue;
-    }
-    
-    return ret;
-}
-
-- (BOOL) getBool:(NSString*) key
-{
-    BOOL ret = NO;
-    
-    if ([key length] > 0)
-    {
-        NSNumber* number = [[NSUserDefaults standardUserDefaults] objectForKey:key];
-        
-        ret = number.boolValue;
-    }
-    
-    return ret;
-}
-
-- (float) getFloat:(NSString*) key
-{
-    float ret = 0.0;
-    
-    if ([key length] > 0)
-    {
-        NSNumber* number = [[NSUserDefaults standardUserDefaults] objectForKey:key];
-        
-        ret = number.floatValue;
-    }
-    
-    return ret;
-}
-
-- (double) getDouble:(NSString*) key
-{
-    double ret = NO;
-    
-    if ([key length] > 0)
-    {
-        NSNumber* number = [[NSUserDefaults standardUserDefaults] objectForKey:key];
-        
-        ret = number.doubleValue;
-    }
-    
-    return ret;
-}
-
-- (void) setString:(NSString*) value key:(NSString*) key
-{
-    if ([key length] > 0 && [value length] > 0)
-    {
-        [[NSUserDefaults standardUserDefaults] setObject:value forKey:key];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
-}
-
-- (void) setInt:(long) value key:(NSString*) key
-{
-    if ([key length] > 0)
-    {
-        NSNumber* number = [NSNumber numberWithLong:value];
-        if (number)
-        {
-            [[NSUserDefaults standardUserDefaults] setObject:number forKey:key];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-        }
-    }
-}
-- (void) setUInt:(unsigned long) value key:(NSString*) key
-{
-    if ([key length] > 0)
-    {
-        NSNumber* number = [NSNumber numberWithUnsignedLong:value];
-        if (number)
-        {
-            [[NSUserDefaults standardUserDefaults] setObject:number forKey:key];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-        }
-    }
-}
-- (void) setBool:(BOOL) value key:(NSString*) key
-{
-    if ([key length] > 0)
-    {
-        NSNumber* number = [NSNumber numberWithBool:value];
-        if (number)
-        {
-            [[NSUserDefaults standardUserDefaults] setObject:number forKey:key];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-        }
-    }
-}
-- (void) setFloat:(float) value key:(NSString*) key
-{
-    if ([key length] > 0)
-    {
-        NSNumber* number = [NSNumber numberWithFloat:value];
-        if (number)
-        {
-            [[NSUserDefaults standardUserDefaults] setObject:number forKey:key];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-        }
-    }
-}
-- (void) setDouble:(double) value key:(NSString*) key
-{
-    if ([key length] > 0)
-    {
-        NSNumber* number = [NSNumber numberWithDouble:value];
-        if (number)
-        {
-            [[NSUserDefaults standardUserDefaults] setObject:number forKey:key];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-        }
-    }
-}
-
-- (void) clearForKey:(NSString*) key
-{
-    if ([key length] > 0)
-    {
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
-}
-
-- (void) storeSettingsFromPath:(NSString*) path
-{
-    NSDictionary* customerSpecificDict = [NSDictionary dictionaryWithContentsOfFile:path];
-    
-    if ([customerSpecificDict count] > 0)
-    {
-        Class boolClass = [[NSNumber numberWithBool:YES] class];
-        
-        for (NSString* key in [customerSpecificDict allKeys])
-        {
-            id value = [customerSpecificDict objectForKey:key];
-            if ([value isKindOfClass:[NSDictionary class]])
-            {
-                for (NSString* subKey in [((NSDictionary*)value) allKeys])
-                    [[Settings sharedSettings] setString:[((NSDictionary*)value) objectForKey:subKey] key:subKey];
-            }
-            else if ([value isKindOfClass:[NSString class]])
-            {
-                [[Settings sharedSettings] setString:value key:key];
-            }
-            else if ([value isKindOfClass:boolClass])
-            {
-                [[Settings sharedSettings] setBool:((NSNumber*)value).boolValue key:key];
-            }
-            else if ([value isKindOfClass:[NSNumber class]])
-            {
-                [[Settings sharedSettings] setInt:value key:key];
-            }
-        }
-    }
-}
-
 - (BOOL) isAppDataSet
 {
     BOOL ret = YES;
     
-    ret &= [[self getString:archiveAppId] length] != 0;
-    ret &= [[self getString:archiveAppIdSharedSecret] length] != 0;
-    ret &= [[self getString:archiveAppName] length] != 0;
-    ret &= [[self getString:archiveAppURL] length] != 0;
-    ret &= [[self getString:archiveAppImageURL] length] != 0;
+    ret &= [[[NSUserDefaults standardUserDefaults] objectForKey:archiveAppId] length] != 0;
+    ret &= [[[NSUserDefaults standardUserDefaults] objectForKey:archiveAppIdSharedSecret] length] != 0;
+    ret &= [[[NSUserDefaults standardUserDefaults] objectForKey:archiveAppName] length] != 0;
+    ret &= [[[NSUserDefaults standardUserDefaults] objectForKey:archiveAppURL] length] != 0;
+    ret &= [[[NSUserDefaults standardUserDefaults] objectForKey:archiveAppImageURL] length] != 0;
     
 #ifdef APNS_ENABLED
-    ret &= [[self getString:archiveAppImageURL] length] != 0;
+    ret &= [[[NSUserDefaults standardUserDefaults] objectForKey:archiveAppImageURL] length] != 0;
 #endif
     return ret;
 }
@@ -774,11 +583,11 @@
 {
     NSMutableArray* ret = [[NSMutableArray alloc] init];
     
-    if ([[self getString:archiveAppId] length] == 0)
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:archiveAppId] length] == 0)
         [ret addObject: archiveAppId];
     
 
-    if ([[self getString:archiveAppIdSharedSecret] length] == 0)
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:archiveAppIdSharedSecret] length] == 0)
         [ret addObject: archiveAppIdSharedSecret];
     return ret;
 }

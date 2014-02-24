@@ -41,6 +41,5 @@ using namespace openpeer::core;
 }
 
 - (void) deleteLocalDelegate;
-
 - (String) log:(NSString*) message;
 @end

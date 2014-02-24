@@ -76,7 +76,7 @@ typedef enum
 
 
 
-@interface Settings : NSObject<HOPSettingsDelegate>
+@interface Settings : NSObject
 
 @property (nonatomic) BOOL isMediaAECOn;
 @property (nonatomic) BOOL isMediaAGCOn;
@@ -132,7 +132,7 @@ typedef enum
 - (NSString*) getLockBoxServiceDomain;
 - (NSString*) getDefaultOutgoingTelnetServer;
 
-- (void) storeSettingsFromPath:(NSString*) path;
+//- (void) storeSettingsFromPath:(NSString*) path;
 
 - (BOOL) isAppDataSet;
 - (BOOL) isLoginSettingsSet;

@@ -57,7 +57,7 @@ String OpenPeerSettingsDelegate::getString(const char *key) const
     NSString* value = nil;
     
     if ([strKey length] > 0)
-        value = [settingsDelegate getString:strKey];
+        value = [[NSUserDefaults standardUserDefaults] stringForKey:strKey];//[settingsDelegate getString:strKey];
     
     if ([value length] > 0)
         ret = [value UTF8String];
@@ -73,7 +73,13 @@ LONG OpenPeerSettingsDelegate::getInt(const char *key) const
     
     NSString* strKey = [NSString stringWithUTF8String:key];
     if ([strKey length] > 0)
-        ret = [settingsDelegate getInt:strKey];
+    {
+        NSNumber* number = [[NSUserDefaults standardUserDefaults] objectForKey:strKey];
+        if (number)
+            ret = number.unsignedLongValue;
+        
+        //ret = [[NSUserDefaults standardUserDefaults] integerForKey:strKey];//[settingsDelegate getInt:strKey];
+    }
     return ret;
 }
 
@@ -83,7 +89,12 @@ ULONG OpenPeerSettingsDelegate::getUInt(const char *key) const
     
     NSString* strKey = [NSString stringWithUTF8String:key];
     if ([strKey length] > 0)
-        ret = [settingsDelegate getUInt:strKey];
+    {
+        NSNumber* number = [[NSUserDefaults standardUserDefaults] objectForKey:strKey];
+        if (number)
+            ret = number.unsignedLongValue;
+        //ret = [settingsDelegate getUInt:strKey];
+    }
     return ret;
 }
 
@@ -93,7 +104,10 @@ bool OpenPeerSettingsDelegate::getBool(const char *key) const
     
     NSString* strKey = [NSString stringWithUTF8String:key];
     if ([strKey length] > 0)
-        ret = [settingsDelegate getBool:strKey];
+    {
+        ret = [[NSUserDefaults standardUserDefaults] boolForKey:strKey];
+        //ret = [settingsDelegate getBool:strKey];
+    }
     return ret;
 }
 
@@ -103,7 +117,10 @@ float OpenPeerSettingsDelegate::getFloat(const char *key) const
     
     NSString* strKey = [NSString stringWithUTF8String:key];
     if ([strKey length] > 0)
-        ret = [settingsDelegate getFloat:strKey];
+    {
+        ret = [[NSUserDefaults standardUserDefaults] floatForKey:strKey];
+        //ret = [settingsDelegate getFloat:strKey];
+    }
     
     return ret;
 }
@@ -114,7 +131,10 @@ double OpenPeerSettingsDelegate::getDouble(const char *key) const
     
     NSString* strKey = [NSString stringWithUTF8String:key];
     if ([strKey length] > 0)
-        ret = [settingsDelegate getDouble:strKey];
+    {
+        ret = [[NSUserDefaults standardUserDefaults] doubleForKey:strKey];
+        //ret = [settingsDelegate getDouble:strKey];
+    }
     
     return ret;
 }
@@ -124,47 +144,90 @@ void OpenPeerSettingsDelegate::setString(const char *key,const char *value)
     NSString* strKey = [NSString stringWithUTF8String:key];
     NSString* strValue = [NSString stringWithUTF8String:value];
     
-    [settingsDelegate setString:strValue key:strKey];
+    if ([strKey length] > 0 && [strKey length] > 0)
+    {
+        [[NSUserDefaults standardUserDefaults] setObject:strValue forKey:strKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+    //[settingsDelegate setString:strValue key:strKey];
 }
 
 void OpenPeerSettingsDelegate::setInt(const char *key,LONG value)
 {
     NSString* strKey = [NSString stringWithUTF8String:key];
     
-    [settingsDelegate setInt:value key:strKey];
+    if ([strKey length] > 0)
+    {
+        NSNumber* number = [NSNumber numberWithLong:value];
+        if (number)
+        {
+            [[NSUserDefaults standardUserDefaults] setObject:number forKey:strKey];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
+    }
+    //[settingsDelegate setInt:value key:strKey];
 }
 
 void OpenPeerSettingsDelegate::setUInt(const char *key,ULONG value)
 {
     NSString* strKey = [NSString stringWithUTF8String:key];
     
-    [settingsDelegate setUInt:value key:strKey];
+    if ([strKey length] > 0)
+    {
+        NSNumber* number = [NSNumber numberWithUnsignedLong:value];
+        if (number)
+        {
+            [[NSUserDefaults standardUserDefaults] setObject:number forKey:strKey];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
+    }
+    //[settingsDelegate setUInt:value key:strKey];
 }
              
 void OpenPeerSettingsDelegate::setBool(const char *key,bool value)
 {
     NSString* strKey = [NSString stringWithUTF8String:key];
     
-    [settingsDelegate setBool:value key:strKey];
+    if ([strKey length] > 0)
+    {
+        [[NSUserDefaults standardUserDefaults] setBool:value forKey:strKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+    //[settingsDelegate setBool:value key:strKey];
 }
              
 void OpenPeerSettingsDelegate::setFloat(const char *key,float value)
 {
     NSString* strKey = [NSString stringWithUTF8String:key];
     
-    [settingsDelegate setFloat:value key:strKey];
+    if ([strKey length] > 0)
+    {
+        [[NSUserDefaults standardUserDefaults] setFloat:value forKey:strKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+    //[settingsDelegate setFloat:value key:strKey];
 }
              
 void OpenPeerSettingsDelegate::setDouble(const char *key,double value)
 {
     NSString* strKey = [NSString stringWithUTF8String:key];
     
-    [settingsDelegate setDouble:value key:strKey];
+    if ([strKey length] > 0)
+    {
+        [[NSUserDefaults standardUserDefaults] setDouble:value forKey:strKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+    //[settingsDelegate setDouble:value key:strKey];
 }
 
 void OpenPeerSettingsDelegate::clear(const char *key)
 {
     NSString* strKey = [NSString stringWithUTF8String:key];
     
-    [settingsDelegate clearForKey:strKey];
+    if ([strKey length] > 0)
+    {
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:strKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+    //[settingsDelegate clearForKey:strKey];
 }

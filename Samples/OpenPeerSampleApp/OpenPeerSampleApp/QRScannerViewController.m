@@ -174,21 +174,7 @@
 }
 
 - (void) loadSettingsfromURL:(NSString*) jsonURL postDate:(NSString*) postData
-{
-//    NSString* jsonURL = nil;
-//    NSString* postData = nil;
-//    if ([url rangeOfString:@"&post="].location != NSNotFound)
-//    {
-//        NSArray* arrayOfStrings = [url componentsSeparatedByString:@"?post="];
-//        if ([arrayOfStrings count] > 1)
-//        {
-//            jsonURL = [Utility decodeBase64:[arrayOfStrings objectAtIndex:0]];
-//            postData = [arrayOfStrings objectAtIndex:1];
-//        }
-//    }
-//    else
-//        jsonURL = url;
-    
+{    
     if ([jsonURL length] == 0)
     {
         [self actionProceedWithlogin:nil];

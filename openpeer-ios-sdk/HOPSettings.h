@@ -45,7 +45,10 @@
 - (id) init __attribute__((unavailable("HOPSettings is singleton class.")));
 
 - (void) setupWithDelegate:(id<HOPSettingsDelegate>) inDelegate;
+- (void) setup;
 - (BOOL) applySettings:(NSString*)jsonSettings;
 - (void) applyDefaults;
-                            
+
+- (void) storeSettingsFromDictionary:(NSDictionary*) inDictionary;
+- (void) storeSettingsFromPath:(NSString*) path;
 @end

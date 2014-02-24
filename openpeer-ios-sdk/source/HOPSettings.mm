@@ -53,6 +53,11 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     ISettings::setup(openPeerSettingsDelegatePtr);
 }
 
+- (void) setup
+{
+    openPeerSettingsDelegatePtr = OpenPeerSettingsDelegate::create(nil);
+    ISettings::setup(openPeerSettingsDelegatePtr);
+}
 - (BOOL) applySettings:(NSString*)jsonSettings
 {
     BOOL ret = NO;
@@ -79,6 +84,58 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     openPeerSettingsDelegatePtr.reset();
 }
 
+
+- (void) storeSettingsFromDictionary:(NSDictionary*) inDictionary
+{
+    if ([inDictionary count] > 0)
+    {
+        Class boolClass = [[NSNumber numberWithBool:YES] class];
+        Class floatClass = [[NSNumber numberWithFloat:0] class];
+        Class doubleClass = [[NSNumber numberWithDouble:0] class];
+        Class integerClass = [[NSNumber numberWithInteger:0] class];
+        
+        for (NSString* key in [inDictionary allKeys])
+        {
+            id value = [inDictionary objectForKey:key];
+            if ([value isKindOfClass:[NSDictionary class]])
+            {
+                [self storeSettingsFromDictionary:value];
+            }
+            else if ([value isKindOfClass:boolClass])
+            {
+                [[NSUserDefaults standardUserDefaults] setBool:((NSNumber*)value).boolValue forKey:key];
+            }
+            else if ([value isKindOfClass:floatClass])
+            {
+                [[NSUserDefaults standardUserDefaults] setFloat:((NSNumber*)value).floatValue forKey:key];
+            }
+            else if ([value isKindOfClass:doubleClass])
+            {
+                [[NSUserDefaults standardUserDefaults] setDouble:((NSNumber*)value).doubleValue forKey:key];
+            }
+            else if ([value isKindOfClass:integerClass])
+            {
+                [[NSUserDefaults standardUserDefaults] setInteger:((NSNumber*)value).integerValue forKey:key];
+            }
+            else if ([value isKindOfClass:[NSNumber class]])
+            {
+                [[NSUserDefaults standardUserDefaults] setInteger:((NSNumber*)value).intValue forKey:key];
+            }
+            else
+            {
+                [[NSUserDefaults standardUserDefaults] setObject:value forKey:key];
+            }
+        }
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+}
+
+- (void) storeSettingsFromPath:(NSString*) path
+{
+    NSDictionary* customerSpecificDict = [NSDictionary dictionaryWithContentsOfFile:path];
+    
+    [self storeSettingsFromDictionary:customerSpecificDict];
+}
 
 - (String) log:(NSString*) message
 {

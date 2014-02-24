@@ -86,7 +86,7 @@
     {
         NSDate* expiry = [[NSDate date] dateByAddingTimeInterval:(30 * 24 * 60 * 60)];
         
-        _authorizedApplicationId = [HOPStack createAuthorizedApplicationID:[[Settings sharedSettings] getString: @"applicationId"] applicationIDSharedSecret:[[Settings sharedSettings] getString: @"applicationIdSharedSecret"] expires:expiry];
+        _authorizedApplicationId = [HOPStack createAuthorizedApplicationID:[[NSUserDefaults standardUserDefaults] stringForKey: @"applicationId"] applicationIDSharedSecret:[[NSUserDefaults standardUserDefaults] stringForKey: @"applicationIdSharedSecret"] expires:expiry];
     }
     return _authorizedApplicationId;
 }
@@ -118,7 +118,7 @@
     [[HOPModelManager sharedModelManager] setCachePath:cachePathDirectory];
     
     //Set settigns delegate
-    [[HOPSettings sharedSettings] setupWithDelegate:[Settings sharedSettings]];
+    [[HOPSettings sharedSettings] setup];//WithDelegate:[Settings sharedSettings]];
     
     //Cleare expired cookies and set delegate
     [[HOPCache sharedCache] removeExpiredCookies];
@@ -135,7 +135,7 @@
             NSString *filePath = [[NSBundle mainBundle] pathForResource:@"DefaultSettings" ofType:@"plist"];
             if ([filePath length] > 0)
             {
-                [[Settings sharedSettings] storeSettingsFromPath:filePath];
+                [[HOPSettings sharedSettings] storeSettingsFromPath:filePath];
             }
             
             isSetLoginSettings = [[Settings sharedSettings] isLoginSettingsSet];
@@ -148,7 +148,7 @@
             NSString* filePath = [[NSBundle mainBundle] pathForResource:@"CustomerSpecific" ofType:@"plist"];
             if ([filePath length] > 0)
             {
-                [[Settings sharedSettings] storeSettingsFromPath:filePath];
+                [[HOPSettings sharedSettings] storeSettingsFromPath:filePath];
             }
             isSetAppData = [[Settings sharedSettings] isAppDataSet];
         }
@@ -200,7 +200,7 @@
     if (![[HOPStack sharedStack] isStackReady])
     {
         //Init openpeer stack and set created delegates
-        [[HOPStack sharedStack] setupWithStackDelegate:self.stackDelegate mediaEngineDelegate:self.mediaEngineDelegate appID: self.authorizedApplicationId appName:[[Settings sharedSettings] getString: @"applicationName"] appImageURL:[[Settings sharedSettings] getString: @"applicationImageURL"]  appURL:[[Settings sharedSettings] getString: @"applicationURL"] userAgent:[Utility getUserAgentName] deviceID:self.deviceId deviceOs:[Utility getDeviceOs] system:[Utility getPlatform]];
+        [[HOPStack sharedStack] setupWithStackDelegate:self.stackDelegate mediaEngineDelegate:self.mediaEngineDelegate appID: self.authorizedApplicationId appName:[[NSUserDefaults standardUserDefaults] stringForKey: @"applicationName"] appImageURL:[[NSUserDefaults standardUserDefaults] stringForKey: @"applicationImageURL"]  appURL:[[NSUserDefaults standardUserDefaults] stringForKey: @"applicationURL"] userAgent:[Utility getUserAgentName] deviceID:self.deviceId deviceOs:[Utility getDeviceOs] system:[Utility getPlatform]];
     }
     
     //Start with login procedure and display login view
@@ -237,7 +237,7 @@
     self.identityDelegate = [[IdentityDelegate alloc] init];
     self.identityDelegate.loginDelegate = self.mainViewController;
     self.identityLookupDelegate = [[IdentityLookupDelegate alloc] init];
-    self.cacheDelegate = [[CacheDelegate alloc] init];
+    //self.cacheDelegate = [[CacheDelegate alloc] init];
 }
 
 - (void) closeTheApp
