@@ -202,6 +202,8 @@
 		876CD4CA18A3BAFA0069C296 /* DefaultSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 877038E518A24774000B7AA1 /* DefaultSettings.plist */; };
 		876CD4CB18A3BB000069C296 /* Template_CustomerSpecific.plist in Resources */ = {isa = PBXBuildFile; fileRef = 876CD4C618A385900069C296 /* Template_CustomerSpecific.plist */; };
 		877038E618A24774000B7AA1 /* DefaultSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 877038E518A24774000B7AA1 /* DefaultSettings.plist */; };
+		8770C34318BB7ABB006F28F0 /* libstdc++.6.0.9.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8770C34218BB7ABB006F28F0 /* libstdc++.6.0.9.dylib */; };
+		8770C34B18BB903A006F28F0 /* libstdc++.6.0.9.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8770C34218BB7ABB006F28F0 /* libstdc++.6.0.9.dylib */; };
 		8774AC4B1897E2F2006B91FA /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8774AC4A1897E2F2006B91FA /* ImageIO.framework */; };
 		8774AC4E1897E305006B91FA /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8774AC4A1897E2F2006B91FA /* ImageIO.framework */; };
 		8774AC6518981094006B91FA /* QRScannerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 872D7E9D1897E19A005D8335 /* QRScannerViewController.xib */; };
@@ -847,6 +849,7 @@
 		876CD4C618A385900069C296 /* Template_CustomerSpecific.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Template_CustomerSpecific.plist; sourceTree = "<group>"; };
 		876CD4C818A38B370069C296 /* CustomerSpecific.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CustomerSpecific.plist; sourceTree = "<group>"; };
 		877038E518A24774000B7AA1 /* DefaultSettings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DefaultSettings.plist; sourceTree = "<group>"; };
+		8770C34218BB7ABB006F28F0 /* libstdc++.6.0.9.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.6.0.9.dylib"; path = "usr/lib/libstdc++.6.0.9.dylib"; sourceTree = SDKROOT; };
 		8774AC4A1897E2F2006B91FA /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		8774AC6618992D53006B91FA /* ZXingObjC.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZXingObjC.xcodeproj; path = ../../../libs/ZXingObjC/ZXingObjC.xcodeproj; sourceTree = "<group>"; };
 		87796E8318A8DDA7002F4B43 /* boost.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = boost.a; path = OpenpeerSDK.framework/Versions/C/Libraries/boost.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -993,6 +996,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8770C34B18BB903A006F28F0 /* libstdc++.6.0.9.dylib in Frameworks */,
 				87F9DAF9189AB7E100D96FF3 /* libZXingObjC-iOS.a in Frameworks */,
 				8774AC4B1897E2F2006B91FA /* ImageIO.framework in Frameworks */,
 				0012C552177D11DB0017FF5E /* libz.dylib in Frameworks */,
@@ -1024,6 +1028,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8770C34318BB7ABB006F28F0 /* libstdc++.6.0.9.dylib in Frameworks */,
 				8774AC7B18992D86006B91FA /* libZXingObjC-iOS.a in Frameworks */,
 				8774AC4E1897E305006B91FA /* ImageIO.framework in Frameworks */,
 				87D4BDFC18683B65008C2D30 /* CoreLocation.framework in Frameworks */,
@@ -1344,6 +1349,7 @@
 		8727282B166CBF9B0089CBB6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8770C34218BB7ABB006F28F0 /* libstdc++.6.0.9.dylib */,
 				87796E8318A8DDA7002F4B43 /* boost.a */,
 				87796E8418A8DDA7002F4B43 /* libcurl.a */,
 				8774AC4A1897E2F2006B91FA /* ImageIO.framework */,
@@ -2387,7 +2393,7 @@
 				GCC_PREFIX_HEADER = "OpenPeerSampleApp/OpenPeerSampleApp-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "OpenPeerSampleApp/OpenPeerSampleApp-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/system",
@@ -2429,7 +2435,7 @@
 					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts\"",
 				);
 				INFOPLIST_FILE = "OpenPeerSampleApp/OpenPeerSampleApp-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/system",
@@ -2473,7 +2479,7 @@
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "$(SRCROOT)/OpenPeerSampleAppAPNS-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/system",
@@ -2518,7 +2524,7 @@
 					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/OpenPeerSampleAppAPNS-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/system",
