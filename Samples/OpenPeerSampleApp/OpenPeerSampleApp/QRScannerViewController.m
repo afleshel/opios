@@ -31,8 +31,11 @@
 
 #import "QRScannerViewController.h"
 #import "LoginManager.h"
+#import "OpenPeer.h"
 #import "Settings.h"
 #import "Utility.h"
+#import <OpenPeerSDK/HOPSettings.h>
+#import "Logger.h"
 
 @interface QRScannerViewController ()
 
@@ -42,7 +45,7 @@
 
 - (IBAction)actionReadQRCode:(id)sender;
 - (IBAction)actionProceedWithlogin:(id)sender;
-
+- (IBAction)actionStartLogger:(id)sender;
 @end
 
 @implementation QRScannerViewController
@@ -91,9 +94,46 @@
         
         NSString* str = result.text;
 
-        if ([str length] > 0 && ([str rangeOfString:@"{...}"].location != NSNotFound))
+        if ([str length] > 0)
         {
-            [self loadSettingsfromURL:str];
+            NSString* jsonURL = nil;
+            NSString* postData = nil;
+            
+            if ([str rangeOfString:@"&post="].location != NSNotFound)
+            {
+                NSArray* arrayOfStrings = [str componentsSeparatedByString:@"&post="];
+                if ([arrayOfStrings count] > 1)
+                {
+                    jsonURL = [arrayOfStrings objectAtIndex:0];
+                    postData = [arrayOfStrings objectAtIndex:1];
+                }
+            }
+            else
+                jsonURL = str;
+                
+            if ([Utility isValidURL:jsonURL])
+            {
+                [self loadSettingsfromURL:jsonURL postDate:postData];
+            }
+            else
+            {
+                //Check if JSON is valid
+                if ([Utility isValidJSON:str])
+                {
+                    [[HOPSettings sharedSettings] applySettings:str];
+                    [self actionProceedWithlogin:nil];
+                }
+                else
+                {
+                    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Invalid login settings!"
+                                                                        message:@"Please, scan another QR code or proceed with already set login settings"
+                                                                       delegate:nil
+                                                              cancelButtonTitle:nil
+                                                              otherButtonTitles:@"Ok",nil];
+                    [alertView show];
+                }
+                
+            }
         }
         else
         {
@@ -129,78 +169,31 @@
 
 - (IBAction)actionProceedWithlogin:(id)sender
 {
-    BOOL isSet = [[Settings sharedSettings] isLoginSettingsSet];
-    if (!isSet)
-    {
-        NSError* error = nil;
-        NSString *filePath = [[NSBundle mainBundle] pathForResource:@"loginSettings" ofType:@"json"];
-        NSString* strJSON = [NSString stringWithContentsOfFile:filePath encoding:NSASCIIStringEncoding error:&error];
-        
-        if ([strJSON length] > 0)
-        {
-            if ([strJSON rangeOfString:@"insert "].location != NSNotFound && [strJSON rangeOfString:@"here"].location != NSNotFound)
-            {
-                OPLog(HOPLoggerSeverityFatal, HOPLoggerLevelBasic, @"It is required to set propper login values in loginSettings.json file.");
-                abort();
-            }
-            isSet = [[Settings sharedSettings] setLoginSettingsFromJSON:strJSON];
-        }
-    }
-    
-    if (isSet)
-    {
-        [self.view removeFromSuperview];
-        [[LoginManager sharedLoginManager] startLogin];
-    }
-    else
-    {
-        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Local file with local settings is corrupted!"
-                                                            message:@"Please try to scan QR code or reinstall the app."
-                                                           delegate:nil
-                                                  cancelButtonTitle:nil
-                                                  otherButtonTitles:@"Ok",nil];
-        [alertView show];
-    }
+    [self.view removeFromSuperview];
+    [[OpenPeer sharedOpenPeer] setup];
 }
 
-- (void) saveSettingsInJSON:(NSString*) settingsInJSON
-{
-    NSError* error = nil;
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"loginSettings" ofType:@"json"];
-    [settingsInJSON writeToFile:filePath atomically:YES encoding:NSASCIIStringEncoding error:&error];
-    if (error)
-    {
-        OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Failed saving settings file. Error: %@", error);
-    }
-}
-- (void) loadSettingsfromURL:(NSString*) url
-{
-    NSString* jsonURL = nil;
-    if ([url rangeOfString:@"&post=base64"].location != NSNotFound)
-    {
-        NSArray* arrayOfStrings = [url componentsSeparatedByString:@"&post=base64"];
-        if ([arrayOfStrings count] > 0)
-        {
-            jsonURL = [Utility decodeBase64:[arrayOfStrings objectAtIndex:0]];
-        }
-    }
-    else
-        jsonURL = url;
-    
+- (void) loadSettingsfromURL:(NSString*) jsonURL postDate:(NSString*) postData
+{    
     if ([jsonURL length] == 0)
     {
-        
         [self actionProceedWithlogin:nil];
         return;
     }
     
     // Create the request.
-    NSURLRequest *theRequest=[NSURLRequest requestWithURL:[NSURL URLWithString:jsonURL]
+    NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:jsonURL]
                                               cachePolicy:NSURLRequestUseProtocolCachePolicy
                                           timeoutInterval:20.0];
 
     self.receivedData = [NSMutableData dataWithCapacity: 0];
     
+    if (postData)
+    {
+        [theRequest setHTTPMethod:@"POST"];
+        [theRequest setValue:@"application/x-www-form-urlencoded; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+        [theRequest setHTTPBody:[postData dataUsingEncoding:NSUTF8StringEncoding]];
+    }
     // create the connection with the request and start loading the data
     self.urlConnection = [[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
     if (!self.urlConnection)
@@ -227,14 +220,12 @@
     [self.receivedData appendData:data];
 }
 
-- (void)connection:(NSURLConnection *)connection
-  didFailWithError:(NSError *)error
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-
     self.urlConnection = nil;
     self.receivedData = nil;
     
-    // inform the user
+    //Inform the user that there was an error with download
     NSLog(@"Connection failed! Error - %@ %@",
           [error localizedDescription],
           [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
@@ -253,15 +244,16 @@
     {
         BOOL isSet = NO;
         NSString* strJSON = [[NSString alloc] initWithData:self.receivedData encoding:NSASCIIStringEncoding];
-        if ([strJSON length] > 0)
-            isSet = [[Settings sharedSettings] setLoginSettingsFromJSON:strJSON];
         
+        //Apply downloaded settings
+        if ([strJSON length] > 0)
+            isSet = [[HOPSettings sharedSettings] applySettings:strJSON];
+        
+        //If set remove scanner and proceed with app setup
         if (isSet)
         {
-            [self saveSettingsInJSON:strJSON];
             [self.view removeFromSuperview];
-            [[LoginManager sharedLoginManager] startLogin];
-
+            [[OpenPeer sharedOpenPeer] setup];
         }
         else
         {
@@ -275,5 +267,10 @@
     }
     self.urlConnection = nil;
     self.receivedData = nil;
+}
+
+- (IBAction)actionStartLogger:(id)sender
+{
+    [Logger startTelnetLoggerOnStartUp];
 }
 @end

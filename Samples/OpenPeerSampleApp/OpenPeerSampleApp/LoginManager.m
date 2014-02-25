@@ -56,7 +56,6 @@
 #import "MainViewController.h"
 #import "ActivityIndicatorViewController.h"
 #import "WebLoginViewController.h"
-#import "CustomerSpecific.h"
 
 @interface LoginManager ()
 
@@ -109,7 +108,7 @@
     //If peer file doesn't exists, show login view, otherwise start relogin
     if (![[HOPModelManager sharedModelManager] getLastLoggedInHomeUser])
     {
-        [[[OpenPeer sharedOpenPeer] mainViewController] showQRScanner];
+        [self startLogin];
     }
     else
     {
@@ -322,7 +321,7 @@
             }
             
             //Not yet ready for association
-            if ((self.isLogin || self.isAssociation) && ([associatedIdentites count] < 2))
+            /*if ((self.isLogin || self.isAssociation) && ([associatedIdentites count] < 2))
             {
                 self.isLogin = NO;
                 
@@ -339,7 +338,7 @@
                 
                 [alert show];
             }
-            else
+            else*/
             {
                 [[[OpenPeer sharedOpenPeer] mainViewController] onLoginFinished];
                 //Start loading contacts.
@@ -364,6 +363,14 @@
     }
 }
 
+- (void) onUserLogOut
+{
+#ifdef DEBUG
+    [[[OpenPeer sharedOpenPeer] mainViewController] showQRScanner];
+#else
+    [[[OpenPeer sharedOpenPeer] mainViewController] waitForUserGesture];
+#endif
+}
 
 /**
  Retrieves info if an identity with specified URI is associated or not.

@@ -31,10 +31,12 @@
 
 #import <UIKit/UIKit.h>
 #import "Delegates.h"
+#import <CoreData/CoreData.h>
+#import "TTTAttributedLabel.h"
 
 @class Session;
 
-@interface ChatViewController : UIViewController <UITextViewDelegate,UITableViewDelegate, UITableViewDataSource>
+@interface ChatViewController : UIViewController <UITextViewDelegate,UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate,TTTAttributedLabelDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *chatTableView;
 @property (weak, nonatomic) IBOutlet UITextView *messageTextbox;
@@ -44,5 +46,6 @@
 - (id) initWithSession:(Session*)inSession;
 - (void) refreshViewWithData;
 - (void) hideKeyboard;
+- (void) updateFetchControllerForSession:(NSString*) sessionID;
 //- (float) getHeaderHeight:(float)tableViewHeight;
 @end

@@ -124,20 +124,19 @@ typedef enum
 
 - (void) saveDefaultsLoggerSettings;
 
-- (void) setOuterFrameURL:(NSString*) inOuterFrameURL;
+
 - (NSString*) getOuterFrameURL;
-- (void) setNamespaceGrantServiceURL:(NSString*) inNamespaceGrantServiceURL;
 - (NSString*) getNamespaceGrantServiceURL;
-- (void) setIdentityProviderDomain:(NSString*) inIdentityProviderDomain;
 - (NSString*) getIdentityProviderDomain;
-- (void) setIdentityFederateBaseURI:(NSString*) inIdentityFederateBaseURI;
 - (NSString*) getIdentityFederateBaseURI;
-- (void) setLockBoxServiceDomain:(NSString*) inLockBoxServiceDomain;
 - (NSString*) getLockBoxServiceDomain;
-- (void) setDefaultOutgoingTelnetServer:(NSString*) inDefaultOutgoingTelnetServer;
 - (NSString*) getDefaultOutgoingTelnetServer;
 
-- (void) saveLoginSettings;
-- (BOOL) setLoginSettingsFromJSON:(NSString *)loginSettingsJSON;
+//- (void) storeSettingsFromPath:(NSString*) path;
+
+- (BOOL) isAppDataSet;
 - (BOOL) isLoginSettingsSet;
+- (BOOL) isAppSettingsSetForPath:(NSString*) path;
+
+- (NSArray*) getMissingAppSettings;
 @end

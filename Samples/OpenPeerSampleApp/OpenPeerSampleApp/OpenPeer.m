@@ -32,13 +32,15 @@
 #import "OpenPeer.h"
 #import "Utility.h"
 #import "AppConsts.h"
-#import "CustomerSpecific.h"
 #import "Logger.h"
+#import "Settings.h"
 //SDK
 #import "OpenpeerSDK/HOPStack.h"
 #import "OpenpeerSDK/HOPLogger.h"
 #import "OpenpeerSDK/HOPMediaEngine.h"
 #import "OpenpeerSDK/HOPCache.h"
+#import "OpenpeerSDK/HOPModelManager.h"
+#import "OpenpeerSDK/HOPSettings.h"
 //Managers
 #import "LoginManager.h"
 //Delegates
@@ -52,7 +54,6 @@
 #import "CacheDelegate.h"
 //View controllers
 #import "MainViewController.h"
-
 
 
 //Private methods
@@ -85,7 +86,7 @@
     {
         NSDate* expiry = [[NSDate date] dateByAddingTimeInterval:(30 * 24 * 60 * 60)];
         
-        _authorizedApplicationId = [HOPStack createAuthorizedApplicationID:applicationId applicationIDSharedSecret:applicationIdSharedSecret expires:expiry];
+        _authorizedApplicationId = [HOPStack createAuthorizedApplicationID:[[NSUserDefaults standardUserDefaults] stringForKey: @"applicationId"] applicationIDSharedSecret:[[NSUserDefaults standardUserDefaults] stringForKey: @"applicationIdSharedSecret"] expires:expiry];
     }
     return _authorizedApplicationId;
 }
@@ -103,25 +104,105 @@
     }
     return _deviceId;
 }
+
+- (void) preSetup
+{
+    //Create all delegates required for communication with core
+    [self createDelegates];
+    
+    //Set persistent stores
+    NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
+    NSString *dataPathDirectory = [libraryPath stringByAppendingPathComponent:@"db"];
+    [[HOPModelManager sharedModelManager] setDataPath:dataPathDirectory backupData:NO];
+    NSString *cachePathDirectory = [libraryPath stringByAppendingPathComponent:@"cache"];
+    [[HOPModelManager sharedModelManager] setCachePath:cachePathDirectory];
+    
+    //Set settigns delegate
+    [[HOPSettings sharedSettings] setup];//WithDelegate:[Settings sharedSettings]];
+    
+    //Cleare expired cookies and set delegate
+    [[HOPCache sharedCache] removeExpiredCookies];
+    [[HOPCache sharedCache] setDelegate:self.cacheDelegate];
+    
+    if (![[HOPModelManager sharedModelManager] getLastLoggedInHomeUser])
+    {
+        //If not already set, set default login settings
+        BOOL isSetLoginSettings = [[Settings sharedSettings] isLoginSettingsSet];
+        if (!isSetLoginSettings)
+        {
+            [[HOPSettings sharedSettings] applyDefaults];
+            
+            NSString *filePath = [[NSBundle mainBundle] pathForResource:@"DefaultSettings" ofType:@"plist"];
+            if ([filePath length] > 0)
+            {
+                [[HOPSettings sharedSettings] storeSettingsFromPath:filePath];
+            }
+            
+            isSetLoginSettings = [[Settings sharedSettings] isLoginSettingsSet];
+        }
+        
+        //If not already set, set default app data
+        BOOL isSetAppData = [[Settings sharedSettings] isAppDataSet];
+        if (!isSetAppData)
+        {
+            NSString* filePath = [[NSBundle mainBundle] pathForResource:@"CustomerSpecific" ofType:@"plist"];
+            if ([filePath length] > 0)
+            {
+                [[HOPSettings sharedSettings] storeSettingsFromPath:filePath];
+            }
+            isSetAppData = [[Settings sharedSettings] isAppDataSet];
+        }
+        
+#ifdef DEBUG
+        //Show QR scanner if user wants to change settings by reading QR code
+        [[self mainViewController] showQRScanner];
+#else
+        [[self mainViewController] waitForUserGesture];
+#endif
+    }
+    else
+    {
+        [self setup];
+        //Set log levels and start logging
+        [Logger startAllSelectedLoggers];
+    }
+}
+
 /**
  Initializes the open peer stack. After initialization succeeds, login screen is displayed, or user relogin started.
  @param inMainViewController MainViewController Input main view controller.
  */
 - (void) setup
 {
-    //Created all delegates required for openpeer stack initialization.
-    [self createDelegates];
+#ifdef DEBUG
+    NSArray* missingFields = [[Settings sharedSettings] getMissingAppSettings];
     
-    [[HOPCache sharedCache] removeExpiredCookies];
-    //Init cache singleton
-    [[HOPCache sharedCache] setDelegate:self.cacheDelegate];
-    
+    if ([missingFields count] > 0)
+    {
+        NSString* strMissingFields = @"";
+        for (NSString* str in missingFields)
+        {
+            if ([strMissingFields length] == 0)
+                strMissingFields = str;
+            else
+                strMissingFields = [strMissingFields stringByAppendingFormat:@", %@",str];
+        }
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Application settings are missing!" message:[NSString stringWithFormat:@"Please set following fields in CustomerSpecific.plist file: %@",strMissingFields] delegate:self cancelButtonTitle:@"I swear, I will enter valid data" otherButtonTitles: nil];
+        
+        [alert show];
+        NSLog(@"Application settings are not set. Please set all required fileds in CustomerSpecific.plist file!");
+        return;
+    }
+#endif
     //Set log levels and start logging
     [Logger startAllSelectedLoggers];
 
-    //Init openpeer stack and set created delegates
-    [[HOPStack sharedStack] setupWithStackDelegate:self.stackDelegate mediaEngineDelegate:self.mediaEngineDelegate appID: self.authorizedApplicationId appName:applicationName appImageURL:applicationImageURL appURL:applicationURL userAgent:[Utility getUserAgentName] deviceID:self.deviceId deviceOs:[Utility getDeviceOs] system:[Utility getPlatform]];
-
+    if (![[HOPStack sharedStack] isStackReady])
+    {
+        //Init openpeer stack and set created delegates
+        [[HOPStack sharedStack] setupWithStackDelegate:self.stackDelegate mediaEngineDelegate:self.mediaEngineDelegate appID: self.authorizedApplicationId appName:[[NSUserDefaults standardUserDefaults] stringForKey: @"applicationName"] appImageURL:[[NSUserDefaults standardUserDefaults] stringForKey: @"applicationImageURL"]  appURL:[[NSUserDefaults standardUserDefaults] stringForKey: @"applicationURL"] userAgent:[Utility getUserAgentName] deviceID:self.deviceId deviceOs:[Utility getDeviceOs] system:[Utility getPlatform]];
+    }
+    
     //Start with login procedure and display login view
     [[LoginManager sharedLoginManager] login];
     
@@ -156,6 +237,18 @@
     self.identityDelegate = [[IdentityDelegate alloc] init];
     self.identityDelegate.loginDelegate = self.mainViewController;
     self.identityLookupDelegate = [[IdentityLookupDelegate alloc] init];
-    self.cacheDelegate = [[CacheDelegate alloc] init];
+    //self.cacheDelegate = [[CacheDelegate alloc] init];
+}
+
+- (void) closeTheApp
+{
+    exit(-1);
+}
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Closing Application" message:@"Application will be closed in 2 seconds" delegate:self cancelButtonTitle:nil otherButtonTitles: nil];
+    
+    [alert show];
+    [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(closeTheApp) userInfo:nil repeats:NO];
 }
 @end

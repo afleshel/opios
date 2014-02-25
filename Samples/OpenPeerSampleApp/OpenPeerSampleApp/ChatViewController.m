@@ -37,11 +37,17 @@
 #import "Session.h"
 //#import "OpenPeerUser.h"
 #import "ChatMessageCell.h"
+#import <OpenPeerSDK/HOPModelManager.h>
+#import <OpenPeerSDK/HOPMessageRecord.h>
+#import <OpenPeerSDK/HOPConversationThread.h>
+
+
 
 @interface ChatViewController()
 
 @property (weak, nonatomic) Session* session;
-
+@property (nonatomic, copy) NSString* predicateString;
+@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 
 //@property (weak, nonatomic) IBOutlet UIView *typingMessageView;
 
@@ -120,6 +126,14 @@
         [self.messageTextbox becomeFirstResponder];
     }
     
+    NSError *error;
+    if (![self.fetchedResultsController performFetch:&error])
+    {
+		OPLog(HOPLoggerSeverityFatal, HOPLoggerLevelDebug, @"Fetching messages has failed with an error: %@, error description: %@", error, [error userInfo]);
+		exit(-1);  // Fail
+	}
+    
+    self.tapGesture.cancelsTouchesInView = NO;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -212,16 +226,49 @@
 
 - (void) refreshViewWithData
 {
-    if(self.session.messageArray && [self.session.messageArray count] > 0)
+    [self.session.unreadMessageArray removeAllObjects];
+    /*if(self.session.messageArray && [self.session.messageArray count] > 0)
     {
         [self.session.unreadMessageArray removeAllObjects];
         
         [self.chatTableView reloadData];
         
         [self.chatTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.session.messageArray count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-    }
+    }*/
 }
 
+- (void) updateFetchControllerForSession:(NSString*) sessionID
+{
+    //NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(session.sessionID IN %@)",self.session.sessionIdsHistory]];
+    //[fetchRequest setPredicate:predicate];
+    
+    //[NSFetchedResultsController deleteCacheWithName:[NSString stringWithFormat:@"messageCache_%@",[self.session.sessionIdsHistory obj]]];
+    
+    NSFetchRequest *fetchRequest = [[self fetchedResultsController] fetchRequest];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPMessageRecord" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];
+    [fetchRequest setEntity:entity];
+    
+    NSPredicate* predicate1 = [fetchRequest predicate];
+    NSPredicate *predicate2 = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(session.sessionID MATCHES '%@')",[self.session.conversationThread getThreadId]]];
+                              
+    [fetchRequest setPredicate:[NSCompoundPredicate orPredicateWithSubpredicates:[NSArray arrayWithObjects:predicate1,predicate2, nil]]];
+    
+	[fetchRequest setFetchBatchSize:20];
+	
+	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"date" ascending:YES];
+	NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+	
+	[fetchRequest setSortDescriptors:sortDescriptors];
+    
+    NSError *error;
+    if (![self.fetchedResultsController performFetch:&error])
+    {
+		OPLog(HOPLoggerSeverityFatal, HOPLoggerLevelDebug, @"Fetching messages has failed with an error: %@, error description: %@", error, [error userInfo]);
+		exit(-1);  // Fail
+	}
+    
+    [self.chatTableView reloadData];
+}
 /*- (float) getHeaderHeight:(float)tableViewHeight
 {
     float res = tableViewHeight;
@@ -269,14 +316,21 @@
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.session.messageArray count];
+    return [[self.fetchedResultsController fetchedObjects] count];
+    //return [self.session.messageArray count];
 }
 
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    Message* message = nil;
+    //Message* message = nil;
+    HOPMessageRecord* message = nil;
     
+    message = [self.fetchedResultsController objectAtIndexPath:indexPath];
+
+    if (!message)
+        return nil;
+    /*
     if (self.session.messageArray && [self.session.messageArray count] > 0)
     {
         message = (Message*)[self.session.messageArray objectAtIndex:indexPath.row];
@@ -284,13 +338,14 @@
     else
     {
         return nil;
-    }
+    }*/
     
     ChatMessageCell* msgCell = [tableView dequeueReusableCellWithIdentifier:@"MessageCellIdentifier"];
     
     if (msgCell == nil)
     {
         msgCell = [[ChatMessageCell alloc] initWithFrame:CGRectZero];
+        msgCell.messageLabel.delegate = self;
     }
     
     [msgCell setMessage:message];
@@ -302,7 +357,8 @@
 {
     
     float res = 0.0;
-    Message *message = [self.session.messageArray objectAtIndex:indexPath.row];
+    //Message *message = [self.session.messageArray objectAtIndex:indexPath.row];
+    HOPMessageRecord* message = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
     CGSize textSize = [ChatMessageCell calcMessageHeight:message.text forScreenWidth:self.chatTableView.frame.size.width - 85];
 
@@ -320,5 +376,65 @@
     [self refreshViewWithData];
 }
 
+#pragma mark - NSFetchedResultsController
+- (NSFetchedResultsController *)fetchedResultsController
+{
+    if (_fetchedResultsController != nil)
+    {
+        return _fetchedResultsController;
+    }
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPMessageRecord" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];
+    [fetchRequest setEntity:entity];
+    
+    self.predicateString = [NSString stringWithFormat:@"(session.sessionID MATCHES '%@')",[self.session.conversationThread getThreadId]];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:self.predicateString];
+    [fetchRequest setPredicate:predicate];
+    
+	[fetchRequest setFetchBatchSize:20];
+	
+	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"date" ascending:YES];
+	NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+	
+	[fetchRequest setSortDescriptors:sortDescriptors];
+    
+	//_fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext] sectionNameKeyPath:nil cacheName:[NSString stringWithFormat:@"messageCache_%@",[self.session.conversationThread getThreadId]]];
+    _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext] sectionNameKeyPath:nil cacheName:nil];
+    
+    _fetchedResultsController.delegate = self;
+    
+	return _fetchedResultsController;
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
+	
+	switch (type)
+    {
+		case NSFetchedResultsChangeInsert:
+			[self.chatTableView  insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self.chatTableView scrollToRowAtIndexPath:newIndexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+			break;
+		case NSFetchedResultsChangeUpdate:
+			//[[self.contactsTableView cellForRowAtIndexPath:indexPath].textLabel setText:((HOPRolodexContact*)[[[self.fetchedResultsController sections] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]).name];
+			break;
+		case NSFetchedResultsChangeDelete:
+			[self.chatTableView  deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+			break;
+		case NSFetchedResultsChangeMove:
+			[self.chatTableView  deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+			[self.chatTableView  insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+			break;
+		default:
+			break;
+	}
+}
+
+#pragma mark - TTTAttributedLabelDelegate
+- (void)attributedLabel:(TTTAttributedLabel *)label didSelectLinkWithURL:(NSURL *)url
+{
+    if (url)
+        [[UIApplication sharedApplication] openURL:url];
+}
 @end
 

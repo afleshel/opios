@@ -72,14 +72,21 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     [self createLocalDelegates:stackDelegate mediaEngineDelegate:mediaEngineDelegate];
     
     IStack::singleton()->setup(openPeerStackDelegatePtr, openPeerMediaEngineDelegatePtr, [appID UTF8String], [appName UTF8String], [appImageURL UTF8String], [appURL UTF8String], [userAgent UTF8String], [deviceID UTF8String], [deviceOs UTF8String], [system UTF8String]);
+    
+    isReady = YES;
 }
 
 - (void) shutdown
 {
+    isReady = NO;
     IStack::singleton()->shutdown();
     [self deleteLocalDelegates];
 }
 
+- (BOOL) isStackReady
+{
+    return isReady;
+}
 #warning "createAuthorizedApplicationID SHOULD BE USED ONLY DURING DEVELOPMENT. AN AUTHORIZED APPLICATION ID SHOULD BE GENERATED FROM  A SERVER AND GIVEN TO THE APPLICATION."
 + (NSString*) createAuthorizedApplicationID:(NSString*) applicationID applicationIDSharedSecret:(NSString*) applicationIDSharedSecret expires:(NSDate*) expires
 {

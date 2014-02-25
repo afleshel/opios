@@ -62,7 +62,7 @@
 @property (nonatomic) BOOL isLogerActivated;
 @property (nonatomic) BOOL showSplash;
 @property (strong, nonatomic) SplashViewController* splashViewController;
-@property (strong, nonatomic) NSTimer* closingTimer;
+@property (strong, nonatomic) NSTimer* waitingGestureTimer;
 @property (strong, nonatomic) QRScannerViewController* qrScannerViewController;
 
 - (void) removeAllSubViews;
@@ -99,8 +99,7 @@
     if (self.threeTapGestureRecognizer)
         [self.view addGestureRecognizer:self.threeTapGestureRecognizer];
     
-    self.splashViewController = [[SplashViewController alloc] initWithNibName:@"SplashViewController" bundle:nil];
-    self.splashViewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    //[self showSplashScreen];
   
 }
 
@@ -115,13 +114,14 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    self.splashViewController.view.frame = self.view.bounds;
-    [self.view addSubview:self.splashViewController.view];
+    [self showSplashScreen];
+    //self.splashViewController.view.frame = self.view.bounds;
+    //[self.view addSubview:self.splashViewController.view];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    //self.closingTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(removeSplashScreen) userInfo:nil repeats:NO];
+    
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -143,7 +143,7 @@
 
 - (void) showTabBarController
 {
-    [self removeAllSubViews];
+    //[self removeAllSubViews];
     
     [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"iPhone_top_bar_background.png"] forBarMetrics:UIBarMetricsDefault];
     
@@ -178,7 +178,14 @@
         [self.tabBarController.tabBar setBackgroundImage:[UIImage imageNamed:@"iPhone_tabBar_bkgd.png"]];
     }
     
+    self.tabBarController.view.alpha = 0.0;
     [self.view addSubview:self.tabBarController.view];
+    
+    [UIView animateWithDuration:1 animations:^
+     {
+         [self.tabBarController.view setAlpha:1.0];
+     }
+     completion:nil];
 }
 
 #pragma mark - Login views
@@ -279,6 +286,7 @@
             sessionViewContorller = [self.sessionViewControllersDictionary objectForKey:sessionId];
             sessionViewContorller.hidesBottomBarWhenPushed = YES;
             [sessionViewContorller.chatViewController refreshViewWithData];
+            [sessionViewContorller.chatViewController.chatTableView reloadData];
             [navigationController popToRootViewControllerAnimated:NO];
             [navigationController pushViewController:sessionViewContorller animated:YES];
             [navigationController.navigationBar.topItem setTitle:title];
@@ -404,6 +412,7 @@
     SessionViewController_iPhone* svc = [self.sessionViewControllersDictionary objectForKey:oldSessionId];
     [self removeSessionViewControllerForSession:oldSessionId];
     [self.sessionViewControllersDictionary setObject:svc forKey:newSesionId];
+    [svc.chatViewController updateFetchControllerForSession:newSesionId];
 }
 /**
  Prepare specific session vire controller for incoming call
@@ -441,7 +450,20 @@
 
 - (void)threeTapGasture
 {
-    [Logger startTelnetLoggerOnStartUp];
+    @synchronized(self)
+    {
+        if (self.waitingGestureTimer)
+        {
+            [self.waitingGestureTimer invalidate];
+            self.waitingGestureTimer = nil;
+            [self showQRScanner];
+            [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:NO withText:nil inView:nil];
+        }
+        else
+        {
+            [Logger startTelnetLoggerOnStartUp];
+        }
+    }
 }
 
 - (void) removeSplashScreen
@@ -461,6 +483,7 @@
 - (void) onLogout
 {
     [self removeAllSubViews];
+    [self showSplashScreen];
     self.contactsTableViewController = nil;
     self.tabBarController = nil;
 }
@@ -486,7 +509,7 @@
 {
     [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:NO withText:nil inView:nil];
     
-    [self removeSplashScreen];
+    //[self removeSplashScreen];
     
     //Add identity login web view like main view subview
     if (!webLoginViewController.view.superview)
@@ -553,5 +576,40 @@
     self.qrScannerViewController = [[QRScannerViewController alloc] initWithNibName:@"QRScannerViewController" bundle:nil];
     self.qrScannerViewController.view.frame = self.view.bounds;
     [self.view addSubview:self.qrScannerViewController.view];
+}
+
+- (void) showSplashScreen
+{
+    if (!self.splashViewController)
+    {
+        self.splashViewController = [[SplashViewController alloc] initWithNibName:@"SplashViewController" bundle:nil];
+        self.splashViewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    }
+    
+    self.splashViewController.view.frame = self.view.bounds;
+    [self.view addSubview:self.splashViewController.view];
+}
+- (void) waitingGestureTimerHasExpired
+{
+    @synchronized(self)
+    {
+        if (self.waitingGestureTimer)
+        {
+            self.waitingGestureTimer = nil;
+            [[OpenPeer sharedOpenPeer] setup];
+            //[[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:NO withText:nil inView:nil];
+        }
+    }
+}
+
+- (void) waitForUserGesture
+{
+    [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:YES withText:@"Loading settings ..." inView:self.splashViewController.infoView];
+    
+    self.waitingGestureTimer = [NSTimer scheduledTimerWithTimeInterval:4.0
+                                     target:self
+                                   selector:@selector(waitingGestureTimerHasExpired)
+                                   userInfo:nil
+                                    repeats:NO];
 }
 @end

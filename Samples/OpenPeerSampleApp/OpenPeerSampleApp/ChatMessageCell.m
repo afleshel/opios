@@ -37,6 +37,9 @@
 #import <OpenpeerSDK/HOPAvatar.h>
 #import <OpenpeerSDK/HOPImage.h>
 #import <OpenpeerSDK/HOPHomeUser+External.h>
+#import <OpenpeerSDK/HOPMessageRecord.h>
+#import <OpenpeerSDK/HOPPublicPeerFile.h>
+#import <OpenpeerSDK/HOPIdentityContact.h>
 #import "TTTAttributedLabel.h"
 #import "Utility.h"
 
@@ -52,7 +55,7 @@
 @property (nonatomic, strong) UIFont *chatNameFont;
 @property (nonatomic, strong) UIFont *chatTimestampFont;
 @property (nonatomic, strong) NSString *unicodeMessageText;
-@property (nonatomic, weak) Message *message;
+@property (nonatomic, weak) HOPMessageRecord *message;
 
 - (void) setUnicodeChars:(NSString *)str;
 
@@ -226,14 +229,15 @@
     }
 }
 
-- (void)setMessage:(Message *)message
+//- (void) setMessage:(Message*) message
+- (void)setMessage:(HOPMessageRecord *)message
 {
     _message = message;
 }
 
 -(void)layoutSubviews
 {
-    BOOL isHomeUserSender = !self.message.contact;
+    BOOL isHomeUserSender = !self.message.fromPeer;
     
     [self.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     self.contentView.frame = self.bounds;
@@ -261,7 +265,9 @@
             //if message is received
             if (!isHomeUserSender)
             {
-                messageSenderName = [self.message.contact name];
+                HOPRolodexContact* contact = ((HOPIdentityContact*)[self.message.fromPeer.identityContacts anyObject]).rolodexContact;
+                messageSenderName = [contact name];
+//                messageSenderName = [self.message.contact name];
             }
             else
             {
@@ -355,7 +361,9 @@
             // show avatar
             if(!isHomeUserSender)
             {
-                 HOPAvatar* avatar = [self.message.contact getAvatarForWidth:@(40.0) height:@(40.0)];
+                HOPRolodexContact* contact = ((HOPIdentityContact*)[self.message.fromPeer.identityContacts anyObject]).rolodexContact;
+                HOPAvatar* avatar = [contact getAvatarForWidth:@(40.0) height:@(40.0)];
+                //HOPAvatar* avatar = [self.message.contact getAvatarForWidth:@(40.0) height:@(40.0)];
                 if (avatar && avatar.avatarImage && avatar.avatarImage.image)
                     avat = [UIImage imageWithData: avatar.avatarImage.image];
             }

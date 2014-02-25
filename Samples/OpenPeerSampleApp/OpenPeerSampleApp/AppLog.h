@@ -32,7 +32,7 @@
 #import <Foundation/Foundation.h>
 #import <OpenPeerSDK/HOPLogger.h>
 
-#define NSLog(...) AppLog([NSString stringWithUTF8String:__PRETTY_FUNCTION__], [NSString stringWithUTF8String:__FILE__], __LINE__, __VA_ARGS__)
+//#define NSLog(...) AppLog([NSString stringWithUTF8String:__PRETTY_FUNCTION__], [NSString stringWithUTF8String:__FILE__], __LINE__, __VA_ARGS__)
 
 #define OPLog(severity, level,...) AppLog2([NSString stringWithUTF8String:__PRETTY_FUNCTION__], [NSString stringWithUTF8String:__FILE__], __LINE__, severity, level, __VA_ARGS__)
 

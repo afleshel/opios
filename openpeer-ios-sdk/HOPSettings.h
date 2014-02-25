@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2014, SMB Phone Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,37 +29,26 @@
  
  */
 
-#import "HOPAvatar+External.h"
-#import "HOPAvatar_Internal.h"
-#import "HOPImage.h"
 
-#import "HOPModelManager.h"
+#import <Foundation/Foundation.h>
+#import "HOPProtocols.h"
 
-#import <UIKit/UIKit.h>
+/**
+ Singleton class to handle various app settings.
+ */
+@interface HOPSettings : NSObject
 
-@implementation HOPAvatar (External)
+/**
+ Returns singleton object of this class.
+ */
++ (id)sharedSettings;
+- (id) init __attribute__((unavailable("HOPSettings is singleton class.")));
 
-- (UIImage*) getImage
-{
-    UIImage* ret = [UIImage imageWithData:((HOPImage*)self.avatarImage).image];
-    
-    return ret;
-}
+- (void) setupWithDelegate:(id<HOPSettingsDelegate>) inDelegate;
+- (void) setup;
+- (BOOL) applySettings:(NSString*)jsonSettings;
+- (void) applyDefaults;
 
-- (void) storeImage:(UIImage*) inImage
-{
-    
-    if (inImage)
-    {
-        HOPImage* hopImage = (HOPImage*)[[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPImage"];
-    
-        NSData *imageData = UIImagePNGRepresentation(inImage);
-        hopImage.image = imageData;
-        hopImage.url = self.url;
-        //hopImage.avatar = self;
-        self.avatarImage = hopImage;
-        [[HOPModelManager sharedModelManager] saveContext];
-    }
-}
-
+- (void) storeSettingsFromDictionary:(NSDictionary*) inDictionary;
+- (void) storeSettingsFromPath:(NSString*) path;
 @end

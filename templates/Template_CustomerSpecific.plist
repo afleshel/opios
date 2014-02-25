@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>applicationId</key>
+	<string>&lt;-- insert application id --&gt;</string>
+	<key>applicationIdSharedSecret</key>
+	<string>&lt;-- insert application id secret obtained from the server --&gt;</string>
+	<key>applicationName</key>
+	<string>&lt;-- insert application name --&gt;</string>
+	<key>applicationImageURL</key>
+	<string>&lt;-- insert application image url --&gt;</string>
+	<key>applicationURL</key>
+	<string>&lt;-- insert application url --&gt;</string>
+	<key>APNS-UrbanAirShip</key>
+	<dict>
+		<key>masterAppSecretDev</key>
+		<string></string>
+		<key>masterAppSecret</key>
+		<string></string>
+		<key>developmentAppKey</key>
+		<string></string>
+		<key>developmentAppSecret</key>
+		<string></string>
+		<key>productionAppKey</key>
+		<string></string>
+		<key>productionAppSecret</key>
+		<string></string>
+		<key>apiPushURL</key>
+		<string></string>
+	</dict>
+</dict>
+</plist>

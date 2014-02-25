@@ -60,11 +60,25 @@
                         <action selector="actionProceedWithlogin:" destination="-1" eventType="touchUpInside" id="KbP-AK-3tp"/>
                     </connections>
                 </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4UM-hE-u9A">
+                    <rect key="frame" x="250" y="20" width="50" height="50"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="50" id="EMk-wA-8r7"/>
+                        <constraint firstAttribute="height" constant="50" id="jHE-yC-NNx"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                    <state key="normal" title="Start Logger" image="logger.png"/>
+                    <connections>
+                        <action selector="actionStartLogger:" destination="-1" eventType="touchUpInside" id="rwh-P0-agC"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="wYP-tb-xGL" firstAttribute="centerY" secondItem="1" secondAttribute="centerY" id="9hR-y8-BZs"/>
                 <constraint firstItem="YWp-Hl-K1F" firstAttribute="top" secondItem="BBu-64-FyA" secondAttribute="bottom" constant="19" id="E61-vB-G9P"/>
+                <constraint firstAttribute="trailing" secondItem="4UM-hE-u9A" secondAttribute="trailing" constant="20" symbolic="YES" id="GUZ-AV-3nS"/>
                 <constraint firstItem="BBu-64-FyA" firstAttribute="top" secondItem="wYP-tb-xGL" secondAttribute="bottom" constant="30" id="LdM-nF-IOt"/>
                 <constraint firstItem="YWp-Hl-K1F" firstAttribute="leading" secondItem="BBu-64-FyA" secondAttribute="leading" id="MZ0-aZ-PxK"/>
                 <constraint firstItem="wYP-tb-xGL" firstAttribute="centerX" secondItem="jcZ-PD-Nyo" secondAttribute="centerX" id="ORJ-sq-vgH"/>
@@ -74,6 +88,7 @@
                 <constraint firstAttribute="trailing" secondItem="jcZ-PD-Nyo" secondAttribute="trailing" id="kP2-JD-vbB"/>
                 <constraint firstItem="jcZ-PD-Nyo" firstAttribute="top" secondItem="1" secondAttribute="top" id="nao-dm-7ve"/>
                 <constraint firstItem="BBu-64-FyA" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="87" id="nck-WR-YTQ"/>
+                <constraint firstItem="4UM-hE-u9A" firstAttribute="top" secondItem="1" secondAttribute="top" constant="20" symbolic="YES" id="pTC-yI-H0g"/>
                 <constraint firstItem="jcZ-PD-Nyo" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="vT2-du-xjS"/>
             </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
@@ -84,5 +99,6 @@
         <image name="OpenPeerLogo.png" width="114" height="114"/>
         <image name="audio_call_incoming_accept_button.png" width="129" height="34"/>
         <image name="iPhone_background.png" width="320" height="460"/>
+        <image name="logger.png" width="64" height="64"/>
     </resources>
 </document>

@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2014, SMB Phone Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,37 +29,48 @@
  
  */
 
-#import "HOPAvatar+External.h"
-#import "HOPAvatar_Internal.h"
-#import "HOPImage.h"
 
-#import "HOPModelManager.h"
+#import <Foundation/Foundation.h>
+#include <openpeer/core/types.h>
+#include <openpeer/core/ISettings.h>
+#import "HOPProtocols.h"
 
-#import <UIKit/UIKit.h>
+using namespace openpeer;
+using namespace openpeer::core;
 
-@implementation HOPAvatar (External)
-
-- (UIImage*) getImage
+/**
+ Wrapper Class that creates settings object used in core.
+ */
+class OpenPeerSettingsDelegate : public ISettingsDelegate
 {
-    UIImage* ret = [UIImage imageWithData:((HOPImage*)self.avatarImage).image];
+protected:
+    id<HOPSettingsDelegate> settingsDelegate;
     
-    return ret;
-}
-
-- (void) storeImage:(UIImage*) inImage
-{
+    OpenPeerSettingsDelegate(id<HOPSettingsDelegate> settingsDelegate);
     
-    if (inImage)
-    {
-        HOPImage* hopImage = (HOPImage*)[[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPImage"];
+public:
     
-        NSData *imageData = UIImagePNGRepresentation(inImage);
-        hopImage.image = imageData;
-        hopImage.url = self.url;
-        //hopImage.avatar = self;
-        self.avatarImage = hopImage;
-        [[HOPModelManager sharedModelManager] saveContext];
-    }
-}
-
-@end
+    ~OpenPeerSettingsDelegate();
+    
+    /**
+     Create SettingsDelegateWrapper object packed in boost shared pointer.
+     @returns SettingsDelegateWrapper object boost shared object
+     */
+    static boost::shared_ptr<OpenPeerSettingsDelegate>  create(id<HOPSettingsDelegate> inSettingsDelegate);
+    
+    String getString(const char *key) const;
+    LONG getInt(const char *key) const;
+    ULONG getUInt(const char *key) const;
+    bool getBool(const char *key) const;
+    float getFloat(const char *key) const;
+    double getDouble(const char *key) const;
+    
+    void setString(const char *key,const char *value);
+    void setInt(const char *key,LONG value);
+    void setUInt(const char *key,ULONG value);
+    void setBool(const char *key,bool value);
+    void setFloat(const char *key,float value);
+    void setDouble(const char *key,double value);
+    
+    void clear(const char *key);
+};

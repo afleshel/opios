@@ -46,6 +46,7 @@
     boost::shared_ptr<OpenPeerStackDelegate> openPeerStackDelegatePtr;
     boost::shared_ptr<OpenPeerMediaEngineDelegate> openPeerMediaEngineDelegatePtr;
     //boost::shared_ptr<OpenPeerConversationThreadDelegate> openPeerConversationThreadDelegatePtr;
+    BOOL isReady;
 }
 
 

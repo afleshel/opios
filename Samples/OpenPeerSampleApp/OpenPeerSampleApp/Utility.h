@@ -50,4 +50,6 @@
 + (NSString *)hexadecimalStringForData:(NSData *)data;
 + (int) getNumberOfDeviceCameras;
 + (BOOL) hasCamera;
++ (BOOL) isValidURL: (NSString *) candidate;
++ (BOOL) isValidJSON:(NSString*) json;
 @end

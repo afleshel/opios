@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2014, SMB Phone Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,29 +29,17 @@
  
  */
 
-#import <Foundation/Foundation.h>
+#import <openpeer/core/types.h>
+#import "HOPSettings.h"
 
-//WARNING: If you got a linker error related to the strings below, please check if they are set correctly in the file CustomerSpecific.m
-extern NSString* const applicationId;
-extern NSString* const applicationIdSharedSecret;
+using namespace openpeer;
+using namespace openpeer::core;
 
-extern NSString* const applicationName;
-extern NSString* const applicationImageURL;
-extern NSString* const applicationURL;
+@interface HOPSettings ()
+{
+    boost::shared_ptr<ISettingsDelegate> openPeerSettingsDelegatePtr;
+}
 
-extern NSString* const outerFrameURL;
-extern NSString* const namespaceGrantServiceURL;
-extern NSString* const identityProviderDomain;
-extern NSString* const identityFederateBaseURI;
-extern NSString* const lockBoxServiceDomain;
-extern NSString* const defaultOutgoingTelnetServer;
-
-#ifdef APNS_ENABLED
-extern NSString* const masterAppSecretDev;
-extern NSString* const masterAppSecret;
-extern NSString* const developmentAppKey;
-extern NSString* const developmentAppSecret;
-extern NSString* const productionAppKey;
-extern NSString* const productionAppSecret;
-extern NSString* const apiPushURL;
-#endif
+- (void) deleteLocalDelegate;
+- (String) log:(NSString*) message;
+@end

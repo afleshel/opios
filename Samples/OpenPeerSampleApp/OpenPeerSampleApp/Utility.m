@@ -397,6 +397,7 @@ static const short _base64DecodingTable[256] = {
        [today year] == [massageDayOfDate year] &&
        [today era] == [massageDayOfDate era])
     {
+        //[df setDateFormat:@"hh:mm:ss aa"];
         [df setDateFormat:@"hh:mm aa"];
     }
     else
@@ -432,5 +433,27 @@ static const short _base64DecodingTable[256] = {
 + (BOOL) hasCamera
 {
     return [[AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo] count] > 0;
+}
+
++ (BOOL) isValidURL: (NSString *) candidate
+{
+    NSString *urlRegEx =
+    @"(http|https)://((\\w)*|([0-9]*)|([-|_])*)+([\\.|/]((\\w)*|([0-9]*)|([-|_])*))+";
+    NSPredicate *urlTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", urlRegEx];
+    return [urlTest evaluateWithObject:candidate];
+}
+
++ (BOOL) isValidJSON:(NSString *)json
+{
+    BOOL ret = NO;
+
+    if ([json length] > 0)
+    {
+        NSData *data = [json dataUsingEncoding:NSUTF8StringEncoding];
+        id jsonObj = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
+        ret = jsonObj != nil;
+    }
+    
+    return ret;
 }
 @end

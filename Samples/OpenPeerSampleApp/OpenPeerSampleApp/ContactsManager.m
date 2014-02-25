@@ -54,7 +54,6 @@
 #import <OpenpeerSDK/HOPPublicPeerFile.h>
 #import <OpenpeerSDK/HOPUtility.h>
 #import <AddressBook/AddressBook.h>
-#import "CustomerSpecific.h"
 
 @interface ContactsManager ()
 {

@@ -51,6 +51,29 @@ extern NSString * const archiveAssociatedIdentities;
 extern NSString * const archiveLastProfileUpdateTimestamp;
 extern NSString * const archiveReloginInfo;
 
+extern NSString * const archiveAppId;
+extern NSString * const archiveAppIdSharedSecret;
+extern NSString * const archiveAppName;
+extern NSString * const archiveAppImageURL;
+extern NSString * const archiveAppURL;
+extern NSString * const archiveAPNS;
+extern NSString * const archiveTelnetLogger;
+extern NSString * const archiveOutgoingTelnetLogger;
+extern NSString * const archiveStdOutLogger;
+extern NSString * const archiveEnabled;
+extern NSString * const archiveServer;
+extern NSString * const archiveColorized;
+
+#ifdef APNS_ENABLED
+extern NSString* const archiveMasterAppSecretDev;
+extern NSString* const archiveMasterAppSecret;
+extern NSString* const archiveDevelopmentAppKey;
+extern NSString* const archiveDevelopmentAppSecret;
+extern NSString* const archiveProductionAppKey;
+extern NSString* const archiveProductionAppSecret;
+extern NSString* const archiveAPIPushURL;
+#endif
+
 //Contact Profile xml tags
 extern NSString* const profileXmlTagProfile;
 extern NSString* const profileXmlTagName;

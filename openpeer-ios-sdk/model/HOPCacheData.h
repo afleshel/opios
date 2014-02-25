@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2014, SMB Phone Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -35,8 +35,8 @@
 
 @interface HOPCacheData : NSManagedObject
 
-@property (nonatomic, retain) NSString * path;
 @property (nonatomic, retain) NSString * data;
 @property (nonatomic, retain) NSNumber * expire;
+@property (nonatomic, retain) NSString * path;
 
 @end

@@ -37,7 +37,7 @@
 #import "Utility.h"
 #import <OpenpeerSDK/HOPIdentity.h>
 #import <OpenpeerSDK/HOPAccount.h>
-#import "CustomerSpecific.h"
+
 
 @interface WebLoginViewController()
 

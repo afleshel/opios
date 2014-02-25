@@ -73,5 +73,5 @@
  */
 + (NSString*) createAuthorizedApplicationID:(NSString*) applicationID applicationIDSharedSecret:(NSString*) applicationIDSharedSecret expires:(NSDate*) expires;
                                             
-                                        
+- (BOOL) isStackReady;
 @end

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>outerFrameURL</key>
+	<string>http://jsouter-v1-beta-1-i.hcs.io/identity.html?view=choose&amp;federated=false</string>
+	<key>identityProviderDomain</key>
+	<string>identity-v1-beta-1-i.hcs.io</string>
+	<key>identityFederateBaseURI</key>
+	<string>identity://identity-v1-beta-1-i.hcs.io/</string>
+	<key>namespaceGrantServiceURL</key>
+	<string>http://jsouter-v1-beta-1-i.hcs.io/grant.html</string>
+	<key>lockBoxServiceDomain</key>
+	<string>lockbox-v1-beta-1-i.hcs.io</string>
+	<key>archiveOutgoingTelnetLoggerServer</key>
+	<string>tcp-logger-v1-beta-1-i.hcs.io:8055</string>
+	<key>archiveTelnetLoggerServer</key>
+	<string>59999</string>
+	<key>openpeer/stack/bootstrapper-force-well-known-over-insecure-http</key>
+	<true/>
+	<key>openpeer/stack/bootstrapper-force-well-known-using-post</key>
+	<true/>
+</dict>
+</plist>

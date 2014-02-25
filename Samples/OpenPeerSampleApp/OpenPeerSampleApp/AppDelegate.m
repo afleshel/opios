@@ -56,7 +56,7 @@
     [self.window makeKeyAndVisible];
 
     [[OpenPeer sharedOpenPeer] setMainViewController:mainViewController];
-    [[OpenPeer sharedOpenPeer] setup];
+    [[OpenPeer sharedOpenPeer] preSetup];
 
 #ifdef APNS_ENABLED
     [[APNSManager sharedAPNSManager] prepareUrbanAirShip];
@@ -108,18 +108,32 @@
 #ifdef APNS_ENABLED
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-    NSString* hexString = [Utility hexadecimalStringForData:deviceToken];
-    
-    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Push notification deviceToken:%@",hexString);
+    if (deviceToken)
+    {
+        NSString* hexString = [Utility hexadecimalStringForData:deviceToken];
+        
+        if ([hexString length] > 0)
+        {
+            OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Push notification deviceToken:%@",hexString);
 
-    [[APNSManager sharedAPNSManager] registerDeviceToken:deviceToken];
-    [[APNSManager sharedAPNSManager] setDeviceToken:hexString];
-    [[OpenPeer sharedOpenPeer] setDeviceToken:hexString];
+            [[APNSManager sharedAPNSManager] registerDeviceToken:deviceToken];
+            [[APNSManager sharedAPNSManager] setDeviceToken:hexString];
+            [[OpenPeer sharedOpenPeer] setDeviceToken:hexString];
+        }
+        else
+        {
+            OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Failed device token conversion to hexadecimal string");
+        }
+    }
+    else
+    {
+        OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Device token is invalid.");
+    }
 }
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err
 {
-    OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Error in registration. Error: %@", err.description);
+    OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Error in registration. Error: %@", err.description);
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo

@@ -52,6 +52,29 @@ NSString * const archiveAssociatedIdentities = @"archiveAssociatedIdentities";
 NSString * const archiveLastProfileUpdateTimestamp = @"archiveLastProfileUpdateTimestamp";
 NSString * const archiveReloginInfo = @"archiveReloginInfo";
 
+NSString * const archiveAppId = @"applicationId";
+NSString * const archiveAppIdSharedSecret = @"applicationIdSharedSecret";
+NSString * const archiveAppName = @"applicationName";
+NSString * const archiveAppImageURL = @"applicationImageURL";
+NSString * const archiveAppURL = @"applicationURL";
+NSString * const archiveAPNS = @"APNS-UrbanAirShip";
+NSString * const archiveTelnetLogger = @"archiveTelnetLogger";
+NSString * const archiveOutgoingTelnetLogger = @"archiveOutgoingTelnetLogger";
+NSString * const archiveStdOutLogger = @"archiveStdOutLogger";
+NSString * const archiveEnabled = @"enabled";
+NSString * const archiveServer = @"Server";
+NSString * const archiveColorized = @"colorized";
+
+#ifdef APNS_ENABLED
+NSString* const archiveMasterAppSecretDev = @"masterAppSecretDev";
+NSString* const archiveMasterAppSecret = @"masterAppSecret";
+NSString* const archiveDevelopmentAppKey = @"developmentAppKey";
+NSString* const archiveDevelopmentAppSecret = @"developmentAppSecret";
+NSString* const archiveProductionAppKey = @"productionAppKey";
+NSString* const archiveProductionAppSecret = @"productionAppSecret";
+NSString* const archiveAPIPushURL = @"apiPushURL";
+#endif
+
 //Contact Profile xml tags
 NSString* const profileXmlTagProfile = @"profile";
 NSString* const profileXmlTagName = @"name";
@@ -88,9 +111,6 @@ NSString * const archiveRemoteSessionActivationMode = @"archiveRemoteSessionActi
 NSString * const archiveFaceDetectionMode = @"archiveFaceDetectionMode";
 NSString * const archiveRedialMode = @"archiveRedialMode";
 
-NSString * const archiveStdLogger = @"archiveStdLogger";
-NSString * const archiveTelnetLogger = @"archiveTelnetLogger";
-NSString * const archiveOutgoingTelnetLogger = @"archiveOutgoingTelnetLogger";
 NSString * const archiveModulesLogLevels = @"archiveModulesLogLevels";
 
 NSString * const moduleApplication = @"openpeer_application";
