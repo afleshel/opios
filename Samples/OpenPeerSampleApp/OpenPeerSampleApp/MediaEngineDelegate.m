@@ -31,7 +31,8 @@
 
 #import "MediaEngineDelegate.h"
 #import "SessionManager.h"
-
+#import <AVFoundation/AVFoundation.h>
+#import <OpenpeerSDK/HOPMediaEngine.h>
 @implementation MediaEngineDelegate
 
 - (void) onMediaEngineAudioRouteChanged:(HOPMediaEngineOutputAudioRoutes) audioRoute
@@ -53,5 +54,15 @@
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Video capture record has stopped.");
     dispatch_async(dispatch_get_main_queue(), ^{
     });
+}
+
+- (void) onMediaEngineAudioSessionInterruptionBegan
+{
+    [[HOPMediaEngine sharedInstance] pauseVoice:YES];
+}
+
+- (void) onMediaEngineAudioSessionInterruptionEnded
+{
+    [[HOPMediaEngine sharedInstance] pauseVoice:NO];
 }
 @end

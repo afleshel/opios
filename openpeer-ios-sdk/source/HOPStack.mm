@@ -58,14 +58,14 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     //Check if delegates are nil
     if (!stackDelegate || !mediaEngineDelegate)
     {
-        ZS_LOG_ERROR(Debug, [self log:@"Passed invalid delegate."]);
+        ZS_LOG_FATAL(Debug, [self log:@"Passed invalid delegate."]);
         [NSException raise:NSInvalidArgumentException format:@"Passed invalid delegate!"];
     }
     
     //Check if other parameters are valid
     if ( ([userAgent length] == 0 ) || ([deviceOs length] == 0 ) || ([system length] == 0 ) || ([deviceID length] == 0))
     {
-        ZS_LOG_ERROR(Debug, [self log:@"Passed invalid system information."]);
+        ZS_LOG_FATAL(Debug, [self log:@"Passed invalid system information."]);
         [NSException raise:NSInvalidArgumentException format:@"Invalid system information!"];
     }
     

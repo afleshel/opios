@@ -74,10 +74,12 @@ void OpenPeerMediaEngineDelegate::onMediaEngineAudioRouteChanged(IMediaEngine::O
 
 void OpenPeerMediaEngineDelegate::onMediaEngineAudioSessionInterruptionBegan()
 {
+    [mediaEngineDelegate onMediaEngineAudioSessionInterruptionBegan];
 }
 
 void OpenPeerMediaEngineDelegate::onMediaEngineAudioSessionInterruptionEnded()
 {
+    [mediaEngineDelegate onMediaEngineAudioSessionInterruptionEnded];
 }
 
 void OpenPeerMediaEngineDelegate::onMediaEngineFaceDetected()
