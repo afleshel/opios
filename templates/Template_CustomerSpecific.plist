@@ -7,11 +7,11 @@
 	<key>applicationIdSharedSecret</key>
 	<string>&lt;-- insert application id secret obtained from the server --&gt;</string>
 	<key>applicationName</key>
-	<string>&lt;-- insert application name --&gt;</string>
+	<string>&lt;-- insert the branded name of your application here --&gt;</string>
 	<key>applicationImageURL</key>
-	<string>&lt;-- insert application image url --&gt;</string>
+	<string>&lt;-- insert a url that loads a branded logo for your application (use https) --&gt;</string>
 	<key>applicationURL</key>
-	<string>&lt;-- insert application url --&gt;</string>
+	<string>&lt;-- insert a url of your choosing to find out more about the application --&gt;</string>
 	<key>APNS-UrbanAirShip</key>
 	<dict>
 		<key>masterAppSecretDev</key>

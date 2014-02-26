@@ -53,6 +53,9 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     return _sharedObject;
 }
 
+#define WARNING_THIS_METHOD_DOES_NOT_NEED_ALL_THESE_PARAMS_ANYMORE 1
+#define WARNING_THIS_METHOD_DOES_NOT_NEED_ALL_THESE_PARAMS_ANYMORE 2
+
 - (void) setupWithStackDelegate:(id<HOPStackDelegate>) stackDelegate mediaEngineDelegate:(id<HOPMediaEngineDelegate>) mediaEngineDelegate appID:(NSString*) appID appName:(NSString*) appName appImageURL:(NSString*) appImageURL appURL:(NSString*) appURL userAgent:(NSString*) userAgent deviceID:(NSString*) deviceID deviceOs:(NSString*) deviceOs system:(NSString*) system
 {
     //Check if delegates are nil
@@ -71,8 +74,8 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     
     [self createLocalDelegates:stackDelegate mediaEngineDelegate:mediaEngineDelegate];
     
-    IStack::singleton()->setup(openPeerStackDelegatePtr, openPeerMediaEngineDelegatePtr, [appID UTF8String], [appName UTF8String], [appImageURL UTF8String], [appURL UTF8String], [userAgent UTF8String], [deviceID UTF8String], [deviceOs UTF8String], [system UTF8String]);
-    
+    IStack::singleton()->setup(openPeerStackDelegatePtr, openPeerMediaEngineDelegatePtr);
+
     isReady = YES;
 }
 

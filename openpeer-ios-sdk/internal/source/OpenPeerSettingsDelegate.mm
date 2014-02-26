@@ -55,10 +55,45 @@ String OpenPeerSettingsDelegate::getString(const char *key) const
     
     NSString* strKey = [NSString stringWithUTF8String:key];
     NSString* value = nil;
-    
-    if ([strKey length] > 0)
-        value = [[NSUserDefaults standardUserDefaults] stringForKey:strKey];//[settingsDelegate getString:strKey];
-    
+
+    if ([strKey length] > 0) {
+               if ([strKey isEqualToString:@"openpeer/common/application-name"]) {
+          value = [[NSUserDefaults standardUserDefaults] stringForKey:@"applicationName"];
+        } else if ([strKey isEqualToString:@"openpeer/common/application-image-url"]) {
+          value = [[NSUserDefaults standardUserDefaults] stringForKey:@"applicationImageURL"];
+        } else if ([strKey isEqualToString:@"openpeer/common/application-url"]) {
+          value = [[NSUserDefaults standardUserDefaults] stringForKey:@"applicationURL"];
+
+#define WARNING_AUTHORIZED_APPLICATION_ID_NEEDS_TO_BE_PULLED_FROM_VALUE_GIVEN_OR_UPDATED_VIA_HOP_SDK 1
+#define WARNING_AUTHORIZED_APPLICATION_ID_NEEDS_TO_BE_PULLED_FROM_VALUE_GIVEN_OR_UPDATED_VIA_HOP_SDK 2
+        } else if ([strKey isEqualToString:@"openpeer/calculated/authorizated-application-id"]) {
+          value = [[NSUserDefaults standardUserDefaults] stringForKey:strKey];
+
+
+#define WARNING_ALL_THESE_VALUES_SHOULD_BE_CALCULATED_OR_MIXED_CALCULATED_AND_COMBINED_WITH_VALUES_GIVEN_TO_HOP_SDK 1
+#define WARNING_ALL_THESE_VALUES_SHOULD_BE_CALCULATED_OR_MIXED_CALCULATED_AND_COMBINED_WITH_VALUES_GIVEN_TO_HOP_SDK 2
+
+        // For values that are calculated, be careful to calculate and re-use
+        // previous calculations because they can be called often and you want
+        // want to have a rapid result. Likewise this rountine can be called
+        // from any thread so you must be able to perform the calculation on the
+        // thread or pre-calculate the value before this method could be called.
+
+        } else if ([strKey isEqualToString:@"openpeer/calculated/user-agent"]) {
+          value = [[NSUserDefaults standardUserDefaults] stringForKey:strKey];
+        } else if ([strKey isEqualToString:@"openpeer/calculated/device-id"]) {
+          value = [[NSUserDefaults standardUserDefaults] stringForKey:strKey];
+        } else if ([strKey isEqualToString:@"openpeer/calculated/os"]) {
+          value = [[NSUserDefaults standardUserDefaults] stringForKey:strKey];
+        } else if ([strKey isEqualToString:@"openpeer/calculated/system"]) {
+          value = [[NSUserDefaults standardUserDefaults] stringForKey:strKey];
+        } else {
+
+          // all other settings can be fetched from user defaults "as is"
+          value = [[NSUserDefaults standardUserDefaults] stringForKey:strKey];
+        }
+    }
+
     if ([value length] > 0)
         ret = [value UTF8String];
     else
