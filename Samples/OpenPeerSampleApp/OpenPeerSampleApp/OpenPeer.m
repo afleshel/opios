@@ -135,7 +135,10 @@
             NSString *filePath = [[NSBundle mainBundle] pathForResource:@"DefaultSettings" ofType:@"plist"];
             if ([filePath length] > 0)
             {
-                [[HOPSettings sharedSettings] storeSettingsFromPath:filePath];
+                NSDictionary* filteredDictionary = [[Settings sharedSettings] dictionaryWithRemovedAllInvalidEntriesForPath:filePath];
+                if ([filteredDictionary count] > 0)
+                    [[HOPSettings sharedSettings] storeSettingsFromDictionary:filteredDictionary];
+                //[[HOPSettings sharedSettings] storeSettingsFromPath:filePath];
             }
             
             isSetLoginSettings = [[Settings sharedSettings] isLoginSettingsSet];
@@ -148,7 +151,10 @@
             NSString* filePath = [[NSBundle mainBundle] pathForResource:@"CustomerSpecific" ofType:@"plist"];
             if ([filePath length] > 0)
             {
-                [[HOPSettings sharedSettings] storeSettingsFromPath:filePath];
+                NSDictionary* filteredDictionary = [[Settings sharedSettings] dictionaryWithRemovedAllInvalidEntriesForPath:filePath];
+                if ([filteredDictionary count] > 0)
+                    [[HOPSettings sharedSettings] storeSettingsFromDictionary:filteredDictionary];
+                //[[HOPSettings sharedSettings] storeSettingsFromPath:filePath];
             }
             isSetAppData = [[Settings sharedSettings] isAppDataSet];
         }

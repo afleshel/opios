@@ -591,4 +591,27 @@
         [ret addObject: archiveAppIdSharedSecret];
     return ret;
 }
+
+- (NSDictionary*) dictionaryWithRemovedAllInvalidEntriesForPath:(NSString*) path
+{
+    NSMutableDictionary* plistDictionary = [NSMutableDictionary dictionaryWithContentsOfFile:path];
+    
+    if ([plistDictionary count] > 0)
+    {
+        for (NSString* key in [plistDictionary allKeys])
+        {
+           id value = [plistDictionary objectForKey:key];
+            if ([value isKindOfClass:[NSString class]])
+            {
+                if ([((NSString*)value) rangeOfString:@"<--"].location != NSNotFound)
+                {
+                    [plistDictionary removeObjectForKey:key];
+                }
+            }
+            
+        }
+    }
+    
+    return plistDictionary;
+}
 @end
