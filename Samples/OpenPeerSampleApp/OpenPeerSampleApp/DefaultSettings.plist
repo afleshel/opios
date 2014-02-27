@@ -20,5 +20,7 @@
 	<true/>
 	<key>openpeer/stack/bootstrapper-force-well-known-using-post</key>
 	<true/>
+	<key>openpeer/stack/debug-force-messages-over-relay</key>
+	<true/>
 </dict>
 </plist>
