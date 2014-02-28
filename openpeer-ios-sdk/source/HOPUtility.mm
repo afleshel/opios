@@ -30,6 +30,8 @@
  */
 
 #import "HOPUtility.h"
+#include <zsLib/String.h>
+#import <openpeer/services/IHelper.h>
 
 @implementation HOPUtility
 
@@ -74,4 +76,17 @@
     return ret;
 }
 
++ (NSString*) hashString:(NSString*) stringToHash
+{
+    NSString* ret = nil;
+    
+    if ([stringToHash length] > 0)
+    {
+        zsLib::String value = openpeer::services::IHelper::convertToHex(*openpeer::services::IHelper::hash([stringToHash UTF8String]),FALSE);
+        if (value.size() > 0)
+            ret = [NSString stringWithUTF8String:value];
+    }
+    
+    return ret;
+}
 @end

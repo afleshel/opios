@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2012, SMB Phone Inc.
+ Copyright (c) 2014, SMB Phone Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,46 +29,20 @@
  
  */
 
-
 #import <Foundation/Foundation.h>
-#import "HOPProtocols.h"
 
-/**
- Singleton class to represent the openpeer stack.
- */
-@interface HOPStack : NSObject
+@interface UUIDManager : NSObject
+{
+    NSMutableDictionary        *keychainData;
+    NSMutableDictionary        *genericPasswordQuery;
+}
 
-/**
- Returns singleton object of this class.
- */
-+ (id)sharedStack;
-- (id) init __attribute__((unavailable("HOPStack is singleton class.")));
+@property (nonatomic, strong) NSMutableDictionary *keychainData;
+@property (nonatomic, strong) NSMutableDictionary *genericPasswordQuery;
 
-/**
- Initialise delegates objects required for communication between core and client.
- @param stackDelegate HOPStackDelegate delegate
- @param mediaEngineDelegate HOPMediaEngineDelegate delegate
++ (id) sharedUUIDManager;
 
- */
-- (void) setupWithStackDelegate:(id<HOPStackDelegate>) stackDelegate mediaEngineDelegate:(id<HOPMediaEngineDelegate>) mediaEngineDelegate;
-
-/**
- Shutdown stack.
- */
-- (void) shutdown;
-
-/** 
- Creates an authorized application ID from an application ID
- @param applicationID NSString applicationID obtained from Hookflash customer portal.
- @param applicationIDSharedSecret NSString Secret obtained from service provider
- @param expires NSDate date when authorized application ID expires
- @return NSString authorized application ID
- */
-+ (NSString*) createAuthorizedApplicationID:(NSString*) inAuthorizedApplicationID applicationIDSharedSecret:(NSString*) applicationIDSharedSecret expires:(NSDate*) expires;
-
-+ (long) getExpiryForAuthorizedApplicationID:(NSString*) inAuthorizedApplicationID;
-
-+ (BOOL) isAuthorizedApplicationExpiryWindowStillValid:(NSString*) inAuthorizedApplicationID minimumValidityWindowRequired:(long) minimumValidityWindowRequired;
-
-- (BOOL) isStackReady;
+- (NSString*) getUUID;
+- (void) saveUUID:(NSString*) uuid;
+- (NSString *)generateUUID;
 @end

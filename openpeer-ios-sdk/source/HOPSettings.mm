@@ -33,8 +33,13 @@
 #import "OpenPeerSettingsDelegate.h"
 #import <zsLib/Log.h>
 
+
 ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
+@interface HOPSettings ()
+
+@property (nonatomic, strong) NSString* authorizedApplicationId;
+@end
 @implementation HOPSettings
 
 + (id)sharedSettings
@@ -142,5 +147,22 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     return String("HOPSettings: ") + [message UTF8String];
 }
 
-
+- (void) storeAuthorizedApplicationId:(NSString*) inAuthorizedApplicationId
+{
+    @synchronized(self)
+    {
+        self.authorizedApplicationId = inAuthorizedApplicationId;
+        [[NSUserDefaults standardUserDefaults] setObject:inAuthorizedApplicationId forKey:@"openpeer/calculated/authorizated-application-id"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+}
+- (NSString*) getAuthorizedApplicationId
+{
+    @synchronized(self)
+    {
+        if ([self.authorizedApplicationId length] == 0)
+            self.authorizedApplicationId = [[NSUserDefaults standardUserDefaults] objectForKey:@"openpeer/calculated/authorizated-application-id"];
+    }
+    return self.authorizedApplicationId;
+}
 @end

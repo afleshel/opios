@@ -215,6 +215,7 @@ static const short _base64DecodingTable[256] = {
 	if ([platform isEqualToString:@"iPhone2,1"]) return @"iPhone 3GS";
     if ([platform hasPrefix:@"iPhone3"]) return @"iPhone 4";
     if ([platform hasPrefix:@"iPhone4"]) return @"iPhone 4S";
+    if ([platform hasPrefix:@"iPhone6,2"]) return @"iPhone 5S";
     
 	if ([platform isEqualToString:@"iPod1,1"])   return @"iPod Touch 1G";
 	if ([platform isEqualToString:@"iPod2,1"])   return @"iPod Touch 2G";

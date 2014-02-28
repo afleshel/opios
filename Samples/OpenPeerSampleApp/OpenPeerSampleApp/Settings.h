@@ -139,5 +139,8 @@ typedef enum
 - (BOOL) isAppSettingsSetForPath:(NSString*) path;
 
 - (NSArray*) getMissingAppSettings;
-- (NSDictionary*) dictionaryWithRemovedAllInvalidEntriesForPath:(NSString*) path;
+- (NSMutableDictionary*) dictionaryWithRemovedAllInvalidEntriesForPath:(NSString*) path;
+- (NSString*) createUserAgentFromDictionary:(NSMutableDictionary*) inDictionary;
+
+- (void) updateDeviceInfo;
 @end
