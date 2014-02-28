@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2012, SMB Phone Inc.
+ Copyright (c) 2014, SMB Phone Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,11 +29,16 @@
  
  */
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import "HOPProtocols.h"
 
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+@interface HOPBackgrounding : NSObject
 
-@property (strong, nonatomic) UIWindow *window;
++ (HOPBackgrounding*) sharedBackgrounding;
+- (id) init __attribute__((unavailable("HOPAccount is singleton class.")));
 
+- (void) notifyGoingToBackground:(id<HOPBackgroundingDelegate>) inDelegate;
+- (void) notifyGoingToBackgroundNow;
+- (void) notifyReturningFromBackground;
 @end

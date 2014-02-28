@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2012, SMB Phone Inc.
+ Copyright (c) 2014, SMB Phone Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,11 +29,41 @@
  
  */
 
-#import <UIKit/UIKit.h>
+#import "HOPBackgrounding_Internal.h"
 
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
 
-@property (strong, nonatomic) UIWindow *window;
+@implementation HOPBackgrounding
 
++ (HOPBackgrounding*) sharedBackgrounding
+{
+    static dispatch_once_t pred = 0;
+    __strong static id _sharedObject = nil;
+    dispatch_once(&pred, ^{
+        _sharedObject = [[self alloc] init];
+    });
+    return _sharedObject;
+}
+
+- (void) notifyGoingToBackground:(id<HOPBackgroundingDelegate>) inDelegate
+{
+    if (!openPeerBackgroundingDelegatePtr)
+        openPeerBackgroundingDelegatePtr = OpenPeerBackgroundingCompletionDelegate::create(inDelegate);
+    activeQuery = IBackgrounding::notifyGoingToBackground(openPeerBackgroundingDelegatePtr);
+}
+
+- (void) notifyGoingToBackgroundNow
+{
+    IBackgrounding::notifyGoingToBackgroundNow();
+}
+
+- (void) notifyReturningFromBackground
+{
+    IBackgrounding::notifyReturningFromBackground();
+}
+
+- (IBackgroundingQueryPtr) getActiveQuery
+{
+    return activeQuery;
+}
 @end

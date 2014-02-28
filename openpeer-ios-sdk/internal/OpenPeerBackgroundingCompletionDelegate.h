@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2012, SMB Phone Inc.
+ Copyright (c) 2014, SMB Phone Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,11 +29,32 @@
  
  */
 
-#import <UIKit/UIKit.h>
+
+#import <Foundation/Foundation.h>
+#include <openpeer/core/types.h>
+#include <openpeer/core/IBackgrounding.h>
+#import "HOPProtocols.h"
+
+using namespace openpeer;
+using namespace openpeer::core;
 
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
-
-@property (strong, nonatomic) UIWindow *window;
-
-@end
+class OpenPeerBackgroundingCompletionDelegate : public IBackgroundingCompletionDelegate
+{
+protected:
+    id<HOPBackgroundingDelegate> backgroundingDelegate;
+    
+    OpenPeerBackgroundingCompletionDelegate(id<HOPBackgroundingDelegate> backgroundingDelegate);
+    
+public:
+    
+    ~OpenPeerBackgroundingCompletionDelegate();
+    
+    /**
+     Create OpenPeerBackgroundingCompletionDelegate object packed in boost shared pointer.
+     @returns OpenPeerBackgroundingCompletionDelegate object boost shared object
+     */
+    static boost::shared_ptr<OpenPeerBackgroundingCompletionDelegate>  create(id<HOPBackgroundingDelegate> inBackgroundingDelegate);
+    
+    virtual void onBackgroundingReady(IBackgroundingQueryPtr query);
+};

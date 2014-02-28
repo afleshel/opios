@@ -218,6 +218,7 @@
 		87B541D11897E2440038D427 /* QRScannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D7E9C1897E19A005D8335 /* QRScannerViewController.m */; };
 		87B5EAC318683E4300D25C3B /* APNSManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87B5EABF18683E3B00D25C3B /* APNSManager.m */; };
 		87BFEDBA183A885C00A48821 /* AppConsts.m in Sources */ = {isa = PBXBuildFile; fileRef = 87BFEDB8183A885C00A48821 /* AppConsts.m */; };
+		87CCF64418C0FFDB000DF636 /* BackgroundingDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 87CCF64318C0FFDB000DF636 /* BackgroundingDelegate.m */; };
 		87D4BCDC18675368008C2D30 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 87272838166CBF9B0089CBB6 /* main.m */; };
 		87D4BCDD18675368008C2D30 /* AppLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 874FE10D17FD7FF0007A791B /* AppLog.m */; };
 		87D4BCDE18675368008C2D30 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8757E1CA1827E85700D7BDA1 /* TTTAttributedLabel.m */; };
@@ -865,6 +866,8 @@
 		87B5EABF18683E3B00D25C3B /* APNSManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APNSManager.m; sourceTree = "<group>"; };
 		87BFEDB8183A885C00A48821 /* AppConsts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppConsts.m; sourceTree = "<group>"; };
 		87BFEDB9183A885C00A48821 /* AppConsts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppConsts.h; sourceTree = "<group>"; };
+		87CCF64218C0FFDB000DF636 /* BackgroundingDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackgroundingDelegate.h; sourceTree = "<group>"; };
+		87CCF64318C0FFDB000DF636 /* BackgroundingDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BackgroundingDelegate.m; sourceTree = "<group>"; };
 		87D4BDD318675368008C2D30 /* openpeersample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = openpeersample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		87D4BDF318683B16008C2D30 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		87D4BDF518683B38008C2D30 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -1450,6 +1453,8 @@
 				87E3CCE6172A814F00084D2F /* IdentityLookupDelegate.m */,
 				87D91B2817687EFD00E46B66 /* CacheDelegate.h */,
 				87D91B2917687EFD00E46B66 /* CacheDelegate.m */,
+				87CCF64218C0FFDB000DF636 /* BackgroundingDelegate.h */,
+				87CCF64318C0FFDB000DF636 /* BackgroundingDelegate.m */,
 			);
 			name = Delegates;
 			sourceTree = "<group>";
@@ -2166,6 +2171,7 @@
 				8730D6E31832601C008D1D37 /* VideoCallViewController.m in Sources */,
 				87272859166CC45B0089CBB6 /* LoginManager.m in Sources */,
 				874AD9D1166CE6540095FE33 /* AccountDelegate.m in Sources */,
+				87CCF64418C0FFDB000DF636 /* BackgroundingDelegate.m in Sources */,
 				874AD9D5166CEAFB0095FE33 /* StackDelegate.m in Sources */,
 				874AD9D8166CEB390095FE33 /* MediaEngineDelegate.m in Sources */,
 				87BFEDBA183A885C00A48821 /* AppConsts.m in Sources */,

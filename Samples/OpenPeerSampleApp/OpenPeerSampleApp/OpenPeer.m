@@ -52,6 +52,7 @@
 #import "IdentityDelegate.h"
 #import "IdentityLookupDelegate.h"
 #import "CacheDelegate.h"
+#import "BackgroundingDelegate.h"
 //View controllers
 #import "MainViewController.h"
 
@@ -229,6 +230,7 @@
     self.identityDelegate = nil;
     self.identityLookupDelegate = nil;
     self.cacheDelegate = nil;
+    self.backgroundingDelegate = nil;
 }
 /**
  Method used for all delegates creation. Delegates will catch events from the Open Peer SDK and handle them properly.
@@ -243,6 +245,7 @@
     self.identityDelegate = [[IdentityDelegate alloc] init];
     self.identityDelegate.loginDelegate = self.mainViewController;
     self.identityLookupDelegate = [[IdentityLookupDelegate alloc] init];
+    self.backgroundingDelegate = [[BackgroundingDelegate alloc] init];
     //self.cacheDelegate = [[CacheDelegate alloc] init];
 }
 
