@@ -32,5 +32,7 @@
 	<string></string>
 	<key>openpeer/services/debug/only-allow-turn-to-relay-data-sent-to-specific-ips</key>
 	<string></string>
+	<key>openpeer/stack/finder-max-client-session-keep-alive-in-seconds</key>
+	<integer>0</integer>
 </dict>
 </plist>
