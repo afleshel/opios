@@ -20,6 +20,10 @@
 	<true/>
 	<key>openpeer/stack/bootstrapper-force-well-known-using-post</key>
 	<true/>
+	<key>openpeer/stack/finder-max-client-session-keep-alive-in-seconds</key>
+	<integer>0</integer>
+	<key>openpeer/stack/finder-connection-send-ping-keep-alive-after-in-seconds</key>
+	<integer>0</integer>
 	<key>openpeer/stack/debug/force-p2p-messages-over-finder-relay</key>
 	<false/>
 	<key>openpeer/services/debug/force-packets-over-turn</key>
@@ -32,7 +36,5 @@
 	<string></string>
 	<key>openpeer/services/debug/only-allow-turn-to-relay-data-sent-to-specific-ips</key>
 	<string></string>
-	<key>openpeer/stack/finder-max-client-session-keep-alive-in-seconds</key>
-	<integer>0</integer>
 </dict>
 </plist>
