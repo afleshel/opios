@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2012, SMB Phone Inc.
+ Copyright (c) 2014, SMB Phone Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,11 +29,16 @@
  
  */
 
-#import <UIKit/UIKit.h>
+#import "BackgroundingDelegate.h"
+#import "OpenPeer.h"
+@implementation BackgroundingDelegate
 
-
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
-
-@property (strong, nonatomic) UIWindow *window;
-
+- (void)onBackgroundingReady
+{
+    dispatch_async(dispatch_get_main_queue(), ^
+    {
+        [[UIApplication sharedApplication] endBackgroundTask:[[OpenPeer sharedOpenPeer] backgroundingTaskId]];
+        [[OpenPeer sharedOpenPeer] setBackgroundingTaskId:UIBackgroundTaskInvalid];
+    });
+}
 @end

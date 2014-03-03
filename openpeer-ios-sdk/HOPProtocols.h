@@ -146,3 +146,9 @@
 - (void) clearForKey:(NSString*) key;
 */
 @end
+
+@protocol HOPBackgroundingDelegate <NSObject>
+
+- (void) onBackgroundingReady;
+
+@end

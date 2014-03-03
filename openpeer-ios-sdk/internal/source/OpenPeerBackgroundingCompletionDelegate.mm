@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2012, SMB Phone Inc.
+ Copyright (c) 2014, SMB Phone Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,11 +29,36 @@
  
  */
 
-#import <UIKit/UIKit.h>
+#import "OpenPeerBackgroundingCompletionDelegate.h"
+#import <openpeer/core/ILogger.h>
+#import "HOPBackgrounding_Internal.h"
 
+ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+OpenPeerBackgroundingCompletionDelegate::OpenPeerBackgroundingCompletionDelegate(id<HOPBackgroundingDelegate> inBackgroundingDelegate)
+{
+    backgroundingDelegate = inBackgroundingDelegate;
+}
 
-@property (strong, nonatomic) UIWindow *window;
+boost::shared_ptr<OpenPeerBackgroundingCompletionDelegate> OpenPeerBackgroundingCompletionDelegate::create(id<HOPBackgroundingDelegate> inBackgroundingDelegate)
+{
+    return boost::shared_ptr<OpenPeerBackgroundingCompletionDelegate> (new OpenPeerBackgroundingCompletionDelegate(inBackgroundingDelegate));
+}
 
-@end
+OpenPeerBackgroundingCompletionDelegate::~OpenPeerBackgroundingCompletionDelegate()
+{
+    ZS_LOG_DEBUG(zsLib::String("SDK - OpenPeerBackgroundingCompletionDelegate destructor is called"));
+}
+
+void OpenPeerBackgroundingCompletionDelegate::onBackgroundingReady(IBackgroundingQueryPtr query)
+{
+    BOOL isActiveQuery = NO;
+    IBackgroundingQueryPtr active = [[HOPBackgrounding sharedBackgrounding] getActiveQuery];
+    if (active)
+      isActiveQuery = active->getID() <= query->getID();
+    
+    if (isActiveQuery)
+    {
+        [backgroundingDelegate onBackgroundingReady];
+    }
+}

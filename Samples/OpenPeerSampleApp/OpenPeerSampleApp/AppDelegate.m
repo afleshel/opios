@@ -34,7 +34,8 @@
 #import "MainViewController.h"
 #import "LoginManager.h"
 #import "Utility.h"
-
+#import <OpenPeerSDK/HOPBackgrounding.h>
+#import "BackgroundingDelegate.h"
 #ifdef APNS_ENABLED
 #import "APNSManager.h"
 #endif
@@ -74,6 +75,8 @@
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+    
+    
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
@@ -83,6 +86,23 @@
     
     [[OpenPeer sharedOpenPeer] setAppEnteredBackground:YES];
     [[OpenPeer sharedOpenPeer] setAppEnteredForeground:NO];
+    
+    UIBackgroundTaskIdentifier bgTask = UIBackgroundTaskInvalid;
+    
+    bgTask = [application beginBackgroundTaskWithExpirationHandler:^
+    {
+        [[HOPBackgrounding sharedBackgrounding]notifyGoingToBackgroundNow];
+        
+        [application endBackgroundTask:bgTask];
+    }];
+    
+    [[OpenPeer sharedOpenPeer] setBackgroundingTaskId:bgTask];
+    
+    // Start the long-running task and return immediately.
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
+    {
+        [[HOPBackgrounding sharedBackgrounding] notifyGoingToBackground:[[OpenPeer sharedOpenPeer] backgroundingDelegate]];
+    });
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -92,6 +112,8 @@
     {
         [[OpenPeer sharedOpenPeer] setAppEnteredForeground:YES];
         [[OpenPeer sharedOpenPeer] setAppEnteredBackground:NO];
+        
+        [[HOPBackgrounding sharedBackgrounding]notifyReturningFromBackground];
     }
 }
 
