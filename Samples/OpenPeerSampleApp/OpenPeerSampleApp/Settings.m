@@ -34,6 +34,9 @@
 #import "OpenPeer.h"
 #import "Logger.h"
 #import "SBJsonParser.h"
+#import "Utility.h"
+#import <OpenPeerSDK/HOPSettings.h>
+#import <OpenPeerSDK/HOPUtility.h>
 
 @interface Settings ()
 
@@ -592,7 +595,82 @@
     return ret;
 }
 
-- (NSDictionary*) dictionaryWithRemovedAllInvalidEntriesForPath:(NSString*) path
+- (NSMutableDictionary*) dictionaryForJSONString:(NSString*) jsonString
+{
+    NSMutableDictionary* ret = nil;
+    SBJsonParser* parser = [[SBJsonParser alloc] init];
+    NSDictionary* inputDictionary = [parser objectWithString: jsonString];
+    
+    if ([inputDictionary count] > 0 && [inputDictionary objectForKey:@"root"] != nil)
+    {
+        ret = [NSMutableDictionary dictionaryWithDictionary:[inputDictionary objectForKey:@"root"]];
+        if (ret)
+            [self createUserAgentFromDictionary:ret];
+    }
+    
+    return ret;
+}
+
+- (NSString*) createUserAgentFromDictionary:(NSMutableDictionary*) inDictionary
+{
+    NSString* ret = nil;
+    if ([inDictionary count] > 0)
+    {
+        NSString* temp = [inDictionary objectForKey: @"userAgent"];
+        if ([temp length] > 0)
+        {
+            ret = @"";
+            NSArray* partsOfString = [temp componentsSeparatedByString:@"$"];
+            for (NSString* str in partsOfString)
+            {
+                NSString* toAppend = @"";
+                if ([str compare:@"appName"] == NSOrderedSame)
+                {
+                    toAppend = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"];
+                }
+                else if ([str compare:@"appVersion"] == NSOrderedSame)
+                {
+                    toAppend = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+                }
+                else if ([str compare:@"systemOs"] == NSOrderedSame)
+                {
+                    toAppend = [[UIDevice currentDevice] systemName];
+                }
+                else if ([str compare:@"versionOs"] == NSOrderedSame)
+                {
+                    toAppend = [[UIDevice currentDevice] systemVersion];
+                }
+                else if ([str compare:@"deviceModel"] == NSOrderedSame)
+                {
+                    toAppend = [[UIDevice currentDevice] model];
+                    
+                    if ([toAppend hasPrefix:@"iPhone"] || [toAppend hasPrefix:@"iPod"])
+                        toAppend = @"iPhone";
+                    else if ([toAppend hasPrefix:@"iPad"])
+                        toAppend = @"iPad";
+                }
+                else if ([str compare:@"developerID"] == NSOrderedSame)
+                {
+                    toAppend = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"Hookflash Developer ID"];
+                }
+                else
+                {
+                    toAppend = str;
+                }
+                
+                ret = [ret stringByAppendingString:toAppend];
+            }
+            
+            if ([ret length] > 0)
+                [inDictionary setObject:ret forKey:@"openpeer/calculated/user-agent"];
+            
+            [inDictionary removeObjectForKey:@"userAgent"];
+        }
+    }
+    return ret;
+}
+
+- (NSMutableDictionary*) dictionaryWithRemovedAllInvalidEntriesForPath:(NSString*) path
 {
     NSMutableDictionary* plistDictionary = [NSMutableDictionary dictionaryWithContentsOfFile:path];
     
@@ -613,5 +691,30 @@
     }
     
     return plistDictionary;
+}
+
+- (void) updateDeviceInfo
+{
+    NSString* deviceId = [[NSUserDefaults standardUserDefaults] objectForKey:@"openpeer/calculated/device-id"];//keyOpenPeerUser];
+    if ([deviceId length] == 0)
+    {
+        deviceId = [HOPUtility hashString:[Utility getGUIDstring]];
+        [[NSUserDefaults standardUserDefaults] setObject:deviceId forKey:@"openpeer/calculated/device-id"];
+    }
+    
+    NSString* str = [Utility getDeviceOs];
+    if ([str length] > 0)
+        [[NSUserDefaults standardUserDefaults] setObject:str forKey:@"openpeer/calculated/os"];
+    
+    NSString* system = [Utility getPlatform];
+    if ([system length] > 0)
+        [[NSUserDefaults standardUserDefaults] setObject:str forKey:@"openpeer/calculated/system"];
+    
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"openpeer/calculated/user-agent"] length] == 0)
+    {
+        NSString* userAgent = [Utility getUserAgentName];
+        if ([userAgent length] > 0)
+            [[NSUserDefaults standardUserDefaults] setObject:str forKey:@"openpeer/calculated/user-agent"];
+    }
 }
 @end

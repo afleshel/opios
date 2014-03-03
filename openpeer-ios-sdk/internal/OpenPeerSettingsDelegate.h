@@ -48,6 +48,9 @@ protected:
     
     OpenPeerSettingsDelegate(id<HOPSettingsDelegate> settingsDelegate);
     
+    NSMutableDictionary* disctionarySettings;
+    
+    NSString* objectFoKey(NSString* key) const;
 public:
     
     ~OpenPeerSettingsDelegate();

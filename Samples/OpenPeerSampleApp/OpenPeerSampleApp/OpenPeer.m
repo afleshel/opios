@@ -87,6 +87,7 @@
         NSDate* expiry = [[NSDate date] dateByAddingTimeInterval:(30 * 24 * 60 * 60)];
         
         _authorizedApplicationId = [HOPStack createAuthorizedApplicationID:[[NSUserDefaults standardUserDefaults] stringForKey: @"applicationId"] applicationIDSharedSecret:[[NSUserDefaults standardUserDefaults] stringForKey: @"applicationIdSharedSecret"] expires:expiry];
+        [[NSUserDefaults standardUserDefaults] synchronize];
     }
     return _authorizedApplicationId;
 }
@@ -100,9 +101,15 @@
         {
             _deviceId = [Utility getGUIDstring];
             [[NSUserDefaults standardUserDefaults] setObject:_deviceId forKey:keyOpenPeerUser];
+            [[NSUserDefaults standardUserDefaults] synchronize];
         }
     }
     return _deviceId;
+}
+- (void) refreshAuthorizedApplicationId
+{
+    self.authorizedApplicationId = nil;
+    [[HOPSettings sharedSettings] storeAuthorizedApplicationId:[self authorizedApplicationId]];
 }
 
 - (void) preSetup
@@ -145,19 +152,21 @@
         }
         
         //If not already set, set default app data
-        BOOL isSetAppData = [[Settings sharedSettings] isAppDataSet];
+        BOOL isSetAppData = NO;//[[Settings sharedSettings] isAppDataSet];
         if (!isSetAppData)
         {
             NSString* filePath = [[NSBundle mainBundle] pathForResource:@"CustomerSpecific" ofType:@"plist"];
             if ([filePath length] > 0)
             {
-                NSDictionary* filteredDictionary = [[Settings sharedSettings] dictionaryWithRemovedAllInvalidEntriesForPath:filePath];
+                NSMutableDictionary* filteredDictionary = [[Settings sharedSettings] dictionaryWithRemovedAllInvalidEntriesForPath:filePath];
+                [[Settings sharedSettings] createUserAgentFromDictionary:filteredDictionary];
                 if ([filteredDictionary count] > 0)
                     [[HOPSettings sharedSettings] storeSettingsFromDictionary:filteredDictionary];
-                //[[HOPSettings sharedSettings] storeSettingsFromPath:filePath];
             }
             isSetAppData = [[Settings sharedSettings] isAppDataSet];
         }
+        
+         [[Settings sharedSettings] updateDeviceInfo];
         
 #ifdef DEBUG
         //Show QR scanner if user wants to change settings by reading QR code
@@ -168,6 +177,8 @@
     }
     else
     {
+        [[Settings sharedSettings] updateDeviceInfo];
+        
         [self setup];
         //Set log levels and start logging
         [Logger startAllSelectedLoggers];
@@ -180,6 +191,11 @@
  */
 - (void) setup
 {
+    //If authorized application id is missing, generate it 
+    if ([[[HOPSettings sharedSettings] getAuthorizedApplicationId] length] == 0)
+        [[HOPSettings sharedSettings] storeAuthorizedApplicationId:[[OpenPeer sharedOpenPeer] authorizedApplicationId]];
+    long secondsTillExpire = [HOPStack getExpiryForAuthorizedApplicationID:[[HOPSettings sharedSettings] getAuthorizedApplicationId]];
+    [NSTimer scheduledTimerWithTimeInterval:secondsTillExpire target:self selector:@selector(refreshAuthorizedApplicationId) userInfo:nil repeats:NO];
 #ifdef DEBUG
     NSArray* missingFields = [[Settings sharedSettings] getMissingAppSettings];
     
@@ -206,7 +222,7 @@
     if (![[HOPStack sharedStack] isStackReady])
     {
         //Init openpeer stack and set created delegates
-        [[HOPStack sharedStack] setupWithStackDelegate:self.stackDelegate mediaEngineDelegate:self.mediaEngineDelegate appID: self.authorizedApplicationId appName:[[NSUserDefaults standardUserDefaults] stringForKey: @"applicationName"] appImageURL:[[NSUserDefaults standardUserDefaults] stringForKey: @"applicationImageURL"]  appURL:[[NSUserDefaults standardUserDefaults] stringForKey: @"applicationURL"] userAgent:[Utility getUserAgentName] deviceID:self.deviceId deviceOs:[Utility getDeviceOs] system:[Utility getPlatform]];
+        [[HOPStack sharedStack] setupWithStackDelegate:self.stackDelegate mediaEngineDelegate:self.mediaEngineDelegate];
     }
     
     //Start with login procedure and display login view

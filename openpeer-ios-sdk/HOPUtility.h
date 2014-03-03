@@ -37,4 +37,6 @@
 + (NSString*) getContactIdFromURI:(NSString*) identityURI;
 + (BOOL) isBaseIdentityURI:(NSString*) identityURI;
 
++ (NSString*) hashString:(NSString*) stringToHash;
+
 @end

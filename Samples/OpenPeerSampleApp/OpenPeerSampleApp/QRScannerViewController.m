@@ -120,7 +120,10 @@
                 //Check if JSON is valid
                 if ([Utility isValidJSON:str])
                 {
-                    [[HOPSettings sharedSettings] applySettings:str];
+                    //[[HOPSettings sharedSettings] applySettings:str];
+                    NSDictionary* settings = [[Settings sharedSettings] dictionaryForJSONString:str];
+                    if (settings)
+                        [[HOPSettings sharedSettings] storeSettingsFromDictionary:settings];
                     [self actionProceedWithlogin:nil];
                 }
                 else
@@ -247,13 +250,16 @@
         
         //Apply downloaded settings
         if ([strJSON length] > 0)
-            isSet = [[HOPSettings sharedSettings] applySettings:strJSON];
+        {
+            //isSet = [[HOPSettings sharedSettings] applySettings:strJSON];
+            NSDictionary* settings = [[Settings sharedSettings] dictionaryForJSONString:strJSON];
+            [[HOPSettings sharedSettings] storeSettingsFromDictionary:settings];
+        }
         
         //If set remove scanner and proceed with app setup
         if (isSet)
         {
-            [self.view removeFromSuperview];
-            [[OpenPeer sharedOpenPeer] setup];
+            [self actionProceedWithlogin:nil];
         }
         else
         {

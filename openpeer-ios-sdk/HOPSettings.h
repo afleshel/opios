@@ -51,4 +51,6 @@
 
 - (void) storeSettingsFromDictionary:(NSDictionary*) inDictionary;
 - (void) storeSettingsFromPath:(NSString*) path;
+- (void) storeAuthorizedApplicationId:(NSString*) inAuthorizedApplicationId;
+- (NSString*) getAuthorizedApplicationId;
 @end
