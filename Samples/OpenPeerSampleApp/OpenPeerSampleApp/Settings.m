@@ -712,8 +712,5 @@
         if ([userAgent length] > 0)
             [[NSUserDefaults standardUserDefaults] setObject:str forKey:@"openpeer/calculated/user-agent"];
     }
-    
-    if ([[[HOPSettings sharedSettings] getAuthorizedApplicationId] length] == 0)
-        [[HOPSettings sharedSettings] storeAuthorizedApplicationId:[[OpenPeer sharedOpenPeer] authorizedApplicationId]];
 }
 @end

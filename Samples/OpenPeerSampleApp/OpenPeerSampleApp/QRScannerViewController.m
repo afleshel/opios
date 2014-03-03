@@ -259,8 +259,7 @@
         //If set remove scanner and proceed with app setup
         if (isSet)
         {
-            [self.view removeFromSuperview];
-            [[OpenPeer sharedOpenPeer] setup];
+            [self actionProceedWithlogin:nil];
         }
         else
         {

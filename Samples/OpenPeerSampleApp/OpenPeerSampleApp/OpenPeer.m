@@ -183,9 +183,6 @@
         //Set log levels and start logging
         [Logger startAllSelectedLoggers];
     }
-    
-    long secondsTillExpire = [HOPStack getExpiryForAuthorizedApplicationID:[[HOPSettings sharedSettings] getAuthorizedApplicationId]];
-    [NSTimer scheduledTimerWithTimeInterval:secondsTillExpire target:self selector:@selector(refreshAuthorizedApplicationId) userInfo:nil repeats:NO];
 }
 
 /**
@@ -194,6 +191,11 @@
  */
 - (void) setup
 {
+    //If authorized application id is missing, generate it 
+    if ([[[HOPSettings sharedSettings] getAuthorizedApplicationId] length] == 0)
+        [[HOPSettings sharedSettings] storeAuthorizedApplicationId:[[OpenPeer sharedOpenPeer] authorizedApplicationId]];
+    long secondsTillExpire = [HOPStack getExpiryForAuthorizedApplicationID:[[HOPSettings sharedSettings] getAuthorizedApplicationId]];
+    [NSTimer scheduledTimerWithTimeInterval:secondsTillExpire target:self selector:@selector(refreshAuthorizedApplicationId) userInfo:nil repeats:NO];
 #ifdef DEBUG
     NSArray* missingFields = [[Settings sharedSettings] getMissingAppSettings];
     
