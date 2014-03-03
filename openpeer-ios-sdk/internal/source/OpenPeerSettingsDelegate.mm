@@ -37,7 +37,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
 OpenPeerSettingsDelegate::OpenPeerSettingsDelegate(id<HOPSettingsDelegate> inSettingsDelegate)
 {
-    disctionarySettings = [[NSMutableDictionary alloc] init];
+    dictionarySettings = [[NSMutableDictionary alloc] init];
     settingsDelegate = inSettingsDelegate;
 }
 
@@ -53,14 +53,20 @@ OpenPeerSettingsDelegate::~OpenPeerSettingsDelegate()
 
 NSString* OpenPeerSettingsDelegate::objectFoKey(NSString* key) const
 {
-    NSString* value = [disctionarySettings objectForKey:key];
-    if ([value length] == 0)
-    {
-        value = [[NSUserDefaults standardUserDefaults] stringForKey:key];
-        [[NSUserDefaults standardUserDefaults] setObject:value forKey:key];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+    NSString* value = nil;
+
+    @synchronized(dictionarySettings) {
+        value = [dictionarySettings objectForKey:key];
+        if ([value length] == 0) {
+          value = [[NSUserDefaults standardUserDefaults] stringForKey:key];
+          if ([value length] != 0) {
+              [dictionarySettings setObject:value forKey:key];
+          } else {
+              [dictionarySettings setObject:@"" forKey:key];
+          }
+        }
     }
-    
+
     return value;
 }
 
@@ -170,7 +176,9 @@ void OpenPeerSettingsDelegate::setString(const char *key,const char *value)
         }
         else
         {
-            [disctionarySettings setObject:strValue forKey:strKey];
+            @synchronized (dictionarySettings) {
+              [dictionarySettings setObject:strValue forKey:strKey];
+            }
             [[NSUserDefaults standardUserDefaults] setObject:strValue forKey:strKey];
             [[NSUserDefaults standardUserDefaults] synchronize];
         }
