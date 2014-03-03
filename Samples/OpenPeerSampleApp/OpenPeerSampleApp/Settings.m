@@ -616,7 +616,7 @@
     NSString* ret = nil;
     if ([inDictionary count] > 0)
     {
-        NSString* temp = [inDictionary objectForKey: @"openpeer/common/user-agent"];
+        NSString* temp = [inDictionary objectForKey: @"userAgent"];
         if ([temp length] > 0)
         {
             ret = @"";
@@ -658,7 +658,9 @@
             }
             
             if ([ret length] > 0)
-                [inDictionary setObject:ret forKey:@"openpeer/common/user-agent"];
+                [inDictionary setObject:ret forKey:@"openpeer/calculated/user-agent"];
+            
+            [inDictionary removeObjectForKey:@"userAgent"];
         }
     }
     return ret;
@@ -704,9 +706,12 @@
     if ([system length] > 0)
         [[NSUserDefaults standardUserDefaults] setObject:str forKey:@"openpeer/calculated/system"];
     
-    NSString* userAgent = [Utility getUserAgentName];
-    if ([userAgent length] > 0)
-        [[NSUserDefaults standardUserDefaults] setObject:str forKey:@"openpeer/calculated/user-agent"];
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"openpeer/calculated/user-agent"] length] == 0)
+    {
+        NSString* userAgent = [Utility getUserAgentName];
+        if ([userAgent length] > 0)
+            [[NSUserDefaults standardUserDefaults] setObject:str forKey:@"openpeer/calculated/user-agent"];
+    }
     
     if ([[[HOPSettings sharedSettings] getAuthorizedApplicationId] length] == 0)
         [[HOPSettings sharedSettings] storeAuthorizedApplicationId:[[OpenPeer sharedOpenPeer] authorizedApplicationId]];
