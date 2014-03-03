@@ -595,6 +595,22 @@
     return ret;
 }
 
+- (NSMutableDictionary*) dictionaryForJSONString:(NSString*) jsonString
+{
+    NSMutableDictionary* ret = nil;
+    SBJsonParser* parser = [[SBJsonParser alloc] init];
+    NSDictionary* inputDictionary = [parser objectWithString: jsonString];
+    
+    if ([inputDictionary count] > 0 && [inputDictionary objectForKey:@"root"] != nil)
+    {
+        ret = [NSMutableDictionary dictionaryWithDictionary:[inputDictionary objectForKey:@"root"]];
+        if (ret)
+            [self createUserAgentFromDictionary:ret];
+    }
+    
+    return ret;
+}
+
 - (NSString*) createUserAgentFromDictionary:(NSMutableDictionary*) inDictionary
 {
     NSString* ret = nil;

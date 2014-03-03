@@ -140,6 +140,7 @@ typedef enum
 
 - (NSArray*) getMissingAppSettings;
 - (NSMutableDictionary*) dictionaryWithRemovedAllInvalidEntriesForPath:(NSString*) path;
+- (NSMutableDictionary*) dictionaryForJSONString:(NSString*) jsonString;
 - (NSString*) createUserAgentFromDictionary:(NSMutableDictionary*) inDictionary;
 
 - (void) updateDeviceInfo;
