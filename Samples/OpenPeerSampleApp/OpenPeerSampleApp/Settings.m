@@ -624,7 +624,11 @@
             for (NSString* str in partsOfString)
             {
                 NSString* toAppend = @"";
-                if ([str compare:@"appVersion"] == NSOrderedSame)
+                if ([str compare:@"appName"] == NSOrderedSame)
+                {
+                    toAppend = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"];
+                }
+                else if ([str compare:@"appVersion"] == NSOrderedSame)
                 {
                     toAppend = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
                 }
