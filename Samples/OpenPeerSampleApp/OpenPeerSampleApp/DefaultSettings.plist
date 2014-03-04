@@ -26,6 +26,8 @@
 	<integer>0</integer>
 	<key>openpeer/stack/debug/force-p2p-messages-over-finder-relay</key>
 	<false/>
+	<key>openpeer/services/turn-candidates-must-remain-alive-after-ice-wake-up-in-seconds</key>
+	<integer>600</integer>
 	<key>openpeer/services/debug/force-packets-over-turn</key>
 	<false/>
 	<key>openpeer/services/debug/force-turn-to-use-tcp</key>
