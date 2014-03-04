@@ -39,6 +39,9 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 @interface HOPSettings ()
 
 @property (nonatomic, strong) NSString* authorizedApplicationId;
+@property (nonatomic, strong) NSMutableDictionary* mappingDictionary;
+
+- (id) initSingleton;
 @end
 @implementation HOPSettings
 
@@ -47,11 +50,31 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     static dispatch_once_t pred = 0;
     __strong static id _sharedObject = nil;
     dispatch_once(&pred, ^{
-        _sharedObject = [[self alloc] init];
+        _sharedObject = [[self alloc] initSingleton];
     });
     return _sharedObject;
 }
 
+- (id) initSingleton
+{
+    self = [super init];
+    if (self)
+    {
+        NSString *filePath = nil;
+        NSBundle* bundle = [NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:@"OpenPeerDataModel" ofType:@"bundle"]];
+        if (bundle)
+            filePath = [bundle pathForResource:@"KeyMappings" ofType:@"plist"];
+        if ([filePath length] > 0)
+        {
+            self.mappingDictionary = [NSMutableDictionary dictionaryWithContentsOfFile:filePath];
+        }
+        else
+        {
+            self.mappingDictionary = [[NSMutableDictionary alloc] init];
+        }
+    }
+    return self;
+}
 - (void) setupWithDelegate:(id<HOPSettingsDelegate>) inDelegate
 {
     openPeerSettingsDelegatePtr = OpenPeerSettingsDelegate::create(inDelegate);
@@ -99,9 +122,12 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
         Class doubleClass = [[NSNumber numberWithDouble:0] class];
         Class integerClass = [[NSNumber numberWithInteger:0] class];
         
-        for (NSString* key in [inDictionary allKeys])
+        for (NSString* tempKey in [inDictionary allKeys])
         {
-            id value = [inDictionary objectForKey:key];
+            id value = [inDictionary objectForKey:tempKey];
+            
+            NSString* key = [[self.mappingDictionary objectForKey:tempKey] length] == 0 ? tempKey : [self.mappingDictionary objectForKey:tempKey];
+
             if ([value isKindOfClass:[NSDictionary class]])
             {
                 [self storeSettingsFromDictionary:value];
