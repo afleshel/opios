@@ -49,6 +49,7 @@ protected:
     OpenPeerSettingsDelegate(id<HOPSettingsDelegate> settingsDelegate);
     
     NSMutableDictionary* dictionarySettings;
+    NSString* authorizedApplicationId;
     
     NSString* objectFoKey(NSString* key) const;
 public:
@@ -76,4 +77,6 @@ public:
     void setDouble(const char *key,double value);
     
     void clear(const char *key);
+    
+    void addSettingWithKey(NSString* inSetting, NSString* key);
 };

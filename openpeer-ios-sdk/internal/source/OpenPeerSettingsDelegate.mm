@@ -258,3 +258,10 @@ void OpenPeerSettingsDelegate::clear(const char *key)
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
 }
+
+void OpenPeerSettingsDelegate::addSettingWithKey(NSString* inSetting, NSString* key)
+{
+    if ([inSetting length] > 0 && [key length] >0)
+        [dictionarySettings setObject:inSetting forKey:key];
+}
+
