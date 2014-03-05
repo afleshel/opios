@@ -12,6 +12,12 @@
 	<string>&lt;-- insert a url that loads a branded logo for your application (use https) --&gt;</string>
 	<key>applicationURL</key>
 	<string>&lt;-- insert a url of your choosing to find out more about the application --&gt;</string>
+	<key>applicationRemoveSettingsAppliedByQRCode</key>
+	<false/>
+	<key>applicationSplashScreenAllowsQRScannerGesture</key>
+	<true/>
+	<key>applicationQRScannerShownAtStart</key>
+	<true/>
 	<key>APNS-UrbanAirShip</key>
 	<dict>
 		<key>masterAppSecretDev</key>

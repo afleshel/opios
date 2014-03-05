@@ -40,6 +40,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
 @property (nonatomic, strong) NSString* authorizedApplicationId;
 @property (nonatomic, strong) NSMutableDictionary* mappingDictionary;
+@property (nonatomic, strong) NSDictionary* currentSettingsDictionary;
 
 - (id) initSingleton;
 @end
@@ -121,6 +122,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
         Class floatClass = [[NSNumber numberWithFloat:0] class];
         Class doubleClass = [[NSNumber numberWithDouble:0] class];
         Class integerClass = [[NSNumber numberWithInteger:0] class];
+        Class unsignedIntegerClass = [[NSNumber numberWithUnsignedInteger:0] class];
         
         for (NSString* tempKey in [inDictionary allKeys])
         {
@@ -134,27 +136,38 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
             }
             else if ([value isKindOfClass:boolClass])
             {
-                [[NSUserDefaults standardUserDefaults] setBool:((NSNumber*)value).boolValue forKey:key];
+                ((OpenPeerSettingsDelegate*)openPeerSettingsDelegatePtr.get())->setBool([key UTF8String], ((NSNumber*)value).boolValue);
+                //[[NSUserDefaults standardUserDefaults] setBool:((NSNumber*)value).boolValue forKey:key];
             }
             else if ([value isKindOfClass:floatClass])
             {
-                [[NSUserDefaults standardUserDefaults] setFloat:((NSNumber*)value).floatValue forKey:key];
+                ((OpenPeerSettingsDelegate*)openPeerSettingsDelegatePtr.get())->setFloat([key UTF8String], ((NSNumber*)value).floatValue);
+                //[[NSUserDefaults standardUserDefaults] setFloat:((NSNumber*)value).floatValue forKey:key];
             }
             else if ([value isKindOfClass:doubleClass])
             {
-                [[NSUserDefaults standardUserDefaults] setDouble:((NSNumber*)value).doubleValue forKey:key];
+                ((OpenPeerSettingsDelegate*)openPeerSettingsDelegatePtr.get())->setDouble([key UTF8String], ((NSNumber*)value).doubleValue);
+                //[[NSUserDefaults standardUserDefaults] setDouble:((NSNumber*)value).doubleValue forKey:key];
             }
             else if ([value isKindOfClass:integerClass])
             {
-                [[NSUserDefaults standardUserDefaults] setInteger:((NSNumber*)value).integerValue forKey:key];
+                ((OpenPeerSettingsDelegate*)openPeerSettingsDelegatePtr.get())->setInt([key UTF8String], ((NSNumber*)value).integerValue);
+                //[[NSUserDefaults standardUserDefaults] setInteger:((NSNumber*)value).integerValue forKey:key];
+            }
+            else if ([value isKindOfClass:unsignedIntegerClass])
+            {
+                ((OpenPeerSettingsDelegate*)openPeerSettingsDelegatePtr.get())->setUInt([key UTF8String], ((NSNumber*)value).integerValue);
+                //[[NSUserDefaults standardUserDefaults] setInteger:((NSNumber*)value).integerValue forKey:key];
             }
             else if ([value isKindOfClass:[NSNumber class]])
             {
-                [[NSUserDefaults standardUserDefaults] setInteger:((NSNumber*)value).intValue forKey:key];
+                ((OpenPeerSettingsDelegate*)openPeerSettingsDelegatePtr.get())->setInt([key UTF8String], ((NSNumber*)value).integerValue);
+                //[[NSUserDefaults standardUserDefaults] setInteger:((NSNumber*)value).intValue forKey:key];
             }
             else
             {
-                [[NSUserDefaults standardUserDefaults] setObject:value forKey:key];
+                ((OpenPeerSettingsDelegate*)openPeerSettingsDelegatePtr.get())->setString([key UTF8String], [value UTF8String]);
+                //[[NSUserDefaults standardUserDefaults] setObject:value forKey:key];
             }
         }
         [[NSUserDefaults standardUserDefaults] synchronize];
@@ -190,5 +203,24 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
             self.authorizedApplicationId = [[NSUserDefaults standardUserDefaults] objectForKey:@"openpeer/calculated/authorizated-application-id"];
     }
     return self.authorizedApplicationId;
+}
+
+- (void) storeCalculatedSettingObject:(NSString*) setting key:(NSString*) key
+{
+    ((OpenPeerSettingsDelegate*)openPeerSettingsDelegatePtr.get())->addSettingWithKey(setting,key);
+}
+
+- (NSString*) getCoreKeyForAppKey:(NSString*) key
+{
+    NSString* ret = [self.mappingDictionary objectForKey:key];
+    
+    if ([ret length] == 0)
+        ret = key;
+    
+    return ret;
+}
+- (NSDictionary*) getCurrentSettingsDictionary
+{
+    return ((OpenPeerSettingsDelegate*)openPeerSettingsDelegatePtr.get())->getCurrentSettingsDictionary();
 }
 @end

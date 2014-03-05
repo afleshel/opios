@@ -232,7 +232,7 @@
     if ([key length] > 0)
     {
         key = [key stringByAppendingString:archiveColorized];
-        ret = [[NSUserDefaults standardUserDefaults] boolForKey:key];;
+        ret = [[NSUserDefaults standardUserDefaults] boolForKey:key];
     }
     
     return ret;
@@ -505,6 +505,17 @@
     [self enable:YES logger:LOGGER_OUTGOING_TELNET];
 }
 
+- (BOOL) isQRSettingsResetEnabled
+{
+    return [[NSUserDefaults standardUserDefaults] boolForKey:@"applicationRemoveSettingsAppliedByQRCode"];
+}
+
+- (void) enableQRSettingsReset:(BOOL) enable
+{
+    [[NSUserDefaults standardUserDefaults] setBool:enable forKey:@"applicationRemoveSettingsAppliedByQRCode"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
 - (NSString*) getOuterFrameURL
 {
     return [[NSUserDefaults standardUserDefaults] stringForKey:@"outerFrameURL"];
@@ -538,14 +549,14 @@
 {
     BOOL ret = YES;
     
-    ret &= [[[NSUserDefaults standardUserDefaults] objectForKey:archiveAppId] length] != 0;
-    ret &= [[[NSUserDefaults standardUserDefaults] objectForKey:archiveAppIdSharedSecret] length] != 0;
-    ret &= [[[NSUserDefaults standardUserDefaults] objectForKey:archiveAppName] length] != 0;
-    ret &= [[[NSUserDefaults standardUserDefaults] objectForKey:archiveAppURL] length] != 0;
-    ret &= [[[NSUserDefaults standardUserDefaults] objectForKey:archiveAppImageURL] length] != 0;
+    ret &= [[[NSUserDefaults standardUserDefaults] objectForKey:[[HOPSettings sharedSettings] getCoreKeyForAppKey:archiveAppId]] length] != 0;
+    ret &= [[[NSUserDefaults standardUserDefaults] objectForKey:[[HOPSettings sharedSettings] getCoreKeyForAppKey:archiveAppIdSharedSecret]] length] != 0;
+    ret &= [[[NSUserDefaults standardUserDefaults] objectForKey:[[HOPSettings sharedSettings] getCoreKeyForAppKey:archiveAppName]] length] != 0;
+    ret &= [[[NSUserDefaults standardUserDefaults] objectForKey:[[HOPSettings sharedSettings] getCoreKeyForAppKey:archiveAppURL]] length] != 0;
+    ret &= [[[NSUserDefaults standardUserDefaults] objectForKey:[[HOPSettings sharedSettings] getCoreKeyForAppKey:archiveAppImageURL]] length] != 0;
     
 #ifdef APNS_ENABLED
-    ret &= [[[NSUserDefaults standardUserDefaults] objectForKey:archiveAppImageURL] length] != 0;
+    ret &= [[[NSUserDefaults standardUserDefaults] objectForKey:[[HOPSettings sharedSettings] getCoreKeyForAppKey:archiveAppImageURL]] length] != 0;
 #endif
     return ret;
 }
@@ -695,26 +706,85 @@
 
 - (void) updateDeviceInfo
 {
-    NSString* deviceId = [[NSUserDefaults standardUserDefaults] objectForKey:@"openpeer/calculated/device-id"];//keyOpenPeerUser];
-    if ([deviceId length] == 0)
-    {
-        deviceId = [HOPUtility hashString:[Utility getGUIDstring]];
-        [[NSUserDefaults standardUserDefaults] setObject:deviceId forKey:@"openpeer/calculated/device-id"];
-    }
-    
+    NSString* deviceId = [HOPUtility hashString:[Utility getGUIDstring]];
+    if ([deviceId length] > 0)
+        [[HOPSettings sharedSettings] storeCalculatedSettingObject:deviceId key:@"openpeer/calculated/device-id"];
+
     NSString* str = [Utility getDeviceOs];
     if ([str length] > 0)
-        [[NSUserDefaults standardUserDefaults] setObject:str forKey:@"openpeer/calculated/os"];
+        [[HOPSettings sharedSettings] storeCalculatedSettingObject:str key:@"openpeer/calculated/os"];
     
     NSString* system = [Utility getPlatform];
     if ([system length] > 0)
-        [[NSUserDefaults standardUserDefaults] setObject:str forKey:@"openpeer/calculated/system"];
+        [[HOPSettings sharedSettings] storeCalculatedSettingObject:system key:@"openpeer/calculated/system"];
     
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"openpeer/calculated/user-agent"] length] == 0)
+    NSString* userAgent = [Utility getUserAgentName];
+    if ([userAgent length] > 0)
+        [[HOPSettings sharedSettings] storeCalculatedSettingObject:userAgent key:@"openpeer/calculated/user-agent"];
+}
+
+- (void) snapshotCurrentSettings
+{
+    NSDictionary* currentSettings = [[HOPSettings sharedSettings] getCurrentSettingsDictionary];
+    if ([currentSettings count] > 0)
+        [[NSUserDefaults standardUserDefaults] setObject:currentSettings forKey:@"settingsSnapshot"];
+}
+
+- (void) storeQRSettings:(NSDictionary*) inDictionary
+{
+    [[NSUserDefaults standardUserDefaults] setObject:inDictionary forKey:@"appliedQRSettings"];
+}
+
+- (void) removeAppliedQRSettings
+{
+//    NSDictionary* customerSpecificDictionary = nil;
+//    NSDictionary* defaultSettingsDictionary = nil;
+    NSDictionary* appliedQRSettingsDictionary = [[NSUserDefaults standardUserDefaults] objectForKey:@"appliedQRSettings"];
+    NSDictionary* preQRSettingsSnapshotDictionary = [[NSUserDefaults standardUserDefaults] objectForKey:@"settingsSnapshot"];
+    
+//    NSString* filePath = [[NSBundle mainBundle] pathForResource:@"CustomerSpecific" ofType:@"plist"];
+//    if ([filePath length] > 0)
+//        customerSpecificDictionary = [NSDictionary dictionaryWithContentsOfFile:filePath];
+//    
+//    filePath = [[NSBundle mainBundle] pathForResource:@"DefaultSettings" ofType:@"plist"];
+//    if ([filePath length] > 0)
+//        defaultSettingsDictionary = [NSDictionary dictionaryWithContentsOfFile:filePath];
+    
+    for (NSString* key in appliedQRSettingsDictionary)
     {
-        NSString* userAgent = [Utility getUserAgentName];
-        if ([userAgent length] > 0)
-            [[NSUserDefaults standardUserDefaults] setObject:str forKey:@"openpeer/calculated/user-agent"];
+        NSString* coreKey = [[HOPSettings sharedSettings] getCoreKeyForAppKey:key];
+        id qrValue = [appliedQRSettingsDictionary objectForKey:key];
+        id currentValue = [[NSUserDefaults standardUserDefaults] objectForKey:coreKey];
+        id preValue = [preQRSettingsSnapshotDictionary objectForKey:coreKey];
+//        id customerSpecificValue = [customerSpecificDictionary objectForKey:key];
+//        id defaultSettingsValue = [defaultSettingsDictionary objectForKey:key];
+        
+        BOOL isEqual = NO;
+        
+        if ([[qrValue class] isSubclassOfClass:[NSNumber class]])
+            isEqual = [qrValue compare:currentValue] == NSOrderedSame;
+        else if ([[qrValue class] isSubclassOfClass:[NSString class]])
+            isEqual = [qrValue isEqualToString:currentValue];
+        else
+            isEqual = qrValue == currentValue;
+        
+        if (isEqual)
+        {
+            if (preValue == nil)
+                [[NSUserDefaults standardUserDefaults] removeObjectForKey:coreKey];
+            else
+                [[NSUserDefaults standardUserDefaults] setObject:preValue forKey:coreKey];
+//            if (customerSpecificValue == nil && defaultSettingsValue == nil)
+//                [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
+//            else
+//            {
+//                if (customerSpecificValue)
+//                    [[NSUserDefaults standardUserDefaults] setObject:customerSpecificValue forKey:coreKey];
+//                else
+//                    [[NSUserDefaults standardUserDefaults] setObject:defaultSettingsValue forKey:coreKey];
+//            }
+            
+        }
     }
 }
 @end

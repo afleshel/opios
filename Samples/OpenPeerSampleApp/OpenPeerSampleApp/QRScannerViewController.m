@@ -43,6 +43,8 @@
 @property (nonatomic, strong) NSURLConnection *urlConnection;
 @property (nonatomic, strong) NSMutableData* receivedData;
 
+@property (nonatomic, weak) IBOutlet UIButton* buttonLogger;
+
 - (IBAction)actionReadQRCode:(id)sender;
 - (IBAction)actionProceedWithlogin:(id)sender;
 - (IBAction)actionStartLogger:(id)sender;
@@ -123,7 +125,11 @@
                     //[[HOPSettings sharedSettings] applySettings:str];
                     NSDictionary* settings = [[Settings sharedSettings] dictionaryForJSONString:str];
                     if (settings)
+                    {
+                        [[Settings sharedSettings] snapshotCurrentSettings];
+                        [[Settings sharedSettings] storeQRSettings:settings];
                         [[HOPSettings sharedSettings] storeSettingsFromDictionary:settings];
+                    }
                     [self actionProceedWithlogin:nil];
                 }
                 else
@@ -168,6 +174,7 @@
     
     [self.view.layer addSublayer:self.capture.layer];
     self.capture.delegate = self;
+    [self.view bringSubviewToFront:self.buttonLogger];
 }
 
 - (IBAction)actionProceedWithlogin:(id)sender
@@ -253,6 +260,8 @@
         {
             //isSet = [[HOPSettings sharedSettings] applySettings:strJSON];
             NSDictionary* settings = [[Settings sharedSettings] dictionaryForJSONString:strJSON];
+            [[Settings sharedSettings] snapshotCurrentSettings];
+            [[Settings sharedSettings] storeQRSettings:settings];
             [[HOPSettings sharedSettings] storeSettingsFromDictionary:settings];
         }
         

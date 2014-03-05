@@ -126,11 +126,14 @@
     [[HOPModelManager sharedModelManager] setCachePath:cachePathDirectory];
     
     //Set settigns delegate
-    [[HOPSettings sharedSettings] setup];//WithDelegate:[Settings sharedSettings]];
+    [[HOPSettings sharedSettings] setup];
     
     //Cleare expired cookies and set delegate
     [[HOPCache sharedCache] removeExpiredCookies];
     [[HOPCache sharedCache] setDelegate:self.cacheDelegate];
+    
+    //Set calculated values
+    [[Settings sharedSettings] updateDeviceInfo];
     
     if (![[HOPModelManager sharedModelManager] getLastLoggedInHomeUser])
     {
@@ -146,14 +149,13 @@
                 NSDictionary* filteredDictionary = [[Settings sharedSettings] dictionaryWithRemovedAllInvalidEntriesForPath:filePath];
                 if ([filteredDictionary count] > 0)
                     [[HOPSettings sharedSettings] storeSettingsFromDictionary:filteredDictionary];
-                //[[HOPSettings sharedSettings] storeSettingsFromPath:filePath];
             }
             
             isSetLoginSettings = [[Settings sharedSettings] isLoginSettingsSet];
         }
         
         //If not already set, set default app data
-        BOOL isSetAppData = NO;//[[Settings sharedSettings] isAppDataSet];
+        BOOL isSetAppData = [[Settings sharedSettings] isAppDataSet];
         if (!isSetAppData)
         {
             NSString* filePath = [[NSBundle mainBundle] pathForResource:@"CustomerSpecific" ofType:@"plist"];
@@ -164,25 +166,35 @@
                 if ([filteredDictionary count] > 0)
                     [[HOPSettings sharedSettings] storeSettingsFromDictionary:filteredDictionary];
             }
+            
+#ifndef DEBUG
+            //Apply release settings
+            NSString* filePath = [[NSBundle mainBundle] pathForResource:@"CustomerSpecific_Release" ofType:@"plist"];
+            if ([filePath length] > 0)
+            {
+                NSMutableDictionary* filteredDictionary = [[Settings sharedSettings] dictionaryWithRemovedAllInvalidEntriesForPath:filePath];
+                [[Settings sharedSettings] createUserAgentFromDictionary:filteredDictionary];
+                if ([filteredDictionary count] > 0)
+                    [[HOPSettings sharedSettings] storeSettingsFromDictionary:filteredDictionary];
+            }
+            
+            [[self mainViewController] waitForUserGesture];
+#endif
+            
             isSetAppData = [[Settings sharedSettings] isAppDataSet];
         }
         
-         [[Settings sharedSettings] updateDeviceInfo];
-        
-#ifdef DEBUG
         //Show QR scanner if user wants to change settings by reading QR code
-        [[self mainViewController] showQRScanner];
-#else
-        [[self mainViewController] waitForUserGesture];
-#endif
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"applicationQRScannerShownAtStart"])
+            [[self mainViewController] showQRScanner];
+        else if ([[NSUserDefaults standardUserDefaults] boolForKey:@"applicationSplashScreenAllowsQRScannerGesture"])
+            [[self mainViewController] waitForUserGesture];
+        else
+            [self setup];
     }
     else
     {
-        [[Settings sharedSettings] updateDeviceInfo];
-        
         [self setup];
-        //Set log levels and start logging
-        [Logger startAllSelectedLoggers];
     }
 }
 
