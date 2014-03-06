@@ -41,6 +41,7 @@
 + (HOPCache*) sharedCache;
 - (id) init __attribute__((unavailable("HOPCache is singleton class.")));
 
+- (void) setup;
 /**
  Set cache delegate implemented in client app
  @param cacheDelegate id<HOPCacheDelegate> cache delegate

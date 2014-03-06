@@ -222,6 +222,7 @@
 		87BFEDBA183A885C00A48821 /* AppConsts.m in Sources */ = {isa = PBXBuildFile; fileRef = 87BFEDB8183A885C00A48821 /* AppConsts.m */; };
 		87CCF63118C0B53C000DF636 /* UUIDManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D4904E18C081A400D34115 /* UUIDManager.m */; };
 		87CCF64418C0FFDB000DF636 /* BackgroundingDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 87CCF64318C0FFDB000DF636 /* BackgroundingDelegate.m */; };
+		87CD91F318C7BF900070F42A /* CustomerSpecific_Release.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8754280818C7A2FD007F626F /* CustomerSpecific_Release.plist */; };
 		87D4904F18C081A400D34115 /* UUIDManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D4904E18C081A400D34115 /* UUIDManager.m */; };
 		87D4BCDC18675368008C2D30 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 87272838166CBF9B0089CBB6 /* main.m */; };
 		87D4BCDD18675368008C2D30 /* AppLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 874FE10D17FD7FF0007A791B /* AppLog.m */; };
@@ -2007,6 +2008,7 @@
 				87D4BD3118675368008C2D30 /* OpenPeerLogo.png in Resources */,
 				87D4BD3218675368008C2D30 /* MainViewController.xib in Resources */,
 				87D4BD3318675368008C2D30 /* iPhone_loader_00024.png in Resources */,
+				87CD91F318C7BF900070F42A /* CustomerSpecific_Release.plist in Resources */,
 				87D4BD3418675368008C2D30 /* audio-call-mic-active.png in Resources */,
 				87D4BD3518675368008C2D30 /* WebLoginViewController.xib in Resources */,
 				87D4BD3618675368008C2D30 /* message-received.wav in Resources */,

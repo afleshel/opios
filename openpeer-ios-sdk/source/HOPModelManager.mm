@@ -206,22 +206,22 @@ using namespace openpeer::core;
     }
     
     //Set cache path
-    NSString *cachePathDirectory = [self.dataPath length] == 0 ? nil : self.cachePath;
+    //NSString *cachePathDirectory = [self.dataPath length] == 0 ? nil : self.cachePath;
     
-    if ([cachePathDirectory length] == 0)
-    {
-        NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
-        cachePathDirectory = [libraryPath stringByAppendingPathComponent:databaseDirectory];
-    }
+    //if ([cachePathDirectory length] == 0)
+    //{
+        NSString *cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+    //cachePathDirectory = [libraryPath stringByAppendingPathComponent:databaseDirectory];
+    //}
     
     //Create a folder if doesn't exists
-    error = nil;
-    if (![[NSFileManager defaultManager] createDirectoryAtPath:cachePathDirectory withIntermediateDirectories:YES attributes:nil error:&error])
-    {
-        [NSException raise:@"Failed creating directory" format:@"[%@], %@", dataPathDirectory, error];
-    }
+//    error = nil;
+//    if (![[NSFileManager defaultManager] createDirectoryAtPath:cachePathDirectory withIntermediateDirectories:YES attributes:nil error:&error])
+//    {
+//        [NSException raise:@"Failed creating directory" format:@"[%@], %@", dataPathDirectory, error];
+//    }
     
-    NSString *pathCache = [cachePathDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"/%@",cacheDatabaseName]];
+    NSString *pathCache = [cachePath stringByAppendingPathComponent:[NSString stringWithFormat:@"/%@",cacheDatabaseName]];
     NSURL *storeCacheURL = [NSURL fileURLWithPath:pathCache];
     
     success = [storeCacheURL setResourceValue: [NSNumber numberWithBool: YES]

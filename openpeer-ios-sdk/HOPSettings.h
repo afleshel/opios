@@ -55,6 +55,7 @@
 - (NSString*) getAuthorizedApplicationId;
 
 - (void) storeCalculatedSettingObject:(id) object key:(NSString*) key;
+- (void) storeSettingsObject:(id) object key:(NSString*) key;
 
 - (NSString*) getCoreKeyForAppKey:(NSString*) key;
 - (NSDictionary*) getCurrentSettingsDictionary;

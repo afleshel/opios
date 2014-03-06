@@ -50,9 +50,8 @@ protected:
     
     NSMutableDictionary* dictionarySettings;
     NSString* authorizedApplicationId;
+    NSString* authorizedApplicationIdCoreKey;
     
-    NSString* stringFoKey(NSString* key) const;
-    NSNumber* numberForKey(NSString* key) const;
 public:
     
     ~OpenPeerSettingsDelegate();
@@ -81,4 +80,8 @@ public:
     
     void addSettingWithKey(NSString* inSetting, NSString* key);
     NSDictionary* getCurrentSettingsDictionary();
+    
+    NSString* stringFoKey(NSString* key) const;
+    NSNumber* numberForKey(NSString* key) const;
+    void setObjectForKey(id object, NSString* key);
 };

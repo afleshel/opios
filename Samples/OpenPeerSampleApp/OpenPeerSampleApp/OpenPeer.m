@@ -87,26 +87,12 @@
     {
         NSDate* expiry = [[NSDate date] dateByAddingTimeInterval:(30 * 24 * 60 * 60)];
         
-        _authorizedApplicationId = [HOPStack createAuthorizedApplicationID:[[NSUserDefaults standardUserDefaults] stringForKey: @"applicationId"] applicationIDSharedSecret:[[NSUserDefaults standardUserDefaults] stringForKey: @"applicationIdSharedSecret"] expires:expiry];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+        _authorizedApplicationId = [HOPStack createAuthorizedApplicationID:[[NSUserDefaults standardUserDefaults] stringForKey: @"applicationId"] applicationIDSharedSecret:[[NSUserDefaults standardUserDefaults] stringForKey: settingsKeyAppIdSharedSecret] expires:expiry];
     }
     return _authorizedApplicationId;
 }
 
-- (NSString*) deviceId
-{
-    if (!_deviceId)
-    {
-        _deviceId = [[NSUserDefaults standardUserDefaults] objectForKey:keyOpenPeerUser];
-        if ([_deviceId length] == 0)
-        {
-            _deviceId = [Utility getGUIDstring];
-            [[NSUserDefaults standardUserDefaults] setObject:_deviceId forKey:keyOpenPeerUser];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-        }
-    }
-    return _deviceId;
-}
+
 - (void) refreshAuthorizedApplicationId
 {
     self.authorizedApplicationId = nil;
@@ -122,15 +108,14 @@
     NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
     NSString *dataPathDirectory = [libraryPath stringByAppendingPathComponent:@"db"];
     [[HOPModelManager sharedModelManager] setDataPath:dataPathDirectory backupData:NO];
-    NSString *cachePathDirectory = [libraryPath stringByAppendingPathComponent:@"cache"];
-    [[HOPModelManager sharedModelManager] setCachePath:cachePathDirectory];
     
     //Set settigns delegate
     [[HOPSettings sharedSettings] setup];
     
     //Cleare expired cookies and set delegate
     [[HOPCache sharedCache] removeExpiredCookies];
-    [[HOPCache sharedCache] setDelegate:self.cacheDelegate];
+    [[HOPCache sharedCache] setup];
+    //[[HOPCache sharedCache] setDelegate:self.cacheDelegate];
     
     //Set calculated values
     [[Settings sharedSettings] updateDeviceInfo];
@@ -257,7 +242,6 @@
     self.accountDelegate = nil;
     self.identityDelegate = nil;
     self.identityLookupDelegate = nil;
-    self.cacheDelegate = nil;
     self.backgroundingDelegate = nil;
 }
 /**
@@ -274,13 +258,13 @@
     self.identityDelegate.loginDelegate = self.mainViewController;
     self.identityLookupDelegate = [[IdentityLookupDelegate alloc] init];
     self.backgroundingDelegate = [[BackgroundingDelegate alloc] init];
-    //self.cacheDelegate = [[CacheDelegate alloc] init];
 }
 
 - (void) closeTheApp
 {
     exit(-1);
 }
+
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Closing Application" message:@"Application will be closed in 2 seconds" delegate:self cancelButtonTitle:nil otherButtonTitles: nil];
