@@ -28,6 +28,10 @@
 	<false/>
 	<key>openpeer/services/turn-candidates-must-remain-alive-after-ice-wake-up-in-seconds</key>
 	<integer>600</integer>
+	<key>openpeer/services/interface-name-order</key>
+	<string>lo;en;pdp_ip;stf;gif;bbptp;p2p</string>
+	<key>openpeer/services/support-ipv6</key>
+	<false/>
 	<key>openpeer/services/debug/force-packets-over-turn</key>
 	<false/>
 	<key>openpeer/services/debug/force-turn-to-use-tcp</key>
