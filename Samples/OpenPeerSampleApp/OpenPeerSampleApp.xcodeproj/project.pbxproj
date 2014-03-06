@@ -211,6 +211,7 @@
 		87796E8518A8DDA7002F4B43 /* boost.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87796E8318A8DDA7002F4B43 /* boost.a */; };
 		87796E8618A8DDA7002F4B43 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87796E8418A8DDA7002F4B43 /* libcurl.a */; };
 		879D7B9717FB1224008C78E2 /* LoggerSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 879D7B9617FB1224008C78E2 /* LoggerSettingsViewController.m */; };
+		879DC5F418C92FE800DA60C0 /* BackgroundingDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 87CCF64318C0FFDB000DF636 /* BackgroundingDelegate.m */; };
 		879F4393186C507000AED5AB /* OpenPeerSampleAppAPNS-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 879F4392186C507000AED5AB /* OpenPeerSampleAppAPNS-Info.plist */; };
 		87A1086A1802C116001F705D /* Logger.m in Sources */ = {isa = PBXBuildFile; fileRef = 87A108691802C116001F705D /* Logger.m */; };
 		87A1086C1802CBDC001F705D /* logger.png in Resources */ = {isa = PBXBuildFile; fileRef = 87A1086B1802CBDC001F705D /* logger.png */; };
@@ -219,8 +220,8 @@
 		87B5EAC318683E4300D25C3B /* APNSManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87B5EABF18683E3B00D25C3B /* APNSManager.m */; };
 		87BFEDBA183A885C00A48821 /* AppConsts.m in Sources */ = {isa = PBXBuildFile; fileRef = 87BFEDB8183A885C00A48821 /* AppConsts.m */; };
 		87CCF63118C0B53C000DF636 /* UUIDManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D4904E18C081A400D34115 /* UUIDManager.m */; };
-		87D4904F18C081A400D34115 /* UUIDManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D4904E18C081A400D34115 /* UUIDManager.m */; };
 		87CCF64418C0FFDB000DF636 /* BackgroundingDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 87CCF64318C0FFDB000DF636 /* BackgroundingDelegate.m */; };
+		87D4904F18C081A400D34115 /* UUIDManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D4904E18C081A400D34115 /* UUIDManager.m */; };
 		87D4BCDC18675368008C2D30 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 87272838166CBF9B0089CBB6 /* main.m */; };
 		87D4BCDD18675368008C2D30 /* AppLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 874FE10D17FD7FF0007A791B /* AppLog.m */; };
 		87D4BCDE18675368008C2D30 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8757E1CA1827E85700D7BDA1 /* TTTAttributedLabel.m */; };
@@ -868,10 +869,10 @@
 		87B5EABF18683E3B00D25C3B /* APNSManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APNSManager.m; sourceTree = "<group>"; };
 		87BFEDB8183A885C00A48821 /* AppConsts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppConsts.m; sourceTree = "<group>"; };
 		87BFEDB9183A885C00A48821 /* AppConsts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppConsts.h; sourceTree = "<group>"; };
-		87D4904D18C081A400D34115 /* UUIDManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UUIDManager.h; sourceTree = "<group>"; };
-		87D4904E18C081A400D34115 /* UUIDManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UUIDManager.m; sourceTree = "<group>"; };
 		87CCF64218C0FFDB000DF636 /* BackgroundingDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackgroundingDelegate.h; sourceTree = "<group>"; };
 		87CCF64318C0FFDB000DF636 /* BackgroundingDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BackgroundingDelegate.m; sourceTree = "<group>"; };
+		87D4904D18C081A400D34115 /* UUIDManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UUIDManager.h; sourceTree = "<group>"; };
+		87D4904E18C081A400D34115 /* UUIDManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UUIDManager.m; sourceTree = "<group>"; };
 		87D4BDD318675368008C2D30 /* openpeersample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = openpeersample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		87D4BDF318683B16008C2D30 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		87D4BDF518683B38008C2D30 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -2273,6 +2274,7 @@
 				87D4BCFD18675368008C2D30 /* SBJsonStreamParserAccumulator.m in Sources */,
 				87D4BCFE18675368008C2D30 /* CallViewController.m in Sources */,
 				87D4BCFF18675368008C2D30 /* IncomingCallViewController.m in Sources */,
+				879DC5F418C92FE800DA60C0 /* BackgroundingDelegate.m in Sources */,
 				87D4BD0018675368008C2D30 /* SBJsonStreamParserAdapter.m in Sources */,
 				87D4BD0118675368008C2D30 /* UIBadgeView.m in Sources */,
 				87D4BD0218675368008C2D30 /* SBJsonStreamParserState.m in Sources */,
