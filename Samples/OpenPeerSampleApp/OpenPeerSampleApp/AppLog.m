@@ -30,26 +30,8 @@
  */
 
 #import "AppLog.h"
-#import "Settings.h"
-#import "AppConsts.h"
-//#import <OpenPeerSDK/HOPLogger.h>
 
-void AppLog(NSString* functionName, NSString* filePath, unsigned long lineNumber, NSString* format,...)
-{
-    if ([[Settings sharedSettings] getLoggerLevelForAppModuleKey:moduleApplication] >= HOPLoggerLevelTrace)
-    {
-        va_list argumentList;
-        va_start(argumentList, format);
-        unsigned int subsystemid = [HOPLogger getApplicationSubsystemID];
-        NSString* message = [[NSString alloc] initWithFormat:format arguments:argumentList];
-        [HOPLogger log:subsystemid severity:HOPLoggerSeverityInformational level:HOPLoggerLevelTrace message:[@"Application:  " stringByAppendingString: message] function: functionName filePath:filePath lineNumber:lineNumber];
-        
-        va_end(argumentList);
-    }
-}
-
-
-void AppLog2(NSString* functionName, NSString* filePath, unsigned long lineNumber, HOPLoggerSeverities severity, HOPLoggerLevels level, NSString* format,...)
+void AppLog(NSString* functionName, NSString* filePath, unsigned long lineNumber, HOPLoggerSeverities severity, HOPLoggerLevels level, NSString* format,...)
 {
     if ([[Settings sharedSettings] getLoggerLevelForAppModuleKey:moduleApplication] >= level)
     {
