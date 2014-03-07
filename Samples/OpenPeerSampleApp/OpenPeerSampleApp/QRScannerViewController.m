@@ -44,10 +44,12 @@
 @property (nonatomic, strong) NSMutableData* receivedData;
 
 @property (nonatomic, weak) IBOutlet UIButton* buttonLogger;
+@property (nonatomic, weak) IBOutlet UIButton* buttonCancel;
 
 - (IBAction)actionReadQRCode:(id)sender;
 - (IBAction)actionProceedWithlogin:(id)sender;
 - (IBAction)actionStartLogger:(id)sender;
+- (IBAction)actionCancelScan:(id)sender;
 @end
 
 @implementation QRScannerViewController
@@ -65,7 +67,7 @@
 {
     [super viewDidLoad];
     
-    
+    self.buttonCancel.layer.cornerRadius = 5.0;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -175,6 +177,9 @@
     [self.view.layer addSublayer:self.capture.layer];
     self.capture.delegate = self;
     [self.view bringSubviewToFront:self.buttonLogger];
+    [self.view bringSubviewToFront:self.buttonCancel];
+    self.buttonCancel.hidden = NO;
+
 }
 
 - (IBAction)actionProceedWithlogin:(id)sender
@@ -287,5 +292,11 @@
 - (IBAction)actionStartLogger:(id)sender
 {
     [Logger startTelnetLoggerOnStartUp];
+}
+
+- (IBAction)actionCancelScan:(id)sender
+{
+    self.buttonCancel.hidden = YES;
+    [self.capture.layer removeFromSuperlayer];
 }
 @end
