@@ -548,7 +548,7 @@
     ret &= [[[NSUserDefaults standardUserDefaults] objectForKey:[[HOPSettings sharedSettings] getCoreKeyForAppKey:settingsKeyAppImageURL]] length] != 0;
     
 #ifdef APNS_ENABLED
-    ret &= [[[NSUserDefaults standardUserDefaults] objectForKey:[[HOPSettings sharedSettings] getCoreKeyForAppKey:archiveAppImageURL]] length] != 0;
+    ret &= [[[NSUserDefaults standardUserDefaults] objectForKey:[[HOPSettings sharedSettings] getCoreKeyForAppKey:settingsKeyUrbanAirShipAPIPushURL]] length] != 0;
 #endif
     return ret;
 }
