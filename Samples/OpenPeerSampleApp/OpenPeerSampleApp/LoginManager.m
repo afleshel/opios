@@ -148,6 +148,10 @@
     
     self.isLogin = YES;
 
+    if ([[Settings sharedSettings] isQRSettingsResetEnabled])
+    {
+        [[Settings sharedSettings] removeAppliedQRSettings];
+    }
 }
 
 - (void) startAccount

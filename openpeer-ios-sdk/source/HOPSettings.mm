@@ -32,14 +32,15 @@
 #import "HOPSettings_Internal.h"
 #import "OpenPeerSettingsDelegate.h"
 #import <zsLib/Log.h>
-
+#import <openpeer/stack/types.h>
 
 ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
 @interface HOPSettings ()
 
 @property (nonatomic, strong) NSString* authorizedApplicationId;
-@property (nonatomic, strong) NSMutableDictionary* mappingDictionary;
+@property (nonatomic, strong) NSMutableDictionary* mappingDictionary;   //Maps keys from the application property lists and keys that re used in the core
+@property (nonatomic, strong) NSDictionary* currentSettingsDictionary;
 
 - (id) initSingleton;
 @end
@@ -86,6 +87,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     openPeerSettingsDelegatePtr = OpenPeerSettingsDelegate::create(nil);
     ISettings::setup(openPeerSettingsDelegatePtr);
 }
+
 - (BOOL) applySettings:(NSString*)jsonSettings
 {
     BOOL ret = NO;
@@ -117,11 +119,6 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 {
     if ([inDictionary count] > 0)
     {
-        Class boolClass = [[NSNumber numberWithBool:YES] class];
-        Class floatClass = [[NSNumber numberWithFloat:0] class];
-        Class doubleClass = [[NSNumber numberWithDouble:0] class];
-        Class integerClass = [[NSNumber numberWithInteger:0] class];
-        
         for (NSString* tempKey in [inDictionary allKeys])
         {
             id value = [inDictionary objectForKey:tempKey];
@@ -132,29 +129,13 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
             {
                 [self storeSettingsFromDictionary:value];
             }
-            else if ([value isKindOfClass:boolClass])
-            {
-                [[NSUserDefaults standardUserDefaults] setBool:((NSNumber*)value).boolValue forKey:key];
-            }
-            else if ([value isKindOfClass:floatClass])
-            {
-                [[NSUserDefaults standardUserDefaults] setFloat:((NSNumber*)value).floatValue forKey:key];
-            }
-            else if ([value isKindOfClass:doubleClass])
-            {
-                [[NSUserDefaults standardUserDefaults] setDouble:((NSNumber*)value).doubleValue forKey:key];
-            }
-            else if ([value isKindOfClass:integerClass])
-            {
-                [[NSUserDefaults standardUserDefaults] setInteger:((NSNumber*)value).integerValue forKey:key];
-            }
             else if ([value isKindOfClass:[NSNumber class]])
             {
-                [[NSUserDefaults standardUserDefaults] setInteger:((NSNumber*)value).intValue forKey:key];
+                ((OpenPeerSettingsDelegate*)openPeerSettingsDelegatePtr.get())->setObjectForKey(value, key);
             }
             else
             {
-                [[NSUserDefaults standardUserDefaults] setObject:value forKey:key];
+                ((OpenPeerSettingsDelegate*)openPeerSettingsDelegatePtr.get())->setString([key UTF8String], [value UTF8String]);
             }
         }
         [[NSUserDefaults standardUserDefaults] synchronize];
@@ -178,7 +159,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     @synchronized(self)
     {
         self.authorizedApplicationId = inAuthorizedApplicationId;
-        [[NSUserDefaults standardUserDefaults] setObject:inAuthorizedApplicationId forKey:@"openpeer/calculated/authorizated-application-id"];
+        [[NSUserDefaults standardUserDefaults] setObject:inAuthorizedApplicationId forKey:[NSString stringWithUTF8String:OPENPEER_COMMON_SETTING_APPLICATION_AUTHORIZATION_ID]];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
 }
@@ -187,8 +168,32 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     @synchronized(self)
     {
         if ([self.authorizedApplicationId length] == 0)
-            self.authorizedApplicationId = [[NSUserDefaults standardUserDefaults] objectForKey:@"openpeer/calculated/authorizated-application-id"];
+            self.authorizedApplicationId = [[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithUTF8String:OPENPEER_COMMON_SETTING_APPLICATION_AUTHORIZATION_ID]];
     }
     return self.authorizedApplicationId;
+}
+
+- (void) storeCalculatedSettingObject:(NSString*) setting key:(NSString*) key
+{
+    ((OpenPeerSettingsDelegate*)openPeerSettingsDelegatePtr.get())->addSettingWithKey(setting,key);
+}
+
+- (void) storeSettingsObject:(id) object key:(NSString*) key
+{
+    ((OpenPeerSettingsDelegate*)openPeerSettingsDelegatePtr.get())->setObjectForKey(object, key);
+}
+
+- (NSString*) getCoreKeyForAppKey:(NSString*) key
+{
+    NSString* ret = [self.mappingDictionary objectForKey:key];
+    
+    if ([ret length] == 0)
+        ret = key;
+    
+    return ret;
+}
+- (NSDictionary*) getCurrentSettingsDictionary
+{
+    return ((OpenPeerSettingsDelegate*)openPeerSettingsDelegatePtr.get())->getCurrentSettingsDictionary();
 }
 @end

@@ -362,4 +362,9 @@ typedef enum
     if ([textField.text length] > 0)
         [[Settings sharedSettings] setServerOrPort:textField.text logger:textField.tag];
 }
+
+- (void) switchResetQRSettings:(UISwitch*) sender
+{
+    [[Settings sharedSettings] enable:[sender isOn] logger:sender.tag];
+}
 @end

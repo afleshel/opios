@@ -53,4 +53,10 @@
 - (void) storeSettingsFromPath:(NSString*) path;
 - (void) storeAuthorizedApplicationId:(NSString*) inAuthorizedApplicationId;
 - (NSString*) getAuthorizedApplicationId;
+
+- (void) storeCalculatedSettingObject:(id) object key:(NSString*) key;
+- (void) storeSettingsObject:(id) object key:(NSString*) key;
+
+- (NSString*) getCoreKeyForAppKey:(NSString*) key;
+- (NSDictionary*) getCurrentSettingsDictionary;
 @end

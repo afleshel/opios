@@ -61,6 +61,11 @@ using namespace openpeer::core;
     return self;
 }
 
+- (void) setup
+{
+    [self setDelegate:nil];
+}
+
 - (void) setDelegate:(id<HOPCacheDelegate>) cacheDelegate
 {
     openpeerCacheDelegatePtr = OpenPeerCacheDelegate::create(cacheDelegate);

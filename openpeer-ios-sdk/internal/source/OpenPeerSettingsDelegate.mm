@@ -31,6 +31,7 @@
 
 #include "OpenPeerSettingsDelegate.h"
 #import <openpeer/core/ILogger.h>
+#import <openpeer/stack/types.h>
 #import "HOPSettings.h"
 
 ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
@@ -39,6 +40,7 @@ OpenPeerSettingsDelegate::OpenPeerSettingsDelegate(id<HOPSettingsDelegate> inSet
 {
     dictionarySettings = [[NSMutableDictionary alloc] init];
     settingsDelegate = inSettingsDelegate;
+    authorizedApplicationIdCoreKey = [NSString stringWithUTF8String:OPENPEER_COMMON_SETTING_APPLICATION_AUTHORIZATION_ID];
 }
 
 boost::shared_ptr<OpenPeerSettingsDelegate> OpenPeerSettingsDelegate::create(id<HOPSettingsDelegate> inSettingsDelegate)
@@ -51,19 +53,21 @@ OpenPeerSettingsDelegate::~OpenPeerSettingsDelegate()
     ZS_LOG_DEBUG(zsLib::String("SDK - OpenPeerSettingsDelegate destructor is called"));
 }
 
-NSString* OpenPeerSettingsDelegate::objectFoKey(NSString* key) const
+NSString* OpenPeerSettingsDelegate::stringFoKey(NSString* key) const
 {
     NSString* value = nil;
 
-    @synchronized(dictionarySettings) {
+    @synchronized(dictionarySettings)
+    {
+        //Get value from cached disctionary, if doesn't exist, read it from NSUserDefaults and store it in the cached dictionary
         value = [dictionarySettings objectForKey:key];
-        if ([value length] == 0) {
-          value = [[NSUserDefaults standardUserDefaults] stringForKey:key];
-          if ([value length] != 0) {
-              [dictionarySettings setObject:value forKey:key];
-          } else {
-              [dictionarySettings setObject:@"" forKey:key];
-          }
+        if ([value length] == 0)
+        {
+            value = [[NSUserDefaults standardUserDefaults] stringForKey:key];
+            if ([value length] != 0)
+                [dictionarySettings setObject:value forKey:key];
+            else
+                [dictionarySettings setObject:@"" forKey:key];
         }
     }
 
@@ -79,13 +83,14 @@ String OpenPeerSettingsDelegate::getString(const char *key) const
 
     if ([strKey length] > 0)
     {
-        if ([strKey isEqualToString:@"openpeer/calculated/authorizated-application-id"])
+        //Check if required string is authorized application id, and if it is get it driectly
+        if ([strKey isEqualToString:authorizedApplicationIdCoreKey])
         {
             value = [[HOPSettings sharedSettings] getAuthorizedApplicationId];
         }
         else
         {
-            value = this->objectFoKey(strKey);
+            value = this->stringFoKey(strKey);
         }
     }
 
@@ -97,6 +102,32 @@ String OpenPeerSettingsDelegate::getString(const char *key) const
     return ret;
 }
 
+NSNumber* OpenPeerSettingsDelegate::numberForKey(NSString* key) const
+{
+    NSNumber* number = nil;
+    @synchronized(dictionarySettings)
+    {
+        number = [dictionarySettings objectForKey:key];
+        if (!number)
+        {
+            number = [[NSUserDefaults standardUserDefaults] objectForKey:key];
+            if (number)
+                [dictionarySettings setObject:number forKey:key];
+        }
+    }
+    return number;
+}
+
+void OpenPeerSettingsDelegate::setObjectForKey(id object, NSString* key)
+{
+    @synchronized(dictionarySettings)
+    {
+        [dictionarySettings setObject:object forKey:key];
+    }
+    [[NSUserDefaults standardUserDefaults] setObject:object forKey:key];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
 LONG OpenPeerSettingsDelegate::getInt(const char *key) const
 {
     long ret = 0;
@@ -104,7 +135,7 @@ LONG OpenPeerSettingsDelegate::getInt(const char *key) const
     NSString* strKey = [NSString stringWithUTF8String:key];
     if ([strKey length] > 0)
     {
-        NSNumber* number = [[NSUserDefaults standardUserDefaults] objectForKey:strKey];
+        NSNumber* number = this->numberForKey(strKey);
         if (number)
             ret = number.unsignedLongValue;
     }
@@ -118,7 +149,7 @@ ULONG OpenPeerSettingsDelegate::getUInt(const char *key) const
     NSString* strKey = [NSString stringWithUTF8String:key];
     if ([strKey length] > 0)
     {
-        NSNumber* number = [[NSUserDefaults standardUserDefaults] objectForKey:strKey];
+        NSNumber* number = this->numberForKey(strKey);
         if (number)
             ret = number.unsignedLongValue;
     }
@@ -132,7 +163,9 @@ bool OpenPeerSettingsDelegate::getBool(const char *key) const
     NSString* strKey = [NSString stringWithUTF8String:key];
     if ([strKey length] > 0)
     {
-        ret = [[NSUserDefaults standardUserDefaults] boolForKey:strKey];
+        NSNumber* number = this->numberForKey(strKey);
+        if (number)
+            ret = number.boolValue;
     }
     return ret;
 }
@@ -144,7 +177,9 @@ float OpenPeerSettingsDelegate::getFloat(const char *key) const
     NSString* strKey = [NSString stringWithUTF8String:key];
     if ([strKey length] > 0)
     {
-        ret = [[NSUserDefaults standardUserDefaults] floatForKey:strKey];
+        NSNumber* number = this->numberForKey(strKey);
+        if (number)
+            ret = number.floatValue;
     }
     
     return ret;
@@ -157,7 +192,9 @@ double OpenPeerSettingsDelegate::getDouble(const char *key) const
     NSString* strKey = [NSString stringWithUTF8String:key];
     if ([strKey length] > 0)
     {
-        ret = [[NSUserDefaults standardUserDefaults] doubleForKey:strKey];
+        NSNumber* number = this->numberForKey(strKey);
+        if (number)
+            ret = number.doubleValue;
     }
     
     return ret;
@@ -170,17 +207,13 @@ void OpenPeerSettingsDelegate::setString(const char *key,const char *value)
     
     if ([strKey length] > 0 && [strKey length] > 0)
     {
-        if ([strKey isEqualToString:@"openpeer/calculated/authorizated-application-id"])
+        if ([strKey isEqualToString:authorizedApplicationIdCoreKey])
         {
             [[HOPSettings sharedSettings] storeAuthorizedApplicationId:strValue];
         }
         else
         {
-            @synchronized (dictionarySettings) {
-              [dictionarySettings setObject:strValue forKey:strKey];
-            }
-            [[NSUserDefaults standardUserDefaults] setObject:strValue forKey:strKey];
-            [[NSUserDefaults standardUserDefaults] synchronize];
+            this->setObjectForKey(strValue,strKey);
         }
     }
 }
@@ -194,8 +227,7 @@ void OpenPeerSettingsDelegate::setInt(const char *key,LONG value)
         NSNumber* number = [NSNumber numberWithLong:value];
         if (number)
         {
-            [[NSUserDefaults standardUserDefaults] setObject:number forKey:strKey];
-            [[NSUserDefaults standardUserDefaults] synchronize];
+            this->setObjectForKey(number,strKey);
         }
     }
 }
@@ -209,8 +241,7 @@ void OpenPeerSettingsDelegate::setUInt(const char *key,ULONG value)
         NSNumber* number = [NSNumber numberWithUnsignedLong:value];
         if (number)
         {
-            [[NSUserDefaults standardUserDefaults] setObject:number forKey:strKey];
-            [[NSUserDefaults standardUserDefaults] synchronize];
+            this->setObjectForKey(number,strKey);
         }
     }
 }
@@ -221,8 +252,11 @@ void OpenPeerSettingsDelegate::setBool(const char *key,bool value)
     
     if ([strKey length] > 0)
     {
-        [[NSUserDefaults standardUserDefaults] setBool:value forKey:strKey];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+        NSNumber* number = [NSNumber numberWithBool:value];
+        if (number)
+        {
+            this->setObjectForKey(number,strKey);
+        }
     }
 }
              
@@ -232,8 +266,11 @@ void OpenPeerSettingsDelegate::setFloat(const char *key,float value)
     
     if ([strKey length] > 0)
     {
-        [[NSUserDefaults standardUserDefaults] setFloat:value forKey:strKey];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+        NSNumber* number = [NSNumber numberWithFloat:value];
+        if (number)
+        {
+            this->setObjectForKey(number,strKey);
+        }
     }
 }
              
@@ -243,8 +280,11 @@ void OpenPeerSettingsDelegate::setDouble(const char *key,double value)
     
     if ([strKey length] > 0)
     {
-        [[NSUserDefaults standardUserDefaults] setDouble:value forKey:strKey];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+        NSNumber* number = [NSNumber numberWithDouble:value];
+        if (number)
+        {
+            this->setObjectForKey(number,strKey);
+        }
     }
 }
 
@@ -254,7 +294,19 @@ void OpenPeerSettingsDelegate::clear(const char *key)
     
     if ([strKey length] > 0)
     {
+        [dictionarySettings removeObjectForKey:strKey];
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:strKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
+}
+
+void OpenPeerSettingsDelegate::addSettingWithKey(NSString* inSetting, NSString* key)
+{
+    if ([inSetting length] > 0 && [key length] >0)
+        [dictionarySettings setObject:inSetting forKey:key];
+}
+
+NSDictionary* OpenPeerSettingsDelegate::getCurrentSettingsDictionary()
+{
+    return dictionarySettings;
 }

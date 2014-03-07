@@ -43,9 +43,13 @@
 @property (nonatomic, strong) NSURLConnection *urlConnection;
 @property (nonatomic, strong) NSMutableData* receivedData;
 
+@property (nonatomic, weak) IBOutlet UIButton* buttonLogger;
+@property (nonatomic, weak) IBOutlet UIButton* buttonCancel;
+
 - (IBAction)actionReadQRCode:(id)sender;
 - (IBAction)actionProceedWithlogin:(id)sender;
 - (IBAction)actionStartLogger:(id)sender;
+- (IBAction)actionCancelScan:(id)sender;
 @end
 
 @implementation QRScannerViewController
@@ -63,7 +67,7 @@
 {
     [super viewDidLoad];
     
-    
+    self.buttonCancel.layer.cornerRadius = 5.0;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -123,7 +127,11 @@
                     //[[HOPSettings sharedSettings] applySettings:str];
                     NSDictionary* settings = [[Settings sharedSettings] dictionaryForJSONString:str];
                     if (settings)
+                    {
+                        [[Settings sharedSettings] snapshotCurrentSettings];
+                        [[Settings sharedSettings] storeQRSettings:settings];
                         [[HOPSettings sharedSettings] storeSettingsFromDictionary:settings];
+                    }
                     [self actionProceedWithlogin:nil];
                 }
                 else
@@ -168,6 +176,10 @@
     
     [self.view.layer addSublayer:self.capture.layer];
     self.capture.delegate = self;
+    [self.view bringSubviewToFront:self.buttonLogger];
+    [self.view bringSubviewToFront:self.buttonCancel];
+    self.buttonCancel.hidden = NO;
+
 }
 
 - (IBAction)actionProceedWithlogin:(id)sender
@@ -253,6 +265,8 @@
         {
             //isSet = [[HOPSettings sharedSettings] applySettings:strJSON];
             NSDictionary* settings = [[Settings sharedSettings] dictionaryForJSONString:strJSON];
+            [[Settings sharedSettings] snapshotCurrentSettings];
+            [[Settings sharedSettings] storeQRSettings:settings];
             [[HOPSettings sharedSettings] storeSettingsFromDictionary:settings];
         }
         
@@ -278,5 +292,11 @@
 - (IBAction)actionStartLogger:(id)sender
 {
     [Logger startTelnetLoggerOnStartUp];
+}
+
+- (IBAction)actionCancelScan:(id)sender
+{
+    self.buttonCancel.hidden = YES;
+    [self.capture.layer removeFromSuperlayer];
 }
 @end
