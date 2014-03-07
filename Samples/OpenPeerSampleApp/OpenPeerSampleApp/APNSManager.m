@@ -34,6 +34,7 @@
 #import "UAConfig.h"
 #import "UAPush.h"
 #import "Settings.h"
+#import "AppConsts.h"
 
 #import <OpenPeerSDK/HOPRolodexContact.h>
 #import <OpenPeerSDK/HOPContact.h>
@@ -45,11 +46,6 @@
 
 @interface APNSManager ()
 
-//@property (nonatomic, strong) NSString* developmentAppKey;
-//@property (nonatomic, strong) NSString* developmentAppSecret;
-//@property (nonatomic, strong) NSString* productionAppKey;
-//@property (nonatomic, strong) NSString* productionAppSecret;
-//@property (nonatomic, strong) NSString* masterAppSecret;
 @property (nonatomic, strong) NSString* apiPushURL;
 
 @property (nonatomic, strong) NSString* urbanAirshipAppKey;
@@ -84,13 +80,13 @@
     {
         
 #ifdef DEBUG
-        self.urbanAirshipAppKey = [[NSUserDefaults standardUserDefaults] stringForKey: @"developmentAppKey"]; //developmentAppKey;//[plistData objectForKey:@"developmentAppKey"];
-        self.urbanAirshipAppSecret = [[NSUserDefaults standardUserDefaults] stringForKey: @"masterAppSecretDev"];//masterAppSecretDev;//[plistData objectForKey:@"masterAppSecretDev"];
+        self.urbanAirshipAppKey = [[NSUserDefaults standardUserDefaults] stringForKey: settingsKeyUrbanAirShipDevelopmentAppKey];
+        self.urbanAirshipAppSecret = [[NSUserDefaults standardUserDefaults] stringForKey: settingsKeyUrbanAirShipMasterAppSecretDev];
 #else
-        self.urbanAirshipAppKey = [[NSUserDefaults standardUserDefaults] stringForKey: @"productionAppKey"];//productionAppKey;//[plistData objectForKey:@"productionAppKey"];
-        self.urbanAirshipAppSecret = [[NSUserDefaults standardUserDefaults] stringForKey: @"masterAppSecret"];//masterAppSecret;//[plistData objectForKey:@"masterAppSecret"];
+        self.urbanAirshipAppKey = [[NSUserDefaults standardUserDefaults] stringForKey: settingsKeyUrbanAirShipProductionAppKey];
+        self.urbanAirshipAppSecret = [[NSUserDefaults standardUserDefaults] stringForKey: settingsKeyUrbanAirMasterAppSecret];
 #endif
-        self.apiPushURL = [[NSUserDefaults standardUserDefaults] stringForKey: @"apiPushURL"];//apiPushURL;//[plistData objectForKey:@"apiPushURL"];
+        self.apiPushURL = [[NSUserDefaults standardUserDefaults] stringForKey: settingsKeyUrbanAirShipAPIPushURL];
         self.apnsHisotry = [[NSMutableDictionary alloc] init];
     }
     return self;

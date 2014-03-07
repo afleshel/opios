@@ -87,26 +87,12 @@
     {
         NSDate* expiry = [[NSDate date] dateByAddingTimeInterval:(30 * 24 * 60 * 60)];
         
-        _authorizedApplicationId = [HOPStack createAuthorizedApplicationID:[[NSUserDefaults standardUserDefaults] stringForKey: @"applicationId"] applicationIDSharedSecret:[[NSUserDefaults standardUserDefaults] stringForKey: @"applicationIdSharedSecret"] expires:expiry];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+        _authorizedApplicationId = [HOPStack createAuthorizedApplicationID:[[NSUserDefaults standardUserDefaults] stringForKey: @"applicationId"] applicationIDSharedSecret:[[NSUserDefaults standardUserDefaults] stringForKey: settingsKeyAppIdSharedSecret] expires:expiry];
     }
     return _authorizedApplicationId;
 }
 
-- (NSString*) deviceId
-{
-    if (!_deviceId)
-    {
-        _deviceId = [[NSUserDefaults standardUserDefaults] objectForKey:keyOpenPeerUser];
-        if ([_deviceId length] == 0)
-        {
-            _deviceId = [Utility getGUIDstring];
-            [[NSUserDefaults standardUserDefaults] setObject:_deviceId forKey:keyOpenPeerUser];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-        }
-    }
-    return _deviceId;
-}
+
 - (void) refreshAuthorizedApplicationId
 {
     self.authorizedApplicationId = nil;
@@ -122,15 +108,17 @@
     NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
     NSString *dataPathDirectory = [libraryPath stringByAppendingPathComponent:@"db"];
     [[HOPModelManager sharedModelManager] setDataPath:dataPathDirectory backupData:NO];
-    NSString *cachePathDirectory = [libraryPath stringByAppendingPathComponent:@"cache"];
-    [[HOPModelManager sharedModelManager] setCachePath:cachePathDirectory];
     
     //Set settigns delegate
-    [[HOPSettings sharedSettings] setup];//WithDelegate:[Settings sharedSettings]];
+    [[HOPSettings sharedSettings] setup];
     
     //Cleare expired cookies and set delegate
     [[HOPCache sharedCache] removeExpiredCookies];
-    [[HOPCache sharedCache] setDelegate:self.cacheDelegate];
+    [[HOPCache sharedCache] setup];
+    //[[HOPCache sharedCache] setDelegate:self.cacheDelegate];
+    
+    //Set calculated values
+    [[Settings sharedSettings] updateDeviceInfo];
     
     if (![[HOPModelManager sharedModelManager] getLastLoggedInHomeUser])
     {
@@ -146,14 +134,13 @@
                 NSDictionary* filteredDictionary = [[Settings sharedSettings] dictionaryWithRemovedAllInvalidEntriesForPath:filePath];
                 if ([filteredDictionary count] > 0)
                     [[HOPSettings sharedSettings] storeSettingsFromDictionary:filteredDictionary];
-                //[[HOPSettings sharedSettings] storeSettingsFromPath:filePath];
             }
             
             isSetLoginSettings = [[Settings sharedSettings] isLoginSettingsSet];
         }
         
         //If not already set, set default app data
-        BOOL isSetAppData = NO;//[[Settings sharedSettings] isAppDataSet];
+        BOOL isSetAppData = [[Settings sharedSettings] isAppDataSet];
         if (!isSetAppData)
         {
             NSString* filePath = [[NSBundle mainBundle] pathForResource:@"CustomerSpecific" ofType:@"plist"];
@@ -164,25 +151,35 @@
                 if ([filteredDictionary count] > 0)
                     [[HOPSettings sharedSettings] storeSettingsFromDictionary:filteredDictionary];
             }
+            
+#ifndef DEBUG
+            //Apply release settings
+            NSString* filePath = [[NSBundle mainBundle] pathForResource:@"CustomerSpecific_Release" ofType:@"plist"];
+            if ([filePath length] > 0)
+            {
+                NSMutableDictionary* filteredDictionary = [[Settings sharedSettings] dictionaryWithRemovedAllInvalidEntriesForPath:filePath];
+                [[Settings sharedSettings] createUserAgentFromDictionary:filteredDictionary];
+                if ([filteredDictionary count] > 0)
+                    [[HOPSettings sharedSettings] storeSettingsFromDictionary:filteredDictionary];
+            }
+            
+            [[self mainViewController] waitForUserGesture];
+#endif
+            
             isSetAppData = [[Settings sharedSettings] isAppDataSet];
         }
         
-         [[Settings sharedSettings] updateDeviceInfo];
-        
-#ifdef DEBUG
         //Show QR scanner if user wants to change settings by reading QR code
-        [[self mainViewController] showQRScanner];
-#else
-        [[self mainViewController] waitForUserGesture];
-#endif
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"applicationQRScannerShownAtStart"])
+            [[self mainViewController] showQRScanner];
+        else if ([[NSUserDefaults standardUserDefaults] boolForKey:@"applicationSplashScreenAllowsQRScannerGesture"])
+            [[self mainViewController] waitForUserGesture];
+        else
+            [self setup];
     }
     else
     {
-        [[Settings sharedSettings] updateDeviceInfo];
-        
         [self setup];
-        //Set log levels and start logging
-        [Logger startAllSelectedLoggers];
     }
 }
 
@@ -245,7 +242,6 @@
     self.accountDelegate = nil;
     self.identityDelegate = nil;
     self.identityLookupDelegate = nil;
-    self.cacheDelegate = nil;
     self.backgroundingDelegate = nil;
 }
 /**
@@ -262,13 +258,13 @@
     self.identityDelegate.loginDelegate = self.mainViewController;
     self.identityLookupDelegate = [[IdentityLookupDelegate alloc] init];
     self.backgroundingDelegate = [[BackgroundingDelegate alloc] init];
-    //self.cacheDelegate = [[CacheDelegate alloc] init];
 }
 
 - (void) closeTheApp
 {
     exit(-1);
 }
+
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Closing Application" message:@"Application will be closed in 2 seconds" delegate:self cancelButtonTitle:nil otherButtonTitles: nil];

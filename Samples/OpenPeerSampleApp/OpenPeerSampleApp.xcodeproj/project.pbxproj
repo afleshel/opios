@@ -161,6 +161,7 @@
 		8730D7E21833A63D008D1D37 /* iPhone_loader_00027@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8730D7A81833A63D008D1D37 /* iPhone_loader_00027@2x.png */; };
 		8730D7E31833A63D008D1D37 /* iPhone_loader_00028.png in Resources */ = {isa = PBXBuildFile; fileRef = 8730D7A91833A63D008D1D37 /* iPhone_loader_00028.png */; };
 		8730D7E41833A63D008D1D37 /* iPhone_loader_00028@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8730D7AA1833A63D008D1D37 /* iPhone_loader_00028@2x.png */; };
+		8731272218C670AD00507144 /* Template_CustomerSpecific_Release.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8731272118C670AD00507144 /* Template_CustomerSpecific_Release.plist */; };
 		87355FE517CCA7E3006151E7 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 87355FE417CCA7E3006151E7 /* Default.png */; };
 		87355FE917CCA8AF006151E7 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 87355FE817CCA8AF006151E7 /* Default@2x.png */; };
 		874408CA182FE873004AD8FC /* IncomingCallView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 874408C7182FE873004AD8FC /* IncomingCallView_iPhone.xib */; };
@@ -179,6 +180,7 @@
 		874AD9DE166CEB780095FE33 /* CallDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 874AD9DD166CEB780095FE33 /* CallDelegate.m */; };
 		874AD9E5166D4C900095FE33 /* OpenPeer.m in Sources */ = {isa = PBXBuildFile; fileRef = 874AD9E4166D4C900095FE33 /* OpenPeer.m */; };
 		874FE10E17FD7FF0007A791B /* AppLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 874FE10D17FD7FF0007A791B /* AppLog.m */; };
+		8754280918C7A2FD007F626F /* CustomerSpecific_Release.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8754280818C7A2FD007F626F /* CustomerSpecific_Release.plist */; };
 		87570E46172ED183006E1C2F /* OpenpeerSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87570E45172ED183006E1C2F /* OpenpeerSDK.framework */; };
 		8757E17F1827A0BF00D7BDA1 /* SessionViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = 8757E17E1827A0BF00D7BDA1 /* SessionViewController_iPhone.m */; };
 		8757E1831827A10E00D7BDA1 /* SessionViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8757E1821827A10E00D7BDA1 /* SessionViewController_iPhone.xib */; };
@@ -212,6 +214,7 @@
 		87796E8618A8DDA7002F4B43 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87796E8418A8DDA7002F4B43 /* libcurl.a */; };
 		879D7B9717FB1224008C78E2 /* LoggerSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 879D7B9617FB1224008C78E2 /* LoggerSettingsViewController.m */; };
 		879DC5F418C92FE800DA60C0 /* BackgroundingDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 87CCF64318C0FFDB000DF636 /* BackgroundingDelegate.m */; };
+		879DC62A18C9F77400DA60C0 /* Template_CustomerSpecific_Release.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8731272118C670AD00507144 /* Template_CustomerSpecific_Release.plist */; };
 		879F4393186C507000AED5AB /* OpenPeerSampleAppAPNS-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 879F4392186C507000AED5AB /* OpenPeerSampleAppAPNS-Info.plist */; };
 		87A1086A1802C116001F705D /* Logger.m in Sources */ = {isa = PBXBuildFile; fileRef = 87A108691802C116001F705D /* Logger.m */; };
 		87A1086C1802CBDC001F705D /* logger.png in Resources */ = {isa = PBXBuildFile; fileRef = 87A1086B1802CBDC001F705D /* logger.png */; };
@@ -221,6 +224,7 @@
 		87BFEDBA183A885C00A48821 /* AppConsts.m in Sources */ = {isa = PBXBuildFile; fileRef = 87BFEDB8183A885C00A48821 /* AppConsts.m */; };
 		87CCF63118C0B53C000DF636 /* UUIDManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D4904E18C081A400D34115 /* UUIDManager.m */; };
 		87CCF64418C0FFDB000DF636 /* BackgroundingDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 87CCF64318C0FFDB000DF636 /* BackgroundingDelegate.m */; };
+		87CD91F318C7BF900070F42A /* CustomerSpecific_Release.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8754280818C7A2FD007F626F /* CustomerSpecific_Release.plist */; };
 		87D4904F18C081A400D34115 /* UUIDManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D4904E18C081A400D34115 /* UUIDManager.m */; };
 		87D4BCDC18675368008C2D30 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 87272838166CBF9B0089CBB6 /* main.m */; };
 		87D4BCDD18675368008C2D30 /* AppLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 874FE10D17FD7FF0007A791B /* AppLog.m */; };
@@ -797,6 +801,7 @@
 		8730D7A81833A63D008D1D37 /* iPhone_loader_00027@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone_loader_00027@2x.png"; sourceTree = "<group>"; };
 		8730D7A91833A63D008D1D37 /* iPhone_loader_00028.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPhone_loader_00028.png; sourceTree = "<group>"; };
 		8730D7AA1833A63D008D1D37 /* iPhone_loader_00028@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone_loader_00028@2x.png"; sourceTree = "<group>"; };
+		8731272118C670AD00507144 /* Template_CustomerSpecific_Release.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Template_CustomerSpecific_Release.plist; sourceTree = "<group>"; };
 		87355FE417CCA7E3006151E7 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = ../Default.png; sourceTree = "<group>"; };
 		87355FE817CCA8AF006151E7 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = SOURCE_ROOT; };
 		874408C7182FE873004AD8FC /* IncomingCallView_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IncomingCallView_iPhone.xib; sourceTree = "<group>"; };
@@ -825,6 +830,7 @@
 		874ADDBC166E14440095FE33 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		874FE10D17FD7FF0007A791B /* AppLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppLog.m; sourceTree = "<group>"; };
 		874FE11117FD8DA9007A791B /* AppLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppLog.h; sourceTree = "<group>"; };
+		8754280818C7A2FD007F626F /* CustomerSpecific_Release.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CustomerSpecific_Release.plist; sourceTree = "<group>"; };
 		87570E45172ED183006E1C2F /* OpenpeerSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OpenpeerSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8757E17D1827A0BF00D7BDA1 /* SessionViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SessionViewController_iPhone.h; sourceTree = "<group>"; };
 		8757E17E1827A0BF00D7BDA1 /* SessionViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionViewController_iPhone.m; sourceTree = "<group>"; };
@@ -1168,6 +1174,7 @@
 			isa = PBXGroup;
 			children = (
 				876CD4C618A385900069C296 /* Template_CustomerSpecific.plist */,
+				8731272118C670AD00507144 /* Template_CustomerSpecific_Release.plist */,
 			);
 			name = templates;
 			path = ../../../templates;
@@ -1414,6 +1421,7 @@
 			isa = PBXGroup;
 			children = (
 				876CD4C818A38B370069C296 /* CustomerSpecific.plist */,
+				8754280818C7A2FD007F626F /* CustomerSpecific_Release.plist */,
 				87098FDC17C23997007C9093 /* OpenPeerDataModel.bundle */,
 				87272838166CBF9B0089CBB6 /* main.m */,
 				8727283A166CBF9B0089CBB6 /* OpenPeerSampleApp-Prefix.pch */,
@@ -1975,6 +1983,7 @@
 				8730D7D11833A63D008D1D37 /* iPhone_loader_00019.png in Resources */,
 				87224759182D165A0027DA50 /* audio-call-mic-active@2x.png in Resources */,
 				8730D7C81833A63D008D1D37 /* iPhone_loader_00014@2x.png in Resources */,
+				8754280918C7A2FD007F626F /* CustomerSpecific_Release.plist in Resources */,
 				87E4D9A9180BE199002CA2D4 /* OpenPeerLogo80.png in Resources */,
 				8757E1C61827E7AE00D7BDA1 /* chat_bubble_left.png in Resources */,
 				8730D76518339AFE008D1D37 /* chat-bottom@2x.png in Resources */,
@@ -1985,6 +1994,7 @@
 				8712BE8117D8CC7C00665F42 /* iPhone_back_button@2x.png in Resources */,
 				8712BE8217D8CC7C00665F42 /* iPhone_back_button.png in Resources */,
 				871C7B9817FEDCEE00BE641B /* OpenPeerLogo@2x.png in Resources */,
+				8731272218C670AD00507144 /* Template_CustomerSpecific_Release.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2000,6 +2010,7 @@
 				87D4BD3118675368008C2D30 /* OpenPeerLogo.png in Resources */,
 				87D4BD3218675368008C2D30 /* MainViewController.xib in Resources */,
 				87D4BD3318675368008C2D30 /* iPhone_loader_00024.png in Resources */,
+				87CD91F318C7BF900070F42A /* CustomerSpecific_Release.plist in Resources */,
 				87D4BD3418675368008C2D30 /* audio-call-mic-active.png in Resources */,
 				87D4BD3518675368008C2D30 /* WebLoginViewController.xib in Resources */,
 				87D4BD3618675368008C2D30 /* message-received.wav in Resources */,
@@ -2159,6 +2170,7 @@
 				87D4BDCC18675368008C2D30 /* iPhone_back_button@2x.png in Resources */,
 				87D4BDCD18675368008C2D30 /* iPhone_back_button.png in Resources */,
 				87D4BDCE18675368008C2D30 /* OpenPeerLogo@2x.png in Resources */,
+				879DC62A18C9F77400DA60C0 /* Template_CustomerSpecific_Release.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

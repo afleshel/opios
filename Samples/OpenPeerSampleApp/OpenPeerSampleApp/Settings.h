@@ -124,6 +124,8 @@ typedef enum
 
 - (void) saveDefaultsLoggerSettings;
 
+- (BOOL) isQRSettingsResetEnabled;
+- (void) enableQRSettingsReset:(BOOL) enable;
 
 - (NSString*) getOuterFrameURL;
 - (NSString*) getNamespaceGrantServiceURL;
@@ -144,4 +146,7 @@ typedef enum
 - (NSString*) createUserAgentFromDictionary:(NSMutableDictionary*) inDictionary;
 
 - (void) updateDeviceInfo;
+- (void) snapshotCurrentSettings;
+- (void) storeQRSettings:(NSDictionary*) inDictionary;
+- (void) removeAppliedQRSettings;
 @end
