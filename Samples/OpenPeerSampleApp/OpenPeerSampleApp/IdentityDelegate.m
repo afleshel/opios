@@ -39,6 +39,8 @@
 #import <OpenpeerSDK/HOPIdentityLookup.h>
 #import <OpenpeerSDK/HOPAssociatedIdentity.h>
 
+#import <pthread.h>
+
 #import "LoginManager.h"
 #import "ContactsManager.h"
 #import "AppConsts.h"
@@ -46,11 +48,16 @@
 #import "MainViewController.h"
 #import "ContactsViewController.h"
 #import "ActivityIndicatorViewController.h"
+#import "Settings.h"
 
 @interface IdentityDelegate()
-
+{
+    pthread_mutex_t mutexVisibleWebView;
+}
 @property (nonatomic,strong) NSMutableDictionary* loginWebViewsDictionary;
-- (WebLoginViewController*) getLoginWebViewForIdentity:(HOPIdentity*) identity;
+@property (nonatomic, weak) HOPIdentity* identityMutexOwner;
+
+- (WebLoginViewController*) getLoginWebViewForIdentity:(HOPIdentity*) identity create:(BOOL) create;
 - (void) removeLoginWebViewForIdentity:(HOPIdentity*) identity;
 @end
 
@@ -62,6 +69,7 @@
     if (self)
     {
         self.loginWebViewsDictionary = [[NSMutableDictionary alloc] init];
+        pthread_mutex_init(&mutexVisibleWebView, NULL);
     }
     return self;
 }
@@ -71,32 +79,35 @@
  @param identity HOPIdentity Login user identity.
  @returns WebLoginViewController web login view
  */
-- (WebLoginViewController*) getLoginWebViewForIdentity:(HOPIdentity*) identity
+- (WebLoginViewController*) getLoginWebViewForIdentity:(HOPIdentity*) identity create:(BOOL)create
 {
     WebLoginViewController* ret = nil;
     
-    NSLog(@"getLoginWebViewForIdentity:%@", [identity getBaseIdentityURI]);
-    //ret = [self.loginWebViewsDictionary objectForKey:[identity getBaseIdentityURI]];
-    if ([self.loginWebViewsDictionary count] > 0)
-    {
-        ret = [[self.loginWebViewsDictionary allValues]objectAtIndex:0];
-        ret.coreObject = identity;
-    }
-    if (!ret)
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"<%p> Identity - Get login web view for identity objectId:%d", identity, [[identity getObjectId] intValue]);
+    
+    ret = [self.loginWebViewsDictionary objectForKey:[identity getObjectId]];
+ 
+    if (create && !ret)
     {
         //ret = [[LoginManager sharedLoginManager] preloadedWebLoginViewController];
         //if (!ret)
         {
             ret= [[WebLoginViewController alloc] initWithCoreObject:identity];
+            OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"<%p> Identity - Created web view: %p \nidentity uri: %@ \nidentity object id:%d",identity, ret,[identity getIdentityURI],[[identity getObjectId] intValue]);
         }
         ret.view.hidden = YES;
-        [self.loginWebViewsDictionary setObject:ret forKey:[identity getBaseIdentityURI]];
+        ret.coreObject = identity;
+        [self.loginWebViewsDictionary setObject:ret forKey:[identity getObjectId]];
         //[[LoginManager sharedLoginManager] setPreloadedWebLoginViewController:nil];
-        NSLog(@"getLoginWebViewForIdentity - CREATED:%@", [identity getBaseIdentityURI]);
     }
     else
     {
-        NSLog(@"getLoginWebViewForIdentity - RETRIEVED EXISTING:%@", [identity getBaseIdentityURI]);
+        if (ret)
+        {
+            OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"<%p> Identity - Retrieved exisitng web view:%p for identity objectId:%d", identity, ret, [[identity getObjectId] intValue]);
+        }
+        else
+            OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelTrace, @"<%p> Identity - getLoginWebViewForIdentity - NO VALID WEB VIEW:%p - %d", identity, ret, [[identity getObjectId] intValue]);
     }
     return ret;
 }
@@ -108,12 +119,20 @@
 
 - (void)identity:(HOPIdentity *)identity stateChanged:(HOPIdentityStates)state
 {
-    NSLog(@"Identity login state: %@ - identityURI: %@",[HOPIdentity stringForIdentityState:state], [identity getIdentityURI]);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"<%p> Identity login state has changed to: %@ - identityURI: %@",identity, [HOPIdentity stringForIdentityState:state], [identity getIdentityURI]);
+    
+    //Prevent to have two web views visible at the time
+    if (state == HOPIdentityStateWaitingForBrowserWindowToBeMadeVisible)
+    {
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"<%p> Identity tries to obtain web view visibility mutex. identityURI: %@ identityObjectId: %d",identity,[identity getIdentityURI], [[identity getObjectId] integerValue]);
+        pthread_mutex_lock(&mutexVisibleWebView);
+        self.identityMutexOwner = identity;
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"<%p> Identity owns web view visibility mutex. identityURI: %@ identityObjectId: %d",identity,[identity getIdentityURI],[[identity getObjectId] integerValue]);
+    }
     
     dispatch_async(dispatch_get_main_queue(), ^
     {
-        WebLoginViewController* webLoginViewController = [self getLoginWebViewForIdentity:identity];
-        NSString* relogininfo = nil;
+        WebLoginViewController* webLoginViewController = nil;
         
         switch (state)
         {
@@ -126,42 +145,32 @@
                 break;
                 
             case HOPIdentityStateWaitingAttachmentOfDelegate:
+            {
                 [[LoginManager sharedLoginManager] attachDelegateForIdentity:identity forceAttach:NO];
+            }
                 break;
                 
             case HOPIdentityStateWaitingForBrowserWindowToBeLoaded:
-                //Login url is received. Remove activity indicator
-                [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:NO withText:nil inView:nil];
+            {
+                webLoginViewController = [self getLoginWebViewForIdentity:identity create:YES];
                 if ([[LoginManager sharedLoginManager] isLogin] || [[LoginManager sharedLoginManager] isAssociation])
-                    [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:YES withText:@"Opening login page ..." inView:[[[OpenPeer sharedOpenPeer] mainViewController] view]];
-                else
-                    [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:YES withText:@"Relogin ..." inView:[[[OpenPeer sharedOpenPeer] mainViewController] view]];
+                {
+                    [self.loginDelegate onOpeningLoginPage];
+                }
 
-                //if ([[LoginManager sharedLoginManager] preloadedWebLoginViewController] != webLoginViewController)
+                if ([[LoginManager sharedLoginManager] preloadedWebLoginViewController] != webLoginViewController)
                 {
                     //Open identity login web page
-                    [webLoginViewController openLoginUrl:outerFrameURL];
+                    [webLoginViewController openLoginUrl:[[Settings sharedSettings] getOuterFrameURL]];
                 }
+            }
                 break;
                 
             case HOPIdentityStateWaitingForBrowserWindowToBeMadeVisible:
             {
-                //Add identity login web view like main view subview
-                if (!webLoginViewController.view.superview)
-                {
-                    [[[OpenPeer sharedOpenPeer] mainViewController] removeSplashScreen];
-                    [webLoginViewController.view setFrame:[[OpenPeer sharedOpenPeer] mainViewController].view.bounds];
-                    [[[OpenPeer sharedOpenPeer] mainViewController] showWebLoginView:webLoginViewController];
-                }
-                
-                webLoginViewController.view.alpha = 0;
-                //Make visible identity login web view
-                webLoginViewController.view.hidden = NO;
-                
-                [UIView animateWithDuration:0.7 animations:^{
-                    webLoginViewController.view.alpha = 1;
-                }];
-                
+                webLoginViewController = [self getLoginWebViewForIdentity:identity create:NO];
+                [self.loginDelegate onLoginWebViewVisible:webLoginViewController];
+
                 //Notify core that identity login web view is visible now
                 [identity notifyBrowserWindowVisible];
             }
@@ -169,31 +178,34 @@
                 
             case HOPIdentityStateWaitingForBrowserWindowToClose:
             {
-                [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:YES withText:@"Login ..." inView:[[[OpenPeer sharedOpenPeer] mainViewController] view]];
-                //Detach identity login web view
-                [UIView animateWithDuration:0.77 animations:^{
-                    webLoginViewController.view.alpha = 0;
-                } completion: ^(BOOL finished) {
-                    [webLoginViewController.view removeFromSuperview];
-                }];
+                webLoginViewController = [self getLoginWebViewForIdentity:identity create:NO];
+                [self.loginDelegate onIdentityLoginWebViewClose:webLoginViewController forIdentityURI:[identity getIdentityURI]];
                 
                 //Notify core that identity login web view is closed
                 [identity notifyBrowserWindowClosed];
                 
-                //Remove identity login web view from the dictionary
-                [self removeLoginWebViewForIdentity:identity];
+                if ([[self.identityMutexOwner getObjectId] intValue] == [[identity getObjectId] intValue])
+                {
+                    self.identityMutexOwner = nil;
+                    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"<%p> Identity releases web view visibility mutex. identityURI: %@",identity,[identity getIdentityURI]);
+                    pthread_mutex_unlock(&mutexVisibleWebView);
+                }
             }
                 break;
                 
             case HOPIdentityStateReady:
-                [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:NO withText:nil inView:nil];
+                [self.loginDelegate onIdentityLoginFinished];
                 if ([[LoginManager sharedLoginManager] isLogin] || [[LoginManager sharedLoginManager] isAssociation])
                     [[LoginManager sharedLoginManager] onIdentityAssociationFinished:identity];
                 break;
                 
             case HOPIdentityStateShutdown:
-                [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:NO withText:nil inView:nil];
-                //[[[OpenPeer sharedOpenPeer] mainViewController] showLoginView];
+            {
+                HOPIdentityState* identityState = [identity getState];
+                if (identityState.lastErrorCode)
+                    [self.loginDelegate onIdentityLoginError:identityState.lastErrorReason];
+                [self.loginDelegate onIdentityLoginShutdown];
+            }
                 break;
                 
             default:
@@ -204,16 +216,16 @@
 
 - (void)onIdentityPendingMessageForInnerBrowserWindowFrame:(HOPIdentity *)identity
 {
-    NSLog(@"onIdentityPendingMessageForInnerBrowserWindowFrame");
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"<%p> Identity: pending message for inner browser window frame.",identity);
     
     dispatch_async(dispatch_get_main_queue(), ^
     {
         //Get login web view for specified identity
-        WebLoginViewController* webLoginViewController = [self getLoginWebViewForIdentity:identity];
+        WebLoginViewController* webLoginViewController = [self getLoginWebViewForIdentity:identity create:NO];
         if (webLoginViewController)
         {
             NSString* jsMethod = [NSString stringWithFormat:@"sendBundleToJS(\'%@\')", [identity getNextMessageForInnerBrowerWindowFrame]];
-            //NSLog(@"\n\nSent to inner frame: %@\n\n",jsMethod);
+
             //Pass JSON message to java script
             [webLoginViewController passMessageToJS:jsMethod];
         }
@@ -222,14 +234,13 @@
 
 - (void)onIdentityRolodexContactsDownloaded:(HOPIdentity *)identity
 {
-    NSLog(@"onIdentityRolodexContactsDownloaded");
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"<%p> Identity rolodex contacts are downloaded.",identity);
     //Remove activity indicator
     [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:NO withText:nil inView:nil];
     if (identity)
     {
         HOPHomeUser* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
         HOPAssociatedIdentity* associatedIdentity = [[HOPModelManager sharedModelManager] getAssociatedIdentityBaseIdentityURI:[identity getBaseIdentityURI] homeUserStableId:homeUser.stableId];
-        //[[[[OpenPeer sharedOpenPeer] mainViewController] contactsTableViewController] onContactsLoaded];
         
         BOOL flushAllRolodexContacts;
         NSString* downloadedVersion;
@@ -238,7 +249,7 @@
         //Get downloaded rolodex contacts
         BOOL rolodexContactsObtained = [identity getDownloadedRolodexContacts:&flushAllRolodexContacts outVersionDownloaded:&downloadedVersion outRolodexContacts:&rolodexContacts];
         
-        NSLog(@"onIdentityRolodexContactsDownloaded - Identity URI: %@ - Total number of roldex contacts: %d",[identity getIdentityURI], [rolodexContacts count]);
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Identity URI: %@ - Total number of roldex contacts: %d",[identity getIdentityURI], [rolodexContacts count]);
         
         if ([downloadedVersion length] > 0)
             associatedIdentity.downloadedVersion = downloadedVersion;
@@ -272,11 +283,13 @@
             //[[HOPModelManager sharedModelManager] saveContext];
         }
         [[HOPModelManager sharedModelManager] saveContext];
+        [[[ContactsManager sharedContactsManager] setOfIdentitiesWhoseContactsDownloadInProgress] removeObject:[identity getIdentityURI]];
     }
 }
 
 - (void) onNewIdentity:(HOPIdentity*) identity
 {
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"<%p> Identity: Handling a new identity with the uri:%@", identity,[identity getIdentityURI]);
     [[LoginManager sharedLoginManager] attachDelegateForIdentity:identity forceAttach:YES];
 }
 @end

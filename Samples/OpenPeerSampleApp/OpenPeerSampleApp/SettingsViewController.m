@@ -41,20 +41,21 @@ typedef enum
 {
     SETTINGS_INFO_SECTION,
     SETTINGS_MEDIA_SECTION,
-    SETTINGS_OPTIONS_SECTION,
     SETTINGS_LOGGER_SECTION,
+    SETTINGS_RESET_QR_SETTINGS_SECTION,
     SETTINGS_LOGOUT_SECTION,
+    SETTINGS_OPTIONS_SECTION,//Not supported at the moment
     
-    SETTINGS_TOTAL_SECTIONS
+    SETTINGS_TOTAL_SECTIONS = 5
 }SettingsSections;
 
 typedef enum
 {
+    SETTINGS_CALL_REDIAL,
     SETTINGS_REMOTE_SESSION_INIT,
     SETTINGS_FACE_DETECTION_MODE,
-    SETTINGS_CALL_REDIAL,
     
-    SETTINS_TOTAL_OPTIONS_NUMBER = 3
+    SETTINS_TOTAL_OPTIONS_NUMBER
 } SettingsOptions;
 
 typedef enum
@@ -89,7 +90,7 @@ typedef enum
 {
     [super viewDidLoad];
 
-    self.tableView.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"iPhone_background_navigation_mode.png"]];
+    //self.tableView.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"iPhone_background_navigation_mode.png"]];
 
 }
 
@@ -121,6 +122,7 @@ typedef enum
         case SETTINGS_INFO_SECTION:
         case SETTINGS_LOGOUT_SECTION:
         case SETTINGS_LOGGER_SECTION:
+        case SETTINGS_RESET_QR_SETTINGS_SECTION:
         default:
             ret = 1;
             break;
@@ -133,6 +135,7 @@ typedef enum
     static NSString *cellIdentifier = @"regularCell";
     static NSString *switchCellIdentifier = @"switchCell";
     static NSString *switchCellMediaIdentifier = @"switchCellMedia";
+    static NSString *switchCellResetQRSettings = @"switchCellResetQRSettings";
     
     UITableViewCell *cell = nil;
     
@@ -164,6 +167,22 @@ typedef enum
             cell.accessoryView = switchView;
             [switchView setOn:NO animated:NO];
             [switchView addTarget:self action:@selector(switchMediaChanged:) forControlEvents:UIControlEventValueChanged];
+        }
+        
+        cell.tag = indexPath.row;
+        [self setSwitchCellData:cell atIndexPath:indexPath];
+    }
+    else if (indexPath.section == SETTINGS_RESET_QR_SETTINGS_SECTION)
+    {
+        cell = [tableView dequeueReusableCellWithIdentifier:switchCellMediaIdentifier];
+        if (!cell)
+        {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:switchCellResetQRSettings];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            UISwitch *switchView = [[UISwitch alloc] initWithFrame:CGRectZero];
+            cell.accessoryView = switchView;
+            [switchView setOn:NO animated:NO];
+            [switchView addTarget:self action:@selector(switchQRSettingsReset:) forControlEvents:UIControlEventValueChanged];
         }
         
         cell.tag = indexPath.row;
@@ -317,6 +336,11 @@ typedef enum
         }
         break;
             
+        case SETTINGS_RESET_QR_SETTINGS_SECTION:
+        {
+            [switcher setOn:[[Settings sharedSettings] isQRSettingsResetEnabled]];
+            tableCell.textLabel.text = @"Discard settings applied by QR code";
+        }
         default:
             break;
     }
@@ -395,5 +419,10 @@ typedef enum
         default:
             break;
     }
+}
+
+- (void) switchQRSettingsReset:(UISwitch*) sender
+{
+    [[Settings sharedSettings] enableQRSettingsReset: [sender isOn]];
 }
 @end

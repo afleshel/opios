@@ -32,9 +32,14 @@
 #import "ChatMessageCell.h"
 #import "Message.h"
 //#import "OpenPeerUser.h"
-#import <OpenpeerSDK/HOPRolodexContact.h>
+#import <OpenpeerSDK/HOPRolodexContact+External.h>
 #import <OpenpeerSDK/HOPModelManager.h>
+#import <OpenpeerSDK/HOPAvatar.h>
+#import <OpenpeerSDK/HOPImage.h>
 #import <OpenpeerSDK/HOPHomeUser+External.h>
+#import <OpenpeerSDK/HOPMessageRecord.h>
+#import <OpenpeerSDK/HOPPublicPeerFile.h>
+#import <OpenpeerSDK/HOPIdentityContact.h>
 #import "TTTAttributedLabel.h"
 #import "Utility.h"
 
@@ -50,7 +55,7 @@
 @property (nonatomic, strong) UIFont *chatNameFont;
 @property (nonatomic, strong) UIFont *chatTimestampFont;
 @property (nonatomic, strong) NSString *unicodeMessageText;
-@property (nonatomic, weak) Message *message;
+@property (nonatomic, weak) HOPMessageRecord *message;
 
 - (void) setUnicodeChars:(NSString *)str;
 
@@ -220,18 +225,19 @@
         [ms1 replaceOccurrencesOfString:@"(ci)" withString:@"\ue30e" options:NSLiteralSearch range:NSMakeRange(0, [ms1 length])];
         
         _unicodeMessageText = [NSString stringWithString:ms1];
-        //NSLog(@"******************setUnicodeChars: _unicodeMessageText:%@",_unicodeMessageText);
+        //OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"******************setUnicodeChars: _unicodeMessageText:%@",_unicodeMessageText);
     }
 }
 
-- (void)setMessage:(Message *)message
+//- (void) setMessage:(Message*) message
+- (void)setMessage:(HOPMessageRecord *)message
 {
     _message = message;
 }
 
 -(void)layoutSubviews
 {
-    BOOL isHomeUserSender = !self.message.contact;
+    BOOL isHomeUserSender = !self.message.fromPeer;
     
     [self.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     self.contentView.frame = self.bounds;
@@ -259,7 +265,9 @@
             //if message is received
             if (!isHomeUserSender)
             {
-                messageSenderName = [self.message.contact name];
+                HOPRolodexContact* contact = ((HOPIdentityContact*)[self.message.fromPeer.identityContacts anyObject]).rolodexContact;
+                messageSenderName = [contact name];
+//                messageSenderName = [self.message.contact name];
             }
             else
             {
@@ -281,7 +289,7 @@
             UILabel *labelSeparator = [[UILabel alloc] initWithFrame:CGRectMake(headerLabelXpos, TOP_SPACE, 10.0, labelHeight)];
             labelSeparator.backgroundColor =[UIColor clearColor];
             labelSeparator.textColor = [UIColor whiteColor];
-            labelSeparator.textAlignment = UITextAlignmentCenter;
+            labelSeparator.textAlignment = NSTextAlignmentCenter;
             labelSeparator.font = self.chatTimestampFont;
             labelSeparator.text = @" | ";
             
@@ -345,23 +353,27 @@
             _messageLabel.dataDetectorTypes = NSTextCheckingTypeLink;
             _messageLabel.backgroundColor = [UIColor clearColor];
             _messageLabel.font = [UIFont systemFontOfSize:14.0];
-            _messageLabel.lineBreakMode = UILineBreakModeWordWrap;
+            _messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
             _messageLabel.text = _unicodeMessageText;
             _messageLabel.numberOfLines = 0;
             [_messageLabel sizeToFit];
             
-            
-            
-#warning TODO: add avatar image
             // show avatar
-            /* if(isHomeUserSender)
-             avat = nil;//[[HomeUser sharedHomeUser].homeUser getAvatarImage];
-             else
-             avat = [_messageOwnerContact getAvatarImage];
-             */
-            avat = [UIImage imageNamed:@"avatar.png"];
+            if(!isHomeUserSender)
+            {
+                HOPRolodexContact* contact = ((HOPIdentityContact*)[self.message.fromPeer.identityContacts anyObject]).rolodexContact;
+                HOPAvatar* avatar = [contact getAvatarForWidth:@(40.0) height:@(40.0)];
+                //HOPAvatar* avatar = [self.message.contact getAvatarForWidth:@(40.0) height:@(40.0)];
+                if (avatar && avatar.avatarImage && avatar.avatarImage.image)
+                    avat = [UIImage imageWithData: avatar.avatarImage.image];
+            }
+    
+            if (!avat)
+                avat = [UIImage imageNamed:@"avatar.png"];
             
             UIImageView *ivAvat = [[UIImageView alloc] initWithFrame:CGRectMake(avatarXpos, 18, AVATAR_WIDTH, AVATAR_HEIGHT)];
+            ivAvat.clipsToBounds = YES;
+            ivAvat.layer.cornerRadius = 5.0;
             [ivAvat setImage:avat];
             // set bubble image
             float baloonViewH = messageSize.height + 8 < 28.0 ? 28.0 : messageSize.height + 8;

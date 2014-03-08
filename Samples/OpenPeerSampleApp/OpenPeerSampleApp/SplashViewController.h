@@ -33,4 +33,5 @@
 
 @interface SplashViewController : UIViewController
 
+@property (nonatomic, weak) IBOutlet UIView* infoView;
 @end

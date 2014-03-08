@@ -58,10 +58,14 @@ typedef enum
     MODULE_STACK_MESSAGE,
     MODULE_STACK,
     MODULE_SERVICES,
+    MODULE_SERVICES_WIRE,
     MODULE_SERVICES_ICE,
+    MODULE_SERVICES_TURN,
     MODULE_SERVICES_RUDP,
     MODULE_SERVICES_HTTP,
     MODULE_SERVICES_MLS,
+    MODULE_SERVICES_TCP,
+    MODULE_SERVICES_TRANSPORT,
     MODULE_ZSLIB,
     MODULE_JAVASCRIPT,
     
@@ -87,6 +91,7 @@ typedef enum
 @property (strong, nonatomic) NSMutableDictionary* appModulesLoggerLevel;
 @property (strong, nonatomic) NSMutableDictionary* telnetLoggerSettings;
 @property (strong, nonatomic) NSMutableDictionary* outgoingTelnetLoggerSettings;
+@property (strong, nonatomic) NSMutableDictionary* loginSettings;
 
 
 
@@ -118,4 +123,30 @@ typedef enum
 - (NSString*) getStringForLogLevel:(HOPLoggerLevels) level;
 
 - (void) saveDefaultsLoggerSettings;
+
+- (BOOL) isQRSettingsResetEnabled;
+- (void) enableQRSettingsReset:(BOOL) enable;
+
+- (NSString*) getOuterFrameURL;
+- (NSString*) getNamespaceGrantServiceURL;
+- (NSString*) getIdentityProviderDomain;
+- (NSString*) getIdentityFederateBaseURI;
+- (NSString*) getLockBoxServiceDomain;
+- (NSString*) getDefaultOutgoingTelnetServer;
+
+//- (void) storeSettingsFromPath:(NSString*) path;
+
+- (BOOL) isAppDataSet;
+- (BOOL) isLoginSettingsSet;
+- (BOOL) isAppSettingsSetForPath:(NSString*) path;
+
+- (NSArray*) getMissingAppSettings;
+- (NSMutableDictionary*) dictionaryWithRemovedAllInvalidEntriesForPath:(NSString*) path;
+- (NSMutableDictionary*) dictionaryForJSONString:(NSString*) jsonString;
+- (NSString*) createUserAgentFromDictionary:(NSMutableDictionary*) inDictionary;
+
+- (void) updateDeviceInfo;
+- (void) snapshotCurrentSettings;
+- (void) storeQRSettings:(NSDictionary*) inDictionary;
+- (void) removeAppliedQRSettings;
 @end

@@ -42,18 +42,23 @@
 @class HOPPublicPeerFile;
 @class HOPHomeUser;
 @class HOPAvatar;
+@class HOPSessionRecord;
+@class HOPMessageRecord;
 
 @interface HOPModelManager : NSObject
 
 //These properties are not marked as readonly because it is left possibility for app developer to integrate its own .xcdatamodel file with OpenPeerModel.xcdatamodel and to use one model object, one context object and one persistent storage. In this case NSManagedObjectModel objects need to be initiated and merged at the application startup and right after that, directly from application, to set managedObjectContext, managedObjectModel and persistentStoreCoordinator properties.
 
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (readonly, strong, nonatomic) NSManagedObjectContext *backgroundManagedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 + (id)sharedModelManager;
 - (id) init __attribute__((unavailable("HOPModelManager is singleton class.")));
 
+- (void) setCachePath:(NSString*) path;
+- (void) setDataPath:(NSString*) path backupData:(BOOL) inBackupData;
 /**
  Retrieves the URL to the application's Documents directory.
  @return NSURL Documents directory URL
@@ -192,4 +197,47 @@
  @return NSArray array of rolodex contacts ready for refresh
  */
 - (NSArray*) getRolodexContactsForRefreshByHomeUserIdentityURI:(NSString*) homeUserIdentityURI lastRefreshTime:(NSDate*) lastRefreshTime;
+
+/**
+ Retrieves device tokens for specific URI.
+ @param peerURI NSString contact peer URI
+ @return NSArray array of device tokens associated to peer URI
+ */
+- (NSArray*) getAPNSDataForPeerURI:(NSString*) peerURI;
+
+/**
+ Sets device token for specific peer URI.
+ @param deviceToken NSString* device token used for sending push notification
+ @param peerURI NSString* contacts peer uri
+ */
+- (void) setAPNSData:(NSString*) deviceToken PeerURI:(NSString*) peerURI;
+
+/**
+ Gets cookie for path.
+ @param path NSString* cookie path
+ */
+- (NSString*) getCookieWithPath:(NSString*) path;
+
+/**
+ Sets cookie data.
+ @param data NSString* cookie data
+ @param path NSString* cookie path
+ @param expires NSString* cookie expire date
+ */
+- (void) setCookie:(NSString*) data withPath:(NSString*) path expires:(NSDate*) expires;
+
+/**
+ Removes all expired cookies.
+ */
+- (void) removeExpiredCookies;
+
+/**
+ Removes cookie with path.
+ @param path NSString* cookie path
+ */
+- (void) removeCookieForPath:(NSString*) path;
+
+- (HOPSessionRecord*) addSession:(NSString*) sessionID type:(NSString*) type date:(NSDate*) date name:(NSString*) name participants:(NSArray*) participants;
+
+- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date session:(NSString*) sessionRecordId rolodexContact:(HOPRolodexContact*) rolodexContact messageId:(NSString*)messageId;
 @end

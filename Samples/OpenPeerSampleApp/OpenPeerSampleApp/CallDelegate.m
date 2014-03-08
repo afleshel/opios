@@ -47,7 +47,7 @@
 
 - (void) onCallStateChanged:(HOPCall*) call callState:(HOPCallStates) callState
 {
-    NSLog(@"Call state: %@", [Utility getCallStateAsString:[call getState]]);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Call state: %@", [Utility getCallStateAsString:[call getState]]);
     
     NSString* sessionId = [[call getConversationThread] getThreadId];
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -81,9 +81,10 @@
                 break;
                 
             case HOPCallStateOpen:                  //Receives both parties. Call is established
-                [[SessionManager sharedSessionManager] onCallOpened:call];
                 [[SoundManager sharedSoundsManager] stopCallingSound];
                 [[SoundManager sharedSoundsManager] stopRingingSound];
+                [[SessionManager sharedSessionManager] onCallOpened:call];
+                [sessionViewController startTimer];
                 break;
                 
             case HOPCallStateActive:                //Currently not in use
@@ -96,9 +97,10 @@
                 break;
                 
             case HOPCallStateClosing:               //Receives both parties
-                 [[SessionManager sharedSessionManager] onCallClosing:call];
+                [[SessionManager sharedSessionManager] onCallClosing:call];
                 [[SoundManager sharedSoundsManager] stopCallingSound];
                 [[SoundManager sharedSoundsManager] stopRingingSound];
+                [sessionViewController stopTimer];
                 break;
                 
             case HOPCallStateClosed:                //Receives both parties

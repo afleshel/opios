@@ -32,8 +32,9 @@
 #import <Foundation/Foundation.h>
 #import "OpenpeerSDK/HOPProtocols.h"
 #import "WebLoginViewController.h"
+#import "Delegates.h"
 
 @interface IdentityDelegate : NSObject<HOPIdentityDelegate>
 
-
+@property (nonatomic, weak) id<LoginEventsDelegate> loginDelegate;
 @end

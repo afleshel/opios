@@ -19,30 +19,72 @@ opios/Samples/                    - contains the Open Peer iOS Samples applicati
 
 How to build:
 
-1) Build boost, from your terminal:
+0) If you haven't installed xcode command line tools so far, please go to Xcode->Preferences->Downloads and download command line tools.
+	Also before calling "prepare.sh", please make sure to remove any file called "user-config.jam" from your HOME directory. If this file is present, the file can conflict with boost building properly on your system.
 
-pushd opios/libs/op/libs/ortc-lib/libs/boost/
-./boost.sh
+For example:
+cp ~/user-config.jam user-config.jam.save
+rm ~/user-config.jam
+
+1) Prepare dvelopment environment by running prepare.sh script from your terminal:
+
+pushd opios/
+./prepare.sh
 popd
 
 
-2) Build curl, from your terminal:
-
-pushd opios/libs/op/libs/ortc-lib/libs/curl/
-./build_ios.sh
-popd
-
-
-3) From X-code, load:
+2) From X-code, load sdk project:
 
 opios/openpeer-ios-sdk.xcodeproj (project/workspace)
 
+or sample project with included SDK project
 
-4) Select HOPSDK > iOS Device schema and then build
+opios/Samples/OpenPeerSampleApp/OpenPeerSampleApp.xcodeproj
+
+3) If you open OpenPeerSampleApp project, it is required to update following files:
+
+	CustomerSpecific.plist (this file is added in git.ignore)
+		applicationId = @"<-- insert application ID here (e.g. com.domain.appName) -->";
+		applicationIdSharedSecret = @"<-- insert shared secret here -->"; (Get it from the https://fly.hookflash.me/apps)
+		applicationName = @"<-- enter application name here (e.g. OpenPeerSampleApp) -->";
+		applicationImageURL = @"<-- enter application image url (e.g. http://hookflash.com/wp-content/themes/CleanSpace/images/logo.png) -->";
+		applicationURL = @"<-- enter application url (e.g. www.openpeer.org) -->";
+
+	DefaultSettings.plist (this file contains valid settings that can be used until you set your developer environment)
+		outerFrameURL = @"<-- enter outer frame url here (e.g. https://app-javascript.hookflash.me/outer.html?view=choose) -->";
+		namespaceGrantServiceURL = @"<-- enter outer namespace grant service url here (e.g. https://app-javascript.hookflash.me/outernamespacegrant.html) -->";
+		identityProviderDomain = @"<-- enter identity provider domain here (e.g. idprovider-javascript.hookflash.me) -->";
+		identityFederateBaseURI = @"<-- enter federated identity base uri here (e.g. identity://idprovider-javascript.hookflash.me/) -->";
+		lockBoxServiceDomain =  @"<-- enter lockbox service domain here (e.g. hcs-javascript.hookflash.me) -->";
+		archiveOutgoingTelnetLoggerServer = @"<-- enter outgoing telnet server here (e.g. tcp.logger.hookflash.me:8055) -->";
+		archiveTelnetLoggerServer = @"<-- enter outgoing telnet server here (e.g. 59999) -->";
+		
+		
+	If you want to change your application data or login settings, you can create a QR code with URL of json file(e.g. www.my_test_server.com/settings.json) that contains desired data. 
+	JSON file format is: 
+	
+	
+	{"root":
+		{
+			"outerFrameURL": "<-- enter outer frame url here (e.g. https://app-javascript.hookflash.me/outer.html?view=choose) -->",
+			"identityProviderDomain": "<-- enter identity provider domain here (e.g. idprovider-javascript.hookflash.me) -->",
+			"identityFederateBaseURI": "<-- enter federated identity base uri here (e.g. identity://idprovider-javascript.hookflash.me/) -->",
+			"namespaceGrantServiceURL": "<-- enter outer namespace grant service url here (e.g. https://app-javascript.hookflash.me/outernamespacegrant.html) -->",
+			"lockBoxServiceDomain": "<-- enter lockbox service domain here (e.g. hcs-javascript.hookflash.me) -->",
+			"archiveOutgoingTelnetLoggerServer": "<-- enter outgoing telnet server here (e.g. tcp.logger.hookflash.me:8055) -->"
+			"archiveTelnetLoggerServer": "<-- enter outgoing telnet server here (e.g. 59999) -->";
+		}
+	}
+	
+	
+
+4) Select HOPSDK > iOS Device (builds only SDK) or OpenPeerSampleApp (builds SDK and sample app) schema and then build
 
 The OpenpeerSDK.framework and OpenpeerDataModel.bundle will be built inside:
 project_derived_data_folder/Build/Products/Debug-iphoneos/		- in debug mode
 project_derived_data_folder/Build/Products/Release-iphoneos/	- in release mode
+
+5) In case you just want to add OpenPeerSDK.framework to your project, beside adding frameworks liste below, it is required to add path to boost.framework that is embed in our framework. (e.g. "path_to_OpenPeerSDK_framework"/OpenPeerSDK.framework/Frameworks/)
 
 
 Required frameworks:
@@ -59,6 +101,7 @@ AssetLibrary
 AudioToolbox
 AVFoundation
 Security
+Boost
 UIKIT
 libresolve.dylib
 libz.dylib

@@ -115,6 +115,24 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     return ret;
 }
 
+- (NSNumber*) getObjectId
+{
+    if (objectId == nil)
+    {
+        if(identityPtr)
+        {
+            ULONG objId = identityPtr->getID();
+            objectId = [NSNumber numberWithUnsignedLong:objId];
+        }
+        else
+        {
+            ZS_LOG_ERROR(Debug, [self log:@"Invalid identity object!"]);
+            [NSException raise:NSInvalidArgumentException format:@"Invalid identity object!"];
+        }
+    }
+    return objectId;
+}
+
 - (HOPIdentityState*) getState
 {
     WORD lastErrorCode;
@@ -240,6 +258,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
         IdentityContact identityContact;
         identityPtr->getSelfIdentityContact(identityContact);
         
+        //HACK: Because identityContact.mStableID is not filled correctly in the core
         NSString* sId = [[HOPAccount sharedAccount] getStableID];//[NSString stringWithUTF8String:identityContact.mStableID];
         NSString* identityURI = [NSString stringWithUTF8String:identityContact.mIdentityURI];
         ret = [[HOPModelManager sharedModelManager] getIdentityContactByStableID:sId identityURI:identityURI];
@@ -250,6 +269,8 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
             {
                 ret = (HOPIdentityContact*) managedObject;
                 [ret updateWithIdentityContact:identityContact];
+                //HACK: Because identityContact.mStableID is not filled correctly in the core
+                ret.stableID = sId;
             }
         }
     }
@@ -358,7 +379,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     NSString* ret = nil;
     
     if (identityPtr)
-        ret = [NSString stringWithUTF8String: IIdentity::toDebugString(identityPtr,NO)];
+        ret = [NSString stringWithUTF8String: IHelper::convertToString(IIdentity::toDebug(identityPtr))];
     else
         ret = NSLocalizedString(@"Core identity object is not created.", @"Core identity object is not created.");
     

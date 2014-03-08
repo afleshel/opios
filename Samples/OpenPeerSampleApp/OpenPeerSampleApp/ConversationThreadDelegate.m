@@ -33,16 +33,26 @@
 #import "SessionManager.h"
 #import "ContactsManager.h"
 #import "MessageManager.h"
+#import "AppConsts.h"
+#import "Utility.h"
 
 #import <OpenpeerSDK/HOPConversationThread.h>
 #import <OpenpeerSDK/HOPContact.h>
+#import <OpenpeerSDK/HOPHomeUser+External.h>
 #import <OpenpeerSDK/HOPRolodexContact.h>
+#import <OpenpeerSDK/HOPMessage.h>
+#import <OpenpeerSDK/HOPModelManager.h>
+
+#ifdef APNS_ENABLED
+#import "APNSManager.h"
+#import <OpenpeerSDK/HOPModelManager.h>
+#endif
 
 @implementation ConversationThreadDelegate
 
 - (void) onConversationThreadNew:(HOPConversationThread*) conversationThread
 {
-    NSLog(@"onConversationThreadNew");
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Handling a new conversation thread creation.");
     dispatch_async(dispatch_get_main_queue(), ^
     {
         if (conversationThread)
@@ -61,19 +71,26 @@
         }
     });
 }
+
 - (void) onConversationThreadContactsChanged:(HOPConversationThread*) conversationThread
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Conversation thread <%@> contact changed.",conversationThread);
+    dispatch_async(dispatch_get_main_queue(), ^
+    {
     });
 }
+
 - (void) onConversationThreadContactStateChanged:(HOPConversationThread*) conversationThread contact:(HOPContact*) contact contactState:(HOPConversationThreadContactStates) contactState
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Conversation thread <%@> contact <%@> state: %@",conversationThread, contact,[HOPConversationThread stringForContactState:contactState]);
+    dispatch_async(dispatch_get_main_queue(), ^
+    {
     });
 }
+
 - (void) onConversationThreadMessage:(HOPConversationThread*) conversationThread messageID:(NSString*) messageID
 {
-    NSLog(@"onConversationThreadMessage");
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Handling a new message with id %@ for conversation thread.",messageID);
     dispatch_async(dispatch_get_main_queue(), ^{
         HOPMessage* message = [conversationThread getMessageForID:messageID];
         if (message)
@@ -82,15 +99,44 @@
         }
     });
 }
+
 - (void) onConversationThreadMessageDeliveryStateChanged:(HOPConversationThread*) conversationThread messageID:(NSString*) messageID messageDeliveryStates:(HOPConversationThreadMessageDeliveryStates) messageDeliveryStates
 {
-    NSLog(@"onConversationThreadMessageDeliveryStateChanged: %d",messageDeliveryStates);
-    dispatch_async(dispatch_get_main_queue(), ^{
-    });
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Conversation thread message with id %@ delivery state has changed to: %@",messageID, [HOPConversationThread stringForMessageDeliveryState:messageDeliveryStates]);
 }
+
 - (void) onConversationThreadPushMessage:(HOPConversationThread*) conversationThread messageID:(NSString*) messageID contact:(HOPContact*) contact
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-    });
+#ifdef APNS_ENABLED
+    NSArray* contacts = [conversationThread getContacts];
+    if ([contacts count] > 0)
+    {
+        BOOL missedCall = NO;
+        HOPMessage* message = [conversationThread getMessageForID:messageID];
+        HOPContact* coreContact = [contacts objectAtIndex:0];
+        if (coreContact)
+        {
+            HOPRolodexContact* contact  = [[[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:[coreContact getPeerURI]] objectAtIndex:0];
+            if (contact)
+            {
+                NSString* messageText = nil;
+                //if ([message.type isEqualToString:messageTypeSystem])
+                if ([[MessageManager sharedMessageManager] getTypeForSystemMessage:message] == SystemMessage_CheckAvailability)
+                {
+                    messageText  = [NSString stringWithFormat:@"%@ \n %@",[[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser] getFullName],@"Missed call"];
+                    missedCall = YES;
+                }
+                else
+                {
+                    NSString* msg = [message.text length] > 22 ? [NSString stringWithFormat:@"%@...",[message.text substringToIndex:22]] : message.text;
+                    
+                    messageText  = [NSString stringWithFormat:@"%@ \n %@",[[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser] getFullName],msg];
+                }
+                [[APNSManager sharedAPNSManager] sendPushNotificationForContact:coreContact message:messageText missedCall:missedCall];
+            }
+        }
+    }
+#endif
+
 }
 @end

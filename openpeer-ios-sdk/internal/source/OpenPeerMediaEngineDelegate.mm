@@ -72,6 +72,16 @@ void OpenPeerMediaEngineDelegate::onMediaEngineAudioRouteChanged(IMediaEngine::O
     [mediaEngineDelegate onMediaEngineAudioRouteChanged:(HOPMediaEngineOutputAudioRoutes) audioRoute];
 }
 
+void OpenPeerMediaEngineDelegate::onMediaEngineAudioSessionInterruptionBegan()
+{
+    [mediaEngineDelegate onMediaEngineAudioSessionInterruptionBegan];
+}
+
+void OpenPeerMediaEngineDelegate::onMediaEngineAudioSessionInterruptionEnded()
+{
+    [mediaEngineDelegate onMediaEngineAudioSessionInterruptionEnded];
+}
+
 void OpenPeerMediaEngineDelegate::onMediaEngineFaceDetected()
 {
     [mediaEngineDelegate onMediaEngineFaceDetected];

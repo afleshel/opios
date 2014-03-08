@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <archive type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="8.00">
 	<data>
-		<int key="IBDocument.SystemTarget">1280</int>
-		<string key="IBDocument.SystemVersion">12F37</string>
+		<int key="IBDocument.SystemTarget">1552</int>
+		<string key="IBDocument.SystemVersion">13B42</string>
 		<string key="IBDocument.InterfaceBuilderVersion">4510</string>
-		<string key="IBDocument.AppKitVersion">1187.39</string>
-		<string key="IBDocument.HIToolboxVersion">626.00</string>
+		<string key="IBDocument.AppKitVersion">1265</string>
+		<string key="IBDocument.HIToolboxVersion">696.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 			<string key="NS.object.0">3742</string>
@@ -15,6 +15,7 @@
 			<string>IBUIImageView</string>
 			<string>IBUILabel</string>
 			<string>IBUITableViewCell</string>
+			<string>IBUIView</string>
 		</array>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -78,7 +79,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{4, 8}, {41, 41}}</string>
 								<reference key="NSSuperview" ref="703089267"/>
-								<reference key="NSNextKeyView" ref="420997024"/>
+								<reference key="NSNextKeyView" ref="977983519"/>
 								<bool key="IBUIClipsSubviews">YES</bool>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -152,6 +153,22 @@
 									<string key="NSClassName">NSImage</string>
 									<string key="NSResourceName">video_indicator_blue.png</string>
 								</object>
+							</object>
+							<object class="IBUIView" id="977983519">
+								<reference key="NSNextResponder" ref="703089267"/>
+								<int key="NSvFlags">292</int>
+								<string key="NSFrame">{{24, 1}, {31, 24}}</string>
+								<reference key="NSSuperview" ref="703089267"/>
+								<reference key="NSNextKeyView" ref="420997024"/>
+								<string key="NSReuseIdentifierKey">_NS:9</string>
+								<object class="NSColor" key="IBUIBackgroundColor">
+									<int key="NSColorSpace">3</int>
+									<bytes key="NSWhite">MQA</bytes>
+									<object class="NSColorSpace" key="NSCustomColorSpace">
+										<int key="NSID">2</int>
+									</object>
+								</object>
+								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 							</object>
 						</array>
 						<string key="NSFrameSize">{270, 54}</string>
@@ -238,6 +255,14 @@
 					</object>
 					<string key="id">51</string>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">badgeView</string>
+						<reference key="source" ref="96725247"/>
+						<reference key="destination" ref="977983519"/>
+					</object>
+					<string key="id">cUf-gM-z5x</string>
+				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<array key="orderedObjects">
@@ -268,6 +293,7 @@
 							<reference ref="337558105"/>
 							<reference ref="1032920000"/>
 							<reference ref="779057432"/>
+							<reference ref="977983519"/>
 						</array>
 						<reference key="parent" ref="0"/>
 						<string key="objectName">Contact Table View Cell</string>
@@ -305,6 +331,11 @@
 						<reference key="object" ref="1032920000"/>
 						<reference key="parent" ref="96725247"/>
 					</object>
+					<object class="IBObjectRecord">
+						<string key="id">wLR-Td-CYD</string>
+						<reference key="object" ref="977983519"/>
+						<reference key="parent" ref="96725247"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -320,6 +351,8 @@
 				<string key="6.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="8.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="9.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+				<string key="wLR-Td-CYD.CustomClassName">UIBadgeView</string>
+				<string key="wLR-Td-CYD.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 			</dictionary>
 			<dictionary class="NSMutableDictionary" key="unlocalizedProperties"/>
 			<nil key="activeLocalization"/>
@@ -332,7 +365,7 @@
 		<bool key="IBDocument.previouslyAttemptedUpgradeToXcode5">YES</bool>
 		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDependencyDefaults">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaTouchPlugin.iPhoneOS</string>
-			<real value="1280" key="NS.object.0"/>
+			<real value="1552" key="NS.object.0"/>
 		</object>
 		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDevelopmentDependencies">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaTouchPlugin.InterfaceBuilder3</string>

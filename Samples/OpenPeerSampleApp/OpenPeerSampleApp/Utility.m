@@ -32,7 +32,7 @@
 #import "Utility.h"
 #include <sys/types.h>
 #include <sys/sysctl.h>
-
+#import <AVFoundation/AVFoundation.h>
 
 @implementation Utility
 
@@ -215,6 +215,7 @@ static const short _base64DecodingTable[256] = {
 	if ([platform isEqualToString:@"iPhone2,1"]) return @"iPhone 3GS";
     if ([platform hasPrefix:@"iPhone3"]) return @"iPhone 4";
     if ([platform hasPrefix:@"iPhone4"]) return @"iPhone 4S";
+    if ([platform hasPrefix:@"iPhone6,2"]) return @"iPhone 5S";
     
 	if ([platform isEqualToString:@"iPod1,1"])   return @"iPod Touch 1G";
 	if ([platform isEqualToString:@"iPod2,1"])   return @"iPod Touch 2G";
@@ -322,6 +323,25 @@ static const short _base64DecodingTable[256] = {
     return res;
 }
 
++ (NSString*) getMessageDeliveryStateAsString:(HOPConversationThreadMessageDeliveryStates) messageState
+{
+    NSString *res = nil;
+    
+    switch (messageState)
+    {
+        case HOPConversationThreadMessageDeliveryStateDiscovering:
+            res = NSLocalizedString(@"discovering", @"");
+            break;
+        case HOPConversationThreadMessageDeliveryStateUserNotAvailable:
+            res = NSLocalizedString(@"user not available", @"");
+            break;
+        case HOPConversationThreadMessageDeliveryStateDelivered:
+            res = NSLocalizedString(@"delivered", @"");
+            break;
+    }
+    return res;
+}
+
 + (NSString*) getFunctionNameForRequest:(NSString*) requestString
 {
     NSString* ret = @"";
@@ -378,6 +398,7 @@ static const short _base64DecodingTable[256] = {
        [today year] == [massageDayOfDate year] &&
        [today era] == [massageDayOfDate era])
     {
+        //[df setDateFormat:@"hh:mm:ss aa"];
         [df setDateFormat:@"hh:mm aa"];
     }
     else
@@ -386,5 +407,54 @@ static const short _base64DecodingTable[256] = {
     }
     
     return [df stringFromDate:inDate];
+}
+
++ (NSString *)hexadecimalStringForData:(NSData *)data
+{
+    /* Returns hexadecimal string of NSData. Empty string if data is empty.   */
+    
+    const unsigned char *dataBuffer = (const unsigned char *)[data bytes];
+    
+    if (!dataBuffer)
+        return [NSString string];
+    
+    NSUInteger          dataLength  = [data length];
+    NSMutableString     *hexString  = [NSMutableString stringWithCapacity:(dataLength * 2)];
+    
+    for (int i = 0; i < dataLength; ++i)
+        [hexString appendString:[NSString stringWithFormat:@"%02lx", (unsigned long)dataBuffer[i]]];
+    
+    return [NSString stringWithString:hexString];
+}
+
++ (int) getNumberOfDeviceCameras
+{
+    return [[AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo] count];
+}
++ (BOOL) hasCamera
+{
+    return [[AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo] count] > 0;
+}
+
++ (BOOL) isValidURL: (NSString *) candidate
+{
+    NSString *urlRegEx =
+    @"(http|https)://((\\w)*|([0-9]*)|([-|_])*)+([\\.|/]((\\w)*|([0-9]*)|([-|_])*))+";
+    NSPredicate *urlTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", urlRegEx];
+    return [urlTest evaluateWithObject:candidate];
+}
+
++ (BOOL) isValidJSON:(NSString *)json
+{
+    BOOL ret = NO;
+
+    if ([json length] > 0)
+    {
+        NSData *data = [json dataUsingEncoding:NSUTF8StringEncoding];
+        id jsonObj = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
+        ret = jsonObj != nil;
+    }
+    
+    return ret;
 }
 @end

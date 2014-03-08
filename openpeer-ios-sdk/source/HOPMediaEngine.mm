@@ -485,6 +485,18 @@ using namespace openpeer::core;
     [self stopVideoCapture];
 }
 
+- (void) pauseVoice:(BOOL) pause
+{
+    if(mediaEnginePtr)
+    {
+        mediaEnginePtr->pauseVoice(pause);
+    }
+    else
+    {
+        [NSException raise:NSInvalidArgumentException format:@"Invalid Media engine pointer!"];
+    }
+}
+
 #pragma mark - Internal methods
 - (IMediaEnginePtr) getMediaEnginePtr
 {

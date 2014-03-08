@@ -29,6 +29,8 @@
  
  */
 
+@class WebLoginViewController;
+
 @protocol ChatViewControllerDelegate <NSObject>
 
 - (void) prepareForKeyboard:(NSDictionary*) userInfo showKeyboard:(BOOL) showKeyboard;
@@ -39,4 +41,24 @@
 
 - (void) hideVideo:(BOOL) hide;
 
+@end
+
+@protocol LoginEventsDelegate <NSObject>
+
+
+
+- (void) onStartLoginWithidentityURI;
+- (void) onOpeningLoginPage;
+- (void) onLoginWebViewVisible:(WebLoginViewController*) webLoginViewController;
+
+- (void) onRelogin;
+- (void) onLoginFinished;
+
+- (void) onIdentityLoginWebViewClose:(WebLoginViewController*) webLoginViewController forIdentityURI:(NSString*) identityURI;
+- (void) onIdentityLoginFinished;
+- (void) onIdentityLoginError:(NSString*) error;
+- (void) onIdentityLoginShutdown;
+
+- (void) onAccountLoginError:(NSString*) error;
+- (void) onAccountLoginWebViewClose:(WebLoginViewController*) webLoginViewController;
 @end

@@ -35,6 +35,7 @@
 #import "MainViewController.h"
 #import "OpenPeer.h"
 #import "SessionManager.h"
+#import "ContactsManager.h"
 
 #import <OpenpeerSDK/HOPRolodexContact+External.h>
 #import <OpenpeerSDK/HOPModelManager.h>
@@ -48,15 +49,19 @@
 @property (weak, nonatomic) IBOutlet UITableView *contactsTableView;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
+@property (nonatomic) BOOL isDragging;
 
 @property (nonatomic, strong) UITapGestureRecognizer *oneTapGestureRecognizer;
 @property (nonatomic,retain) NSMutableArray* listOfSelectedContacts;
 @property (nonatomic) BOOL keyboardIsHidden;
 
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
+
 - (void)registerForNotifications:(BOOL)registerForNotifications;
 - (void)keyboardWillShow:(NSNotification *)notification;
 - (void)keyboardWillHide:(NSNotification *)notification;
 - (void) setFramesSizesForUserInfo:(NSDictionary*) userInfo;
+- (void) stopRefreshController;
 @end
 
 @implementation ContactsViewController
@@ -91,8 +96,7 @@
     NSError *error;
     if (![self.fetchedResultsController performFetch:&error])
     {
-		// Update to handle the error appropriately.
-		NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+		OPLog(HOPLoggerSeverityFatal, HOPLoggerLevelDebug, @"Fetching contacts has failed with an error: %@, error description: %@", error, [error userInfo]);
 		exit(-1);  // Fail
 	}
     
@@ -102,21 +106,28 @@
     self.oneTapGestureRecognizer.numberOfTouchesRequired = 1;
  
     self.navigationController.navigationBar.titleTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], NSForegroundColorAttributeName, [UIFont fontWithName:@"Helvetica-Bold" size:22.0], NSFontAttributeName, nil];
+    
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.tintColor = [UIColor grayColor];
+    self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Refresh Contacts"];
+    [self.refreshControl addTarget:self action:@selector(startContactsRefresh) forControlEvents:UIControlEventValueChanged];
+    [self.contactsTableView addSubview:self.refreshControl];
+    //Hack to position text properly
+    [self.refreshControl beginRefreshing];
+    [self.refreshControl endRefreshing];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     self.navigationItem.title = @"Contacts";
-
+    [self.contactsTableView reloadRowsAtIndexPaths:[self.contactsTableView indexPathsForVisibleRows]
+                     withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [self registerForNotifications:YES];
-    
-//    CGRect rect = self.navigationController.navigationBar.frame;
-//    rect.size.height = 70.0;
-//    self.navigationController.navigationBar.frame = rect;
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -146,6 +157,8 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return [[self.fetchedResultsController sections] count];
+    
+    [self.refreshControl endRefreshing];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -170,17 +183,6 @@
     HOPRolodexContact* contact = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
     [cell setContact:contact inTable:self.contactsTableView atIndexPath:indexPath];
-    
-    if (contact.identityContact)
-    {
-        cell.userInteractionEnabled = YES;
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    }
-    else
-    {
-        cell.userInteractionEnabled = NO;
-        cell.accessoryType = UITableViewCellAccessoryNone;
-    }
     
     return cell;
 }
@@ -346,9 +348,8 @@
     NSError *error;
 	if (![self.fetchedResultsController performFetch:&error])
     {
-		// Update to handle the error appropriately.
-		NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-		exit(-1);  // Fail
+		OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Fetching contacts for search, has failed with an error: %@, error description: %@", error, [error userInfo]);
+		//exit(-1);  // Fail
 	}
     
     [self.contactsTableView reloadData];
@@ -362,13 +363,13 @@
 
 - (void) onContactsLoaded
 {
-    NSLog(@"onContactsLoaded");
+    [self stopRefreshController];
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Handling loaded contacts.");
     NSError *error;
 	if (![self.fetchedResultsController performFetch:&error])
     {
-		// Update to handle the error appropriately.
-		NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-		exit(-1);  // Fail
+		OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Fetching contacts has failed with an error: %@, error description: %@", error, [error userInfo]);
+		//exit(-1);  // Fail
 	}
     
     [self.contactsTableView reloadData];
@@ -430,7 +431,6 @@
     
     // set initial size, chat view
     CGRect contactsTableViewRect = self.contactsTableView.frame;
-    //contactsTableViewRect.origin.y = 0.0;//topSessionView.frame.size.height;
     
     if (!self.keyboardIsHidden)
         contactsTableViewRect.size.height = self.view.frame.size.height - self.searchBar.viewForBaselineLayout.frame.size.height - keyboardHeight + self.tabBarController.tabBar.frame.size.height;
@@ -442,4 +442,36 @@
         [UIView commitAnimations];
 }
 
+- (void) startContactsRefresh
+{
+    [NSTimer scheduledTimerWithTimeInterval:2.0
+                                     target:self
+                                   selector:@selector(stopRefreshController)
+                                   userInfo:nil
+                                    repeats:NO];
+    self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@"Refreshing Contacts"];
+    [[ContactsManager sharedContactsManager] refreshRolodexContacts];
+}
+
+- (void) resetRefreshTitle
+{
+    self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Refresh Contacts"];
+    //Hack to position text properly
+    [self.refreshControl beginRefreshing];
+    [self.refreshControl endRefreshing];
+}
+- (void) stopRefreshController
+{
+    if ([self.refreshControl isRefreshing])
+    {
+        [self.refreshControl endRefreshing];
+        self.refreshControl.attributedTitle = nil;
+        //self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Refresh Contacts"];
+        [NSTimer scheduledTimerWithTimeInterval:1.0
+                                         target:self
+                                       selector:@selector(resetRefreshTitle)
+                                       userInfo:nil
+                                        repeats:NO];
+    }
+}
 @end

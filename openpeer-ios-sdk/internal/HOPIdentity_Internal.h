@@ -41,6 +41,7 @@ using namespace openpeer::core;
 {
     IIdentityPtr identityPtr;
     boost::shared_ptr<OpenPeerIdentityDelegate> openPeerIdentityDelegatePtr;
+    NSNumber* objectId;
 }
 
 - (id) initWithIdentityPtr:(IIdentityPtr) inIdentityPtr;

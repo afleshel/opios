@@ -43,6 +43,8 @@
 @property (strong) HOPCall* currentCall;
 @property (assign) BOOL isRedial;
 @property (strong) NSMutableArray* messageArray;
+@property (strong) NSMutableArray* unreadMessageArray;
+@property (strong) NSMutableSet* sessionIdsHistory;
 
 - (id) initWithContact:(HOPRolodexContact*) inContact conversationThread:(HOPConversationThread*) inConverationThread;
 - (id) initWithContacts:(NSArray*) inContacts conversationThread:(HOPConversationThread*) inConverationThread;

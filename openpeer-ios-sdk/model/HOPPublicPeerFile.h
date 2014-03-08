@@ -32,13 +32,14 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class HOPIdentityContact;
+@class HOPAPNSData, HOPIdentityContact;
 
 @interface HOPPublicPeerFile : NSManagedObject
 
 @property (nonatomic, retain) NSString * peerFile;
 @property (nonatomic, retain) NSString * peerURI;
 @property (nonatomic, retain) NSSet *identityContacts;
+@property (nonatomic, retain) NSSet *apnsData;
 @end
 
 @interface HOPPublicPeerFile (CoreDataGeneratedAccessors)
@@ -47,5 +48,10 @@
 - (void)removeIdentityContactsObject:(HOPIdentityContact *)value;
 - (void)addIdentityContacts:(NSSet *)values;
 - (void)removeIdentityContacts:(NSSet *)values;
+
+- (void)addApnsDataObject:(HOPAPNSData *)value;
+- (void)removeApnsDataObject:(HOPAPNSData *)value;
+- (void)addApnsData:(NSSet *)values;
+- (void)removeApnsData:(NSSet *)values;
 
 @end

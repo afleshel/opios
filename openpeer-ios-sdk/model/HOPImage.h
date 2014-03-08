@@ -37,6 +37,7 @@
 @interface HOPImage : NSManagedObject
 
 @property (nonatomic, retain) NSData * image;
+@property (nonatomic, retain) NSString * url;
 @property (nonatomic, retain) HOPAvatar *avatar;
 
 @end

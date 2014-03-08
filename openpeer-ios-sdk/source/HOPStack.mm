@@ -32,7 +32,7 @@
 
 #import <openpeer/core/IStack.h>
 #import <zsLib/Log.h>
-
+#include <zsLib/types.h>
 #import "HOPStack_Internal.h"
 #import "OpenPeerStorageManager.h"
 #import "OpenPeerUtility.h"
@@ -53,43 +53,43 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     return _sharedObject;
 }
 
-- (void) setupWithStackDelegate:(id<HOPStackDelegate>) stackDelegate mediaEngineDelegate:(id<HOPMediaEngineDelegate>) mediaEngineDelegate appID:(NSString*) appID appName:(NSString*) appName appImageURL:(NSString*) appImageURL appURL:(NSString*) appURL userAgent:(NSString*) userAgent deviceID:(NSString*) deviceID deviceOs:(NSString*) deviceOs system:(NSString*) system
+- (void) setupWithStackDelegate:(id<HOPStackDelegate>) stackDelegate mediaEngineDelegate:(id<HOPMediaEngineDelegate>) mediaEngineDelegate
 {
     //Check if delegates are nil
     if (!stackDelegate || !mediaEngineDelegate)
     {
-        ZS_LOG_ERROR(Debug, [self log:@"Passed invalid delegate."]);
+        ZS_LOG_FATAL(Debug, [self log:@"Passed invalid delegate."]);
         [NSException raise:NSInvalidArgumentException format:@"Passed invalid delegate!"];
-    }
-    
-    //Check if other parameters are valid
-    if ( ([userAgent length] == 0 ) || ([deviceOs length] == 0 ) || ([system length] == 0 ) || ([deviceID length] == 0))
-    {
-        ZS_LOG_ERROR(Debug, [self log:@"Passed invalid system information."]);
-        [NSException raise:NSInvalidArgumentException format:@"Invalid system information!"];
     }
     
     [self createLocalDelegates:stackDelegate mediaEngineDelegate:mediaEngineDelegate];
     
-    IStack::singleton()->setup(openPeerStackDelegatePtr, openPeerMediaEngineDelegatePtr, [appID UTF8String], [appName UTF8String], [appImageURL UTF8String], [appURL UTF8String], [userAgent UTF8String], [deviceID UTF8String], [deviceOs UTF8String], [system UTF8String]);
+    IStack::singleton()->setup(openPeerStackDelegatePtr, openPeerMediaEngineDelegatePtr);
+
+    isReady = YES;
 }
 
 - (void) shutdown
 {
+    isReady = NO;
     IStack::singleton()->shutdown();
     [self deleteLocalDelegates];
 }
 
+- (BOOL) isStackReady
+{
+    return isReady;
+}
 #warning "createAuthorizedApplicationID SHOULD BE USED ONLY DURING DEVELOPMENT. AN AUTHORIZED APPLICATION ID SHOULD BE GENERATED FROM  A SERVER AND GIVEN TO THE APPLICATION."
-+ (NSString*) createAuthorizedApplicationID:(NSString*) applicationID applicationIDSharedSecret:(NSString*) applicationIDSharedSecret expires:(NSDate*) expires
++ (NSString*) createAuthorizedApplicationID:(NSString*) inAuthorizedApplicationID applicationIDSharedSecret:(NSString*) applicationIDSharedSecret expires:(NSDate*) expires
 {
     NSString* ret = nil;
     
     NSLog(@"!!!!!!!!!!!!!!!!!!!! WARNING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!/n THIS SHOULD BE USED ONLY DURING DEVELOPMENT. AN AUTHORIZED APPLICATION ID SHOULD BE GENERATED FROM  A SERVER AND GIVEN TO THE APPLICATION");
     
-    if ([applicationID length] > 0 && [applicationIDSharedSecret length] > 0)
+    if ([inAuthorizedApplicationID length] > 0 && [applicationIDSharedSecret length] > 0)
     {
-        String authorizedApplicationID = IStack::createAuthorizedApplicationID([applicationID UTF8String], [applicationIDSharedSecret UTF8String], boost::posix_time::from_time_t([expires timeIntervalSince1970]));
+        String authorizedApplicationID = IStack::createAuthorizedApplicationID([inAuthorizedApplicationID UTF8String], [applicationIDSharedSecret UTF8String], boost::posix_time::from_time_t([expires timeIntervalSince1970]));
         if (authorizedApplicationID)
         {
             ret = [NSString stringWithUTF8String:authorizedApplicationID];
@@ -99,6 +99,29 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     return ret;
 }
 
++ (long) getExpiryForAuthorizedApplicationID:(NSString*) inAuthorizedApplicationID
+{
+    long ret = 0;
+    if ([inAuthorizedApplicationID length] > 0)
+    {
+        zsLib::Duration duration;
+        zsLib::Time time = IStack::getAuthorizedApplicationIDExpiry([inAuthorizedApplicationID UTF8String],&duration);
+        ret = duration.total_seconds();
+    }
+    return ret;
+}
+
++ (BOOL) isAuthorizedApplicationExpiryWindowStillValid:(NSString*) inAuthorizedApplicationID minimumValidityWindowRequired:(long) minimumValidityWindowRequired
+{
+    BOOL ret = YES;
+    
+    if ([inAuthorizedApplicationID length] > 0)
+    {
+        ret = IStack::isAuthorizedApplicationIDExpiryWindowStillValid([inAuthorizedApplicationID UTF8String], boost::posix_time::time_duration(0,0,minimumValidityWindowRequired,0));
+    }
+    
+    return ret;
+}
 #pragma mark - Internal methods
 - (void) createLocalDelegates:(id<HOPStackDelegate>) stackDelegate mediaEngineDelegate:(id<HOPMediaEngineDelegate>) mediaEngineDelegate 
 {

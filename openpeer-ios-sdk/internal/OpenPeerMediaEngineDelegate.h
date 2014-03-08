@@ -52,6 +52,8 @@ public:
   static boost::shared_ptr<OpenPeerMediaEngineDelegate> create(id<HOPMediaEngineDelegate> inMediaEngineDelegate);
   
   virtual void onMediaEngineAudioRouteChanged(IMediaEngine::OutputAudioRoutes audioRoute);
+  virtual void onMediaEngineAudioSessionInterruptionBegan();
+  virtual void onMediaEngineAudioSessionInterruptionEnded();
   virtual void onMediaEngineFaceDetected();
   virtual void onMediaEngineVideoCaptureRecordStopped();
 };

@@ -236,7 +236,7 @@ typedef enum
                     if ([server length] > 0)
                         textField.text = server;
                     else
-                        textField.text = indexPath.section == SECTION_LOGGER_TELNET ? defaultTelnetPort : defaultOutgoingTelnetServer;
+                        textField.text = indexPath.section == SECTION_LOGGER_TELNET ? defaultTelnetPort : [[Settings sharedSettings] getDefaultOutgoingTelnetServer];
                         
                     
                 }
@@ -329,6 +329,7 @@ typedef enum
 - (void) switchColorChanged:(UISwitch*) sender
 {
     [[Settings sharedSettings] setColorizedOutput:[sender isOn] logger:sender.tag];
+     [Logger start:[sender isOn] logger:sender.tag];
 }
 
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)thePickerView
@@ -360,5 +361,10 @@ typedef enum
 {
     if ([textField.text length] > 0)
         [[Settings sharedSettings] setServerOrPort:textField.text logger:textField.tag];
+}
+
+- (void) switchResetQRSettings:(UISwitch*) sender
+{
+    [[Settings sharedSettings] enable:[sender isOn] logger:sender.tag];
 }
 @end

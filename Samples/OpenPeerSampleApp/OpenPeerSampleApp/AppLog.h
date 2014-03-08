@@ -30,7 +30,11 @@
  */
 
 #import <Foundation/Foundation.h>
+#import <OpenPeerSDK/HOPLogger.h>
+#import "Settings.h"
+#import "AppConsts.h"
 
-#define NSLog(...) AppLog([NSString stringWithUTF8String:__PRETTY_FUNCTION__], [NSString stringWithUTF8String:__FILE__], __LINE__, __VA_ARGS__)
+#define OPLog(severity, level,...) if ([[Settings sharedSettings] getLoggerLevelForAppModuleKey:moduleApplication] >= level) AppLog([NSString stringWithUTF8String:__PRETTY_FUNCTION__], [NSString stringWithUTF8String:__FILE__], __LINE__, severity, level, __VA_ARGS__)
 
-void AppLog(NSString* functionName, NSString* filePath, unsigned long lineNumber, NSString* format,...);
+void AppLog(NSString* functionName, NSString* filePath, unsigned long lineNumber, HOPLoggerSeverities severity, HOPLoggerLevels level,  NSString* format,...);
+

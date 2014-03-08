@@ -55,6 +55,8 @@
 - (void) onMediaEngineAudioRouteChanged:(HOPMediaEngineOutputAudioRoutes) audioRoute;
 - (void) onMediaEngineFaceDetected;
 - (void) onMediaEngineVideoCaptureRecordStopped;
+- (void) onMediaEngineAudioSessionInterruptionBegan;
+- (void) onMediaEngineAudioSessionInterruptionEnded;
 @end
 
 
@@ -122,5 +124,31 @@
 - (NSString*) fetchCookieWithPath:(NSString*) cookieNamePath;
 - (void) storeCookie:(NSString*) cookie cookieNamePath:(NSString*) cookieNamePath expireTime:(NSDate*) expireTime;
 - (void) clearCookieWithPath:(NSString*) cookieNamePath;
+
+@end
+
+@protocol HOPSettingsDelegate <NSObject>
+
+/*- (NSString*) getString:(NSString*) key;
+- (long) getInt:(NSString*) key;
+- (unsigned long) getUInt:(NSString*) key;
+- (BOOL) getBool:(NSString*) key;
+- (float) getFloat:(NSString*) key;
+- (double) getDouble:(NSString*) key;
+
+- (void) setString:(NSString*) value key:(NSString*) key;
+- (void) setInt:(long) value key:(NSString*) key;
+- (void) setUInt:(unsigned long) value key:(NSString*) key;
+- (void) setBool:(BOOL) value key:(NSString*) key;
+- (void) setFloat:(float) value key:(NSString*) key;
+- (void) setDouble:(double) value key:(NSString*) key;
+
+- (void) clearForKey:(NSString*) key;
+*/
+@end
+
+@protocol HOPBackgroundingDelegate <NSObject>
+
+- (void) onBackgroundingReady;
 
 @end

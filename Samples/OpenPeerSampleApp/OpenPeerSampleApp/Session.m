@@ -31,6 +31,7 @@
 
 #import "Session.h"
 #import <OpenpeerSDK/HOPRolodexContact.h>
+#import <OpenpeerSDK/HOPConversationThread.h>
 
 @implementation Session
 
@@ -42,8 +43,11 @@
         self.participantsArray = [[NSMutableArray alloc] init];
         [self.participantsArray addObject:inContact];
         self.messageArray = [[NSMutableArray alloc] init];
+        self.unreadMessageArray = [[NSMutableArray alloc] init];
+        self.sessionIdsHistory = [[NSMutableSet alloc] init];
     }
     self.conversationThread = inConverationThread;
+    [self.sessionIdsHistory addObject:[inConverationThread getThreadId]];
     return self;
 }
 
@@ -56,8 +60,10 @@
         if (inContacts)
             [self.participantsArray addObjectsFromArray:inContacts];
         self.messageArray = [[NSMutableArray alloc] init];
+        self.unreadMessageArray = [[NSMutableArray alloc] init];
     }
     self.conversationThread = inConverationThread;
+    [self.sessionIdsHistory addObject:[inConverationThread getThreadId]];
     return self;
 }
 

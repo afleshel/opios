@@ -82,6 +82,13 @@
  @return HOPIdentity object if IIdentityPtr object is created sucessfully, otherwise nil
  */
 + (id) loginWithDelegate:(id<HOPIdentityDelegate>) inIdentityDelegate identityProviderDomain:(NSString*) identityProviderDomain identityPreauthorizedURI:(NSString*) identityURI identityAccessToken:(NSString*) identityAccessToken identityAccessSecret:(NSString*) identityAccessSecret identityAccessSecretExpires:(NSDate*) identityAccessSecretExpires;
+
+/**
+ Retrieves unique object id
+ @returns NSNumber Unique object id
+ */
+- (NSNumber*) getObjectId;
+
 /**
  Retrieves identity state
  @returns HOPIdentityState Identity state

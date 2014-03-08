@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>applicationName</key>
+	<string>openpeer/common/application-name</string>
+	<key>applicationImageURL</key>
+	<string>openpeer/common/application-image-url</string>
+	<key>applicationURL</key>
+	<string>openpeer/common/application-url</string>
+	<key>userAgent</key>
+	<string>openpeer/calculated/user-agent</string>
+</dict>
+</plist>

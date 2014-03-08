@@ -33,6 +33,7 @@
 #import <openpeer/core/ICall.h>
 #import <openpeer/core/IConversationThread.h>
 #import <openpeer/core/IContact.h>
+#import <openpeer/core/IHelper.h>
 
 #import "HOPCall_Internal.h"
 #import "OpenPeerUtility.h"
@@ -381,7 +382,7 @@ using namespace openpeer::core;
 
 -(NSString *)description
 {
-    return [NSString stringWithUTF8String: ICall::toDebugString([self getCallPtr],NO)];
+    return [NSString stringWithUTF8String: IHelper::convertToString(ICall::toDebug([self getCallPtr]))];
 }
 
 #pragma mark - Internal methods

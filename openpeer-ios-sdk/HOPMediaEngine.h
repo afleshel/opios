@@ -233,4 +233,6 @@
 
 - (void) startFaceDetectionForImageView:(UIImageView*) inImageView;
 - (void) stopFaceDetection;
+
+- (void) pauseVoice:(BOOL) pause;
 @end

@@ -45,6 +45,7 @@
 
 - (void) startLoginUsingIdentityURI:(NSString*) identityURI;
 - (void) startAccount;
+- (void) startLogin;
 - (void) login;
 - (void) logout;
 
@@ -52,6 +53,7 @@
 - (void) attachDelegateForIdentity:(HOPIdentity*) identity forceAttach:(BOOL) forceAttach;
 
 - (void) onUserLoggedIn;
+- (void) onUserLogOut;
 
 - (BOOL) isAssociatedIdentity:(NSString*) inBaseIdentityURI;
 

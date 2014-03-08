@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4510" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment defaultVersion="1792" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="QRScannerViewController">
+            <connections>
+                <outlet property="buttonCancel" destination="Sjc-Mu-Rj1" id="ByD-MM-mN2"/>
+                <outlet property="buttonLogger" destination="4UM-hE-u9A" id="hcK-R6-omI"/>
+                <outlet property="view" destination="1" id="3"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="1">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="iPhone_background.png" translatesAutoresizingMaskIntoConstraints="NO" id="jcZ-PD-Nyo">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="OpenPeerLogo.png" translatesAutoresizingMaskIntoConstraints="NO" id="wYP-tb-xGL">
+                    <rect key="frame" x="103" y="227" width="114" height="114"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="114" id="gHg-t5-gLh"/>
+                        <constraint firstAttribute="width" constant="114" id="hAP-Cq-ifR"/>
+                    </constraints>
+                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BBu-64-FyA">
+                    <rect key="frame" x="87" y="371" width="145" height="45"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="45" id="CVj-md-Oci"/>
+                        <constraint firstAttribute="width" constant="145" id="oMh-Ug-9Ag"/>
+                        <constraint firstAttribute="height" constant="45" id="trR-mQ-dL6"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <state key="normal" title="Scan QR code" backgroundImage="audio_call_incoming_accept_button.png">
+                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="actionReadQRCode:" destination="-1" eventType="touchUpInside" id="iKS-L9-7Of"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YWp-Hl-K1F">
+                    <rect key="frame" x="87" y="435" width="145" height="45"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="45" id="Ky1-gK-lGt"/>
+                        <constraint firstAttribute="width" constant="145" id="mTf-Hp-cU8"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <state key="normal" title="Skip" backgroundImage="audio_call_incoming_accept_button.png">
+                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="actionProceedWithlogin:" destination="-1" eventType="touchUpInside" id="KbP-AK-3tp"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4UM-hE-u9A">
+                    <rect key="frame" x="250" y="20" width="50" height="50"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="50" id="EMk-wA-8r7"/>
+                        <constraint firstAttribute="height" constant="50" id="jHE-yC-NNx"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                    <state key="normal" title="Start Logger" image="logger.png"/>
+                    <connections>
+                        <action selector="actionStartLogger:" destination="-1" eventType="touchUpInside" id="rwh-P0-agC"/>
+                    </connections>
+                </button>
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sjc-Mu-Rj1">
+                    <rect key="frame" x="20" y="20" width="60" height="30"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" red="1" green="0.033936653179999998" blue="0.1128735853" alpha="1" colorSpace="calibratedRGB"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <state key="normal" title="Cancel">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="actionCancelScan:" destination="-1" eventType="touchUpInside" id="ISJ-vJ-Jdv"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="wYP-tb-xGL" firstAttribute="centerY" secondItem="1" secondAttribute="centerY" id="9hR-y8-BZs"/>
+                <constraint firstItem="YWp-Hl-K1F" firstAttribute="top" secondItem="BBu-64-FyA" secondAttribute="bottom" constant="19" id="E61-vB-G9P"/>
+                <constraint firstAttribute="trailing" secondItem="4UM-hE-u9A" secondAttribute="trailing" constant="20" symbolic="YES" id="GUZ-AV-3nS"/>
+                <constraint firstItem="BBu-64-FyA" firstAttribute="top" secondItem="wYP-tb-xGL" secondAttribute="bottom" constant="30" id="LdM-nF-IOt"/>
+                <constraint firstItem="YWp-Hl-K1F" firstAttribute="leading" secondItem="BBu-64-FyA" secondAttribute="leading" id="MZ0-aZ-PxK"/>
+                <constraint firstItem="wYP-tb-xGL" firstAttribute="centerX" secondItem="jcZ-PD-Nyo" secondAttribute="centerX" id="ORJ-sq-vgH"/>
+                <constraint firstAttribute="bottom" secondItem="jcZ-PD-Nyo" secondAttribute="bottom" id="VVI-oL-LPy"/>
+                <constraint firstItem="wYP-tb-xGL" firstAttribute="centerY" secondItem="jcZ-PD-Nyo" secondAttribute="centerY" id="d7V-E2-7Wx"/>
+                <constraint firstItem="wYP-tb-xGL" firstAttribute="centerX" secondItem="1" secondAttribute="centerX" id="g5Z-cf-iId"/>
+                <constraint firstAttribute="trailing" secondItem="jcZ-PD-Nyo" secondAttribute="trailing" id="kP2-JD-vbB"/>
+                <constraint firstItem="jcZ-PD-Nyo" firstAttribute="top" secondItem="1" secondAttribute="top" id="nao-dm-7ve"/>
+                <constraint firstItem="BBu-64-FyA" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="87" id="nck-WR-YTQ"/>
+                <constraint firstItem="4UM-hE-u9A" firstAttribute="top" secondItem="1" secondAttribute="top" constant="20" symbolic="YES" id="pTC-yI-H0g"/>
+                <constraint firstItem="jcZ-PD-Nyo" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="vT2-du-xjS"/>
+            </constraints>
+            <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="OpenPeerLogo.png" width="114" height="114"/>
+        <image name="audio_call_incoming_accept_button.png" width="129" height="34"/>
+        <image name="audio_call_incoming_accept_button.png" width="129" height="34"/>
+        <image name="iPhone_background.png" width="320" height="460"/>
+        <image name="logger.png" width="64" height="64"/>
+    </resources>
+</document>

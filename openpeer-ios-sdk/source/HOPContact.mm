@@ -191,7 +191,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
 -(NSString *)description
 {
-    return [NSString stringWithUTF8String: IContact::toDebugString([self getContactPtr],NO)];
+    return [NSString stringWithUTF8String: IHelper::convertToString(IContact::toDebug([self getContactPtr]))];
 }
 
 

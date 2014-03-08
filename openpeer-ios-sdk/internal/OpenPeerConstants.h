@@ -34,5 +34,6 @@
 
 extern NSString* const databaseDirectory;
 extern NSString* const databaseName;
+extern NSString* const cacheDatabaseName;
 extern NSString* const modelName;
 extern NSTimeInterval const flushContactsDownloadTime;

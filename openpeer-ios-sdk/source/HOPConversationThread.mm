@@ -182,7 +182,9 @@ using namespace openpeer::core;
                         }
                     }
                 }
-                [contactArray addObject:tempContact];
+                
+                if (tempContact)
+                    [contactArray addObject:tempContact];
             }
         }
     }
@@ -320,6 +322,7 @@ using namespace openpeer::core;
             hopMessage.type = [NSString stringWithUTF8String:messageType];
             hopMessage.text = [NSString stringWithUTF8String:message];
             hopMessage.date = [OpenPeerUtility convertPosixTimeToDate:messageTime];
+            hopMessage.messageID = messageID;
         }
     }
     else
@@ -383,7 +386,7 @@ using namespace openpeer::core;
 
 - (NSString *)description
 {
-    return [NSString stringWithUTF8String: IConversationThread::toDebugString([self getConversationThreadPtr],NO)];
+    return [NSString stringWithUTF8String: IHelper::convertToString(IConversationThread::toDebug([self getConversationThreadPtr]))];
 }
 
 #pragma mark - Internal methods

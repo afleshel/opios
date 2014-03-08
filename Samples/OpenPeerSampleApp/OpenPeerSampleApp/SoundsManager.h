@@ -29,8 +29,9 @@
  
  */
 
+#import <AVFoundation/AVAudioPlayer.h>
 
-@interface SoundManager : NSObject
+@interface SoundManager : NSObject<AVAudioPlayerDelegate>
 
 + (id) sharedSoundsManager;
 

@@ -29,14 +29,14 @@
  
  */
 
-#import <AVFoundation/AVAudioPlayer.h>
 #import "SoundsManager.h"
-
+#import <AVFoundation/AVAudioSession.h>
 @interface SoundManager ()
 
 @property (strong, nonatomic) AVAudioPlayer *callingAudioPlayer;
 @property (strong, nonatomic) AVAudioPlayer *ringingAudioPlayer;
 
+@property (weak, nonatomic) AVAudioPlayer *interruptudeAudioPlayer;
 - (id) initSingleton;
 @end
 
@@ -64,12 +64,14 @@
                                                       ofType:@"wav"]];
         self.callingAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:callingSound error:nil];
         self.callingAudioPlayer.numberOfLoops = -1;
+        self.callingAudioPlayer.delegate = self;
         
         NSURL *ringingSound = [NSURL fileURLWithPath:[[NSBundle mainBundle]
                                                       pathForResource:@"ringing"
                                                       ofType:@"caf"]];
         self.ringingAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:ringingSound error:nil];
         self.ringingAudioPlayer.numberOfLoops = -1;
+        self.ringingAudioPlayer.delegate = self;
     }
     
     return self;
@@ -78,6 +80,8 @@
 
 - (void) playCallingSound
 {
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+    //[[AVAudioSession sharedInstance] setMode:AVAudioSessionModeVoiceChat error:nil];
     if (![self.callingAudioPlayer isPlaying])
         [self.callingAudioPlayer play];
 }
@@ -88,10 +92,15 @@
     {
         [self.callingAudioPlayer stop];
     }
+    
+    if (self.interruptudeAudioPlayer == self.callingAudioPlayer)
+        self.interruptudeAudioPlayer = nil;
 }
 
 - (void) playRingingSound
 {
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+    //[[AVAudioSession sharedInstance] setMode:AVAudioSessionModeVoiceChat error:nil];
     if (![self.ringingAudioPlayer isPlaying])
         [self.ringingAudioPlayer play];
 }
@@ -101,5 +110,34 @@
     {
         [self.ringingAudioPlayer stop];
     }
+    if (self.interruptudeAudioPlayer == self.ringingAudioPlayer)
+        self.interruptudeAudioPlayer = nil;
 }
+
+
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
+{
+    [self.interruptudeAudioPlayer stop];
+    self.interruptudeAudioPlayer = nil;
+}
+
+
+- (void)audioPlayerDecodeErrorDidOccur:(AVAudioPlayer *)player error:(NSError *)error
+{
+    [self.interruptudeAudioPlayer stop];
+    self.interruptudeAudioPlayer = nil;
+}
+
+- (void)audioPlayerBeginInterruption:(AVAudioPlayer *)player
+{
+    self.interruptudeAudioPlayer = player;
+    [self.interruptudeAudioPlayer stop];
+}
+
+
+- (void)audioPlayerEndInterruption:(AVAudioPlayer *)player withOptions:(NSUInteger)flags
+{
+     [self.interruptudeAudioPlayer play];
+}
+
 @end

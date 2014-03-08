@@ -1,4 +1,10 @@
 
+opios SDK v0.4.3 changes
+- updated splash screen appearance
+- improved image downloading
+- fixed crashing bug related to contacts download
+- updated OpenpeerData model
+
 opios SDK v0.4.2 changes
 - login is done via a webpage instead of a customized iOS window
 - stability improvements

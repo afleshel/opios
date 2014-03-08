@@ -39,5 +39,5 @@
 @property (nonatomic, strong) NSDate* date;
 @property (nonatomic, weak) HOPRolodexContact* contact;
 
-- (id) initWithMessageText:(NSString*) messageText senderContact:(HOPRolodexContact*) senderContact;
+- (id) initWithMessageText:(NSString*) messageText senderContact:(HOPRolodexContact*) senderContact sentTime:(NSDate*) sentTime;
 @end

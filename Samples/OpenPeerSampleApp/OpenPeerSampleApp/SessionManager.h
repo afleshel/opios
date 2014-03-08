@@ -73,4 +73,5 @@
 - (void) stopVideoRecording;
 
 - (BOOL) isCallInProgress;
+- (void) recreateExistingSessions;
 @end

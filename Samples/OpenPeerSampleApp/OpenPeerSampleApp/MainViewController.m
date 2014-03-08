@@ -44,7 +44,6 @@
 //Model
 #import "Session.h"
 //View controllers
-#import "LoginViewController.h"
 #import "WebLoginViewController.h"
 #import "ContactsViewController.h"
 #import "SessionViewController_iPhone.h"
@@ -54,12 +53,17 @@
 #import "SettingsViewController.h"
 #import "SplashViewController.h"
 #import "ActivityIndicatorViewController.h"
+
+#import "QRScannerViewController.h"
+
 //Private methods
 @interface MainViewController ()
 
 @property (nonatomic) BOOL isLogerActivated;
 @property (nonatomic) BOOL showSplash;
 @property (strong, nonatomic) SplashViewController* splashViewController;
+@property (strong, nonatomic) NSTimer* waitingGestureTimer;
+@property (strong, nonatomic) QRScannerViewController* qrScannerViewController;
 
 - (void) removeAllSubViews;
 - (SessionTransitionStates) determineViewControllerTransitionStateForSession:(NSString*) sessionId forIncomingCall:(BOOL) incomingCall forIncomingMessage:(BOOL) incomingMessage;
@@ -92,17 +96,11 @@
 {
     [super viewDidLoad];
 
-    [[OpenPeer sharedOpenPeer] setMainViewController:self];
-
     if (self.threeTapGestureRecognizer)
         [self.view addGestureRecognizer:self.threeTapGestureRecognizer];
     
-    self.splashViewController = [[SplashViewController alloc] initWithNibName:@"SplashViewController" bundle:nil];
-    self.splashViewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    
-    self.splashViewController.view.frame = self.view.bounds;
-    
-    [self.view addSubview:self.splashViewController.view];
+    //[self showSplashScreen];
+  
 }
 
 -(void)viewDidUnload
@@ -114,12 +112,16 @@
     }
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [self showSplashScreen];
+    //self.splashViewController.view.frame = self.view.bounds;
+    //[self.view addSubview:self.splashViewController.view];
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
-//    if (self.showSplash)
-//    {
-//        [self presentViewController:self.splashViewController animated:YES completion:nil];
-//    }
+    
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -141,7 +143,7 @@
 
 - (void) showTabBarController
 {
-    [self removeAllSubViews];
+    //[self removeAllSubViews];
     
     [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"iPhone_top_bar_background.png"] forBarMetrics:UIBarMetricsDefault];
     
@@ -176,28 +178,17 @@
         [self.tabBarController.tabBar setBackgroundImage:[UIImage imageNamed:@"iPhone_tabBar_bkgd.png"]];
     }
     
+    self.tabBarController.view.alpha = 0.0;
     [self.view addSubview:self.tabBarController.view];
+    
+    [UIView animateWithDuration:1 animations:^
+     {
+         [self.tabBarController.view setAlpha:1.0];
+     }
+     completion:nil];
 }
 
 #pragma mark - Login views
-/**
- Show view with login button
-*/
-- (void) showLoginView
-{
-    if (!self.loginViewController)
-    {
-        self.loginViewController = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
-    }
-    
-    [self removeAllSubViews];
-    self.tabBarController = nil;
-    
-    [self.loginViewController prepareForLogin];
-    [self.view addSubview:self.loginViewController.view];
-    [self.loginViewController.view setFrame:self.view.bounds];
-}
-
 /**
  Show web view with opened login page.
  @param url NSString Login page url.
@@ -206,11 +197,36 @@
 {
     if (webLoginViewController)
     {
-        NSLog(@"Displayed WebLoginViewController");
-        [self.view addSubview:webLoginViewController.view];
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Show WebLoginViewController <%p>",webLoginViewController);
+        webLoginViewController.view.frame = self.view.bounds;
+        webLoginViewController.view.hidden = NO;
+        [webLoginViewController.view setAlpha:0];
+        
+        [UIView animateWithDuration:1 animations:^
+        {
+            [webLoginViewController.view setAlpha:1];
+            [self.view addSubview:webLoginViewController.view];
+        }
+        completion:nil];
     }
 }
 
+- (void) closeWebLoginView:(WebLoginViewController*) webLoginViewController
+{
+    if (webLoginViewController)
+    {
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Close WebLoginViewController <%p>",webLoginViewController);
+        
+        [UIView animateWithDuration:1 animations:^
+         {
+             [webLoginViewController.view setAlpha:0];
+         }
+        completion:^(BOOL finished)
+        {
+            [webLoginViewController.view removeFromSuperview];
+        }];
+    }
+}
 
 #pragma mark - Session view
 /**
@@ -228,6 +244,7 @@
     
     NSString* title = [[[session participantsArray] objectAtIndex:0] name];
     
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Transition %d for session with id:%@ and for participant:%@",transition,[session.conversationThread getThreadId],title);
     UINavigationController* navigationController = (UINavigationController*)[[self.tabBarController viewControllers] objectAtIndex:0];
     switch (transition)
     {
@@ -259,7 +276,7 @@
         {
             sessionViewContorller = [[SessionViewController_iPhone alloc] initWithSession:session];
             [self.sessionViewControllersDictionary setObject:sessionViewContorller forKey:sessionId];
-            [sessionViewContorller.chatViewController refreshViewWithData];
+            //[sessionViewContorller.chatViewController refreshViewWithData];
             
             [self showNotification:[NSString stringWithFormat:@"New message from %@",title]];
         }
@@ -267,7 +284,9 @@
             
         case EXISITNG_SESSION_SWITCH:
             sessionViewContorller = [self.sessionViewControllersDictionary objectForKey:sessionId];
-            
+            sessionViewContorller.hidesBottomBarWhenPushed = YES;
+            [sessionViewContorller.chatViewController refreshViewWithData];
+            [sessionViewContorller.chatViewController.chatTableView reloadData];
             [navigationController popToRootViewControllerAnimated:NO];
             [navigationController pushViewController:sessionViewContorller animated:YES];
             [navigationController.navigationBar.topItem setTitle:title];
@@ -275,6 +294,8 @@
             
         case EXISTING_SESSION_REFRESH_NOT_VISIBLE_CHAT:
             [self showNotification:[NSString stringWithFormat:@"New message from %@",title]];
+            break;
+            
         case EXISTING_SESSION_REFRESH_CHAT:
             sessionViewContorller = [self.sessionViewControllersDictionary objectForKey:sessionId];
             [sessionViewContorller.chatViewController refreshViewWithData];
@@ -391,6 +412,7 @@
     SessionViewController_iPhone* svc = [self.sessionViewControllersDictionary objectForKey:oldSessionId];
     [self removeSessionViewControllerForSession:oldSessionId];
     [self.sessionViewControllersDictionary setObject:svc forKey:newSesionId];
+    [svc.chatViewController updateFetchControllerForSession:newSesionId];
 }
 /**
  Prepare specific session vire controller for incoming call
@@ -428,29 +450,40 @@
 
 - (void)threeTapGasture
 {
-    [Logger startTelnetLoggerOnStartUp];
+    @synchronized(self)
+    {
+        if (self.waitingGestureTimer)
+        {
+            [self.waitingGestureTimer invalidate];
+            self.waitingGestureTimer = nil;
+            [self showQRScanner];
+            [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:NO withText:nil inView:nil];
+        }
+        else
+        {
+            [Logger startTelnetLoggerOnStartUp];
+        }
+    }
 }
 
 - (void) removeSplashScreen
 {
-    [self.splashViewController.view removeFromSuperview];
-    /*
-    if (![self.presentedViewController isBeingDismissed])
-    {
-        self.showSplash = NO;
-        [self dismissViewControllerAnimated:NO completion:^
-        {
-            self.splashViewController = nil;
-        }];
-    }
-    */
-    //Init open peer delegates. Start login procedure. Display Login view controller.
-    //[[OpenPeer sharedOpenPeer] setup];
+    [UIView animateWithDuration:1 animations:^
+     {
+         [self.splashViewController.view setAlpha:0.0];
+     }
+     completion:^(BOOL finished)
+     {
+         [self.splashViewController.view removeFromSuperview];
+         self.splashViewController = nil;
+     }];
+    
 }
 
 - (void) onLogout
 {
     [self removeAllSubViews];
+    [self showSplashScreen];
     self.contactsTableViewController = nil;
     self.tabBarController = nil;
 }
@@ -460,15 +493,123 @@
     [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:YES withText:@"Getting contacts ..." inView:self.view];
 }
 
-- (void) onCallEnded
+
+#pragma mark LoginEventsDelegate
+- (void)onStartLoginWithidentityURI
 {
-//    if (self.callViewController)
-//    {
-//        [self dismissViewControllerAnimated:YES completion:^
-//        {
-//            //self.callViewController = nil;
-//        }];
-//        
-//    }
+    [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:YES withText:@"Getting identity login url ..." inView:self.splashViewController.infoView];
+}
+
+- (void) onOpeningLoginPage
+{
+    [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:YES withText:@"Opening login page ..." inView:self.splashViewController.infoView];
+}
+
+- (void) onLoginWebViewVisible:(WebLoginViewController*) webLoginViewController
+{
+    [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:NO withText:nil inView:nil];
+    
+    //[self removeSplashScreen];
+    
+    //Add identity login web view like main view subview
+    if (!webLoginViewController.view.superview)
+        [self showWebLoginView:webLoginViewController];
+}
+
+- (void)onRelogin
+{
+    [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:YES withText:@"Relogin ..." inView:self.splashViewController.infoView];
+}
+
+- (void) onLoginFinished
+{
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Updating main view controller on successfull login.");
+    [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:NO withText:nil inView:nil];
+    [self removeSplashScreen];
+    [self showTabBarController];
+}
+
+- (void) onIdentityLoginWebViewClose:(WebLoginViewController*) webLoginViewController forIdentityURI:(NSString*) identityURI
+{
+    [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:YES withText:[NSString stringWithFormat:@"Login identity: %@",identityURI] inView:self.view];
+    [self closeWebLoginView:webLoginViewController];
+}
+
+- (void) onIdentityLoginFinished
+{
+    [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:NO withText:nil inView:nil];
+}
+
+- (void) onIdentityLoginError:(NSString*) error
+{
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Identity login error: %@",error);
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"Identity login error: %@",error] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+    [alert show];
+    
+}
+
+- (void) onIdentityLoginShutdown
+{
+    [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:NO withText:nil inView:nil];
+}
+
+- (void) onAccountLoginError:(NSString *)error
+{
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Account login error: %@",error);
+    
+    if ([self.splashViewController.infoView superview])
+        [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:YES withText:@"Error. Please restart the application" inView:self.splashViewController.infoView];
+    
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Login Error" message:[NSString stringWithFormat:@"%@. Please check your internet connection and restart the application.",error] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+    [alert show];
+    
+}
+
+- (void) onAccountLoginWebViewClose:(WebLoginViewController*) webLoginViewController
+{
+    [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:nil withText:nil inView:nil];
+    [self closeWebLoginView:webLoginViewController];
+}
+
+- (void) showQRScanner
+{
+    self.qrScannerViewController = [[QRScannerViewController alloc] initWithNibName:@"QRScannerViewController" bundle:nil];
+    self.qrScannerViewController.view.frame = self.view.bounds;
+    [self.view addSubview:self.qrScannerViewController.view];
+}
+
+- (void) showSplashScreen
+{
+    if (!self.splashViewController)
+    {
+        self.splashViewController = [[SplashViewController alloc] initWithNibName:@"SplashViewController" bundle:nil];
+        self.splashViewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    }
+    
+    self.splashViewController.view.frame = self.view.bounds;
+    [self.view addSubview:self.splashViewController.view];
+}
+- (void) waitingGestureTimerHasExpired
+{
+    @synchronized(self)
+    {
+        if (self.waitingGestureTimer)
+        {
+            self.waitingGestureTimer = nil;
+            [[OpenPeer sharedOpenPeer] setup];
+            //[[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:NO withText:nil inView:nil];
+        }
+    }
+}
+
+- (void) waitForUserGesture
+{
+    [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:YES withText:@"Loading settings ..." inView:self.splashViewController.infoView];
+    
+    self.waitingGestureTimer = [NSTimer scheduledTimerWithTimeInterval:4.0
+                                     target:self
+                                   selector:@selector(waitingGestureTimerHasExpired)
+                                   userInfo:nil
+                                    repeats:NO];
 }
 @end

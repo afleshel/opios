@@ -41,6 +41,7 @@
 + (HOPCache*) sharedCache;
 - (id) init __attribute__((unavailable("HOPCache is singleton class.")));
 
+- (void) setup;
 /**
  Set cache delegate implemented in client app
  @param cacheDelegate id<HOPCacheDelegate> cache delegate
@@ -66,5 +67,10 @@
  Removes data from cache for specified path
  @param cookieNamePath NSString path
  */
-- (void) clearForCookieNamePath:(NSString*) cookieNamePath;
+- (void) removeCookieWithNamePath:(NSString*) cookieNamePath;
+
+/**
+ Removes all expired cookies.
+ */
+- (void) removeExpiredCookies;
 @end

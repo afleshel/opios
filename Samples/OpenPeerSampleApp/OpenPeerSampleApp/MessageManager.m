@@ -50,6 +50,14 @@
 #import <OpenpeerSDK/HOPConversationThread.h>
 #import <OpenpeerSDK/HOPContact.h>
 #import <OpenpeerSDK/HOPModelManager.h>
+#import <OpenPeerSDK/HOPMessageRecord.h>
+
+@interface MessageManager ()
+
+@property (nonatomic, strong) NSComparator comparator;
+
+- (id) initSingleton;
+@end
 
 @implementation MessageManager
 
@@ -62,13 +70,28 @@
     static dispatch_once_t pred = 0;
     __strong static id _sharedObject = nil;
     dispatch_once(&pred, ^{
-        _sharedObject = [[self alloc] init];
+        _sharedObject = [[self alloc] initSingleton];
     });
     return _sharedObject;
 }
 
+- (id)initSingleton
+{
+    self = [super init];
+    if (self)
+    {
+        _comparator = ^NSComparisonResult(Message* message1, Message* message2)
+        {
+            return [message1.date compare:message2.date];
+        };
+    }
+    return self;
+}
+
 - (HOPMessage*) createSystemMessageWithType:(SystemMessageTypes) type andText:(NSString*) text andRecipient:(HOPRolodexContact*) contact
 {
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Creating system message with type %d, text:%@ recipient:%@",type,text,contact.name);
+    
     HOPMessage* hopMessage = nil;
     XMLWriter *xmlWriter = [[XMLWriter alloc] init];
     
@@ -95,6 +118,12 @@
     if (messageBody)
     {
         hopMessage = [[HOPMessage alloc] initWithMessageId:[Utility getGUIDstring] andMessage:messageBody andContact:[contact getCoreContact] andMessageType:messageTypeSystem andMessageDate:[NSDate date]];
+        
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Created system messsage with id:%@ %@\n",hopMessage.messageID,messageBody);
+    }
+    else
+    {
+        OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Failed creating a system messsage");
     }
     
     return hopMessage;
@@ -123,6 +152,11 @@
     [inSession.conversationThread sendMessage:hopMessage];
 }
 
+- (void) sendSystemMessageToCheckAvailability:(Session*) inSession
+{
+    HOPMessage* hopMessage = [self createSystemMessageWithType:SystemMessage_CheckAvailability andText:systemMessageRequest andRecipient:[[inSession participantsArray] objectAtIndex:0]];
+    [inSession.conversationThread sendMessage:hopMessage];
+}
 - (void) parseSystemMessage:(HOPMessage*) inMessage forSession:(Session*) inSession
 {
     if ([inMessage.type isEqualToString:messageTypeSystem])
@@ -131,6 +165,8 @@
         if ([eventElement.tag isEqualToString:TagEvent])
         {
             SystemMessageTypes type = (SystemMessageTypes) [[eventElement child:TagId].text intValue];
+            OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Parsing system message with type %d",type);
+            
             NSString* messageText =  [eventElement child:TagText].text;
             switch (type)
             {
@@ -158,7 +194,25 @@
                     [[SessionManager sharedSessionManager] redialCallForSession:inSession];
                 }
                 break;
+#ifdef APNS_ENABLED
+                case SystemMessage_APNS_Request:
+                {
+                    if ([messageText length] > 0 && [[inMessage.contact getPeerURI] length] > 0)
+                        [[HOPModelManager sharedModelManager] setAPNSData:messageText PeerURI: [inMessage.contact getPeerURI]];
                     
+                    HOPMessage* message = [self createSystemMessageWithType:SystemMessage_APNS_Response andText:[[OpenPeer sharedOpenPeer] deviceToken] andRecipient:[[inSession participantsArray] objectAtIndex:0]];
+                    if (message)
+                        [inSession.conversationThread sendMessage:message];
+                }
+                break;
+                    
+                case SystemMessage_APNS_Response:
+                {
+                    if ([messageText length] > 0 && [[inMessage.contact getPeerURI] length] > 0)
+                        [[HOPModelManager sharedModelManager] setAPNSData:messageText PeerURI: [inMessage.contact getPeerURI]];
+                }
+                break;
+#endif
                 default:
                     break;
             }
@@ -169,17 +223,23 @@
 
 - (void) sendMessage:(NSString*) message forSession:(Session*) inSession
 {
-    NSLog(@"Send message");
-    
     //Currently it is not available group chat, so we can have only one message recipients
     HOPRolodexContact* contact = [[inSession participantsArray] objectAtIndex:0];
     //Create a message object
     HOPMessage* hopMessage = [[HOPMessage alloc] initWithMessageId:[Utility getGUIDstring] andMessage:message andContact:[contact getCoreContact] andMessageType:messageTypeText andMessageDate:[NSDate date]];
+    
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Sending message: %@ - message id: %@ - for session with id: %@",message,hopMessage.messageID,[inSession.conversationThread getThreadId]);
+    
     //Send message
     [inSession.conversationThread sendMessage:hopMessage];
     
-    Message* messageObj = [[Message alloc] initWithMessageText:message senderContact:nil];
-    [inSession.messageArray addObject:messageObj];
+    /*Message* messageObj = [[Message alloc] initWithMessageText:message senderContact:nil sentTime:hopMessage.date];
+    //[inSession.messageArray addObject:messageObj];
+
+    NSUInteger addedIndex = [inSession.messageArray indexOfObject:messageObj inSortedRange:NSMakeRange(0, inSession.messageArray.count) options:NSBinarySearchingInsertionIndex usingComparator:self.comparator];
+    [inSession.messageArray insertObject:messageObj atIndex:addedIndex];*/
+    
+    [[HOPModelManager sharedModelManager] addMessage:message type:messageTypeText date:hopMessage.date session:[inSession.conversationThread getThreadId] rolodexContact:nil messageId:hopMessage.messageID];
 }
 
 /**
@@ -189,25 +249,67 @@
  */
 - (void) onMessageReceived:(HOPMessage*) message forSessionId:(NSString*) sessionId
 {
-    NSLog(@"Message received");
+    BOOL isTextMessage = [message.type isEqualToString:messageTypeText];
+    NSString* messageType = isTextMessage ? @"Text" : @"System";
     
     if ([sessionId length] == 0)
+    {
+        OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"%@ message received with invalid session id", messageType);
         return;
+    }
+ 
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Received %@ message with id: %@ for session:%@",[messageType lowercaseString],message.messageID,sessionId);
     
     Session* session = [[SessionManager sharedSessionManager] getSessionForSessionId:sessionId];
     
-    if ([message.type isEqualToString:messageTypeText])
+    if (session == nil)
     {
-        HOPRolodexContact* contact  = [[[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:[message.contact getPeerURI]] objectAtIndex:0];
-        Message* messageObj = [[Message alloc] initWithMessageText:message.text senderContact:contact];
-        [session.messageArray addObject:messageObj];
-        //If session view controller with message sender is not yet shown, show it
-        [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForSession:session forIncomingCall:NO forIncomingMessage:YES];
+        OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"%@ message received - unable to get session for provided session id %@.",messageType,sessionId);
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"%@ message received - further message handling is canceled.",messageType);
+        return;
+    }
+    
+    if (isTextMessage)
+    {
         
+        HOPRolodexContact* contact  = [[[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:[message.contact getPeerURI]] objectAtIndex:0];
+        //Message* messageObj = [[Message alloc] initWithMessageText:message.text senderContact:contact sentTime:message.date];
+        HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:message.text type:messageTypeText date:message.date session:[session.conversationThread getThreadId] rolodexContact:contact messageId:message.messageID];
+   
+        if (messageObj)
+        {
+            [session.unreadMessageArray addObject:messageObj];
+            /*NSUInteger addedIndex = [session.messageArray indexOfObject:messageObj inSortedRange:NSMakeRange(0, session.messageArray.count) options:NSBinarySearchingInsertionIndex usingComparator:self.comparator];
+                [session.messageArray insertObject:messageObj atIndex:addedIndex];
+
+            //[session.messageArray addObject:messageObj];
+            [session.unreadMessageArray addObject:messageObj];*/
+
+            //If session view controller with message sender is not yet shown, show it
+            [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForSession:session forIncomingCall:NO forIncomingMessage:YES];
+        }
+        else
+        {
+            OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"%@ message no saved - message id %@ - session id %@",message.messageID,sessionId);
+        }
     }
     else
     {
         [self parseSystemMessage:message forSession:session];
     }
+}
+
+- (SystemMessageTypes) getTypeForSystemMessage:(HOPMessage*) message
+{
+    SystemMessageTypes ret = SystemMessage_None;
+    if ([message.type isEqualToString:messageTypeSystem])
+    {
+        RXMLElement *eventElement = [RXMLElement elementFromXMLString:message.text encoding:NSUTF8StringEncoding];
+        if ([eventElement.tag isEqualToString:TagEvent])
+        {
+            ret = (SystemMessageTypes) [[eventElement child:TagId].text intValue];
+        }
+    }
+    return ret;
 }
 @end

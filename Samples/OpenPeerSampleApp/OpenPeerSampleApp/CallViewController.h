@@ -34,14 +34,11 @@
 
 @interface CallViewController : UIViewController
 
-//@property (weak, nonatomic) IBOutlet UILabel *callDurationLabel;
-
 @property (weak, nonatomic) IBOutlet UIButton *muteButton;
 @property (weak, nonatomic) IBOutlet UIButton *videoButton;
 @property (weak, nonatomic) IBOutlet UIButton *speakerButton;
 
 @property (weak,nonatomic) Session *session;
-@property (strong,nonatomic) NSDate *callStartedTime;
 
 - (id) initWithSession:(Session*) inSession;
 
@@ -50,16 +47,10 @@
 - (IBAction) pauseCall:(id)sender;
 - (IBAction) recordCall:(id)sender;
 
-- (IBAction)actionSwitchToSpeaker:(id)sender;
-- (IBAction)actionShowChat:(id)sender;
+- (IBAction) actionSwitchToSpeaker:(id)sender;
 
-- (void) callStarted;
-- (void)setDefaults;
+- (void) setDefaults;
 
-- (void)handleCallStateChanged;
-- (void)playSoundForSessionState;
-- (void) endAudioCall;
-
--(void)setControlPositions;
+- (void) handleCallStateChanged;
 
 @end

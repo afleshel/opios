@@ -34,6 +34,7 @@
 #import "HOPIdentityLookup_Internal.h"
 #import "HOPIdentityLookupInfo_Internal.h"
 #import <openpeer/core/IIdentityLookup.h>
+#import <openpeer/core/IHelper.h>
 #import "OpenPeerStorageManager.h"
 #import "HOPAccount_Internal.h"
 #import "HOPRolodexContact.h"
@@ -170,9 +171,12 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
                         }
                     }
                     
-                    [hopIdentityContact updateWithIdentityContact:identityContact];
+                    if (hopIdentityContact)
+                    {
+                        [hopIdentityContact updateWithIdentityContact:identityContact];
                     
-                    [ret addObject:hopIdentityContact];
+                        [ret addObject:hopIdentityContact];
+                    }
                 }
             }
             [[HOPModelManager sharedModelManager] saveContext];
@@ -241,7 +245,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     NSString* ret = nil;
     
     if (identityLookupPtr)
-        ret = [NSString stringWithUTF8String: IIdentityLookup::toDebugString(identityLookupPtr,NO)];
+        ret = [NSString stringWithUTF8String: IHelper::convertToString(IIdentityLookup::toDebug(identityLookupPtr))];
     else
         ret = NSLocalizedString(@"Identity lookup object is not created.", @"Identity lookup  object is not created.");
     

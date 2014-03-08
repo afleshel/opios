@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2012, SMB Phone Inc.
+ Copyright (c) 2014, SMB Phone Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -37,38 +37,17 @@
 - (NSString*) fetchCookieWithPath:(NSString*) cookieNamePath
 {
     NSString* ret = nil;
-    
-    NSData* data = [[NSUserDefaults standardUserDefaults] objectForKey:cookieNamePath];
-    if (data)
-    {
-        NSKeyedUnarchiver *aDecoder = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
-        if (aDecoder)
-        {
-            NSDate* expireDate = [aDecoder decodeObjectForKey:@"expireDate"];
-            if ([expireDate compare:[NSDate date]] == NSOrderedDescending)
-                ret = [aDecoder decodeObjectForKey:@"value"];
-        }
-    }
-    
     return ret;
 }
 
 - (void) storeCookie:(NSString*) cookie cookieNamePath:(NSString*) cookieNamePath expireTime:(NSDate*) expireTime
 {
-    NSMutableData *data = [NSMutableData data];
     
-    NSKeyedArchiver *aCoder = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
-    
-    [aCoder encodeObject:cookie forKey:@"value"];
-    [aCoder encodeObject:expireTime forKey:@"expireDate"];
-    [aCoder finishEncoding];
-    
-    [[NSUserDefaults standardUserDefaults] setObject:data forKey:cookieNamePath];
 }
 
 - (void) clearCookieWithPath:(NSString*) cookieNamePath
 {
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:cookieNamePath];
+    
 }
 
 @end

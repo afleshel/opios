@@ -50,8 +50,6 @@
 - (void) updateCallState;
 - (void) showIncomingCall:(BOOL) show;
 - (void) showCallViewControllerWithVideo:(BOOL) videoCall;
-- (IBAction) startAudioSession:(id)sender;
-- (IBAction) startVideoSession:(id)sender;
 - (void) removeCallViews;
 - (void) startTimer;
 - (void) stopTimer;

@@ -40,6 +40,7 @@
 #import "Utility.h"
 #import <OpenPeerSDK/HOPCall.h>
 
+
 @interface SessionViewController_iPhone ()
 
 @property (nonatomic, weak) IBOutlet UIView* containerView;
@@ -54,7 +55,8 @@
 //@property (nonatomic, strong) UIButton *menuButton;
 @property (nonatomic, strong) UIBarButtonItem* menuRightbarButton;
 @property (nonatomic, strong) UIBarButtonItem* endCallRightbarButton;
-@property (nonatomic) int callDuration;
+//@property (nonatomic) int callDuration;
+@property (nonatomic, strong) NSDate* callStartedTime;
 - (void) actionCallMenu;
 - (void) updateCallDuration;
 - (void) setRightBarButtonWithEndCall:(BOOL) withEndCall forWaitingView:(BOOL)forWaitingView ;
@@ -97,7 +99,9 @@
 {
     [super viewDidLoad];
     
-    self.edgesForExtendedLayout = UIRectEdgeNone;
+    //Check if iOS version is 7 or greater
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
+        self.edgesForExtendedLayout = UIRectEdgeNone;
     
     self.chatViewController = [[ChatViewController alloc] initWithSession:self.session];
     self.chatViewController.delegate = self;
@@ -114,14 +118,6 @@
     
     [self.containerView addConstraint:[NSLayoutConstraint constraintWithItem:self.chatViewController.view attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:self.containerView attribute:NSLayoutAttributeTrailing multiplier:1.0 constant:0]];
     
-    // Lightning button
-    /*self.menuButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.menuButton setImage:[UIImage imageNamed:@"iPhone_lightning_bolt.png"] forState:UIControlStateNormal];
-    [self.menuButton addTarget:self action:@selector(actionCallMenu) forControlEvents:UIControlEventTouchUpInside];
-    [self.menuButton setFrame:CGRectMake(0.0, 0.0, 40.0, 40.0)];
-    UIBarButtonItem *navBarMenuButton = [[UIBarButtonItem alloc] initWithCustomView: self.menuButton];
-    self.navigationItem.rightBarButtonItem = navBarMenuButton;*/
-    
     [self setRightBarButtonWithEndCall:NO forWaitingView:NO];
     
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -133,9 +129,9 @@
     UIView* titleView = [[ UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 200.0, 44.0)];
     titleView.backgroundColor = [UIColor clearColor];
     
-    self.labelTitle = [[UILabel alloc] initWithFrame:CGRectMake(10.0, 3.0, 180.0, 24.0)];
+    self.labelTitle = [[UILabel alloc] initWithFrame:CGRectMake(15.0, 3.0, 170.0, 24.0)];
     self.labelTitle.text = [[[self.session participantsArray]objectAtIndex:0] name];
-    [self.labelTitle setFont:[UIFont fontWithName:@"Helvetica-Bold" size:22.0]];
+    [self.labelTitle setFont:[UIFont fontWithName:@"Helvetica-Bold" size:20.0]];
     self.labelTitle.textColor = [UIColor whiteColor];
     self.labelTitle.textAlignment = NSTextAlignmentCenter;
     
@@ -183,6 +179,9 @@
         
         if (self.audioCallViewController.view && self.audioCallViewController.view.hidden == NO)
             self.audioCallViewController.view.hidden = YES;
+        
+        if (self.videoCallViewController.view && self.videoCallViewController.view.hidden == NO)
+            self.videoCallViewController.view.hidden = YES;
     }
     else
     {
@@ -199,10 +198,11 @@
         //[self.audioCallViewController.view removeFromSuperview];
         
     }
-    else if(self.videoCallViewController != nil)
+    else if(self.videoCallViewController != nil && self.videoCallViewController.view.hidden)
     {
         [self.chatViewController.messageTextbox resignFirstResponder];
         self.videoCallViewController.view.hidden = NO;
+        [self setRightBarButtonWithEndCall:YES forWaitingView:NO];
      }
     else
     {
@@ -220,7 +220,8 @@
             //int i = 0;
             
             [buttonTitles addObject:NSLocalizedString(@"Audio Call", @"")];
-            [buttonTitles addObject:NSLocalizedString(@"Video Call", @"")];
+            if ([Utility hasCamera])
+                [buttonTitles addObject:NSLocalizedString(@"Video Call", @"")];
             //[buttonTitles addObject:NSLocalizedString(@"Close session", @"")];
             [buttonTitles addObject:NSLocalizedString(@"Cancel", @"")];
             
@@ -242,17 +243,14 @@
 #pragma mark - UIActionSheetDelegate
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex;
 {
-    NSLog(@"index: %d", buttonIndex);
-    
     switch (buttonIndex)
     {
         case 0:
-            //[self startAudioSession:NO];
             [[SessionManager sharedSessionManager] makeCallForSession:self.session includeVideo:NO isRedial:NO];
             break;
         case 1:
-            //[self startCallWithVideo:YES];
-            [[SessionManager sharedSessionManager] makeCallForSession:self.session includeVideo:YES isRedial:NO];
+            if ([Utility hasCamera])
+                [[SessionManager sharedSessionManager] makeCallForSession:self.session includeVideo:YES isRedial:NO];
             break;
         case 2:
             //[self closeSession:nil];
@@ -331,7 +329,6 @@
         
         [self setRightBarButtonWithEndCall:YES forWaitingView:NO];
     }
-    [callViewController callStarted];
     [[SessionManager sharedSessionManager] makeCallForSession:self.session includeVideo:videoCall isRedial:NO];
 }
 
@@ -397,7 +394,7 @@
 
 - (void)startTimer
 {
-    self.callDuration = 0;
+    self.callStartedTime = [NSDate date];
     [self updateCallDuration];
     self.callTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateCallDuration) userInfo:nil repeats:YES];
 }
@@ -411,10 +408,12 @@
 
 -(void)updateCallDuration
 {
-    self.callDuration++;
-    NSInteger secs =    self.callDuration % 60;
-    NSInteger mins = (self.callDuration / 60) % 60;
-    NSInteger hrs = (self.callDuration / 3600);
+    NSDate* currentTime = [NSDate date];
+    
+    NSInteger callDuration = (NSInteger)[currentTime timeIntervalSinceDate:self.callStartedTime];
+    NSInteger secs =    callDuration % 60;
+    NSInteger mins = (callDuration / 60) % 60;
+    NSInteger hrs = (callDuration / 3600);
     
     self.labelDuration.text = [NSString stringWithFormat:@"%@: %02i:%02i:%02i", NSLocalizedString(@"Duration", @""), hrs, mins, secs];
     
@@ -430,8 +429,10 @@
 #pragma mark - VideoCallViewControllerDelegate
 - (void)hideVideo:(BOOL)hide
 {
-    if (self.videoCallViewController)
-        self.videoCallViewController.view.hidden = hide;
+    [self.chatViewController.messageTextbox becomeFirstResponder];
+    [self setRightBarButtonWithEndCall:NO forWaitingView:NO];
+//    if (self.videoCallViewController)
+//        self.videoCallViewController.view.hidden = hide;
 }
 
 - (void) setRightBarButtonWithEndCall:(BOOL) withEndCall forWaitingView:(BOOL) forWaitingView
@@ -471,29 +472,6 @@
     
     self.navigationItem.rightBarButtonItem = nil;
     self.navigationItem.rightBarButtonItem = rightBarButtonItem;
-    /*// Lightning button
-    self.menuButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.menuButton setImage:[UIImage imageNamed:@"iPhone_lightning_bolt.png"] forState:UIControlStateNormal];
-    [self.menuButton addTarget:self action:@selector(actionCallMenu) forControlEvents:UIControlEventTouchUpInside];
-    [self.menuButton setFrame:CGRectMake(0.0, 0.0, 40.0, 40.0)];
-    UIBarButtonItem *navBarMenuButton = [[UIBarButtonItem alloc] initWithCustomView: self.menuButton];
-    self.navigationItem.rightBarButtonItem = navBarMenuButton;
-    
-    UIButton* btn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    UIImage* img =[UIImage imageNamed:@"iPhone_Button-end-baritem.png"];
-    //[btn setBackgroundImage:img forState:UIControlStateNormal];
-    //[btn setImage:img forState:UIControlStateNormal];
-    btn.titleLabel.textColor = [UIColor whiteColor];
-    btn.titleLabel.text = @"End";
-    [btn addTarget:self action:@selector(actionCallMenu) forControlEvents:UIControlEventTouchUpInside];
-    [btn setFrame:CGRectMake(20.0, 0.0, 30.0, 40.0)];
-    [btn addTarget:self.videoCallViewController action:@selector(callHangup:) forControlEvents:UIControlEventTouchUpInside];
-     UIBarButtonItem* endCallButton = [[UIBarButtonItem alloc] initWithCustomView:btn];//[[UIBarButtonItem alloc] initWithTitle:@"End" style:UIBarButtonItemStylePlain target:self.videoCallViewController action:@selector(callHangup:)];
-    [endCallButton setBackgroundImage:img forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-    endCallButton.tintColor = [UIColor whiteColor];
-    //endCallButton.width = 30.0;
-    self.navigationItem.rightBarButtonItem = nil;
-    self.navigationItem.rightBarButtonItem = endCallButton;*/
 }
 @end
 

@@ -39,6 +39,7 @@
 @interface ContactsManager : NSObject<UIWebViewDelegate>
 
 @property (strong) NSMutableArray *identityLookupsArray;
+@property (strong) NSMutableSet *setOfIdentitiesWhoseContactsDownloadInProgress;
 
 + (id) sharedContactsManager;
 
@@ -46,6 +47,7 @@
 
 - (void) loadContacts;
 - (void) refreshExisitngContacts;
+- (void) refreshRolodexContacts;
 - (void) identityLookupForContacts:(NSArray *)contacts identityServiceDomain:(NSString*) identityServiceDomain;
 - (void) updateContactsWithDataFromLookup:(HOPIdentityLookup*) identityLookup;
 - (BOOL) checkIsContactValid:(HOPContact*) contact;

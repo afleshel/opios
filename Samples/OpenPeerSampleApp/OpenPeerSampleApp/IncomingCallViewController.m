@@ -43,6 +43,7 @@
 
 @property (nonatomic, weak) IBOutlet UIImageView *bgImgView;
 @property (nonatomic, weak) IBOutlet UIImageView *imageViewCallerAvatar;
+@property (nonatomic, weak) IBOutlet UIImageView *imageViewLogo;
 
 @property (nonatomic, weak) IBOutlet UIButton *buttonAccept;
 @property (nonatomic, weak) IBOutlet UIButton *buttonDecline;
@@ -115,7 +116,6 @@
     
     self.labelCaller.text = rolodexContact.name;
     
-    //rolodexContact.profileURL = @"http://www.blic.rs";
     if ([rolodexContact.profileURL length] > 0)
     {
         NSURL* url = [NSURL URLWithString:rolodexContact.profileURL];
@@ -130,6 +130,16 @@
     }
     [self.webView.layer setCornerRadius:5.0];
 
+    [self.imageViewLogo.layer setCornerRadius:5.0];
+    [self.imageViewLogo setClipsToBounds:YES];
+    
+    [UIView animateWithDuration:1.5
+                          delay:0.0
+                        options:UIViewAnimationOptionAutoreverse | UIViewAnimationOptionRepeat | UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         self.imageViewLogo.alpha = 0.1;
+                     }
+                     completion:NULL];
 }
 
 - (void)viewDidUnload
@@ -159,7 +169,7 @@
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
-    NSLog(@"Error: %@", [error description]);
+    OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelTrace, @"Failed loading a caller web profile with an error: %@", [error description]);
 }
 
 

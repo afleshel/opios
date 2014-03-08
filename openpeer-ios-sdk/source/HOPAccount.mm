@@ -444,7 +444,7 @@ using namespace openpeer::core;
     NSString* ret = nil;
     
     if (accountPtr)
-        ret = [NSString stringWithUTF8String: IAccount::toDebugString(accountPtr,NO)];
+      ret = [NSString stringWithUTF8String: IHelper::convertToString(IAccount::toDebug(accountPtr))];
     else
         ret = NSLocalizedString(@"Core account object is not created.", @"Core account object is not created.");
     

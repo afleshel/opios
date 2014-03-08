@@ -36,6 +36,7 @@
 @implementation HOPImage
 
 @dynamic image;
+@dynamic url;
 @dynamic avatar;
 
 @end

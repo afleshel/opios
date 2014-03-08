@@ -30,7 +30,7 @@
  */
 
 #import <UIKit/UIKit.h>
-
+#import "Delegates.h"
 @class Session;
 
 @class LoginViewController;
@@ -62,7 +62,7 @@ typedef  enum
     ERROR_CALL_ALREADY_IN_PROGRESS = 100
 }SessionTransitionStates;
 
-@interface MainViewController : UIViewController<UIActionSheetDelegate,UITabBarControllerDelegate,UIGestureRecognizerDelegate>
+@interface MainViewController : UIViewController<UIActionSheetDelegate,UITabBarControllerDelegate,UIGestureRecognizerDelegate,LoginEventsDelegate>
 
 @property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, weak) IBOutlet UILabel *activityLabel;
@@ -71,16 +71,14 @@ typedef  enum
 @property (nonatomic, strong) LoginViewController *loginViewController;
 @property (nonatomic, strong) ContactsViewController *contactsTableViewController;
 @property (nonatomic, strong) UITabBarController *tabBarController;
-//@property (nonatomic, strong) UINavigationController *contactsNavigationController;
 
 @property (nonatomic, strong) NSMutableDictionary *sessionViewControllersDictionary;
 
 @property (nonatomic, strong) UITapGestureRecognizer *threeTapGestureRecognizer;
 
 - (void) showTabBarController;
-- (void) showLoginView;
 - (void) showWebLoginView:(WebLoginViewController*) webLoginViewController;
-//- (void) showContactsTable;
+- (void) closeWebLoginView:(WebLoginViewController*) webLoginViewController;
 
 - (void) showSessionViewControllerForSession:(Session*) session forIncomingCall:(BOOL) incomingCall forIncomingMessage:(BOOL) incomingMessage;
 - (void) removeSessionViewControllerForSession:(NSString*) sessionId;
@@ -93,5 +91,7 @@ typedef  enum
 - (void) onLogout;
 - (void) onContactsLoadingStarted;
 
-- (void) onCallEnded;
+- (void) showQRScanner;
+- (void) showSplashScreen;
+- (void) waitForUserGesture;
 @end

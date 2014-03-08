@@ -48,14 +48,13 @@
   
  */
 
-@class AppRecord;
 
+//@class HOPAvatar;
 
 @interface IconDownloader : NSObject
 
-@property (nonatomic, strong) UIImage *downloadedImage;
 @property (nonatomic, copy) NSString *imageURL;
-@property (nonatomic, copy) void (^completionHandler)(UIImage*);
+@property (nonatomic, copy) void (^completionHandler)(UIImage*,NSString*);
 
 - (void)startDownloadForURL:(NSString*) url;
 - (void)cancelDownload;

@@ -41,8 +41,8 @@
 @class MainViewController;
 @class IdentityDelegate;
 @class IdentityLookupDelegate;
-
-
+@class CacheDelegate;
+@class BackgroundingDelegate;
 
 @interface OpenPeer : NSObject
 
@@ -54,6 +54,8 @@
 @property (nonatomic,strong) MainViewController *mainViewController;
 @property (nonatomic,strong) IdentityDelegate *identityDelegate;
 @property (nonatomic,strong) IdentityLookupDelegate *identityLookupDelegate;
+@property (nonatomic,strong) CacheDelegate *cacheDelegate;
+@property (nonatomic,strong) BackgroundingDelegate *backgroundingDelegate;
 
 @property (nonatomic,strong) NSString *authorizedApplicationId;
 
@@ -64,9 +66,17 @@
 @property (nonatomic) BOOL isLocalTelnetOn;
 @property (nonatomic) BOOL isRemoteTelnetOn;
 
+@property (nonatomic) BOOL appEnteredBackground;
+@property (nonatomic) BOOL appEnteredForeground;
+
 @property (nonatomic, strong) NSString* deviceId;
+@property (nonatomic, strong) NSString* deviceToken;
+
+@property UIBackgroundTaskIdentifier backgroundingTaskId;
+
 + (id) sharedOpenPeer;
 
+- (void) preSetup;
 - (void) setup;
 - (void) shutdown;
 @end

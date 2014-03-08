@@ -31,6 +31,7 @@
 
 #import "VideoCallViewController.h"
 #import <OpenPeerSDK/HOPMediaEngine.h>
+#import "Utility.h"
 
 @interface VideoCallViewController ()
 
@@ -38,9 +39,10 @@
 @property (weak, nonatomic) IBOutlet UIImageView *videoPreviewImageView;
 @property (weak, nonatomic) IBOutlet UIView *controlView;
 
+@property (weak, nonatomic) IBOutlet UIButton *buttonSwitchCamera;
+
 @property (nonatomic,strong) UITapGestureRecognizer *tapGesture;
 
-- (IBAction) actionMuteMic:(id)sender;
 - (IBAction) actionSwitchCamera:(id)sender;
 - (IBAction) actionShowChat:(id)sender;
 - (IBAction) actionShowPreview:(id)sender;
@@ -75,6 +77,8 @@
     self.videoPreviewImageView.layer.cornerRadius = 5;
     self.videoPreviewImageView.layer.masksToBounds = YES;
     
+    self.buttonSwitchCamera.enabled = [Utility getNumberOfDeviceCameras] > 1;
+    
     //Set default video orientation to be portrait
     [[HOPMediaEngine sharedInstance] setDefaultVideoOrientation:HOPMediaEngineVideoOrientationPortrait];
     
@@ -93,11 +97,6 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (IBAction) actionMuteMic:(id)sender
-{
-    
 }
 
 - (IBAction) actionSwitchCamera:(id)sender

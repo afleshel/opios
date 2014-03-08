@@ -33,6 +33,10 @@
 #import "AppConsts.h"
 #import "OpenPeer.h"
 #import "Logger.h"
+#import "SBJsonParser.h"
+#import "Utility.h"
+#import <OpenPeerSDK/HOPSettings.h>
+#import <OpenPeerSDK/HOPUtility.h>
 
 @interface Settings ()
 
@@ -62,14 +66,14 @@
     self = [super init];
     if (self)
     {
-        if ([[NSUserDefaults standardUserDefaults] objectForKey:archiveMediaAEC])
-            self.isMediaAECOn = [[[NSUserDefaults standardUserDefaults] objectForKey:archiveMediaAEC] boolValue];
+        if ([[NSUserDefaults standardUserDefaults] objectForKey:settingsKeyMediaAEC])
+            self.isMediaAECOn = [[[NSUserDefaults standardUserDefaults] objectForKey:settingsKeyMediaAEC] boolValue];
         
-        if ([[NSUserDefaults standardUserDefaults] objectForKey:archiveMediaAGC])
-            self.isMediaAGCOn = [[[NSUserDefaults standardUserDefaults] objectForKey:archiveMediaAGC] boolValue];
+        if ([[NSUserDefaults standardUserDefaults] objectForKey:settingsKeyMediaAGC])
+            self.isMediaAGCOn = [[[NSUserDefaults standardUserDefaults] objectForKey:settingsKeyMediaAGC] boolValue];
         
-        if ([[NSUserDefaults standardUserDefaults] objectForKey:archiveMediaNS])
-            self.isMediaNSOn = [[[NSUserDefaults standardUserDefaults] objectForKey:archiveMediaNS] boolValue];
+        if ([[NSUserDefaults standardUserDefaults] objectForKey:settingsKeyMediaNS])
+            self.isMediaNSOn = [[[NSUserDefaults standardUserDefaults] objectForKey:settingsKeyMediaNS] boolValue];
         
         if ([[NSUserDefaults standardUserDefaults] objectForKey:archiveRemoteSessionActivationMode])
             self.isRemoteSessionActivationModeOn = [[[NSUserDefaults standardUserDefaults] objectForKey:archiveRemoteSessionActivationMode] boolValue];
@@ -80,28 +84,13 @@
         if ([[NSUserDefaults standardUserDefaults] objectForKey:archiveRedialMode])
             self.isRedialModeOn = [[[NSUserDefaults standardUserDefaults] objectForKey:archiveRedialMode] boolValue];
         
-        if ([[NSUserDefaults standardUserDefaults] objectForKey:archiveStdLogger])
-            self.enabledStdLogger = [[[NSUserDefaults standardUserDefaults] objectForKey:archiveStdLogger] boolValue];
+        if ([[NSUserDefaults standardUserDefaults] objectForKey:settingsKeyStdOutLogger])
+            self.enabledStdLogger = [[[NSUserDefaults standardUserDefaults] objectForKey:settingsKeyStdOutLogger] boolValue];
         
         self.appModulesLoggerLevel =[[[NSUserDefaults standardUserDefaults] objectForKey:archiveModulesLogLevels] mutableCopy];
+        
         if (!self.appModulesLoggerLevel)
             self.appModulesLoggerLevel = [[NSMutableDictionary alloc] init];
-        
-        self.telnetLoggerSettings =[[[NSUserDefaults standardUserDefaults] objectForKey:archiveTelnetLogger] mutableCopy];
-        if (!self.telnetLoggerSettings)
-        {
-            self.telnetLoggerSettings = [[NSMutableDictionary alloc] init];
-            [self.telnetLoggerSettings setObject:defaultTelnetPort forKey:@"server"];
-            [self.telnetLoggerSettings setObject:[NSNumber numberWithBool:YES] forKey:@"colorized"];
-        }
-        
-        self.outgoingTelnetLoggerSettings =[[[NSUserDefaults standardUserDefaults] objectForKey:archiveOutgoingTelnetLogger] mutableCopy];
-        if (!self.outgoingTelnetLoggerSettings)
-        {
-            self.outgoingTelnetLoggerSettings = [[NSMutableDictionary alloc] init];
-            [self.outgoingTelnetLoggerSettings setObject:defaultOutgoingTelnetServer forKey:@"server"];
-            [self.outgoingTelnetLoggerSettings setObject:[NSNumber numberWithBool:YES] forKey:@"colorized"];
-        }
     }
     return self;
 }
@@ -109,164 +98,134 @@
 - (void) enableMediaAEC:(BOOL) enable
 {
     self.isMediaAECOn = enable;
-    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:self.isMediaAECOn] forKey:archiveMediaAEC];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    [[HOPSettings sharedSettings] storeSettingsObject:[NSNumber numberWithBool:self.isMediaAECOn] key:settingsKeyMediaAEC];
 }
 - (void) enableMediaAGC:(BOOL) enable
 {
     self.isMediaAGCOn = enable;
-    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:self.isMediaAGCOn] forKey:archiveMediaAGC];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    [[HOPSettings sharedSettings] storeSettingsObject:[NSNumber numberWithBool:self.isMediaAGCOn] key:settingsKeyMediaAGC];
 }
 - (void) enableMediaNS:(BOOL) enable
 {
     self.isMediaNSOn = enable;
-    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:self.isMediaNSOn] forKey:archiveMediaNS];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    [[HOPSettings sharedSettings] storeSettingsObject:[NSNumber numberWithBool:self.isMediaNSOn] key:settingsKeyMediaNS];
 }
 
 - (void) enableRemoteSessionActivationMode:(BOOL) enable
 {
     self.isRemoteSessionActivationModeOn = enable;
-    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:self.isRemoteSessionActivationModeOn] forKey:archiveRemoteSessionActivationMode];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    [[HOPSettings sharedSettings] storeSettingsObject:[NSNumber numberWithBool:self.isRemoteSessionActivationModeOn] key:archiveRemoteSessionActivationMode];
 }
 
 - (void) enableFaceDetectionMode:(BOOL) enable
 {
     self.isFaceDetectionModeOn = enable;
-    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:self.isFaceDetectionModeOn] forKey:archiveFaceDetectionMode];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    [[HOPSettings sharedSettings] storeSettingsObject:[NSNumber numberWithBool:self.isFaceDetectionModeOn] key:archiveFaceDetectionMode];
 }
 
 - (void) enableRedialMode:(BOOL) enable
 {
     self.isRedialModeOn = enable;
-    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:self.isRedialModeOn] forKey:archiveRedialMode];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    [[HOPSettings sharedSettings] storeSettingsObject:[NSNumber numberWithBool:self.isRedialModeOn] key:archiveRedialMode];
+}
+
+
+- (NSString *)getArchiveKeyForLoggerType:(LoggerTypes)type
+{
+    NSString *key= nil;
+    
+    switch (type)
+    {
+        case LOGGER_STD_OUT:
+            key = settingsKeyStdOutLogger;
+            break;
+            
+        case LOGGER_TELNET:
+            key = settingsKeyTelnetLogger;
+            break;
+            
+        case LOGGER_OUTGOING_TELNET:
+            key = settingsKeyOutgoingTelnetLogger;
+            break;
+            
+        default:
+            break;
+    }
+    return key;
 }
 
 - (void) enable:(BOOL) enable logger:(LoggerTypes) type
 {
-    switch (type)
+    NSString* key = [self getArchiveKeyForLoggerType:type];
+    
+    if ([key length] > 0)
     {
-        case LOGGER_STD_OUT:
-            self.enabledStdLogger = enable;
-            [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:self.enabledStdLogger] forKey:archiveStdLogger];
-            break;
-            
-        case LOGGER_TELNET:
-            [self.telnetLoggerSettings setObject:[NSNumber numberWithBool:enable] forKey:@"enabled"];
-            [[NSUserDefaults standardUserDefaults] setObject:self.telnetLoggerSettings forKey:archiveTelnetLogger];
-            break;
-            
-        case LOGGER_OUTGOING_TELNET:
-            [self.outgoingTelnetLoggerSettings setObject:[NSNumber numberWithBool:enable] forKey:@"enabled"];
-            [[NSUserDefaults standardUserDefaults] setObject:self.outgoingTelnetLoggerSettings forKey:archiveOutgoingTelnetLogger];
-            break;
-            
-        default:
-            break;
+        key = [key stringByAppendingString:archiveEnabled];
+        [[HOPSettings sharedSettings] storeSettingsObject:[NSNumber numberWithBool:enable] key:key];
     }
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    //[Logger start:enable logger:type];
 }
 
 - (BOOL) isLoggerEnabled:(LoggerTypes) type
 {
-    switch (type)
+    BOOL ret = NO;
+    NSString* key = [self getArchiveKeyForLoggerType:type];
+    
+    if ([key length] > 0)
     {
-        case LOGGER_STD_OUT:
-            return self.enabledStdLogger;
-            break;
-            
-        case LOGGER_TELNET:
-            return [self.telnetLoggerSettings objectForKey:@"enabled"];
-            break;
-            
-        case LOGGER_OUTGOING_TELNET:
-            return [self.outgoingTelnetLoggerSettings objectForKey:@"enabled"];
-            break;
-            
-        default:
-            break;
+        key = [key stringByAppendingString:archiveEnabled];
+        ret = [[NSUserDefaults standardUserDefaults] boolForKey:key];
     }
-    return NO;
+    
+    return ret;
 }
 
 - (void) setServerOrPort:(NSString*) server logger:(LoggerTypes) type
 {
-    switch (type)
+    NSString* key = [self getArchiveKeyForLoggerType:type];
+    
+    if ([key length] > 0)
     {
-        case LOGGER_TELNET:
-            [self.telnetLoggerSettings setObject:server forKey:@"server"];
-            [[NSUserDefaults standardUserDefaults] setObject:self.telnetLoggerSettings forKey:archiveTelnetLogger];
-            break;
-            
-        case LOGGER_OUTGOING_TELNET:
-            [self.outgoingTelnetLoggerSettings setObject:server forKey:@"server"];
-            [[NSUserDefaults standardUserDefaults] setObject:self.outgoingTelnetLoggerSettings forKey:archiveOutgoingTelnetLogger];
-            
-        default:
-            break;
+        key = [key stringByAppendingString:archiveServer];
+        [[HOPSettings sharedSettings] storeSettingsObject:server key:key];
     }
-    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (NSString*) getServerPortForLogger:(LoggerTypes) type
 {
-    switch (type)
+    NSString* ret = nil;
+    NSString* key = [self getArchiveKeyForLoggerType:type];
+    
+    if ([key length] > 0)
     {
-        case LOGGER_TELNET:
-            return [self.telnetLoggerSettings objectForKey:@"server"];
-            break;
-            
-        case LOGGER_OUTGOING_TELNET:
-            return [self.outgoingTelnetLoggerSettings objectForKey:@"server"];
-            break;
-            
-        default:
-            break;
+        key = [key stringByAppendingString:archiveServer];
+        ret = [[NSUserDefaults standardUserDefaults] objectForKey:key];
     }
-    return nil;
+    
+    return ret;
 }
 
 - (void) setColorizedOutput:(BOOL) colorized logger:(LoggerTypes) type
 {
-    switch (type)
+    NSString* key = [self getArchiveKeyForLoggerType:type];
+    
+    if ([key length] > 0)
     {
-        case LOGGER_TELNET:
-            [self.telnetLoggerSettings setObject:[NSNumber numberWithBool:colorized] forKey:@"colorized"];
-            [[NSUserDefaults standardUserDefaults] setObject:self.telnetLoggerSettings forKey:archiveTelnetLogger];
-            break;
-            
-        case LOGGER_OUTGOING_TELNET:
-            [self.outgoingTelnetLoggerSettings setObject:[NSNumber numberWithBool:colorized] forKey:@"colorized"];
-            [[NSUserDefaults standardUserDefaults] setObject:self.outgoingTelnetLoggerSettings forKey:archiveOutgoingTelnetLogger];
-            break;
-            
-        default:
-            break;
+        key = [key stringByAppendingString:archiveColorized];
+        [[HOPSettings sharedSettings] storeSettingsObject:[NSNumber numberWithBool:colorized] key:key];
     }
-    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (BOOL) isColorizedOutputForLogger:(LoggerTypes) type
 {
     BOOL ret = NO;
-    switch (type)
+    NSString* key = [self getArchiveKeyForLoggerType:type];
+    
+    if ([key length] > 0)
     {
-        case LOGGER_TELNET:
-            ret = [self.telnetLoggerSettings objectForKey:@"colorized"];
-            break;
-            
-        case LOGGER_OUTGOING_TELNET:
-            ret = [self.outgoingTelnetLoggerSettings objectForKey:@"colorized"];
-            break;
-            
-        default:
-            break;
+        key = [key stringByAppendingString:archiveColorized];
+        ret = [[NSUserDefaults standardUserDefaults] boolForKey:key];
     }
+    
     return ret;
 }
 
@@ -301,8 +260,10 @@
 
 - (void) saveModuleLogLevels
 {
-    [[NSUserDefaults standardUserDefaults] setObject:self.appModulesLoggerLevel forKey:archiveModulesLogLevels];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    [[HOPSettings sharedSettings] storeSettingsObject:self.appModulesLoggerLevel key:archiveModulesLogLevels];
+    
+//    [[NSUserDefaults standardUserDefaults] setObject:self.appModulesLoggerLevel forKey:archiveModulesLogLevels];
+//    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (NSString*) getStringForModule:(Modules) module
@@ -343,8 +304,16 @@
             ret = @"SDK (services)";
             break;
 
+        case MODULE_SERVICES_WIRE:
+            ret = @"SDK (services packets)";
+            break;
+
         case MODULE_SERVICES_ICE:
-            ret = @"SDK (ICE)";
+            ret = @"SDK (STUN/ICE)";
+            break;
+
+      case MODULE_SERVICES_TURN:
+            ret = @"SDK (TURN)";
             break;
 
         case MODULE_SERVICES_RUDP:
@@ -357,6 +326,14 @@
 
         case MODULE_SERVICES_MLS:
             ret = @"SDK (MLS)";
+            break;
+
+        case MODULE_SERVICES_TCP:
+            ret = @"SDK (TCP Messaging)";
+            break;
+
+        case MODULE_SERVICES_TRANSPORT:
+            ret = @"SDK (Transport Stream)";
             break;
 
         case MODULE_ZSLIB:
@@ -411,9 +388,17 @@
             ret = moduleServices;
             break;
             
+        case MODULE_SERVICES_WIRE:
+            ret = moduleServicesWire;
+            break;
+
         case MODULE_SERVICES_ICE:
             ret = moduleServicesIce;
             break;
+
+        case MODULE_SERVICES_TURN:
+          ret = moduleServicesTurn;
+          break;
 
         case MODULE_SERVICES_RUDP:
           ret = moduleServicesRudp;
@@ -425,6 +410,14 @@
 
         case MODULE_SERVICES_MLS:
             ret = moduleServicesMls;
+            break;
+
+        case MODULE_SERVICES_TCP:
+            ret = moduleServicesTcp;
+            break;
+
+        case MODULE_SERVICES_TRANSPORT:
+            ret = moduleServicesTransport;
             break;
 
         case MODULE_ZSLIB:
@@ -479,10 +472,14 @@
 {
     [self setLoggerLevel:HOPLoggerLevelTrace forAppModule:MODULE_APPLICATION];
     [self setLoggerLevel:HOPLoggerLevelTrace forAppModule:MODULE_SERVICES];
+    [self setLoggerLevel:HOPLoggerLevelDebug forAppModule:MODULE_SERVICES_WIRE];
     [self setLoggerLevel:HOPLoggerLevelTrace forAppModule:MODULE_SERVICES_ICE];
-    [self setLoggerLevel:HOPLoggerLevelTrace forAppModule:MODULE_SERVICES_RUDP];
-    [self setLoggerLevel:HOPLoggerLevelTrace forAppModule:MODULE_SERVICES_HTTP];
+    [self setLoggerLevel:HOPLoggerLevelTrace forAppModule:MODULE_SERVICES_TURN];
+    [self setLoggerLevel:HOPLoggerLevelDebug forAppModule:MODULE_SERVICES_RUDP];
+    [self setLoggerLevel:HOPLoggerLevelDebug forAppModule:MODULE_SERVICES_HTTP];
     [self setLoggerLevel:HOPLoggerLevelTrace forAppModule:MODULE_SERVICES_MLS];
+    [self setLoggerLevel:HOPLoggerLevelTrace forAppModule:MODULE_SERVICES_TCP];
+    [self setLoggerLevel:HOPLoggerLevelDebug forAppModule:MODULE_SERVICES_TRANSPORT];
     [self setLoggerLevel:HOPLoggerLevelTrace forAppModule:MODULE_CORE];
     [self setLoggerLevel:HOPLoggerLevelTrace forAppModule:MODULE_STACK_MESSAGE];
     [self setLoggerLevel:HOPLoggerLevelTrace forAppModule:MODULE_STACK];
@@ -501,4 +498,269 @@
     [self enable:YES logger:LOGGER_OUTGOING_TELNET];
 }
 
+- (BOOL) isQRSettingsResetEnabled
+{
+    return [[NSUserDefaults standardUserDefaults] boolForKey:settingsKeyRemoveSettingsAppliedByQRCode];
+}
+
+- (void) enableQRSettingsReset:(BOOL) enable
+{
+    [[HOPSettings sharedSettings] storeSettingsObject:[NSNumber numberWithBool:enable] key:settingsKeyRemoveSettingsAppliedByQRCode];
+}
+
+- (NSString*) getOuterFrameURL
+{
+    return [[NSUserDefaults standardUserDefaults] stringForKey:settingsKeyOuterFrameURL];
+}
+
+- (NSString*) getNamespaceGrantServiceURL
+{
+    return [[NSUserDefaults standardUserDefaults] stringForKey:settingsKeyGrantServiceURL];
+}
+
+- (NSString*) getIdentityProviderDomain
+{
+    return [[NSUserDefaults standardUserDefaults] stringForKey:settingsKeyIdentityProviderDomain];
+}
+
+- (NSString*) getIdentityFederateBaseURI
+{
+    return [[NSUserDefaults standardUserDefaults] stringForKey:settingsKeyIdentityFederateBaseURI];
+}
+
+- (NSString*) getLockBoxServiceDomain
+{
+    return [[NSUserDefaults standardUserDefaults] stringForKey:settingsKeyLockBoxServiceDomain];
+}
+
+- (NSString*) getDefaultOutgoingTelnetServer
+{
+    return [[NSUserDefaults standardUserDefaults] stringForKey:settingsKeyOutgoingTelnetLoggerServer];
+}
+- (BOOL) isAppDataSet
+{
+    BOOL ret = YES;
+    
+    ret &= [[[NSUserDefaults standardUserDefaults] objectForKey:[[HOPSettings sharedSettings] getCoreKeyForAppKey:settingsKeyAppId]] length] != 0;
+    ret &= [[[NSUserDefaults standardUserDefaults] objectForKey:[[HOPSettings sharedSettings] getCoreKeyForAppKey:settingsKeyAppIdSharedSecret]] length] != 0;
+    ret &= [[[NSUserDefaults standardUserDefaults] objectForKey:[[HOPSettings sharedSettings] getCoreKeyForAppKey:settingsKeyAppName]] length] != 0;
+    ret &= [[[NSUserDefaults standardUserDefaults] objectForKey:[[HOPSettings sharedSettings] getCoreKeyForAppKey:settingsKeyAppURL]] length] != 0;
+    ret &= [[[NSUserDefaults standardUserDefaults] objectForKey:[[HOPSettings sharedSettings] getCoreKeyForAppKey:settingsKeyAppImageURL]] length] != 0;
+    
+#ifdef APNS_ENABLED
+    ret &= [[[NSUserDefaults standardUserDefaults] objectForKey:[[HOPSettings sharedSettings] getCoreKeyForAppKey:settingsKeyUrbanAirShipAPIPushURL]] length] != 0;
+#endif
+    return ret;
+}
+
+- (BOOL) isLoginSettingsSet
+{
+    BOOL ret = YES;
+    
+    ret &= [[self getOuterFrameURL] length] != 0;
+    ret &= [[self getIdentityFederateBaseURI] length] != 0;
+    ret &= [[self getIdentityProviderDomain] length] != 0;
+    ret &= [[self getNamespaceGrantServiceURL] length] != 0;
+    ret &= [[self getLockBoxServiceDomain] length] != 0;
+    ret &= [[self getDefaultOutgoingTelnetServer] length] != 0;
+    
+    return ret;
+}
+
+- (BOOL) isAppSettingsSetForPath:(NSString*) path
+{
+    BOOL ret = YES;
+    NSDictionary* customerSpecificDict = [NSDictionary dictionaryWithContentsOfFile:path];
+    
+    if ([customerSpecificDict count] > 0)
+    {
+        NSString* appID = [customerSpecificDict objectForKey:settingsKeyAppId];
+        NSString* appSecret = [customerSpecificDict objectForKey:settingsKeyAppIdSharedSecret];
+        NSString* appName = [customerSpecificDict objectForKey:settingsKeyAppName];
+        
+        if ([appID length] == 0 || [appSecret length] == 0 || [appName length] == 0)
+            ret = NO;
+    }
+    
+    return ret;
+}
+
+- (NSArray*) getMissingAppSettings
+{
+    NSMutableArray* ret = [[NSMutableArray alloc] init];
+    
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:settingsKeyAppId] length] == 0)
+        [ret addObject: settingsKeyAppId];
+    
+
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:settingsKeyAppIdSharedSecret] length] == 0)
+        [ret addObject: settingsKeyAppIdSharedSecret];
+    return ret;
+}
+
+- (NSMutableDictionary*) dictionaryForJSONString:(NSString*) jsonString
+{
+    NSMutableDictionary* ret = nil;
+    SBJsonParser* parser = [[SBJsonParser alloc] init];
+    NSDictionary* inputDictionary = [parser objectWithString: jsonString];
+    
+    if ([inputDictionary count] > 0 && [inputDictionary objectForKey:@"root"] != nil)
+    {
+        ret = [NSMutableDictionary dictionaryWithDictionary:[inputDictionary objectForKey:@"root"]];
+        if (ret)
+            [self createUserAgentFromDictionary:ret];
+    }
+    
+    return ret;
+}
+
+- (NSString*) createUserAgentFromDictionary:(NSMutableDictionary*) inDictionary
+{
+    NSString* ret = nil;
+    if ([inDictionary count] > 0)
+    {
+        NSString* temp = [inDictionary objectForKey: settingsKeyUserAgent];
+        if ([temp length] > 0)
+        {
+            ret = @"";
+            NSArray* partsOfString = [temp componentsSeparatedByString:@"$"];
+            for (NSString* str in partsOfString)
+            {
+                NSString* toAppend = @"";
+                if ([str compare:userAgentVariableAppName] == NSOrderedSame)
+                {
+                    toAppend = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"];
+                }
+                else if ([str compare:userAgentVariableAppVersion] == NSOrderedSame)
+                {
+                    toAppend = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+                }
+                else if ([str compare:userAgentVariableSystemOS] == NSOrderedSame)
+                {
+                    toAppend = [[UIDevice currentDevice] systemName];
+                }
+                else if ([str compare:userAgentVariableVersionOS] == NSOrderedSame)
+                {
+                    toAppend = [[UIDevice currentDevice] systemVersion];
+                }
+                else if ([str compare:userAgentVariableDeviceModel] == NSOrderedSame)
+                {
+                    toAppend = [[UIDevice currentDevice] model];
+                    
+                    if ([toAppend hasPrefix:@"iPhone"] || [toAppend hasPrefix:@"iPod"])
+                        toAppend = @"iPhone";
+                    else if ([toAppend hasPrefix:@"iPad"])
+                        toAppend = @"iPad";
+                }
+                else if ([str compare:userAgentVariableDeveloperID] == NSOrderedSame)
+                {
+                    toAppend = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"Hookflash Developer ID"];
+                }
+                else
+                {
+                    toAppend = str;
+                }
+                
+                ret = [ret stringByAppendingString:toAppend];
+            }
+            
+            if ([ret length] > 0)
+                [inDictionary setObject:ret forKey:[[HOPSettings sharedSettings] getCoreKeyForAppKey:settingsKeyUserAgent]];
+            
+            [inDictionary removeObjectForKey:settingsKeyUserAgent];
+        }
+    }
+    return ret;
+}
+
+- (NSMutableDictionary*) dictionaryWithRemovedAllInvalidEntriesForPath:(NSString*) path
+{
+    NSMutableDictionary* plistDictionary = [NSMutableDictionary dictionaryWithContentsOfFile:path];
+    
+    if ([plistDictionary count] > 0)
+    {
+        for (NSString* key in [plistDictionary allKeys])
+        {
+           id value = [plistDictionary objectForKey:key];
+            if ([value isKindOfClass:[NSString class]])
+            {
+                if ([((NSString*)value) rangeOfString:@"<--"].location != NSNotFound)
+                {
+                    [plistDictionary removeObjectForKey:key];
+                }
+            }
+            
+        }
+    }
+    
+    return plistDictionary;
+}
+
+- (void) updateDeviceInfo
+{
+    NSString* deviceId = [HOPUtility hashString:[Utility getGUIDstring]];
+    if ([deviceId length] > 0)
+        [[HOPSettings sharedSettings] storeCalculatedSettingObject:deviceId key:@"openpeer/calculated/device-id"];
+
+    NSString* str = [Utility getDeviceOs];
+    if ([str length] > 0)
+        [[HOPSettings sharedSettings] storeCalculatedSettingObject:str key:@"openpeer/calculated/os"];
+    
+    NSString* system = [Utility getPlatform];
+    if ([system length] > 0)
+        [[HOPSettings sharedSettings] storeCalculatedSettingObject:system key:@"openpeer/calculated/system"];
+    
+    NSString* userAgent = [Utility getUserAgentName];
+    if ([userAgent length] > 0)
+        [[HOPSettings sharedSettings] storeCalculatedSettingObject:userAgent key:[[HOPSettings sharedSettings] getCoreKeyForAppKey:settingsKeyUserAgent]];
+}
+
+- (void) snapshotCurrentSettings
+{
+    NSDictionary* currentSettings = [[HOPSettings sharedSettings] getCurrentSettingsDictionary];
+    if ([currentSettings count] > 0)
+        [[NSUserDefaults standardUserDefaults] setObject:currentSettings forKey:settingsKeySettingsSnapshot];
+}
+
+- (void) storeQRSettings:(NSDictionary*) inDictionary
+{
+    [[NSUserDefaults standardUserDefaults] setObject:inDictionary forKey:settingsKeyAppliedQRSettings];
+}
+
+
+- (void) removeAppliedQRSettings
+{
+    //Load applied QR settings
+    NSDictionary* appliedQRSettingsDictionary = [[NSUserDefaults standardUserDefaults] objectForKey:settingsKeyAppliedQRSettings];
+    //Load initial settings
+    NSDictionary* preQRSettingsSnapshotDictionary = [[NSUserDefaults standardUserDefaults] objectForKey:settingsKeySettingsSnapshot];
+   
+    for (NSString* key in appliedQRSettingsDictionary)
+    {
+        //Get core key for existing application
+        NSString* coreKey = [[HOPSettings sharedSettings] getCoreKeyForAppKey:key];
+        id qrValue = [appliedQRSettingsDictionary objectForKey:key];
+        id currentValue = [[NSUserDefaults standardUserDefaults] objectForKey:coreKey];
+        id preValue = [preQRSettingsSnapshotDictionary objectForKey:coreKey];
+        
+        BOOL isEqual = NO;
+        
+        //Check if qr settings is changed since it is applied
+        if ([[qrValue class] isSubclassOfClass:[NSNumber class]])
+            isEqual = [qrValue compare:currentValue] == NSOrderedSame;
+        else if ([[qrValue class] isSubclassOfClass:[NSString class]])
+            isEqual = [qrValue isEqualToString:currentValue];
+        else
+            isEqual = qrValue == currentValue;
+        
+        //If qr settings is not changed remove it or replace with initial value
+        if (isEqual)
+        {
+            if (preValue == nil)
+                [[NSUserDefaults standardUserDefaults] removeObjectForKey:coreKey];
+            else
+                [[NSUserDefaults standardUserDefaults] setObject:preValue forKey:coreKey];
+        }
+    }
+}
 @end

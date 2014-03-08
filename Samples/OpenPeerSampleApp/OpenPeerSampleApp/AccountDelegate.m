@@ -63,8 +63,7 @@
 //This method handles account state changes from SDK.
 - (void) account:(HOPAccount*) account stateChanged:(HOPAccountStates) accountState
 {
-    NSLog(@"Account login state: %@", [HOPAccount stringForAccountState:accountState]);
-    //HOPLog(HOPLoggerLevelDebug,@"Account login state: %@", [HOPAccount stringForAccountState:accountState]);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Account login state: %@", [HOPAccount stringForAccountState:accountState]);
     
     dispatch_async(dispatch_get_main_queue(), ^
     {
@@ -80,7 +79,7 @@
                 break;
                 
             case HOPAccountWaitingForBrowserWindowToBeLoaded:
-                [self.webLoginViewController openLoginUrl:namespaceGrantServiceURL];
+                [self.webLoginViewController openLoginUrl:[[Settings sharedSettings] getNamespaceGrantServiceURL]];
                 break;
                 
             case HOPAccountWaitingForBrowserWindowToBeMadeVisible:
@@ -106,12 +105,8 @@
                 
             case HOPAccountWaitingForBrowserWindowToClose:
             {
-                //Detach login web view
-                [UIView animateWithDuration:0.77 animations:^{
-                    self.webLoginViewController.view.alpha = 0;
-                } completion: ^(BOOL finished) {
-                    [self.webLoginViewController.view removeFromSuperview];
-                }];
+                [[[OpenPeer sharedOpenPeer] mainViewController] closeWebLoginView:self.webLoginViewController];
+                
                 //Notify core that login web view is closed
                 [account notifyBrowserWindowClosed];
             }
@@ -125,7 +120,17 @@
                 break;
                 
             case HOPAccountStateShutdown:
-                [[LoginManager sharedLoginManager] login];
+            {
+                HOPAccountState* accountState = [account getState];
+                if (accountState.errorCode && ![[OpenPeer sharedOpenPeer] appEnteredForeground])
+                {
+                    [[[OpenPeer sharedOpenPeer] mainViewController]  onAccountLoginError:accountState.errorReason];
+                }
+                else
+                {
+                    [[LoginManager sharedLoginManager] onUserLogOut];
+                }
+            }
                 break;
                 
             default:
@@ -136,7 +141,7 @@
 
 - (void)onAccountAssociatedIdentitiesChanged:(HOPAccount *)account
 {
-    NSLog(@"onAccountAssociatedIdentitiesChanged");
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Account associated identities has changed.");
     dispatch_async(dispatch_get_main_queue(), ^
     {
         NSArray* associatedIdentities = [account getAssociatedIdentities];
@@ -149,7 +154,7 @@
 
 - (void)onAccountPendingMessageForInnerBrowserWindowFrame:(HOPAccount*) account
 {
-    NSLog(@"onAccountPendingMessageForInnerBrowserWindowFrame");
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Account: pending message for inner browser window frame.");
   
     dispatch_async(dispatch_get_main_queue(), ^
     {
