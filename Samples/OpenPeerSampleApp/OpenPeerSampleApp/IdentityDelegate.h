@@ -37,4 +37,6 @@
 @interface IdentityDelegate : NSObject<HOPIdentityDelegate>
 
 @property (nonatomic, weak) id<LoginEventsDelegate> loginDelegate;
+
+- (void) cleanAllWebViewControllers;
 @end

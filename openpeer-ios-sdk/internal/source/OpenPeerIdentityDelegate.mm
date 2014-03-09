@@ -82,6 +82,8 @@ void OpenPeerIdentityDelegate::onIdentityRolodexContactsDownloaded(IIdentityPtr 
 HOPIdentity* OpenPeerIdentityDelegate::getHOPIdentity(IIdentityPtr identity)
 {
     NSString* identityURI = [NSString stringWithCString:identity->getIdentityURI() encoding:NSUTF8StringEncoding];
+    NSNumber* identityObjectId = [NSNumber numberWithInt:identity->getID()];
+    //TODO: Use identityObjectId for key
     HOPIdentity* hopIdentity = [[OpenPeerStorageManager sharedStorageManager] getIdentityForId:identityURI];
      
     if (!hopIdentity && ![HOPUtility isBaseIdentityURI:identityURI])
