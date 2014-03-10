@@ -179,7 +179,7 @@
             
 #ifndef DEBUG
             //Apply release settings
-            NSString* filePath = [[NSBundle mainBundle] pathForResource:@"CustomerSpecific_Release" ofType:@"plist"];
+            filePath = [[NSBundle mainBundle] pathForResource:@"CustomerSpecific_Release" ofType:@"plist"];
             if ([filePath length] > 0)
             {
                 NSMutableDictionary* filteredDictionary = [[Settings sharedSettings] dictionaryWithRemovedAllInvalidEntriesForPath:filePath];

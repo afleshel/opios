@@ -6,7 +6,7 @@ For a quick introduction to the code please read the following. For more detaile
 
 
 From your terminal, please clone the "opios" git repository:
-git clone --recursive https://github.com/openpeer/opios.git -b 20131025-federated-cloud-contacts
+git clone --recursive https://github.com/openpeer/opios.git
 
 This repository will yield the iOS Object-C SDK, sample application and dependency librarys like the C++ open peer core, stack, media and libraries needed to support the underlying SDK.
 
@@ -174,6 +174,16 @@ HOPStack.h
 
 HOPTypes.h
 - Place where are defined most of enums used in SDK
+
+
+Branches:
+
+Our current activity is being performed on "20140307-dev-stable" but this branch is unstable. Individual activity is on other sub-branches from this branch.
+https://github.com/openpeer/opios/tree/20140307-dev-stable
+
+To see all branches go to:
+https://github.com/openpeer/opios/branches
+
 
 Contact info:
 

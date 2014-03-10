@@ -1,4 +1,22 @@
 
+opios SDK v0.5.0 changes
+- added: APNS push integration example
+- fix: incoming call audio routing issue
+- improved: NAT traveral with STUN/ICE/TURN
+- improved: DNS handling / localized caching
+- improved: settings downloading / control
+- added: QR code scanner to easily download server settings during development process
+- improved: server connectivity re-tries and keep-alive scenarios
+- improved: iOS backgrounding (app going in/out of backgrounding and maintaining connections)
+- fix: various random crashes for audio/video
+- added: chat cell avatar downloading
+- added: call duration
+- improved: optimization via caching some data
+- improved: tons more component level logging / tracing
+- improved: updated to changes to the Open Peer protocol specification
+- improved: background generation of RSA keys to cut down on start-up time
+- added: MLS (Message Layer Security) to both P2P and P<->relay<->P connections (i.e. Diffie-Hellman with open peer fingerprint ID and RSA validation)
+
 opios SDK v0.4.3 changes
 - updated splash screen appearance
 - improved image downloading
