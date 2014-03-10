@@ -370,11 +370,12 @@
 
 - (void) onUserLogOut
 {
-#ifdef DEBUG
-    [[[OpenPeer sharedOpenPeer] mainViewController] showQRScanner];
-#else
-    [[[OpenPeer sharedOpenPeer] mainViewController] waitForUserGesture];
-#endif
+    [[OpenPeer sharedOpenPeer] finishPreSetup];
+//#ifdef DEBUG
+//    [[[OpenPeer sharedOpenPeer] mainViewController] showQRScanner];
+//#else
+//    [[[OpenPeer sharedOpenPeer] mainViewController] waitForUserGesture];
+//#endif
 }
 
 /**

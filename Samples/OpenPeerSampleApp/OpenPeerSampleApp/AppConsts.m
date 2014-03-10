@@ -67,6 +67,10 @@ NSString * const settingsKeyIdentityProviderDomain = @"identityProviderDomain";
 NSString * const settingsKeyIdentityFederateBaseURI = @"identityFederateBaseURI";
 NSString * const settingsKeyLockBoxServiceDomain = @"lockBoxServiceDomain";
 NSString * const settingsKeyOutgoingTelnetLoggerServer = @"archiveOutgoingTelnetLoggerServer";
+NSString * const settingsKeySettingsDownloadURL = @"applicationSettingsDownloadURL";
+NSString * const settingsKeySettingsDownloadExpiryTime = @"applicationSettingsDownloadExpiryTime";
+NSString * const settingsKeyQRScannerShownAtStart = @"applicationQRScannerShownAtStart";
+NSString * const settingsKeySplashScreenAllowsQRScannerGesture = @"applicationSplashScreenAllowsQRScannerGesture";
 
 NSString * const archiveEnabled = @"enabled";
 NSString * const archiveServer = @"Server";

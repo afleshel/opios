@@ -36,12 +36,14 @@
 #import "Utility.h"
 #import <OpenPeerSDK/HOPSettings.h>
 #import "Logger.h"
+#import "SettingsDownloader.h"
 
 @interface QRScannerViewController ()
 
 @property (nonatomic, strong) ZXCapture* capture;
-@property (nonatomic, strong) NSURLConnection *urlConnection;
-@property (nonatomic, strong) NSMutableData* receivedData;
+//@property (nonatomic, strong) NSURLConnection *urlConnection;
+//@property (nonatomic, strong) NSMutableData* receivedData;
+@property (nonatomic, strong) SettingsDownloader* settingsDownloader;
 
 @property (nonatomic, weak) IBOutlet UIButton* buttonLogger;
 @property (nonatomic, weak) IBOutlet UIButton* buttonCancel;
@@ -136,6 +138,7 @@
                 }
                 else
                 {
+                    self.buttonCancel.hidden = YES;
                     UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Invalid login settings!"
                                                                         message:@"Please, scan another QR code or proceed with already set login settings"
                                                                        delegate:nil
@@ -196,8 +199,12 @@
         return;
     }
     
+    self.settingsDownloader = nil;
+    self.settingsDownloader = [[SettingsDownloader alloc] initSettingsDownloadFromURL:jsonURL postDate:postData];
+    self.settingsDownloader.delegate = self;
+    [self.settingsDownloader startDownload];
     // Create the request.
-    NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:jsonURL]
+    /*NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:jsonURL]
                                               cachePolicy:NSURLRequestUseProtocolCachePolicy
                                           timeoutInterval:20.0];
 
@@ -222,10 +229,10 @@
                                                   cancelButtonTitle:nil
                                                   otherButtonTitles:@"Ok",nil];
         [alertView show];
-    }
+    }*/
 }
 
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+/*- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
     [self.receivedData setLength:0];
 }
@@ -268,11 +275,7 @@
             [[Settings sharedSettings] snapshotCurrentSettings];
             [[Settings sharedSettings] storeQRSettings:settings];
             [[HOPSettings sharedSettings] storeSettingsFromDictionary:settings];
-        }
-        
-        //If set remove scanner and proceed with app setup
-        if (isSet)
-        {
+            
             [self actionProceedWithlogin:nil];
         }
         else
@@ -287,7 +290,7 @@
     }
     self.urlConnection = nil;
     self.receivedData = nil;
-}
+}*/
 
 - (IBAction)actionStartLogger:(id)sender
 {
@@ -298,5 +301,20 @@
 {
     self.buttonCancel.hidden = YES;
     [self.capture.layer removeFromSuperlayer];
+}
+
+#pragma mark - SettingsDownloaderDelegate
+- (void)onSettingsDownloadCompletion:(NSDictionary *)inSettingsDictionary
+{
+    [[Settings sharedSettings] snapshotCurrentSettings];
+    [[Settings sharedSettings] storeQRSettings:inSettingsDictionary];
+    [[HOPSettings sharedSettings] storeSettingsFromDictionary:inSettingsDictionary];
+    
+    [self actionProceedWithlogin:nil];
+}
+
+- (void)onSettingsDownloadFailure
+{
+    [self actionProceedWithlogin:nil];
 }
 @end

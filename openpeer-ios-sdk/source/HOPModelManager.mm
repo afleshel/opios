@@ -196,14 +196,6 @@ using namespace openpeer::core;
     NSString *pathData = [dataPathDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"/%@",databaseName]];
     NSURL *storeDataURL = [NSURL fileURLWithPath:pathData];
     
-    //Set weather data will be backed up or not
-    BOOL success = [storeDataURL setResourceValue: [NSNumber numberWithBool: !self.backupData]
-                                  forKey: NSURLIsExcludedFromBackupKey error: &error];
-    if(!success)
-    {
-        NSString* str = [NSString stringWithFormat:@"Error excluding %@ from backup %@", [storeDataURL lastPathComponent], error];
-        ZS_LOG_ERROR(Debug, [self log:str]);
-    }
     
     //Set cache path
     //NSString *cachePathDirectory = [self.dataPath length] == 0 ? nil : self.cachePath;
@@ -223,14 +215,7 @@ using namespace openpeer::core;
     
     NSString *pathCache = [cachePath stringByAppendingPathComponent:[NSString stringWithFormat:@"/%@",cacheDatabaseName]];
     NSURL *storeCacheURL = [NSURL fileURLWithPath:pathCache];
-    
-    success = [storeCacheURL setResourceValue: [NSNumber numberWithBool: YES]
-                                      forKey: NSURLIsExcludedFromBackupKey error: &error];
-    if(!success)
-    {
-        NSString* str = [NSString stringWithFormat:@"Error excluding %@ from backup %@", [storeCacheURL lastPathComponent], error];
-        ZS_LOG_ERROR(Debug, [self log:str]);
-    }
+
     
     //Perform lightweight migration if it is necessary;
     NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -267,6 +252,16 @@ using namespace openpeer::core;
         }
     }
     
+    //Set weather data will be backed up or not
+    BOOL success = [storeDataURL setResourceValue: [NSNumber numberWithBool: !self.backupData]
+                                           forKey: NSURLIsExcludedFromBackupKey error: &error];
+    if(!success)
+    {
+        NSString* str = [NSString stringWithFormat:@"Error excluding %@ from backup %@", [storeDataURL lastPathComponent], error];
+        ZS_LOG_ERROR(Debug, [self log:str]);
+    }
+
+    
     NSPersistentStore* storeCache = [_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:@"Cache" URL:storeCacheURL options:options error:&error];
     
     
@@ -294,6 +289,14 @@ using namespace openpeer::core;
         {
             ZS_LOG_DEBUG([self log: @"Failed to delete cache store."]);
         }
+    }
+    
+    success = [storeCacheURL setResourceValue: [NSNumber numberWithBool: YES]
+                                            forKey: NSURLIsExcludedFromBackupKey error: &error];
+    if(!success)
+    {
+        NSString* str = [NSString stringWithFormat:@"Error excluding %@ from backup %@", [storeCacheURL lastPathComponent], error];
+        ZS_LOG_ERROR(Debug, [self log:str]);
     }
     
     if (!storeData || !storeCache)

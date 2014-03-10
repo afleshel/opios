@@ -164,6 +164,7 @@
 		8731272218C670AD00507144 /* Template_CustomerSpecific_Release.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8731272118C670AD00507144 /* Template_CustomerSpecific_Release.plist */; };
 		87355FE517CCA7E3006151E7 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 87355FE417CCA7E3006151E7 /* Default.png */; };
 		87355FE917CCA8AF006151E7 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 87355FE817CCA8AF006151E7 /* Default@2x.png */; };
+		873D174318CD31E100FD88C3 /* SettingsDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 879DC66118CA0F1C00DA60C0 /* SettingsDownloader.m */; };
 		874408CA182FE873004AD8FC /* IncomingCallView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 874408C7182FE873004AD8FC /* IncomingCallView_iPhone.xib */; };
 		874408CB182FE873004AD8FC /* IncomingCallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 874408C9182FE873004AD8FC /* IncomingCallViewController.m */; };
 		874408D1182FFD6D004AD8FC /* handset_decline_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 874408D0182FFD6D004AD8FC /* handset_decline_icon.png */; };
@@ -215,6 +216,7 @@
 		879D7B9717FB1224008C78E2 /* LoggerSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 879D7B9617FB1224008C78E2 /* LoggerSettingsViewController.m */; };
 		879DC5F418C92FE800DA60C0 /* BackgroundingDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 87CCF64318C0FFDB000DF636 /* BackgroundingDelegate.m */; };
 		879DC62A18C9F77400DA60C0 /* Template_CustomerSpecific_Release.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8731272118C670AD00507144 /* Template_CustomerSpecific_Release.plist */; };
+		879DC66218CA0F1C00DA60C0 /* SettingsDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 879DC66118CA0F1C00DA60C0 /* SettingsDownloader.m */; };
 		879F4393186C507000AED5AB /* OpenPeerSampleAppAPNS-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 879F4392186C507000AED5AB /* OpenPeerSampleAppAPNS-Info.plist */; };
 		87A1086A1802C116001F705D /* Logger.m in Sources */ = {isa = PBXBuildFile; fileRef = 87A108691802C116001F705D /* Logger.m */; };
 		87A1086C1802CBDC001F705D /* logger.png in Resources */ = {isa = PBXBuildFile; fileRef = 87A1086B1802CBDC001F705D /* logger.png */; };
@@ -866,6 +868,8 @@
 		87796E8418A8DDA7002F4B43 /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = OpenpeerSDK.framework/Versions/C/Libraries/libcurl.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		879D7B9517FB1224008C78E2 /* LoggerSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoggerSettingsViewController.h; sourceTree = "<group>"; };
 		879D7B9617FB1224008C78E2 /* LoggerSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = LoggerSettingsViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		879DC66018CA0F1C00DA60C0 /* SettingsDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsDownloader.h; sourceTree = "<group>"; };
+		879DC66118CA0F1C00DA60C0 /* SettingsDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsDownloader.m; sourceTree = "<group>"; };
 		879F4392186C507000AED5AB /* OpenPeerSampleAppAPNS-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "OpenPeerSampleAppAPNS-Info.plist"; sourceTree = SOURCE_ROOT; };
 		87A108681802C116001F705D /* Logger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Logger.h; sourceTree = "<group>"; };
 		87A108691802C116001F705D /* Logger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Logger.m; sourceTree = "<group>"; };
@@ -1191,6 +1195,8 @@
 				8712BE8917D8CCAD00665F42 /* InfoViewController.h */,
 				879D7B9517FB1224008C78E2 /* LoggerSettingsViewController.h */,
 				879D7B9617FB1224008C78E2 /* LoggerSettingsViewController.m */,
+				879DC66018CA0F1C00DA60C0 /* SettingsDownloader.h */,
+				879DC66118CA0F1C00DA60C0 /* SettingsDownloader.m */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -2189,6 +2195,7 @@
 				87A1086A1802C116001F705D /* Logger.m in Sources */,
 				8730D6E31832601C008D1D37 /* VideoCallViewController.m in Sources */,
 				87272859166CC45B0089CBB6 /* LoginManager.m in Sources */,
+				879DC66218CA0F1C00DA60C0 /* SettingsDownloader.m in Sources */,
 				874AD9D1166CE6540095FE33 /* AccountDelegate.m in Sources */,
 				87CCF64418C0FFDB000DF636 /* BackgroundingDelegate.m in Sources */,
 				874AD9D5166CEAFB0095FE33 /* StackDelegate.m in Sources */,
@@ -2297,6 +2304,7 @@
 				87D4BD0818675368008C2D30 /* SBJsonWriter.m in Sources */,
 				87D4BD0918675368008C2D30 /* RXMLElement.m in Sources */,
 				87D4BD0A18675368008C2D30 /* ChatViewController.m in Sources */,
+				873D174318CD31E100FD88C3 /* SettingsDownloader.m in Sources */,
 				87D4BD0B18675368008C2D30 /* ChatMessageCell.m in Sources */,
 				87D4BD0C18675368008C2D30 /* Message.m in Sources */,
 				87D4BD0D18675368008C2D30 /* IdentityLookupDelegate.m in Sources */,

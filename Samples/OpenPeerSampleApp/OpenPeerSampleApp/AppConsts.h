@@ -51,6 +51,10 @@ extern NSString * const settingsKeyIdentityProviderDomain;
 extern NSString * const settingsKeyIdentityFederateBaseURI;
 extern NSString * const settingsKeyLockBoxServiceDomain;
 extern NSString * const settingsKeyOutgoingTelnetLoggerServer;
+extern NSString * const settingsKeySettingsDownloadURL;
+extern NSString * const settingsKeySettingsDownloadExpiryTime;
+extern NSString * const settingsKeyQRScannerShownAtStart;
+extern NSString * const settingsKeySplashScreenAllowsQRScannerGesture;
 
 extern NSString * const archiveEnabled;
 extern NSString * const archiveServer;

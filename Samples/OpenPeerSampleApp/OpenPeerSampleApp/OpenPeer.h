@@ -32,6 +32,7 @@
 #import <Foundation/Foundation.h>
 #import <OpenPeerSDK/HOPTypes.h>
 #import "Settings.h"
+#import "Delegates.h"
 
 @class CallDelegate;
 @class StackDelegate;
@@ -44,7 +45,7 @@
 @class CacheDelegate;
 @class BackgroundingDelegate;
 
-@interface OpenPeer : NSObject
+@interface OpenPeer : NSObject<SettingsDownloaderDelegate>
 
 @property (nonatomic,strong) CallDelegate *callDelegate;
 @property (nonatomic,strong) StackDelegate *stackDelegate;
@@ -77,6 +78,7 @@
 + (id) sharedOpenPeer;
 
 - (void) preSetup;
+- (void) finishPreSetup;
 - (void) setup;
 - (void) shutdown;
 @end
