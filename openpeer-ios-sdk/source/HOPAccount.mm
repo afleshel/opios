@@ -317,13 +317,12 @@ using namespace openpeer::core;
             for (IdentityList::iterator it = associatedIdentities->begin(); it != associatedIdentities->end(); ++it)
             {
                 NSString* identityURI = [NSString stringWithUTF8String: it->get()->getIdentityURI()];
-                
-                HOPIdentity* identity = [[OpenPeerStorageManager sharedStorageManager] getIdentityForId:identityURI];
+                HOPIdentity* identity = [[OpenPeerStorageManager sharedStorageManager] getIdentityForPUID:it->get()->getID()];
                 
                 if (!identity)
                 {
                     identity = [[HOPIdentity alloc] initWithIdentityPtr:*it openPeerIdentityDelegate:boost::shared_ptr<OpenPeerIdentityDelegate>()];
-                    [[OpenPeerStorageManager sharedStorageManager] setIdentity:identity forId:identityURI];
+                    [[OpenPeerStorageManager sharedStorageManager] setIdentity:identity forPUID:it->get()->getID()];
                 }
                 if (identity)
                     [array addObject:identity];

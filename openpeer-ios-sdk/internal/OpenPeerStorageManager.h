@@ -34,11 +34,6 @@
 #import <openpeer/core/types.h>
 #import <zsLib/types.h>
 
-//#import "OpenPeerCallDelegate.h"
-//#import "OpenPeerStackDelegate.h"
-//#import "OpenPeerConversationThreadDelegate.h"
-//#import "OpenPeerMediaEngineDelegate.h"
-
 @class HOPCall;
 @class HOPConversationThread;
 @class HOPContact;
@@ -75,8 +70,10 @@ using namespace zsLib;
 - (void) setCProvisioningAccount:(HOPProvisioningAccount*) account forUserId:(NSString*) userId;
 
 - (HOPIdentity*) getIdentityForId:(NSString*) identityId;
-- (NSArray*) getIdentities;
 - (void) setIdentity:(HOPIdentity*) identity forId:(NSString*) identityId;
+- (HOPIdentity*) getIdentityForPUID:(PUID) puid;
+- (void) setIdentity:(HOPIdentity*) identity forPUID:(PUID) puid;
+- (NSArray*) getIdentities;
 
 - (HOPIdentityLookup*) getIdentityLookupForPUID:(PUID) puid;
 - (void) setIdentityLookup:(HOPIdentityLookup*) lookup forPUID:(PUID) puid;

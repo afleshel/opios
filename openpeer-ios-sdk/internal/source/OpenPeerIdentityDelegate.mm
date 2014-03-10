@@ -32,9 +32,7 @@
 
 #import "OpenPeerIdentityDelegate.h"
 #import "HOPIdentity_Internal.h"
-
 #import "OpenPeerStorageManager.h"
-//#import "OpenPeerUtility.h"
 #import "HOPUtility.h"
 
 #import <openpeer/core/ILogger.h>
@@ -59,49 +57,36 @@ boost::shared_ptr<OpenPeerIdentityDelegate>  OpenPeerIdentityDelegate::create(id
 void OpenPeerIdentityDelegate::onIdentityStateChanged(IIdentityPtr identity,IdentityStates state)
 {
     ZS_LOG_DEBUG(zsLib::String("SDK - onIdentityStateChanged for URI: ") + identity->getIdentityURI());
-    // NSString* identityId = [NSString stringWithCString:identity->getIdentityURI() encoding:NSUTF8StringEncoding];
-    HOPIdentity* hopIdentity = this->getHOPIdentity(identity);//[[OpenPeerStorageManager sharedStorageManager] getIdentityForId:identityId];
+    HOPIdentity* hopIdentity = this->getHOPIdentity(identity);
     
     [identityDelegate identity:hopIdentity stateChanged:(HOPIdentityStates) state];
 }
 
 void OpenPeerIdentityDelegate::onIdentityPendingMessageForInnerBrowserWindowFrame(IIdentityPtr identity)
 {
-    //NSString* identityId = [NSString stringWithCString:identity->getIdentityURI() encoding:NSUTF8StringEncoding];
-    HOPIdentity* hopIdentity = this->getHOPIdentity(identity);//[[OpenPeerStorageManager sharedStorageManager] getIdentityForId:identityId];
+    HOPIdentity* hopIdentity = this->getHOPIdentity(identity);
     
     [identityDelegate onIdentityPendingMessageForInnerBrowserWindowFrame:hopIdentity];
 }
 
 void OpenPeerIdentityDelegate::onIdentityRolodexContactsDownloaded(IIdentityPtr identity)
 {
-    HOPIdentity* hopIdentity = this->getHOPIdentity(identity);//[[OpenPeerStorageManager sharedStorageManager] getIdentityForId:identityId];
+    HOPIdentity* hopIdentity = this->getHOPIdentity(identity);
     
     [identityDelegate onIdentityRolodexContactsDownloaded:hopIdentity];
 }
+
 HOPIdentity* OpenPeerIdentityDelegate::getHOPIdentity(IIdentityPtr identity)
 {
-    NSString* identityURI = [NSString stringWithCString:identity->getIdentityURI() encoding:NSUTF8StringEncoding];
-    NSNumber* identityObjectId = [NSNumber numberWithInt:identity->getID()];
-    //TODO: Use identityObjectId for key
-    HOPIdentity* hopIdentity = [[OpenPeerStorageManager sharedStorageManager] getIdentityForId:identityURI];
-     
-    if (!hopIdentity && ![HOPUtility isBaseIdentityURI:identityURI])
+    HOPIdentity* hopIdentity = [[OpenPeerStorageManager sharedStorageManager] getIdentityForPUID:identity->getID()];
+    
+    if (!hopIdentity)
     {
-        NSString* uri = [HOPUtility getBaseIdentityURIFromURI:identityURI];
-        if (uri)
-        {
-            hopIdentity = [[OpenPeerStorageManager sharedStorageManager] getIdentityForId:uri];
-            
-            if (!hopIdentity)
-            {
-                hopIdentity = [[HOPIdentity alloc] initWithIdentityPtr:identity];
-                [identityDelegate onNewIdentity:hopIdentity];
-            }
-            
-            if (hopIdentity)
-                [[OpenPeerStorageManager sharedStorageManager] setIdentity:hopIdentity forId:identityURI];
-        }
+        hopIdentity = [[HOPIdentity alloc] initWithIdentityPtr:identity];
+        [identityDelegate onNewIdentity:hopIdentity];
+        
+        if (hopIdentity)
+            [[OpenPeerStorageManager sharedStorageManager] setIdentity:hopIdentity forPUID:identity->getID()];
     }
     return hopIdentity;
 }
