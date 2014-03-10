@@ -131,21 +131,17 @@
     NSString *dataPathDirectory = [libraryPath stringByAppendingPathComponent:@"db"];
     [[HOPModelManager sharedModelManager] setDataPath:dataPathDirectory backupData:NO];
  
-    BOOL isRelogin = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser] != nil;
-    
     //Set settigns delegate
     [[HOPSettings sharedSettings] setup];
     
     //Cleare expired cookies and set delegate
     [[HOPCache sharedCache] removeExpiredCookies];
     [[HOPCache sharedCache] setup];
-    //[[HOPCache sharedCache] setDelegate:self.cacheDelegate];
     
     //Set calculated values
     [[Settings sharedSettings] updateDeviceInfo];
     
-//    if (![[HOPModelManager sharedModelManager] getLastLoggedInHomeUser])
-    if (!isRelogin)
+    if (![[HOPModelManager sharedModelManager] getLastLoggedInHomeUser])
     {
         //If not already set, set default login settings
         BOOL isSetLoginSettings = [[Settings sharedSettings] isLoginSettingsSet];
@@ -208,9 +204,7 @@
 
 - (void) finishPreSetup
 {
-    BOOL isRelogin = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser] != nil;
-    
-    if (!isRelogin)
+    if (![[HOPModelManager sharedModelManager] getLastLoggedInHomeUser])
     {
         if ([[NSUserDefaults standardUserDefaults] boolForKey: settingsKeyQRScannerShownAtStart])
             [[self mainViewController] showQRScanner]; //Show QR scanner if user wants to change settings by reading QR code

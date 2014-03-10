@@ -19,9 +19,9 @@
 	<key>applicationQRScannerShownAtStart</key>
 	<true/>
 	<key>applicationSettingsDownloadURL</key>
-	<string></string>
+	<string>&lt;-- insert settings download url --&gt;</string>
 	<key>applicationSettingsDownloadExpiryTime</key>
-	<integer>86400</integer>
+	<real>86400</real>
 	<key>APNS-UrbanAirShip</key>
 	<dict>
 		<key>masterAppSecretDev</key>

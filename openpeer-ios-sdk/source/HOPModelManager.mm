@@ -157,13 +157,7 @@ using namespace openpeer::core;
     NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"OpenPeerDataModel" ofType:@"bundle"];
     NSURL *modelURL = [[NSBundle bundleWithPath:bundlePath] URLForResource:@"OpenPeerModel" withExtension:@"momd"];
     _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
-    //NSManagedObjectModel* modelData = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
-    
-//    NSURL *modelURL2 = [[NSBundle bundleWithPath:bundlePath] URLForResource:@"OpenPeerCacheModel" withExtension:@"momd"];
-//    NSManagedObjectModel* modelCache = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL2];
-//    
-//    _managedObjectModel = [NSManagedObjectModel modelByMergingModels:@[modelData,modelCache]];
-    
+  
     return _managedObjectModel;
 }
 
@@ -198,20 +192,8 @@ using namespace openpeer::core;
     
     
     //Set cache path
-    //NSString *cachePathDirectory = [self.dataPath length] == 0 ? nil : self.cachePath;
-    
-    //if ([cachePathDirectory length] == 0)
-    //{
-        NSString *cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
-    //cachePathDirectory = [libraryPath stringByAppendingPathComponent:databaseDirectory];
-    //}
-    
-    //Create a folder if doesn't exists
-//    error = nil;
-//    if (![[NSFileManager defaultManager] createDirectoryAtPath:cachePathDirectory withIntermediateDirectories:YES attributes:nil error:&error])
-//    {
-//        [NSException raise:@"Failed creating directory" format:@"[%@], %@", dataPathDirectory, error];
-//    }
+    NSString *cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+
     
     NSString *pathCache = [cachePath stringByAppendingPathComponent:[NSString stringWithFormat:@"/%@",cacheDatabaseName]];
     NSURL *storeCacheURL = [NSURL fileURLWithPath:pathCache];
