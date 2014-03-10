@@ -114,7 +114,7 @@
 
 - (void) removeLoginWebViewForIdentity:(HOPIdentity*) identity
 {
-    [self.loginWebViewsDictionary removeObjectForKey:[identity getBaseIdentityURI]];
+    [self.loginWebViewsDictionary removeObjectForKey:[identity getObjectId]];
 }
 
 - (void)identity:(HOPIdentity *)identity stateChanged:(HOPIdentityStates)state
@@ -190,6 +190,8 @@
                     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"<%p> Identity releases web view visibility mutex. identityURI: %@",identity,[identity getIdentityURI]);
                     pthread_mutex_unlock(&mutexVisibleWebView);
                 }
+                
+                [self removeLoginWebViewForIdentity:identity];
             }
                 break;
                 
@@ -291,6 +293,11 @@
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"<%p> Identity: Handling a new identity with the uri:%@", identity,[identity getIdentityURI]);
     [[LoginManager sharedLoginManager] attachDelegateForIdentity:identity forceAttach:YES];
+}
+
+- (void) cleanAllWebViewControllers
+{
+    [self.loginWebViewsDictionary removeAllObjects];
 }
 @end
 

@@ -130,6 +130,7 @@
                 {
                     [[LoginManager sharedLoginManager] onUserLogOut];
                 }
+                self.webLoginViewController = nil;
             }
                 break;
                 

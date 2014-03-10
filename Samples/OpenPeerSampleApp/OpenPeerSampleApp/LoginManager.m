@@ -53,6 +53,8 @@
 
 //Delegates
 #import "StackDelegate.h"
+#import "IdentityDelegate.h"
+#import "AccountDelegate.h"
 //View Controllers
 #import "MainViewController.h"
 #import "ActivityIndicatorViewController.h"
@@ -152,6 +154,7 @@
     {
         [[Settings sharedSettings] removeAppliedQRSettings];
     }
+    [[[OpenPeer sharedOpenPeer] identityDelegate] cleanAllWebViewControllers];
 }
 
 - (void) startAccount
