@@ -1,7 +1,0 @@
-//
-// Prefix header for all source files of the 'OpenPeerModels' target in the 'OpenPeerModels' project
-//
-
-#ifdef __OBJC__
-    #import <Cocoa/Cocoa.h>
-#endif
