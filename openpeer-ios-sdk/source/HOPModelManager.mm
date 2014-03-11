@@ -812,6 +812,25 @@ using namespace openpeer::core;
     
     return messageRecord;
 }
+
+- (void) clearSessionRecords
+{
+    NSArray* results = [self getResultsForEntity:@"HOPMessageRecord" withPredicateString:nil orderDescriptors:nil];
+    
+    for (HOPMessageRecord* record in results)
+    {
+        [self deleteObject:record];
+    }
+    
+    results = [self getResultsForEntity:@"HOPSessionRecord" withPredicateString:nil orderDescriptors:nil];
+    
+    for (HOPSessionRecord* record in results)
+    {
+        [self deleteObject:record];
+    }
+    
+    [self saveContext];
+}
 @end
 
 

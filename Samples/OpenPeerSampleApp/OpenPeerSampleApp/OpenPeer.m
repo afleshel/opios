@@ -130,6 +130,7 @@
     NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
     NSString *dataPathDirectory = [libraryPath stringByAppendingPathComponent:@"db"];
     [[HOPModelManager sharedModelManager] setDataPath:dataPathDirectory backupData:NO];
+    [[HOPModelManager sharedModelManager] clearSessionRecords];
  
     //Set settigns delegate
     [[HOPSettings sharedSettings] setup];
