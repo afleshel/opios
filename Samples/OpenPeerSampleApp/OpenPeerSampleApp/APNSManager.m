@@ -195,7 +195,7 @@
         }
         else
         {
-            OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Cannot send push notification because it passes less than %d seconds since last push",timeBetweenPushNotificationsInSeconds);
+            OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Cannot send push notification because it passes less than %d seconds since last push",[[NSUserDefaults standardUserDefaults] integerForKey:settingsKeyAPNSTimeOut]);
         }
     }
     else
@@ -210,7 +210,7 @@
 
     NSDate* lastPushDate = [self.apnsHisotry objectForKey:peerURI];
     if (lastPushDate)
-        ret = [[NSDate date] timeIntervalSinceDate:lastPushDate] > timeBetweenPushNotificationsInSeconds ? YES : NO;
+        ret = [[NSDate date] timeIntervalSinceDate:lastPushDate] > [[NSUserDefaults standardUserDefaults] integerForKey:settingsKeyAPNSTimeOut] ? YES : NO;
     
     return ret;
 }

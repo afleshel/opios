@@ -85,6 +85,8 @@ extern NSString* const settingsKeyUrbanAirShipDevelopmentAppSecret;
 extern NSString* const settingsKeyUrbanAirShipProductionAppKey;
 extern NSString* const settingsKeyUrbanAirShipProductionAppSecret;
 extern NSString* const settingsKeyUrbanAirShipAPIPushURL;
+
+extern NSString* const settingsKeyAPNSTimeOut;
 #endif
 
 //Contact Profile xml tags

@@ -39,5 +39,7 @@
 		<key>apiPushURL</key>
 		<string></string>
 	</dict>
+	<key>applicationTimeBetweenTwoPushes</key>
+	<integer>0</integer>
 </dict>
 </plist>

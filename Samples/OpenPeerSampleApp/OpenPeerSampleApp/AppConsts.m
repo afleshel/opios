@@ -84,6 +84,8 @@ NSString* const settingsKeyUrbanAirShipDevelopmentAppSecret = @"developmentAppSe
 NSString* const settingsKeyUrbanAirShipProductionAppKey = @"productionAppKey";
 NSString* const settingsKeyUrbanAirShipProductionAppSecret = @"productionAppSecret";
 NSString* const settingsKeyUrbanAirShipAPIPushURL = @"apiPushURL";
+
+NSString* const settingsKeyAPNSTimeOut = @"applicationTimeBetweenTwoPushes";
 #endif
 
 
