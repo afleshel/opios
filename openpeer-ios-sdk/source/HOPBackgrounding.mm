@@ -66,4 +66,9 @@
 {
     return activeQuery;
 }
+
+- (String) log:(NSString*) message
+{
+    return String("HOPBackgrounding: ") + [message UTF8String];
+}
 @end

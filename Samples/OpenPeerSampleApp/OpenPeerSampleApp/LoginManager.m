@@ -185,9 +185,13 @@
         HOPIdentity* hopIdentity = [HOPIdentity loginWithDelegate:(id<HOPIdentityDelegate>)[[OpenPeer sharedOpenPeer] identityDelegate] identityProviderDomain:[[Settings sharedSettings] getIdentityProviderDomain]  identityURIOridentityBaseURI:identityURI outerFrameURLUponReload:redirectAfterLoginCompleteURL];
         
         if (!hopIdentity)
+        {
             OPLog(HOPLoggerSeverityError, HOPLoggerLevelTrace, @"Identity login has failed for uri: %@",identityURI);
+        }
         else
+        {
             [self.associatingIdentitiesDictionary setObject:hopIdentity forKey:identityURI];
+        }
     }
 }
 
@@ -362,9 +366,13 @@
     {
         int o = [self.associatingIdentitiesDictionary count];
         if (o > 0)
+        {
             OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"onUserLoggedIn - NOT Ready because of associatingIdentitiesDictionary is not empty: %d",o);
+        }
         else
+        {
             OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"onUserLoggedIn - NOT Ready because account is not in ready state");
+        }
     }
 }
 

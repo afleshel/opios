@@ -275,7 +275,7 @@
             }
             
             //Label participant
-            participantNameSize = [messageSenderName sizeWithFont:self.chatNameFont];
+            participantNameSize = [messageSenderName sizeWithAttributes:@{NSFontAttributeName:self.chatNameFont}];//[messageSenderName sizeWithFont:self.chatNameFont];
             labelHeight = participantNameSize.height + TOP_SPACE;
             UILabel *labelParticipant = [[UILabel alloc] initWithFrame:CGRectMake(headerLabelXpos, TOP_SPACE, participantNameSize.width + SPACE_BETWEEN_LABELS, labelHeight)];
             labelParticipant.backgroundColor = [UIColor clearColor];
@@ -297,7 +297,7 @@
             
             // Label date
             NSString* formatedDate = [Utility formatedMessageTimeStampForDate:self.message.date];
-            dateSize = [formatedDate sizeWithFont:self.chatTimestampFont];
+            dateSize = [formatedDate sizeWithAttributes:@{NSFontAttributeName:self.chatNameFont}];//[formatedDate sizeWithFont:self.chatTimestampFont];
             UILabel *lblChatMessageTimestamp = [[UILabel alloc] initWithFrame:CGRectMake(headerLabelXpos, TOP_SPACE, dateSize.width + TRAILING_SPACE, labelHeight)];
             lblChatMessageTimestamp.textColor = [UIColor grayColor];
             lblChatMessageTimestamp.backgroundColor = [UIColor clearColor];
@@ -402,9 +402,8 @@
 + (CGSize) calcMessageHeight:(NSString *)message forScreenWidth:(float)width
 {
     CGSize maxSize = {width, 200000.0};
-    CGSize calcSize = [message sizeWithFont:[UIFont systemFontOfSize:14.0]
-                          constrainedToSize:maxSize];
-    
+    //CGSize calcSize = [message sizeWithFont:[UIFont systemFontOfSize:14.0] constrainedToSize:maxSize];
+    CGSize calcSize = [message boundingRectWithSize: maxSize options: NSStringDrawingUsesLineFragmentOrigin attributes: @{ NSFontAttributeName: [UIFont systemFontOfSize:14.0] } context: nil].size;
     return calcSize;
 }
 

@@ -90,7 +90,7 @@
         CGContextRef context = UIGraphicsGetCurrentContext();
         CGColorSpaceRef colorspace = CGColorSpaceCreateDeviceRGB();
         
-        CGSize badgeTextSize = [_badgeText sizeWithFont:_bagdeFont];
+        CGSize badgeTextSize = [_badgeText sizeWithAttributes:@{NSFontAttributeName:_bagdeFont}];//[_badgeText sizeWithFont:_bagdeFont];
         CGRect bounds = CGRectMake(0 , 0, badgeTextSize.width + 14 , 22);
         float radius = rect.size.height/2;
         
@@ -140,7 +140,8 @@
         bounds.origin.x = (bounds.size.width - badgeTextSize.width) / 2 + 1;
         bounds.origin.y = (bounds.size.height - self.bagdeTextSize) / 2 - 8;
         CGContextSetBlendMode(context, kCGBlendModeNormal);
-        [_badgeText drawInRect:bounds withFont:_bagdeFont];
+        //[_badgeText drawInRect:bounds withFont:_bagdeFont];
+        [_badgeText drawInRect:bounds withAttributes:@{ NSFontAttributeName: _bagdeFont}];
         
     }
 }

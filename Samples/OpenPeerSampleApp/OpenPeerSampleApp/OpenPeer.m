@@ -157,7 +157,7 @@
                     [[HOPSettings sharedSettings] storeSettingsFromDictionary:filteredDictionary];
             }
             
-            isSetLoginSettings = [[Settings sharedSettings] isLoginSettingsSet];
+            //isSetLoginSettings = [[Settings sharedSettings] isLoginSettingsSet];
         }
         
         //If not already set, set default app data
@@ -187,7 +187,7 @@
             [[self mainViewController] waitForUserGesture];
 #endif
             
-            isSetAppData = [[Settings sharedSettings] isAppDataSet];
+            //isSetAppData = [[Settings sharedSettings] isAppDataSet];
         }
         
         //Start settings download. If download is not started finish presetup

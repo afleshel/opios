@@ -224,7 +224,7 @@ typedef enum
                     [cell.contentView sendSubviewToBack:cell.textLabel];
                     
                     UIFont* font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:17.0];
-                    CGSize size = [cell.textLabel.text sizeWithFont:font];
+                    CGSize size = [cell.textLabel.text sizeWithAttributes:@{NSFontAttributeName:font}];//[cell.textLabel.text sizeWithFont:font];
                     CGRect rect = textField.frame;
                     
                     rect.origin.y = fabsf((cell.frame.size.height - textField.frame.size.height)/2.0);
@@ -329,7 +329,7 @@ typedef enum
 - (void) switchColorChanged:(UISwitch*) sender
 {
     [[Settings sharedSettings] setColorizedOutput:[sender isOn] logger:sender.tag];
-     [Logger start:[sender isOn] logger:sender.tag];
+     [Logger start:[[Settings sharedSettings] isLoggerEnabled:LOGGER_OUTGOING_TELNET] logger:sender.tag];
 }
 
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)thePickerView

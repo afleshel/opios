@@ -46,6 +46,5 @@ using namespace openpeer::core;
 }
 
 - (IBackgroundingQueryPtr) getActiveQuery;
-- (void) deleteLocalDelegate;
 - (String) log:(NSString*) message;
 @end
