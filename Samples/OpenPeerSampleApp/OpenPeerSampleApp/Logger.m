@@ -55,6 +55,7 @@
     [HOPLogger setLogLevelbyName:moduleStack level:[[Settings sharedSettings] getLoggerLevelForAppModuleKey:moduleStack]];
     [HOPLogger setLogLevelbyName:moduleWebRTC level:[[Settings sharedSettings] getLoggerLevelForAppModuleKey:moduleWebRTC]];
     [HOPLogger setLogLevelbyName:moduleZsLib level:[[Settings sharedSettings] getLoggerLevelForAppModuleKey:moduleZsLib]];
+    [HOPLogger setLogLevelbyName:moduleZsLibSocket level:[[Settings sharedSettings] getLoggerLevelForAppModuleKey:moduleZsLibSocket]];
     [HOPLogger setLogLevelbyName:moduleSDK level:[[Settings sharedSettings] getLoggerLevelForAppModuleKey:moduleSDK]];
     [HOPLogger setLogLevelbyName:moduleMedia level:[[Settings sharedSettings] getLoggerLevelForAppModuleKey:moduleMedia]];
     [HOPLogger setLogLevelbyName:moduleJavaScript level:[[Settings sharedSettings] getLoggerLevelForAppModuleKey:moduleJavaScript]];

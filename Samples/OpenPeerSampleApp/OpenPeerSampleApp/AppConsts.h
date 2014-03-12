@@ -136,4 +136,5 @@ extern NSString * const moduleServicesMls;
 extern NSString * const moduleServicesTcp;
 extern NSString * const moduleServicesTransport;
 extern NSString * const moduleZsLib;
+extern NSString * const moduleZsLibSocket;
 extern NSString * const moduleJavaScript;

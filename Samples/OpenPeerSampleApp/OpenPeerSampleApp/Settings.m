@@ -340,6 +340,10 @@
             ret = @"SDK (zsLib)";
             break;
             
+        case MODULE_ZSLIB_SOCKET:
+            ret = @"SDK (zsLib sockets)";
+            break;
+            
         case MODULE_JAVASCRIPT:
             ret = @"JavaScript";
             break;
@@ -424,6 +428,10 @@
             ret = moduleZsLib;
             break;
             
+        case MODULE_ZSLIB_SOCKET:
+            ret = moduleZsLibSocket;
+            break;
+            
         case MODULE_JAVASCRIPT:
             ret = moduleJavaScript;
             break;
@@ -484,6 +492,7 @@
     [self setLoggerLevel:HOPLoggerLevelTrace forAppModule:MODULE_STACK_MESSAGE];
     [self setLoggerLevel:HOPLoggerLevelTrace forAppModule:MODULE_STACK];
     [self setLoggerLevel:HOPLoggerLevelTrace forAppModule:MODULE_ZSLIB];
+    [self setLoggerLevel:HOPLoggerLevelDebug forAppModule:MODULE_ZSLIB_SOCKET];
     [self setLoggerLevel:HOPLoggerLevelTrace forAppModule:MODEULE_SDK];
     [self setLoggerLevel:HOPLoggerLevelDetail forAppModule:MODULE_WEBRTC];
     [self setLoggerLevel:HOPLoggerLevelDetail forAppModule:MODULE_MEDIA];
