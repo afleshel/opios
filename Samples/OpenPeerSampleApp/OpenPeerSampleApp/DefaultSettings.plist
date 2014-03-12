@@ -12,9 +12,9 @@
 	<string>http://jsouter-v1-beta-1-i.hcs.io/grant.html</string>
 	<key>lockBoxServiceDomain</key>
 	<string>lockbox-v1-beta-1-i.hcs.io</string>
-	<key>archiveOutgoingTelnetLoggerServer</key>
+	<key>defaultOutgoingTelnetServer</key>
 	<string>tcp-logger-v1-beta-1-i.hcs.io:8055</string>
-	<key>archiveTelnetLoggerServer</key>
+	<key>localTelnetLoggerPort</key>
 	<string>59999</string>
 	<key>openpeer/stack/bootstrapper-force-well-known-over-insecure-http</key>
 	<true/>

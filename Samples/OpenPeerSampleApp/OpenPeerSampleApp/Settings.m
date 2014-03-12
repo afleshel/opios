@@ -185,7 +185,7 @@
     
     if ([key length] > 0)
     {
-        key = [key stringByAppendingString:archiveServer];
+        //key = [key stringByAppendingString:archiveServer];
         [[HOPSettings sharedSettings] storeSettingsObject:server key:key];
     }
 }
@@ -197,7 +197,7 @@
     
     if ([key length] > 0)
     {
-        key = [key stringByAppendingString:archiveServer];
+        //key = [key stringByAppendingString:archiveServer];
         ret = [[NSUserDefaults standardUserDefaults] objectForKey:key];
     }
     
@@ -535,7 +535,7 @@
 
 - (NSString*) getDefaultOutgoingTelnetServer
 {
-    return [[NSUserDefaults standardUserDefaults] stringForKey:settingsKeyOutgoingTelnetLoggerServer];
+    return [[NSUserDefaults standardUserDefaults] stringForKey:settingsKeyOutgoingTelnetLogger];
 }
 - (BOOL) isAppDataSet
 {
