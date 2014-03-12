@@ -144,6 +144,17 @@
     [_dictionaryIdentities setObject:identity forKey:identityId];
 }
 
+- (void) setIdentity:(HOPIdentity*) identity forPUID:(PUID) puid
+{
+    [_dictionaryIdentities setObject:identity forKey:[NSNumber numberWithInt:puid]];
+}
+
+- (HOPIdentity*) getIdentityForPUID:(PUID) puid
+{
+    return [_dictionaryIdentities objectForKey:[NSNumber numberWithInt:puid]];
+}
+
+
 - (HOPIdentityLookup*) getIdentityLookupForPUID:(PUID) puid
 {
     return [_dictionaryIdentityLookups objectForKey:[NSNumber numberWithInt:puid]];

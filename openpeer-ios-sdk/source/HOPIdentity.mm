@@ -78,7 +78,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     if (identity)
     {
         ret = [[self alloc] initWithIdentityPtr:identity openPeerIdentityDelegate:identityDelegatePtr];
-        [[OpenPeerStorageManager sharedStorageManager] setIdentity:ret forId:identityURIOridentityBaseURI];
+        [[OpenPeerStorageManager sharedStorageManager] setIdentity:ret forPUID:identity->getID()];
     }
     else
     {
@@ -105,7 +105,8 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     if (identity)
     {
         ret = [[self alloc] initWithIdentityPtr:identity openPeerIdentityDelegate:identityDelegatePtr];
-        [[OpenPeerStorageManager sharedStorageManager] setIdentity:ret forId:identityURI];
+        //[[OpenPeerStorageManager sharedStorageManager] setIdentity:ret forId:identityURI];
+        [[OpenPeerStorageManager sharedStorageManager] setIdentity:ret forPUID:identity->getID()];
     }
     else
     {
@@ -259,7 +260,8 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
         identityPtr->getSelfIdentityContact(identityContact);
         
         //HACK: Because identityContact.mStableID is not filled correctly in the core
-        NSString* sId = [[HOPAccount sharedAccount] getStableID];//[NSString stringWithUTF8String:identityContact.mStableID];
+        NSString* sId = [[HOPAccount sharedAccount] getStableID];//
+        NSString* stID = [NSString stringWithUTF8String:identityContact.mStableID];
         NSString* identityURI = [NSString stringWithUTF8String:identityContact.mIdentityURI];
         ret = [[HOPModelManager sharedModelManager] getIdentityContactByStableID:sId identityURI:identityURI];
         if (!ret)
