@@ -53,11 +53,7 @@ using namespace openpeer::core;
 - (id) initSingleton
 {
     self = [super init];
-    if (self)
-    {
-        cachePtr = ICache::singleton();
-    }
-    
+
     return self;
 }
 
@@ -69,7 +65,7 @@ using namespace openpeer::core;
 - (void) setDelegate:(id<HOPCacheDelegate>) cacheDelegate
 {
     openpeerCacheDelegatePtr = OpenPeerCacheDelegate::create(cacheDelegate);
-    cachePtr->setup(openpeerCacheDelegatePtr);
+    ICache::setup(openpeerCacheDelegatePtr);
 }
 
 - (NSString*) fetchForCookieNamePath:(NSString*) cookieNamePath
@@ -78,7 +74,7 @@ using namespace openpeer::core;
     
     if ([cookieNamePath length] > 0)
     {
-        zsLib::String data = cachePtr->fetch([cookieNamePath UTF8String]);
+      zsLib::String data = ICache::fetch([cookieNamePath UTF8String]);
         if (!data.isEmpty())
             ret = [NSString stringWithUTF8String:data];
     }
@@ -91,16 +87,16 @@ using namespace openpeer::core;
     if ([stringToStore length] > 0 && [cookieNamePath length] > 0)
     {
         if (expireDate)
-            cachePtr->store([cookieNamePath UTF8String], boost::posix_time::from_time_t([expireDate timeIntervalSince1970]), [stringToStore UTF8String]);
+            ICache::store([cookieNamePath UTF8String], boost::posix_time::from_time_t([expireDate timeIntervalSince1970]), [stringToStore UTF8String]);
         else
-            cachePtr->store([cookieNamePath UTF8String], boost::posix_time::ptime(), [stringToStore UTF8String]);
+            ICache::store([cookieNamePath UTF8String], boost::posix_time::ptime(), [stringToStore UTF8String]);
     }
 }
 
 - (void) removeCookieWithNamePath:(NSString*) cookieNamePath
 {
     if ([cookieNamePath length] > 0)
-        cachePtr->clear([cookieNamePath UTF8String]);
+        ICache::clear([cookieNamePath UTF8String]);
 }
 
 - (void) removeExpiredCookies

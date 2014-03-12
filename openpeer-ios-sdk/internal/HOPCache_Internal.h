@@ -37,8 +37,6 @@
 @interface HOPCache ()
 {
     boost::shared_ptr<OpenPeerCacheDelegate> openpeerCacheDelegatePtr;
-    
-    ICachePtr cachePtr;
 }
 
 @end
