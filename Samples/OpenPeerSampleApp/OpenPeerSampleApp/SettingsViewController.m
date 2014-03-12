@@ -31,6 +31,7 @@
 
 #import "SettingsViewController.h"
 #import "LoggerSettingsViewController.h"
+#import "AppInfoViewController.h"
 #import "Settings.h"
 #import "AppConsts.h"
 #import "InfoViewController.h"
@@ -39,6 +40,7 @@
 
 typedef enum
 {
+    SETTINGS_APP_INFO_SECTION,
     SETTINGS_INFO_SECTION,
     SETTINGS_MEDIA_SECTION,
     SETTINGS_LOGGER_SECTION,
@@ -46,7 +48,7 @@ typedef enum
     SETTINGS_LOGOUT_SECTION,
     SETTINGS_OPTIONS_SECTION,//Not supported at the moment
     
-    SETTINGS_TOTAL_SECTIONS = 5
+    SETTINGS_TOTAL_SECTIONS = 6
 }SettingsSections;
 
 typedef enum
@@ -119,6 +121,7 @@ typedef enum
         case SETTINGS_MEDIA_SECTION:
             ret = SETTINGS_MEDIA_TOTAL_NUMBER;
             break;
+        case SETTINGS_APP_INFO_SECTION:
         case SETTINGS_INFO_SECTION:
         case SETTINGS_LOGOUT_SECTION:
         case SETTINGS_LOGGER_SECTION:
@@ -197,6 +200,11 @@ typedef enum
         
         switch (indexPath.section)
         {
+            case SETTINGS_APP_INFO_SECTION:
+                cell.textLabel.text = @"Application info";
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                break;
+                
             case SETTINGS_INFO_SECTION:
                 cell.textLabel.text = @"User info";
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -225,6 +233,16 @@ typedef enum
 {    
     switch (indexPath.section)
     {
+            
+        case SETTINGS_APP_INFO_SECTION:
+        {
+            AppInfoViewController *infoViewController = [[AppInfoViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            infoViewController.title = @"Application Info";
+            
+            [self.navigationController pushViewController:infoViewController animated:YES];
+        }
+            break;
+            
         case SETTINGS_INFO_SECTION:
         {
             InfoViewController *infoViewController = [[InfoViewController alloc] initWithStyle:UITableViewStyleGrouped];

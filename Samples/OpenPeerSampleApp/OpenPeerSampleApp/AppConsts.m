@@ -71,6 +71,7 @@ NSString * const settingsKeySettingsDownloadURL = @"applicationSettingsDownloadU
 NSString * const settingsKeySettingsDownloadExpiryTime = @"applicationSettingsDownloadExpiryTime";
 NSString * const settingsKeyQRScannerShownAtStart = @"applicationQRScannerShownAtStart";
 NSString * const settingsKeySplashScreenAllowsQRScannerGesture = @"applicationSplashScreenAllowsQRScannerGesture";
+NSString * const settingsKeySettingsVersion = @"applicationSettingsVersion";
 
 NSString * const archiveEnabled = @"enabled";
 NSString * const archiveServer = @"Server";

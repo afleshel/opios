@@ -213,6 +213,8 @@
 		8774AC7B18992D86006B91FA /* libZXingObjC-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8774AC7018992D5A006B91FA /* libZXingObjC-iOS.a */; };
 		87796E8518A8DDA7002F4B43 /* boost.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87796E8318A8DDA7002F4B43 /* boost.a */; };
 		87796E8618A8DDA7002F4B43 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87796E8418A8DDA7002F4B43 /* libcurl.a */; };
+		87904E9818D06FD1004BC06C /* AppInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87904E9618D06FD1004BC06C /* AppInfoViewController.m */; };
+		87904EA118D07725004BC06C /* AppInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87904E9618D06FD1004BC06C /* AppInfoViewController.m */; };
 		879D7B9717FB1224008C78E2 /* LoggerSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 879D7B9617FB1224008C78E2 /* LoggerSettingsViewController.m */; };
 		879DC5F418C92FE800DA60C0 /* BackgroundingDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 87CCF64318C0FFDB000DF636 /* BackgroundingDelegate.m */; };
 		879DC62A18C9F77400DA60C0 /* Template_CustomerSpecific_Release.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8731272118C670AD00507144 /* Template_CustomerSpecific_Release.plist */; };
@@ -866,6 +868,8 @@
 		8774AC6618992D53006B91FA /* ZXingObjC.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZXingObjC.xcodeproj; path = ../../../libs/ZXingObjC/ZXingObjC.xcodeproj; sourceTree = "<group>"; };
 		87796E8318A8DDA7002F4B43 /* boost.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = boost.a; path = OpenpeerSDK.framework/Versions/C/Libraries/boost.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		87796E8418A8DDA7002F4B43 /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = OpenpeerSDK.framework/Versions/C/Libraries/libcurl.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		87904E9518D06FD1004BC06C /* AppInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppInfoViewController.h; sourceTree = "<group>"; };
+		87904E9618D06FD1004BC06C /* AppInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppInfoViewController.m; sourceTree = "<group>"; };
 		879D7B9517FB1224008C78E2 /* LoggerSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoggerSettingsViewController.h; sourceTree = "<group>"; };
 		879D7B9617FB1224008C78E2 /* LoggerSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = LoggerSettingsViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		879DC66018CA0F1C00DA60C0 /* SettingsDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsDownloader.h; sourceTree = "<group>"; };
@@ -1197,6 +1201,8 @@
 				879D7B9617FB1224008C78E2 /* LoggerSettingsViewController.m */,
 				879DC66018CA0F1C00DA60C0 /* SettingsDownloader.h */,
 				879DC66118CA0F1C00DA60C0 /* SettingsDownloader.m */,
+				87904E9518D06FD1004BC06C /* AppInfoViewController.h */,
+				87904E9618D06FD1004BC06C /* AppInfoViewController.m */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -2200,6 +2206,7 @@
 				87CCF64418C0FFDB000DF636 /* BackgroundingDelegate.m in Sources */,
 				874AD9D5166CEAFB0095FE33 /* StackDelegate.m in Sources */,
 				874AD9D8166CEB390095FE33 /* MediaEngineDelegate.m in Sources */,
+				87904E9818D06FD1004BC06C /* AppInfoViewController.m in Sources */,
 				87BFEDBA183A885C00A48821 /* AppConsts.m in Sources */,
 				874AD9DB166CEB530095FE33 /* ConversationThreadDelegate.m in Sources */,
 				874AD9DE166CEB780095FE33 /* CallDelegate.m in Sources */,
@@ -2292,6 +2299,7 @@
 				87D4BCFC18675368008C2D30 /* SBJsonStreamParser.m in Sources */,
 				87D4BCFD18675368008C2D30 /* SBJsonStreamParserAccumulator.m in Sources */,
 				87D4BCFE18675368008C2D30 /* CallViewController.m in Sources */,
+				87904EA118D07725004BC06C /* AppInfoViewController.m in Sources */,
 				87D4BCFF18675368008C2D30 /* IncomingCallViewController.m in Sources */,
 				879DC5F418C92FE800DA60C0 /* BackgroundingDelegate.m in Sources */,
 				87D4BD0018675368008C2D30 /* SBJsonStreamParserAdapter.m in Sources */,

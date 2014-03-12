@@ -41,5 +41,7 @@
 	</dict>
 	<key>applicationTimeBetweenTwoPushes</key>
 	<integer>0</integer>
+	<key>applicationSettingsVersion</key>
+	<string>1.0</string>
 </dict>
 </plist>

@@ -14,5 +14,7 @@
 	<real>86400</real>
 	<key>applicationTimeBetweenTwoPushes</key>
 	<integer>0</integer>
+	<key>applicationSettingsVersion</key>
+	<string>1.1</string>
 </dict>
 </plist>
