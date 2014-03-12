@@ -33,6 +33,7 @@
 #import "AppConsts.h"
 #import "OpenPeer.h"
 
+#import "OpenpeerSDK/HOPSettings.h"
 #import "OpenpeerSDK/HOPLogger.h"
 
 @implementation Logger
@@ -59,6 +60,8 @@
     [HOPLogger setLogLevelbyName:moduleSDK level:[[Settings sharedSettings] getLoggerLevelForAppModuleKey:moduleSDK]];
     [HOPLogger setLogLevelbyName:moduleMedia level:[[Settings sharedSettings] getLoggerLevelForAppModuleKey:moduleMedia]];
     [HOPLogger setLogLevelbyName:moduleJavaScript level:[[Settings sharedSettings] getLoggerLevelForAppModuleKey:moduleJavaScript]];
+    
+    applicationLogerLevel = [[Settings sharedSettings] getLoggerLevelForAppModuleKey:moduleApplication];
 }
 
 
@@ -97,7 +100,7 @@
         NSString* server =[[Settings sharedSettings] getServerPortForLogger:LOGGER_OUTGOING_TELNET];
         BOOL colorized = [[Settings sharedSettings] isColorizedOutputForLogger:LOGGER_OUTGOING_TELNET];
         if ([server length] > 0)
-            [HOPLogger installOutgoingTelnetLogger:server colorizeOutput:colorized stringToSendUponConnection:[[OpenPeer sharedOpenPeer] authorizedApplicationId]];
+            [HOPLogger installOutgoingTelnetLogger:server colorizeOutput:colorized stringToSendUponConnection:[[HOPSettings sharedSettings] getAuthorizedApplicationId]];
     }
     else
     {
@@ -108,9 +111,9 @@
 + (void) startAllSelectedLoggers
 {
     [self setLogLevels];
-    [self startStdLogger:[[Settings sharedSettings] isLoggerEnabled:LOGGER_STD_OUT]];
-    [self startTelnetLogger:[[Settings sharedSettings] isLoggerEnabled:LOGGER_TELNET]];
-    [self startOutgoingTelnetLogger:[[Settings sharedSettings] isLoggerEnabled:LOGGER_OUTGOING_TELNET]];
+    [self start:[[Settings sharedSettings] isLoggerEnabled:LOGGER_STD_OUT] logger:LOGGER_STD_OUT];
+    [self start:[[Settings sharedSettings] isLoggerEnabled:LOGGER_TELNET] logger:LOGGER_TELNET];
+    [self start:[[Settings sharedSettings] isLoggerEnabled:LOGGER_OUTGOING_TELNET] logger:LOGGER_OUTGOING_TELNET];
 }
 
 
@@ -133,7 +136,7 @@
         default:
             break;
     }
-    
+    isLoggerStarted = [[Settings sharedSettings] isLoggerEnabled:LOGGER_STD_OUT] || [[Settings sharedSettings] isLoggerEnabled:LOGGER_TELNET] || [[Settings sharedSettings] isLoggerEnabled:LOGGER_OUTGOING_TELNET];
 }
 
 + (void) startTelnetLoggerOnStartUp

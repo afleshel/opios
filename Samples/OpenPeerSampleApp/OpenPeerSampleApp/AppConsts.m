@@ -57,8 +57,8 @@ NSString * const settingsKeyAppName = @"applicationName";
 NSString * const settingsKeyAppImageURL = @"applicationImageURL";
 NSString * const settingsKeyAppURL = @"applicationURL";
 NSString * const settingsKeyAPNS = @"APNS-UrbanAirShip";
-NSString * const settingsKeyTelnetLogger = @"archiveTelnetLogger";
-NSString * const settingsKeyOutgoingTelnetLogger = @"archiveOutgoingTelnetLogger";
+NSString * const settingsKeyTelnetLogger = @"localTelnetLoggerPort";
+NSString * const settingsKeyOutgoingTelnetLogger = @"defaultOutgoingTelnetServer";
 NSString * const settingsKeyStdOutLogger = @"archiveStdOutLogger";
 NSString * const settingsKeyRemoveSettingsAppliedByQRCode = @"applicationRemoveSettingsAppliedByQRCode";
 NSString * const settingsKeyOuterFrameURL = @"outerFrameURL";
@@ -66,7 +66,12 @@ NSString * const settingsKeyGrantServiceURL = @"namespaceGrantServiceURL";
 NSString * const settingsKeyIdentityProviderDomain = @"identityProviderDomain";
 NSString * const settingsKeyIdentityFederateBaseURI = @"identityFederateBaseURI";
 NSString * const settingsKeyLockBoxServiceDomain = @"lockBoxServiceDomain";
-NSString * const settingsKeyOutgoingTelnetLoggerServer = @"archiveOutgoingTelnetLoggerServer";
+//NSString * const settingsKeyOutgoingTelnetLoggerServer = @"defaultOutgoingTelnetServer";
+NSString * const settingsKeySettingsDownloadURL = @"applicationSettingsDownloadURL";
+NSString * const settingsKeySettingsDownloadExpiryTime = @"applicationSettingsDownloadExpiryTime";
+NSString * const settingsKeyQRScannerShownAtStart = @"applicationQRScannerShownAtStart";
+NSString * const settingsKeySplashScreenAllowsQRScannerGesture = @"applicationSplashScreenAllowsQRScannerGesture";
+NSString * const settingsKeySettingsVersion = @"applicationSettingsVersion";
 
 NSString * const archiveEnabled = @"enabled";
 NSString * const archiveServer = @"Server";
@@ -80,6 +85,8 @@ NSString* const settingsKeyUrbanAirShipDevelopmentAppSecret = @"developmentAppSe
 NSString* const settingsKeyUrbanAirShipProductionAppKey = @"productionAppKey";
 NSString* const settingsKeyUrbanAirShipProductionAppSecret = @"productionAppSecret";
 NSString* const settingsKeyUrbanAirShipAPIPushURL = @"apiPushURL";
+
+NSString* const settingsKeyAPNSTimeOut = @"applicationTimeBetweenTwoPushes";
 #endif
 
 

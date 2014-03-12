@@ -31,16 +31,16 @@
 
 #import "AppLog.h"
 
+BOOL isLoggerStarted;
+HOPLoggerLevels applicationLogerLevel;
+
 void AppLog(NSString* functionName, NSString* filePath, unsigned long lineNumber, HOPLoggerSeverities severity, HOPLoggerLevels level, NSString* format,...)
 {
-    if ([[Settings sharedSettings] getLoggerLevelForAppModuleKey:moduleApplication] >= level)
-    {
-        va_list argumentList;
-        va_start(argumentList, format);
-        unsigned int subsystemid = [HOPLogger getApplicationSubsystemID];
-        NSString* message = [[NSString alloc] initWithFormat:format arguments:argumentList];
-        [HOPLogger log:subsystemid severity:severity level:level message:[@"Application:  " stringByAppendingString: message] function: functionName filePath:filePath lineNumber:lineNumber];
-        
-        va_end(argumentList);
-    }
+    va_list argumentList;
+    va_start(argumentList, format);
+    unsigned int subsystemid = [HOPLogger getApplicationSubsystemID];
+    NSString* message = [[NSString alloc] initWithFormat:format arguments:argumentList];
+    [HOPLogger log:subsystemid severity:severity level:level message:[@"Application:  " stringByAppendingString: message] function: functionName filePath:filePath lineNumber:lineNumber];
+    
+    va_end(argumentList);
 }

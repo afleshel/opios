@@ -409,9 +409,6 @@
 		87A5B20816EDE656007E825A /* HOPIdentityLookup.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HOPIdentityLookup.h; sourceTree = "<group>"; };
 		87A5B20916EDE9A4007E825A /* HOPIdentityLookup_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HOPIdentityLookup_Internal.h; sourceTree = "<group>"; };
 		87B864CA1796BBB20027F8B1 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
-		87B864CE1796BBB20027F8B1 /* OpenPeerModels-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "OpenPeerModels-Info.plist"; sourceTree = "<group>"; };
-		87B864D01796BBB20027F8B1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		87B864D21796BBB20027F8B1 /* OpenPeerModels-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OpenPeerModels-Prefix.pch"; sourceTree = "<group>"; };
 		87BE5FB618AB74DE0010006A /* HOPRolodexContact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HOPRolodexContact.h; sourceTree = "<group>"; };
 		87BE5FB718AB74DE0010006A /* HOPRolodexContact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HOPRolodexContact.m; sourceTree = "<group>"; };
 		87BE5FBA18AB74DF0010006A /* HOPSessionRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HOPSessionRecord.h; sourceTree = "<group>"; };
@@ -677,7 +674,6 @@
 				8792E86D16519CFF00DEAC58 /* openpeer-ios-sdk */,
 				E2AF705717561D74001F85F1 /* WebRTC libs */,
 				0012C521177D10110017FF5E /* Libraries */,
-				87B864CC1796BBB20027F8B1 /* OpenPeerModels */,
 				87C981FB17BE37CF002B947B /* OpenPeerDataModel */,
 				8792E86A16519CFF00DEAC58 /* Frameworks */,
 				8792E86916519CFF00DEAC58 /* Products */,
@@ -840,24 +836,6 @@
 				87CCF63F18C0F253000DF636 /* OpenPeerBackgroundingCompletionDelegate.mm */,
 			);
 			path = source;
-			sourceTree = "<group>";
-		};
-		87B864CC1796BBB20027F8B1 /* OpenPeerModels */ = {
-			isa = PBXGroup;
-			children = (
-				87B864CD1796BBB20027F8B1 /* Supporting Files */,
-			);
-			path = OpenPeerModels;
-			sourceTree = "<group>";
-		};
-		87B864CD1796BBB20027F8B1 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				87B864CE1796BBB20027F8B1 /* OpenPeerModels-Info.plist */,
-				87B864CF1796BBB20027F8B1 /* InfoPlist.strings */,
-				87B864D21796BBB20027F8B1 /* OpenPeerModels-Prefix.pch */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		87C981FB17BE37CF002B947B /* OpenPeerDataModel */ = {
@@ -1306,14 +1284,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		87B864CF1796BBB20027F8B1 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				87B864D01796BBB20027F8B1 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
 		87C981FE17BE37CF002B947B /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (

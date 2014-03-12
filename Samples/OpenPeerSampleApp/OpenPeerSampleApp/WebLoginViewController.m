@@ -100,9 +100,13 @@
     NSString *requestString = [[request URL] absoluteString];
     
     if ([self.coreObject isKindOfClass:[HOPIdentity class]])
+    {
         OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"<%p> WebLoginViewController\n Identity web request for URI: %@", self,[((HOPIdentity*) self.coreObject) getIdentityURI]);
+    }
     else
+    {
         OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"<%p> WebLoginViewController\n Account web request: %@", self,requestString);
+    }
     
     //Check if request contains JSON message for core
     if ([requestString hasPrefix:@"https://datapass.hookflash.me/?method="] || [requestString hasPrefix:@"http://datapass.hookflash.me/?method="])

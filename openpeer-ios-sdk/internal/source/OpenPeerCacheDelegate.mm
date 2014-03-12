@@ -52,9 +52,9 @@ String OpenPeerCacheDelegate::fetch(const char *cookieNamePath)
         NSString* cookie = nil;
         
         if (cacheDelegate)
-            [cacheDelegate fetchCookieWithPath:path];
+            cookie = [cacheDelegate fetchCookieWithPath:path];
         else
-            [[HOPModelManager sharedModelManager] getCookieWithPath:path];
+            cookie = [[HOPModelManager sharedModelManager] getCookieWithPath:path];
         
         if ([cookie length] > 0)
             ret = [cookie UTF8String];

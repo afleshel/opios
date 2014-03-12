@@ -50,7 +50,12 @@ extern NSString * const settingsKeyGrantServiceURL;
 extern NSString * const settingsKeyIdentityProviderDomain;
 extern NSString * const settingsKeyIdentityFederateBaseURI;
 extern NSString * const settingsKeyLockBoxServiceDomain;
-extern NSString * const settingsKeyOutgoingTelnetLoggerServer;
+//extern NSString * const settingsKeyOutgoingTelnetLoggerServer;
+extern NSString * const settingsKeySettingsDownloadURL;
+extern NSString * const settingsKeySettingsDownloadExpiryTime;
+extern NSString * const settingsKeyQRScannerShownAtStart;
+extern NSString * const settingsKeySplashScreenAllowsQRScannerGesture;
+extern NSString * const settingsKeySettingsVersion;
 
 extern NSString * const archiveEnabled;
 extern NSString * const archiveServer;
@@ -81,6 +86,8 @@ extern NSString* const settingsKeyUrbanAirShipDevelopmentAppSecret;
 extern NSString* const settingsKeyUrbanAirShipProductionAppKey;
 extern NSString* const settingsKeyUrbanAirShipProductionAppSecret;
 extern NSString* const settingsKeyUrbanAirShipAPIPushURL;
+
+extern NSString* const settingsKeyAPNSTimeOut;
 #endif
 
 //Contact Profile xml tags

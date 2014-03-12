@@ -55,11 +55,13 @@
 #import "BackgroundingDelegate.h"
 //View controllers
 #import "MainViewController.h"
+#import "SettingsDownloader.h"
 
 
 //Private methods
 @interface OpenPeer ()
 
+@property (nonatomic, strong) SettingsDownloader* settingsDownloadeer;
 - (void) createDelegates;
 //- (void) setLogLevels;
 @end
@@ -99,6 +101,26 @@
     [[HOPSettings sharedSettings] storeAuthorizedApplicationId:[self authorizedApplicationId]];
 }
 
+- (BOOL) downloadLatestSettings
+{
+    BOOL ret = NO;
+    NSString* settingsDownloadURL = [[NSUserDefaults standardUserDefaults] stringForKey:settingsKeySettingsDownloadURL];
+    
+    if ([settingsDownloadURL length] > 0)
+    {
+        //Check if cookie has expired, and run download if it has
+        if ([[[HOPCache sharedCache] fetchForCookieNamePath:settingsKeySettingsDownloadURL] length] == 0)
+        {
+            self.settingsDownloadeer = [[SettingsDownloader alloc] initSettingsDownloadFromURL:settingsDownloadURL postDate:nil];
+            self.settingsDownloadeer.delegate = self;
+            [self.settingsDownloadeer startDownload];
+            ret = YES;
+        }
+    }
+   
+    return ret;
+}
+
 - (void) preSetup
 {
     //Create all delegates required for communication with core
@@ -108,14 +130,14 @@
     NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
     NSString *dataPathDirectory = [libraryPath stringByAppendingPathComponent:@"db"];
     [[HOPModelManager sharedModelManager] setDataPath:dataPathDirectory backupData:NO];
-    
+    [[HOPModelManager sharedModelManager] clearSessionRecords];
+ 
     //Set settigns delegate
     [[HOPSettings sharedSettings] setup];
     
     //Cleare expired cookies and set delegate
     [[HOPCache sharedCache] removeExpiredCookies];
     [[HOPCache sharedCache] setup];
-    //[[HOPCache sharedCache] setDelegate:self.cacheDelegate];
     
     //Set calculated values
     [[Settings sharedSettings] updateDeviceInfo];
@@ -136,7 +158,7 @@
                     [[HOPSettings sharedSettings] storeSettingsFromDictionary:filteredDictionary];
             }
             
-            isSetLoginSettings = [[Settings sharedSettings] isLoginSettingsSet];
+            //isSetLoginSettings = [[Settings sharedSettings] isLoginSettingsSet];
         }
         
         //If not already set, set default app data
@@ -166,23 +188,35 @@
             [[self mainViewController] waitForUserGesture];
 #endif
             
-            isSetAppData = [[Settings sharedSettings] isAppDataSet];
+            //isSetAppData = [[Settings sharedSettings] isAppDataSet];
         }
         
-        //Show QR scanner if user wants to change settings by reading QR code
-        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"applicationQRScannerShownAtStart"])
-            [[self mainViewController] showQRScanner];
-        else if ([[NSUserDefaults standardUserDefaults] boolForKey:@"applicationSplashScreenAllowsQRScannerGesture"])
+        //Start settings download. If download is not started finish presetup
+        if (![self downloadLatestSettings])
+            [self finishPreSetup];
+    }
+    else
+    {
+        //Start settings download. If download is not started finish setup
+        if (![self downloadLatestSettings])
+            [self setup];
+    }
+}
+
+- (void) finishPreSetup
+{
+    if (![[HOPModelManager sharedModelManager] getLastLoggedInHomeUser])
+    {
+        if ([[NSUserDefaults standardUserDefaults] boolForKey: settingsKeyQRScannerShownAtStart])
+            [[self mainViewController] showQRScanner]; //Show QR scanner if user wants to change settings by reading QR code
+        else if ([[NSUserDefaults standardUserDefaults] boolForKey:settingsKeySplashScreenAllowsQRScannerGesture])
             [[self mainViewController] waitForUserGesture];
         else
             [self setup];
     }
     else
-    {
         [self setup];
-    }
 }
-
 /**
  Initializes the open peer stack. After initialization succeeds, login screen is displayed, or user relogin started.
  @param inMainViewController MainViewController Input main view controller.
@@ -272,4 +306,19 @@
     [alert show];
     [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(closeTheApp) userInfo:nil repeats:NO];
 }
+
+#pragma mark - SettingsDownloaderDelegate
+- (void)onSettingsDownloadCompletion:(NSDictionary *)inSettingsDictionary
+{
+    [[HOPSettings sharedSettings] storeSettingsFromDictionary:inSettingsDictionary];
+    [[OpenPeer sharedOpenPeer] finishPreSetup];
+    int expiryTime = [[NSUserDefaults standardUserDefaults] integerForKey:settingsKeySettingsDownloadExpiryTime];
+    [[HOPCache sharedCache] store:[[NSUserDefaults standardUserDefaults] stringForKey:settingsKeySettingsDownloadURL] expireDate:[[NSDate date] dateByAddingTimeInterval:expiryTime] cookieNamePath:settingsKeySettingsDownloadURL];
+}
+
+- (void)onSettingsDownloadFailure
+{
+    [[OpenPeer sharedOpenPeer] finishPreSetup];
+}
 @end
+

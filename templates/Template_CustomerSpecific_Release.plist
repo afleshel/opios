@@ -8,5 +8,13 @@
 	<false/>
 	<key>applicationSplashScreenAllowsQRScannerGesture</key>
 	<true/>
+	<key>applicationSettingsDownloadURL</key>
+	<string>&lt;-- insert settings download url --&gt;</string>
+	<key>applicationSettingsDownloadExpiryTime</key>
+	<real>86400</real>
+	<key>applicationTimeBetweenTwoPushes</key>
+	<integer>0</integer>
+	<key>applicationSettingsVersion</key>
+	<string>1.1</string>
 </dict>
 </plist>

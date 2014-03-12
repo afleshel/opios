@@ -170,7 +170,7 @@ typedef enum
         case USER_INFO_STABLE_ID:
         {
             UIFont* cellFont = [UIFont boldSystemFontOfSize:17.0];
-            CGSize labelSize = [self.homeUser.stableId sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:NSLineBreakByCharWrapping];
+            CGSize labelSize = [self.homeUser.stableId boundingRectWithSize: constraintSize options: NSStringDrawingUsesLineFragmentOrigin attributes: @{ NSFontAttributeName: cellFont } context: nil].size;//[self.homeUser.stableId sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:NSLineBreakByCharWrapping];
             ret = (labelSize.height) > cellDefaultHeight ? labelSize.height : cellDefaultHeight;
         }
         break;
@@ -180,7 +180,7 @@ typedef enum
             UIFont* cellFont = [UIFont boldSystemFontOfSize:17.0];
             //NSString* str = ((HOPRolodexContact*)((HOPAssociatedIdentity*)self.homeUser.associatedIdentities.anyObject).rolodexContacts.anyObject).identityContact.peerFile.peerURI;
             NSString* str = ((HOPRolodexContact*)((HOPAssociatedIdentity*)self.homeUser.associatedIdentities.anyObject).homeUserProfile).identityContact.peerFile.peerURI;
-            CGSize labelSize = [str sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:NSLineBreakByCharWrapping];
+            CGSize labelSize = [str boundingRectWithSize: constraintSize options: NSStringDrawingUsesLineFragmentOrigin attributes: @{ NSFontAttributeName: cellFont } context: nil].size;//[str sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:NSLineBreakByCharWrapping];
             ret = labelSize.height > cellDefaultHeight ? labelSize.height : cellDefaultHeight;
         }
             break;
@@ -191,10 +191,10 @@ typedef enum
             UIFont* cellDetailFont = [UIFont boldSystemFontOfSize:14.0];
             HOPAssociatedIdentity* identityInfo = [[self.homeUser.associatedIdentities allObjects] objectAtIndex:indexPath.row];
             
-            CGSize labelSize = [identityInfo.name sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:NSLineBreakByCharWrapping];
+            CGSize labelSize = [identityInfo.name boundingRectWithSize: constraintSize options: NSStringDrawingUsesLineFragmentOrigin attributes: @{ NSFontAttributeName: cellFont } context: nil].size;//[identityInfo.name sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:NSLineBreakByCharWrapping];
             
             NSString* str = [NSString stringWithFormat:@"Identity URI: %@",identityInfo.homeUserProfile.identityURI];
-            CGSize labelDetailSize = [str sizeWithFont:cellDetailFont constrainedToSize:constraintSize lineBreakMode:NSLineBreakByCharWrapping];
+            CGSize labelDetailSize = [str boundingRectWithSize: constraintSize options: NSStringDrawingUsesLineFragmentOrigin attributes: @{ NSFontAttributeName: cellDetailFont } context: nil].size;//[str sizeWithFont:cellDetailFont constrainedToSize:constraintSize lineBreakMode:NSLineBreakByCharWrapping];
             
             CGFloat totalCellHeight = labelSize.height + labelDetailSize.height;
             ret = (totalCellHeight) > cellDefaultHeight ? totalCellHeight: cellDefaultHeight;

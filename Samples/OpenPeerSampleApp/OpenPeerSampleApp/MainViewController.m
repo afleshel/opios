@@ -156,8 +156,13 @@
         self.contactsTableViewController.title = @"Contacts";
         self.tabBarItem.title = @"CONTACTS";
         
-        [self.contactsTableViewController.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"iPhone_tabBar_contacts_active.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"iPhone_tabBar_contacts_inactive.png"]];
+        //[self.contactsTableViewController.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"iPhone_tabBar_contacts_active.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"iPhone_tabBar_contacts_inactive.png"]];
         
+        
+        [self.contactsTableViewController.tabBarItem setImage:[[UIImage imageNamed:@"iPhone_tabBar_contacts_inactive.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+        [self.contactsTableViewController.tabBarItem setSelectedImage:[[UIImage imageNamed:@"iPhone_tabBar_contacts_active.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+
+         
         UINavigationController *contactsNavigationController = [[UINavigationController alloc] initWithRootViewController:self.contactsTableViewController];
         contactsNavigationController.navigationBar.translucent = NO;
         //Settings tab
@@ -165,7 +170,10 @@
         settingsViewController.title = @"Settings";
         self.tabBarItem.title = @"SETTINGS";
             
-        [settingsViewController.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"iPhone_tabBar_settings_active_Icon.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"iPhone_tabBar_settings_inactive_Icon.png"]];
+        //[settingsViewController.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"iPhone_tabBar_settings_active_Icon.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"iPhone_tabBar_settings_inactive_Icon.png"]];
+        
+        [settingsViewController.tabBarItem setImage:[[UIImage imageNamed:@"iPhone_tabBar_settings_inactive_Icon.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+        [settingsViewController.tabBarItem setSelectedImage:[[UIImage imageNamed:@"iPhone_tabBar_settings_active_Icon.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
         
         UINavigationController *settingsNavigationController = [[UINavigationController alloc] initWithRootViewController:settingsViewController];
         

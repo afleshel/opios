@@ -227,7 +227,7 @@
  */
 - (void) loadContacts
 {
-    BOOL downloadedEnded = NO;
+    //BOOL downloadedEnded = NO;
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Init loading contacts");
     
     //For the first login and association it should be performed contacts download on just associated identity

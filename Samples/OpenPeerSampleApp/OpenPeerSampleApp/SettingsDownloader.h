@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2014, SMB Phone Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,42 +29,14 @@
  
  */
 
-@class WebLoginViewController;
+#import <Foundation/Foundation.h>
+#import "Delegates.h"
 
-@protocol ChatViewControllerDelegate <NSObject>
+@interface SettingsDownloader : NSObject
 
-- (void) prepareForKeyboard:(NSDictionary*) userInfo showKeyboard:(BOOL) showKeyboard;
+@property (nonatomic, weak) id<SettingsDownloaderDelegate> delegate;
 
-@end
-
-@protocol VideoCallViewControllerDelegate <NSObject>
-
-- (void) hideVideo:(BOOL) hide;
-
-@end
-
-@protocol LoginEventsDelegate <NSObject>
-
-
-- (void) onStartLoginWithidentityURI;
-- (void) onOpeningLoginPage;
-- (void) onLoginWebViewVisible:(WebLoginViewController*) webLoginViewController;
-
-- (void) onRelogin;
-- (void) onLoginFinished;
-
-- (void) onIdentityLoginWebViewClose:(WebLoginViewController*) webLoginViewController forIdentityURI:(NSString*) identityURI;
-- (void) onIdentityLoginFinished;
-- (void) onIdentityLoginError:(NSString*) error;
-- (void) onIdentityLoginShutdown;
-
-- (void) onAccountLoginError:(NSString*) error;
-- (void) onAccountLoginWebViewClose:(WebLoginViewController*) webLoginViewController;
-@end
-
-@protocol SettingsDownloaderDelegate <NSObject>
-
-- (void) onSettingsDownloadCompletion:(NSDictionary*) inSettingsDictionary;
-- (void) onSettingsDownloadFailure;
-
+- (id) initSettingsDownloadFromURL:(NSString*) url postDate:(NSString*) postData;
+- (void) startDownload;
+//- (void) downloadFromURL:(NSString*) url postDate:(NSString*) postData;
 @end

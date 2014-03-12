@@ -38,6 +38,7 @@
 #import "MainViewController.h"
 #import "WebLoginViewController.h"
 #import "OpenpeerSDK/HOPLogger.h"
+#import "OpenpeerSDK/HOPCache.h"
 
 @interface AccountDelegate()
 @property (nonatomic, strong) WebLoginViewController* webLoginViewController;
@@ -125,6 +126,7 @@
                 if (accountState.errorCode && ![[OpenPeer sharedOpenPeer] appEnteredForeground])
                 {
                     [[[OpenPeer sharedOpenPeer] mainViewController]  onAccountLoginError:accountState.errorReason];
+                    [[HOPCache sharedCache] removeCookieWithNamePath:settingsKeySettingsDownloadURL];
                 }
                 else
                 {

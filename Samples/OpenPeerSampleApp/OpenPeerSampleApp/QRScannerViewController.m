@@ -36,12 +36,14 @@
 #import "Utility.h"
 #import <OpenPeerSDK/HOPSettings.h>
 #import "Logger.h"
+#import "SettingsDownloader.h"
 
 @interface QRScannerViewController ()
 
 @property (nonatomic, strong) ZXCapture* capture;
-@property (nonatomic, strong) NSURLConnection *urlConnection;
-@property (nonatomic, strong) NSMutableData* receivedData;
+//@property (nonatomic, strong) NSURLConnection *urlConnection;
+//@property (nonatomic, strong) NSMutableData* receivedData;
+@property (nonatomic, strong) SettingsDownloader* settingsDownloader;
 
 @property (nonatomic, weak) IBOutlet UIButton* buttonLogger;
 @property (nonatomic, weak) IBOutlet UIButton* buttonCancel;
@@ -136,6 +138,7 @@
                 }
                 else
                 {
+                    self.buttonCancel.hidden = YES;
                     UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Invalid login settings!"
                                                                         message:@"Please, scan another QR code or proceed with already set login settings"
                                                                        delegate:nil
@@ -196,98 +199,12 @@
         return;
     }
     
-    // Create the request.
-    NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:jsonURL]
-                                              cachePolicy:NSURLRequestUseProtocolCachePolicy
-                                          timeoutInterval:20.0];
-
-    self.receivedData = [NSMutableData dataWithCapacity: 0];
-    
-    if (postData)
-    {
-        [theRequest setHTTPMethod:@"POST"];
-        [theRequest setValue:@"application/x-www-form-urlencoded; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
-        [theRequest setHTTPBody:[postData dataUsingEncoding:NSUTF8StringEncoding]];
-    }
-    // create the connection with the request and start loading the data
-    self.urlConnection = [[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
-    if (!self.urlConnection)
-    {
-        // Release the receivedData object.
-        self.receivedData = nil;
-        
-        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Downloading login settings failed!"
-                                                            message:@"Please, ckeck you internet connection and try to scan QR code again or proceed login with default values."
-                                                           delegate:nil
-                                                  cancelButtonTitle:nil
-                                                  otherButtonTitles:@"Ok",nil];
-        [alertView show];
-    }
+    self.settingsDownloader = nil;
+    self.settingsDownloader = [[SettingsDownloader alloc] initSettingsDownloadFromURL:jsonURL postDate:postData];
+    self.settingsDownloader.delegate = self;
+    [self.settingsDownloader startDownload];
 }
 
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
-{
-    [self.receivedData setLength:0];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
-{
-    [self.receivedData appendData:data];
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
-{
-    self.urlConnection = nil;
-    self.receivedData = nil;
-    
-    //Inform the user that there was an error with download
-    NSLog(@"Connection failed! Error - %@ %@",
-          [error localizedDescription],
-          [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
-    
-    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Downloading login settings failed!"
-                                                        message:@"Please, ckeck you internet connection and try to scan QR code again or proceed login with default values."
-                                                       delegate:nil
-                                              cancelButtonTitle:nil
-                                              otherButtonTitles:@"Ok",nil];
-    [alertView show];
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection
-{
-    if ([self.receivedData length] > 0)
-    {
-        BOOL isSet = NO;
-        NSString* strJSON = [[NSString alloc] initWithData:self.receivedData encoding:NSASCIIStringEncoding];
-        
-        //Apply downloaded settings
-        if ([strJSON length] > 0)
-        {
-            //isSet = [[HOPSettings sharedSettings] applySettings:strJSON];
-            NSDictionary* settings = [[Settings sharedSettings] dictionaryForJSONString:strJSON];
-            [[Settings sharedSettings] snapshotCurrentSettings];
-            [[Settings sharedSettings] storeQRSettings:settings];
-            [[HOPSettings sharedSettings] storeSettingsFromDictionary:settings];
-        }
-        
-        //If set remove scanner and proceed with app setup
-        if (isSet)
-        {
-            [self actionProceedWithlogin:nil];
-        }
-        else
-        {
-            UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Login settings are not valid!"
-                                                                message:@"Please try to scan another QR code or proceed login with default values."
-                                                               delegate:nil
-                                                      cancelButtonTitle:nil
-                                                      otherButtonTitles:@"Ok",nil];
-            [alertView show];
-        }
-    }
-    self.urlConnection = nil;
-    self.receivedData = nil;
-}
 
 - (IBAction)actionStartLogger:(id)sender
 {
@@ -298,5 +215,20 @@
 {
     self.buttonCancel.hidden = YES;
     [self.capture.layer removeFromSuperlayer];
+}
+
+#pragma mark - SettingsDownloaderDelegate
+- (void)onSettingsDownloadCompletion:(NSDictionary *)inSettingsDictionary
+{
+    [[Settings sharedSettings] snapshotCurrentSettings];
+    [[Settings sharedSettings] storeQRSettings:inSettingsDictionary];
+    [[HOPSettings sharedSettings] storeSettingsFromDictionary:inSettingsDictionary];
+    
+    [self actionProceedWithlogin:nil];
+}
+
+- (void)onSettingsDownloadFailure
+{
+    [self actionProceedWithlogin:nil];
 }
 @end

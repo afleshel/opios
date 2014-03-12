@@ -18,6 +18,10 @@
 	<true/>
 	<key>applicationQRScannerShownAtStart</key>
 	<true/>
+	<key>applicationSettingsDownloadURL</key>
+	<string>&lt;-- insert settings download url --&gt;</string>
+	<key>applicationSettingsDownloadExpiryTime</key>
+	<real>86400</real>
 	<key>APNS-UrbanAirShip</key>
 	<dict>
 		<key>masterAppSecretDev</key>
@@ -35,5 +39,9 @@
 		<key>apiPushURL</key>
 		<string></string>
 	</dict>
+	<key>applicationTimeBetweenTwoPushes</key>
+	<integer>0</integer>
+	<key>applicationSettingsVersion</key>
+	<string>1.0</string>
 </dict>
 </plist>
