@@ -81,4 +81,5 @@
 - (void) finishPreSetup;
 - (void) setup;
 - (void) shutdown;
+- (void) shutdownCleanup;
 @end

@@ -295,7 +295,7 @@
     [[LoginManager sharedLoginManager] attachDelegateForIdentity:identity forceAttach:YES];
 }
 
-- (void) cleanAllWebViewControllers
+- (void) removeAllWebViewControllers
 {
     [self.loginWebViewsDictionary removeAllObjects];
 }

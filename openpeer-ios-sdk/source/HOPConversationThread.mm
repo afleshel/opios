@@ -389,6 +389,14 @@ using namespace openpeer::core;
     return [NSString stringWithUTF8String: IHelper::convertToString(IConversationThread::toDebug([self getConversationThreadPtr]))];
 }
 
+
+- (void) destroyCoreObject
+{
+    if(conversationThreadPtr)
+    {
+        conversationThreadPtr.reset();
+    }
+}
 #pragma mark - Internal methods
 - (IConversationThreadPtr) getConversationThreadPtr
 {

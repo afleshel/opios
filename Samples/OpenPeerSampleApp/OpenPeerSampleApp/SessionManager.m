@@ -631,4 +631,21 @@
         }
     }
 }
+
+
+- (void) stopAnyActiveCall
+{
+    if (self.sessionWithActiveCall)
+        [self.sessionWithActiveCall.currentCall hangup:HOPCallClosedReasonNone];
+}
+
+- (void) clearAllSessions
+{
+    [self stopAnyActiveCall];
+    for (Session* session in [self.sessionsDictionary allValues])
+    {
+        [session.conversationThread destroyCoreObject];
+    }
+    [self.sessionsDictionary removeAllObjects];
+}
 @end

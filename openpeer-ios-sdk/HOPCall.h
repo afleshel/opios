@@ -159,4 +159,5 @@
  */
 - (void) hangup:(HOPCallClosedReasons) reason;
 
+- (void) destroyCoreObject;
 @end

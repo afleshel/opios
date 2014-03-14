@@ -57,7 +57,8 @@ boost::shared_ptr<OpenPeerIdentityDelegate>  OpenPeerIdentityDelegate::create(id
 void OpenPeerIdentityDelegate::onIdentityStateChanged(IIdentityPtr identity,IdentityStates state)
 {
     ZS_LOG_DEBUG(zsLib::String("SDK - onIdentityStateChanged for URI: ") + identity->getIdentityURI());
-    HOPIdentity* hopIdentity = this->getHOPIdentity(identity);
+    //HOPIdentity* hopIdentity = this->getHOPIdentity(identity);
+    HOPIdentity* hopIdentity = this->getHOPIdentity(identity, state != HOPIdentityStateShutdown);
     
     [identityDelegate identity:hopIdentity stateChanged:(HOPIdentityStates) state];
 }
@@ -78,9 +79,23 @@ void OpenPeerIdentityDelegate::onIdentityRolodexContactsDownloaded(IIdentityPtr 
 
 HOPIdentity* OpenPeerIdentityDelegate::getHOPIdentity(IIdentityPtr identity)
 {
-    HOPIdentity* hopIdentity = [[OpenPeerStorageManager sharedStorageManager] getIdentityForPUID:identity->getID()];
+    HOPIdentity* hopIdentity = this->getHOPIdentity(identity, YES);//[[OpenPeerStorageManager sharedStorageManager] getIdentityForPUID:identity->getID()];
     
-    if (!hopIdentity)
+    /*if (!hopIdentity)
+    {
+        hopIdentity = [[HOPIdentity alloc] initWithIdentityPtr:identity];
+        [identityDelegate onNewIdentity:hopIdentity];
+        
+        if (hopIdentity)
+            [[OpenPeerStorageManager sharedStorageManager] setIdentity:hopIdentity forPUID:identity->getID()];
+    }*/
+    return hopIdentity;
+}
+
+HOPIdentity* OpenPeerIdentityDelegate::getHOPIdentity(IIdentityPtr identity, BOOL createNewIfMissing)
+{
+    HOPIdentity* hopIdentity = [[OpenPeerStorageManager sharedStorageManager] getIdentityForPUID:identity->getID()];
+    if (!hopIdentity && createNewIfMissing)
     {
         hopIdentity = [[HOPIdentity alloc] initWithIdentityPtr:identity];
         [identityDelegate onNewIdentity:hopIdentity];

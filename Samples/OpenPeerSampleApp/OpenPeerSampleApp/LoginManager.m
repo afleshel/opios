@@ -50,7 +50,7 @@
 #import <OpenpeerSDK/HOPAssociatedIdentity.h>
 #import <OpenpeerSDK/HOPIdentityContact.h>
 #import <OpenpeerSDK/HOPRolodexContact.h>
-
+#import <OpenpeerSDK/HOPStack.h>
 //Delegates
 #import "StackDelegate.h"
 #import "IdentityDelegate.h"
@@ -119,14 +119,8 @@
     }
 }
 
-/**
- Logout from the current account.
- */
-- (void) logout
-{    
-    //Delete all cookies.
-    [Utility removeCookiesAndClearCredentials];
-    
+- (void)clearIdentities
+{
     NSArray* associatedIdentities = [[HOPAccount sharedAccount] getAssociatedIdentities];
     for (HOPIdentity* identity in associatedIdentities)
     {
@@ -138,10 +132,33 @@
         [identity cancel];
     }
     [self.associatingIdentitiesDictionary removeAllObjects];
+}
+
+/**
+ Logout from the current account.
+ */
+- (void) logout
+{
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace,@"Logout started");
     
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane,@"Remove cookies");
+    //Delete all cookies.
+    [Utility removeCookiesAndClearCredentials];
+    
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane,@"Remove identity web view controllers");
+    [[[OpenPeer sharedOpenPeer] identityDelegate] removeAllWebViewControllers];
+    
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane,@"Clear all session objects");
+    [[SessionManager sharedSessionManager] clearAllSessions];
+    
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane,@"Clear all identity objects");
+    [self clearIdentities];
+    
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane,@"Start account shutdown");
     //Call to the SDK in order to shutdown Open Peer engine.
     [[HOPAccount sharedAccount] shutdown];
     
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane,@"Handle logout on UI level");
     [[[OpenPeer sharedOpenPeer] mainViewController] onLogout];
     
     HOPHomeUser* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
@@ -152,9 +169,15 @@
 
     if ([[Settings sharedSettings] isQRSettingsResetEnabled])
     {
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace,@"Removing QR settings");
         [[Settings sharedSettings] removeAppliedQRSettings];
     }
-    [[[OpenPeer sharedOpenPeer] identityDelegate] cleanAllWebViewControllers];
+    
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane,@"Clear session records from the database");
+    [[HOPModelManager sharedModelManager] clearSessionRecords];
+    
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane,@"Release all core objects");
+    [[HOPStack sharedStack] doLogoutCleanup];
 }
 
 - (void) startAccount
@@ -381,6 +404,7 @@
 
 - (void) onUserLogOut
 {
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace,@"Logout finished");
     [[OpenPeer sharedOpenPeer] finishPreSetup];
 }
 

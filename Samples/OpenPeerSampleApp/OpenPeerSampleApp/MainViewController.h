@@ -82,6 +82,7 @@ typedef  enum
 
 - (void) showSessionViewControllerForSession:(Session*) session forIncomingCall:(BOOL) incomingCall forIncomingMessage:(BOOL) incomingMessage;
 - (void) removeSessionViewControllerForSession:(NSString*) sessionId;
+- (void) removeAllSessionViewControllers;
 - (void) updateSessionViewControllerId:(NSString*) oldSessionId newSesionId:(NSString*) newSesionId;
 
 - (void) showIncominCallForSession:(Session*) session;

@@ -194,6 +194,11 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     return [NSString stringWithUTF8String: IHelper::convertToString(IContact::toDebug([self getContactPtr]))];
 }
 
+- (void) destroyCoreObject
+{
+    if(coreContactPtr)
+        coreContactPtr.reset();
+}
 
 #pragma mark - Internal methods
 - (IContactPtr) getContactPtr

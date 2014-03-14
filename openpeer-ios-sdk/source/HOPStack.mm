@@ -135,6 +135,10 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     openPeerMediaEngineDelegatePtr.reset();
 }
 
+- (void) doLogoutCleanup
+{
+    [[OpenPeerStorageManager sharedStorageManager] totalCleanup];
+}
 
 - (IStackPtr) getStackPtr
 {

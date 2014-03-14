@@ -82,4 +82,6 @@
  @returns HOPAccount account object
  */
 - (void) hintAboutLocation:(NSString*) contactsLocationID;
+
+- (void) destroyCoreObject;
 @end

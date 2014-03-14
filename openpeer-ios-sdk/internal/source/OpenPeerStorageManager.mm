@@ -31,9 +31,11 @@
 
 
 #import "OpenPeerStorageManager.h"
-//#import "HOPCall.h"
-//#import "HOPContact.h"
-//#import "HOPConversationThread.h"
+#import "HOPCall.h"
+#import "HOPContact.h"
+#import "HOPConversationThread.h"
+#import "HOPIdentity.h"
+#import "HOPIdentityLookup.h"
 
 @interface OpenPeerStorageManager()
 
@@ -58,11 +60,11 @@
 {
     _dictionaryCalls = [[NSMutableDictionary alloc] init];
     _dictionaryContacts = [[NSMutableDictionary alloc] init];
-    _dictionaryContactsWithUserId = [[NSMutableDictionary alloc] init];
+//    _dictionaryContactsWithUserId = [[NSMutableDictionary alloc] init];
     _dictionaryConversationThreads = [[NSMutableDictionary alloc] init];
     _dictionaryIdentities = [[NSMutableDictionary alloc] init];
     _dictionaryIdentityLookups = [[NSMutableDictionary alloc] init];
-    _dictionaryContactPeerFilePublicLookup = [[NSMutableDictionary alloc] init];
+//    _dictionaryContactPeerFilePublicLookup = [[NSMutableDictionary alloc] init];
 }
 
 
@@ -112,7 +114,7 @@
 }
 
 
-- (HOPProvisioningAccount*) getProvisioningAccountForUserId:(NSString*) userId
+/*- (HOPProvisioningAccount*) getProvisioningAccountForUserId:(NSString*) userId
 {
     HOPProvisioningAccount* provisioningAccount = nil;
     
@@ -124,7 +126,7 @@
 - (void) setCProvisioningAccount:(HOPProvisioningAccount*) account forUserId:(NSString*) userId
 {
     [_dictionaryProvisioningAccount setObject:account forKey:userId];
-}
+}*/
 
 - (HOPIdentity*) getIdentityForId:(NSString*) identityId
 {
@@ -164,4 +166,36 @@
     [_dictionaryIdentityLookups setObject:lookup forKey:[NSNumber numberWithInt:puid]];
 }
 
+- (void) totalCleanup
+{
+    for (HOPCall* object in [_dictionaryCalls allValues])
+    {
+        [object destroyCoreObject];
+    }
+    [_dictionaryCalls removeAllObjects];
+    
+    for (HOPConversationThread* object in [_dictionaryConversationThreads allValues])
+    {
+        [object destroyCoreObject];
+    }
+    [_dictionaryConversationThreads removeAllObjects];
+    
+    for (HOPIdentity* object in [_dictionaryIdentities allValues])
+    {
+        [object destroyCoreObject];
+    }
+    [_dictionaryIdentities removeAllObjects];
+    
+    for (HOPContact* object in [_dictionaryContacts allValues])
+    {
+        [object destroyCoreObject];
+    }
+    [_dictionaryContacts removeAllObjects];
+    
+    for (HOPIdentityLookup* object in [_dictionaryIdentityLookups allValues])
+    {
+        [object destroyCoreObject];
+    }
+    [_dictionaryIdentityLookups removeAllObjects];
+}
 @end

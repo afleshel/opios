@@ -146,6 +146,13 @@
     
     [self.navigationItem setTitleView:titleView];
     
+    self.videoCallViewController = [[VideoCallViewController alloc] initWithSession:self.session];
+    self.videoCallViewController.delegate = self;
+    self.videoCallViewController.view.frame = self.chatViewController.view.frame;
+    [self.containerView addSubview:self.videoCallViewController.view];
+    self.videoCallViewController.view.hidden = YES;
+    
+    
 }
 
 
@@ -198,7 +205,7 @@
         //[self.audioCallViewController.view removeFromSuperview];
         
     }
-    else if(self.videoCallViewController != nil && self.videoCallViewController.view.hidden)
+    else if(self.videoCallViewController != nil && self.videoCallViewController.view.hidden && self.callTimer != nil)
     {
         [self.chatViewController.messageTextbox resignFirstResponder];
         self.videoCallViewController.view.hidden = NO;
@@ -316,7 +323,10 @@
     else
     {
         if (callViewController.view.hidden == YES)
+        {
             callViewController.view.hidden = NO;
+            callViewController.view.frame = self.view.bounds;
+        }
     }
     
     if (videoCall)
@@ -403,6 +413,7 @@
 {
     [self.callTimer invalidate];
     self.callTimer = nil;
+    self.callStartedTime = nil;
     self.labelDuration.text = @"";
 }
 

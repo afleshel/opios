@@ -58,4 +58,5 @@
 - (BOOL) isAssociatedIdentity:(NSString*) inBaseIdentityURI;
 
 - (void) preloadLoginWebPage;
+- (void)clearIdentities;
 @end

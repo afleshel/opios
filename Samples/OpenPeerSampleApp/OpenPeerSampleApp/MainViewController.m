@@ -415,6 +415,11 @@
     [self.sessionViewControllersDictionary removeObjectForKey:sessionId];
 }
 
+- (void) removeAllSessionViewControllers
+{
+    [self.sessionViewControllersDictionary removeAllObjects];
+}
+
 - (void) updateSessionViewControllerId:(NSString*) oldSessionId newSesionId:(NSString*) newSesionId
 {
     SessionViewController_iPhone* svc = [self.sessionViewControllersDictionary objectForKey:oldSessionId];
@@ -490,7 +495,12 @@
 
 - (void) onLogout
 {
-    [self removeAllSubViews];
+    //[self removeAllSubViews];
+    
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace,@"Remove all session view controllers");
+    [self removeAllSessionViewControllers];
+    
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace,@"Show splash view");
     [self showSplashScreen];
     self.contactsTableViewController = nil;
     self.tabBarController = nil;

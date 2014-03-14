@@ -502,4 +502,8 @@
     return ret;
 }
 
+- (void) removeAllContacts
+{
+    
+}
 @end
