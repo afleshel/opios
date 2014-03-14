@@ -16,6 +16,16 @@
 	<string>tcp-logger-v1-beta-1-i.hcs.io:8055</string>
 	<key>localTelnetLoggerPort</key>
 	<string>59999</string>
+	<key>openpeer/core/core-thread-priority</key>
+	<string>normal</string>
+	<key>openpeer/core/media-thread-priority</key>
+	<string>real-time</string>
+	<key>openpeer/core/authorized-application-id-split-char</key>
+	<string>-</string>
+	<key>openpeer/stack/stack-thread-priority</key>
+	<string>normal</string>
+	<key>openpeer/stack/key-generation-thread-priority</key>
+	<string>low</string>
 	<key>openpeer/stack/bootstrapper-force-well-known-over-insecure-http</key>
 	<true/>
 	<key>openpeer/stack/bootstrapper-force-well-known-using-post</key>
@@ -26,6 +36,16 @@
 	<integer>0</integer>
 	<key>openpeer/stack/debug/force-p2p-messages-over-finder-relay</key>
 	<false/>
+	<key>openpeer/services/services-thread-priority</key>
+	<string>high</string>
+	<key>openpeer/services/logger-thread-priority</key>
+	<string>normal</string>
+	<key>openpeer/services/socket-monitor-thread-priority</key>
+	<string>real-time</string>
+	<key>openpeer/services/timer-monitor-thread-priority</key>
+	<string>normal</string>
+	<key>openpeer/services/http-thread-priority</key>
+	<string>normal</string>
 	<key>openpeer/services/turn-candidates-must-remain-alive-after-ice-wake-up-in-seconds</key>
 	<integer>600</integer>
 	<key>openpeer/services/interface-name-order</key>
