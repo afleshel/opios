@@ -26,6 +26,8 @@
 	<string>normal</string>
 	<key>openpeer/stack/key-generation-thread-priority</key>
 	<string>low</string>
+	<key>openpeer/stack/backgrounding-phase-account</key>
+	<integer>1</integer>
 	<key>openpeer/stack/bootstrapper-force-well-known-over-insecure-http</key>
 	<true/>
 	<key>openpeer/stack/bootstrapper-force-well-known-using-post</key>
@@ -46,6 +48,12 @@
 	<string>normal</string>
 	<key>openpeer/services/http-thread-priority</key>
 	<string>normal</string>
+	<key>openpeer/services/backgrounding-phase-ice-socket-session</key>
+	<integer>1</integer>
+	<key>openpeer/services/backgrounding-phase-turn</key>
+	<integer>1</integer>
+	<key>openpeer/services/backgrounding-phase-tcp-messaging</key>
+	<integer>1</integer>
 	<key>openpeer/services/turn-candidates-must-remain-alive-after-ice-wake-up-in-seconds</key>
 	<integer>600</integer>
 	<key>openpeer/services/interface-name-order</key>
