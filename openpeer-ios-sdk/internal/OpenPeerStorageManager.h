@@ -71,6 +71,7 @@ using namespace zsLib;
 
 - (HOPIdentity*) getIdentityForId:(NSString*) identityId;
 - (void) setIdentity:(HOPIdentity*) identity forId:(NSString*) identityId;
+- (void) removeIdentityWithPUID:(PUID) puid;
 - (HOPIdentity*) getIdentityForPUID:(PUID) puid;
 - (void) setIdentity:(HOPIdentity*) identity forPUID:(PUID) puid;
 - (NSArray*) getIdentities;

@@ -206,6 +206,7 @@
                 HOPIdentityState* identityState = [identity getState];
                 if (identityState.lastErrorCode)
                     [self.loginDelegate onIdentityLoginError:identityState.lastErrorReason];
+                [identity destroyCoreObject];
                 [self.loginDelegate onIdentityLoginShutdown];
             }
                 break;

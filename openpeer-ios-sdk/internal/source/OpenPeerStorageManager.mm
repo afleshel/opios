@@ -150,7 +150,10 @@
 {
     [_dictionaryIdentities setObject:identity forKey:[NSNumber numberWithInt:puid]];
 }
-
+- (void) removeIdentityWithPUID:(PUID) puid
+{
+    [_dictionaryIdentities removeObjectForKey:[NSNumber numberWithInt:puid]];
+}
 - (HOPIdentity*) getIdentityForPUID:(PUID) puid
 {
     return [_dictionaryIdentities objectForKey:[NSNumber numberWithInt:puid]];
@@ -180,11 +183,11 @@
     }
     [_dictionaryConversationThreads removeAllObjects];
     
-    for (HOPIdentity* object in [_dictionaryIdentities allValues])
-    {
-        [object destroyCoreObject];
-    }
-    [_dictionaryIdentities removeAllObjects];
+//    for (HOPIdentity* object in [_dictionaryIdentities allValues])
+//    {
+//        [object destroyCoreObject];
+//    }
+//    [_dictionaryIdentities removeAllObjects];
     
     for (HOPContact* object in [_dictionaryContacts allValues])
     {
