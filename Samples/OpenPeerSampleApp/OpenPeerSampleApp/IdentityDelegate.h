@@ -38,5 +38,5 @@
 
 @property (nonatomic, weak) id<LoginEventsDelegate> loginDelegate;
 
-- (void) cleanAllWebViewControllers;
+- (void) removeAllWebViewControllers;
 @end

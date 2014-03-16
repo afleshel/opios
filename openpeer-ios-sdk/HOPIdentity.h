@@ -205,4 +205,6 @@
  Stops deletion timer..
  */
 - (void) stopTimerForContactsDeletion;
+
+- (void) destroyCoreObject;
 @end

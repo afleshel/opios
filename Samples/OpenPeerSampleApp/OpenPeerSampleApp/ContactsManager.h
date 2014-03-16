@@ -54,4 +54,6 @@
 - (NSArray*) getBaseURIsForStableId:(NSString*) stableID;
 - (NSString*) createProfileBundleForCommunicationWithContact:(HOPRolodexContact*) targetContact;
 - (HOPRolodexContact*) getRolodexContactByProfileBundle:(NSString*) profileBundle coreContact:(HOPContact*) coreContact;
+
+- (void) removeAllContacts;
 @end

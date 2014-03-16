@@ -240,6 +240,12 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     return ret;
 }
 
+- (void) destroyCoreObject
+{
+    if(identityLookupPtr)
+        identityLookupPtr.reset();
+}
+
 - (NSString *)description
 {
     NSString* ret = nil;

@@ -252,6 +252,11 @@ using namespace openpeer::core;
     }
 }
 
+- (void) destroyCoreObject
+{
+    if(accountPtr)
+        accountPtr.reset();
+}
 
 - (NSString*) getPeerFilePrivate
 {

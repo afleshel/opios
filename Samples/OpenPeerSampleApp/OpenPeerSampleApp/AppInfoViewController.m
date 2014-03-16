@@ -100,7 +100,7 @@ typedef enum
     switch (indexPath.section)
     {
         case APP_VERSION:
-            cell.textLabel.text =  [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+            cell.textLabel.text =  [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
             break;
             
         case APP_SETTINGS_VERSION:

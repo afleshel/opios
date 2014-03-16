@@ -71,4 +71,6 @@
 + (BOOL) isAuthorizedApplicationExpiryWindowStillValid:(NSString*) inAuthorizedApplicationID minimumValidityWindowRequired:(long) minimumValidityWindowRequired;
 
 - (BOOL) isStackReady;
+
+- (void) doLogoutCleanup;
 @end

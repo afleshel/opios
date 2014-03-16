@@ -511,6 +511,12 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     
 }
 
+- (void) destroyCoreObject
+{
+    if(identityPtr)
+        identityPtr.reset();
+}
+
 #pragma mark - Internal methods
 - (id) initWithIdentityPtr:(IIdentityPtr) inIdentityPtr
 {

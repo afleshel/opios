@@ -85,4 +85,6 @@
  @return NSArray List of invalid identity profiles for contacts that were registered in OpenPeer system
  */
 - (NSArray*) getInvalidIdentities;
+
+- (void) destroyCoreObject;
 @end

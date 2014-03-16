@@ -380,6 +380,12 @@ using namespace openpeer::core;
     }
 }
 
+- (void) destroyCoreObject
+{
+    if(callPtr)
+        callPtr.reset();
+}
+
 -(NSString *)description
 {
     return [NSString stringWithUTF8String: IHelper::convertToString(ICall::toDebug([self getCallPtr]))];

@@ -169,4 +169,5 @@
 - (void) handleMessageFromInnerBrowserWindowFrame:(NSString*) message;
 
 - (BOOL) isCoreAccountCreated;
+- (void) destroyCoreObject;
 @end

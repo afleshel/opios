@@ -106,7 +106,7 @@
 
 /**
  Retrieves the list of all or just registered rolodex contacts for home user identity URI.
- @param openPeerContacts BOOL If YES is passed, only registered roldex contacts will be returned
+ @param openPeerContacts BOOL If YES is passed, only registered rolodex contacts will be returned
  @param homeUserIdentityURI NSString home user identity URI
  @return NSArray list of HOPRolodexContact objects
  */

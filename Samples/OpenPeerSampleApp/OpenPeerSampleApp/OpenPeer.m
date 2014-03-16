@@ -41,8 +41,10 @@
 #import "OpenpeerSDK/HOPCache.h"
 #import "OpenpeerSDK/HOPModelManager.h"
 #import "OpenpeerSDK/HOPSettings.h"
+#import "OpenpeerSDK/HOPAccount.h"
 //Managers
 #import "LoginManager.h"
+#import "SessionManager.h"
 //Delegates
 #import "StackDelegate.h"
 #import "MediaEngineDelegate.h"
@@ -307,6 +309,15 @@
     [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(closeTheApp) userInfo:nil repeats:NO];
 }
 
+
+- (void) shutdownCleanup
+{
+    [[SessionManager sharedSessionManager] stopAnyActiveCall];
+    [[LoginManager sharedLoginManager] clearIdentities];
+    [[HOPAccount sharedAccount] shutdown];
+    [self shutdown];
+    
+}
 #pragma mark - SettingsDownloaderDelegate
 - (void)onSettingsDownloadCompletion:(NSDictionary *)inSettingsDictionary
 {

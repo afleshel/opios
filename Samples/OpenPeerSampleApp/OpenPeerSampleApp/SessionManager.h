@@ -74,4 +74,7 @@
 
 - (BOOL) isCallInProgress;
 - (void) recreateExistingSessions;
+
+- (void) stopAnyActiveCall;
+- (void) clearAllSessions;
 @end

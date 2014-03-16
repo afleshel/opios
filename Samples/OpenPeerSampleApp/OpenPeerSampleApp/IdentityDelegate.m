@@ -206,6 +206,7 @@
                 HOPIdentityState* identityState = [identity getState];
                 if (identityState.lastErrorCode)
                     [self.loginDelegate onIdentityLoginError:identityState.lastErrorReason];
+                [identity destroyCoreObject];
                 [self.loginDelegate onIdentityLoginShutdown];
             }
                 break;
@@ -251,7 +252,7 @@
         //Get downloaded rolodex contacts
         BOOL rolodexContactsObtained = [identity getDownloadedRolodexContacts:&flushAllRolodexContacts outVersionDownloaded:&downloadedVersion outRolodexContacts:&rolodexContacts];
         
-        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Identity URI: %@ - Total number of roldex contacts: %d",[identity getIdentityURI], [rolodexContacts count]);
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Identity URI: %@ - Total number of rolodex contacts: %d",[identity getIdentityURI], [rolodexContacts count]);
         
         if ([downloadedVersion length] > 0)
             associatedIdentity.downloadedVersion = downloadedVersion;
@@ -295,7 +296,7 @@
     [[LoginManager sharedLoginManager] attachDelegateForIdentity:identity forceAttach:YES];
 }
 
-- (void) cleanAllWebViewControllers
+- (void) removeAllWebViewControllers
 {
     [self.loginWebViewsDictionary removeAllObjects];
 }

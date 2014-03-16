@@ -48,11 +48,11 @@ using namespace zsLib;
     NSMutableDictionary* _dictionaryCalls;
     NSMutableDictionary* _dictionaryConversationThreads;
     NSMutableDictionary* _dictionaryContacts;
-    NSMutableDictionary* _dictionaryContactsWithUserId;
-    NSMutableDictionary* _dictionaryProvisioningAccount;
+//    NSMutableDictionary* _dictionaryContactsWithUserId;
+//NSMutableDictionary* _dictionaryProvisioningAccount;
     NSMutableDictionary* _dictionaryIdentities;
     NSMutableDictionary* _dictionaryIdentityLookups;
-    NSMutableDictionary* _dictionaryContactPeerFilePublicLookup;
+//    NSMutableDictionary* _dictionaryContactPeerFilePublicLookup;
 }
 + (id)sharedStorageManager;
 
@@ -66,11 +66,12 @@ using namespace zsLib;
 - (HOPContact*) getContactForPeerURI:(NSString*) peerURI;
 - (void) setContact:(HOPContact*) contact forPeerURI:(NSString*) contactId;
 
-- (HOPProvisioningAccount*) getProvisioningAccountForUserId:(NSString*) userId;
-- (void) setCProvisioningAccount:(HOPProvisioningAccount*) account forUserId:(NSString*) userId;
+//- (HOPProvisioningAccount*) getProvisioningAccountForUserId:(NSString*) userId;
+//- (void) setCProvisioningAccount:(HOPProvisioningAccount*) account forUserId:(NSString*) userId;
 
 - (HOPIdentity*) getIdentityForId:(NSString*) identityId;
 - (void) setIdentity:(HOPIdentity*) identity forId:(NSString*) identityId;
+- (void) removeIdentityWithPUID:(PUID) puid;
 - (HOPIdentity*) getIdentityForPUID:(PUID) puid;
 - (void) setIdentity:(HOPIdentity*) identity forPUID:(PUID) puid;
 - (NSArray*) getIdentities;
@@ -78,4 +79,5 @@ using namespace zsLib;
 - (HOPIdentityLookup*) getIdentityLookupForPUID:(PUID) puid;
 - (void) setIdentityLookup:(HOPIdentityLookup*) lookup forPUID:(PUID) puid;
 
+- (void) totalCleanup;
 @end
