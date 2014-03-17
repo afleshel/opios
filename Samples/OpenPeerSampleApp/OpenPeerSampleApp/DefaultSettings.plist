@@ -57,7 +57,7 @@
 	<key>openpeer/services/backgrounding-phase-tcp-messaging</key>
 	<integer>3</integer>
 	<key>openpeer/services/backgrounding-phase-1-timeout-in-seconds</key>
-	<integer>5</integer>
+	<integer>8</integer>
 	<key>openpeer/services/backgrounding-phase-2-timeout-in-seconds</key>
 	<integer>0</integer>
 	<key>openpeer/services/backgrounding-phase-3-timeout-in-seconds</key>
