@@ -128,11 +128,12 @@
                 }
                 else
                 {
-                    NSString* msg = [message.text length] > 22 ? [NSString stringWithFormat:@"%@...",[message.text substringToIndex:22]] : message.text;
+                    //NSString* msg = [message.text length] > 22 ? [NSString stringWithFormat:@"%@...",[message.text substringToIndex:22]] : message.text;
                     
-                    messageText  = [NSString stringWithFormat:@"%@ \n %@",[[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser] getFullName],msg];
+                    messageText  = message.text;//[NSString stringWithFormat:@"%@ \n %@",[[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser] getFullName],msg];
                 }
-                [[APNSManager sharedAPNSManager] sendPushNotificationForContact:coreContact message:messageText missedCall:missedCall];
+                //[[APNSManager sharedAPNSManager] sendPushNotificationForContact:coreContact message:messageText missedCall:missedCall];
+                [[APNSManager sharedAPNSManager]sendRichPushNotificationForContact:coreContact message:messageText messageId:messageID missedCall:missedCall];
             }
         }
     }
