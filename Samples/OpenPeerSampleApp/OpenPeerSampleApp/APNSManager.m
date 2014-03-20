@@ -30,12 +30,14 @@
  */
 
 #import "APNSManager.h"
+#import "APNSInboxManager.h"
 #import "UAirship.h"
 #import "UAConfig.h"
 #import "UAPush.h"
 #import "Settings.h"
 #import "AppConsts.h"
 #import "SBJsonParser.h"
+#import "Utility.h"
 
 #import <OpenPeerSDK/HOPRolodexContact.h>
 #import <OpenPeerSDK/HOPContact.h>
@@ -43,6 +45,7 @@
 #import <OpenPeerSDK/HOPAccount.h>
 #import <OpenPeerSDK/HOPPublicPeerFile.h>
 #import <OpenPeerSDK/HOPHomeUser+External.h>
+#import <OpenPeerSDK/HOPMessage.h>
 
 #define  timeBetweenPushNotificationsInSeconds 1
 
@@ -60,7 +63,7 @@
 - (void) pushData:(NSDictionary*) dataToPush sendingRich:(BOOL) sendingRich;
 - (BOOL) canSendPushNotificationForPeerURI:(NSString*) peerURI;
 - (NSArray*) getDeviceTokensForContact:(HOPContact*) contact;
-- (NSString*) prepareMessageForRichPush:(NSString*) message messageId:(NSString*) messageId peerURI:(NSString*) peerURI location:(NSString*) location;
+- (NSString*) prepareMessageForRichPush:(HOPMessage*) message peerURI:(NSString*) peerURI location:(NSString*) location;
 @end
 
 @implementation APNSManager
@@ -100,12 +103,24 @@
     [UAirship setLogging:NO];
     
     UAConfig *config = [UAConfig defaultConfig];
+    
+    config.developmentAppKey = self.urbanAirshipAppKey;
+    config.developmentAppSecret = self.urbanAirshipAppSecret;
+    
+    config.productionAppKey = self.urbanAirshipAppKey;
+    config.productionAppSecret = self.urbanAirshipAppSecret;
+    
     [UAirship takeOff:config];
+    
+    [UAPush shared].notificationTypes = (UIRemoteNotificationTypeBadge |
+                                         UIRemoteNotificationTypeSound |
+                                         UIRemoteNotificationTypeAlert);
+    [[UAPush shared] registerForRemoteNotifications];
     
     // Print out the application configuration for debugging (optional)
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"UrbanAirship config: %@",[config description]);
 
-    
+    [[APNSInboxManager sharedAPNSInboxManager]setup];
     // Set the icon badge to zero on startup (optional)
     [[UAPush shared] resetBadge];
 }
@@ -210,24 +225,25 @@
     }
 }
 
-- (void) sendRichPushNotificationForContact:(HOPContact*) contact message:(NSString*) message messageId:(NSString*) messageID missedCall:(BOOL) missedCall
+//- (void) sendRichPushNotificationForContact:(HOPContact*) contact message:(HOPMessage*) message missedCall:(BOOL) missedCall
+- (void) sendRichPushNotificationForMessage:(HOPMessage*) message missedCall:(BOOL) missedCall
 {
 //    {"audience" : {"device_token" : "a685917cc39723e1e60025fbaf677578dbe9b340abcfa8e24af00d05be499ff1"}, "device_types" : [ "ios" ], "notification" : {"alert": "Here is the normal push alert"}, "message" : {"title" : "Message Title", "body" : "Your message goes here", "content_type" : "text/html"} }
     
-    NSArray* deviceTokens = [self getDeviceTokensForContact:contact];
+    NSArray* deviceTokens = [self getDeviceTokensForContact:message.contact];
     
     if ([deviceTokens count] > 0)
     {
-        NSString* msg = [message length] > 22 ? [NSString stringWithFormat:@"%@...",[message substringToIndex:22]] : message;
+        NSString* msg = [message.text length] > 22 ? [NSString stringWithFormat:@"%@...",[message.text substringToIndex:22]] : message.text;
         
         NSString* messageText  = [NSString stringWithFormat:@"%@  %@",[[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser] getFullName],msg];
         
-        NSString* content = [self prepareMessageForRichPush:message messageId:messageID peerURI:[[HOPContact getForSelf]getPeerURI] location:[[HOPAccount sharedAccount] getLocationID]];
+        NSString* content = [self prepareMessageForRichPush:message peerURI:[[HOPContact getForSelf]getPeerURI] location:[[HOPAccount sharedAccount] getLocationID]];
         
         for (NSString* deviceToken in deviceTokens)
         {
             
-            NSString* stringToSend = [NSString stringWithFormat:@"{\"audience\" : {\"device_token\" : \"%@\"}, \"device_types\" : [ \"ios\" ], \"notification\" : {\"alert\": \"%@\"}, \"message\" : {\"title\" : \"%@\", \"body\" : \"%@\", \"content_type\" : \"text/html\"} }",deviceToken,messageText,messageText,content];
+            NSString* stringToSend = [NSString stringWithFormat:@"{\"audience\" : {\"device_token\" : \"%@\"}, \"device_types\" : [ \"ios\" ], \"notification\" : {\"ios\" : {\"badge\":\"+1\",\"sound\":\"default\",\"alert\": \"%@\",\"content-available\": true,\"priority\": 10}}, \"message\" : {\"title\" : \"%@\", \"body\" : \"%@\", \"content_type\" : \"text/html\"} }",deviceToken,messageText,messageText,content];
             //NSDictionary* tokenDict = @{@"device_token":deviceToken};
 //            NSDictionary* audiencenDict = @{@"audience":tokenDict};
 //            NSDictionary* deviceTypesDict = @{@"device_types":@[@"ios"]};
@@ -239,14 +255,16 @@
             
             SBJsonParser* parser = [[SBJsonParser alloc] init];
             NSDictionary* dataToPush = [parser objectWithString: stringToSend];
+            NSError* error = nil;
+            NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:[stringToSend dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
             
             [self pushData:dataToPush sendingRich:YES];
         }
-        [self.apnsHisotry setObject:[NSDate date] forKey:[contact getPeerURI]];
+        [self.apnsHisotry setObject:[NSDate date] forKey:[message.contact getPeerURI]];
     }
 }
 
-- (NSString*) prepareMessageForRichPush:(NSString*) message messageId:(NSString*) messageId peerURI:(NSString*) peerURI location:(NSString*) location
+- (NSString*) prepareMessageForRichPush:(HOPMessage*) message peerURI:(NSString*) peerURI location:(NSString*) location
 {
     NSString* ret = nil;
     
@@ -257,10 +275,13 @@
     
     //NSDictionary* contentDict = @{@"message":message,@"messageId":messageId,@"peerURI":peerURI,@"location":location};
     
-    //ret = [NSString stringWithFormat:@"{\"peerURI\":\"%@\",\"messageId\": \"%@\",\"message\": \"%@\",\"location\":\"%@\"}",peerURI,messageId,message,location];
+    //ret = [NSString stringWithFormat:@"{\\\"peerURI\\\":\\\"%@\\\",\\\"messageId\\\":\\\"%@\\\",\\\"message\\\":\\\"%@\\\",\\\"location\\\":\\\"%@\\\"}",peerURI,message.messageID,message.text,location];
+    ret = [NSString stringWithFormat:@"{\\\"peerURI\\\":\\\"%@\\\",\\\"messageId\\\":\\\"%@\\\",\\\"message\\\":\\\"%@\\\",\\\"location\\\":\\\"%@\\\",\\\"date\\\":\\\"%.0f\\\"}",peerURI,message.messageID,message.text,location,[message.date timeIntervalSince1970]];
+    //ret = [NSString stringWithFormat:@"{'peerURI':'%@','messageId': '%@','message':'%@','location':'%@'}",peerURI,messageId,message,location];
+    //ret = [NSString stringWithFormat:@"peerURI<:>%@<,>messageId<:> %@<,>message<:>%@<,>location<:>%@",peerURI,messageId,message,location];
     
-    ret = [NSString stringWithFormat:@"peerURI<:>%@<,>messageId<:> %@<,>message<:>%@<,>location<:>%@",peerURI,messageId,message,location];
-                              
+    NSError* error = nil;
+    NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:[ret dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
 
 //    NSError *error;
 //    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:contentDict

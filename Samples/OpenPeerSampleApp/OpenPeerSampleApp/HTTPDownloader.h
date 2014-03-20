@@ -32,11 +32,12 @@
 #import <Foundation/Foundation.h>
 #import "Delegates.h"
 
-@interface SettingsDownloader : NSObject
+@interface HTTPDownloader : NSObject
 
-@property (nonatomic, weak) id<SettingsDownloaderDelegate> delegate;
+@property (nonatomic, weak) id<HTTPDownloaderDelegate> delegate;
 
 - (id) initSettingsDownloadFromURL:(NSString*) url postDate:(NSString*) postData;
+- (id) initSettingsDownloadFromURL:(NSString*) url postDate:(NSString*) postData auth:(NSString*) auth;
 - (void) startDownload;
 //- (void) downloadFromURL:(NSString*) url postDate:(NSString*) postData;
 @end

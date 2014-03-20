@@ -32,6 +32,6 @@
 #import <UIKit/UIKit.h>
 #import "ZXingObjC/ZXingObjC.h"
 #import "Delegates.h"
-@interface QRScannerViewController : UIViewController <ZXCaptureDelegate,SettingsDownloaderDelegate>
+@interface QRScannerViewController : UIViewController <ZXCaptureDelegate,HTTPDownloaderDelegate>
 
 @end

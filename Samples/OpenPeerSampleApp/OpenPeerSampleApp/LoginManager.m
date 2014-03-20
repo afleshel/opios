@@ -41,6 +41,7 @@
 #import "ContactsManager.h"
 #import "SessionManager.h"
 #import "UUIDManager.h"
+#import "APNSInboxManager.h"
 //SDK
 #import <OpenPeerSDK/HOPAccount.h>
 #import <OpenPeerSDK/HOPIdentity.h>
@@ -379,11 +380,14 @@
                 //Start loading contacts.
                 [[ContactsManager sharedContactsManager] loadContacts];
             }
+            
+            [[APNSInboxManager sharedAPNSInboxManager] handleNewMessages];
         }
         else
         {
             [[SessionManager sharedSessionManager] recreateExistingSessions];
         }
+        
         
         //Login finished. Remove activity indicator
         [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:NO withText:nil inView:nil];

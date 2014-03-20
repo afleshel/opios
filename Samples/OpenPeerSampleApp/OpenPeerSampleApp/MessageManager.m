@@ -312,4 +312,15 @@
     }
     return ret;
 }
+
+- (HOPMessage*) createMessageFromRichPush:(NSDictionary*) richPush
+{
+    //HOPMessage* hopMessage = [[HOPMessage alloc] initWithMessageId:[Utility getGUIDstring] andMessage:message andContact:[contact getCoreContact] andMessageType:messageTypeText andMessageDate:[NSDate date]];
+    
+//    NSString* senderPeerURI = [richPush objectForKey:@"peerURI"];
+//    NSString* messageId = [richPush objectForKey:@"messageId"];
+//    NSString* messageText = [richPush objectForKey:@"message"];
+//    NSString* location = [richPush objectForKey:@"location"];
+}
+
 @end

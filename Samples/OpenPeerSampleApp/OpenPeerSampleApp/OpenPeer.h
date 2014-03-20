@@ -45,7 +45,7 @@
 @class CacheDelegate;
 @class BackgroundingDelegate;
 
-@interface OpenPeer : NSObject<SettingsDownloaderDelegate>
+@interface OpenPeer : NSObject<HTTPDownloaderDelegate>
 
 @property (nonatomic,strong) CallDelegate *callDelegate;
 @property (nonatomic,strong) StackDelegate *stackDelegate;

@@ -36,14 +36,14 @@
 #import "Utility.h"
 #import <OpenPeerSDK/HOPSettings.h>
 #import "Logger.h"
-#import "SettingsDownloader.h"
+#import "HTTPDownloader.h"
 
 @interface QRScannerViewController ()
 
 @property (nonatomic, strong) ZXCapture* capture;
 //@property (nonatomic, strong) NSURLConnection *urlConnection;
 //@property (nonatomic, strong) NSMutableData* receivedData;
-@property (nonatomic, strong) SettingsDownloader* settingsDownloader;
+@property (nonatomic, strong) HTTPDownloader* settingsDownloader;
 
 @property (nonatomic, weak) IBOutlet UIButton* buttonLogger;
 @property (nonatomic, weak) IBOutlet UIButton* buttonCancel;
@@ -200,7 +200,7 @@
     }
     
     self.settingsDownloader = nil;
-    self.settingsDownloader = [[SettingsDownloader alloc] initSettingsDownloadFromURL:jsonURL postDate:postData];
+    self.settingsDownloader = [[HTTPDownloader alloc] initSettingsDownloadFromURL:jsonURL postDate:postData];
     self.settingsDownloader.delegate = self;
     [self.settingsDownloader startDownload];
 }
@@ -218,17 +218,45 @@
 }
 
 #pragma mark - SettingsDownloaderDelegate
-- (void)onSettingsDownloadCompletion:(NSDictionary *)inSettingsDictionary
+
+- (void) httpDownloader:(HTTPDownloader*) downloader downloaded:(NSString*) downloaded
 {
-    [[Settings sharedSettings] snapshotCurrentSettings];
-    [[Settings sharedSettings] storeQRSettings:inSettingsDictionary];
-    [[HOPSettings sharedSettings] storeSettingsFromDictionary:inSettingsDictionary];
+    NSDictionary* settingsDictionary = nil;
     
+    //Apply downloaded settings
+    if ([downloaded length] > 0)
+    {
+        settingsDictionary = [[Settings sharedSettings] dictionaryForJSONString:downloaded];
+        
+        if ([settingsDictionary count] > 0)
+        {
+            [[Settings sharedSettings] snapshotCurrentSettings];
+            [[Settings sharedSettings] storeQRSettings:settingsDictionary];
+            [[HOPSettings sharedSettings] storeSettingsFromDictionary:settingsDictionary];
+        }
+    }
     [self actionProceedWithlogin:nil];
 }
 
-- (void)onSettingsDownloadFailure
+- (void) httpDownloader:(HTTPDownloader *) downloader didFailWithError:(NSError *)error
 {
+    self.settingsDownloader = nil;
     [self actionProceedWithlogin:nil];
 }
+
+//- (void)onSettingsDownloadCompletion:(NSDictionary *)inSettingsDictionary
+//{
+//    [[Settings sharedSettings] snapshotCurrentSettings];
+//    [[Settings sharedSettings] storeQRSettings:inSettingsDictionary];
+//    [[HOPSettings sharedSettings] storeSettingsFromDictionary:inSettingsDictionary];
+//    
+//    [self actionProceedWithlogin:nil];
+//}
+//
+//- (void)onSettingsDownloadFailure
+//{
+//    [self actionProceedWithlogin:nil];
+//}
+
 @end
+

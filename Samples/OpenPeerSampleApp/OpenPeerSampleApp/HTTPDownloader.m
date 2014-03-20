@@ -29,21 +29,22 @@
  
  */
 
-#import "SettingsDownloader.h"
+#import "HTTPDownloader.h"
 #import "Settings.h"
 #import "OpenPeer.h"
 #import <OpenPeerSDK/HOPSettings.h>
 #import <OpenPeerSDK/HOPCache.h>
 
-@interface SettingsDownloader ()
+@interface HTTPDownloader ()
 
 @property (nonatomic, strong) NSMutableData* receivedData;
 @property (nonatomic, strong) NSURLConnection *urlConnection;
 @property (nonatomic, copy) NSString* url;
 @property (nonatomic, copy) NSString* postData;
+@property (nonatomic, copy) NSString* auth;
 @end
 
-@implementation SettingsDownloader
+@implementation HTTPDownloader
 
 - (id) initSettingsDownloadFromURL:(NSString*) inURL postDate:(NSString*) inPostData
 {
@@ -52,6 +53,16 @@
     {
         self.url = inURL;
         self.postData = inPostData;
+    }
+    return self;
+}
+
+- (id) initSettingsDownloadFromURL:(NSString*) inURL postDate:(NSString*) inPostData auth:(NSString*) inAuth
+{
+    self = [self initSettingsDownloadFromURL:inURL postDate:inPostData];
+    if (self)
+    {
+        self.auth = inAuth;
     }
     return self;
 }
@@ -70,6 +81,11 @@
         [theRequest setHTTPMethod:@"POST"];
         [theRequest setValue:@"application/x-www-form-urlencoded; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
         [theRequest setHTTPBody:[self.postData dataUsingEncoding:NSUTF8StringEncoding]];
+    }
+    
+    if ([self.auth length] > 0)
+    {
+        [theRequest setValue:self.auth forHTTPHeaderField:@"Authorization"];
     }
     
     // create the connection with the request and start loading the data
@@ -115,20 +131,25 @@
                                               otherButtonTitles:@"Ok",nil];
     [alertView show];
     
-    [self.delegate onSettingsDownloadFailure];
+//    [self.delegate onSettingsDownloadFailure];
+    [self.delegate httpDownloader:self didFailWithError:error];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
     if ([self.receivedData length] > 0)
     {
-        NSString* strJSON = [[NSString alloc] initWithData:self.receivedData encoding:NSASCIIStringEncoding];
+//        NSString* strJSON = [[NSString alloc] initWithData:self.receivedData encoding:NSASCIIStringEncoding];
+            NSString* str = [[NSString alloc] initWithData:self.receivedData encoding:NSASCIIStringEncoding];
         
         //Apply downloaded settings
-        if ([strJSON length] > 0)
+        if ([str length] > 0)
         {
-            NSDictionary* settings = [[Settings sharedSettings] dictionaryForJSONString:strJSON];
-            [self.delegate onSettingsDownloadCompletion:settings];
+//            NSDictionary* settings = [[Settings sharedSettings] dictionaryForJSONString:strJSON];
+//            [self.delegate onSettingsDownloadCompletion:settings];
+            
+            [self.delegate httpDownloader:self downloaded:str];
+            
 //            [[Settings sharedSettings] snapshotCurrentSettings];
 //            [[Settings sharedSettings] storeQRSettings:settings];
 //            [[HOPSettings sharedSettings] storeSettingsFromDictionary:settings];

@@ -41,8 +41,6 @@
 #import "AppConsts.h"
 
 #import <OpenpeerSDK/HOPConversationThread.h>
-#import <OpenpeerSDK/HOPContact.h>
-#import <OpenpeerSDK/HOPRolodexContact+External.h>
 #import <OpenpeerSDK/HOPIdentityContact.h>
 #import <OpenpeerSDK/HOPPublicPeerFile.h>
 #import <OpenpeerSDK/HOPMessage.h>
@@ -51,6 +49,7 @@
 #import <OpenpeerSDK/HOPModelManager.h>
 #import <OpenpeerSDK/HOPContact.h>
 #import <OpenpeerSDK/HOPHomeUser+External.h>
+#import <OpenpeerSDK/HOPRolodexContact+External.h>
 
 @interface SessionManager()
 
