@@ -272,6 +272,7 @@
                     HOPPublicPeerFile* publicPerFile = [[HOPModelManager sharedModelManager] getPublicPeerFileForPeerURI:senderPeerURI];
                     HOPContact* coreContact = [[HOPContact alloc] initWithPeerFile:publicPerFile.peerFile];
                     [coreContact hintAboutLocation:location];
+                    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push hit location");
 
                     HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:messageText type:messageTypeText date:date session:[session.conversationThread getThreadId] rolodexContact:contact messageId:messageID];
                     
