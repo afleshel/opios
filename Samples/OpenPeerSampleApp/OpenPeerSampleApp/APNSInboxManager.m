@@ -14,6 +14,7 @@
 #import "UAUtils.h"
 #import "SBJsonParser.h"
 #import "SessionManager.h"
+#import "LoginManager.h"
 #import "Session.h"
 #import "OpenPeer.h"
 #import "MainViewController.h"
@@ -64,8 +65,11 @@
 
 - (void) handleNewMessages
 {
-    for (UAInboxMessage* message in self.arrayRichPushMessages)
-        [self loadMessage:message];
+    if ([[LoginManager sharedLoginManager] isUserFullyLoggedIn])
+    {
+        for (UAInboxMessage* message in self.arrayRichPushMessages)
+            [self loadMessage:message];
+    }
 }
 
 - (void)loadMessage:(UAInboxMessage*) inboxMessage

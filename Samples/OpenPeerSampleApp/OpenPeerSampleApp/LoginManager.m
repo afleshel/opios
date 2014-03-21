@@ -380,8 +380,6 @@
                 //Start loading contacts.
                 [[ContactsManager sharedContactsManager] loadContacts];
             }
-            
-            [[APNSInboxManager sharedAPNSInboxManager] handleNewMessages];
         }
         else
         {
