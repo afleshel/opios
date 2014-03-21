@@ -87,6 +87,7 @@
 		87272859166CC45B0089CBB6 /* LoginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87272858166CC45B0089CBB6 /* LoginManager.m */; };
 		872D7E9E1897E19A005D8335 /* QRScannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D7E9C1897E19A005D8335 /* QRScannerViewController.m */; };
 		872D7E9F1897E19A005D8335 /* QRScannerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 872D7E9D1897E19A005D8335 /* QRScannerViewController.xib */; };
+		872DC43B18D9AFED009B6005 /* APNSInboxManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 872DC43218D9AFE4009B6005 /* APNSInboxManager.m */; };
 		8730D6E31832601C008D1D37 /* VideoCallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8730D6E11832601C008D1D37 /* VideoCallViewController.m */; };
 		8730D6E41832601C008D1D37 /* VideoCallViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8730D6E21832601C008D1D37 /* VideoCallViewController.xib */; };
 		8730D6FE18328D6A008D1D37 /* iPhone_switch_camera.png in Resources */ = {isa = PBXBuildFile; fileRef = 8730D6FC18328D6A008D1D37 /* iPhone_switch_camera.png */; };
@@ -164,7 +165,7 @@
 		8731272218C670AD00507144 /* Template_CustomerSpecific_Release.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8731272118C670AD00507144 /* Template_CustomerSpecific_Release.plist */; };
 		87355FE517CCA7E3006151E7 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 87355FE417CCA7E3006151E7 /* Default.png */; };
 		87355FE917CCA8AF006151E7 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 87355FE817CCA8AF006151E7 /* Default@2x.png */; };
-		873D174318CD31E100FD88C3 /* SettingsDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 879DC66118CA0F1C00DA60C0 /* SettingsDownloader.m */; };
+		873D174318CD31E100FD88C3 /* HTTPDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 879DC66118CA0F1C00DA60C0 /* HTTPDownloader.m */; };
 		874408CA182FE873004AD8FC /* IncomingCallView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 874408C7182FE873004AD8FC /* IncomingCallView_iPhone.xib */; };
 		874408CB182FE873004AD8FC /* IncomingCallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 874408C9182FE873004AD8FC /* IncomingCallViewController.m */; };
 		874408D1182FFD6D004AD8FC /* handset_decline_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 874408D0182FFD6D004AD8FC /* handset_decline_icon.png */; };
@@ -218,7 +219,7 @@
 		879D7B9717FB1224008C78E2 /* LoggerSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 879D7B9617FB1224008C78E2 /* LoggerSettingsViewController.m */; };
 		879DC5F418C92FE800DA60C0 /* BackgroundingDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 87CCF64318C0FFDB000DF636 /* BackgroundingDelegate.m */; };
 		879DC62A18C9F77400DA60C0 /* Template_CustomerSpecific_Release.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8731272118C670AD00507144 /* Template_CustomerSpecific_Release.plist */; };
-		879DC66218CA0F1C00DA60C0 /* SettingsDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 879DC66118CA0F1C00DA60C0 /* SettingsDownloader.m */; };
+		879DC66218CA0F1C00DA60C0 /* HTTPDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 879DC66118CA0F1C00DA60C0 /* HTTPDownloader.m */; };
 		879F4393186C507000AED5AB /* OpenPeerSampleAppAPNS-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 879F4392186C507000AED5AB /* OpenPeerSampleAppAPNS-Info.plist */; };
 		87A1086A1802C116001F705D /* Logger.m in Sources */ = {isa = PBXBuildFile; fileRef = 87A108691802C116001F705D /* Logger.m */; };
 		87A1086C1802CBDC001F705D /* logger.png in Resources */ = {isa = PBXBuildFile; fileRef = 87A1086B1802CBDC001F705D /* logger.png */; };
@@ -729,6 +730,8 @@
 		872D7E9B1897E19A005D8335 /* QRScannerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRScannerViewController.h; sourceTree = "<group>"; };
 		872D7E9C1897E19A005D8335 /* QRScannerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRScannerViewController.m; sourceTree = "<group>"; };
 		872D7E9D1897E19A005D8335 /* QRScannerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QRScannerViewController.xib; sourceTree = "<group>"; };
+		872DC43118D9AFE4009B6005 /* APNSInboxManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APNSInboxManager.h; sourceTree = "<group>"; };
+		872DC43218D9AFE4009B6005 /* APNSInboxManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APNSInboxManager.m; sourceTree = "<group>"; };
 		8730D6E01832601C008D1D37 /* VideoCallViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoCallViewController.h; sourceTree = "<group>"; };
 		8730D6E11832601C008D1D37 /* VideoCallViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoCallViewController.m; sourceTree = "<group>"; };
 		8730D6E21832601C008D1D37 /* VideoCallViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VideoCallViewController.xib; sourceTree = "<group>"; };
@@ -872,8 +875,8 @@
 		87904E9618D06FD1004BC06C /* AppInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppInfoViewController.m; sourceTree = "<group>"; };
 		879D7B9517FB1224008C78E2 /* LoggerSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoggerSettingsViewController.h; sourceTree = "<group>"; };
 		879D7B9617FB1224008C78E2 /* LoggerSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = LoggerSettingsViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		879DC66018CA0F1C00DA60C0 /* SettingsDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsDownloader.h; sourceTree = "<group>"; };
-		879DC66118CA0F1C00DA60C0 /* SettingsDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsDownloader.m; sourceTree = "<group>"; };
+		879DC66018CA0F1C00DA60C0 /* HTTPDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPDownloader.h; sourceTree = "<group>"; };
+		879DC66118CA0F1C00DA60C0 /* HTTPDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPDownloader.m; sourceTree = "<group>"; };
 		879F4392186C507000AED5AB /* OpenPeerSampleAppAPNS-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "OpenPeerSampleAppAPNS-Info.plist"; sourceTree = SOURCE_ROOT; };
 		87A108681802C116001F705D /* Logger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Logger.h; sourceTree = "<group>"; };
 		87A108691802C116001F705D /* Logger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Logger.m; sourceTree = "<group>"; };
@@ -1121,6 +1124,8 @@
 				87091143184762F300E65465 /* ImageManager.m */,
 				87B5EABE18683E3B00D25C3B /* APNSManager.h */,
 				87B5EABF18683E3B00D25C3B /* APNSManager.m */,
+				872DC43118D9AFE4009B6005 /* APNSInboxManager.h */,
+				872DC43218D9AFE4009B6005 /* APNSInboxManager.m */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -1199,8 +1204,8 @@
 				8712BE8917D8CCAD00665F42 /* InfoViewController.h */,
 				879D7B9517FB1224008C78E2 /* LoggerSettingsViewController.h */,
 				879D7B9617FB1224008C78E2 /* LoggerSettingsViewController.m */,
-				879DC66018CA0F1C00DA60C0 /* SettingsDownloader.h */,
-				879DC66118CA0F1C00DA60C0 /* SettingsDownloader.m */,
+				879DC66018CA0F1C00DA60C0 /* HTTPDownloader.h */,
+				879DC66118CA0F1C00DA60C0 /* HTTPDownloader.m */,
 				87904E9518D06FD1004BC06C /* AppInfoViewController.h */,
 				87904E9618D06FD1004BC06C /* AppInfoViewController.m */,
 			);
@@ -2201,7 +2206,7 @@
 				87A1086A1802C116001F705D /* Logger.m in Sources */,
 				8730D6E31832601C008D1D37 /* VideoCallViewController.m in Sources */,
 				87272859166CC45B0089CBB6 /* LoginManager.m in Sources */,
-				879DC66218CA0F1C00DA60C0 /* SettingsDownloader.m in Sources */,
+				879DC66218CA0F1C00DA60C0 /* HTTPDownloader.m in Sources */,
 				874AD9D1166CE6540095FE33 /* AccountDelegate.m in Sources */,
 				87CCF64418C0FFDB000DF636 /* BackgroundingDelegate.m in Sources */,
 				874AD9D5166CEAFB0095FE33 /* StackDelegate.m in Sources */,
@@ -2312,13 +2317,14 @@
 				87D4BD0818675368008C2D30 /* SBJsonWriter.m in Sources */,
 				87D4BD0918675368008C2D30 /* RXMLElement.m in Sources */,
 				87D4BD0A18675368008C2D30 /* ChatViewController.m in Sources */,
-				873D174318CD31E100FD88C3 /* SettingsDownloader.m in Sources */,
+				873D174318CD31E100FD88C3 /* HTTPDownloader.m in Sources */,
 				87D4BD0B18675368008C2D30 /* ChatMessageCell.m in Sources */,
 				87D4BD0C18675368008C2D30 /* Message.m in Sources */,
 				87D4BD0D18675368008C2D30 /* IdentityLookupDelegate.m in Sources */,
 				87D4BD0E18675368008C2D30 /* AudioCallViewController.m in Sources */,
 				87D4BD0F18675368008C2D30 /* CacheDelegate.m in Sources */,
 				87D4BD1018675368008C2D30 /* ContactTableViewCell.m in Sources */,
+				872DC43B18D9AFED009B6005 /* APNSInboxManager.m in Sources */,
 				87D4BD1118675368008C2D30 /* SettingsViewController.m in Sources */,
 				87D4BD1218675368008C2D30 /* LoggerSettingsViewController.m in Sources */,
 				87D4BD1318675368008C2D30 /* InfoViewController.m in Sources */,

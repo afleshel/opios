@@ -57,13 +57,13 @@
 #import "BackgroundingDelegate.h"
 //View controllers
 #import "MainViewController.h"
-#import "SettingsDownloader.h"
+#import "HTTPDownloader.h"
 
 
 //Private methods
 @interface OpenPeer ()
 
-@property (nonatomic, strong) SettingsDownloader* settingsDownloadeer;
+@property (nonatomic, strong) HTTPDownloader* settingsDownloadeer;
 - (void) createDelegates;
 //- (void) setLogLevels;
 @end
@@ -113,7 +113,7 @@
         //Check if cookie has expired, and run download if it has
         if ([[[HOPCache sharedCache] fetchForCookieNamePath:settingsKeySettingsDownloadURL] length] == 0)
         {
-            self.settingsDownloadeer = [[SettingsDownloader alloc] initSettingsDownloadFromURL:settingsDownloadURL postDate:nil];
+            self.settingsDownloadeer = [[HTTPDownloader alloc] initSettingsDownloadFromURL:settingsDownloadURL postDate:nil];
             self.settingsDownloadeer.delegate = self;
             [self.settingsDownloadeer startDownload];
             ret = YES;
@@ -319,9 +319,10 @@
     
 }
 #pragma mark - SettingsDownloaderDelegate
-- (void)onSettingsDownloadCompletion:(NSDictionary *)inSettingsDictionary
+- (void) httpDownloader:(HTTPDownloader *)downloader downloaded:(NSString *)downloaded
 {
-    [[HOPSettings sharedSettings] storeSettingsFromDictionary:inSettingsDictionary];
+    NSDictionary* settingsDictionary = [[Settings sharedSettings] dictionaryForJSONString:downloaded];
+    [[HOPSettings sharedSettings] storeSettingsFromDictionary:settingsDictionary];
     [[OpenPeer sharedOpenPeer] finishPreSetup];
     int expiryTime = [[NSUserDefaults standardUserDefaults] integerForKey:settingsKeySettingsDownloadExpiryTime];
     [[HOPCache sharedCache] store:[[NSUserDefaults standardUserDefaults] stringForKey:settingsKeySettingsDownloadURL] expireDate:[[NSDate date] dateByAddingTimeInterval:expiryTime] cookieNamePath:settingsKeySettingsDownloadURL];

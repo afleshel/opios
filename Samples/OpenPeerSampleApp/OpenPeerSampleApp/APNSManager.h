@@ -33,17 +33,17 @@
 
 @class HOPRolodexContact;
 @class HOPContact;
-
+@class HOPMessage;
 @interface APNSManager : NSObject
 
 @property (nonatomic, strong) NSString* deviceToken;
 
 + (id) sharedAPNSManager;
 - (void) prepareUrbanAirShip;
-- (void) sendPushNotificationForDeviceToken:(NSString*) deviceToken message:(NSString*) message;
+//- (void) sendPushNotificationForDeviceToken:(NSString*) deviceToken message:(NSString*) message;
 - (void) registerDeviceToken:(NSData*) devToken;
 
 - (void) sendPushNotificationForContact:(HOPContact*) contact message:(NSString*) message missedCall:(BOOL) missedCall;
-
-- (void) handleAPNS:(NSDictionary *)apnsInfo;
+//- (void) sendRichPushNotificationForContact:(HOPContact*) contact message:(HOPMessage*) message missedCall:(BOOL) missedCall;
+- (void) sendRichPushNotificationForMessage:(HOPMessage*) message missedCall:(BOOL) missedCall;
 @end

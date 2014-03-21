@@ -29,21 +29,22 @@
  
  */
 
-#import "SettingsDownloader.h"
+#import "HTTPDownloader.h"
 #import "Settings.h"
 #import "OpenPeer.h"
 #import <OpenPeerSDK/HOPSettings.h>
 #import <OpenPeerSDK/HOPCache.h>
 
-@interface SettingsDownloader ()
+@interface HTTPDownloader ()
 
 @property (nonatomic, strong) NSMutableData* receivedData;
 @property (nonatomic, strong) NSURLConnection *urlConnection;
 @property (nonatomic, copy) NSString* url;
 @property (nonatomic, copy) NSString* postData;
+@property (nonatomic, copy) NSString* auth;
 @end
 
-@implementation SettingsDownloader
+@implementation HTTPDownloader
 
 - (id) initSettingsDownloadFromURL:(NSString*) inURL postDate:(NSString*) inPostData
 {
@@ -56,9 +57,20 @@
     return self;
 }
 
-//- (void) downloadFromURL:(NSString*) url postDate:(NSString*) postData
-- (void)startDownload
+- (id) initSettingsDownloadFromURL:(NSString*) inURL postDate:(NSString*) inPostData auth:(NSString*) inAuth
 {
+    self = [self initSettingsDownloadFromURL:inURL postDate:inPostData];
+    if (self)
+    {
+        self.auth = inAuth;
+    }
+    return self;
+}
+
+//- (void) downloadFromURL:(NSString*) url postDate:(NSString*) postData
+- (BOOL)startDownload
+{
+    BOOL ret = YES;
     NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:self.url]
                                                             cachePolicy:NSURLRequestUseProtocolCachePolicy
                                                         timeoutInterval:20.0];
@@ -72,6 +84,11 @@
         [theRequest setHTTPBody:[self.postData dataUsingEncoding:NSUTF8StringEncoding]];
     }
     
+    if ([self.auth length] > 0)
+    {
+        [theRequest setValue:self.auth forHTTPHeaderField:@"Authorization"];
+    }
+    
     // create the connection with the request and start loading the data
     self.urlConnection = [[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
     if (!self.urlConnection)
@@ -79,13 +96,18 @@
         // Release the receivedData object.
         self.receivedData = nil;
         
-        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Downloading login settings failed!"
-                                                            message:@"Please, ckeck you internet connection and try to scan QR code again or proceed login with default values."
-                                                           delegate:nil
-                                                  cancelButtonTitle:nil
-                                                  otherButtonTitles:@"Ok",nil];
-        [alertView show];
+        ret = NO;
+        
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Start downloading failed for url %@",self.url);
+//        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Downloading login settings failed!"
+//                                                            message:@"Please, ckeck you internet connection and try to scan QR code again or proceed login with default values."
+//                                                           delegate:nil
+//                                                  cancelButtonTitle:nil
+//                                                  otherButtonTitles:@"Ok",nil];
+//        [alertView show];
     }
+    
+    return ret;
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
@@ -115,20 +137,25 @@
                                               otherButtonTitles:@"Ok",nil];
     [alertView show];
     
-    [self.delegate onSettingsDownloadFailure];
+//    [self.delegate onSettingsDownloadFailure];
+    [self.delegate httpDownloader:self didFailWithError:error];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
     if ([self.receivedData length] > 0)
     {
-        NSString* strJSON = [[NSString alloc] initWithData:self.receivedData encoding:NSASCIIStringEncoding];
+//        NSString* strJSON = [[NSString alloc] initWithData:self.receivedData encoding:NSASCIIStringEncoding];
+            NSString* str = [[NSString alloc] initWithData:self.receivedData encoding:NSASCIIStringEncoding];
         
         //Apply downloaded settings
-        if ([strJSON length] > 0)
+        if ([str length] > 0)
         {
-            NSDictionary* settings = [[Settings sharedSettings] dictionaryForJSONString:strJSON];
-            [self.delegate onSettingsDownloadCompletion:settings];
+//            NSDictionary* settings = [[Settings sharedSettings] dictionaryForJSONString:strJSON];
+//            [self.delegate onSettingsDownloadCompletion:settings];
+            
+            [self.delegate httpDownloader:self downloaded:str];
+            
 //            [[Settings sharedSettings] snapshotCurrentSettings];
 //            [[Settings sharedSettings] storeQRSettings:settings];
 //            [[HOPSettings sharedSettings] storeSettingsFromDictionary:settings];

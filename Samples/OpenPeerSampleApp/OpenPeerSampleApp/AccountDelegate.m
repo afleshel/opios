@@ -39,6 +39,7 @@
 #import "WebLoginViewController.h"
 #import "OpenpeerSDK/HOPLogger.h"
 #import "OpenpeerSDK/HOPCache.h"
+#import "APNSInboxManager.h"
 
 @interface AccountDelegate()
 @property (nonatomic, strong) WebLoginViewController* webLoginViewController;
@@ -115,6 +116,7 @@
                 
             case HOPAccountStateReady:
                 [[LoginManager sharedLoginManager] onUserLoggedIn];
+                [[APNSInboxManager sharedAPNSInboxManager] handleNewMessages];
                 break;
                 
             case HOPAccountStateShuttingDown:

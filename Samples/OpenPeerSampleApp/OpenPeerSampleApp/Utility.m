@@ -457,4 +457,22 @@ static const short _base64DecodingTable[256] = {
     
     return ret;
 }
+
++ (NSString *) stringFromDate: (NSDate*) date
+{
+    NSDateFormatter *timeFormatter = [[NSDateFormatter alloc] init];
+    [timeFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+    [timeFormatter setDateFormat:@"yyyy:MM:dd HH:mm"];
+    NSString* ret = [timeFormatter stringFromDate:date];
+    return ret;
+}
+
++ (NSDate *) dateFromTimeString: (NSString*) timeStr
+{
+    NSDateFormatter *timeFormatter = [[NSDateFormatter alloc] init];
+    [timeFormatter setDateFormat:@"yyyy:MM:dd HH:mm"];
+    [timeFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+    NSDate *date = [timeFormatter dateFromString:timeStr];
+    return date;
+}
 @end
