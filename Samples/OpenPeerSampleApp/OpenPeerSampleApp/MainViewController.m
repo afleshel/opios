@@ -423,9 +423,12 @@
 - (void) updateSessionViewControllerId:(NSString*) oldSessionId newSesionId:(NSString*) newSesionId
 {
     SessionViewController_iPhone* svc = [self.sessionViewControllersDictionary objectForKey:oldSessionId];
-    [self removeSessionViewControllerForSession:oldSessionId];
-    [self.sessionViewControllersDictionary setObject:svc forKey:newSesionId];
-    [svc.chatViewController updateFetchControllerForSession:newSesionId];
+    if (svc)
+    {
+        [self.sessionViewControllersDictionary setObject:svc forKey:newSesionId];
+        //[self removeSessionViewControllerForSession:oldSessionId];
+        [svc.chatViewController updateFetchControllerForSession:newSesionId];
+    }
 }
 /**
  Prepare specific session vire controller for incoming call
