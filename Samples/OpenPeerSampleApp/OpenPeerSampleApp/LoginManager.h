@@ -59,4 +59,6 @@
 
 - (void) preloadLoginWebPage;
 - (void)clearIdentities;
+
+- (BOOL) isUserFullyLoggedIn;
 @end

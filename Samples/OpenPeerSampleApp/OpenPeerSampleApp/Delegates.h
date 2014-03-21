@@ -30,6 +30,7 @@
  */
 
 @class WebLoginViewController;
+@class HTTPDownloader;
 
 @protocol ChatViewControllerDelegate <NSObject>
 
@@ -62,9 +63,12 @@
 - (void) onAccountLoginWebViewClose:(WebLoginViewController*) webLoginViewController;
 @end
 
-@protocol SettingsDownloaderDelegate <NSObject>
+@protocol HTTPDownloaderDelegate <NSObject>
 
-- (void) onSettingsDownloadCompletion:(NSDictionary*) inSettingsDictionary;
-- (void) onSettingsDownloadFailure;
+- (void) httpDownloader:(HTTPDownloader*) downloader downloaded:(NSString*) downloaded;
+- (void) httpDownloader:(HTTPDownloader *) downloader didFailWithError:(NSError *)error;
+
+//- (void) onSettingsDownloadCompletion:(NSDictionary*) inSettingsDictionary;
+//- (void) onSettingsDownloadFailure;
 
 @end

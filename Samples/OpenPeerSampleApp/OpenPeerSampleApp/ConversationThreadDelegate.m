@@ -105,17 +105,20 @@
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Conversation thread message with id %@ delivery state has changed to: %@",messageID, [HOPConversationThread stringForMessageDeliveryState:messageDeliveryStates]);
 }
 
-- (void) onConversationThreadPushMessage:(HOPConversationThread*) conversationThread messageID:(NSString*) messageID contact:(HOPContact*) contact
+- (void) onConversationThreadPushMessage:(HOPConversationThread*) conversationThread messageID:(NSString*) messageID contact:(HOPContact*) coreContact
 {
 #ifdef APNS_ENABLED
-    NSArray* contacts = [conversationThread getContacts];
-    if ([contacts count] > 0)
+    //NSArray* contacts = [conversationThread getContacts];
+    //if ([contacts count] > 0)
+    if (coreContact)
     {
         BOOL missedCall = NO;
         HOPMessage* message = [conversationThread getMessageForID:messageID];
-        HOPContact* coreContact = [contacts objectAtIndex:0];
-        if (coreContact)
+        //HOPContact* coreContact = [contacts objectAtIndex:0];
+        if (message)
         {
+            message.contact = coreContact;
+            
             HOPRolodexContact* contact  = [[[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:[coreContact getPeerURI]] objectAtIndex:0];
             if (contact)
             {
@@ -123,16 +126,20 @@
                 //if ([message.type isEqualToString:messageTypeSystem])
                 if ([[MessageManager sharedMessageManager] getTypeForSystemMessage:message] == SystemMessage_CheckAvailability)
                 {
-                    messageText  = [NSString stringWithFormat:@"%@ \n %@",[[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser] getFullName],@"Missed call"];
+                    messageText  = [NSString stringWithFormat:@"%@  %@",[[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser] getFullName],@"Missed call"];
                     missedCall = YES;
+                    [[APNSManager sharedAPNSManager] sendPushNotificationForContact:coreContact message:messageText missedCall:missedCall];
                 }
                 else
                 {
-                    NSString* msg = [message.text length] > 22 ? [NSString stringWithFormat:@"%@...",[message.text substringToIndex:22]] : message.text;
+                    //NSString* msg = [message.text length] > 22 ? [NSString stringWithFormat:@"%@...",[message.text substringToIndex:22]] : message.text;
                     
-                    messageText  = [NSString stringWithFormat:@"%@ \n %@",[[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser] getFullName],msg];
+                    messageText  = message.text;//[NSString stringWithFormat:@"%@ \n %@",[[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser] getFullName],msg];
+                    [[APNSManager sharedAPNSManager]sendRichPushNotificationForMessage:message missedCall:NO];
                 }
-                [[APNSManager sharedAPNSManager] sendPushNotificationForContact:coreContact message:messageText missedCall:missedCall];
+                //[[APNSManager sharedAPNSManager] sendPushNotificationForContact:coreContact message:messageText missedCall:missedCall];
+                //[[APNSManager sharedAPNSManager]sendRichPushNotificationForContact:coreContact message:messageText messageId:messageID missedCall:missedCall];
+//                [[APNSManager sharedAPNSManager]sendRichPushNotificationForMessage:message missedCall:NO];
             }
         }
     }

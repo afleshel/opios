@@ -49,6 +49,7 @@
 #import "ContactsViewController.h"
 #import "ActivityIndicatorViewController.h"
 #import "Settings.h"
+#import "APNSInboxManager.h"
 
 @interface IdentityDelegate()
 {
@@ -197,6 +198,7 @@
                 
             case HOPIdentityStateReady:
                 [self.loginDelegate onIdentityLoginFinished];
+                [[APNSInboxManager sharedAPNSInboxManager] handleNewMessages];
                 if ([[LoginManager sharedLoginManager] isLogin] || [[LoginManager sharedLoginManager] isAssociation])
                     [[LoginManager sharedLoginManager] onIdentityAssociationFinished:identity];
                 break;

@@ -54,6 +54,7 @@
 - (Session*) getSessionForContact:(HOPRolodexContact*) contact;
 - (Session*) getSessionForSessionId:(NSString*) sessionId;
 
+- (void)setValidSession:(Session *)inSession newSessionId:(NSString *)newSessionId oldSessionId:(NSString *)oldSessionId;
 
 - (void) makeCallForSession:(Session*) inSession includeVideo:(BOOL) includeVideo isRedial:(BOOL) isRedial;
 - (void) answerCallForSession:(Session*) inSession;

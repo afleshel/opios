@@ -52,4 +52,6 @@
 + (BOOL) hasCamera;
 + (BOOL) isValidURL: (NSString *) candidate;
 + (BOOL) isValidJSON:(NSString*) json;
++ (NSString *) stringFromDate: (NSDate*) date;
++ (NSDate *) dateFromTimeString: (NSString*) timeStr;
 @end
