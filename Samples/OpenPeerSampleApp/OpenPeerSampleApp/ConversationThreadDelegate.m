@@ -128,16 +128,18 @@
                 {
                     messageText  = [NSString stringWithFormat:@"%@  %@",[[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser] getFullName],@"Missed call"];
                     missedCall = YES;
+                    [[APNSManager sharedAPNSManager] sendPushNotificationForContact:coreContact message:messageText missedCall:missedCall];
                 }
                 else
                 {
                     //NSString* msg = [message.text length] > 22 ? [NSString stringWithFormat:@"%@...",[message.text substringToIndex:22]] : message.text;
                     
                     messageText  = message.text;//[NSString stringWithFormat:@"%@ \n %@",[[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser] getFullName],msg];
+                    [[APNSManager sharedAPNSManager]sendRichPushNotificationForMessage:message missedCall:NO];
                 }
                 //[[APNSManager sharedAPNSManager] sendPushNotificationForContact:coreContact message:messageText missedCall:missedCall];
                 //[[APNSManager sharedAPNSManager]sendRichPushNotificationForContact:coreContact message:messageText messageId:messageID missedCall:missedCall];
-                [[APNSManager sharedAPNSManager]sendRichPushNotificationForMessage:message missedCall:NO];
+//                [[APNSManager sharedAPNSManager]sendRichPushNotificationForMessage:message missedCall:NO];
             }
         }
     }

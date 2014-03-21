@@ -68,8 +68,9 @@
 }
 
 //- (void) downloadFromURL:(NSString*) url postDate:(NSString*) postData
-- (void)startDownload
+- (BOOL)startDownload
 {
+    BOOL ret = YES;
     NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:self.url]
                                                             cachePolicy:NSURLRequestUseProtocolCachePolicy
                                                         timeoutInterval:20.0];
@@ -95,13 +96,18 @@
         // Release the receivedData object.
         self.receivedData = nil;
         
-        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Downloading login settings failed!"
-                                                            message:@"Please, ckeck you internet connection and try to scan QR code again or proceed login with default values."
-                                                           delegate:nil
-                                                  cancelButtonTitle:nil
-                                                  otherButtonTitles:@"Ok",nil];
-        [alertView show];
+        ret = NO;
+        
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Start downloading failed for url %@",self.url);
+//        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Downloading login settings failed!"
+//                                                            message:@"Please, ckeck you internet connection and try to scan QR code again or proceed login with default values."
+//                                                           delegate:nil
+//                                                  cancelButtonTitle:nil
+//                                                  otherButtonTitles:@"Ok",nil];
+//        [alertView show];
     }
+    
+    return ret;
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response

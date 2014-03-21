@@ -38,6 +38,7 @@
 #import "BackgroundingDelegate.h"
 #ifdef APNS_ENABLED
 #import "APNSManager.h"
+#import "APNSInboxManager.h"
 #import "UAInboxPushHandler.h"
 #import "UAPush.h"
 #endif
@@ -67,7 +68,7 @@
     
     if ([apnsInfo count] > 0)
     {
-        [[APNSManager sharedAPNSManager] handleAPNS:apnsInfo];
+        [[APNSInboxManager sharedAPNSInboxManager] handleAPNS:apnsInfo];
     }
 #endif
     return YES;
@@ -167,20 +168,20 @@
     
     if ([apnsInfo count] > 0)
     {
-        [[APNSManager sharedAPNSManager] handleAPNS:apnsInfo];
+        [[APNSInboxManager sharedAPNSInboxManager] handleAPNS:apnsInfo];
     }
 }
 
 /*- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     // Notify UAInbox to fetch any new messages if the notification contains a rich application page id.
-    //if (application.applicationState != UIApplicationStateBackground)
+    if (application.applicationState != UIApplicationStateBackground)
     {
         [UAInboxPushHandler handleNotification:userInfo];
     }
     
     // Notify UAPush that a push came in with the completion handler
-    [[UAPush shared] handleNotification:userInfo applicationState:application.applicationState fetchCompletionHandler:completionHandler];
+//    [[UAPush shared] handleNotification:userInfo applicationState:application.applicationState fetchCompletionHandler:completionHandler];
 }*/
 
 - (void)handleNotification:(NSDictionary *)notification applicationState:(UIApplicationState)state

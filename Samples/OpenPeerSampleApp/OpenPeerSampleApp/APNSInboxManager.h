@@ -17,4 +17,5 @@
 
 - (void) setup;
 - (void) handleNewMessages;
+- (void) handleAPNS:(NSDictionary *)apnsInfo;
 @end

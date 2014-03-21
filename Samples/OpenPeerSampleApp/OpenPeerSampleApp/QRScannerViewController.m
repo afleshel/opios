@@ -202,7 +202,15 @@
     self.settingsDownloader = nil;
     self.settingsDownloader = [[HTTPDownloader alloc] initSettingsDownloadFromURL:jsonURL postDate:postData];
     self.settingsDownloader.delegate = self;
-    [self.settingsDownloader startDownload];
+    if (![self.settingsDownloader startDownload])
+    {
+        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Downloading login settings failed!"
+                                                            message:@"Please, ckeck you internet connection and try to scan QR code again or proceed login with default values."
+                                                           delegate:nil
+                                                  cancelButtonTitle:nil
+                                                  otherButtonTitles:@"Ok",nil];
+        [alertView show];
+    }
 }
 
 

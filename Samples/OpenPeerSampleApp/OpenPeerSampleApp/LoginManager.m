@@ -433,6 +433,25 @@
     return ret;
 }
 
+- (BOOL) isUserFullyLoggedIn
+{
+    BOOL ret = NO;
+    
+    ret = [[HOPAccount sharedAccount] getState].state == HOPAccountStateReady;
+    if (ret)
+    {
+        NSArray* identities = [[HOPAccount sharedAccount] getAssociatedIdentities];
+        for (HOPIdentity* identity in identities)
+        {
+            if ([identity getState].state != HOPIdentityStateReady)
+            {
+                ret = NO;
+                break;
+            }
+        }
+    }
+    return ret;
+}
 #pragma UIAlertViewDelegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {

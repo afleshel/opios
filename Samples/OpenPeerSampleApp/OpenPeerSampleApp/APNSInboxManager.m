@@ -23,6 +23,8 @@
 #import <OpenpeerSDK/HOPContact.h>
 #import <OpenpeerSDK/HOPRolodexContact+External.h>
 #import <OpenpeerSDK/HOPConversationThread.h>
+#import <OpenpeerSDK/HOPPublicPeerFile.h>
+
 @interface APNSInboxManager ()
 
 @property (strong, nonatomic) NSMutableArray* arrayMessageDownloaders;
@@ -68,6 +70,7 @@
 
 - (void)loadMessage:(UAInboxMessage*) inboxMessage
 {
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Start downloading content for rich push message %@",inboxMessage.messageID);
     HTTPDownloader* downloader = [[HTTPDownloader alloc] initSettingsDownloadFromURL:inboxMessage.messageBodyURL.absoluteString postDate:nil auth:[UAUtils userAuthHeaderString]];
     downloader.delegate = self;
     [downloader startDownload];
@@ -77,17 +80,18 @@
 #pragma mark - UAInboxPushHandlerDelegate
 - (void)richPushNotificationArrived:(NSDictionary *)notification
 {
-
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Received rich push notification id:%@",[notification objectForKey:@"_uamaid"]);
 }
 
 - (void)applicationLaunchedWithRichPushNotification:(NSDictionary *)notification
 {
-
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Allication launched with rich push notification id:%@",[notification objectForKey:@"_uamaid"]);
 }
 
 
 - (void)richPushMessageAvailable:(UAInboxMessage *)richPushMessage
 {
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push message is available id:%@",richPushMessage.messageID);
     if ([[HOPAccount sharedAccount] getState].state == HOPAccountStateReady)
         [self loadMessage:richPushMessage];
     else
@@ -97,10 +101,24 @@
 
 - (void)launchRichPushMessageAvailable:(UAInboxMessage *)richPushMessage
 {
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Launch rich push message is available id:%@",richPushMessage.messageID);
     if ([[HOPAccount sharedAccount] getState].state == HOPAccountStateReady)
         [self loadMessage:richPushMessage];
     else
         [self.arrayRichPushMessages addObject:richPushMessage];
+}
+
+- (void) handleAPNS:(NSDictionary *)apnsInfo
+{
+    NSDictionary *apsInfo = [apnsInfo objectForKey:@"aps"];
+    NSString *alert = [apsInfo objectForKey:@"alert"];
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Received Push Alert: %@", alert);
+    NSString *peerURI = [apnsInfo objectForKey:@"peerURI"];
+    NSString *locationID = [apnsInfo objectForKey:@"location"];
+    
+    HOPPublicPeerFile* publicPerFile = [[HOPModelManager sharedModelManager] getPublicPeerFileForPeerURI:peerURI];
+    HOPContact* contact = [[HOPContact alloc] initWithPeerFile:publicPerFile.peerFile];
+    [contact hintAboutLocation:locationID];
 }
 
 #pragma mark - UAPushNotificationDelegate
@@ -216,6 +234,7 @@
 #pragma mark - HTTPDownloaderDelegate
 - (void) httpDownloader:(HTTPDownloader*) downloader downloaded:(NSString*) downloaded
 {
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push content is downloaded");
     SBJsonParser* parser = [[SBJsonParser alloc] init];
     NSDictionary* richPushDictionary = [parser objectWithString: downloaded];
     
@@ -241,18 +260,33 @@
                 NSString* location = [richPushDictionary objectForKey:@"location"];
                 NSNumber* timeInterval = [richPushDictionary objectForKey:@"date"];
                 NSDate* date = [NSDate dateWithTimeIntervalSince1970:timeInterval.doubleValue];
-                HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:messageText type:messageTypeText date:date session:[session.conversationThread getThreadId] rolodexContact:contact messageId:messageID];
                 
-                if (messageObj)
+                if ([messageID length] > 0 && [messageText length] > 0 && [location length] > 0 && date)
                 {
-                    [session.unreadMessageArray addObject:messageObj];
+                    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push content for message %@ is ready.",messageID);
                     
-                    //If session view controller with message sender is not yet shown, show it
-                    [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForSession:session forIncomingCall:NO forIncomingMessage:YES];
+                    HOPPublicPeerFile* publicPerFile = [[HOPModelManager sharedModelManager] getPublicPeerFileForPeerURI:senderPeerURI];
+                    HOPContact* coreContact = [[HOPContact alloc] initWithPeerFile:publicPerFile.peerFile];
+                    [coreContact hintAboutLocation:location];
+
+                    HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:messageText type:messageTypeText date:date session:[session.conversationThread getThreadId] rolodexContact:contact messageId:messageID];
+                    
+                    
+                    if (messageObj)
+                    {
+                        [session.unreadMessageArray addObject:messageObj];
+                        
+                        //If session view controller with message sender is not yet shown, show it
+                        [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForSession:session forIncomingCall:NO forIncomingMessage:YES];
+                    }
+                    else
+                    {
+                        OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"%@ message not saved - message id %@ - session id %@",messageID,[session.conversationThread getThreadId]);
+                    }
                 }
                 else
                 {
-                    OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"%@ message no saved - message id %@ - session id %@",messageID,[session.conversationThread getThreadId]);
+                    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push content is corrupted");
                 }
             }
         }
@@ -262,6 +296,7 @@
 }
 - (void) httpDownloader:(HTTPDownloader *) downloader didFailWithError:(NSError *)error
 {
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push content download has failed.");
     return;
 }
 @end
