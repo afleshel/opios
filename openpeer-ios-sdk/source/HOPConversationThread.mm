@@ -108,8 +108,12 @@ using namespace openpeer::core;
         elementPtr = IHelper::createElement([profileBundle UTF8String]);
     else
         elementPtr = zsLib::XML::ElementPtr();
-    
-    IConversationThreadPtr tempConversationThreadPtr = IConversationThread::create([[HOPAccount sharedAccount] getAccountPtr], elementPtr);
+
+    core::IdentityContactList empty;
+#define WARNING_FIX_ME 1
+#define WARNING_FIX_ME 2
+
+    IConversationThreadPtr tempConversationThreadPtr = IConversationThread::create([[HOPAccount sharedAccount] getAccountPtr], empty);
     
     if (tempConversationThreadPtr)
     {
@@ -202,7 +206,9 @@ using namespace openpeer::core;
     NSString* ret = nil;
     if (conversationThreadPtr)
     {
-        ret = [NSString stringWithUTF8String:IHelper::convertToString(conversationThreadPtr->getProfileBundle([contact getContactPtr]))];
+#define WARNING_FIX_ME 1
+#define WARNING_FIX_ME 2
+        ret = @"";
     }
     else
     {
@@ -239,8 +245,7 @@ using namespace openpeer::core;
             {
                 ContactProfileInfo contactInfo;
                 contactInfo.mContact = [contact getContactPtr];
-                contactInfo.mProfileBundleEl = zsLib::XML::ElementPtr();
-                
+
                 contactList.push_back(contactInfo);
             }
 
@@ -280,7 +285,7 @@ using namespace openpeer::core;
 {
     if(conversationThreadPtr)
     {
-        conversationThreadPtr->sendMessage([messageID UTF8String], [messageType UTF8String], [message UTF8String]);
+        conversationThreadPtr->sendMessage([messageID UTF8String], [messageType UTF8String], [message UTF8String], false);
     }
     else
     {
@@ -293,7 +298,7 @@ using namespace openpeer::core;
 {
     if(conversationThreadPtr)
     {
-        conversationThreadPtr->sendMessage([message.messageID UTF8String], [message.type UTF8String], [message.text UTF8String]);
+        conversationThreadPtr->sendMessage([message.messageID UTF8String], [message.type UTF8String], [message.text UTF8String], false);
     }
     else
     {
