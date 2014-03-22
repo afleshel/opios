@@ -254,7 +254,7 @@
     //Set log levels and start logging
     [Logger startAllSelectedLoggers];
 
-    [[HOPBackgrounding sharedBackgrounding] subscribeDelegate:self.backgroundingDelegate phase:4];
+    [[HOPBackgrounding sharedBackgrounding] subscribeDelegate:self.backgroundingDelegate phase:((NSNumber*)[[NSUserDefaults standardUserDefaults]objectForKey:settingsKeyBackgroundingPhaseRichPush]).unsignedLongValue];
     if (![[HOPStack sharedStack] isStackReady])
     {
         //Init openpeer stack and set created delegates
