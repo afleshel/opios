@@ -29,6 +29,7 @@
  
  */
 
+
 #import "APNSManager.h"
 #import "APNSInboxManager.h"
 #import "UAirship.h"
@@ -38,6 +39,8 @@
 #import "AppConsts.h"
 #import "SBJsonParser.h"
 #import "Utility.h"
+#import "OpenPeer.h"
+#import "BackgroundingDelegate.h"
 
 #import <OpenPeerSDK/HOPRolodexContact.h>
 #import <OpenPeerSDK/HOPContact.h>
@@ -46,6 +49,7 @@
 #import <OpenPeerSDK/HOPPublicPeerFile.h>
 #import <OpenPeerSDK/HOPHomeUser+External.h>
 #import <OpenPeerSDK/HOPMessage.h>
+#import <OpenPeerSDK/HOPBackgrounding.h>
 
 #define  timeBetweenPushNotificationsInSeconds 1
 
@@ -85,7 +89,8 @@
     self = [super init];
     if (self)
     {
-        
+        self.pushesToSend = 0;
+        self.goingToBackground = NO;
 #ifdef DEBUG
         self.urbanAirshipAppKey = [[NSUserDefaults standardUserDefaults] stringForKey: settingsKeyUrbanAirShipDevelopmentAppKey];
         self.urbanAirshipAppSecret = [[NSUserDefaults standardUserDefaults] stringForKey: settingsKeyUrbanAirShipMasterAppSecretDev];
@@ -140,6 +145,10 @@
         
         [NSURLConnection connectionWithRequest:request delegate:self];
         OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push is sent");
+        @synchronized (self)
+        {
+            self.pushesToSend++;
+        }
     }
 }
 
@@ -180,6 +189,15 @@
 {
     NSHTTPURLResponse * res = (NSHTTPURLResponse *) response;
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Response code %i: response: %@",res.statusCode, res);
+    @synchronized (self)
+    {
+        self.pushesToSend--;
+        if (self.goingToBackground)
+        {
+            [[[[OpenPeer sharedOpenPeer] backgroundingDelegate] backgroundingNotifier] destroy];
+            [[[OpenPeer sharedOpenPeer] backgroundingDelegate] setBackgroundingNotifier:nil];
+        }
+    }
 }
 
 - (void) sendPushNotificationForContact:(HOPContact*) contact message:(NSString*) message missedCall:(BOOL) missedCall
@@ -287,6 +305,14 @@
     
     return ret;
 }
-
+- (BOOL) areTherePushesForSending
+{
+    BOOL ret = NO;
+    @synchronized(self)
+    {
+        ret = self.pushesToSend > 0;
+    }
+    return ret;
+}
 
 @end

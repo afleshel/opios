@@ -41,7 +41,7 @@
 #import "ContactsManager.h"
 #import "SessionManager.h"
 #import "UUIDManager.h"
-#import "APNSInboxManager.h"
+//∫#import "APNSInboxManager.h"
 //SDK
 #import <OpenPeerSDK/HOPAccount.h>
 #import <OpenPeerSDK/HOPIdentity.h>
@@ -52,10 +52,12 @@
 #import <OpenpeerSDK/HOPIdentityContact.h>
 #import <OpenpeerSDK/HOPRolodexContact.h>
 #import <OpenpeerSDK/HOPStack.h>
+#import <OpenpeerSDK/HOPBackgrounding.h>
 //Delegates
 #import "StackDelegate.h"
 #import "IdentityDelegate.h"
 #import "AccountDelegate.h"
+#import "BackgroundingDelegate.h"
 //View Controllers
 #import "MainViewController.h"
 #import "ActivityIndicatorViewController.h"
@@ -148,6 +150,8 @@
     
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane,@"Remove identity web view controllers");
     [[[OpenPeer sharedOpenPeer] identityDelegate] removeAllWebViewControllers];
+    
+    [[[[OpenPeer sharedOpenPeer] backgroundingDelegate] backgroundingSubscription] cancel];
     
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane,@"Clear all session objects");
     [[SessionManager sharedSessionManager] clearAllSessions];

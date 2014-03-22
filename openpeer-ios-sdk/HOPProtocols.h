@@ -147,8 +147,20 @@
 */
 @end
 
-@protocol HOPBackgroundingDelegate <NSObject>
+@protocol HOPBackgroundingCompletionDelegate <NSObject>
 
 - (void) onBackgroundingReady;
+
+@end
+
+@class HOPBackgroundingSubscription;
+@class HOPBackgroundingNotifier;
+
+@protocol HOPBackgroundingDelegate <NSObject>
+
+- (void) onBackgroundingGoingToBackground:(HOPBackgroundingSubscription*) subscription notifier:(HOPBackgroundingNotifier*)notifier;
+
+- (void) onBackgroundingGoingToBackgroundNow:(HOPBackgroundingSubscription*) subscription;
+- (void) onBackgroundingReturningFromBackground:(HOPBackgroundingSubscription*) subscription;
 
 @end
