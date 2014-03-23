@@ -80,6 +80,7 @@ public:
     virtual void onBackgroundingGoingToBackground(IBackgroundingSubscriptionPtr subscription,IBackgroundingNotifierPtr notifier);
     virtual void onBackgroundingGoingToBackgroundNow(IBackgroundingSubscriptionPtr subscription);
     virtual void onBackgroundingReturningFromBackground(IBackgroundingSubscriptionPtr subscription);
+    virtual void onBackgroundingApplicationWillQuit(IBackgroundingSubscriptionPtr subscription);
 };
 
 

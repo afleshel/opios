@@ -79,4 +79,11 @@
     [self.backgroundingNotifier destroy];
     self.backgroundingNotifier = nil;
 }
+
+- (void) onBackgroundingApplicationWillQuit:(HOPBackgroundingSubscription*) subscription
+{
+  [self.backgroundingNotifier destroy];
+  self.backgroundingNotifier = nil;
+}
+
 @end

@@ -112,6 +112,13 @@ void OpenPeerBackgroundingDelegate::onBackgroundingReturningFromBackground(IBack
     [backgroundingDelegate onBackgroundingReturningFromBackground:[[OpenPeerStorageManager sharedStorageManager] backgroundingSubscription]];
 }
 
-
+void OpenPeerBackgroundingDelegate::onBackgroundingApplicationWillQuit(IBackgroundingSubscriptionPtr subscription)
+{
+  if (![[OpenPeerStorageManager sharedStorageManager] backgroundingSubscription])
+  {
+    [[OpenPeerStorageManager sharedStorageManager] setBackgroundingSubscription:[[HOPBackgroundingSubscription alloc] initWithBackgroundingSubscriptionPtr:subscription]];
+  }
+  [backgroundingDelegate onBackgroundingApplicationWillQuit:[[OpenPeerStorageManager sharedStorageManager] backgroundingSubscription]];
+}
 
 

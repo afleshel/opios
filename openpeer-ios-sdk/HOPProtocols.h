@@ -162,5 +162,6 @@
 
 - (void) onBackgroundingGoingToBackgroundNow:(HOPBackgroundingSubscription*) subscription;
 - (void) onBackgroundingReturningFromBackground:(HOPBackgroundingSubscription*) subscription;
+- (void) onBackgroundingApplicationWillQuit:(HOPBackgroundingSubscription*) subscription;
 
 @end
