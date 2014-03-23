@@ -16,6 +16,8 @@
 	<string>tcp-logger-v1-beta-1-i.hcs.io:8055</string>
 	<key>localTelnetLoggerPort</key>
 	<string>59999</string>
+	<key>applicationSettingsBackgroundingPhaseRichPush</key>
+	<integer>4</integer>
 	<key>openpeer/core/core-thread-priority</key>
 	<string>normal</string>
 	<key>openpeer/core/media-thread-priority</key>
@@ -54,8 +56,6 @@
 	<string>normal</string>
 	<key>openpeer/services/backgrounding-phase-ice-socket-session</key>
 	<integer>3</integer>
-	<key>openpeer/services/backgrounding-phase-rich-push</key>
-	<integer>4</integer>
 	<key>openpeer/services/backgrounding-phase-turn</key>
 	<integer>3</integer>
 	<key>openpeer/services/backgrounding-phase-tcp-messaging</key>

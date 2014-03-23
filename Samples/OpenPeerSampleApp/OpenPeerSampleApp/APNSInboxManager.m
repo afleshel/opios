@@ -89,7 +89,7 @@
 
 - (void)applicationLaunchedWithRichPushNotification:(NSDictionary *)notification
 {
-    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Allication launched with rich push notification id:%@",[notification objectForKey:@"_uamaid"]);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Apllication launched with rich push notification id:%@",[notification objectForKey:@"_uamaid"]);
 }
 
 

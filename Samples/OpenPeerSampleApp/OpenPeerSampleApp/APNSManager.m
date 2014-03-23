@@ -117,9 +117,9 @@
     
     [UAirship takeOff:config];
     
-    [UAPush shared].notificationTypes = (UIRemoteNotificationTypeBadge |
-                                         UIRemoteNotificationTypeSound |
-                                         UIRemoteNotificationTypeAlert);
+    //[UAPush shared].notificationTypes = (UIRemoteNotificationTypeBadge |UIRemoteNotificationTypeSound |UIRemoteNotificationTypeAlert);
+    
+    [UAPush shared].notificationTypes = (UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert);
     [[UAPush shared] registerForRemoteNotifications];
     
     // Print out the application configuration for debugging (optional)
