@@ -50,6 +50,8 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 using namespace openpeer;
 using namespace openpeer::core;
 
+#define removeOnNextRunExpireTimeInterval  31536000
+
 @interface HOPModelManager()
 
 @property (nonatomic, copy) NSString* cachePath;
@@ -687,7 +689,14 @@ using namespace openpeer::core;
             
             cacheData.data = data;
             cacheData.path = path;
-            cacheData.expire = [NSNumber numberWithDouble:[expires timeIntervalSince1970]];
+            if (expires == nil)
+            {
+                NSDate* expireDate = [[NSDate date] dateByAddingTimeInterval:removeOnNextRunExpireTimeInterval];
+                cacheData.expire = [NSNumber numberWithDouble:[expireDate timeIntervalSince1970]];
+                cacheData.removeOnNextRun = [NSNumber numberWithBool:YES];
+            }
+            else
+                cacheData.expire = [NSNumber numberWithDouble:[expires timeIntervalSince1970]];
              
              [self saveBackgroundContext];
          }];
@@ -711,7 +720,7 @@ using namespace openpeer::core;
 {
     [self.backgroundManagedObjectContext performBlock:
      ^{
-        NSArray* objectsToDelete = [self getResultsInBackgroundForEntity:@"HOPCacheData" withPredicateString:[NSString stringWithFormat:@" (expire < %f)", [[NSDate date] timeIntervalSince1970]] orderDescriptors:nil];
+        NSArray* objectsToDelete = [self getResultsInBackgroundForEntity:@"HOPCacheData" withPredicateString:[NSString stringWithFormat:@" (removeOnNextRun == YES OR expire < %f)", [[NSDate date] timeIntervalSince1970]] orderDescriptors:nil];
         
         for (NSManagedObject* object in objectsToDelete)
             [self.backgroundManagedObjectContext deleteObject:object];

@@ -66,7 +66,10 @@ void OpenPeerCacheDelegate::store(const char *cookieNamePath,Time expires,const 
 {
     NSString* cookie = [NSString stringWithUTF8String:str];
     NSString* path = [NSString stringWithUTF8String:cookieNamePath];
-    NSDate* date = [OpenPeerUtility convertPosixTimeToDate:expires];
+    NSDate* date = nil;
+    
+    if (expires != Time())
+        date = [OpenPeerUtility convertPosixTimeToDate:expires];
     
     if (cacheDelegate)
         [cacheDelegate storeCookie:cookie cookieNamePath:path expireTime:date];

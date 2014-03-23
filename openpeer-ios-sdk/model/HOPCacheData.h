@@ -38,5 +38,6 @@
 @property (nonatomic, retain) NSString * data;
 @property (nonatomic, retain) NSNumber * expire;
 @property (nonatomic, retain) NSString * path;
+@property (nonatomic, retain) NSNumber * removeOnNextRun;
 
 @end

@@ -37,5 +37,6 @@
 @dynamic data;
 @dynamic expire;
 @dynamic path;
+@dynamic removeOnNextRun;
 
 @end
