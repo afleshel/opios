@@ -72,6 +72,7 @@ NSString * const settingsKeySettingsDownloadExpiryTime = @"applicationSettingsDo
 NSString * const settingsKeyQRScannerShownAtStart = @"applicationQRScannerShownAtStart";
 NSString * const settingsKeySplashScreenAllowsQRScannerGesture = @"applicationSplashScreenAllowsQRScannerGesture";
 NSString * const settingsKeySettingsVersion = @"applicationSettingsVersion";
+NSString * const settingsKeyBackgroundingPhaseRichPush = @"openpeer/services/backgrounding-phase-rich-push";
 
 NSString * const archiveEnabled = @"enabled";
 NSString * const archiveServer = @"Server";

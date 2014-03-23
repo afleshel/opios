@@ -54,6 +54,8 @@
 	<string>normal</string>
 	<key>openpeer/services/backgrounding-phase-ice-socket-session</key>
 	<integer>3</integer>
+	<key>openpeer/services/backgrounding-phase-rich-push</key>
+	<integer>4</integer>
 	<key>openpeer/services/backgrounding-phase-turn</key>
 	<integer>3</integer>
 	<key>openpeer/services/backgrounding-phase-tcp-messaging</key>

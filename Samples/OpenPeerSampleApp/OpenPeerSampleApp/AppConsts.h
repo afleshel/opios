@@ -56,6 +56,7 @@ extern NSString * const settingsKeySettingsDownloadExpiryTime;
 extern NSString * const settingsKeyQRScannerShownAtStart;
 extern NSString * const settingsKeySplashScreenAllowsQRScannerGesture;
 extern NSString * const settingsKeySettingsVersion;
+extern NSString * const settingsKeyBackgroundingPhaseRichPush;
 
 extern NSString * const archiveEnabled;
 extern NSString * const archiveServer;
