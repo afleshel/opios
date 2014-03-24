@@ -16,10 +16,16 @@
 	<string>tcp-logger-v1-beta-1-i.hcs.io:8055</string>
 	<key>localTelnetLoggerPort</key>
 	<string>59999</string>
+	<key>applicationSettingsBackgroundingPhaseRichPush</key>
+	<integer>4</integer>
 	<key>openpeer/core/core-thread-priority</key>
 	<string>normal</string>
 	<key>openpeer/core/media-thread-priority</key>
 	<string>real-time</string>
+	<key>openpeer/core/backgrounding-phase-conversation-thread</key>
+	<integer>1</integer>
+	<key>openpeer/core/backgrounding-phase-account</key>
+	<integer>1</integer>
 	<key>openpeer/core/authorized-application-id-split-char</key>
 	<string>-</string>
 	<key>openpeer/core/auto-find-peers-added-to-conversation-in-seconds</key>
@@ -28,6 +34,8 @@
 	<string>normal</string>
 	<key>openpeer/stack/key-generation-thread-priority</key>
 	<string>low</string>
+	<key>openpeer/stack/backgrounding-phase-account</key>
+	<integer>2</integer>
 	<key>openpeer/stack/bootstrapper-force-well-known-over-insecure-http</key>
 	<true/>
 	<key>openpeer/stack/bootstrapper-force-well-known-using-post</key>
@@ -50,6 +58,26 @@
 	<string>normal</string>
 	<key>openpeer/services/http-thread-priority</key>
 	<string>normal</string>
+	<key>openpeer/services/backgrounding-phase-ice-socket-session</key>
+	<integer>3</integer>
+	<key>openpeer/services/backgrounding-phase-turn</key>
+	<integer>3</integer>
+	<key>openpeer/services/backgrounding-phase-tcp-messaging</key>
+	<integer>3</integer>
+	<key>openpeer/services/backgrounding-phase-telnet-logger</key>
+	<integer>5</integer>
+	<key>openpeer/services/backgrounding-phase-1-timeout-in-seconds</key>
+	<integer>8</integer>
+	<key>openpeer/services/backgrounding-phase-2-timeout-in-seconds</key>
+	<integer>0</integer>
+	<key>openpeer/services/backgrounding-phase-3-timeout-in-seconds</key>
+	<integer>0</integer>
+	<key>openpeer/services/backgrounding-phase-4-timeout-in-seconds</key>
+	<integer>0</integer>
+	<key>openpeer/services/backgrounding-phase-5-timeout-in-seconds</key>
+	<integer>0</integer>
+	<key>openpeer/services/process-application-message-queue-on-quit</key>
+	<true/>
 	<key>openpeer/services/turn-candidates-must-remain-alive-after-ice-wake-up-in-seconds</key>
 	<integer>600</integer>
 	<key>openpeer/services/interface-name-order</key>

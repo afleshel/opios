@@ -33,12 +33,12 @@
 #import "OpenPeer.h"
 @implementation StackDelegate
 
-- (void)onShutdownReady
+- (void) onStackShutdown
 {
-    dispatch_async(dispatch_get_main_queue(), ^
-    {
-        //[[OpenPeer sharedOpenPeer] setup];
-    });
+  dispatch_async(dispatch_get_main_queue(), ^
+                 {
+                   //[[OpenPeer sharedOpenPeer] setup];
+                 });
 }
 
 @end

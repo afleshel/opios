@@ -42,6 +42,7 @@
 #import "OpenpeerSDK/HOPModelManager.h"
 #import "OpenpeerSDK/HOPSettings.h"
 #import "OpenpeerSDK/HOPAccount.h"
+#import "OpenpeerSDK/HOPBackgrounding.h"
 //Managers
 #import "LoginManager.h"
 #import "SessionManager.h"
@@ -57,13 +58,13 @@
 #import "BackgroundingDelegate.h"
 //View controllers
 #import "MainViewController.h"
-#import "SettingsDownloader.h"
+#import "HTTPDownloader.h"
 
 
 //Private methods
 @interface OpenPeer ()
 
-@property (nonatomic, strong) SettingsDownloader* settingsDownloadeer;
+@property (nonatomic, strong) HTTPDownloader* settingsDownloadeer;
 - (void) createDelegates;
 //- (void) setLogLevels;
 @end
@@ -113,7 +114,7 @@
         //Check if cookie has expired, and run download if it has
         if ([[[HOPCache sharedCache] fetchForCookieNamePath:settingsKeySettingsDownloadURL] length] == 0)
         {
-            self.settingsDownloadeer = [[SettingsDownloader alloc] initSettingsDownloadFromURL:settingsDownloadURL postDate:nil];
+            self.settingsDownloadeer = [[HTTPDownloader alloc] initSettingsDownloadFromURL:settingsDownloadURL postDate:nil];
             self.settingsDownloadeer.delegate = self;
             [self.settingsDownloadeer startDownload];
             ret = YES;
@@ -253,6 +254,7 @@
     //Set log levels and start logging
     [Logger startAllSelectedLoggers];
 
+    [[HOPBackgrounding sharedBackgrounding] subscribeDelegate:self.backgroundingDelegate phase:((NSNumber*)[[NSUserDefaults standardUserDefaults]objectForKey:settingsKeyBackgroundingPhaseRichPush]).unsignedLongValue];
     if (![[HOPStack sharedStack] isStackReady])
     {
         //Init openpeer stack and set created delegates
@@ -318,16 +320,38 @@
     [self shutdown];
     
 }
-#pragma mark - SettingsDownloaderDelegate
-- (void)onSettingsDownloadCompletion:(NSDictionary *)inSettingsDictionary
+
+- (void) prepareAppForBackground
 {
-    [[HOPSettings sharedSettings] storeSettingsFromDictionary:inSettingsDictionary];
+    UIBackgroundTaskIdentifier bgTask = UIBackgroundTaskInvalid;
+    
+    bgTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^
+              {
+                  [[HOPBackgrounding sharedBackgrounding]notifyGoingToBackgroundNow];
+                  
+                  [[UIApplication sharedApplication] endBackgroundTask:bgTask];
+              }];
+    
+    [[OpenPeer sharedOpenPeer] setBackgroundingTaskId:bgTask];
+    
+    // Start the long-running task and return immediately.
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
+                   {
+                       [[HOPBackgrounding sharedBackgrounding] notifyGoingToBackground:[[OpenPeer sharedOpenPeer] backgroundingDelegate]];
+                   });
+}
+
+#pragma mark - SettingsDownloaderDelegate
+- (void) httpDownloader:(HTTPDownloader *)downloader downloaded:(NSString *)downloaded
+{
+    NSDictionary* settingsDictionary = [[Settings sharedSettings] dictionaryForJSONString:downloaded];
+    [[HOPSettings sharedSettings] storeSettingsFromDictionary:settingsDictionary];
     [[OpenPeer sharedOpenPeer] finishPreSetup];
     int expiryTime = [[NSUserDefaults standardUserDefaults] integerForKey:settingsKeySettingsDownloadExpiryTime];
     [[HOPCache sharedCache] store:[[NSUserDefaults standardUserDefaults] stringForKey:settingsKeySettingsDownloadURL] expireDate:[[NSDate date] dateByAddingTimeInterval:expiryTime] cookieNamePath:settingsKeySettingsDownloadURL];
 }
 
-- (void)onSettingsDownloadFailure
+- (void) httpDownloader:(HTTPDownloader *) downloader didFailWithError:(NSError *)error
 {
     [[OpenPeer sharedOpenPeer] finishPreSetup];
 }

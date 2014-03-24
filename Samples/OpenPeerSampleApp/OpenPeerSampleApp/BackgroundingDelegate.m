@@ -29,8 +29,15 @@
  
  */
 
+#ifdef APNS_ENABLED
+#import "APNSManager.h"
+#endif
 #import "BackgroundingDelegate.h"
 #import "OpenPeer.h"
+#import <OpenPeerSDK/HOPBackgrounding.h>
+
+
+
 @implementation BackgroundingDelegate
 
 - (void)onBackgroundingReady
@@ -41,4 +48,42 @@
         [[OpenPeer sharedOpenPeer] setBackgroundingTaskId:UIBackgroundTaskInvalid];
     });
 }
+
+#pragma mark - HOPBackgroundingDelegate
+
+- (void) onBackgroundingGoingToBackground:(HOPBackgroundingSubscription*) subscription notifier:(HOPBackgroundingNotifier*)notifier
+{
+    self.backgroundingNotifier = notifier;
+    self.backgroundingSubscription = subscription;
+#ifdef APNS_ENABLED
+    if ([[APNSManager sharedAPNSManager] areTherePushesForSending])
+    {
+        [[APNSManager sharedAPNSManager]  setGoingToBackground:YES];
+    }
+    else
+#endif
+    {
+        [self.backgroundingNotifier destroy];
+        self.backgroundingNotifier = nil;
+    }
+}
+
+- (void) onBackgroundingGoingToBackgroundNow:(HOPBackgroundingSubscription*) subscription
+{
+    [self.backgroundingNotifier destroy];
+    self.backgroundingNotifier = nil;
+}
+
+- (void) onBackgroundingReturningFromBackground:(HOPBackgroundingSubscription*) subscription
+{
+    [self.backgroundingNotifier destroy];
+    self.backgroundingNotifier = nil;
+}
+
+- (void) onBackgroundingApplicationWillQuit:(HOPBackgroundingSubscription*) subscription
+{
+  [self.backgroundingNotifier destroy];
+  self.backgroundingNotifier = nil;
+}
+
 @end

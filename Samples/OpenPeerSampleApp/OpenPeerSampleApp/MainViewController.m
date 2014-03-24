@@ -275,7 +275,7 @@
             sessionViewContorller = [[SessionViewController_iPhone alloc] initWithSession:session];
             sessionViewContorller.hidesBottomBarWhenPushed = YES;
             [self.sessionViewControllersDictionary setObject:sessionViewContorller forKey:sessionId];
-            [navigationController pushViewController:sessionViewContorller animated:NO];
+            [navigationController pushViewController:sessionViewContorller animated:YES];
             [navigationController.navigationBar.topItem setTitle:title];
             //[navigationController pushViewController:sessionViewContorller.chatViewController animated:YES];
             break;
@@ -423,9 +423,12 @@
 - (void) updateSessionViewControllerId:(NSString*) oldSessionId newSesionId:(NSString*) newSesionId
 {
     SessionViewController_iPhone* svc = [self.sessionViewControllersDictionary objectForKey:oldSessionId];
-    [self removeSessionViewControllerForSession:oldSessionId];
-    [self.sessionViewControllersDictionary setObject:svc forKey:newSesionId];
-    [svc.chatViewController updateFetchControllerForSession:newSesionId];
+    if (svc)
+    {
+        [self.sessionViewControllersDictionary setObject:svc forKey:newSesionId];
+        //[self removeSessionViewControllerForSession:oldSessionId];
+        [svc.chatViewController updateFetchControllerForSession:newSesionId];
+    }
 }
 /**
  Prepare specific session vire controller for incoming call

@@ -209,7 +209,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     }
     else
     {
-        ZS_LOG_ERROR(Debug, [self log:@"Invalid identity lookup object!"]);
+            
         [NSException raise:NSInvalidArgumentException format:@"Invalid identity lookup object!"];
     }
     return ret;

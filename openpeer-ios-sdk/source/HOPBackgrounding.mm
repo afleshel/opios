@@ -30,8 +30,13 @@
  */
 
 #import "HOPBackgrounding_Internal.h"
+#import <zsLib/Log.h>
+#import "OpenPeerStorageManager.h"
 
+using namespace openpeer;
+using namespace openpeer::core;
 
+ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
 @implementation HOPBackgrounding
 
@@ -45,11 +50,11 @@
     return _sharedObject;
 }
 
-- (void) notifyGoingToBackground:(id<HOPBackgroundingDelegate>) inDelegate
+- (void) notifyGoingToBackground:(id<HOPBackgroundingCompletionDelegate>) inDelegate
 {
-    if (!openPeerBackgroundingDelegatePtr)
-        openPeerBackgroundingDelegatePtr = OpenPeerBackgroundingCompletionDelegate::create(inDelegate);
-    activeQuery = IBackgrounding::notifyGoingToBackground(openPeerBackgroundingDelegatePtr);
+    if (!openPeerBackgroundingCompletionDelegatePtr)
+        openPeerBackgroundingCompletionDelegatePtr = OpenPeerBackgroundingCompletionDelegate::create(inDelegate);
+    activeQuery = IBackgrounding::notifyGoingToBackground(openPeerBackgroundingCompletionDelegatePtr);
 }
 
 - (void) notifyGoingToBackgroundNow
@@ -62,6 +67,13 @@
     IBackgrounding::notifyReturningFromBackground();
 }
 
+- (void) subscribeDelegate:(id<HOPBackgroundingDelegate>) inDelegate phase:(unsigned long) phase
+{
+    if (!openPeerBackgroundingDelegatePtr)
+        openPeerBackgroundingDelegatePtr = OpenPeerBackgroundingDelegate::create(inDelegate);
+    backgroundingSubscriptionPtr = IBackgrounding::subscribe(openPeerBackgroundingDelegatePtr, phase);
+}
+
 - (IBackgroundingQueryPtr) getActiveQuery
 {
     return activeQuery;
@@ -70,5 +82,78 @@
 - (String) log:(NSString*) message
 {
     return String("HOPBackgrounding: ") + [message UTF8String];
+}
+@end
+
+@implementation HOPBackgroundingSubscription
+
+- (id) initWithBackgroundingSubscriptionPtr:(IBackgroundingSubscriptionPtr)inBackgroundingSubscriptionPtr
+{
+    self = [super init];
+    if (self)
+    {
+        backgroundingSubscriptionPtr = inBackgroundingSubscriptionPtr;
+    }
+    return self;
+}
+
+- (void) cancel
+{
+    if (backgroundingSubscriptionPtr)
+    {
+        backgroundingSubscriptionPtr->cancel();
+    }
+    else
+    {
+        ZS_LOG_ERROR(Debug, [self log:@"Invalid backgrounding subscription object!"]);
+    }
+}
+
+- (String) log:(NSString*) message
+{
+    return String("HOPBackgroundingSubscription: ") + [message UTF8String];
+}
+
+@end
+
+@implementation HOPBackgroundingNotifier : NSObject
+
+- (id) initWithBackgroundingNotifierPtr:(IBackgroundingNotifierPtr) inBackgroundingNotifierPtr
+{
+    self = [super init];
+    if (self)
+    {
+        backgroundingNotifierPtr = inBackgroundingNotifierPtr;
+    }
+    return self;
+}
+
+- (void) ready
+{
+    if (backgroundingNotifierPtr)
+    {
+        backgroundingNotifierPtr->ready();
+    }
+    else
+    {
+        ZS_LOG_ERROR(Debug, [self log:@"Invalid backgrounding notifier object!"]);
+    }
+}
+- (void) destroy
+{
+    if (backgroundingNotifierPtr)
+    {
+        backgroundingNotifierPtr.reset();
+        [[OpenPeerStorageManager sharedStorageManager] setBackgroundingNotifier:nil];
+    }
+    else
+    {
+        ZS_LOG_ERROR(Debug, [self log:@"Invalid backgrounding notifier object!"]);
+    }
+}
+
+- (String) log:(NSString*) message
+{
+    return String("HOPBackgroundingNotifier: ") + [message UTF8String];
 }
 @end

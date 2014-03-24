@@ -42,9 +42,9 @@ using namespace openpeer::core;
 class OpenPeerBackgroundingCompletionDelegate : public IBackgroundingCompletionDelegate
 {
 protected:
-    id<HOPBackgroundingDelegate> backgroundingDelegate;
+    id<HOPBackgroundingCompletionDelegate> backgroundingCompletionDelegate;
     
-    OpenPeerBackgroundingCompletionDelegate(id<HOPBackgroundingDelegate> backgroundingDelegate);
+    OpenPeerBackgroundingCompletionDelegate(id<HOPBackgroundingCompletionDelegate> backgroundingCompletionDelegate);
     
 public:
     
@@ -54,7 +54,39 @@ public:
      Create OpenPeerBackgroundingCompletionDelegate object packed in boost shared pointer.
      @returns OpenPeerBackgroundingCompletionDelegate object boost shared object
      */
-    static boost::shared_ptr<OpenPeerBackgroundingCompletionDelegate>  create(id<HOPBackgroundingDelegate> inBackgroundingDelegate);
+    static boost::shared_ptr<OpenPeerBackgroundingCompletionDelegate>  create(id<HOPBackgroundingCompletionDelegate> inBackgroundingCompletionDelegate);
     
     virtual void onBackgroundingReady(IBackgroundingQueryPtr query);
 };
+
+
+class OpenPeerBackgroundingDelegate : public IBackgroundingDelegate
+{
+protected:
+    id<HOPBackgroundingDelegate> backgroundingDelegate;
+    
+    OpenPeerBackgroundingDelegate(id<HOPBackgroundingDelegate> backgroundingDelegate);
+    
+public:
+    
+    ~OpenPeerBackgroundingDelegate();
+    
+    /**
+     Create OpenPeerBackgroundingCompletionDelegate object packed in boost shared pointer.
+     @returns OpenPeerBackgroundingCompletionDelegate object boost shared object
+     */
+    static boost::shared_ptr<OpenPeerBackgroundingDelegate>  create(id<HOPBackgroundingDelegate> inBackgroundingDelegate);
+    
+    virtual void onBackgroundingGoingToBackground(IBackgroundingSubscriptionPtr subscription,IBackgroundingNotifierPtr notifier);
+    virtual void onBackgroundingGoingToBackgroundNow(IBackgroundingSubscriptionPtr subscription);
+    virtual void onBackgroundingReturningFromBackground(IBackgroundingSubscriptionPtr subscription);
+    virtual void onBackgroundingApplicationWillQuit(IBackgroundingSubscriptionPtr subscription);
+};
+
+
+
+
+
+
+
+

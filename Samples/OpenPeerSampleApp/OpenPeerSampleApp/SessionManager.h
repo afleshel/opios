@@ -54,6 +54,7 @@
 - (Session*) getSessionForContact:(HOPRolodexContact*) contact;
 - (Session*) getSessionForSessionId:(NSString*) sessionId;
 
+- (void)setValidSession:(Session *)inSession newSessionId:(NSString *)newSessionId oldSessionId:(NSString *)oldSessionId;
 
 - (void) makeCallForSession:(Session*) inSession includeVideo:(BOOL) includeVideo isRedial:(BOOL) isRedial;
 - (void) answerCallForSession:(Session*) inSession;
@@ -61,6 +62,7 @@
 
 - (void) onCallPreparing:(HOPCall*) call;
 - (void) onCallIncoming:(HOPCall*) call;
+- (void) onCallRinging:(HOPCall*) call;
 - (void) onCallOpened:(HOPCall*) call;
 - (void) onCallClosing:(HOPCall*) call;
 
@@ -77,4 +79,6 @@
 
 - (void) stopAnyActiveCall;
 - (void) clearAllSessions;
+
+- (void) setLatestValidConversationThread:(HOPConversationThread*) inConversationThread;
 @end

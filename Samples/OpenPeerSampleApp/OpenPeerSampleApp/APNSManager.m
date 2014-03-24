@@ -29,18 +29,27 @@
  
  */
 
+
 #import "APNSManager.h"
+#import "APNSInboxManager.h"
 #import "UAirship.h"
 #import "UAConfig.h"
 #import "UAPush.h"
 #import "Settings.h"
 #import "AppConsts.h"
+#import "SBJsonParser.h"
+#import "Utility.h"
+#import "OpenPeer.h"
+#import "BackgroundingDelegate.h"
 
 #import <OpenPeerSDK/HOPRolodexContact.h>
 #import <OpenPeerSDK/HOPContact.h>
 #import <OpenPeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPAccount.h>
 #import <OpenPeerSDK/HOPPublicPeerFile.h>
+#import <OpenPeerSDK/HOPHomeUser+External.h>
+#import <OpenPeerSDK/HOPMessage.h>
+#import <OpenPeerSDK/HOPBackgrounding.h>
 
 #define  timeBetweenPushNotificationsInSeconds 1
 
@@ -55,8 +64,10 @@
 
 - (id) initSingleton;
 
-- (void) pushData:(NSDictionary*) dataToPush;
+- (void) pushData:(NSDictionary*) dataToPush sendingRich:(BOOL) sendingRich;
 - (BOOL) canSendPushNotificationForPeerURI:(NSString*) peerURI;
+- (NSArray*) getDeviceTokensForContact:(HOPContact*) contact;
+- (NSString*) prepareMessageForRichPush:(HOPMessage*) message peerURI:(NSString*) peerURI location:(NSString*) location;
 @end
 
 @implementation APNSManager
@@ -78,7 +89,8 @@
     self = [super init];
     if (self)
     {
-        
+        self.pushesToSend = 0;
+        self.goingToBackground = NO;
 #ifdef DEBUG
         self.urbanAirshipAppKey = [[NSUserDefaults standardUserDefaults] stringForKey: settingsKeyUrbanAirShipDevelopmentAppKey];
         self.urbanAirshipAppSecret = [[NSUserDefaults standardUserDefaults] stringForKey: settingsKeyUrbanAirShipMasterAppSecretDev];
@@ -96,39 +108,58 @@
     [UAirship setLogging:NO];
     
     UAConfig *config = [UAConfig defaultConfig];
+    
+    config.developmentAppKey = self.urbanAirshipAppKey;
+    config.developmentAppSecret = self.urbanAirshipAppSecret;
+    
+    config.productionAppKey = self.urbanAirshipAppKey;
+    config.productionAppSecret = self.urbanAirshipAppSecret;
+    
     [UAirship takeOff:config];
+    
+    //[UAPush shared].notificationTypes = (UIRemoteNotificationTypeBadge |UIRemoteNotificationTypeSound |UIRemoteNotificationTypeAlert);
+    
+    [UAPush shared].notificationTypes = (UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert);
+    [[UAPush shared] registerForRemoteNotifications];
     
     // Print out the application configuration for debugging (optional)
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"UrbanAirship config: %@",[config description]);
 
-    
+    [[APNSInboxManager sharedAPNSInboxManager]setup];
     // Set the icon badge to zero on startup (optional)
     [[UAPush shared] resetBadge];
 }
 
-- (void) pushData:(NSDictionary*) dataToPush
+- (void) pushData:(NSDictionary*) dataToPush sendingRich:(BOOL) sendingRich
 {
     if ([self.apiPushURL length] > 0)
     {
         NSMutableURLRequest * request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:self.apiPushURL]];
         [request setHTTPMethod:@"POST"];
         [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+        if (sendingRich)
+            [request setValue:@"application/vnd.urbanairship+json; version=3;" forHTTPHeaderField:@"Accept"];
         
         NSData * pushdata = [NSJSONSerialization dataWithJSONObject:dataToPush options:0 error:NULL];
         [request setHTTPBody:pushdata];
         
         [NSURLConnection connectionWithRequest:request delegate:self];
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push is sent");
+        @synchronized (self)
+        {
+            self.pushesToSend++;
+        }
     }
 }
 
-- (void) sendPushNotificationForDeviceToken:(NSString*) deviceToken message:(NSString*) message
+/*- (void) sendPushNotificationForDeviceToken:(NSString*) deviceToken message:(NSString*) message
 {
     NSDictionary * dataToPush = @{@"device_tokens":@[deviceToken], @"aps":@{@"alert":message, @"sound":@"calling"}};
     
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Sending push notification: %@",message);
     
-    [self pushData:dataToPush];
-}
+    [self pushData:dataToPush sendingRich:NO];
+}*/
 
 - (void) registerDeviceToken:(NSData*) devToken
 {
@@ -158,6 +189,15 @@
 {
     NSHTTPURLResponse * res = (NSHTTPURLResponse *) response;
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Response code %i: response: %@",res.statusCode, res);
+    @synchronized (self)
+    {
+        self.pushesToSend--;
+        if (self.goingToBackground)
+        {
+            [[[[OpenPeer sharedOpenPeer] backgroundingDelegate] backgroundingNotifier] destroy];
+            [[[OpenPeer sharedOpenPeer] backgroundingDelegate] setBackgroundingNotifier:nil];
+        }
+    }
 }
 
 - (void) sendPushNotificationForContact:(HOPContact*) contact message:(NSString*) message missedCall:(BOOL) missedCall
@@ -188,7 +228,7 @@
                 
                 OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Sending push notification: %@",message);
                 
-                [self pushData:dataToPush];
+                [self pushData:dataToPush sendingRich:NO];
                 
                 [self.apnsHisotry setObject:[NSDate date] forKey:peerURI];
             }
@@ -204,6 +244,57 @@
     }
 }
 
+- (void) sendRichPushNotificationForMessage:(HOPMessage*) message missedCall:(BOOL) missedCall
+{
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Creating rich push for message: :%@", message.messageID);
+    NSArray* deviceTokens = [self getDeviceTokensForContact:message.contact];
+    
+    if ([deviceTokens count] > 0)
+    {
+        NSString* msg = [message.text length] > 22 ? [NSString stringWithFormat:@"%@...",[message.text substringToIndex:22]] : message.text;
+        
+        NSString* messageText  = [NSString stringWithFormat:@"%@  %@",[[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser] getFullName],msg];
+        
+        NSString* content = [self prepareMessageForRichPush:message peerURI:[[HOPContact getForSelf]getPeerURI] location:[[HOPAccount sharedAccount] getLocationID]];
+        
+        for (NSString* deviceToken in deviceTokens)
+        {
+            
+            //NSString* stringToSend = [NSString stringWithFormat:@"{\"audience\" : {\"device_token\" : \"%@\"}, \"device_types\" : [ \"ios\" ], \"notification\" : {\"ios\" : {\"badge\":\"+1\",\"sound\":\"default\",\"alert\": \"%@\",\"content-available\": true,\"priority\": 10}}, \"message\" : {\"title\" : \"%@\", \"body\" : \"%@\", \"content_type\" : \"text/html\"} }",deviceToken,messageText,messageText,content];
+            NSString* stringToSend = [NSString stringWithFormat:@"{\"audience\" : {\"device_token\" : \"%@\"}, \"device_types\" : [ \"ios\" ], \"notification\" : {\"ios\" : {\"sound\":\"message-received\",\"alert\": \"%@\",\"content-available\": true,\"priority\": 10}}, \"message\" : {\"title\" : \"%@\", \"body\" : \"%@\", \"content_type\" : \"text/html\"} }",deviceToken,messageText,messageText,content];
+
+            
+            SBJsonParser* parser = [[SBJsonParser alloc] init];
+            NSDictionary* dataToPush = [parser objectWithString: stringToSend];
+
+            [self pushData:dataToPush sendingRich:YES];
+        }
+        [self.apnsHisotry setObject:[NSDate date] forKey:[message.contact getPeerURI]];
+    }
+}
+
+- (NSString*) prepareMessageForRichPush:(HOPMessage*) message peerURI:(NSString*) peerURI location:(NSString*) location
+{
+    NSString* ret = [NSString stringWithFormat:@"{\\\"peerURI\\\":\\\"%@\\\",\\\"messageId\\\":\\\"%@\\\",\\\"message\\\":\\\"%@\\\",\\\"location\\\":\\\"%@\\\",\\\"date\\\":\\\"%.0f\\\"}",peerURI,message.messageID,message.text,location,[message.date timeIntervalSince1970]];
+
+    return ret;
+}
+
+- (NSArray*) getDeviceTokensForContact:(HOPContact*) contact
+{
+    NSArray* ret = nil;
+    
+    NSString* peerURI = [contact getPeerURI];
+    if ([peerURI length] > 0)
+    {
+        if ([self canSendPushNotificationForPeerURI:peerURI])
+        {
+            ret = [[HOPModelManager sharedModelManager] getAPNSDataForPeerURI:peerURI];
+        }
+    }
+    return ret;
+}
+
 - (BOOL) canSendPushNotificationForPeerURI:(NSString*) peerURI
 {
     BOOL ret = YES;
@@ -214,17 +305,14 @@
     
     return ret;
 }
-
-- (void) handleAPNS:(NSDictionary *)apnsInfo
+- (BOOL) areTherePushesForSending
 {
-    NSDictionary *apsInfo = [apnsInfo objectForKey:@"aps"];
-    NSString *alert = [apsInfo objectForKey:@"alert"];
-    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Received Push Alert: %@", alert);
-    NSString *peerURI = [apnsInfo objectForKey:@"peerURI"];
-    NSString *locationID = [apnsInfo objectForKey:@"location"];
-    
-    HOPPublicPeerFile* publicPerFile = [[HOPModelManager sharedModelManager] getPublicPeerFileForPeerURI:peerURI];
-    HOPContact* contact = [[HOPContact alloc] initWithPeerFile:publicPerFile.peerFile];
-    [contact hintAboutLocation:locationID];
+    BOOL ret = NO;
+    @synchronized(self)
+    {
+        ret = self.pushesToSend > 0;
+    }
+    return ret;
 }
+
 @end

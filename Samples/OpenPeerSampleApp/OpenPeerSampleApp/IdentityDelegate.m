@@ -50,6 +50,10 @@
 #import "ActivityIndicatorViewController.h"
 #import "Settings.h"
 
+#ifdef APNS_ENABLED
+#import "APNSInboxManager.h"
+#endif
+
 @interface IdentityDelegate()
 {
     pthread_mutex_t mutexVisibleWebView;
@@ -197,6 +201,9 @@
                 
             case HOPIdentityStateReady:
                 [self.loginDelegate onIdentityLoginFinished];
+#ifdef APNS_ENABLED
+                [[APNSInboxManager sharedAPNSInboxManager] handleNewMessages];
+#endif
                 if ([[LoginManager sharedLoginManager] isLogin] || [[LoginManager sharedLoginManager] isAssociation])
                     [[LoginManager sharedLoginManager] onIdentityAssociationFinished:identity];
                 break;

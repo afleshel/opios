@@ -38,7 +38,23 @@
 + (HOPBackgrounding*) sharedBackgrounding;
 - (id) init __attribute__((unavailable("HOPAccount is singleton class.")));
 
-- (void) notifyGoingToBackground:(id<HOPBackgroundingDelegate>) inDelegate;
+- (void) notifyGoingToBackground:(id<HOPBackgroundingCompletionDelegate>) inDelegate;
 - (void) notifyGoingToBackgroundNow;
 - (void) notifyReturningFromBackground;
+- (void) subscribeDelegate:(id<HOPBackgroundingDelegate>) inDelegate phase:(unsigned long) phase;
+
+@end
+
+
+@interface HOPBackgroundingSubscription : NSObject
+
+- (void) cancel;
+
+@end
+
+@interface HOPBackgroundingNotifier : NSObject
+
+- (void) ready;
+- (void) destroy;
+
 @end

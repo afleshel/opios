@@ -264,9 +264,19 @@
     
     if (session == nil)
     {
-        OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"%@ message received - unable to get session for provided session id %@.",messageType,sessionId);
-        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"%@ message received - further message handling is canceled.",messageType);
-        return;
+        HOPRolodexContact* contact  = [[[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:[message.contact getPeerURI]] objectAtIndex:0];
+        session = [[SessionManager sharedSessionManager] getSessionForContact:contact];
+        if (session == nil)
+        {
+            OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"%@ message received - unable to get session for provided session id %@.",messageType,sessionId);
+            OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"%@ message received - further message handling is canceled.",messageType);
+            return;
+        }
+        else
+        {
+            //[[SessionManager sharedSessionManager] setValidSession:session newSessionId:[session.conversationThread getThreadId]oldSessionId:sessionId];
+            OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"%Session for id %@ not found, but it is found other with id %@",sessionId,[session.conversationThread getThreadId]);
+        }
     }
     
     if (isTextMessage)
@@ -290,7 +300,7 @@
         }
         else
         {
-            OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"%@ message no saved - message id %@ - session id %@",message.messageID,sessionId);
+            OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"%@ message is not saved - message id %@ - session id %@",message.text,message.messageID,sessionId);
         }
     }
     else
@@ -312,4 +322,15 @@
     }
     return ret;
 }
+
+- (HOPMessage*) createMessageFromRichPush:(NSDictionary*) richPush
+{
+    //HOPMessage* hopMessage = [[HOPMessage alloc] initWithMessageId:[Utility getGUIDstring] andMessage:message andContact:[contact getCoreContact] andMessageType:messageTypeText andMessageDate:[NSDate date]];
+    
+//    NSString* senderPeerURI = [richPush objectForKey:@"peerURI"];
+//    NSString* messageId = [richPush objectForKey:@"messageId"];
+//    NSString* messageText = [richPush objectForKey:@"message"];
+//    NSString* location = [richPush objectForKey:@"location"];
+}
+
 @end

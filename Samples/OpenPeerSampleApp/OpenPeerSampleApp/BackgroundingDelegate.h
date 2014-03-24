@@ -32,6 +32,10 @@
 #import <Foundation/Foundation.h>
 #import "OpenpeerSDK/HOPProtocols.h"
 
-@interface BackgroundingDelegate : NSObject<HOPBackgroundingDelegate>
+@class HOPBackgroundingNotifier;
+@class HOPBackgroundingSubscription;
+@interface BackgroundingDelegate : NSObject<HOPBackgroundingCompletionDelegate,HOPBackgroundingDelegate>
 
+@property (strong, nonatomic) HOPBackgroundingNotifier* backgroundingNotifier;
+@property (strong, nonatomic) HOPBackgroundingSubscription* backgroundingSubscription;
 @end

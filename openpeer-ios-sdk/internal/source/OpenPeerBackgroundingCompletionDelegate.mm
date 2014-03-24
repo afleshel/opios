@@ -32,17 +32,18 @@
 #import "OpenPeerBackgroundingCompletionDelegate.h"
 #import <openpeer/core/ILogger.h>
 #import "HOPBackgrounding_Internal.h"
+#import "OpenPeerStorageManager.h"
 
 ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
-OpenPeerBackgroundingCompletionDelegate::OpenPeerBackgroundingCompletionDelegate(id<HOPBackgroundingDelegate> inBackgroundingDelegate)
+OpenPeerBackgroundingCompletionDelegate::OpenPeerBackgroundingCompletionDelegate(id<HOPBackgroundingCompletionDelegate> inBackgroundingCompletionDelegate)
 {
-    backgroundingDelegate = inBackgroundingDelegate;
+    backgroundingCompletionDelegate = inBackgroundingCompletionDelegate;
 }
 
-boost::shared_ptr<OpenPeerBackgroundingCompletionDelegate> OpenPeerBackgroundingCompletionDelegate::create(id<HOPBackgroundingDelegate> inBackgroundingDelegate)
+boost::shared_ptr<OpenPeerBackgroundingCompletionDelegate> OpenPeerBackgroundingCompletionDelegate::create(id<HOPBackgroundingCompletionDelegate> inBackgroundingCompletionDelegate)
 {
-    return boost::shared_ptr<OpenPeerBackgroundingCompletionDelegate> (new OpenPeerBackgroundingCompletionDelegate(inBackgroundingDelegate));
+    return boost::shared_ptr<OpenPeerBackgroundingCompletionDelegate> (new OpenPeerBackgroundingCompletionDelegate(inBackgroundingCompletionDelegate));
 }
 
 OpenPeerBackgroundingCompletionDelegate::~OpenPeerBackgroundingCompletionDelegate()
@@ -59,6 +60,65 @@ void OpenPeerBackgroundingCompletionDelegate::onBackgroundingReady(IBackgroundin
     
     if (isActiveQuery)
     {
-        [backgroundingDelegate onBackgroundingReady];
+        [backgroundingCompletionDelegate onBackgroundingReady];
     }
 }
+
+#pragma mark - OpenPeerBackgroundingDelegate
+OpenPeerBackgroundingDelegate::OpenPeerBackgroundingDelegate(id<HOPBackgroundingDelegate> inBackgroundingDelegate)
+{
+    backgroundingDelegate = inBackgroundingDelegate;
+}
+
+boost::shared_ptr<OpenPeerBackgroundingDelegate> OpenPeerBackgroundingDelegate::create(id<HOPBackgroundingDelegate> inBackgroundingDelegate)
+{
+    return boost::shared_ptr<OpenPeerBackgroundingDelegate> (new OpenPeerBackgroundingDelegate(inBackgroundingDelegate));
+}
+
+OpenPeerBackgroundingDelegate::~OpenPeerBackgroundingDelegate()
+{
+    ZS_LOG_DEBUG(zsLib::String("SDK - OpenPeerBackgroundingDelegate destructor is called"));
+}
+
+void OpenPeerBackgroundingDelegate::onBackgroundingGoingToBackground(IBackgroundingSubscriptionPtr subscription,IBackgroundingNotifierPtr notifier)
+{
+    if (![[OpenPeerStorageManager sharedStorageManager] backgroundingNotifier])
+    {
+        [[OpenPeerStorageManager sharedStorageManager] setBackgroundingNotifier:[[HOPBackgroundingNotifier alloc] initWithBackgroundingNotifierPtr:notifier]];
+    }
+    
+    if (![[OpenPeerStorageManager sharedStorageManager] backgroundingSubscription])
+    {
+        [[OpenPeerStorageManager sharedStorageManager] setBackgroundingSubscription:[[HOPBackgroundingSubscription alloc] initWithBackgroundingSubscriptionPtr:subscription]];
+    }
+    
+    [backgroundingDelegate onBackgroundingGoingToBackground:[[OpenPeerStorageManager sharedStorageManager] backgroundingSubscription] notifier:[[OpenPeerStorageManager sharedStorageManager] backgroundingNotifier]];
+}
+void OpenPeerBackgroundingDelegate::onBackgroundingGoingToBackgroundNow(IBackgroundingSubscriptionPtr subscription)
+{
+    if (![[OpenPeerStorageManager sharedStorageManager] backgroundingSubscription])
+    {
+        [[OpenPeerStorageManager sharedStorageManager] setBackgroundingSubscription:[[HOPBackgroundingSubscription alloc] initWithBackgroundingSubscriptionPtr:subscription]];
+    }
+    [backgroundingDelegate onBackgroundingGoingToBackgroundNow:[[OpenPeerStorageManager sharedStorageManager] backgroundingSubscription]];
+}
+
+void OpenPeerBackgroundingDelegate::onBackgroundingReturningFromBackground(IBackgroundingSubscriptionPtr subscription)
+{
+    if (![[OpenPeerStorageManager sharedStorageManager] backgroundingSubscription])
+    {
+        [[OpenPeerStorageManager sharedStorageManager] setBackgroundingSubscription:[[HOPBackgroundingSubscription alloc] initWithBackgroundingSubscriptionPtr:subscription]];
+    }
+    [backgroundingDelegate onBackgroundingReturningFromBackground:[[OpenPeerStorageManager sharedStorageManager] backgroundingSubscription]];
+}
+
+void OpenPeerBackgroundingDelegate::onBackgroundingApplicationWillQuit(IBackgroundingSubscriptionPtr subscription)
+{
+  if (![[OpenPeerStorageManager sharedStorageManager] backgroundingSubscription])
+  {
+    [[OpenPeerStorageManager sharedStorageManager] setBackgroundingSubscription:[[HOPBackgroundingSubscription alloc] initWithBackgroundingSubscriptionPtr:subscription]];
+  }
+  [backgroundingDelegate onBackgroundingApplicationWillQuit:[[OpenPeerStorageManager sharedStorageManager] backgroundingSubscription]];
+}
+
+

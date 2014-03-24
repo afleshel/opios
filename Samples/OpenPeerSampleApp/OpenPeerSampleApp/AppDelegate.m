@@ -36,8 +36,12 @@
 #import "Utility.h"
 #import <OpenPeerSDK/HOPBackgrounding.h>
 #import "BackgroundingDelegate.h"
+#import "SessionManager.h"
 #ifdef APNS_ENABLED
 #import "APNSManager.h"
+#import "APNSInboxManager.h"
+#import "UAInboxPushHandler.h"
+#import "UAPush.h"
 #endif
 
 @implementation AppDelegate
@@ -65,7 +69,7 @@
     
     if ([apnsInfo count] > 0)
     {
-        [[APNSManager sharedAPNSManager] handleAPNS:apnsInfo];
+        [[APNSInboxManager sharedAPNSInboxManager] handleAPNS:apnsInfo];
     }
 #endif
     return YES;
@@ -87,22 +91,26 @@
     [[OpenPeer sharedOpenPeer] setAppEnteredBackground:YES];
     [[OpenPeer sharedOpenPeer] setAppEnteredForeground:NO];
     
-    UIBackgroundTaskIdentifier bgTask = UIBackgroundTaskInvalid;
-    
-    bgTask = [application beginBackgroundTaskWithExpirationHandler:^
+    if (![[SessionManager sharedSessionManager] isCallInProgress])
     {
-        [[HOPBackgrounding sharedBackgrounding]notifyGoingToBackgroundNow];
-        
-        [application endBackgroundTask:bgTask];
-    }];
-    
-    [[OpenPeer sharedOpenPeer] setBackgroundingTaskId:bgTask];
-    
-    // Start the long-running task and return immediately.
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
-    {
-        [[HOPBackgrounding sharedBackgrounding] notifyGoingToBackground:[[OpenPeer sharedOpenPeer] backgroundingDelegate]];
-    });
+        [[OpenPeer sharedOpenPeer]prepareAppForBackground];
+//        UIBackgroundTaskIdentifier bgTask = UIBackgroundTaskInvalid;
+//        
+//        bgTask = [application beginBackgroundTaskWithExpirationHandler:^
+//        {
+//            [[HOPBackgrounding sharedBackgrounding]notifyGoingToBackgroundNow];
+//            
+//            [application endBackgroundTask:bgTask];
+//        }];
+//        
+//        [[OpenPeer sharedOpenPeer] setBackgroundingTaskId:bgTask];
+//        
+//        // Start the long-running task and return immediately.
+//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
+//        {
+//            [[HOPBackgrounding sharedBackgrounding] notifyGoingToBackground:[[OpenPeer sharedOpenPeer] backgroundingDelegate]];
+//        });
+    }
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -165,9 +173,22 @@
     
     if ([apnsInfo count] > 0)
     {
-        [[APNSManager sharedAPNSManager] handleAPNS:apnsInfo];
+        [[APNSInboxManager sharedAPNSInboxManager] handleAPNS:apnsInfo];
     }
 }
+
+/*- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+{
+    // Notify UAInbox to fetch any new messages if the notification contains a rich application page id.
+    if (application.applicationState != UIApplicationStateBackground)
+    {
+        [UAInboxPushHandler handleNotification:userInfo];
+    }
+    
+    // Notify UAPush that a push came in with the completion handler
+//    [[UAPush shared] handleNotification:userInfo applicationState:application.applicationState fetchCompletionHandler:completionHandler];
+}*/
+
 - (void)handleNotification:(NSDictionary *)notification applicationState:(UIApplicationState)state
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Received push notification with notification:%@", notification);

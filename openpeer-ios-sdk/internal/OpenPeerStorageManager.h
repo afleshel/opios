@@ -40,7 +40,8 @@
 @class HOPProvisioningAccount;
 @class HOPIdentity;
 @class HOPIdentityLookup;
-
+@class HOPBackgroundingNotifier;
+@class HOPBackgroundingSubscription;
 using namespace zsLib;
 
 @interface OpenPeerStorageManager : NSObject
@@ -54,6 +55,10 @@ using namespace zsLib;
     NSMutableDictionary* _dictionaryIdentityLookups;
 //    NSMutableDictionary* _dictionaryContactPeerFilePublicLookup;
 }
+
+@property (strong, nonatomic) HOPBackgroundingNotifier* backgroundingNotifier;
+@property (strong, nonatomic) HOPBackgroundingSubscription* backgroundingSubscription;
+
 + (id)sharedStorageManager;
 
 - (HOPCall*) getCallForId:(NSString*) callId;

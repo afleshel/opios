@@ -42,13 +42,13 @@
 #import "MainViewController.h"
 #import "SessionViewController_iPhone.h"
 #import "Utility.h"
-
+#import <OpenpeerSDK/HOPMediaEngine.h>
 @implementation CallDelegate
 
 - (void) onCallStateChanged:(HOPCall*) call callState:(HOPCallStates) callState
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Call state: %@", [Utility getCallStateAsString:[call getState]]);
-    
+    [[SessionManager sharedSessionManager] setLatestValidConversationThread:[call getConversationThread]];
     NSString* sessionId = [[call getConversationThread] getThreadId];
     dispatch_async(dispatch_get_main_queue(), ^{
 
@@ -73,7 +73,8 @@
                 break;
                 
             case HOPCallStateRinging:               //Receives just callee side. Now should play ringing sound
-                [[SoundManager sharedSoundsManager] playRingingSound];
+                [[SessionManager sharedSessionManager] onCallRinging:call];
+                                                    //[[SoundManager sharedSoundsManager] playRingingSound];
                 break;
                 
             case HOPCallStateRingback:              //Receives just caller side
@@ -97,7 +98,11 @@
                 break;
                 
             case HOPCallStateClosing:               //Receives both parties
+                if ([[OpenPeer sharedOpenPeer] appEnteredBackground])
+                    [[OpenPeer sharedOpenPeer]prepareAppForBackground];
+
                 [[SessionManager sharedSessionManager] onCallClosing:call];
+                
                 [[SoundManager sharedSoundsManager] stopCallingSound];
                 [[SoundManager sharedSoundsManager] stopRingingSound];
                 [sessionViewController stopTimer];
