@@ -320,6 +320,27 @@
     [self shutdown];
     
 }
+
+- (void) prepareAppForBackground
+{
+    UIBackgroundTaskIdentifier bgTask = UIBackgroundTaskInvalid;
+    
+    bgTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^
+              {
+                  [[HOPBackgrounding sharedBackgrounding]notifyGoingToBackgroundNow];
+                  
+                  [[UIApplication sharedApplication] endBackgroundTask:bgTask];
+              }];
+    
+    [[OpenPeer sharedOpenPeer] setBackgroundingTaskId:bgTask];
+    
+    // Start the long-running task and return immediately.
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
+                   {
+                       [[HOPBackgrounding sharedBackgrounding] notifyGoingToBackground:[[OpenPeer sharedOpenPeer] backgroundingDelegate]];
+                   });
+}
+
 #pragma mark - SettingsDownloaderDelegate
 - (void) httpDownloader:(HTTPDownloader *)downloader downloaded:(NSString *)downloaded
 {

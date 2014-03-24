@@ -42,7 +42,7 @@
 #import "MainViewController.h"
 #import "SessionViewController_iPhone.h"
 #import "Utility.h"
-
+#import <OpenpeerSDK/HOPMediaEngine.h>
 @implementation CallDelegate
 
 - (void) onCallStateChanged:(HOPCall*) call callState:(HOPCallStates) callState
@@ -98,7 +98,11 @@
                 break;
                 
             case HOPCallStateClosing:               //Receives both parties
+                if ([[OpenPeer sharedOpenPeer] appEnteredBackground])
+                    [[OpenPeer sharedOpenPeer]prepareAppForBackground];
+
                 [[SessionManager sharedSessionManager] onCallClosing:call];
+                
                 [[SoundManager sharedSoundsManager] stopCallingSound];
                 [[SoundManager sharedSoundsManager] stopRingingSound];
                 [sessionViewController stopTimer];

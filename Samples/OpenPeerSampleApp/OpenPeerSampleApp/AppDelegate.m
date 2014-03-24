@@ -36,6 +36,7 @@
 #import "Utility.h"
 #import <OpenPeerSDK/HOPBackgrounding.h>
 #import "BackgroundingDelegate.h"
+#import "SessionManager.h"
 #ifdef APNS_ENABLED
 #import "APNSManager.h"
 #import "APNSInboxManager.h"
@@ -90,22 +91,26 @@
     [[OpenPeer sharedOpenPeer] setAppEnteredBackground:YES];
     [[OpenPeer sharedOpenPeer] setAppEnteredForeground:NO];
     
-    UIBackgroundTaskIdentifier bgTask = UIBackgroundTaskInvalid;
-    
-    bgTask = [application beginBackgroundTaskWithExpirationHandler:^
+    if (![[SessionManager sharedSessionManager] isCallInProgress])
     {
-        [[HOPBackgrounding sharedBackgrounding]notifyGoingToBackgroundNow];
-        
-        [application endBackgroundTask:bgTask];
-    }];
-    
-    [[OpenPeer sharedOpenPeer] setBackgroundingTaskId:bgTask];
-    
-    // Start the long-running task and return immediately.
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
-    {
-        [[HOPBackgrounding sharedBackgrounding] notifyGoingToBackground:[[OpenPeer sharedOpenPeer] backgroundingDelegate]];
-    });
+        [[OpenPeer sharedOpenPeer]prepareAppForBackground];
+//        UIBackgroundTaskIdentifier bgTask = UIBackgroundTaskInvalid;
+//        
+//        bgTask = [application beginBackgroundTaskWithExpirationHandler:^
+//        {
+//            [[HOPBackgrounding sharedBackgrounding]notifyGoingToBackgroundNow];
+//            
+//            [application endBackgroundTask:bgTask];
+//        }];
+//        
+//        [[OpenPeer sharedOpenPeer] setBackgroundingTaskId:bgTask];
+//        
+//        // Start the long-running task and return immediately.
+//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
+//        {
+//            [[HOPBackgrounding sharedBackgrounding] notifyGoingToBackground:[[OpenPeer sharedOpenPeer] backgroundingDelegate]];
+//        });
+    }
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application

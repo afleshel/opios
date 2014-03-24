@@ -82,4 +82,5 @@
 - (void) setup;
 - (void) shutdown;
 - (void) shutdownCleanup;
+- (void) prepareAppForBackground;
 @end
