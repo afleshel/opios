@@ -35,6 +35,7 @@
 
 @implementation Session
 
+@synthesize conversationThread = _conversationThread;
 - (id) initWithContact:(HOPRolodexContact*) inContact conversationThread:(HOPConversationThread*) inConverationThread
 {
     self = [super init];
@@ -45,6 +46,7 @@
         self.messageArray = [[NSMutableArray alloc] init];
         self.unreadMessageArray = [[NSMutableArray alloc] init];
         self.sessionIdsHistory = [[NSMutableSet alloc] init];
+        self.arrayMergedConversationThreads = [[NSMutableArray alloc] init];
     }
     self.conversationThread = inConverationThread;
     [self.sessionIdsHistory addObject:[inConverationThread getThreadId]];
@@ -67,4 +69,31 @@
     return self;
 }
 
+- (void) setConversationThread:(HOPConversationThread *)inConversationThread
+{
+    @synchronized(self)
+    {
+        if (![self.arrayMergedConversationThreads containsObject:inConversationThread])
+        {
+            if (inConversationThread)
+                [self.arrayMergedConversationThreads addObject:inConversationThread];
+            else
+                [self.arrayMergedConversationThreads removeAllObjects];
+        }
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, [NSString stringWithFormat:@"%@", (inConversationThread == _conversationThread ? [NSString stringWithFormat:@"Using same conversation thread %@",[inConversationThread getThreadId]] : [NSString stringWithFormat:@"Switched from %@ conversation thread to %@",[_conversationThread getThreadId],[inConversationThread getThreadId]])]);
+        
+        _conversationThread = inConversationThread;
+    }
+}
+
+- (HOPConversationThread*) conversationThread
+{
+    HOPConversationThread* ret  = nil;
+    @synchronized(self)
+    {
+        ret = _conversationThread;
+    }
+    
+    return ret;
+}
 @end

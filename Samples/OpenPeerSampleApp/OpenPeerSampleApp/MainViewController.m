@@ -275,7 +275,7 @@
             sessionViewContorller = [[SessionViewController_iPhone alloc] initWithSession:session];
             sessionViewContorller.hidesBottomBarWhenPushed = YES;
             [self.sessionViewControllersDictionary setObject:sessionViewContorller forKey:sessionId];
-            [navigationController pushViewController:sessionViewContorller animated:NO];
+            [navigationController pushViewController:sessionViewContorller animated:YES];
             [navigationController.navigationBar.topItem setTitle:title];
             //[navigationController pushViewController:sessionViewContorller.chatViewController animated:YES];
             break;

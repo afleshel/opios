@@ -34,6 +34,7 @@
 #import "MainViewController.h"
 #import "MessageManager.h"
 #import "SessionViewController_iPhone.h"
+#import "SoundsManager.h"
 
 #import "Utility.h"
 #import "Session.h"
@@ -389,11 +390,12 @@
         SessionViewController_iPhone* sessionViewController = [[[[OpenPeer sharedOpenPeer] mainViewController] sessionViewControllersDictionary] objectForKey:[session.conversationThread getThreadId]];
         
         //If it is an incomming call, get show session view controller
-        if (![[call getCaller] isSelf])
+        /*if (![[call getCaller] isSelf])
         {
             [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForSession:session forIncomingCall:YES forIncomingMessage:NO];
         }
-        else
+        else*/
+        if ([[call getCaller] isSelf])
         {
             if ([call hasVideo])
                 [sessionViewController showWaitingView:YES];
@@ -423,25 +425,45 @@
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Incoming a call for the session <%p>", session);
     
     //Set current call
-    BOOL callFlagIsSet = [self setActiveCallSession:session callActive:YES];
+    //BOOL callFlagIsSet = [self setActiveCallSession:session callActive:YES];
     
     //If callFlagIsSet is YES, show incoming call view, and move call to ringing state
-    if (callFlagIsSet)
+    if (![self isCallInProgress])
     {
         session.currentCall = call;
         
         if (!session.isRedial)
         {
-            [[[OpenPeer sharedOpenPeer] mainViewController] showIncominCallForSession:session];
-            
+            //[[[OpenPeer sharedOpenPeer] mainViewController] showIncominCallForSession:session];
+            //If it is an incomming call, get show session view controller
+            if (![[call getCaller] isSelf])
+            {
+                [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForSession:session forIncomingCall:YES forIncomingMessage:NO];
+            }
             [call ring];
         }
         else
             [call answer];
+        
+        BOOL callFlagIsSet = [self setActiveCallSession:session callActive:YES];
     }
     else //If callFlagIsSet is NO, hangup incoming call. 
     {
         [call hangup:HOPCallClosedReasonBusy];
+    }
+}
+
+- (void) onCallRinging:(HOPCall*) call
+{
+    NSString* sessionId = [[call getConversationThread] getThreadId];
+    if ([sessionId length] > 0)
+    {
+        Session* session = [[[SessionManager sharedSessionManager] sessionsDictionary] objectForKey:sessionId];
+        if (session)
+        {
+            [[[OpenPeer sharedOpenPeer] mainViewController] showIncominCallForSession:session];
+            [[SoundManager sharedSoundsManager] playRingingSound];
+        }
     }
 }
 
@@ -613,7 +635,12 @@
  */
 - (BOOL) isCallInProgress
 {
-    return self.sessionWithActiveCall != nil;
+    BOOL ret = NO;
+    @synchronized(self)
+    {
+        ret = self.sessionWithActiveCall != nil;
+    }
+    return ret;
 }
 
 
@@ -669,5 +696,11 @@
         [session.conversationThread destroyCoreObject];
     }
     [self.sessionsDictionary removeAllObjects];
+}
+
+- (void) setLatestValidConversationThread:(HOPConversationThread*) inConversationThread
+{
+    Session* session = [self.sessionsDictionary objectForKey:[inConversationThread getThreadId]];
+    session.conversationThread = inConversationThread;
 }
 @end

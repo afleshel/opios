@@ -39,12 +39,13 @@
 @interface Session : NSObject
 
 @property (strong) NSMutableArray* participantsArray;
-@property (strong) HOPConversationThread* conversationThread;
+@property (weak, nonatomic) HOPConversationThread* conversationThread;
 @property (strong) HOPCall* currentCall;
 @property (assign) BOOL isRedial;
 @property (strong) NSMutableArray* messageArray;
 @property (strong) NSMutableArray* unreadMessageArray;
 @property (strong) NSMutableSet* sessionIdsHistory;
+@property (strong) NSMutableArray* arrayMergedConversationThreads;
 
 - (id) initWithContact:(HOPRolodexContact*) inContact conversationThread:(HOPConversationThread*) inConverationThread;
 - (id) initWithContacts:(NSArray*) inContacts conversationThread:(HOPConversationThread*) inConverationThread;

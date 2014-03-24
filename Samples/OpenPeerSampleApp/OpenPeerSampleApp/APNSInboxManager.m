@@ -286,7 +286,7 @@
                     }
                     else
                     {
-                        OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"%@ message not saved - message id %@ - session id %@",messageID,[session.conversationThread getThreadId]);
+                        OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"%@ message is not saved - message id %@ - session id %@",messageText,messageID,[session.conversationThread getThreadId]);
                     }
                 }
                 else

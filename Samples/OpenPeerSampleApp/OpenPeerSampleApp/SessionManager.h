@@ -62,6 +62,7 @@
 
 - (void) onCallPreparing:(HOPCall*) call;
 - (void) onCallIncoming:(HOPCall*) call;
+- (void) onCallRinging:(HOPCall*) call;
 - (void) onCallOpened:(HOPCall*) call;
 - (void) onCallClosing:(HOPCall*) call;
 
@@ -78,4 +79,6 @@
 
 - (void) stopAnyActiveCall;
 - (void) clearAllSessions;
+
+- (void) setLatestValidConversationThread:(HOPConversationThread*) inConversationThread;
 @end

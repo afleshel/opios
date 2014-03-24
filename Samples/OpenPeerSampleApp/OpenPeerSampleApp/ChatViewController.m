@@ -388,8 +388,16 @@
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPMessageRecord" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];
     [fetchRequest setEntity:entity];
     
-    self.predicateString = [NSString stringWithFormat:@"(session.sessionID MATCHES '%@')",[self.session.conversationThread getThreadId]];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:self.predicateString];
+    //self.predicateString = [NSString stringWithFormat:@"(session.sessionID MATCHES '%@')",[self.session.conversationThread getThreadId]];
+    //NSPredicate *predicate = [NSPredicate predicateWithFormat:self.predicateString];
+    NSMutableArray* arrayOfPredicates = [[NSMutableArray alloc] init];
+    for (NSString* sessionID in [self.session.sessionIdsHistory allObjects])
+    {
+        NSPredicate* predicateSessionID = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(session.sessionID MATCHES '%@')",sessionID]];
+        [arrayOfPredicates addObject:predicateSessionID];
+    }
+    NSPredicate *predicate = [NSCompoundPredicate andPredicateWithSubpredicates:arrayOfPredicates];
+    
     [fetchRequest setPredicate:predicate];
     
 	[fetchRequest setFetchBatchSize:20];

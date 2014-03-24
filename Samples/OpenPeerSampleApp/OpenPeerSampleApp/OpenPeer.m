@@ -330,7 +330,7 @@
     [[HOPCache sharedCache] store:[[NSUserDefaults standardUserDefaults] stringForKey:settingsKeySettingsDownloadURL] expireDate:[[NSDate date] dateByAddingTimeInterval:expiryTime] cookieNamePath:settingsKeySettingsDownloadURL];
 }
 
-- (void)onSettingsDownloadFailure
+- (void) httpDownloader:(HTTPDownloader *) downloader didFailWithError:(NSError *)error
 {
     [[OpenPeer sharedOpenPeer] finishPreSetup];
 }

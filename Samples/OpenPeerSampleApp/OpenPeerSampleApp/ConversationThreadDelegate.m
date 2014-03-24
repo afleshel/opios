@@ -92,6 +92,7 @@
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Handling a new message with id %@ for conversation thread.",messageID);
     dispatch_async(dispatch_get_main_queue(), ^{
+        [[SessionManager sharedSessionManager] setLatestValidConversationThread:conversationThread];
         HOPMessage* message = [conversationThread getMessageForID:messageID];
         if (message)
         {
