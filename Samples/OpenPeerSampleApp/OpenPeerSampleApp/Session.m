@@ -47,9 +47,10 @@
         self.unreadMessageArray = [[NSMutableArray alloc] init];
         self.sessionIdsHistory = [[NSMutableSet alloc] init];
         self.arrayMergedConversationThreads = [[NSMutableArray alloc] init];
+        self.conversationThread = inConverationThread;
+        [self.sessionIdsHistory addObject:[inConverationThread getThreadId]];
     }
-    self.conversationThread = inConverationThread;
-    [self.sessionIdsHistory addObject:[inConverationThread getThreadId]];
+    
     return self;
 }
 
@@ -62,10 +63,12 @@
         if (inContacts)
             [self.participantsArray addObjectsFromArray:inContacts];
         self.messageArray = [[NSMutableArray alloc] init];
+        self.sessionIdsHistory = [[NSMutableSet alloc] init];
         self.unreadMessageArray = [[NSMutableArray alloc] init];
+        self.conversationThread = inConverationThread;
+        [self.sessionIdsHistory addObject:[inConverationThread getThreadId]];
     }
-    self.conversationThread = inConverationThread;
-    [self.sessionIdsHistory addObject:[inConverationThread getThreadId]];
+    
     return self;
 }
 

@@ -36,6 +36,7 @@
 @class HOPRolodexContact;
 @class HOPMessage;
 @class HOPAccount;
+@class HOPIdentity;
 
 //HOP_NOTICE: Don't expose this till group conversations are not enabled
 @interface ContactInfo
@@ -54,8 +55,8 @@
  @param profileBundleEl NSString Profile bundle
  @returns HOPConversationThread object if core conversation thread object is created
  */
-+ (id) conversationThreadWithProfileBundle:(NSString*) profileBundle;
-
+//+ (id) conversationThreadWithProfileBundle:(NSString*) profileBundle;
++ (id) conversationThreadWithIdentities:(NSArray*) identities;
 /**
  Retrieves list of all created conversation threads.
  @returns NSArray List of HOPConversationThread objects
@@ -115,7 +116,8 @@
  @param contact HOPContact Contact object reference
  @returns String representation of profile bundle of the provided contact object
  */
-- (NSString*) getProfileBundle: (HOPContact*) contact;
+//- (NSString*) getProfileBundle: (HOPContact*) contact;
+- (NSArray*) getIdentityContactListForContact:(HOPContact*) contact;
 
 /**
  Retrieves state of the provided contact.

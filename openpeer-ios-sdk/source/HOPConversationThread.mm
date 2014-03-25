@@ -38,10 +38,12 @@
 #import "HOPContact_Internal.h"
 #import "HOPAccount_Internal.h"
 #import "HOPMessage.h"
+#import "HOPModelManager.h"
+#import "HOPIdentityContact_Internal.h"
 
 #import "OpenPeerStorageManager.h"
 #import "OpenPeerUtility.h"
-
+#import "HOPIdentity_Internal.h"
 
 ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
@@ -98,26 +100,24 @@ using namespace openpeer::core;
     return self;
 }
 
-+  (id) conversationThreadWithProfileBundle:(NSString*) profileBundle
++ (id) conversationThreadWithIdentities:(NSArray*) identities
 {
     HOPConversationThread* ret = nil;
+    core::IdentityContactList identityContactsList;
     
-    zsLib::XML::ElementPtr elementPtr;
-    
-    if ([profileBundle length] > 0)
-        elementPtr = IHelper::createElement([profileBundle UTF8String]);
-    else
-        elementPtr = zsLib::XML::ElementPtr();
-
-    core::IdentityContactList empty;
-#define WARNING_FIX_ME 1
-#define WARNING_FIX_ME 2
-
-    IConversationThreadPtr tempConversationThreadPtr = IConversationThread::create([[HOPAccount sharedAccount] getAccountPtr], empty);
-    
-    if (tempConversationThreadPtr)
+    for (HOPIdentity* identity in identities)
     {
-        ret = [[self alloc] initWithConversationThread:tempConversationThreadPtr];
+        IdentityContact identityContact;
+        [identity getIdentityPtr]->getSelfIdentityContact(identityContact);
+        
+        identityContactsList.push_back(identityContact);
+        
+        IConversationThreadPtr tempConversationThreadPtr = IConversationThread::create([[HOPAccount sharedAccount] getAccountPtr], identityContactsList);
+        
+        if (tempConversationThreadPtr)
+        {
+            ret = [[self alloc] initWithConversationThread:tempConversationThreadPtr];
+        }
     }
     return ret;
 }
@@ -201,20 +201,88 @@ using namespace openpeer::core;
     return contactArray;
 }
 
-- (NSString*) getProfileBundle: (HOPContact*) contact
+//- (NSString*) getProfileBundle: (HOPContact*) contact
+//{
+//    NSString* ret = nil;
+//    if (conversationThreadPtr)
+//    {
+//#define WARNING_FIX_ME 1
+//#define WARNING_FIX_ME 2
+//        ret = @"";
+//    }
+//    else
+//    {
+//        ZS_LOG_ERROR(Debug, [self log:@"Invalid conversation thread object!"]);
+//        [NSException raise:NSInvalidArgumentException format:@"Invalid conversation thread object!"];
+//    }
+//    return ret;
+//}
+
+- (NSArray*) getIdentityContactListForContact:(HOPContact*) contact
 {
-    NSString* ret = nil;
-    if (conversationThreadPtr)
+    NSMutableArray* ret = nil;
+    if(conversationThreadPtr)
     {
-#define WARNING_FIX_ME 1
-#define WARNING_FIX_ME 2
-        ret = @"";
+        //ret = [[NSMutableArray alloc] init];
+        /*IdentityContactListPtr identityList = conversationThreadPtr->getIdentityContactList([contact getContactPtr]);
+        for (IdentityContactList::iterator contact = identityList->begin(); contact != identityList->end(); ++contact)
+        {
+            HOPRolodexContact* hopRolodexContact = nil;
+            IdentityContact identityContact = *contact;
+            NSString* contactIdentityURI = [NSString stringWithCString:identityContact.mIdentityURI encoding:NSUTF8StringEncoding];
+            
+            if ([contactIdentityURI length] > 0)
+            {
+                hopRolodexContact = nil;//[[HOPModelManager sharedModelManager] getRolodexContactByIdentityURI:contactIdentityURI];
+                if (!hopRolodexContact)
+                {
+                    //Create a new menaged object for new rolodex contact
+                    NSManagedObject* managedObject = [[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPRolodexContact"];
+                    if ([managedObject isKindOfClass:[HOPRolodexContact class]])
+                    {
+                        hopRolodexContact = (HOPRolodexContact*)managedObject;
+                        [hopRolodexContact updateWithCoreRolodexContact:identityContact identityProviderDomain:[NSString stringWithCString:identityContact.mIdentityProvider encoding:NSUTF8StringEncoding] homeUserIdentityURI:[NSString stringWithCString:identityContact.mIdentityURI encoding:NSUTF8StringEncoding]];
+                        [[HOPModelManager sharedModelManager] saveContext];
+                    }
+                }
+            }
+        }*/
+
+        IdentityContactListPtr identityContactListPtr = conversationThreadPtr->getIdentityContactList([contact getContactPtr]);
+        if (identityContactListPtr)
+        {
+            ret = [[NSMutableArray alloc] init];
+            for (IdentityContactList::iterator identityContactInfo = identityContactListPtr->begin(); identityContactInfo != identityContactListPtr->end(); ++identityContactInfo)
+            {
+                IdentityContact identityContact = *identityContactInfo;
+                if (identityContact.hasData())
+                {
+                    NSString* sId = [NSString stringWithUTF8String:identityContact.mStableID];
+                    NSString* identityURI = [NSString stringWithUTF8String:identityContact.mIdentityURI];
+                    HOPIdentityContact* hopIdentityContact = [[HOPModelManager sharedModelManager] getIdentityContactByStableID:sId identityURI:identityURI];
+                    
+                    if (!hopIdentityContact)
+                    {
+                        NSManagedObject* managedObject = [[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPIdentityContact"];
+                        if (managedObject && [managedObject isKindOfClass:[HOPIdentityContact class]])
+                        {
+                            hopIdentityContact = (HOPIdentityContact*) managedObject;
+                        }
+                    }
+                    
+                    if (hopIdentityContact)
+                    {
+                        [hopIdentityContact updateWithIdentityContact:identityContact];
+                        
+                        [ret addObject:hopIdentityContact];
+                    }
+                }
+            }
+            [[HOPModelManager sharedModelManager] saveContext];
+        }
+
     }
-    else
-    {
-        ZS_LOG_ERROR(Debug, [self log:@"Invalid conversation thread object!"]);
-        [NSException raise:NSInvalidArgumentException format:@"Invalid conversation thread object!"];
-    }
+    
     return ret;
 }
 

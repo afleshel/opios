@@ -131,7 +131,7 @@
                     missedCall = YES;
                     [[APNSManager sharedAPNSManager] sendPushNotificationForContact:coreContact message:messageText missedCall:missedCall];
                 }
-                else
+                else if (![message.type isEqualToString:messageTypeSystem])
                 {
                     //NSString* msg = [message.text length] > 22 ? [NSString stringWithFormat:@"%@...",[message.text substringToIndex:22]] : message.text;
                     

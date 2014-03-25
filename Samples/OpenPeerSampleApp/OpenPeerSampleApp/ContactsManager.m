@@ -502,6 +502,24 @@
     return ret;
 }
 
+- (NSArray*) getIdentityContactsForHomeUser
+{
+    NSMutableArray* ret = nil;
+    NSArray* identities = [[HOPAccount sharedAccount] getAssociatedIdentities];
+    
+    if ([identities count] > 0)
+        ret = [[NSMutableArray alloc] init];
+    
+    for (HOPIdentity* identity in identities)
+    {
+        HOPIdentityContact* identityContact = [identity getSelfIdentityContact];
+        if (identityContact)
+            [ret addObject:identityContact];
+    }
+    
+    return ret;
+}
+
 - (void) removeAllContacts
 {
     

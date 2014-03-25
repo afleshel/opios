@@ -228,9 +228,12 @@
                 
                 OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Sending push notification: %@",message);
                 
-                [self pushData:dataToPush sendingRich:NO];
-                
-                [self.apnsHisotry setObject:[NSDate date] forKey:peerURI];
+                if ([dataToPush count] > 0)
+                {
+                    [self pushData:dataToPush sendingRich:NO];
+                    
+                    [self.apnsHisotry setObject:[NSDate date] forKey:peerURI];
+                }
             }
         }
         else
@@ -267,7 +270,8 @@
             SBJsonParser* parser = [[SBJsonParser alloc] init];
             NSDictionary* dataToPush = [parser objectWithString: stringToSend];
 
-            [self pushData:dataToPush sendingRich:YES];
+            if ([dataToPush count] > 0)
+                [self pushData:dataToPush sendingRich:YES];
         }
         [self.apnsHisotry setObject:[NSDate date] forKey:[message.contact getPeerURI]];
     }

@@ -41,6 +41,7 @@
 #import "OpenPeer.h"
 #import "AppConsts.h"
 
+#import <OpenpeerSDK/HOPAccount.h>
 #import <OpenpeerSDK/HOPConversationThread.h>
 #import <OpenpeerSDK/HOPIdentityContact.h>
 #import <OpenpeerSDK/HOPPublicPeerFile.h>
@@ -108,9 +109,15 @@
     
     if (!ret)
     {
-        NSString* profileBundle = [[ContactsManager sharedContactsManager] createProfileBundleForCommunicationWithContact:contact];
+        //NSString* profileBundle = [[ContactsManager sharedContactsManager] createProfileBundleForCommunicationWithContact:contact];
+        //NSArray* identityContacts = [[ContactsManager sharedContactsManager]  getIdentityContactsForHomeUser];
         //Create a conversation thread
-        HOPConversationThread* conversationThread = [HOPConversationThread conversationThreadWithProfileBundle:profileBundle];
+        
+//        if ([identityContacts count] == 0)
+//            return ret;
+        
+        //HOPConversationThread* conversationThread = [HOPConversationThread conversationThreadWithProfileBundle:profileBundle];
+        HOPConversationThread* conversationThread = [HOPConversationThread conversationThreadWithIdentities:[[HOPAccount sharedAccount] getAssociatedIdentities]];
         
         //Create a session with new conversation thread
         ret = [[Session alloc] initWithContact:contact conversationThread:conversationThread];
@@ -165,12 +172,22 @@
     NSArray* contactAaray = [[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:[[contacts objectAtIndex:0] getPeerURI]];
     NSMutableArray* rolodexContacts  = contactAaray == nil ? [[NSMutableArray alloc] init] : [NSMutableArray  arrayWithArray: contactAaray];
     
+    //NSMutableArray* test = [inConversationThread getRolodexContactListForContact:[contacts objectAtIndex:0]];
     if ([rolodexContacts count] == 0)
     {
         HOPContact* coreContact = [contacts objectAtIndex:0];
-        NSString* profileBundle = [inConversationThread getProfileBundle:coreContact];
-        rolodexContact = [[ContactsManager sharedContactsManager] getRolodexContactByProfileBundle:profileBundle coreContact:coreContact];
-        [rolodexContacts addObject:rolodexContact];
+//        NSString* profileBundle = [inConversationThread getProfileBundle:coreContact];
+//        rolodexContact = [[ContactsManager sharedContactsManager] getRolodexContactByProfileBundle:profileBundle coreContact:coreContact];
+//        [rolodexContacts addObject:rolodexContact];
+        
+        
+        NSArray* identityContacts = [inConversationThread getIdentityContactListForContact:coreContact];
+        for (HOPIdentityContact* identityContact in identityContacts)
+        {
+            [rolodexContacts addObject:identityContact.rolodexContact];
+        }
+        rolodexContact = [rolodexContacts objectAtIndex:0];
+        [[ContactsManager sharedContactsManager] refreshRolodexContacts];
     }
     else
     {
@@ -652,10 +669,12 @@
         Session* session = [self.sessionsDictionary objectForKey:key];
         if ([session.participantsArray count] > 0)
         {
-            HOPRolodexContact* sessionParticipant = [session.participantsArray objectAtIndex:0];
-            NSString* profileBundle = [[ContactsManager sharedContactsManager] createProfileBundleForCommunicationWithContact:sessionParticipant];
-            //Create a conversation thread
-            HOPConversationThread* conversationThread = [HOPConversationThread conversationThreadWithProfileBundle:profileBundle];
+//            HOPRolodexContact* sessionParticipant = [session.participantsArray objectAtIndex:0];
+//            NSString* profileBundle = [[ContactsManager sharedContactsManager] createProfileBundleForCommunicationWithContact:sessionParticipant];
+//            //Create a conversation thread
+//            HOPConversationThread* conversationThread = [HOPConversationThread conversationThreadWithProfileBundle:profileBundle];
+            
+            HOPConversationThread* conversationThread = [HOPConversationThread conversationThreadWithIdentities:[[HOPAccount sharedAccount] getAssociatedIdentities]];
             
             session.conversationThread = nil;
             
