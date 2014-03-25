@@ -53,6 +53,7 @@
 
 @property (weak, nonatomic) NSDictionary* userInfo;
 @property (nonatomic) BOOL keyboardIsHidden;
+@property (nonatomic) BOOL isRefreshed;
 @property (nonatomic) CGFloat keyboardLastChange;
 @property (nonatomic,strong) UITapGestureRecognizer *tapGesture;
 
@@ -227,14 +228,15 @@
 - (void) refreshViewWithData
 {
     [self.session.unreadMessageArray removeAllObjects];
-    /*if(self.session.messageArray && [self.session.messageArray count] > 0)
+    
+    if (!self.isRefreshed)
     {
-        [self.session.unreadMessageArray removeAllObjects];
-        
         [self.chatTableView reloadData];
         
-        [self.chatTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.session.messageArray count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-    }*/
+        [self.chatTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[[[self fetchedResultsController] fetchedObjects] count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    }
+    
+    self.isRefreshed = NO;
 }
 
 - (void) updateFetchControllerForSession:(NSString*) sessionID
@@ -317,6 +319,7 @@
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return [[self.fetchedResultsController fetchedObjects] count];
+
     //return [self.session.messageArray count];
 }
 
@@ -415,9 +418,10 @@
 	return _fetchedResultsController;
 }
 
-- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
-	
-	switch (type)
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath
+{
+    self.isRefreshed = YES;
+    switch (type)
     {
 		case NSFetchedResultsChangeInsert:
 			[self.chatTableView  insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];

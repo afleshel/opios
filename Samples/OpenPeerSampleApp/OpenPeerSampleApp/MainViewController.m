@@ -311,6 +311,7 @@
             
         case EXISTIG_SESSION_SHOW_CHAT:
             sessionViewContorller = [self.sessionViewControllersDictionary objectForKey:sessionId];
+            [sessionViewContorller.chatViewController refreshViewWithData];
             if (navigationController.visibleViewController != sessionViewContorller)
             {
                 [navigationController popToRootViewControllerAnimated:NO];
