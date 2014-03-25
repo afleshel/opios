@@ -365,9 +365,9 @@
     
     CGSize textSize = [ChatMessageCell calcMessageHeight:message.text forScreenWidth:self.chatTableView.frame.size.width - 85];
 
-    textSize.height += 32;
+    textSize.height += 52;
     
-    res = (textSize.height < 46) ? 46 : textSize.height;
+    res = (textSize.height < 52) ? 52 : textSize.height;
     
     return res;
 }
