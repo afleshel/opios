@@ -669,10 +669,7 @@
         Session* session = [self.sessionsDictionary objectForKey:key];
         if ([session.participantsArray count] > 0)
         {
-//            HOPRolodexContact* sessionParticipant = [session.participantsArray objectAtIndex:0];
-//            NSString* profileBundle = [[ContactsManager sharedContactsManager] createProfileBundleForCommunicationWithContact:sessionParticipant];
-//            //Create a conversation thread
-//            HOPConversationThread* conversationThread = [HOPConversationThread conversationThreadWithProfileBundle:profileBundle];
+            NSString* oldSessionId = [session.conversationThread getThreadId];
             
             HOPConversationThread* conversationThread = [HOPConversationThread conversationThreadWithIdentities:[[HOPAccount sharedAccount] getAssociatedIdentities]];
             
@@ -682,8 +679,12 @@
             //Add list of all participants. Currently only one participant is added
             if (conversationThread)
             {
+                //NSString* oldSessionId = [session.conversationThread getThreadId];
+                NSString* newSessionId = [conversationThread getThreadId];
+                
                 //Update the session with a new conversation thread
                 session.conversationThread = conversationThread;
+                [session.sessionIdsHistory addObject:[conversationThread getThreadId]];
                 
                 NSMutableArray* participants = [[NSMutableArray alloc] init];
                 for (HOPRolodexContact* rolodexContact in session.participantsArray)
@@ -691,6 +692,13 @@
                     [participants addObject:[rolodexContact getCoreContact]];
                 }
                 [conversationThread addContacts:participants];
+                NSArray* contactsArray = [[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:[[participants objectAtIndex:0] getPeerURI]];
+                if (contactsArray)
+                {
+                    [[HOPModelManager sharedModelManager] addSession:[conversationThread getThreadId] type:nil date:nil name:nil participants:contactsArray];
+                
+                    [self setValidSession:session newSessionId:newSessionId oldSessionId:oldSessionId];
+                }
             }
         }
         else

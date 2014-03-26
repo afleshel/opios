@@ -374,9 +374,12 @@
 
 - (void) sendIMmessage:(NSString *)message
 {
-    [[MessageManager sharedMessageManager] sendMessage:message forSession:self.session];
-    self.messageTextbox.text = nil;
-    [self refreshViewWithData];
+    if ([message length] > 0)
+    {
+        [[MessageManager sharedMessageManager] sendMessage:message forSession:self.session];
+        self.messageTextbox.text = nil;
+        [self refreshViewWithData];
+    }
 }
 
 #pragma mark - NSFetchedResultsController
