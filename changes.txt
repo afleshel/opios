@@ -1,4 +1,19 @@
 
+opios SDK v0.5.1 changes
+- improved backgrounding by adding phased backgrounding
+- pushes before backgrounding
+- added rich push
+- added trickle ice for media
+- improved handling of settings
+- various caching improvements
+- fixed many logout / application quit issues
+- logger optimization
+- fixed various deadlocks / crashes
+- improved socket polling
+- reduced conversation thread overhead by optionally pulling in peer files when needed
+- added identity information to conversation thread for better identification when identity information is not available
+- made many engine properties adjustable in settings
+
 opios SDK v0.5.0 changes
 - added: APNS push integration example
 - fix: incoming call audio routing issue
