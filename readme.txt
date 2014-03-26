@@ -56,8 +56,8 @@ opios/Samples/OpenPeerSampleApp/OpenPeerSampleApp.xcodeproj
 		identityProviderDomain = @"<-- enter identity provider domain here (e.g. idprovider-javascript.hookflash.me) -->";
 		identityFederateBaseURI = @"<-- enter federated identity base uri here (e.g. identity://idprovider-javascript.hookflash.me/) -->";
 		lockBoxServiceDomain =  @"<-- enter lockbox service domain here (e.g. hcs-javascript.hookflash.me) -->";
-		archiveOutgoingTelnetLoggerServer = @"<-- enter outgoing telnet server here (e.g. tcp.logger.hookflash.me:8055) -->";
-		archiveTelnetLoggerServer = @"<-- enter outgoing telnet server here (e.g. 59999) -->";
+		defaultOutgoingTelnetServer = @"<-- enter outgoing telnet server here (e.g. tcp.logger.hookflash.me:8055) -->";
+		localTelnetLoggerPort = @"<-- enter outgoing telnet server here (e.g. 59999) -->";
 		
 		
 	If you want to change your application data or login settings, you can create a QR code with URL of json file(e.g. www.my_test_server.com/settings.json) that contains desired data. 
@@ -71,8 +71,8 @@ opios/Samples/OpenPeerSampleApp/OpenPeerSampleApp.xcodeproj
 			"identityFederateBaseURI": "<-- enter federated identity base uri here (e.g. identity://idprovider-javascript.hookflash.me/) -->",
 			"namespaceGrantServiceURL": "<-- enter outer namespace grant service url here (e.g. https://app-javascript.hookflash.me/outernamespacegrant.html) -->",
 			"lockBoxServiceDomain": "<-- enter lockbox service domain here (e.g. hcs-javascript.hookflash.me) -->",
-			"archiveOutgoingTelnetLoggerServer": "<-- enter outgoing telnet server here (e.g. tcp.logger.hookflash.me:8055) -->"
-			"archiveTelnetLoggerServer": "<-- enter outgoing telnet server here (e.g. 59999) -->";
+			"defaultOutgoingTelnetServer": "<-- enter outgoing telnet server here (e.g. tcp.logger.hookflash.me:8055) -->"
+			"localTelnetLoggerPort": "<-- enter outgoing telnet server here (e.g. 59999) -->";
 		}
 	}
 	

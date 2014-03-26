@@ -35,6 +35,7 @@
 		8713363B17CCBD6F008C91F7 /* iPhone_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8713363817CCBD6F008C91F7 /* iPhone_background@2x.png */; };
 		8713363E17CCC10B008C91F7 /* iPhone_blue_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8713363C17CCC10B008C91F7 /* iPhone_blue_button@2x.png */; };
 		8713363F17CCC10B008C91F7 /* iPhone_blue_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 8713363D17CCC10B008C91F7 /* iPhone_blue_button.png */; };
+		871952AD18E3521500E15F2A /* readme.txt in Resources */ = {isa = PBXBuildFile; fileRef = 871952AC18E3521500E15F2A /* readme.txt */; };
 		8719AB0117CE0523007E991B /* tableViewCell@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8719AAFF17CE0523007E991B /* tableViewCell@2x.png */; };
 		8719AB0217CE0523007E991B /* tableViewCell.png in Resources */ = {isa = PBXBuildFile; fileRef = 8719AB0017CE0523007E991B /* tableViewCell.png */; };
 		8719AB0717CE0710007E991B /* tableViewCell_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8719AB0517CE0710007E991B /* tableViewCell_selected@2x.png */; };
@@ -665,6 +666,7 @@
 		8713363817CCBD6F008C91F7 /* iPhone_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone_background@2x.png"; sourceTree = "<group>"; };
 		8713363C17CCC10B008C91F7 /* iPhone_blue_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone_blue_button@2x.png"; sourceTree = "<group>"; };
 		8713363D17CCC10B008C91F7 /* iPhone_blue_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPhone_blue_button.png; sourceTree = "<group>"; };
+		871952AC18E3521500E15F2A /* readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = readme.txt; path = ../../../readme.txt; sourceTree = "<group>"; };
 		8719AAFF17CE0523007E991B /* tableViewCell@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tableViewCell@2x.png"; sourceTree = "<group>"; };
 		8719AB0017CE0523007E991B /* tableViewCell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tableViewCell.png; sourceTree = "<group>"; };
 		8719AB0517CE0710007E991B /* tableViewCell_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tableViewCell_selected@2x.png"; sourceTree = "<group>"; };
@@ -1437,6 +1439,7 @@
 		87272833166CBF9B0089CBB6 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				871952AC18E3521500E15F2A /* readme.txt */,
 				876CD4C818A38B370069C296 /* CustomerSpecific.plist */,
 				8754280818C7A2FD007F626F /* CustomerSpecific_Release.plist */,
 				87098FDC17C23997007C9093 /* OpenPeerDataModel.bundle */,
@@ -1920,6 +1923,7 @@
 				87224761182D165A0027DA50 /* iPhone_audio_camera@2x.png in Resources */,
 				8730D7D61833A63D008D1D37 /* iPhone_loader_00021@2x.png in Resources */,
 				8722472A182D01AB0027DA50 /* iPhone_lightning_bolt@2x.png in Resources */,
+				871952AD18E3521500E15F2A /* readme.txt in Resources */,
 				8722A67E17D35AB3002A3BB6 /* video_indicator_blue.png in Resources */,
 				8722A67F17D35AB3002A3BB6 /* chat_indicator_blue.png in Resources */,
 				87E4D9A0180BE07F002CA2D4 /* OpenPeerLogo114.png in Resources */,
