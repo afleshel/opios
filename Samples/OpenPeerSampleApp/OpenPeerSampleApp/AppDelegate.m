@@ -94,23 +94,10 @@
     if (![[SessionManager sharedSessionManager] isCallInProgress])
     {
         [[OpenPeer sharedOpenPeer]prepareAppForBackground];
-//        UIBackgroundTaskIdentifier bgTask = UIBackgroundTaskInvalid;
-//        
-//        bgTask = [application beginBackgroundTaskWithExpirationHandler:^
-//        {
-//            [[HOPBackgrounding sharedBackgrounding]notifyGoingToBackgroundNow];
-//            
-//            [application endBackgroundTask:bgTask];
-//        }];
-//        
-//        [[OpenPeer sharedOpenPeer] setBackgroundingTaskId:bgTask];
-//        
-//        // Start the long-running task and return immediately.
-//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
-//        {
-//            [[HOPBackgrounding sharedBackgrounding] notifyGoingToBackground:[[OpenPeer sharedOpenPeer] backgroundingDelegate]];
-//        });
     }
+    
+    //[[UIApplication sharedApplication] setApplicationIconBadgeNumber:[[SessionManager sharedSessionManager] totalNumberOfUnreadMessages]];
+    [[UAPush shared] setBadgeNumber:[[SessionManager sharedSessionManager] totalNumberOfUnreadMessages]];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -123,6 +110,9 @@
         
         [[HOPBackgrounding sharedBackgrounding]notifyReturningFromBackground];
     }
+#ifdef APNS_ENABLED
+    [[APNSInboxManager sharedAPNSInboxManager] getAllMessages];
+#endif
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
@@ -132,6 +122,8 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
+    //[[UIApplication sharedApplication] setApplicationIconBadgeNumber:[[SessionManager sharedSessionManager] totalNumberOfUnreadMessages]];
+    [[UAPush shared] setBadgeNumber:[[SessionManager sharedSessionManager] totalNumberOfUnreadMessages]];
     [[OpenPeer sharedOpenPeer] shutdownCleanup];
 }
 

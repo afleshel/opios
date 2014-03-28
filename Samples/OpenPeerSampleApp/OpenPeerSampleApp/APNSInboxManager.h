@@ -11,11 +11,13 @@
 #import "UAPush.h"
 #import "Delegates.h"
 
-@interface APNSInboxManager : NSObject<UAInboxPushHandlerDelegate,UAPushNotificationDelegate,HTTPDownloaderDelegate>
+@interface APNSInboxManager : NSObject<UAInboxPushHandlerDelegate,UAPushNotificationDelegate,HTTPDownloaderDelegate,UAInboxMessageListDelegate>
 
 + (id) sharedAPNSInboxManager;
 
 - (void) setup;
 - (void) handleNewMessages;
 - (void) handleAPNS:(NSDictionary *)apnsInfo;
+
+- (void) getAllMessages;
 @end

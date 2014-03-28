@@ -81,4 +81,6 @@
 - (void) clearAllSessions;
 
 - (void) setLatestValidConversationThread:(HOPConversationThread*) inConversationThread;
+
+- (int) totalNumberOfUnreadMessages;
 @end

@@ -467,6 +467,7 @@
     else //If callFlagIsSet is NO, hangup incoming call. 
     {
         [call hangup:HOPCallClosedReasonBusy];
+        [[[OpenPeer sharedOpenPeer] mainViewController] showNotification:[NSString stringWithFormat:@"%@ is busy.",[[[session participantsArray] objectAtIndex:0] name]]];
     }
 }
 
@@ -729,5 +730,15 @@
 {
     Session* session = [self.sessionsDictionary objectForKey:[inConversationThread getThreadId]];
     session.conversationThread = inConversationThread;
+}
+
+- (int) totalNumberOfUnreadMessages
+{
+    int ret = 0;
+    for (Session* session in [self.sessionsDictionary allValues])
+    {
+        ret += [session.unreadMessageArray count];
+    }
+    return ret;
 }
 @end

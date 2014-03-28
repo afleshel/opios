@@ -62,6 +62,7 @@
 #import "MainViewController.h"
 #import "ActivityIndicatorViewController.h"
 #import "WebLoginViewController.h"
+#import "APNSInboxManager.h"
 
 @interface LoginManager ()
 
@@ -390,7 +391,7 @@
             [[SessionManager sharedSessionManager] recreateExistingSessions];
         }
         
-        
+        [[APNSInboxManager sharedAPNSInboxManager] getAllMessages];
         //Login finished. Remove activity indicator
         [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:NO withText:nil inView:nil];
     }

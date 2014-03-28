@@ -233,7 +233,8 @@
     {
         [self.chatTableView reloadData];
         
-        [self.chatTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[[[self fetchedResultsController] fetchedObjects] count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        if ([[[self fetchedResultsController] fetchedObjects] count] > 0)
+            [self.chatTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[[[self fetchedResultsController] fetchedObjects] count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     }
     
     self.isRefreshed = NO;

@@ -52,7 +52,7 @@
     if (self)
     {
         self.arrayMessageDownloaders = [[NSMutableArray alloc] init];
-        self.arrayRichPushMessages = [[NSMutableArray alloc] init];
+        //self.arrayRichPushMessages = [[NSMutableArray alloc] init];
     }
     return self;
 }
@@ -60,7 +60,7 @@
 - (void) setup
 {
     [UAInbox shared].pushHandler.delegate = self;
-    //[UAPush shared].pushNotificationDelegate = self;
+    [UAPush shared].pushNotificationDelegate = self;
 }
 
 - (void) handleNewMessages
@@ -207,7 +207,11 @@
  */
 - (void)receivedBackgroundNotification:(NSDictionary *)notification
 {
-    
+//    //Bage is restart by urban airship to show number of meessages in the mail box
+//    NSInteger badge = [[UIApplication sharedApplication] applicationIconBadgeNumber];
+//    //Append all unread message that are already received
+//    badge ++;//= [[SessionManager sharedSessionManager] totalNumberOfUnreadMessages];
+//    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:badge];
 }
 
 
@@ -304,4 +308,119 @@
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push content download has failed.");
     return;
 }
+
+- (void)getAllMessages
+{
+    [[UAInbox shared].messageList retrieveMessageListWithDelegate:self];
+}
+
+/**
+ * Tells the delegate that a request for inbox messages succeeded.
+ */
+- (void)messageListLoadSucceeded
+{
+    NSMutableIndexSet *set = [NSMutableIndexSet indexSet];
+    NSMutableArray* arrayOfMessages = [UAInbox shared].messageList.messages;
+    int counter = 0;
+    
+    for (UAInboxMessage* message in arrayOfMessages)
+    {
+        
+        [message markAsReadWithDelegate:self];
+        //UAInboxMessage *message = [[UAInbox shared].messageList messageForID:self.lastMeesageId];
+        [set addIndex:counter];
+        
+        if ([message unread])
+            [self loadMessage:message];
+        else
+        {
+            
+        }
+        //[self launchRichPushMessageAvailable:message];
+        counter++;
+    }
+    
+    UADisposable *disposable = [[UAInbox shared].messageList performBatchUpdateCommand:UABatchDeleteMessages withMessageIndexSet:set withDelegate:self];
+    
+    if (disposable)
+    {
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push inbox is cleaned");
+    }
+}
+/**
+ * Tells the delegate that a request for inbox messages failed.
+ */
+- (void)messageListLoadFailed
+{
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Loading rich push inbox has failed");
+}
+
+/**
+ * Tells the delegate that a message has been marked as read.
+ *
+ * @param message The message marked as read
+ */
+- (void)singleMessageMarkAsReadFinished:(UAInboxMessage *)message
+{
+    
+}
+
+/**
+ * Tells the delegate that a mark-as-read request failed.
+ *
+ * @param message The message that failed to update
+ */
+- (void)singleMessageMarkAsReadFailed:(UAInboxMessage *)message
+{
+    
+}
+
+/**
+ * Tells the delegate that a batch of messages has been marked as read.
+ */
+- (void)batchMarkAsReadFinished
+{
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Reading rich push messages has successfully finished");
+    int numberOfMessages = [[UAInbox shared].messageList unreadCount];
+    if ( numberOfMessages > 0)
+    {
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"There is %d unread rich push %@",numberOfMessages, (numberOfMessages == 1 ? @"message" : @"messages"));
+    }
+}
+
+/**
+ * Tells the delegate that a batch mark-as-read request failed.
+ */
+- (void)batchMarkAsReadFailed
+{
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Reading rich push messages has failed");
+    int numberOfMessages = [[UAInbox shared].messageList unreadCount];
+    if ( numberOfMessages > 0)
+    {
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"There is %d unread rich push %@",numberOfMessages, (numberOfMessages == 1 ? @"message" : @"messages"));
+    }
+}
+
+/**
+ * Tells the delegate that a batch of messages has been deleted.
+ */
+- (void)batchDeleteFinished
+{
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Deleting rich push messages has successfully finished");
+    int numberOfMessages = [[UAInbox shared].messageList messageCount];
+    if ( numberOfMessages > 0)
+    {
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"After delete there is %d rich push %@",numberOfMessages, (numberOfMessages == 1 ? @"message" : @"messages"));
+    }
+    
+}
+
+/**
+ * Tells the delegate that a batch update of messages has failed.
+ */
+- (void)batchDeleteFailed
+{
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Deleting rich push messages has failed");
+}
+
 @end
