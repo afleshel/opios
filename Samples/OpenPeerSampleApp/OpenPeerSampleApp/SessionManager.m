@@ -439,7 +439,7 @@
     NSString* sessionId = [[call getConversationThread] getThreadId];
     Session* session = [[[SessionManager sharedSessionManager] sessionsDictionary] objectForKey:sessionId];
     
-    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Incoming a call for the session <%p>", session);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Incoming a call for the session <%p>", session);
     
     //Set current call
     //BOOL callFlagIsSet = [self setActiveCallSession:session callActive:YES];

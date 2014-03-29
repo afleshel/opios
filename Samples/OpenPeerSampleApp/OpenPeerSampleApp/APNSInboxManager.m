@@ -271,7 +271,7 @@
                 
                 if ([messageID length] > 0 && [messageText length] > 0 && [location length] > 0 && date)
                 {
-                    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push content for message %@ is ready.",messageID);
+                    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push content \"%@\" for message %@ is ready.",messageText,messageID);
                     
                     HOPPublicPeerFile* publicPerFile = [[HOPModelManager sharedModelManager] getPublicPeerFileForPeerURI:senderPeerURI];
                     HOPContact* coreContact = [[HOPContact alloc] initWithPeerFile:publicPerFile.peerFile];
@@ -290,7 +290,7 @@
                     }
                     else
                     {
-                        OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"%@ message is not saved - message id %@ - session id %@",messageText,messageID,[session.conversationThread getThreadId]);
+                        OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"%@ message is not saved - message id %@ - session id %@ - date %@",messageText,messageID,[session.conversationThread getThreadId],date);
                     }
                 }
                 else

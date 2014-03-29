@@ -123,7 +123,7 @@
     [[UAPush shared] registerForRemoteNotifications];
     
     // Print out the application configuration for debugging (optional)
-    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"UrbanAirship config: %@",[config description]);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"UrbanAirship config: %@",[config description]);
 
     [[UAPush shared] setAutobadgeEnabled:YES];
     
@@ -190,7 +190,7 @@
 - (void) connection:(NSURLConnection *) connection didReceiveResponse:(NSURLResponse *) response
 {
     NSHTTPURLResponse * res = (NSHTTPURLResponse *) response;
-    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Response code %i: response: %@",res.statusCode, res);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Sending rivh push response code %i: response: %@",res.statusCode, res);
     @synchronized (self)
     {
         self.pushesToSend--;
@@ -228,7 +228,7 @@
 
                 NSDictionary * dataToPush = @{@"device_tokens":deviceTokens, @"aps":messageDictionary};
                 
-                OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Sending push notification: %@",message);
+                OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Sending push notification: %@",message);
                 
                 if ([dataToPush count] > 0)
                 {
@@ -268,7 +268,7 @@
             //NSString* stringToSend = [NSString stringWithFormat:@"{\"audience\" : {\"device_token\" : \"%@\"}, \"device_types\" : [ \"ios\" ], \"notification\" : {\"ios\" : {\"badge\":\"auto\",\"sound\":\"default\",\"alert\": \"%@\",\"content-available\": true,\"priority\": 10}}, \"message\" : {\"title\" : \"%@\", \"body\" : \"%@\", \"content_type\" : \"text/html\"} }",deviceToken,messageText,messageText,content];
             NSString* stringToSend = [NSString stringWithFormat:@"{\"audience\" : {\"device_token\" : \"%@\"}, \"device_types\" : [ \"ios\" ], \"notification\" : {\"ios\" : {\"sound\":\"message-received\",\"alert\": \"%@\",\"content-available\": true,\"priority\": 10}}, \"message\" : {\"title\" : \"%@\", \"body\" : \"%@\", \"content_type\" : \"text/html\"} }",deviceToken,messageText,messageText,content];
 
-            
+            OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelTrace, @"Rich push content: %@",stringToSend);
             SBJsonParser* parser = [[SBJsonParser alloc] init];
             NSDictionary* dataToPush = [parser objectWithString: stringToSend];
 
