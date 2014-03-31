@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>outerFrameURL</key>
-	<string>http://jsouter-v1-beta-1-i.hcs.io/identity.html?view=choose&amp;federated=false</string>
+	<string>http://jsouter-v1-rel-lespaul-i.hcs.io/identity.html?view=choose&amp;amp;federated=false</string>
 	<key>identityProviderDomain</key>
-	<string>identity-v1-beta-1-i.hcs.io</string>
+	<string>identity-v1-rel-lespaul-i.hcs.io</string>
 	<key>identityFederateBaseURI</key>
-	<string>identity://identity-v1-beta-1-i.hcs.io/</string>
+	<string>identity://identity-v1-rel-lespaul-i.hcs.io/</string>
 	<key>namespaceGrantServiceURL</key>
-	<string>http://jsouter-v1-beta-1-i.hcs.io/grant.html</string>
+	<string>http://jsouter-v1-rel-lespaul-i.hcs.io/grant.html</string>
 	<key>lockBoxServiceDomain</key>
-	<string>lockbox-v1-beta-1-i.hcs.io</string>
+	<string>lockbox-v1-rel-lespaul-i.hcs.io</string>
 	<key>defaultOutgoingTelnetServer</key>
-	<string>tcp-logger-v1-beta-1-i.hcs.io:8055</string>
+	<string>tcp-logger-v1-rel-lespaul-i.hcs.io:8055</string>
 	<key>localTelnetLoggerPort</key>
 	<string>59999</string>
 	<key>applicationSettingsBackgroundingPhaseRichPush</key>
