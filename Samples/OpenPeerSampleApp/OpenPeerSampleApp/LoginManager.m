@@ -41,7 +41,9 @@
 #import "ContactsManager.h"
 #import "SessionManager.h"
 #import "UUIDManager.h"
-//∫#import "APNSInboxManager.h"
+#ifdef APNS_ENABLED
+#import "APNSInboxManager.h"
+#endif
 //SDK
 #import <OpenPeerSDK/HOPAccount.h>
 #import <OpenPeerSDK/HOPIdentity.h>
@@ -62,7 +64,7 @@
 #import "MainViewController.h"
 #import "ActivityIndicatorViewController.h"
 #import "WebLoginViewController.h"
-#import "APNSInboxManager.h"
+
 
 @interface LoginManager ()
 
@@ -390,8 +392,9 @@
         {
             [[SessionManager sharedSessionManager] recreateExistingSessions];
         }
-        
+#ifdef APNS_ENABLED
         [[APNSInboxManager sharedAPNSInboxManager] getAllMessages];
+#endif
         //Login finished. Remove activity indicator
         [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:NO withText:nil inView:nil];
     }

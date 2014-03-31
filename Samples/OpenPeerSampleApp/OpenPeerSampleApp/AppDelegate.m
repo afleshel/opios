@@ -97,7 +97,9 @@
     }
     
     //[[UIApplication sharedApplication] setApplicationIconBadgeNumber:[[SessionManager sharedSessionManager] totalNumberOfUnreadMessages]];
+#ifdef APNS_ENABLED
     [[UAPush shared] setBadgeNumber:[[SessionManager sharedSessionManager] totalNumberOfUnreadMessages]];
+#endif
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -123,7 +125,9 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     //[[UIApplication sharedApplication] setApplicationIconBadgeNumber:[[SessionManager sharedSessionManager] totalNumberOfUnreadMessages]];
+#ifdef APNS_ENABLED
     [[UAPush shared] setBadgeNumber:[[SessionManager sharedSessionManager] totalNumberOfUnreadMessages]];
+#endif
     [[OpenPeer sharedOpenPeer] shutdownCleanup];
 }
 
