@@ -179,7 +179,7 @@ HOPTypes.h
 Branches:
 
 Our current activity is being performed on "20140307-dev-stable" but this branch is unstable. Individual activity is on other sub-branches from this branch.
-https://github.com/openpeer/opios/tree/20140307-dev-stable
+https://github.com/openpeer/opios/tree/20140401-dev-stable
 
 To see all branches go to:
 https://github.com/openpeer/opios/branches
