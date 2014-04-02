@@ -156,10 +156,23 @@ using namespace openpeer::core;
     {
         return _managedObjectModel;
     }
-    NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"OpenpeerDataModel" ofType:@"bundle"];
-    NSURL *modelURL = [[NSBundle bundleWithPath:bundlePath] URLForResource:@"OpenPeerModel" withExtension:@"momd"];
-    _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+    NSBundle* mainBundle = [NSBundle mainBundle];
+    if (mainBundle)
+    {
+        NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"OpenpeerDataModel" ofType:@"bundle"];
+        if (bundlePath)
+        {
+            NSURL *modelURL = [[NSBundle bundleWithPath:bundlePath] URLForResource:@"OpenPeerModel" withExtension:@"momd"];
+            if (modelURL)
+                _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+        }
+    }
   
+    if (!_managedObjectModel)
+    {
+        ZS_LOG_ERROR(Debug, [self log:@"Invalid managed object model!"]);
+        [NSException raise:NSInvalidArgumentException format:@"Invalid managed object model!"];
+    }
     return _managedObjectModel;
 }
 

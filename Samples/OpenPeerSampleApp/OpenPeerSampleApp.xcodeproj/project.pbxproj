@@ -1754,6 +1754,9 @@
 				LastUpgradeCheck = 0450;
 				ORGANIZATIONNAME = Hookflash;
 				TargetAttributes = {
+					87272827166CBF9B0089CBB6 = {
+						DevelopmentTeam = Z5WRU4N5VJ;
+					};
 					87D4BCD818675368008C2D30 = {
 						DevelopmentTeam = Z5WRU4N5VJ;
 					};
