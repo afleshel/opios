@@ -63,6 +63,7 @@
     [[OpenPeer sharedOpenPeer] setMainViewController:mainViewController];
     [[OpenPeer sharedOpenPeer] preSetup];
 
+    BOOL updated = [Utility isAppUpdated];
 #ifdef APNS_ENABLED
     [[APNSManager sharedAPNSManager] prepareUrbanAirShip];
     NSDictionary *apnsInfo = [launchOptions valueForKey:@"UIApplicationLaunchOptionsRemoteNotificationKey"];

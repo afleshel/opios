@@ -62,7 +62,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     if (self)
     {
         NSString *filePath = nil;
-        NSBundle* bundle = [NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:@"OpenPeerDataModel" ofType:@"bundle"]];
+        NSBundle* bundle = [NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:@"OpenpeerDataModel" ofType:@"bundle"]];
         if (bundle)
             filePath = [bundle pathForResource:@"KeyMappings" ofType:@"plist"];
         if ([filePath length] > 0)

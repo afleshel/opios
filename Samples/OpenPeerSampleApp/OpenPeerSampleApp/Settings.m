@@ -37,8 +37,11 @@
 #import "Utility.h"
 #import <OpenPeerSDK/HOPSettings.h>
 #import <OpenPeerSDK/HOPUtility.h>
+#import <OpenPeerSDK/HOPCache.h>
+#import "HTTPDownloader.h"
 
 @interface Settings ()
+@property (nonatomic, strong) HTTPDownloader* settingsDownloader;
 
 - (NSString*) getArchiveStringForModule:(Modules) module;
 @end
@@ -771,5 +774,148 @@
                 [[NSUserDefaults standardUserDefaults] setObject:preValue forKey:coreKey];
         }
     }
+}
+
+- (void)updateDefaultSettingsFromPath:(NSString *)filePath notToUpdateKeys:(NSMutableArray *)notToUpdateKeys
+{
+    if ([filePath length] > 0)
+    {
+        //Clean disctionary from invalid entries
+        NSDictionary* filteredDictionary = [[Settings sharedSettings] dictionaryWithRemovedAllInvalidEntriesForPath:filePath];
+        if ([filteredDictionary count] > 0)
+        {
+            for (NSString* key in [filteredDictionary allKeys])
+            {
+                //Check if value for specific key should be updated
+                if (![notToUpdateKeys containsObject:key])
+                {
+                    id value = [filteredDictionary objectForKey:key];
+                    [[HOPSettings sharedSettings] storeSettingsObject:value key:[[HOPSettings sharedSettings]getCoreKeyForAppKey:key]];
+                }
+            }
+        }
+        
+        //Save new default settings
+        NSMutableDictionary* defaultSettings = nil;
+        if ([[NSUserDefaults standardUserDefaults] objectForKey:settingsKeyDefaultSettingsSnapshot])
+            defaultSettings = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:settingsKeyDefaultSettingsSnapshot]];
+        else
+            defaultSettings = [[NSMutableDictionary alloc] init];
+        [defaultSettings addEntriesFromDictionary:filteredDictionary];
+        [[NSUserDefaults standardUserDefaults] setObject:defaultSettings forKey:settingsKeyDefaultSettingsSnapshot];
+        
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+}
+
+- (BOOL) shouldOverwriteExistingSettings
+{
+    BOOL ret = NO;
+    
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"CustomerSpecific" ofType:@"plist"];
+    if ([filePath length] > 0)
+    {
+        NSDictionary* settingsDictionary = [NSDictionary dictionaryWithContentsOfFile:filePath];
+        if ([settingsDictionary count] > 0)
+        {
+            ret = [settingsDictionary objectForKey:settingsKeyOverwriteExistingSettings] != nil ? ((NSNumber*)[settingsDictionary objectForKey:settingsKeyOverwriteExistingSettings]).boolValue : NO;
+        }
+    }
+    
+    return ret;
+}
+- (BOOL) updateAppSettings
+{
+    BOOL ret = NO;
+    BOOL updateSettings = [Utility isAppUpdated];
+    [self updateDeviceInfo];
+    
+    if (updateSettings)
+    {
+        //Check if all settings can be overwritten. If not it will overwritten just settings that atil has default values
+        BOOL overwrite = [self shouldOverwriteExistingSettings];
+        
+        NSMutableDictionary* defaultSettings = [[NSUserDefaults standardUserDefaults] objectForKey:settingsKeyDefaultSettingsSnapshot];
+        NSMutableArray* arrayOfChangedKeys = overwrite ? nil : [[NSMutableArray alloc] init];
+        
+        if (!overwrite)
+        {
+            //For each key check if value is changed comparing to default value
+            for (NSString* key in [defaultSettings allKeys])
+            {
+                id defaultValue = [defaultSettings objectForKey:key];
+                id currentValue = [[NSUserDefaults standardUserDefaults] objectForKey:[[HOPSettings sharedSettings]getCoreKeyForAppKey:key]];
+                
+                if ([defaultValue isKindOfClass:[NSString class]] && [currentValue isKindOfClass:[NSString class]])
+                {
+                    if (![((NSString*) defaultValue) isEqualToString:((NSString*) currentValue)])
+                        [arrayOfChangedKeys addObject:key];
+                }
+                else if ([defaultValue isKindOfClass:[NSNumber class]] && [currentValue isKindOfClass:[NSNumber class]])
+                {
+                    if (![((NSNumber*) defaultValue) isEqualToNumber:((NSNumber*) currentValue)])
+                        [arrayOfChangedKeys addObject:key];
+                }
+                else if ([defaultValue isKindOfClass:[NSDictionary class]] && [currentValue isKindOfClass:[NSDictionary class]])
+                {
+                    if (![((NSDictionary*)defaultValue) isEqualToDictionary:((NSDictionary*)currentValue)])
+                        [arrayOfChangedKeys addObject:key];
+                }
+                else
+                {
+                    if (defaultValue != currentValue)
+                        [arrayOfChangedKeys addObject:key];
+                }
+            }
+        }
+        
+        //Update settings with new values
+        [self updateDefaultSettingsFromPath:[[NSBundle mainBundle] pathForResource:@"DefaultSettings" ofType:@"plist"] notToUpdateKeys:arrayOfChangedKeys];
+        [self updateDefaultSettingsFromPath:[[NSBundle mainBundle] pathForResource:@"CustomerSpecific" ofType:@"plist"] notToUpdateKeys:arrayOfChangedKeys];
+#ifndef DEBUG
+        [self updateDefaultSettingsFromPath:[[NSBundle mainBundle] pathForResource:@"CustomerSpecific_Release" ofType:@"plist"] notToUpdateKeys:arrayOfChangedKeys];
+#endif
+        [self snapshotCurrentSettings];
+    }
+    //Start settings download. If download is not started finish presetup
+    ret = [self downloadLatestSettings];
+    
+    return ret;
+}
+
+- (BOOL) downloadLatestSettings
+{
+    BOOL ret = NO;
+    NSString* settingsDownloadURL = [[NSUserDefaults standardUserDefaults] stringForKey:settingsKeySettingsDownloadURL];
+    
+    if ([settingsDownloadURL length] > 0)
+    {
+        //Check if cookie has expired, and run download if it has
+        if ([[[HOPCache sharedCache] fetchForCookieNamePath:settingsKeySettingsDownloadURL] length] == 0)
+        {
+            self.settingsDownloader = [[HTTPDownloader alloc] initSettingsDownloadFromURL:settingsDownloadURL postDate:nil];
+            self.settingsDownloader.delegate = self;
+            [self.settingsDownloader startDownload];
+            ret = YES;
+        }
+    }
+    
+    return ret;
+}
+
+#pragma mark - SettingsDownloaderDelegate
+- (void) httpDownloader:(HTTPDownloader *)downloader downloaded:(NSString *)downloaded
+{
+    NSDictionary* settingsDictionary = [[Settings sharedSettings] dictionaryForJSONString:downloaded];
+    [[HOPSettings sharedSettings] storeSettingsFromDictionary:settingsDictionary];
+    [self snapshotCurrentSettings];
+    [[OpenPeer sharedOpenPeer] finishPreSetup];
+    int expiryTime = [[NSUserDefaults standardUserDefaults] integerForKey:settingsKeySettingsDownloadExpiryTime];
+    [[HOPCache sharedCache] store:[[NSUserDefaults standardUserDefaults] stringForKey:settingsKeySettingsDownloadURL] expireDate:[[NSDate date] dateByAddingTimeInterval:expiryTime] cookieNamePath:settingsKeySettingsDownloadURL];
+}
+
+- (void) httpDownloader:(HTTPDownloader *) downloader didFailWithError:(NSError *)error
+{
+    [[OpenPeer sharedOpenPeer] finishPreSetup];
 }
 @end

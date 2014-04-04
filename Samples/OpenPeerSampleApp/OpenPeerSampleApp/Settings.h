@@ -31,6 +31,7 @@
 
 #import <Foundation/Foundation.h>
 #import <OpenPeerSDK/HOPTypes.h>
+#import "Delegates.h"
 
 typedef enum
 {
@@ -77,7 +78,7 @@ typedef enum
 
 
 
-@interface Settings : NSObject
+@interface Settings : NSObject<HTTPDownloaderDelegate>
 
 @property (nonatomic) BOOL isMediaAECOn;
 @property (nonatomic) BOOL isMediaAGCOn;
@@ -150,4 +151,6 @@ typedef enum
 - (void) snapshotCurrentSettings;
 - (void) storeQRSettings:(NSDictionary*) inDictionary;
 - (void) removeAppliedQRSettings;
+
+- (BOOL) updateAppSettings;
 @end

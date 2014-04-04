@@ -43,5 +43,7 @@
 	<integer>0</integer>
 	<key>applicationSettingsVersion</key>
 	<string>1.0</string>
+	<key>applicationOverwriteSettings</key>
+	<true/>
 </dict>
 </plist>

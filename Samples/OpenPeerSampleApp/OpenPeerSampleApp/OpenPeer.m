@@ -143,65 +143,20 @@
     [[HOPCache sharedCache] setup];
     
     //Set calculated values
-    [[Settings sharedSettings] updateDeviceInfo];
+    //[[Settings sharedSettings] updateDeviceInfo];
+    
+    BOOL startDownloadingSettings = [[Settings sharedSettings] updateAppSettings];
     
     if (![[HOPModelManager sharedModelManager] getLastLoggedInHomeUser])
     {
-        //If not already set, set default login settings
-        BOOL isSetLoginSettings = [[Settings sharedSettings] isLoginSettingsSet];
-        if (!isSetLoginSettings)
-        {
-            [[HOPSettings sharedSettings] applyDefaults];
-            
-            NSString *filePath = [[NSBundle mainBundle] pathForResource:@"DefaultSettings" ofType:@"plist"];
-            if ([filePath length] > 0)
-            {
-                NSDictionary* filteredDictionary = [[Settings sharedSettings] dictionaryWithRemovedAllInvalidEntriesForPath:filePath];
-                if ([filteredDictionary count] > 0)
-                    [[HOPSettings sharedSettings] storeSettingsFromDictionary:filteredDictionary];
-            }
-            
-            //isSetLoginSettings = [[Settings sharedSettings] isLoginSettingsSet];
-        }
-        
-        //If not already set, set default app data
-        BOOL isSetAppData = [[Settings sharedSettings] isAppDataSet];
-        if (!isSetAppData)
-        {
-            NSString* filePath = [[NSBundle mainBundle] pathForResource:@"CustomerSpecific" ofType:@"plist"];
-            if ([filePath length] > 0)
-            {
-                NSMutableDictionary* filteredDictionary = [[Settings sharedSettings] dictionaryWithRemovedAllInvalidEntriesForPath:filePath];
-                [[Settings sharedSettings] createUserAgentFromDictionary:filteredDictionary];
-                if ([filteredDictionary count] > 0)
-                    [[HOPSettings sharedSettings] storeSettingsFromDictionary:filteredDictionary];
-            }
-            
-#ifndef DEBUG
-            //Apply release settings
-            filePath = [[NSBundle mainBundle] pathForResource:@"CustomerSpecific_Release" ofType:@"plist"];
-            if ([filePath length] > 0)
-            {
-                NSMutableDictionary* filteredDictionary = [[Settings sharedSettings] dictionaryWithRemovedAllInvalidEntriesForPath:filePath];
-                [[Settings sharedSettings] createUserAgentFromDictionary:filteredDictionary];
-                if ([filteredDictionary count] > 0)
-                    [[HOPSettings sharedSettings] storeSettingsFromDictionary:filteredDictionary];
-            }
-            
-            [[self mainViewController] waitForUserGesture];
-#endif
-            
-            //isSetAppData = [[Settings sharedSettings] isAppDataSet];
-        }
-        
         //Start settings download. If download is not started finish presetup
-        if (![self downloadLatestSettings])
+        if (!startDownloadingSettings)
             [self finishPreSetup];
     }
     else
     {
         //Start settings download. If download is not started finish setup
-        if (![self downloadLatestSettings])
+        if (!startDownloadingSettings)
             [self setup];
     }
 }
@@ -341,7 +296,7 @@
                    });
 }
 
-#pragma mark - SettingsDownloaderDelegate
+/*#pragma mark - SettingsDownloaderDelegate
 - (void) httpDownloader:(HTTPDownloader *)downloader downloaded:(NSString *)downloaded
 {
     NSDictionary* settingsDictionary = [[Settings sharedSettings] dictionaryForJSONString:downloaded];
@@ -354,6 +309,6 @@
 - (void) httpDownloader:(HTTPDownloader *) downloader didFailWithError:(NSError *)error
 {
     [[OpenPeer sharedOpenPeer] finishPreSetup];
-}
+}*/
 @end
 
