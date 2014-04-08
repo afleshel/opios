@@ -264,9 +264,6 @@
 - (void) saveModuleLogLevels
 {
     [[HOPSettings sharedSettings] storeSettingsObject:self.appModulesLoggerLevel key:archiveModulesLogLevels];
-    
-//    [[NSUserDefaults standardUserDefaults] setObject:self.appModulesLoggerLevel forKey:archiveModulesLogLevels];
-//    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (NSString*) getStringForModule:(Modules) module
@@ -601,6 +598,7 @@
 {
     NSMutableArray* ret = [[NSMutableArray alloc] init];
     
+    //Check if app id and app shared secret id are set
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:settingsKeyAppId] length] == 0)
         [ret addObject: settingsKeyAppId];
     
@@ -616,6 +614,7 @@
     SBJsonParser* parser = [[SBJsonParser alloc] init];
     NSDictionary* inputDictionary = [parser objectWithString: jsonString];
     
+    //Check if downloaded JSON is having root object
     if ([inputDictionary count] > 0 && [inputDictionary objectForKey:@"root"] != nil)
     {
         ret = [NSMutableDictionary dictionaryWithDictionary:[inputDictionary objectForKey:@"root"]];
@@ -696,6 +695,7 @@
            id value = [plistDictionary objectForKey:key];
             if ([value isKindOfClass:[NSString class]])
             {
+                //If settings value starts with <-- remove it from the dictionary
                 if ([((NSString*)value) rangeOfString:@"<--"].location != NSNotFound)
                 {
                     [plistDictionary removeObjectForKey:key];
@@ -710,6 +710,7 @@
 
 - (void) updateDeviceInfo
 {
+    //Get device info: device ID, iOS, platform and user agent
     NSString* deviceId = [HOPUtility hashString:[Utility getGUIDstring]];
     if ([deviceId length] > 0)
         [[HOPSettings sharedSettings] storeCalculatedSettingObject:deviceId key:@"openpeer/calculated/device-id"];
@@ -729,6 +730,7 @@
 
 - (void) snapshotCurrentSettings
 {
+    //Save current settings value like dictionary
     NSDictionary* currentSettings = [[HOPSettings sharedSettings] getCurrentSettingsDictionary];
     if ([currentSettings count] > 0)
         [[NSUserDefaults standardUserDefaults] setObject:currentSettings forKey:settingsKeySettingsSnapshot];
@@ -816,6 +818,8 @@
     if ([filePath length] > 0)
     {
         NSDictionary* settingsDictionary = [NSDictionary dictionaryWithContentsOfFile:filePath];
+        
+        //Check if all settings should be overwritten
         if ([settingsDictionary count] > 0)
         {
             ret = [settingsDictionary objectForKey:settingsKeyOverwriteExistingSettings] != nil ? ((NSNumber*)[settingsDictionary objectForKey:settingsKeyOverwriteExistingSettings]).boolValue : NO;
@@ -824,6 +828,7 @@
     
     return ret;
 }
+
 - (BOOL) updateAppSettings
 {
     BOOL ret = NO;
@@ -863,7 +868,7 @@
                 }
                 else
                 {
-                    if (defaultValue != currentValue)
+                    if (currentValue && defaultValue != currentValue)
                         [arrayOfChangedKeys addObject:key];
                 }
             }
@@ -908,6 +913,7 @@
 {
     NSDictionary* settingsDictionary = [[Settings sharedSettings] dictionaryForJSONString:downloaded];
     [[HOPSettings sharedSettings] storeSettingsFromDictionary:settingsDictionary];
+    //After downloading settings are applied make a settings snaplshot
     [self snapshotCurrentSettings];
     [[OpenPeer sharedOpenPeer] finishPreSetup];
     int expiryTime = [[NSUserDefaults standardUserDefaults] integerForKey:settingsKeySettingsDownloadExpiryTime];

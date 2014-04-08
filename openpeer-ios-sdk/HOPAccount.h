@@ -59,7 +59,6 @@
 + (NSString*) stateToString:(HOPAccountStates) state __attribute__((deprecated("use method stringForAccountState instead")));
 + (NSString*) stringForAccountState:(HOPAccountStates) state;
 
-//TODO: update comment
 /**
  Login method for verified identity.
  @param inAccountDelegate HOPAccountDelegate delegate
@@ -80,7 +79,7 @@
  @param inConversationThreadDelegate HOPConversationThreadDelegate delegate
  @param inCallDelegate HOPCallDelegate delegate
  @param lockboxOuterFrameURLUponReload NSString private peer file
- @param lockboxReloginInfo NSString login information retrieved from the local storage and packed in xml form
+ @param reloginInformation NSString login information retrieved from the local storage and packed in xml form
  @returns YES if IAccount object is created sucessfully
  */
 - (BOOL) reloginWithAccountDelegate:(id<HOPAccountDelegate>) inAccountDelegate conversationThreadDelegate:(id<HOPConversationThreadDelegate>) inConversationThreadDelegate callDelegate:(id<HOPCallDelegate>) inCallDelegate lockboxOuterFrameURLUponReload:(NSString *)lockboxOuterFrameURLUponReload reloginInformation:(NSString *)reloginInformation;
@@ -168,6 +167,13 @@
  */
 - (void) handleMessageFromInnerBrowserWindowFrame:(NSString*) message;
 
+/**
+ Check if core account is created.
+ */
 - (BOOL) isCoreAccountCreated;
+
+/**
+ Destroy core account object.
+ */
 - (void) destroyCoreObject;
 @end

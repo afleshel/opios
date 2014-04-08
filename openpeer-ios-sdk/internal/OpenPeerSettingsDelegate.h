@@ -44,9 +44,10 @@ using namespace openpeer::core;
 class OpenPeerSettingsDelegate : public ISettingsDelegate
 {
 protected:
-    id<HOPSettingsDelegate> settingsDelegate;
+    //id<HOPSettingsDelegate> settingsDelegate;
     
-    OpenPeerSettingsDelegate(id<HOPSettingsDelegate> settingsDelegate);
+    //OpenPeerSettingsDelegate(id<HOPSettingsDelegate> settingsDelegate);
+    OpenPeerSettingsDelegate();
     
     NSMutableDictionary* dictionarySettings;
     NSString* authorizedApplicationId;
@@ -60,7 +61,8 @@ public:
      Create SettingsDelegateWrapper object packed in boost shared pointer.
      @returns SettingsDelegateWrapper object boost shared object
      */
-    static boost::shared_ptr<OpenPeerSettingsDelegate>  create(id<HOPSettingsDelegate> inSettingsDelegate);
+//    static boost::shared_ptr<OpenPeerSettingsDelegate>  create(id<HOPSettingsDelegate> inSettingsDelegate);
+    static boost::shared_ptr<OpenPeerSettingsDelegate>  create();
     
     String getString(const char *key) const;
     LONG getInt(const char *key) const;

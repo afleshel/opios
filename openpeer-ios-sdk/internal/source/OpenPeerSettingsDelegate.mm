@@ -36,16 +36,19 @@
 
 ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
-OpenPeerSettingsDelegate::OpenPeerSettingsDelegate(id<HOPSettingsDelegate> inSettingsDelegate)
+//OpenPeerSettingsDelegate::OpenPeerSettingsDelegate(id<HOPSettingsDelegate> inSettingsDelegate)
+OpenPeerSettingsDelegate::OpenPeerSettingsDelegate()
 {
     dictionarySettings = [[NSMutableDictionary alloc] init];
-    settingsDelegate = inSettingsDelegate;
+    //settingsDelegate = inSettingsDelegate;
     authorizedApplicationIdCoreKey = [NSString stringWithUTF8String:OPENPEER_COMMON_SETTING_APPLICATION_AUTHORIZATION_ID];
 }
 
-boost::shared_ptr<OpenPeerSettingsDelegate> OpenPeerSettingsDelegate::create(id<HOPSettingsDelegate> inSettingsDelegate)
+//boost::shared_ptr<OpenPeerSettingsDelegate> OpenPeerSettingsDelegate::create(id<HOPSettingsDelegate> inSettingsDelegate)
+boost::shared_ptr<OpenPeerSettingsDelegate> OpenPeerSettingsDelegate::create()
 {
-    return boost::shared_ptr<OpenPeerSettingsDelegate> (new OpenPeerSettingsDelegate(inSettingsDelegate));
+//    return boost::shared_ptr<OpenPeerSettingsDelegate> (new OpenPeerSettingsDelegate(inSettingsDelegate));
+    return boost::shared_ptr<OpenPeerSettingsDelegate> (new OpenPeerSettingsDelegate());
 }
 
 OpenPeerSettingsDelegate::~OpenPeerSettingsDelegate()

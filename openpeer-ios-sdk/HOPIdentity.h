@@ -71,6 +71,7 @@
  */
 + (id) loginWithDelegate:(id<HOPIdentityDelegate>) inIdentityDelegate identityProviderDomain:(NSString*) identityProviderDomain  identityURIOridentityBaseURI:(NSString*) identityURIOridentityBaseURI outerFrameURLUponReload:(NSString*) outerFrameURLUponReload;
 - (id) init __attribute__((unavailable("Use one of loginWithDelegate: static methods to create an identity object.")));
+
 /**
  Creates identity object and starts identity login for preauthorized identites. This method is called only on login procedure. During relogin procedure this method is not invoked.
  @param inIdentityDelegate HOPIdentityDelegate delegate
@@ -206,5 +207,8 @@
  */
 - (void) stopTimerForContactsDeletion;
 
+/**
+ Destroy core object.
+ */
 - (void) destroyCoreObject;
 @end

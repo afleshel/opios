@@ -58,7 +58,7 @@
 #import "BackgroundingDelegate.h"
 //View controllers
 #import "MainViewController.h"
-#import "HTTPDownloader.h"
+//#import "HTTPDownloader.h"
 
 
 //Private methods
@@ -66,7 +66,6 @@
 
 @property (nonatomic, strong) HTTPDownloader* settingsDownloadeer;
 - (void) createDelegates;
-//- (void) setLogLevels;
 @end
 
 
@@ -104,7 +103,7 @@
     [[HOPSettings sharedSettings] storeAuthorizedApplicationId:[self authorizedApplicationId]];
 }
 
-- (BOOL) downloadLatestSettings
+/*- (BOOL) downloadLatestSettings
 {
     BOOL ret = NO;
     NSString* settingsDownloadURL = [[NSUserDefaults standardUserDefaults] stringForKey:settingsKeySettingsDownloadURL];
@@ -122,7 +121,7 @@
     }
    
     return ret;
-}
+}*/
 
 - (void) preSetup
 {
@@ -141,10 +140,7 @@
     //Cleare expired cookies and set delegate
     [[HOPCache sharedCache] removeExpiredCookies];
     [[HOPCache sharedCache] setup];
-    
-    //Set calculated values
-    //[[Settings sharedSettings] updateDeviceInfo];
-    
+
     BOOL startDownloadingSettings = [[Settings sharedSettings] updateAppSettings];
     
     if (![[HOPModelManager sharedModelManager] getLastLoggedInHomeUser])
@@ -296,19 +292,5 @@
                    });
 }
 
-/*#pragma mark - SettingsDownloaderDelegate
-- (void) httpDownloader:(HTTPDownloader *)downloader downloaded:(NSString *)downloaded
-{
-    NSDictionary* settingsDictionary = [[Settings sharedSettings] dictionaryForJSONString:downloaded];
-    [[HOPSettings sharedSettings] storeSettingsFromDictionary:settingsDictionary];
-    [[OpenPeer sharedOpenPeer] finishPreSetup];
-    int expiryTime = [[NSUserDefaults standardUserDefaults] integerForKey:settingsKeySettingsDownloadExpiryTime];
-    [[HOPCache sharedCache] store:[[NSUserDefaults standardUserDefaults] stringForKey:settingsKeySettingsDownloadURL] expireDate:[[NSDate date] dateByAddingTimeInterval:expiryTime] cookieNamePath:settingsKeySettingsDownloadURL];
-}
-
-- (void) httpDownloader:(HTTPDownloader *) downloader didFailWithError:(NSError *)error
-{
-    [[OpenPeer sharedOpenPeer] finishPreSetup];
-}*/
 @end
 

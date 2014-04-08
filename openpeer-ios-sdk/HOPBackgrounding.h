@@ -35,12 +35,32 @@
 
 @interface HOPBackgrounding : NSObject
 
+/**
+ Singleton class to handle backgrounding.
+ */
 + (HOPBackgrounding*) sharedBackgrounding;
 - (id) init __attribute__((unavailable("HOPAccount is singleton class.")));
 
+/**
+ Notifies core that app is going to background.
+ @param inDelegate id<HOPBackgroundingCompletionDelegate>* backgroundning delegate
+ */
 - (void) notifyGoingToBackground:(id<HOPBackgroundingCompletionDelegate>) inDelegate;
+
+/**
+ Notifies core that app is going to background without chance for delay.
+ */
 - (void) notifyGoingToBackgroundNow;
+
+/**
+ Notifies core that app is returning from the background without.
+ */
 - (void) notifyReturningFromBackground;
+
+
+/**
+ Subscribes bacakgrouding delegate and add backgrounding phase.
+ */
 - (void) subscribeDelegate:(id<HOPBackgroundingDelegate>) inDelegate phase:(unsigned long) phase;
 
 @end

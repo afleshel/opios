@@ -83,5 +83,8 @@
  */
 - (void) hintAboutLocation:(NSString*) contactsLocationID;
 
+/**
+ Destroy core object.
+ */
 - (void) destroyCoreObject;
 @end

@@ -67,7 +67,6 @@
     return self;
 }
 
-//- (void) downloadFromURL:(NSString*) url postDate:(NSString*) postData
 - (BOOL)startDownload
 {
     BOOL ret = YES;
@@ -99,12 +98,6 @@
         ret = NO;
         
         OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Start downloading failed for url %@",self.url);
-//        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Downloading login settings failed!"
-//                                                            message:@"Please, ckeck you internet connection and try to scan QR code again or proceed login with default values."
-//                                                           delegate:nil
-//                                                  cancelButtonTitle:nil
-//                                                  otherButtonTitles:@"Ok",nil];
-//        [alertView show];
     }
     
     return ret;
@@ -137,7 +130,6 @@
                                               otherButtonTitles:@"Ok",nil];
     [alertView show];
     
-//    [self.delegate onSettingsDownloadFailure];
     [self.delegate httpDownloader:self didFailWithError:error];
 }
 
@@ -145,22 +137,12 @@
 {
     if ([self.receivedData length] > 0)
     {
-//        NSString* strJSON = [[NSString alloc] initWithData:self.receivedData encoding:NSASCIIStringEncoding];
-            NSString* str = [[NSString alloc] initWithData:self.receivedData encoding:NSASCIIStringEncoding];
+        NSString* str = [[NSString alloc] initWithData:self.receivedData encoding:NSASCIIStringEncoding];
         
         //Apply downloaded settings
         if ([str length] > 0)
         {
-//            NSDictionary* settings = [[Settings sharedSettings] dictionaryForJSONString:strJSON];
-//            [self.delegate onSettingsDownloadCompletion:settings];
-            
             [self.delegate httpDownloader:self downloaded:str];
-            
-//            [[Settings sharedSettings] snapshotCurrentSettings];
-//            [[Settings sharedSettings] storeQRSettings:settings];
-//            [[HOPSettings sharedSettings] storeSettingsFromDictionary:settings];
-//            [[OpenPeer sharedOpenPeer] finishPreSetup];
-            //[[OpenPeer sharedOpenPeer] setup];
         }
         else
         {

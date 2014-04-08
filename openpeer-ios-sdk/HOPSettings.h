@@ -44,19 +44,71 @@
 + (id)sharedSettings;
 - (id) init __attribute__((unavailable("HOPSettings is singleton class.")));
 
-- (void) setupWithDelegate:(id<HOPSettingsDelegate>) inDelegate;
+//- (void) setupWithDelegate:(id<HOPSettingsDelegate>) inDelegate;
+/**
+ Creates open peer setup delelgate.
+ */
 - (void) setup;
+
+/**
+ Applies settings from a json string.
+ @param jsonSettings NSSTring* json settings
+ */
 - (BOOL) applySettings:(NSString*)jsonSettings;
+
+/**
+ Applies default core settings.
+ */
 - (void) applyDefaults;
 
+/**
+ Stores settings from dictionary. First it does mapping from applicaiton settings keys to core keys.
+ @param inDictionary NSDictionary* dictionary with settings
+ */
 - (void) storeSettingsFromDictionary:(NSDictionary*) inDictionary;
+
+/**
+ Stores settings from dictionary file path.
+ @param path NSString* dictionary file path
+ */
 - (void) storeSettingsFromPath:(NSString*) path;
+
+/**
+ Stores authorized application id
+ @param inAuthorizedApplicationId NSString* authorized application id
+ */
 - (void) storeAuthorizedApplicationId:(NSString*) inAuthorizedApplicationId;
+
+/**
+ Retrieves authorized application id
+ @return NSString* authorized application id
+ */
 - (NSString*) getAuthorizedApplicationId;
 
+/**
+ Use this method to store following values device id, iOS version, platgorm name, user agent
+ @param object NSString* one of above mentioned settings
+ @param key NSString* settings key
+ */
 - (void) storeCalculatedSettingObject:(id) object key:(NSString*) key;
+
+/**
+ Stores individual setting
+ @param object NSString* settings value
+ @param key NSString* settings key
+ */
 - (void) storeSettingsObject:(id) object key:(NSString*) key;
 
+/**
+ Retrieves core settings key for application settings key
+ @param key NSString* application settings key
+ @return NSString* settings core key
+ */
 - (NSString*) getCoreKeyForAppKey:(NSString*) key;
+
+/**
+ Retrieves dictionary with all currenlty set settings values with core settings keys
+ @return NSDictionary* dictionary with currently set settings
+ */
 - (NSDictionary*) getCurrentSettingsDictionary;
 @end

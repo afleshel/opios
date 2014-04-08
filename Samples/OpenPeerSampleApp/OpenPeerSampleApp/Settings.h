@@ -136,8 +136,6 @@ typedef enum
 - (NSString*) getLockBoxServiceDomain;
 - (NSString*) getDefaultOutgoingTelnetServer;
 
-//- (void) storeSettingsFromPath:(NSString*) path;
-
 - (BOOL) isAppDataSet;
 - (BOOL) isLoginSettingsSet;
 - (BOOL) isAppSettingsSetForPath:(NSString*) path;

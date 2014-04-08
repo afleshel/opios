@@ -41,8 +41,6 @@
 @interface QRScannerViewController ()
 
 @property (nonatomic, strong) ZXCapture* capture;
-//@property (nonatomic, strong) NSURLConnection *urlConnection;
-//@property (nonatomic, strong) NSMutableData* receivedData;
 @property (nonatomic, strong) HTTPDownloader* settingsDownloader;
 
 @property (nonatomic, weak) IBOutlet UIButton* buttonLogger;
@@ -251,20 +249,6 @@
     self.settingsDownloader = nil;
     [self actionProceedWithlogin:nil];
 }
-
-//- (void)onSettingsDownloadCompletion:(NSDictionary *)inSettingsDictionary
-//{
-//    [[Settings sharedSettings] snapshotCurrentSettings];
-//    [[Settings sharedSettings] storeQRSettings:inSettingsDictionary];
-//    [[HOPSettings sharedSettings] storeSettingsFromDictionary:inSettingsDictionary];
-//    
-//    [self actionProceedWithlogin:nil];
-//}
-//
-//- (void)onSettingsDownloadFailure
-//{
-//    [self actionProceedWithlogin:nil];
-//}
 
 @end
 
