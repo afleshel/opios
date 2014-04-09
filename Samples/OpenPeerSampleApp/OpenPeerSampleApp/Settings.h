@@ -151,4 +151,5 @@ typedef enum
 - (void) removeAppliedQRSettings;
 
 - (BOOL) updateAppSettings;
+- (BOOL) checkIfReloginInfoIsValid;
 @end

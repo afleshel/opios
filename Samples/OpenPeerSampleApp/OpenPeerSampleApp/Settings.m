@@ -38,6 +38,8 @@
 #import <OpenPeerSDK/HOPSettings.h>
 #import <OpenPeerSDK/HOPUtility.h>
 #import <OpenPeerSDK/HOPCache.h>
+#import <OpenPeerSDK/HOPHomeUser.h>
+#import <OpenPeerSDK/HOPModelManager.h>
 #import "HTTPDownloader.h"
 
 @interface Settings ()
@@ -793,6 +795,7 @@
                 {
                     id value = [filteredDictionary objectForKey:key];
                     [[HOPSettings sharedSettings] storeSettingsObject:value key:[[HOPSettings sharedSettings]getCoreKeyForAppKey:key]];
+                    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Updated value: %@ for key: %@",value,key);
                 }
             }
         }
@@ -837,6 +840,7 @@
     
     if (updateSettings)
     {
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Updating application settings");
         //Check if all settings can be overwritten. If not it will overwritten just settings that atil has default values
         BOOL overwrite = [self shouldOverwriteExistingSettings];
         
@@ -873,6 +877,10 @@
                 }
             }
         }
+        else
+        {
+            OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"No change in application settings");
+        }
         
         //Update settings with new values
         [self updateDefaultSettingsFromPath:[[NSBundle mainBundle] pathForResource:@"DefaultSettings" ofType:@"plist"] notToUpdateKeys:arrayOfChangedKeys];
@@ -905,12 +913,35 @@
         }
     }
     
+    if (ret)
+    {
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Downloading settings from url:%@",settingsDownloadURL);
+    }
+    else
+    {
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Settings download not started for url:%@",settingsDownloadURL);
+    }
+    
+    return ret;
+}
+
+- (BOOL) checkIfReloginInfoIsValid
+{
+    BOOL ret = NO;
+    
+    HOPHomeUser* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
+    NSString* domain = [[NSUserDefaults standardUserDefaults] objectForKey:settingsKeyIdentityProviderDomain];
+    
+    ret = [homeUser.reloginInfo isEqualToString:domain];
+    
     return ret;
 }
 
 #pragma mark - SettingsDownloaderDelegate
 - (void) httpDownloader:(HTTPDownloader *)downloader downloaded:(NSString *)downloaded
 {
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Settings are successfully downloaded");
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Downloaded settings: %@",downloaded);
     NSDictionary* settingsDictionary = [[Settings sharedSettings] dictionaryForJSONString:downloaded];
     [[HOPSettings sharedSettings] storeSettingsFromDictionary:settingsDictionary];
     //After downloading settings are applied make a settings snaplshot
@@ -922,6 +953,7 @@
 
 - (void) httpDownloader:(HTTPDownloader *) downloader didFailWithError:(NSError *)error
 {
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Settings download failed. Reason:%@",error);
     [[OpenPeer sharedOpenPeer] finishPreSetup];
 }
 @end
