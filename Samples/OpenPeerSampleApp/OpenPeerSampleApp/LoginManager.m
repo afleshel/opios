@@ -226,7 +226,7 @@
         
         if (!hopIdentity)
         {
-            OPLog(HOPLoggerSeverityError, HOPLoggerLevelTrace, @"Identity login has failed for uri: %@",identityURI);
+            OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Identity login has failed for uri: %@",identityURI);
         }
         else
         {

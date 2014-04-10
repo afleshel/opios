@@ -79,7 +79,8 @@
     if (self.postData)
     {
         [theRequest setHTTPMethod:@"POST"];
-        [theRequest setValue:@"application/x-www-form-urlencoded; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+        //[theRequest setValue:@"application/x-www-form-urlencoded; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+        [theRequest setValue:@"application/json; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
         [theRequest setHTTPBody:[self.postData dataUsingEncoding:NSUTF8StringEncoding]];
     }
     
@@ -97,7 +98,7 @@
         
         ret = NO;
         
-        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Start downloading failed for url %@",self.url);
+        OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Start downloading failed for url %@",self.url);
     }
     
     return ret;
@@ -119,16 +120,8 @@
     self.receivedData = nil;
     
     //Inform the user that there was an error with download
-    NSLog(@"Connection failed! Error - %@ %@",
-          [error localizedDescription],
-          [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
-    
-    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Downloading login settings failed!"
-                                                        message:@"Please, ckeck you internet connection and try to scan QR code again or proceed login with default values."
-                                                       delegate:nil
-                                              cancelButtonTitle:nil
-                                              otherButtonTitles:@"Ok",nil];
-    [alertView show];
+    //NSLog(@"Connection failed! Error - %@ %@", [error localizedDescription], [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
+    OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Downloading failed for url %@. Error: %@ %@",self.url,[error localizedDescription], [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
     
     [self.delegate httpDownloader:self didFailWithError:error];
 }
@@ -146,12 +139,7 @@
         }
         else
         {
-            UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Login settings are not valid!"
-                                                                message:@"Please try to scan another QR code or proceed login with default values."
-                                                               delegate:nil
-                                                      cancelButtonTitle:nil
-                                                      otherButtonTitles:@"Ok",nil];
-            [alertView show];
+            OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Downloaded empty string for url %@",self.url);
         }
     }
     self.urlConnection = nil;

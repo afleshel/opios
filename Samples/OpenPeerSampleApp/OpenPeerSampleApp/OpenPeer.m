@@ -109,6 +109,9 @@
     //Create all delegates required for communication with core
     [self createDelegates];
     
+    //Set log levels and start logging
+    [Logger startAllSelectedLoggers];
+    
     //Set persistent stores
     NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
     NSString *dataPathDirectory = [libraryPath stringByAppendingPathComponent:@"db"];
@@ -183,7 +186,7 @@
         return;
     }
 #endif
-    //Set log levels and start logging
+    //Run logger again if some of logger settings are changed during settings initialization
     [Logger startAllSelectedLoggers];
 
     [[HOPBackgrounding sharedBackgrounding] subscribeDelegate:self.backgroundingDelegate phase:((NSNumber*)[[NSUserDefaults standardUserDefaults]objectForKey:settingsKeyBackgroundingPhaseRichPush]).unsignedLongValue];

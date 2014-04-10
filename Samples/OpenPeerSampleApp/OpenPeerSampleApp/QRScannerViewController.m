@@ -243,7 +243,7 @@
     NSDictionary* settingsDictionary = nil;
     
     //Apply downloaded settings
-    if ([downloaded length] > 0)
+    if ([downloaded length] > 0 && [downloaded rangeOfString:@">404<"].location == NSNotFound)
     {
         settingsDictionary = [[Settings sharedSettings] dictionaryForJSONString:downloaded];
         
@@ -254,11 +254,35 @@
             [[HOPSettings sharedSettings] storeSettingsFromDictionary:settingsDictionary];
         }
     }
+    else
+    {
+        if ([downloaded length] > 0)
+        {
+            OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Settings download error: 404 Not found");
+        }
+        else
+        {
+            OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Received empty settings string.");
+        }
+        
+        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Downloading login settings failed!"
+                                                            message:@"Login will proceed with default settings."
+                                                           delegate:nil
+                                                  cancelButtonTitle:nil
+                                                  otherButtonTitles:@"Ok",nil];
+        [alertView show];
+    }
     [self actionProceedWithlogin:nil];
 }
 
 - (void) httpDownloader:(HTTPDownloader *) downloader didFailWithError:(NSError *)error
 {
+    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Downloading login settings failed!"
+                                                        message:@"Please, ckeck you internet connection and try to scan QR code again or proceed login with default values."
+                                                       delegate:nil
+                                              cancelButtonTitle:nil
+                                              otherButtonTitles:@"Ok",nil];
+    [alertView show];
     self.settingsDownloader = nil;
     [self actionProceedWithlogin:nil];
 }

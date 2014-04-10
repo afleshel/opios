@@ -944,20 +944,47 @@
 #pragma mark - SettingsDownloaderDelegate
 - (void) httpDownloader:(HTTPDownloader *)downloader downloaded:(NSString *)downloaded
 {
-    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Settings are successfully downloaded");
-    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Downloaded settings: %@",downloaded);
-    NSDictionary* settingsDictionary = [[Settings sharedSettings] dictionaryForJSONString:downloaded];
-    [[HOPSettings sharedSettings] storeSettingsFromDictionary:settingsDictionary];
-    //After downloading settings are applied make a settings snaplshot
-    [self snapshotCurrentSettings];
+    if ([downloaded length] > 0 && [downloaded rangeOfString:@">404<"].location == NSNotFound)
+    {
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Settings are successfully downloaded");
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Downloaded settings: %@",downloaded);
+        NSDictionary* settingsDictionary = [[Settings sharedSettings] dictionaryForJSONString:downloaded];
+        [[HOPSettings sharedSettings] storeSettingsFromDictionary:settingsDictionary];
+        //After downloading settings are applied make a settings snaplshot
+        [self snapshotCurrentSettings];
+        int expiryTime = [[NSUserDefaults standardUserDefaults] integerForKey:settingsKeySettingsDownloadExpiryTime];
+        [[HOPCache sharedCache] store:[[NSUserDefaults standardUserDefaults] stringForKey:settingsKeySettingsDownloadURL] expireDate:[[NSDate date] dateByAddingTimeInterval:expiryTime] cookieNamePath:settingsKeySettingsDownloadURL];
+    }
+    else
+    {
+        if ([downloaded length] > 0)
+        {
+            OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Settings download error: 404 Not found");
+        }
+        else
+        {
+            OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Received empty settings string.");
+        }
+        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Downloading login settings failed!"
+                                                            message:@"Login will proceed with default settings."
+                                                           delegate:nil
+                                                  cancelButtonTitle:nil
+                                                  otherButtonTitles:@"Ok",nil];
+        [alertView show];
+    }
+    
     [[OpenPeer sharedOpenPeer] finishPreSetup];
-    int expiryTime = [[NSUserDefaults standardUserDefaults] integerForKey:settingsKeySettingsDownloadExpiryTime];
-    [[HOPCache sharedCache] store:[[NSUserDefaults standardUserDefaults] stringForKey:settingsKeySettingsDownloadURL] expireDate:[[NSDate date] dateByAddingTimeInterval:expiryTime] cookieNamePath:settingsKeySettingsDownloadURL];
 }
 
 - (void) httpDownloader:(HTTPDownloader *) downloader didFailWithError:(NSError *)error
 {
-    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Settings download failed. Reason:%@",error);
+    OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Settings download failed. Reason:%@",error);
+    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Downloading login settings failed!"
+                                                        message:@"Login will proceed with previous settings."
+                                                       delegate:nil
+                                              cancelButtonTitle:nil
+                                              otherButtonTitles:@"Ok",nil];
+    [alertView show];
     [[OpenPeer sharedOpenPeer] finishPreSetup];
 }
 @end
