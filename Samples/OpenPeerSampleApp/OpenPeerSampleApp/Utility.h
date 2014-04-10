@@ -54,4 +54,5 @@
 + (BOOL) isValidJSON:(NSString*) json;
 + (NSString *) stringFromDate: (NSDate*) date;
 + (NSDate *) dateFromTimeString: (NSString*) timeStr;
++ (BOOL) isAppUpdated;
 @end

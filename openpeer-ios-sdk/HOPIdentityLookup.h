@@ -86,5 +86,8 @@
  */
 - (NSArray*) getInvalidIdentities;
 
+/**
+ Destroy core object.
+ */
 - (void) destroyCoreObject;
 @end

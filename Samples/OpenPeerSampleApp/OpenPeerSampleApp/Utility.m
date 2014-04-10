@@ -475,4 +475,22 @@ static const short _base64DecodingTable[256] = {
     NSDate *date = [timeFormatter dateFromString:timeStr];
     return date;
 }
+
+
+
++ (BOOL) isAppUpdated
+{
+    BOOL ret = YES;
+    NSDate* appPreviousModificationDate = [[NSUserDefaults standardUserDefaults] objectForKey:@"appUpdateDate"];
+    NSString *exePath = [[NSBundle mainBundle] executablePath];
+    NSDictionary *exeAttrs = [[NSFileManager defaultManager] attributesOfItemAtPath:exePath error:nil];
+    NSDate *lastModificationDate = [exeAttrs objectForKey:@"NSFileModificationDate"];
+    
+    if ([lastModificationDate isEqualToDate:appPreviousModificationDate])
+        ret = NO;
+    else
+        [[NSUserDefaults standardUserDefaults] setObject:lastModificationDate forKey:@"appUpdateDate"];
+        
+    return ret;
+}
 @end

@@ -127,9 +127,9 @@
 
 @end
 
-@protocol HOPSettingsDelegate <NSObject>
+/*@protocol HOPSettingsDelegate <NSObject>
 
-/*- (NSString*) getString:(NSString*) key;
+- (NSString*) getString:(NSString*) key;
 - (long) getInt:(NSString*) key;
 - (unsigned long) getUInt:(NSString*) key;
 - (BOOL) getBool:(NSString*) key;
@@ -144,9 +144,9 @@
 - (void) setDouble:(double) value key:(NSString*) key;
 
 - (void) clearForKey:(NSString*) key;
-*/
-@end
 
+@end
+*/
 @protocol HOPBackgroundingCompletionDelegate <NSObject>
 
 - (void) onBackgroundingReady;

@@ -43,7 +43,18 @@
 @property (nonatomic, strong) NSString* identityURI;
 @property (nonatomic, strong) NSDate* lastUpdated;
 
+/**
+ Initializer for HOPIdentityLookupInfo
+ @param inIdentityContact HOPIdentityContact identity contact object
+ @returns HOPIdentityLookupInfo object
+ */
 - (id) initWithIdentityContact:(HOPIdentityContact*) inIdentityContact;
+
+/**
+ Initializer for HOPIdentityLookupInfo
+ @param inRolodexContact HOPRolodexContact rolodex contact object
+ @returns HOPIdentityLookupInfo object
+ */
 - (id) initWithRolodexContact:(HOPRolodexContact*) inRolodexContact;
 
 @end

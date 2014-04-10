@@ -177,5 +177,8 @@
  */
 - (BOOL) getMessageDeliveryState: (NSString*) messageID outDeliveryState:(HOPConversationThreadMessageDeliveryStates*) outDeliveryState;
 
+/**
+ Destroy core object.
+ */
 - (void) destroyCoreObject;
 @end

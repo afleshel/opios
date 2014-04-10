@@ -64,6 +64,8 @@ extern NSString * const archiveColorized;
 
 extern NSString * const settingsKeyAppliedQRSettings;
 extern NSString * const settingsKeySettingsSnapshot;
+extern NSString * const settingsKeyDefaultSettingsSnapshot;
+extern NSString * const settingsKeyOverwriteExistingSettings;
 extern NSString * const settingsKeyUserAgent;
 
 extern NSString * const settingsKeyMediaAEC;

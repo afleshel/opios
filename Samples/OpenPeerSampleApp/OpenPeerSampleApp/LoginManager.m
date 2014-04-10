@@ -114,14 +114,20 @@
  */
 - (void) login
 {
-    //If peer file doesn't exists, show login view, otherwise start relogin
-    if (![[HOPModelManager sharedModelManager] getLastLoggedInHomeUser])
+    if (![[Settings sharedSettings] checkIfReloginInfoIsValid])
     {
-        [self startLogin];
+        HOPHomeUser* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
+        homeUser.loggedIn = [NSNumber numberWithBool:NO];
+        [[HOPModelManager sharedModelManager] saveContext];
+    }
+    //If peer file doesn't exists, show login view, otherwise start relogin
+    if ([[HOPModelManager sharedModelManager] getLastLoggedInHomeUser])
+    {
+        [self startRelogin];
     }
     else
     {
-        [self startRelogin];
+        [self startLogin];
     }
 }
 
@@ -220,7 +226,7 @@
         
         if (!hopIdentity)
         {
-            OPLog(HOPLoggerSeverityError, HOPLoggerLevelTrace, @"Identity login has failed for uri: %@",identityURI);
+            OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Identity login has failed for uri: %@",identityURI);
         }
         else
         {

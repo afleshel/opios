@@ -31,6 +31,7 @@
 
 #import <Foundation/Foundation.h>
 #import <OpenPeerSDK/HOPTypes.h>
+#import "Delegates.h"
 
 typedef enum
 {
@@ -77,7 +78,7 @@ typedef enum
 
 
 
-@interface Settings : NSObject
+@interface Settings : NSObject<HTTPDownloaderDelegate>
 
 @property (nonatomic) BOOL isMediaAECOn;
 @property (nonatomic) BOOL isMediaAGCOn;
@@ -135,8 +136,6 @@ typedef enum
 - (NSString*) getLockBoxServiceDomain;
 - (NSString*) getDefaultOutgoingTelnetServer;
 
-//- (void) storeSettingsFromPath:(NSString*) path;
-
 - (BOOL) isAppDataSet;
 - (BOOL) isLoginSettingsSet;
 - (BOOL) isAppSettingsSetForPath:(NSString*) path;
@@ -150,4 +149,7 @@ typedef enum
 - (void) snapshotCurrentSettings;
 - (void) storeQRSettings:(NSDictionary*) inDictionary;
 - (void) removeAppliedQRSettings;
+
+- (BOOL) updateAppSettings;
+- (BOOL) checkIfReloginInfoIsValid;
 @end

@@ -58,7 +58,7 @@
 #import "BackgroundingDelegate.h"
 //View controllers
 #import "MainViewController.h"
-#import "HTTPDownloader.h"
+//#import "HTTPDownloader.h"
 
 
 //Private methods
@@ -66,7 +66,6 @@
 
 @property (nonatomic, strong) HTTPDownloader* settingsDownloadeer;
 - (void) createDelegates;
-//- (void) setLogLevels;
 @end
 
 
@@ -104,30 +103,14 @@
     [[HOPSettings sharedSettings] storeAuthorizedApplicationId:[self authorizedApplicationId]];
 }
 
-- (BOOL) downloadLatestSettings
-{
-    BOOL ret = NO;
-    NSString* settingsDownloadURL = [[NSUserDefaults standardUserDefaults] stringForKey:settingsKeySettingsDownloadURL];
-    
-    if ([settingsDownloadURL length] > 0)
-    {
-        //Check if cookie has expired, and run download if it has
-        if ([[[HOPCache sharedCache] fetchForCookieNamePath:settingsKeySettingsDownloadURL] length] == 0)
-        {
-            self.settingsDownloadeer = [[HTTPDownloader alloc] initSettingsDownloadFromURL:settingsDownloadURL postDate:nil];
-            self.settingsDownloadeer.delegate = self;
-            [self.settingsDownloadeer startDownload];
-            ret = YES;
-        }
-    }
-   
-    return ret;
-}
 
 - (void) preSetup
 {
     //Create all delegates required for communication with core
     [self createDelegates];
+    
+    //Set log levels and start logging
+    [Logger startAllSelectedLoggers];
     
     //Set persistent stores
     NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
@@ -141,67 +124,19 @@
     //Cleare expired cookies and set delegate
     [[HOPCache sharedCache] removeExpiredCookies];
     [[HOPCache sharedCache] setup];
-    
-    //Set calculated values
-    [[Settings sharedSettings] updateDeviceInfo];
+
+    BOOL startDownloadingSettings = [[Settings sharedSettings] updateAppSettings];
     
     if (![[HOPModelManager sharedModelManager] getLastLoggedInHomeUser])
     {
-        //If not already set, set default login settings
-        BOOL isSetLoginSettings = [[Settings sharedSettings] isLoginSettingsSet];
-        if (!isSetLoginSettings)
-        {
-            [[HOPSettings sharedSettings] applyDefaults];
-            
-            NSString *filePath = [[NSBundle mainBundle] pathForResource:@"DefaultSettings" ofType:@"plist"];
-            if ([filePath length] > 0)
-            {
-                NSDictionary* filteredDictionary = [[Settings sharedSettings] dictionaryWithRemovedAllInvalidEntriesForPath:filePath];
-                if ([filteredDictionary count] > 0)
-                    [[HOPSettings sharedSettings] storeSettingsFromDictionary:filteredDictionary];
-            }
-            
-            //isSetLoginSettings = [[Settings sharedSettings] isLoginSettingsSet];
-        }
-        
-        //If not already set, set default app data
-        BOOL isSetAppData = [[Settings sharedSettings] isAppDataSet];
-        if (!isSetAppData)
-        {
-            NSString* filePath = [[NSBundle mainBundle] pathForResource:@"CustomerSpecific" ofType:@"plist"];
-            if ([filePath length] > 0)
-            {
-                NSMutableDictionary* filteredDictionary = [[Settings sharedSettings] dictionaryWithRemovedAllInvalidEntriesForPath:filePath];
-                [[Settings sharedSettings] createUserAgentFromDictionary:filteredDictionary];
-                if ([filteredDictionary count] > 0)
-                    [[HOPSettings sharedSettings] storeSettingsFromDictionary:filteredDictionary];
-            }
-            
-#ifndef DEBUG
-            //Apply release settings
-            filePath = [[NSBundle mainBundle] pathForResource:@"CustomerSpecific_Release" ofType:@"plist"];
-            if ([filePath length] > 0)
-            {
-                NSMutableDictionary* filteredDictionary = [[Settings sharedSettings] dictionaryWithRemovedAllInvalidEntriesForPath:filePath];
-                [[Settings sharedSettings] createUserAgentFromDictionary:filteredDictionary];
-                if ([filteredDictionary count] > 0)
-                    [[HOPSettings sharedSettings] storeSettingsFromDictionary:filteredDictionary];
-            }
-            
-            [[self mainViewController] waitForUserGesture];
-#endif
-            
-            //isSetAppData = [[Settings sharedSettings] isAppDataSet];
-        }
-        
         //Start settings download. If download is not started finish presetup
-        if (![self downloadLatestSettings])
+        if (!startDownloadingSettings)
             [self finishPreSetup];
     }
     else
     {
         //Start settings download. If download is not started finish setup
-        if (![self downloadLatestSettings])
+        if (!startDownloadingSettings)
             [self setup];
     }
 }
@@ -251,7 +186,7 @@
         return;
     }
 #endif
-    //Set log levels and start logging
+    //Run logger again if some of logger settings are changed during settings initialization
     [Logger startAllSelectedLoggers];
 
     [[HOPBackgrounding sharedBackgrounding] subscribeDelegate:self.backgroundingDelegate phase:((NSNumber*)[[NSUserDefaults standardUserDefaults]objectForKey:settingsKeyBackgroundingPhaseRichPush]).unsignedLongValue];
@@ -341,19 +276,5 @@
                    });
 }
 
-#pragma mark - SettingsDownloaderDelegate
-- (void) httpDownloader:(HTTPDownloader *)downloader downloaded:(NSString *)downloaded
-{
-    NSDictionary* settingsDictionary = [[Settings sharedSettings] dictionaryForJSONString:downloaded];
-    [[HOPSettings sharedSettings] storeSettingsFromDictionary:settingsDictionary];
-    [[OpenPeer sharedOpenPeer] finishPreSetup];
-    int expiryTime = [[NSUserDefaults standardUserDefaults] integerForKey:settingsKeySettingsDownloadExpiryTime];
-    [[HOPCache sharedCache] store:[[NSUserDefaults standardUserDefaults] stringForKey:settingsKeySettingsDownloadURL] expireDate:[[NSDate date] dateByAddingTimeInterval:expiryTime] cookieNamePath:settingsKeySettingsDownloadURL];
-}
-
-- (void) httpDownloader:(HTTPDownloader *) downloader didFailWithError:(NSError *)error
-{
-    [[OpenPeer sharedOpenPeer] finishPreSetup];
-}
 @end
 

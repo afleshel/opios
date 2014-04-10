@@ -37,6 +37,8 @@ NSString* const identityFacebookBaseURI = @"identity://facebook.com/";
 //Property list keys
 NSString * const settingsKeyAppliedQRSettings = @"appliedQRSettings";
 NSString * const settingsKeySettingsSnapshot = @"settingsSnapshot";
+NSString * const settingsKeyDefaultSettingsSnapshot = @"defaultSettingsSnapshot";
+NSString * const settingsKeyOverwriteExistingSettings = @"applicationOverwriteSettings";
 NSString * const settingsKeyUserAgent = @"userAgent";
 
 NSString * const settingsKeyMediaAEC = @"archiveMediaAEC";

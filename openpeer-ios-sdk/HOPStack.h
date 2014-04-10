@@ -59,18 +59,36 @@
 
 /** 
  Creates an authorized application ID from an application ID
- @param applicationID NSString applicationID obtained from Hookflash customer portal.
- @param applicationIDSharedSecret NSString Secret obtained from service provider
- @param expires NSDate date when authorized application ID expires
+ @param applicationID NSString* applicationID obtained from Hookflash customer portal.
+ @param applicationIDSharedSecret NSString* Secret obtained from service provider
+ @param expires NSDate* date when authorized application ID expires
  @return NSString authorized application ID
  */
 + (NSString*) createAuthorizedApplicationID:(NSString*) inAuthorizedApplicationID applicationIDSharedSecret:(NSString*) applicationIDSharedSecret expires:(NSDate*) expires;
 
+/**
+ Get expiry time for specified authorized application id.
+ @param inAuthorizedApplicationID NSString* authorized application id
+ @return long time in seconds till expiry
+ */
 + (long) getExpiryForAuthorizedApplicationID:(NSString*) inAuthorizedApplicationID;
 
+/**
+ Check if authorized application id will be valid in some time frame
+ @param inAuthorizedApplicationID NSString* authorized application id
+ @param minimumValidityWindowRequired long time in seconds for desired time frame
+ @return BOOL YES if it is valid in that ime frame
+ */
 + (BOOL) isAuthorizedApplicationExpiryWindowStillValid:(NSString*) inAuthorizedApplicationID minimumValidityWindowRequired:(long) minimumValidityWindowRequired;
 
+/**
+ Check if stack object is ready.
+ @return BOOL YES if ready, NO if not ready or shutdown precuderu is started
+ */
 - (BOOL) isStackReady;
 
+/**
+ Clean all core objects, except stack, on logout
+ */
 - (void) doLogoutCleanup;
 @end

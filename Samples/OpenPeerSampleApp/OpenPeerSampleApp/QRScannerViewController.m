@@ -41,8 +41,6 @@
 @interface QRScannerViewController ()
 
 @property (nonatomic, strong) ZXCapture* capture;
-//@property (nonatomic, strong) NSURLConnection *urlConnection;
-//@property (nonatomic, strong) NSMutableData* receivedData;
 @property (nonatomic, strong) HTTPDownloader* settingsDownloader;
 
 @property (nonatomic, weak) IBOutlet UIButton* buttonLogger;
@@ -98,60 +96,73 @@
         // Vibrate
         AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
         
-        NSString* str = result.text;
-
-        if ([str length] > 0)
+        if (result.barcodeFormat == kBarcodeFormatQRCode)
         {
-            NSString* jsonURL = nil;
-            NSString* postData = nil;
-            
-            if ([str rangeOfString:@"&post="].location != NSNotFound)
+            NSString* str = result.text;
+
+            if ([str length] > 0)
             {
-                NSArray* arrayOfStrings = [str componentsSeparatedByString:@"&post="];
-                if ([arrayOfStrings count] > 1)
-                {
-                    jsonURL = [arrayOfStrings objectAtIndex:0];
-                    postData = [arrayOfStrings objectAtIndex:1];
-                }
-            }
-            else
-                jsonURL = str;
+                NSString* jsonURL = nil;
+                NSString* postData = nil;
                 
-            if ([Utility isValidURL:jsonURL])
-            {
-                [self loadSettingsfromURL:jsonURL postDate:postData];
-            }
-            else
-            {
-                //Check if JSON is valid
-                if ([Utility isValidJSON:str])
+                if ([str rangeOfString:@"&post="].location != NSNotFound)
                 {
-                    //[[HOPSettings sharedSettings] applySettings:str];
-                    NSDictionary* settings = [[Settings sharedSettings] dictionaryForJSONString:str];
-                    if (settings)
+                    NSArray* arrayOfStrings = [str componentsSeparatedByString:@"&post="];
+                    if ([arrayOfStrings count] > 1)
                     {
-                        [[Settings sharedSettings] snapshotCurrentSettings];
-                        [[Settings sharedSettings] storeQRSettings:settings];
-                        [[HOPSettings sharedSettings] storeSettingsFromDictionary:settings];
+                        jsonURL = [arrayOfStrings objectAtIndex:0];
+                        postData = [arrayOfStrings objectAtIndex:1];
                     }
-                    [self actionProceedWithlogin:nil];
+                }
+                else
+                    jsonURL = str;
+                    
+                if ([Utility isValidURL:jsonURL])
+                {
+                    [self loadSettingsfromURL:jsonURL postDate:postData];
                 }
                 else
                 {
-                    self.buttonCancel.hidden = YES;
-                    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Invalid login settings!"
-                                                                        message:@"Please, scan another QR code or proceed with already set login settings"
-                                                                       delegate:nil
-                                                              cancelButtonTitle:nil
-                                                              otherButtonTitles:@"Ok",nil];
-                    [alertView show];
+                    //Check if JSON is valid
+                    if ([Utility isValidJSON:str])
+                    {
+                        //[[HOPSettings sharedSettings] applySettings:str];
+                        NSDictionary* settings = [[Settings sharedSettings] dictionaryForJSONString:str];
+                        if (settings)
+                        {
+                            [[Settings sharedSettings] snapshotCurrentSettings];
+                            [[Settings sharedSettings] storeQRSettings:settings];
+                            [[HOPSettings sharedSettings] storeSettingsFromDictionary:settings];
+                        }
+                        [self actionProceedWithlogin:nil];
+                    }
+                    else
+                    {
+                        self.buttonCancel.hidden = YES;
+                        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Invalid login settings!"
+                                                                            message:@"Please, scan another QR code or proceed with already set login settings"
+                                                                           delegate:nil
+                                                                  cancelButtonTitle:nil
+                                                                  otherButtonTitles:@"Ok",nil];
+                        [alertView show];
+                    }
+                    
                 }
-                
+            }
+            else
+            {
+                [self actionProceedWithlogin:nil];
             }
         }
         else
         {
-            [self actionProceedWithlogin:nil];
+            self.buttonCancel.hidden = YES;
+            UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Invalid QR code format!"
+                                                                message:@"Please, scan another QR code or proceed with already set login settings"
+                                                               delegate:nil
+                                                      cancelButtonTitle:nil
+                                                      otherButtonTitles:@"Ok",nil];
+            [alertView show];
         }
     }
     
@@ -232,7 +243,7 @@
     NSDictionary* settingsDictionary = nil;
     
     //Apply downloaded settings
-    if ([downloaded length] > 0)
+    if ([downloaded length] > 0 && [downloaded rangeOfString:@">404<"].location == NSNotFound)
     {
         settingsDictionary = [[Settings sharedSettings] dictionaryForJSONString:downloaded];
         
@@ -243,28 +254,38 @@
             [[HOPSettings sharedSettings] storeSettingsFromDictionary:settingsDictionary];
         }
     }
+    else
+    {
+        if ([downloaded length] > 0)
+        {
+            OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Settings download error: 404 Not found");
+        }
+        else
+        {
+            OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Received empty settings string.");
+        }
+        
+        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Downloading login settings failed!"
+                                                            message:@"Login will proceed with default settings."
+                                                           delegate:nil
+                                                  cancelButtonTitle:nil
+                                                  otherButtonTitles:@"Ok",nil];
+        [alertView show];
+    }
     [self actionProceedWithlogin:nil];
 }
 
 - (void) httpDownloader:(HTTPDownloader *) downloader didFailWithError:(NSError *)error
 {
+    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Downloading login settings failed!"
+                                                        message:@"Please, ckeck you internet connection and try to scan QR code again or proceed login with default values."
+                                                       delegate:nil
+                                              cancelButtonTitle:nil
+                                              otherButtonTitles:@"Ok",nil];
+    [alertView show];
     self.settingsDownloader = nil;
     [self actionProceedWithlogin:nil];
 }
-
-//- (void)onSettingsDownloadCompletion:(NSDictionary *)inSettingsDictionary
-//{
-//    [[Settings sharedSettings] snapshotCurrentSettings];
-//    [[Settings sharedSettings] storeQRSettings:inSettingsDictionary];
-//    [[HOPSettings sharedSettings] storeSettingsFromDictionary:inSettingsDictionary];
-//    
-//    [self actionProceedWithlogin:nil];
-//}
-//
-//- (void)onSettingsDownloadFailure
-//{
-//    [self actionProceedWithlogin:nil];
-//}
 
 @end
 

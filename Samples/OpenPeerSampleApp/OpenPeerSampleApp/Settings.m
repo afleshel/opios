@@ -37,8 +37,13 @@
 #import "Utility.h"
 #import <OpenPeerSDK/HOPSettings.h>
 #import <OpenPeerSDK/HOPUtility.h>
+#import <OpenPeerSDK/HOPCache.h>
+#import <OpenPeerSDK/HOPHomeUser.h>
+#import <OpenPeerSDK/HOPModelManager.h>
+#import "HTTPDownloader.h"
 
 @interface Settings ()
+@property (nonatomic, strong) HTTPDownloader* settingsDownloader;
 
 - (NSString*) getArchiveStringForModule:(Modules) module;
 @end
@@ -261,9 +266,6 @@
 - (void) saveModuleLogLevels
 {
     [[HOPSettings sharedSettings] storeSettingsObject:self.appModulesLoggerLevel key:archiveModulesLogLevels];
-    
-//    [[NSUserDefaults standardUserDefaults] setObject:self.appModulesLoggerLevel forKey:archiveModulesLogLevels];
-//    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (NSString*) getStringForModule:(Modules) module
@@ -598,6 +600,7 @@
 {
     NSMutableArray* ret = [[NSMutableArray alloc] init];
     
+    //Check if app id and app shared secret id are set
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:settingsKeyAppId] length] == 0)
         [ret addObject: settingsKeyAppId];
     
@@ -613,6 +616,7 @@
     SBJsonParser* parser = [[SBJsonParser alloc] init];
     NSDictionary* inputDictionary = [parser objectWithString: jsonString];
     
+    //Check if downloaded JSON is having root object
     if ([inputDictionary count] > 0 && [inputDictionary objectForKey:@"root"] != nil)
     {
         ret = [NSMutableDictionary dictionaryWithDictionary:[inputDictionary objectForKey:@"root"]];
@@ -693,6 +697,7 @@
            id value = [plistDictionary objectForKey:key];
             if ([value isKindOfClass:[NSString class]])
             {
+                //If settings value starts with <-- remove it from the dictionary
                 if ([((NSString*)value) rangeOfString:@"<--"].location != NSNotFound)
                 {
                     [plistDictionary removeObjectForKey:key];
@@ -707,6 +712,7 @@
 
 - (void) updateDeviceInfo
 {
+    //Get device info: device ID, iOS, platform and user agent
     NSString* deviceId = [HOPUtility hashString:[Utility getGUIDstring]];
     if ([deviceId length] > 0)
         [[HOPSettings sharedSettings] storeCalculatedSettingObject:deviceId key:@"openpeer/calculated/device-id"];
@@ -726,6 +732,7 @@
 
 - (void) snapshotCurrentSettings
 {
+    //Save current settings value like dictionary
     NSDictionary* currentSettings = [[HOPSettings sharedSettings] getCurrentSettingsDictionary];
     if ([currentSettings count] > 0)
         [[NSUserDefaults standardUserDefaults] setObject:currentSettings forKey:settingsKeySettingsSnapshot];
@@ -771,5 +778,213 @@
                 [[NSUserDefaults standardUserDefaults] setObject:preValue forKey:coreKey];
         }
     }
+}
+
+- (void)updateDefaultSettingsFromPath:(NSString *)filePath notToUpdateKeys:(NSMutableArray *)notToUpdateKeys
+{
+    if ([filePath length] > 0)
+    {
+        //Clean disctionary from invalid entries
+        NSDictionary* filteredDictionary = [[Settings sharedSettings] dictionaryWithRemovedAllInvalidEntriesForPath:filePath];
+        if ([filteredDictionary count] > 0)
+        {
+            for (NSString* key in [filteredDictionary allKeys])
+            {
+                //Check if value for specific key should be updated
+                if (![notToUpdateKeys containsObject:key])
+                {
+                    id value = [filteredDictionary objectForKey:key];
+                    [[HOPSettings sharedSettings] storeSettingsObject:value key:[[HOPSettings sharedSettings]getCoreKeyForAppKey:key]];
+                    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Updated value: %@ for key: %@",value,key);
+                }
+            }
+        }
+        
+        //Save new default settings
+        NSMutableDictionary* defaultSettings = nil;
+        if ([[NSUserDefaults standardUserDefaults] objectForKey:settingsKeyDefaultSettingsSnapshot])
+            defaultSettings = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:settingsKeyDefaultSettingsSnapshot]];
+        else
+            defaultSettings = [[NSMutableDictionary alloc] init];
+        [defaultSettings addEntriesFromDictionary:filteredDictionary];
+        [[NSUserDefaults standardUserDefaults] setObject:defaultSettings forKey:settingsKeyDefaultSettingsSnapshot];
+        
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+}
+
+- (BOOL) shouldOverwriteExistingSettings
+{
+    BOOL ret = NO;
+    
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"CustomerSpecific" ofType:@"plist"];
+    if ([filePath length] > 0)
+    {
+        NSDictionary* settingsDictionary = [NSDictionary dictionaryWithContentsOfFile:filePath];
+        
+        //Check if all settings should be overwritten
+        if ([settingsDictionary count] > 0)
+        {
+            ret = [settingsDictionary objectForKey:settingsKeyOverwriteExistingSettings] != nil ? ((NSNumber*)[settingsDictionary objectForKey:settingsKeyOverwriteExistingSettings]).boolValue : NO;
+        }
+    }
+    
+    return ret;
+}
+
+- (BOOL) updateAppSettings
+{
+    BOOL ret = NO;
+    BOOL updateSettings = [Utility isAppUpdated];
+    [self updateDeviceInfo];
+    
+    if (updateSettings)
+    {
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Updating application settings");
+        //Check if all settings can be overwritten. If not it will overwritten just settings that atil has default values
+        BOOL overwrite = [self shouldOverwriteExistingSettings];
+        
+        NSMutableDictionary* defaultSettings = [[NSUserDefaults standardUserDefaults] objectForKey:settingsKeyDefaultSettingsSnapshot];
+        NSMutableArray* arrayOfChangedKeys = overwrite ? nil : [[NSMutableArray alloc] init];
+        
+        if (!overwrite)
+        {
+            //For each key check if value is changed comparing to default value
+            for (NSString* key in [defaultSettings allKeys])
+            {
+                id defaultValue = [defaultSettings objectForKey:key];
+                id currentValue = [[NSUserDefaults standardUserDefaults] objectForKey:[[HOPSettings sharedSettings]getCoreKeyForAppKey:key]];
+                
+                if ([defaultValue isKindOfClass:[NSString class]] && [currentValue isKindOfClass:[NSString class]])
+                {
+                    if (![((NSString*) defaultValue) isEqualToString:((NSString*) currentValue)])
+                        [arrayOfChangedKeys addObject:key];
+                }
+                else if ([defaultValue isKindOfClass:[NSNumber class]] && [currentValue isKindOfClass:[NSNumber class]])
+                {
+                    if (![((NSNumber*) defaultValue) isEqualToNumber:((NSNumber*) currentValue)])
+                        [arrayOfChangedKeys addObject:key];
+                }
+                else if ([defaultValue isKindOfClass:[NSDictionary class]] && [currentValue isKindOfClass:[NSDictionary class]])
+                {
+                    if (![((NSDictionary*)defaultValue) isEqualToDictionary:((NSDictionary*)currentValue)])
+                        [arrayOfChangedKeys addObject:key];
+                }
+                else
+                {
+                    if (currentValue && defaultValue != currentValue)
+                        [arrayOfChangedKeys addObject:key];
+                }
+            }
+        }
+        else
+        {
+            OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"No change in application settings");
+        }
+        
+        //Update settings with new values
+        [self updateDefaultSettingsFromPath:[[NSBundle mainBundle] pathForResource:@"DefaultSettings" ofType:@"plist"] notToUpdateKeys:arrayOfChangedKeys];
+        [self updateDefaultSettingsFromPath:[[NSBundle mainBundle] pathForResource:@"CustomerSpecific" ofType:@"plist"] notToUpdateKeys:arrayOfChangedKeys];
+#ifndef DEBUG
+        [self updateDefaultSettingsFromPath:[[NSBundle mainBundle] pathForResource:@"CustomerSpecific_Release" ofType:@"plist"] notToUpdateKeys:arrayOfChangedKeys];
+#endif
+        [self snapshotCurrentSettings];
+    }
+    //Start settings download. If download is not started finish presetup
+    ret = [self downloadLatestSettings];
+    
+    return ret;
+}
+
+- (BOOL) downloadLatestSettings
+{
+    BOOL ret = NO;
+    NSString* settingsDownloadURL = [[NSUserDefaults standardUserDefaults] stringForKey:settingsKeySettingsDownloadURL];
+    
+    if ([settingsDownloadURL length] > 0)
+    {
+        NSString* cachedSettingsDownloadURL = [[HOPCache sharedCache] fetchForCookieNamePath:settingsKeySettingsDownloadURL];
+        //Check if cookie has expired, and run download if it has
+        if ([cachedSettingsDownloadURL length] == 0 || ![cachedSettingsDownloadURL isEqualToString:settingsDownloadURL])
+        {
+            self.settingsDownloader = [[HTTPDownloader alloc] initSettingsDownloadFromURL:settingsDownloadURL postDate:nil];
+            self.settingsDownloader.delegate = self;
+            ret = [self.settingsDownloader startDownload];
+        }
+        else
+        {
+            OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Cookie has not expired so settings are not downloaded");
+        }
+    }
+    
+    if (ret)
+    {
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Downloading settings from url:%@",settingsDownloadURL);
+    }
+    else
+    {
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Settings download not started for url:%@",settingsDownloadURL);
+    }
+    
+    return ret;
+}
+
+- (BOOL) checkIfReloginInfoIsValid
+{
+    BOOL ret = NO;
+    
+    HOPHomeUser* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
+    NSString* domain = [[NSUserDefaults standardUserDefaults] objectForKey:settingsKeyIdentityProviderDomain];
+    
+    ret = [homeUser.reloginInfo rangeOfString:domain].location != NSNotFound;
+    
+    return ret;
+}
+
+#pragma mark - SettingsDownloaderDelegate
+- (void) httpDownloader:(HTTPDownloader *)downloader downloaded:(NSString *)downloaded
+{
+    if ([downloaded length] > 0 && [downloaded rangeOfString:@">404<"].location == NSNotFound)
+    {
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Settings are successfully downloaded");
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Downloaded settings: %@",downloaded);
+        NSDictionary* settingsDictionary = [[Settings sharedSettings] dictionaryForJSONString:downloaded];
+        [[HOPSettings sharedSettings] storeSettingsFromDictionary:settingsDictionary];
+        //After downloading settings are applied make a settings snaplshot
+        [self snapshotCurrentSettings];
+        int expiryTime = [[NSUserDefaults standardUserDefaults] integerForKey:settingsKeySettingsDownloadExpiryTime];
+        [[HOPCache sharedCache] store:[[NSUserDefaults standardUserDefaults] stringForKey:settingsKeySettingsDownloadURL] expireDate:[[NSDate date] dateByAddingTimeInterval:expiryTime] cookieNamePath:settingsKeySettingsDownloadURL];
+    }
+    else
+    {
+        if ([downloaded length] > 0)
+        {
+            OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Settings download error: 404 Not found");
+        }
+        else
+        {
+            OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Received empty settings string.");
+        }
+        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Downloading login settings failed!"
+                                                            message:@"Login will proceed with default settings."
+                                                           delegate:nil
+                                                  cancelButtonTitle:nil
+                                                  otherButtonTitles:@"Ok",nil];
+        [alertView show];
+    }
+    
+    [[OpenPeer sharedOpenPeer] finishPreSetup];
+}
+
+- (void) httpDownloader:(HTTPDownloader *) downloader didFailWithError:(NSError *)error
+{
+    OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Settings download failed. Reason:%@",error);
+    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Downloading login settings failed!"
+                                                        message:@"Login will proceed with previous settings."
+                                                       delegate:nil
+                                              cancelButtonTitle:nil
+                                              otherButtonTitles:@"Ok",nil];
+    [alertView show];
+    [[OpenPeer sharedOpenPeer] finishPreSetup];
 }
 @end

@@ -237,9 +237,29 @@
  */
 - (void) removeCookieForPath:(NSString*) path;
 
+/**
+ Create a HOPSessionRecord object
+ @param sessionID NSString* session id
+ @param type NSString* session type
+ @param date NSDate* time of creation
+ @param name NSString* session name
+ @return HOPSessionRecord* session record boject
+ */
 - (HOPSessionRecord*) addSession:(NSString*) sessionID type:(NSString*) type date:(NSDate*) date name:(NSString*) name participants:(NSArray*) participants;
 
+/**
+ Create a HOPMessageRecord object
+ @param messageText NSString* message text
+ @param type NSString* session type
+ @param date NSDate* time of creation
+ @param sessionRecordId NSString* session id
+ @param rolodexContact HOPRolodexContact* rolodex contact for sender
+ @param messageId NSString* message id
+ @return HOPMessageRecord* message record boject
+ */
 - (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date session:(NSString*) sessionRecordId rolodexContact:(HOPRolodexContact*) rolodexContact messageId:(NSString*)messageId;
-
+/**
+ Removes all session and message records.
+ */
 - (void) clearSessionRecords;
 @end

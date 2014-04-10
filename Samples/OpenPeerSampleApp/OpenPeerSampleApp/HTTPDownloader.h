@@ -39,5 +39,4 @@
 - (id) initSettingsDownloadFromURL:(NSString*) url postDate:(NSString*) postData;
 - (id) initSettingsDownloadFromURL:(NSString*) url postDate:(NSString*) postData auth:(NSString*) auth;
 - (BOOL) startDownload;
-//- (void) downloadFromURL:(NSString*) url postDate:(NSString*) postData;
 @end
