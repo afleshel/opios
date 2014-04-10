@@ -103,25 +103,6 @@
     [[HOPSettings sharedSettings] storeAuthorizedApplicationId:[self authorizedApplicationId]];
 }
 
-/*- (BOOL) downloadLatestSettings
-{
-    BOOL ret = NO;
-    NSString* settingsDownloadURL = [[NSUserDefaults standardUserDefaults] stringForKey:settingsKeySettingsDownloadURL];
-    
-    if ([settingsDownloadURL length] > 0)
-    {
-        //Check if cookie has expired, and run download if it has
-        if ([[[HOPCache sharedCache] fetchForCookieNamePath:settingsKeySettingsDownloadURL] length] == 0)
-        {
-            self.settingsDownloadeer = [[HTTPDownloader alloc] initSettingsDownloadFromURL:settingsDownloadURL postDate:nil];
-            self.settingsDownloadeer.delegate = self;
-            [self.settingsDownloadeer startDownload];
-            ret = YES;
-        }
-    }
-   
-    return ret;
-}*/
 
 - (void) preSetup
 {

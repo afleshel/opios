@@ -903,13 +903,17 @@
     
     if ([settingsDownloadURL length] > 0)
     {
+        NSString* cachedSettingsDownloadURL = [[HOPCache sharedCache] fetchForCookieNamePath:settingsKeySettingsDownloadURL];
         //Check if cookie has expired, and run download if it has
-        if ([[[HOPCache sharedCache] fetchForCookieNamePath:settingsKeySettingsDownloadURL] length] == 0)
+        if ([cachedSettingsDownloadURL length] == 0 || ![cachedSettingsDownloadURL isEqualToString:settingsDownloadURL])
         {
             self.settingsDownloader = [[HTTPDownloader alloc] initSettingsDownloadFromURL:settingsDownloadURL postDate:nil];
             self.settingsDownloader.delegate = self;
-            [self.settingsDownloader startDownload];
-            ret = YES;
+            ret = [self.settingsDownloader startDownload];
+        }
+        else
+        {
+            OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Cookie has not expired so settings are not downloaded");
         }
     }
     
@@ -932,7 +936,7 @@
     HOPHomeUser* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
     NSString* domain = [[NSUserDefaults standardUserDefaults] objectForKey:settingsKeyIdentityProviderDomain];
     
-    ret = [homeUser.reloginInfo isEqualToString:domain];
+    ret = [homeUser.reloginInfo rangeOfString:domain].location != NSNotFound;
     
     return ret;
 }
