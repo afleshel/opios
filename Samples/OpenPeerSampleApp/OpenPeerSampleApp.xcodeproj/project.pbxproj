@@ -201,6 +201,8 @@
 		8757E1CE1827ED5600D7BDA1 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8757E1CD1827ED5600D7BDA1 /* CoreText.framework */; };
 		875CD7E2167A14810037396B /* SessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 875CD7E1167A14810037396B /* SessionManager.m */; };
 		875CD7E5167A14960037396B /* Session.m in Sources */ = {isa = PBXBuildFile; fileRef = 875CD7E4167A14960037396B /* Session.m */; };
+		8766DB6719083F7E004D7264 /* OpenpeerDataModel.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8766DB6619083F7E004D7264 /* OpenpeerDataModel.bundle */; };
+		8766DB6819083F83004D7264 /* OpenpeerDataModel.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8766DB6619083F7E004D7264 /* OpenpeerDataModel.bundle */; };
 		876CBCBB16F20A88004D542B /* IdentityDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 876CBCBA16F20A88004D542B /* IdentityDelegate.m */; };
 		876CD4C718A385900069C296 /* Template_CustomerSpecific.plist in Resources */ = {isa = PBXBuildFile; fileRef = 876CD4C618A385900069C296 /* Template_CustomerSpecific.plist */; };
 		876CD4C918A38B370069C296 /* CustomerSpecific.plist in Resources */ = {isa = PBXBuildFile; fileRef = 876CD4C818A38B370069C296 /* CustomerSpecific.plist */; };
@@ -508,8 +510,6 @@
 		87F24B5F166FF0C900A5389F /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F24B5E166FF0C900A5389F /* Utility.m */; };
 		87F24B62167003F400A5389F /* ContactsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F24B61167003F300A5389F /* ContactsManager.m */; };
 		87F9DAF9189AB7E100D96FF3 /* libZXingObjC-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8774AC7018992D5A006B91FA /* libZXingObjC-iOS.a */; };
-		87FAE77018EC47E400D82719 /* OpenpeerDataModel.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 87FAE76F18EC47E400D82719 /* OpenpeerDataModel.bundle */; };
-		87FAE77118EC47E400D82719 /* OpenpeerDataModel.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 87FAE76F18EC47E400D82719 /* OpenpeerDataModel.bundle */; };
 		87FC39F71709BB39002030D1 /* MessageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC39F51709BB36002030D1 /* MessageManager.m */; };
 		87FC3A151709BD8D002030D1 /* XMLWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC39FB1709BD8C002030D1 /* XMLWriter.m */; };
 		87FC3A161709BD8D002030D1 /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC39FF1709BD8C002030D1 /* SBJsonParser.m */; };
@@ -862,6 +862,7 @@
 		875CD7E1167A14810037396B /* SessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionManager.m; sourceTree = "<group>"; };
 		875CD7E3167A14960037396B /* Session.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Session.h; sourceTree = "<group>"; };
 		875CD7E4167A14960037396B /* Session.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Session.m; sourceTree = "<group>"; };
+		8766DB6619083F7E004D7264 /* OpenpeerDataModel.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = OpenpeerDataModel.bundle; path = OpenpeerSDK.framework/Versions/C/Resources/OpenpeerDataModel.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		876CBCB916F20A88004D542B /* IdentityDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdentityDelegate.h; sourceTree = "<group>"; };
 		876CBCBA16F20A88004D542B /* IdentityDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdentityDelegate.m; sourceTree = "<group>"; };
 		876CD4C618A385900069C296 /* Template_CustomerSpecific.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Template_CustomerSpecific.plist; sourceTree = "<group>"; };
@@ -984,7 +985,6 @@
 		87F24B5E166FF0C900A5389F /* Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utility.m; sourceTree = "<group>"; };
 		87F24B60167003F300A5389F /* ContactsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactsManager.h; sourceTree = "<group>"; };
 		87F24B61167003F300A5389F /* ContactsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactsManager.m; sourceTree = "<group>"; };
-		87FAE76F18EC47E400D82719 /* OpenpeerDataModel.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = OpenpeerDataModel.bundle; path = "../Debug-iphoneos/OpenpeerSDK.framework/Versions/C/Resources/OpenpeerDataModel.bundle"; sourceTree = BUILT_PRODUCTS_DIR; };
 		87FC39F51709BB36002030D1 /* MessageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageManager.m; sourceTree = "<group>"; };
 		87FC39F61709BB37002030D1 /* MessageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageManager.h; sourceTree = "<group>"; };
 		87FC39FA1709BD8C002030D1 /* XMLWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMLWriter.h; sourceTree = "<group>"; };
@@ -1439,6 +1439,7 @@
 		87272833166CBF9B0089CBB6 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				8766DB6619083F7E004D7264 /* OpenpeerDataModel.bundle */,
 				871952AC18E3521500E15F2A /* readme.txt */,
 				876CD4C818A38B370069C296 /* CustomerSpecific.plist */,
 				8754280818C7A2FD007F626F /* CustomerSpecific_Release.plist */,
@@ -1453,7 +1454,6 @@
 				87272835166CBF9B0089CBB6 /* InfoPlist.strings */,
 				87E4DA06180D5082002CA2D4 /* Sounds */,
 				877038E518A24774000B7AA1 /* DefaultSettings.plist */,
-				87FAE76F18EC47E400D82719 /* OpenpeerDataModel.bundle */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -1897,7 +1897,7 @@
 				874408D5182FFE43004AD8FC /* video_indicator_white_big.png in Resources */,
 				8730D76418339AFE008D1D37 /* chat-bottom.png in Resources */,
 				8719AB0717CE0710007E991B /* tableViewCell_selected@2x.png in Resources */,
-				87FAE77018EC47E400D82719 /* OpenpeerDataModel.bundle in Resources */,
+				8766DB6719083F7E004D7264 /* OpenpeerDataModel.bundle in Resources */,
 				8719AB0817CE0710007E991B /* tableViewCell_selected.png in Resources */,
 				8730D75C183398A5008D1D37 /* iPhone_Button-end-baritem.png in Resources */,
 				87E4D99F180BE07F002CA2D4 /* OpenPeerLogo57.png in Resources */,
@@ -2096,7 +2096,7 @@
 				87D4BD6C18675368008C2D30 /* iPhone_loader_00016.png in Resources */,
 				87D4BD6D18675368008C2D30 /* call_recording_white_button.png in Resources */,
 				87D4BD6E18675368008C2D30 /* audio_call_incoming_accept_button.png in Resources */,
-				87FAE77118EC47E400D82719 /* OpenpeerDataModel.bundle in Resources */,
+				8766DB6819083F83004D7264 /* OpenpeerDataModel.bundle in Resources */,
 				87D4BD6F18675368008C2D30 /* iPhone_loader_00013.png in Resources */,
 				87D4BD7018675368008C2D30 /* iPhone_loader_00016@2x.png in Resources */,
 				87D4BD7118675368008C2D30 /* iPhone_chat_textfield_bkgd@2x.png in Resources */,
