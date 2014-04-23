@@ -2456,7 +2456,7 @@
 					"$(SDKROOT)/usr/lib/system",
 					"$(CONFIGURATION_BUILD_DIR)/OpenpeerSDK.framework/Libraries",
 				);
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-x",
@@ -2468,8 +2468,9 @@
 					"-lstdc++",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "E2D523C4-225A-469F-BDAC-DB1AF003D447";
 				SUPPORTED_PLATFORMS = iphoneos;
+				VALID_ARCHS = "armv7 armv7s";
 				WARNING_CFLAGS = (
 					"-Wno-c++11-extensions",
 					"-Wno-arc-performSelector-leaks",
@@ -2498,7 +2499,7 @@
 					"$(SDKROOT)/usr/lib/system",
 					"$(CONFIGURATION_BUILD_DIR)/OpenpeerSDK.framework/Libraries",
 				);
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-x",
@@ -2510,8 +2511,9 @@
 					"-lstdc++",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "E2D523C4-225A-469F-BDAC-DB1AF003D447";
 				SUPPORTED_PLATFORMS = iphoneos;
+				VALID_ARCHS = "armv7 armv7s";
 				WARNING_CFLAGS = (
 					"-Wno-c++11-extensions",
 					"-Wno-arc-performSelector-leaks",
@@ -2543,7 +2545,7 @@
 					./3rdParties/Airship/,
 					"$(CONFIGURATION_BUILD_DIR)/OpenpeerSDK.framework/Libraries",
 				);
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "";
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
@@ -2556,8 +2558,9 @@
 					"-lstdc++",
 				);
 				PRODUCT_NAME = openpeersample;
-				PROVISIONING_PROFILE = "F0ABAE63-F921-4AFD-BC72-D6F5C41B9194";
+				PROVISIONING_PROFILE = "04DA01E5-197E-472B-BF94-92FACFC7642C";
 				SUPPORTED_PLATFORMS = iphoneos;
+				VALID_ARCHS = "armv7 armv7s";
 				WARNING_CFLAGS = (
 					"-Wno-c++11-extensions",
 					"-Wno-arc-performSelector-leaks",
@@ -2588,7 +2591,7 @@
 					./3rdParties/Airship/,
 					"$(CONFIGURATION_BUILD_DIR)/OpenpeerSDK.framework/Libraries",
 				);
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-x",
@@ -2600,8 +2603,9 @@
 					"-lstdc++",
 				);
 				PRODUCT_NAME = openpeersample;
-				PROVISIONING_PROFILE = "F0ABAE63-F921-4AFD-BC72-D6F5C41B9194";
+				PROVISIONING_PROFILE = "04DA01E5-197E-472B-BF94-92FACFC7642C";
 				SUPPORTED_PLATFORMS = iphoneos;
+				VALID_ARCHS = "armv7 armv7s";
 				WARNING_CFLAGS = (
 					"-Wno-c++11-extensions",
 					"-Wno-arc-performSelector-leaks",
