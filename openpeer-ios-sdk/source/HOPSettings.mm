@@ -180,7 +180,10 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
 - (void) storeSettingsObject:(id) object key:(NSString*) key
 {
-    ((OpenPeerSettingsDelegate*)openPeerSettingsDelegatePtr.get())->setObjectForKey(object, key);
+    if ([object isKindOfClass:[NSDictionary class]])
+        [self storeSettingsFromDictionary:object];
+    else
+        ((OpenPeerSettingsDelegate*)openPeerSettingsDelegatePtr.get())->setObjectForKey(object, key);
 }
 
 - (NSString*) getCoreKeyForAppKey:(NSString*) key
