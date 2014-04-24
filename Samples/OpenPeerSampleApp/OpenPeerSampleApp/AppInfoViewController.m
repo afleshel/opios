@@ -39,9 +39,11 @@ typedef enum
 {
     
     APP_VERSION,
+    APP_BUILD_VERSION,
+    APP_SETTINGS_DOWNLOAD_URL,
     APP_SETTINGS_VERSION,
     
-    APP_INFO_SECTIONS = 2
+    APP_INFO_SECTIONS = 4
 } AppInfoOptions;
 
 @interface AppInfoViewController ()
@@ -97,10 +99,20 @@ typedef enum
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
+    cell.textLabel.numberOfLines = 0;
+    
     switch (indexPath.section)
     {
         case APP_VERSION:
             cell.textLabel.text =  [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+            break;
+            
+        case APP_BUILD_VERSION:
+            cell.textLabel.text =  [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+            break;
+            
+        case APP_SETTINGS_DOWNLOAD_URL:
+            cell.textLabel.text =  [[[NSUserDefaults standardUserDefaults] stringForKey:settingsKeySettingsDownloadURL] length] > 0 ? [[NSUserDefaults standardUserDefaults] stringForKey:settingsKeySettingsDownloadURL] : @"None";
             break;
             
         case APP_SETTINGS_VERSION:
@@ -123,6 +135,14 @@ typedef enum
     {
         case APP_VERSION:
             ret = @"Application Version";
+            break;
+            
+        case APP_BUILD_VERSION:
+            ret = @"Application Build Version";
+            break;
+            
+        case APP_SETTINGS_DOWNLOAD_URL:
+            ret = @"Settings Download URL";
             break;
             
         case APP_SETTINGS_VERSION:

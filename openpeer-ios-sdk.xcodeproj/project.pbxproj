@@ -1417,6 +1417,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACH_O_TYPE = staticlib;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-x",
@@ -1428,6 +1429,7 @@
 				PUBLIC_HEADERS_FOLDER_PATH = usr/local/include;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = iphoneos;
+				VALID_ARCHS = "armv7 armv7s";
 				VERSIONING_SYSTEM = "";
 			};
 			name = Debug;
@@ -1461,6 +1463,7 @@
 				PUBLIC_HEADERS_FOLDER_PATH = usr/local/include;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = iphoneos;
+				VALID_ARCHS = "armv7 armv7s";
 				VERSIONING_SYSTEM = "";
 			};
 			name = Release;
@@ -1480,9 +1483,11 @@
 				INFOPLIST_FILE = "OpenPeerDataModel/OpenPeerDataModel-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = iphoneos;
+				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Debug;
@@ -1506,6 +1511,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = iphoneos;
+				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Release;
@@ -1513,8 +1519,10 @@
 		87C9820917BE38A7002B947B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = iphoneos;
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Debug;
 		};
@@ -1523,6 +1531,7 @@
 			buildSettings = {
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = iphoneos;
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Release;
 		};
