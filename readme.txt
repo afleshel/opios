@@ -1,6 +1,6 @@
 Thank you for downloading Hookflash's Open Peer iOS SDK.
 
-This release is a preliminary 0.8.0 release of the SDK and Hookflash will be publishing updates to the SDK regularly.
+This release is a 1.0.8 release of the SDK and Hookflash will be publishing updates to the SDK regularly.
 
 For a quick introduction to the code please read the following. For more detailed instructions please go to http://docs.hookflash.com.
 
@@ -178,7 +178,7 @@ HOPTypes.h
 
 Branches:
 
-Our current activity is being performed on "20140307-dev-stable" but this branch is unstable. Individual activity is on other sub-branches from this branch.
+Our current activity is being performed on "20140401-dev-stable" but this branch is unstable. Individual activity is on other sub-branches from this branch.
 https://github.com/openpeer/opios/tree/20140401-dev-stable
 
 To see all branches go to:
