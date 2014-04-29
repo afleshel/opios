@@ -331,6 +331,8 @@
 //    NSString* messageId = [richPush objectForKey:@"messageId"];
 //    NSString* messageText = [richPush objectForKey:@"message"];
 //    NSString* location = [richPush objectForKey:@"location"];
+    
+    return nil;
 }
 
 @end
