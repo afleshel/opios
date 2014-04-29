@@ -1,4 +1,13 @@
 
+opios SDK v1.0.8 changes
+- add "final" flag to ice candidates to better detect when ice negotiation has failed
+- improved rich push experience (more to come)
+- added "created" flag so simultanious "peer-location-find" requests will have conflict resolution for the winner (thus peer sessions can reconnect properly from backgrounding)
+- improved setting downloading
+- removed arm64 from builds (as not possible to build WebRTC lib with arm64 at this moment)
+- fix for binding issue when socket is unbound by the system for unspecified reason
+- various crash fixes
+
 opios SDK v0.5.1 changes
 - improved backgrounding by adding phased backgrounding
 - pushes before backgrounding
