@@ -265,7 +265,8 @@
 
 - (void) saveModuleLogLevels
 {
-    [[HOPSettings sharedSettings] storeSettingsObject:self.appModulesLoggerLevel key:archiveModulesLogLevels];
+    [[NSUserDefaults standardUserDefaults] setObject:self.appModulesLoggerLevel forKey:archiveModulesLogLevels];
+    //[[HOPSettings sharedSettings] storeSettingsObject:self.appModulesLoggerLevel key:archiveModulesLogLevels];
 }
 
 - (NSString*) getStringForModule:(Modules) module
