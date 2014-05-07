@@ -587,6 +587,11 @@
     
 }
 
+- (void) onNetworkProblem
+{
+    [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:YES withText:@"Please, check your internet connection." inView:self.splashViewController.infoView];
+}
+
 - (void) onAccountLoginWebViewClose:(WebLoginViewController*) webLoginViewController
 {
     [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:nil withText:nil inView:nil];

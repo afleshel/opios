@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2012, SMB Phone Inc.
+ Copyright (c) 2014, SMB Phone Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,25 +29,17 @@
  
  */
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+#import <SystemConfiguration/SCNetworkReachability.h>
+#import "Reachability.h"
 
-@class HOPContact;
-@class HOPCall;
-@class HOPConversationThread;
-@class HOPRolodexContact;
+@interface UIDevice (Networking)
 
-@interface Session : NSObject
++(NetworkStatus)networkStatusForInternetConnection;
++(BOOL)cellularConnected; // EDGE or GPRS
++(BOOL)wiFiConnected;
++(BOOL)isNetworkReachable;
++(void)startNotifier;
++(void)stopNotifier;
 
-@property (strong) NSMutableArray* participantsArray;
-@property (weak, nonatomic) HOPConversationThread* conversationThread;
-@property (strong) HOPCall* currentCall;
-@property (assign) BOOL isRedial;
-@property (strong) NSMutableArray* messageArray;
-@property (strong) NSMutableArray* unreadMessageArray;
-@property (strong) NSMutableSet* sessionIdsHistory;
-@property (strong) NSMutableArray* arrayMergedConversationThreads;
-@property (strong) NSMutableSet* setOfNotSentMessages;
-
-- (id) initWithContact:(HOPRolodexContact*) inContact conversationThread:(HOPConversationThread*) inConverationThread;
-- (id) initWithContacts:(NSArray*) inContacts conversationThread:(HOPConversationThread*) inConverationThread;
 @end

@@ -205,7 +205,8 @@
             //If not, create a session for selecte contact
             Session* session = [[SessionManager sharedSessionManager] createSessionForContact:contact];
             
-            [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForSession:session forIncomingCall:NO forIncomingMessage:NO];
+            if (session)
+                [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForSession:session forIncomingCall:NO forIncomingMessage:NO];
         }
         else
         {

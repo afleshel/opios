@@ -39,6 +39,7 @@
 #import "WebLoginViewController.h"
 #import "OpenpeerSDK/HOPLogger.h"
 #import "OpenpeerSDK/HOPCache.h"
+#import "MessageManager.h"
 
 #ifdef APNS_ENABLED
 #import "APNSInboxManager.h"

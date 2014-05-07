@@ -37,10 +37,12 @@
 #import "Utility.h"
 #import "AppConsts.h"
 #import "Settings.h"
+#import "UIDevice+Networking.h"
 //Managers
 #import "ContactsManager.h"
 #import "SessionManager.h"
 #import "UUIDManager.h"
+#import "MessageManager.h"
 #ifdef APNS_ENABLED
 #import "APNSInboxManager.h"
 #endif
@@ -66,12 +68,12 @@
 #import "WebLoginViewController.h"
 
 
+#define ALERT_NO_CONNECTION_TAG 1
+
 @interface LoginManager ()
 
-
-
-
 @property (strong, nonatomic) NSMutableDictionary* associatingIdentitiesDictionary;
+- (void) handleEstablishedInternetConnection;
 @end
 
 
@@ -101,8 +103,10 @@
     if (self)
     {
         self.isLogin  = NO;
+        self.isRelogin = NO;
+        self.isLoggedin = NO;
         self.isAssociation = NO;
-        
+        self.isRecovering = NO;
         self.associatingIdentitiesDictionary = [[NSMutableDictionary alloc] init];
     }
     return self;
@@ -114,21 +118,29 @@
  */
 - (void) login
 {
+//    [UIDevice startNotifier];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleEstablishedInternetConnection) name:kReachabilityChangedNotification object:nil];
+    
     if (![[Settings sharedSettings] checkIfReloginInfoIsValid])
     {
         HOPHomeUser* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
         homeUser.loggedIn = [NSNumber numberWithBool:NO];
         [[HOPModelManager sharedModelManager] saveContext];
     }
-    //If peer file doesn't exists, show login view, otherwise start relogin
-    if ([[HOPModelManager sharedModelManager] getLastLoggedInHomeUser])
+    
+    if ([UIDevice isNetworkReachable])
     {
-        [self startRelogin];
+        //If peer file doesn't exists, show login view, otherwise start relogin
+        if ([[HOPModelManager sharedModelManager] getLastLoggedInHomeUser])
+        {
+            [self startRelogin];
+        }
+        else
+        {
+            [self startLogin];
+        }
     }
-    else
-    {
-        [self startLogin];
-    }
+    
 }
 
 - (void)clearIdentities
@@ -241,6 +253,8 @@
 - (void) startRelogin
 {
     BOOL reloginStarted = NO;
+    self.isRelogin = YES;
+    
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Relogin started");
     [[[OpenPeer sharedOpenPeer] mainViewController] onRelogin];
     
@@ -339,7 +353,7 @@
     {
         OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"User is successfully logged in.");
         
-        if (![[OpenPeer sharedOpenPeer] appEnteredForeground])
+        if (self.isLogin || ![[OpenPeer sharedOpenPeer] appEnteredForeground])
         {
             NSArray* associatedIdentites = [[HOPAccount sharedAccount] getAssociatedIdentities];
             for (HOPIdentity* identity in associatedIdentites)
@@ -392,12 +406,27 @@
                 [[[OpenPeer sharedOpenPeer] mainViewController] onLoginFinished];
                 //Start loading contacts.
                 [[ContactsManager sharedContactsManager] loadContacts];
+                
             }
+            
+            if (self.isRecovering)
+            {
+                [[SessionManager sharedSessionManager] recreateExistingSessions];
+            }
+            self.isLoggedin = YES;
         }
         else
         {
             [[SessionManager sharedSessionManager] recreateExistingSessions];
         }
+        
+        if (self.isRecovering)
+        {
+            OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Recovering application from network issue.");
+            [[MessageManager sharedMessageManager] resendMessages];
+            self.isRecovering = NO;
+        }
+        self.isRelogin = NO;
 #ifdef APNS_ENABLED
         [[APNSInboxManager sharedAPNSInboxManager] getAllMessages];
 #endif
@@ -464,10 +493,45 @@
     }
     return ret;
 }
+- (void) handleEstablishedInternetConnection
+{
+    if ([UIDevice isNetworkReachable])
+    {
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Network connection is established again");
+        if (![[HOPAccount sharedAccount] isCoreAccountCreated] || [[HOPAccount sharedAccount] getState].state != HOPAccountStateReady)
+        {
+            self.isRecovering = YES;
+            //If peer file doesn't exists, show login view, otherwise start relogin
+            if ([[HOPModelManager sharedModelManager] getLastLoggedInHomeUser])
+            {
+                [self startRelogin];
+            }
+            else
+            {
+                [self startLogin];
+            }
+        }
+        else
+        {
+            [[MessageManager sharedMessageManager] resendMessages];
+        }
+    }
+    else
+    {
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Network connection is lost");
+    }
+}
+
 #pragma UIAlertViewDelegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (buttonIndex != alertView.cancelButtonIndex)
+    if (alertView.tag == ALERT_NO_CONNECTION_TAG)
+    {
+        //[self login];
+    }
+    
+    //DON'T DELETE. This section is related to identity association
+    /*if (buttonIndex != alertView.cancelButtonIndex)
     {
         NSArray* associatedIdentites = [[HOPAccount sharedAccount] getAssociatedIdentities];
         HOPIdentity* identity = [associatedIdentites objectAtIndex:0];
@@ -488,6 +552,6 @@
         [[[OpenPeer sharedOpenPeer] mainViewController] onLoginFinished];
         //Start loading contacts.
         [[ContactsManager sharedContactsManager] loadContacts];
-    }
+    }*/
 }
 @end

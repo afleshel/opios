@@ -37,6 +37,7 @@
 #import <OpenPeerSDK/HOPBackgrounding.h>
 #import "BackgroundingDelegate.h"
 #import "SessionManager.h"
+#import "OfflineManager.h"
 #ifdef APNS_ENABLED
 #import "APNSManager.h"
 #import "APNSInboxManager.h"
@@ -60,8 +61,11 @@
     
     [self.window makeKeyAndVisible];
 
+    [[OfflineManager sharedOfflineManager]  startNetworkMonitor];
+    
     [[OpenPeer sharedOpenPeer] setMainViewController:mainViewController];
     [[OpenPeer sharedOpenPeer] preSetup];
+    
 
 #ifdef APNS_ENABLED
     [[APNSManager sharedAPNSManager] prepareUrbanAirShip];

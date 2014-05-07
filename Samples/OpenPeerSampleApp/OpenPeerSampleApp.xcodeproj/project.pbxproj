@@ -86,6 +86,11 @@
 		87272850166CC1810089CBB6 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8727284E166CC1810089CBB6 /* MainViewController.m */; };
 		87272851166CC1810089CBB6 /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8727284F166CC1810089CBB6 /* MainViewController.xib */; };
 		87272859166CC45B0089CBB6 /* LoginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87272858166CC45B0089CBB6 /* LoginManager.m */; };
+		872B1EB21918F7AE000E21C9 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 872B1EB11918F7AE000E21C9 /* AudioToolbox.framework */; };
+		872B1EB41918FB1C000E21C9 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 872B1EB31918FB1C000E21C9 /* AudioUnit.framework */; };
+		872B1EB51918FB6A000E21C9 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 872B1EB11918F7AE000E21C9 /* AudioToolbox.framework */; };
+		872B1EBC191A1C47000E21C9 /* OfflineManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 872B1EBB191A1C47000E21C9 /* OfflineManager.m */; };
+		872B1EBD191A1C47000E21C9 /* OfflineManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 872B1EBB191A1C47000E21C9 /* OfflineManager.m */; };
 		872D7E9E1897E19A005D8335 /* QRScannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D7E9C1897E19A005D8335 /* QRScannerViewController.m */; };
 		872D7E9F1897E19A005D8335 /* QRScannerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 872D7E9D1897E19A005D8335 /* QRScannerViewController.xib */; };
 		872DC43B18D9AFED009B6005 /* APNSInboxManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 872DC43218D9AFE4009B6005 /* APNSInboxManager.m */; };
@@ -220,6 +225,10 @@
 		878E880C19105076000DAA8A /* OpenPeerSampleAPNSApp-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 878E880B19105076000DAA8A /* OpenPeerSampleAPNSApp-Info.plist */; };
 		87904E9818D06FD1004BC06C /* AppInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87904E9618D06FD1004BC06C /* AppInfoViewController.m */; };
 		87904EA118D07725004BC06C /* AppInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87904E9618D06FD1004BC06C /* AppInfoViewController.m */; };
+		879923941917B05400FBD21E /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 879923931917B05400FBD21E /* Reachability.m */; };
+		879923951917B05400FBD21E /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 879923931917B05400FBD21E /* Reachability.m */; };
+		8799239E1917C85500FBD21E /* UIDevice+Networking.m in Sources */ = {isa = PBXBuildFile; fileRef = 8799239D1917C85500FBD21E /* UIDevice+Networking.m */; };
+		8799239F1917C85500FBD21E /* UIDevice+Networking.m in Sources */ = {isa = PBXBuildFile; fileRef = 8799239D1917C85500FBD21E /* UIDevice+Networking.m */; };
 		879D7B9717FB1224008C78E2 /* LoggerSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 879D7B9617FB1224008C78E2 /* LoggerSettingsViewController.m */; };
 		879DC5F418C92FE800DA60C0 /* BackgroundingDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 87CCF64318C0FFDB000DF636 /* BackgroundingDelegate.m */; };
 		879DC62A18C9F77400DA60C0 /* Template_CustomerSpecific_Release.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8731272118C670AD00507144 /* Template_CustomerSpecific_Release.plist */; };
@@ -295,7 +304,6 @@
 		87D4BD1818675368008C2D30 /* libresolv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 87EE5FE8166E917B002C5FA3 /* libresolv.dylib */; };
 		87D4BD1918675368008C2D30 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87E0FFB317BB8ADD00F30484 /* AddressBook.framework */; };
 		87D4BD1A18675368008C2D30 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87FF988D170EDB5C0017C627 /* AssetsLibrary.framework */; };
-		87D4BD1B18675368008C2D30 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 874ADDBA166E14000095FE33 /* AudioToolbox.framework */; };
 		87D4BD1C18675368008C2D30 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 874ADDB8166E13970095FE33 /* AVFoundation.framework */; };
 		87D4BD1E18675368008C2D30 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 874ADDB4166E138A0095FE33 /* CoreAudio.framework */; };
 		87D4BD1F18675368008C2D30 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 871BC9A6179EECC400AEA4A6 /* CoreData.framework */; };
@@ -500,7 +508,6 @@
 		87EE5FF4166E9615002C5FA3 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 874ADDB4166E138A0095FE33 /* CoreAudio.framework */; };
 		87EE5FF5166E9615002C5FA3 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 874ADDBC166E14440095FE33 /* CoreMedia.framework */; };
 		87EE5FF6166E9615002C5FA3 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 874ADDB6166E13910095FE33 /* CoreVideo.framework */; };
-		87EE5FF7166E961F002C5FA3 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 874ADDBA166E14000095FE33 /* AudioToolbox.framework */; };
 		87EE5FF8166E9625002C5FA3 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 874ADDB8166E13970095FE33 /* AVFoundation.framework */; };
 		87EE5FFB166F5A7F002C5FA3 /* WebLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87EE5FFA166F5A7F002C5FA3 /* WebLoginViewController.m */; };
 		87EE6070166F667C002C5FA3 /* WebLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 87EE606F166F667B002C5FA3 /* WebLoginViewController.xib */; };
@@ -729,6 +736,11 @@
 		87272857166CC45A0089CBB6 /* LoginManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginManager.h; sourceTree = "<group>"; };
 		87272858166CC45B0089CBB6 /* LoginManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginManager.m; sourceTree = "<group>"; };
 		872729CF166CDF530089CBB6 /* openpeer-ios-sdk.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "openpeer-ios-sdk.xcodeproj"; path = "../../openpeer-ios-sdk.xcodeproj"; sourceTree = "<group>"; };
+		872B1EB01918F7AD000E21C9 /* OpenPeerSampleApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = OpenPeerSampleApp.entitlements; sourceTree = "<group>"; };
+		872B1EB11918F7AE000E21C9 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		872B1EB31918FB1C000E21C9 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
+		872B1EBA191A1C47000E21C9 /* OfflineManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OfflineManager.h; sourceTree = "<group>"; };
+		872B1EBB191A1C47000E21C9 /* OfflineManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OfflineManager.m; sourceTree = "<group>"; };
 		872D7E9B1897E19A005D8335 /* QRScannerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRScannerViewController.h; sourceTree = "<group>"; };
 		872D7E9C1897E19A005D8335 /* QRScannerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRScannerViewController.m; sourceTree = "<group>"; };
 		872D7E9D1897E19A005D8335 /* QRScannerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QRScannerViewController.xib; sourceTree = "<group>"; };
@@ -835,7 +847,6 @@
 		874ADDB4166E138A0095FE33 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		874ADDB6166E13910095FE33 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		874ADDB8166E13970095FE33 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		874ADDBA166E14000095FE33 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		874ADDBC166E14440095FE33 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		874FE10D17FD7FF0007A791B /* AppLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppLog.m; sourceTree = "<group>"; };
 		874FE11117FD8DA9007A791B /* AppLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppLog.h; sourceTree = "<group>"; };
@@ -877,6 +888,10 @@
 		878E880B19105076000DAA8A /* OpenPeerSampleAPNSApp-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "OpenPeerSampleAPNSApp-Info.plist"; sourceTree = "<group>"; };
 		87904E9518D06FD1004BC06C /* AppInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppInfoViewController.h; sourceTree = "<group>"; };
 		87904E9618D06FD1004BC06C /* AppInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppInfoViewController.m; sourceTree = "<group>"; };
+		879923921917B05400FBD21E /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		879923931917B05400FBD21E /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		8799239C1917C85500FBD21E /* UIDevice+Networking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+Networking.h"; sourceTree = "<group>"; };
+		8799239D1917C85500FBD21E /* UIDevice+Networking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+Networking.m"; sourceTree = "<group>"; };
 		879D7B9517FB1224008C78E2 /* LoggerSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoggerSettingsViewController.h; sourceTree = "<group>"; };
 		879D7B9617FB1224008C78E2 /* LoggerSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = LoggerSettingsViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		879DC66018CA0F1C00DA60C0 /* HTTPDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPDownloader.h; sourceTree = "<group>"; };
@@ -1024,6 +1039,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				872B1EB41918FB1C000E21C9 /* AudioUnit.framework in Frameworks */,
 				8770C34B18BB903A006F28F0 /* libstdc++.6.0.9.dylib in Frameworks */,
 				87F9DAF9189AB7E100D96FF3 /* libZXingObjC-iOS.a in Frameworks */,
 				8774AC4B1897E2F2006B91FA /* ImageIO.framework in Frameworks */,
@@ -1034,9 +1050,9 @@
 				87796E8618A8DDA7002F4B43 /* libcurl.a in Frameworks */,
 				87E0FFB417BB8ADD00F30484 /* AddressBook.framework in Frameworks */,
 				87FF988E170EDB5D0017C627 /* AssetsLibrary.framework in Frameworks */,
-				87EE5FF7166E961F002C5FA3 /* AudioToolbox.framework in Frameworks */,
 				87EE5FF8166E9625002C5FA3 /* AVFoundation.framework in Frameworks */,
 				87EE5FF4166E9615002C5FA3 /* CoreAudio.framework in Frameworks */,
+				872B1EB21918F7AE000E21C9 /* AudioToolbox.framework in Frameworks */,
 				871BC9A7179EECC400AEA4A6 /* CoreData.framework in Frameworks */,
 				87272831166CBF9B0089CBB6 /* CoreGraphics.framework in Frameworks */,
 				87FF9892170EDB7D0017C627 /* CoreImage.framework in Frameworks */,
@@ -1056,6 +1072,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				872B1EB51918FB6A000E21C9 /* AudioToolbox.framework in Frameworks */,
 				8770C34318BB7ABB006F28F0 /* libstdc++.6.0.9.dylib in Frameworks */,
 				8774AC7B18992D86006B91FA /* libZXingObjC-iOS.a in Frameworks */,
 				8774AC4E1897E305006B91FA /* ImageIO.framework in Frameworks */,
@@ -1069,7 +1086,6 @@
 				87D4BD1818675368008C2D30 /* libresolv.dylib in Frameworks */,
 				87D4BD1918675368008C2D30 /* AddressBook.framework in Frameworks */,
 				87D4BD1A18675368008C2D30 /* AssetsLibrary.framework in Frameworks */,
-				87D4BD1B18675368008C2D30 /* AudioToolbox.framework in Frameworks */,
 				87D4BD1C18675368008C2D30 /* AVFoundation.framework in Frameworks */,
 				87D4BD1E18675368008C2D30 /* CoreAudio.framework in Frameworks */,
 				87D4BECA18683C0D008C2D30 /* libUAirship-3.0.2.a in Frameworks */,
@@ -1096,6 +1112,9 @@
 		870C5E181672345A00A3AA4F /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				8799239C1917C85500FBD21E /* UIDevice+Networking.h */,
+				8799239D1917C85500FBD21E /* UIDevice+Networking.m */,
+				879923911917B05400FBD21E /* Reachability */,
 				87D4904D18C081A400D34115 /* UUIDManager.h */,
 				87D4904E18C081A400D34115 /* UUIDManager.m */,
 				8774AC6618992D53006B91FA /* ZXingObjC.xcodeproj */,
@@ -1129,6 +1148,8 @@
 				87B5EABF18683E3B00D25C3B /* APNSManager.m */,
 				872DC43118D9AFE4009B6005 /* APNSInboxManager.h */,
 				872DC43218D9AFE4009B6005 /* APNSInboxManager.m */,
+				872B1EBA191A1C47000E21C9 /* OfflineManager.h */,
+				872B1EBB191A1C47000E21C9 /* OfflineManager.m */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -1386,6 +1407,8 @@
 		8727282B166CBF9B0089CBB6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				872B1EB31918FB1C000E21C9 /* AudioUnit.framework */,
+				872B1EB11918F7AE000E21C9 /* AudioToolbox.framework */,
 				8770C34218BB7ABB006F28F0 /* libstdc++.6.0.9.dylib */,
 				87796E8318A8DDA7002F4B43 /* boost.a */,
 				87796E8418A8DDA7002F4B43 /* libcurl.a */,
@@ -1401,7 +1424,6 @@
 				87EE5FE8166E917B002C5FA3 /* libresolv.dylib */,
 				87E0FFB317BB8ADD00F30484 /* AddressBook.framework */,
 				87FF988D170EDB5C0017C627 /* AssetsLibrary.framework */,
-				874ADDBA166E14000095FE33 /* AudioToolbox.framework */,
 				874ADDB8166E13970095FE33 /* AVFoundation.framework */,
 				874ADDB4166E138A0095FE33 /* CoreAudio.framework */,
 				871BC9A6179EECC400AEA4A6 /* CoreData.framework */,
@@ -1423,6 +1445,7 @@
 		87272832166CBF9B0089CBB6 /* OpenPeerSampleApp */ = {
 			isa = PBXGroup;
 			children = (
+				872B1EB01918F7AD000E21C9 /* OpenPeerSampleApp.entitlements */,
 				8711BE1D1861EF1300DBF8B5 /* templates */,
 				8712BE8517D8CC9900665F42 /* Settings */,
 				87FC39F81709BB66002030D1 /* Session */,
@@ -1516,6 +1539,16 @@
 			);
 			name = Products;
 			sourceTree = "<group>";
+		};
+		879923911917B05400FBD21E /* Reachability */ = {
+			isa = PBXGroup;
+			children = (
+				879923921917B05400FBD21E /* Reachability.h */,
+				879923931917B05400FBD21E /* Reachability.m */,
+			);
+			name = Reachability;
+			path = 3rdParties/Reachability;
+			sourceTree = SOURCE_ROOT;
 		};
 		87D4BDFD18683BED008C2D30 /* Airship */ = {
 			isa = PBXGroup;
@@ -1757,6 +1790,11 @@
 				TargetAttributes = {
 					87272827166CBF9B0089CBB6 = {
 						DevelopmentTeam = Z5WRU4N5VJ;
+						SystemCapabilities = {
+							com.apple.InterAppAudio = {
+								enabled = 1;
+							};
+						};
 					};
 					87D4BCD818675368008C2D30 = {
 						DevelopmentTeam = Z5WRU4N5VJ;
@@ -2248,11 +2286,14 @@
 				87224734182D02F30027DA50 /* CallViewController.m in Sources */,
 				874408CB182FE873004AD8FC /* IncomingCallViewController.m in Sources */,
 				87FC3A191709BD8D002030D1 /* SBJsonStreamParserAdapter.m in Sources */,
+				872B1EBC191A1C47000E21C9 /* OfflineManager.m in Sources */,
 				870059EE184F563800B6B826 /* UIBadgeView.m in Sources */,
+				879923941917B05400FBD21E /* Reachability.m in Sources */,
 				872D7E9E1897E19A005D8335 /* QRScannerViewController.m in Sources */,
 				87FC3A1A1709BD8D002030D1 /* SBJsonStreamParserState.m in Sources */,
 				87FC3A1B1709BD8D002030D1 /* SBJsonStreamTokeniser.m in Sources */,
 				87FC3A1C1709BD8D002030D1 /* SBJsonStreamWriter.m in Sources */,
+				8799239E1917C85500FBD21E /* UIDevice+Networking.m in Sources */,
 				87FC3A1D1709BD8D002030D1 /* SBJsonStreamWriterAccumulator.m in Sources */,
 				87FC3A1E1709BD8D002030D1 /* SBJsonStreamWriterState.m in Sources */,
 				87FC3A1F1709BD8D002030D1 /* SBJsonWriter.m in Sources */,
@@ -2276,6 +2317,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				87D4BCDC18675368008C2D30 /* main.m in Sources */,
+				872B1EBD191A1C47000E21C9 /* OfflineManager.m in Sources */,
 				87D4BCDD18675368008C2D30 /* AppLog.m in Sources */,
 				87D4BCDE18675368008C2D30 /* TTTAttributedLabel.m in Sources */,
 				87D4BCDF18675368008C2D30 /* AppDelegate.m in Sources */,
@@ -2323,6 +2365,7 @@
 				87D4BD0418675368008C2D30 /* SBJsonStreamWriter.m in Sources */,
 				87D4BD0518675368008C2D30 /* SBJsonStreamWriterAccumulator.m in Sources */,
 				87D4BD0718675368008C2D30 /* SBJsonStreamWriterState.m in Sources */,
+				8799239F1917C85500FBD21E /* UIDevice+Networking.m in Sources */,
 				87D4BD0818675368008C2D30 /* SBJsonWriter.m in Sources */,
 				87D4BD0918675368008C2D30 /* RXMLElement.m in Sources */,
 				87D4BD0A18675368008C2D30 /* ChatViewController.m in Sources */,
@@ -2333,6 +2376,7 @@
 				87D4BD0E18675368008C2D30 /* AudioCallViewController.m in Sources */,
 				87D4BD0F18675368008C2D30 /* CacheDelegate.m in Sources */,
 				87D4BD1018675368008C2D30 /* ContactTableViewCell.m in Sources */,
+				879923951917B05400FBD21E /* Reachability.m in Sources */,
 				872DC43B18D9AFED009B6005 /* APNSInboxManager.m in Sources */,
 				87D4BD1118675368008C2D30 /* SettingsViewController.m in Sources */,
 				87D4BD1218675368008C2D30 /* LoggerSettingsViewController.m in Sources */,
@@ -2445,6 +2489,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_ENTITLEMENTS = OpenPeerSampleApp/OpenPeerSampleApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = "";
@@ -2486,6 +2531,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_ENTITLEMENTS = OpenPeerSampleApp/OpenPeerSampleApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = "";

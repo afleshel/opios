@@ -190,7 +190,7 @@
 - (void) connection:(NSURLConnection *) connection didReceiveResponse:(NSURLResponse *) response
 {
     NSHTTPURLResponse * res = (NSHTTPURLResponse *) response;
-    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Sending rivh push response code %i: response: %@",res.statusCode, res);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Sending rich push response code %i: response: %@",res.statusCode, res);
     @synchronized (self)
     {
         self.pushesToSend--;
@@ -200,6 +200,11 @@
             [[[OpenPeer sharedOpenPeer] backgroundingDelegate] setBackgroundingNotifier:nil];
         }
     }
+}
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error;
+{
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Sending rich push failed. Error: %@",error);
 }
 
 - (void) sendPushNotificationForContact:(HOPContact*) contact message:(NSString*) message missedCall:(BOOL) missedCall

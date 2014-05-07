@@ -65,4 +65,6 @@ typedef enum
 - (void) onMessageReceived:(HOPMessage*) message forSessionId:(NSString*) sessionId;
 
 - (SystemMessageTypes) getTypeForSystemMessage:(HOPMessage*) message;
+
+- (void) resendMessages;
 @end
