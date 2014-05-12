@@ -64,6 +64,7 @@ using namespace openpeer::core;
     return self;
 }
 
+//TODO: remove toContact:(HOPContact*) toContact
 + (id) placeCall:(HOPConversationThread*) conversationThread toContact:(HOPContact*) toContact includeAudio:(BOOL) includeAudio includeVideo:(BOOL) includeVideo
 {
     HOPCall* ret = nil;

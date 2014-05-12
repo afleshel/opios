@@ -75,7 +75,7 @@
 - (void) onConversationThreadContactsChanged:(HOPConversationThread*) conversationThread
 {
     //OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread <%@> contact changed.",conversationThread);
-    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread %@ contact changed.",[conversationThread getThreadId]);
+    //OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread %@ contact changed.",[conversationThread getThreadId]);
     dispatch_async(dispatch_get_main_queue(), ^
     {
     });
@@ -84,7 +84,7 @@
 - (void) onConversationThreadContactStateChanged:(HOPConversationThread*) conversationThread contact:(HOPContact*) contact contactState:(HOPConversationThreadContactStates) contactState
 {
     //OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread <%@> contact <%@> state: %@",conversationThread, contact,[HOPConversationThread stringForContactState:contactState]);
-    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread %@ contact <%@> state: %@",[conversationThread getThreadId], contact,[HOPConversationThread stringForContactState:contactState]);
+    //OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread %@ contact <%@> state: %@",[conversationThread getThreadId], contact,[HOPConversationThread stringForContactState:contactState]);
     dispatch_async(dispatch_get_main_queue(), ^
     {
     });

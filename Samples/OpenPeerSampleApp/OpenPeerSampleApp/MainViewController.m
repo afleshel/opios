@@ -577,12 +577,12 @@
 
 - (void) onAccountLoginError:(NSString *)error
 {
-    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Account login error: %@",error);
+    OPLog(HOPLoggerSeverityError, HOPLoggerLevelTrace, @"Account login error: %@",error);
     
     if ([self.splashViewController.infoView superview])
         [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:YES withText:@"Error. Please restart the application" inView:self.splashViewController.infoView];
     
-    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Login Error" message:[NSString stringWithFormat:@"%@. Please check your internet connection and restart the application.",error] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"%@. Please check your internet connection and restart the application.",error] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
     [alert show];
     
 }
@@ -590,6 +590,11 @@
 - (void) onNetworkProblem
 {
     [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:YES withText:@"Please, check your internet connection." inView:self.splashViewController.infoView];
+}
+
+- (void) onNetworkProblemResolved
+{
+    [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:YES withText:@"Recoverying from network lost ..." inView:self.view];
 }
 
 - (void) onAccountLoginWebViewClose:(WebLoginViewController*) webLoginViewController
@@ -616,6 +621,7 @@
     self.splashViewController.view.frame = self.view.bounds;
     [self.view addSubview:self.splashViewController.view];
 }
+
 - (void) waitingGestureTimerHasExpired
 {
     @synchronized(self)

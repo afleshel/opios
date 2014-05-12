@@ -36,6 +36,7 @@
 #import "OpenPeer.h"
 #import "MainViewController.h"
 #import "MessageManager.h"
+#import "Logger.h"
 
 #import <OpenPeerSDK/HOPAccount.h>
 #import <OpenpeerSDK/HOPModelManager.h>
@@ -118,12 +119,13 @@ typedef enum
 {
     if ([UIDevice isNetworkReachable])
     {
-        OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Network connection is not available.");
+        OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Network connection is available.");
+        [Logger startAllSelectedLoggers];
         [self handleNetworkConnectionAvailable];
     }
     else
     {
-        OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Network connection is available.");
+        OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Network connection is not available.");
         [self handleNetworkConnectionNotAvailable];
     }
 }
@@ -173,7 +175,12 @@ typedef enum
             break;
             
         case LOGGEDIN_STATE:
-            
+            if (![[HOPAccount sharedAccount] isCoreAccountCreated] || [[HOPAccount sharedAccount] getState].state != HOPAccountStateReady)
+            {
+                [[LoginManager sharedLoginManager] setIsRecovering:YES];
+                [[LoginManager sharedLoginManager] login];
+                [[[OpenPeer sharedOpenPeer] mainViewController] onNetworkProblemResolved];
+            }
             break;
 
         case LOGGEDIN_ACTIVE_SESSION:
@@ -183,6 +190,7 @@ typedef enum
             {
                 [[LoginManager sharedLoginManager] setIsRecovering:YES];
                 [[LoginManager sharedLoginManager] login];
+                [[[OpenPeer sharedOpenPeer] mainViewController] onNetworkProblemResolved];
             }
             else
             {

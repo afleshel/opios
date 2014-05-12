@@ -249,7 +249,7 @@
     }
     else
     {
-        OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Message %@ cannot be sent because of network problem.",hopMessage.messageID);
+        OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Message %@ cannot be sent because of network problem.",hopMessage.messageID);
         //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resendMessages) name:kReachabilityChangedNotification object:nil];
         [inSession.setOfNotSentMessages addObject:hopMessage];
     }

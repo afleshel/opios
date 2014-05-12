@@ -53,6 +53,7 @@
 
 - (void) onBackgroundingGoingToBackground:(HOPBackgroundingSubscription*) subscription notifier:(HOPBackgroundingNotifier*)notifier
 {
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Going to background.");
     self.backgroundingNotifier = notifier;
     self.backgroundingSubscription = subscription;
 #ifdef APNS_ENABLED
@@ -70,18 +71,21 @@
 
 - (void) onBackgroundingGoingToBackgroundNow:(HOPBackgroundingSubscription*) subscription
 {
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Going to background NOW.");
     [self.backgroundingNotifier destroy];
     self.backgroundingNotifier = nil;
 }
 
 - (void) onBackgroundingReturningFromBackground:(HOPBackgroundingSubscription*) subscription
 {
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Returning from the background.");
     [self.backgroundingNotifier destroy];
     self.backgroundingNotifier = nil;
 }
 
 - (void) onBackgroundingApplicationWillQuit:(HOPBackgroundingSubscription*) subscription
 {
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Application will quit");
   [self.backgroundingNotifier destroy];
   self.backgroundingNotifier = nil;
 }

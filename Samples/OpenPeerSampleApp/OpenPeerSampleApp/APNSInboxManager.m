@@ -334,6 +334,7 @@
 
 - (void)getAllMessages
 {
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Get all messages from the UA inbox.");
     [[UAInbox shared].messageList retrieveMessageListWithDelegate:self];
 }
 
@@ -342,13 +343,15 @@
  */
 - (void)messageListLoadSucceeded
 {
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push message list load succeeded.");
     NSMutableIndexSet *set = [NSMutableIndexSet indexSet];
     NSMutableArray* arrayOfMessages = [UAInbox shared].messageList.messages;
     int counter = 0;
     
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Numbe of reach push messages is %d",[arrayOfMessages count]);
+    
     for (UAInboxMessage* message in arrayOfMessages)
     {
-        
         [message markAsReadWithDelegate:self];
         //UAInboxMessage *message = [[UAInbox shared].messageList messageForID:self.lastMeesageId];
         [set addIndex:counter];

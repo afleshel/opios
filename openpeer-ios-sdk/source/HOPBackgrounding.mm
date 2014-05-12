@@ -53,12 +53,17 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 - (void) notifyGoingToBackground:(id<HOPBackgroundingCompletionDelegate>) inDelegate
 {
     if (!openPeerBackgroundingCompletionDelegatePtr)
+    {
+        ZS_LOG(Trace, [self log:@"Creating backgrounding completion delegate"]);
         openPeerBackgroundingCompletionDelegatePtr = OpenPeerBackgroundingCompletionDelegate::create(inDelegate);
+    }
+    ZS_LOG(Trace, [self log:@"Notifying core about going to background."]);
     activeQuery = IBackgrounding::notifyGoingToBackground(openPeerBackgroundingCompletionDelegatePtr);
 }
 
 - (void) notifyGoingToBackgroundNow
 {
+    ZS_LOG(Trace, [self log:@"Notifying core about going to background NOW."]);
     IBackgrounding::notifyGoingToBackgroundNow();
 }
 

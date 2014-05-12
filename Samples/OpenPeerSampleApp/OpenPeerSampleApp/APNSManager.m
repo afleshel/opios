@@ -256,11 +256,12 @@
 
 - (void) sendRichPushNotificationForMessage:(HOPMessage*) message missedCall:(BOOL) missedCall
 {
-    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Creating rich push for message: :%@", message.messageID);
+    
     NSArray* deviceTokens = [self getDeviceTokensForContact:message.contact];
     
     if ([deviceTokens count] > 0)
     {
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Creating rich push for message: :%@", message.messageID);
         NSString* msg = [message.text length] > 22 ? [NSString stringWithFormat:@"%@...",[message.text substringToIndex:22]] : message.text;
         
         NSString* messageText  = [NSString stringWithFormat:@"%@  %@",[[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser] getFullName],msg];
@@ -281,6 +282,10 @@
                 [self pushData:dataToPush sendingRich:YES];
         }
         [self.apnsHisotry setObject:[NSDate date] forKey:[message.contact getPeerURI]];
+    }
+    else
+    {
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Unable to send a message because lack of device token for contact with peer uri: ", [message.contact getPeerURI]);
     }
 }
 
