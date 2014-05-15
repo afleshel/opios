@@ -508,7 +508,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
 - (void) deleteMarkedRolodexContacts
 {
-    
+    //[[HOPModelManager sharedModelManager] deleteAllMarkedRolodexContactsForHomeUserIdentityURI:[self getIdentityURI]];
 }
 
 - (void) destroyCoreObject

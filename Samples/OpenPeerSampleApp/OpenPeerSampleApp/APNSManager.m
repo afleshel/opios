@@ -61,6 +61,8 @@
 @property (nonatomic, strong) NSString* urbanAirshipAppSecret;
 
 @property (nonatomic, strong) NSMutableDictionary* apnsHisotry;
+@property (nonatomic, strong) NSURLSession *urlSession;
+@property (nonatomic, strong) NSURLSessionUploadTask *sessionDataTask;
 
 - (id) initSingleton;
 
@@ -154,6 +156,77 @@
     }
 }
 
+- (void) pushData2:(NSDictionary*) dataToPush sendingRich:(BOOL) sendingRich
+{
+    NSString* sessionIdentifier = [NSString stringWithFormat:@"com.hookflash.backgroundSession.%@",@""];
+    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration backgroundSessionConfiguration:sessionIdentifier];
+//NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    
+    self.urlSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:[NSOperationQueue mainQueue]];
+    
+    NSMutableURLRequest * request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:self.apiPushURL]];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    if (sendingRich)
+        [request setValue:@"application/vnd.urbanairship+json; version=3;" forHTTPHeaderField:@"Accept"];
+    
+    NSData * pushdata = [NSJSONSerialization dataWithJSONObject:dataToPush options:0 error:NULL];
+    //[request setHTTPBody:pushdata];
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *filePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, @"myData.json"];
+    
+    NSURL *filePAth = [NSURL fileURLWithPath:filePath];
+    self.sessionDataTask = [self.urlSession uploadTaskWithRequest:request fromFile:filePAth];
+    
+    [self.sessionDataTask resume];
+    
+}
+
+- (void) pushData3:(NSDictionary*) dataToPush sendingRich:(BOOL) sendingRich
+{
+    NSURL *feedsURL = [NSURL URLWithString:self.apiPushURL];
+    
+    NSString *user = self.urbanAirshipAppKey;
+    NSString *password = self.urbanAirshipAppSecret;
+    NSURLCredential *defaultCredential = [NSURLCredential credentialWithUser:user password:password persistence:NSURLCredentialPersistencePermanent];
+    
+    NSString *host = [feedsURL host];
+    NSInteger port = [[feedsURL port] integerValue];
+    NSString *protocol = [feedsURL scheme];
+    NSURLProtectionSpace *protectionSpace = [[NSURLProtectionSpace alloc] initWithHost:host port:port protocol:protocol realm:nil authenticationMethod:NSURLAuthenticationMethodServerTrust];
+    
+    NSURLCredentialStorage *credentials = [NSURLCredentialStorage sharedCredentialStorage];
+    [credentials setDefaultCredential:defaultCredential forProtectionSpace:protectionSpace];
+    
+    NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
+    [config setURLCredentialStorage:credentials];
+    
+    NSMutableURLRequest * request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:self.apiPushURL]];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    if (sendingRich)
+        [request setValue:@"application/vnd.urbanairship+json; version=3;" forHTTPHeaderField:@"Accept"];
+    
+    NSData * pushdata = [NSJSONSerialization dataWithJSONObject:dataToPush options:0 error:NULL];
+    [request setHTTPBody:pushdata];
+    
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:config delegate:self delegateQueue:nil];
+    [[session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        if (!error) {
+            NSHTTPURLResponse *httpResp = (NSHTTPURLResponse*) response;
+            if (httpResp.statusCode == 200) {
+                NSLog(@"Woo! everything is working");
+            } else {
+                NSLog(@"Hrmmm... error %@ occured", error);
+            }
+        } else {
+            NSLog(@"Hrmmm... error %@ occured", error);
+        }
+        
+    }] resume];
+}
 /*- (void) sendPushNotificationForDeviceToken:(NSString*) deviceToken message:(NSString*) message
 {
     NSDictionary * dataToPush = @{@"device_tokens":@[deviceToken], @"aps":@{@"alert":message, @"sound":@"calling"}};
@@ -237,7 +310,7 @@
                 
                 if ([dataToPush count] > 0)
                 {
-                    [self pushData:dataToPush sendingRich:NO];
+                    [self pushData2:dataToPush sendingRich:NO];
                     
                     [self.apnsHisotry setObject:[NSDate date] forKey:peerURI];
                 }
@@ -278,8 +351,25 @@
             SBJsonParser* parser = [[SBJsonParser alloc] init];
             NSDictionary* dataToPush = [parser objectWithString: stringToSend];
 
+            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+            NSString *documentsDirectory = [paths objectAtIndex:0];
+            NSString *filePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, @"myData.json"];
+            NSLog(@"filePath %@", filePath);
+            
+            if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]) { // if file is not exist, create it.
+                                                                               // NSString *helloStr = @"hello world";
+                NSError *error;
+                [stringToSend writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
+            }
+            
+            if ([[NSFileManager defaultManager] isWritableFileAtPath:filePath]) {
+                NSLog(@"Writable");
+            }else {
+                NSLog(@"Not Writable");
+            }
+            
             if ([dataToPush count] > 0)
-                [self pushData:dataToPush sendingRich:YES];
+                [self pushData2:dataToPush sendingRich:YES];
         }
         [self.apnsHisotry setObject:[NSDate date] forKey:[message.contact getPeerURI]];
     }
@@ -331,4 +421,141 @@
     return ret;
 }
 
+#pragma  mark - NSURLSessionDelegate
+- (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
+ completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler
+{
+//    if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
+//    {
+//        if ([self.urbanAirshipAppSecret length] > 0 || [self.urbanAirshipAppKey length] > 0)
+//        {
+//            NSURLCredential * credential = [[NSURLCredential alloc] initWithUser:self.urbanAirshipAppKey password:self.urbanAirshipAppSecret persistence:NSURLCredentialPersistenceForSession];
+//            [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
+//        }
+//    }
+    if (challenge.previousFailureCount == 0)
+    {
+        NSURLCredentialPersistence persistence = NSURLCredentialPersistenceForSession;
+        NSURLCredential *credential = [NSURLCredential credentialWithUser:self.urbanAirshipAppKey password:self.urbanAirshipAppSecret persistence:persistence];
+        completionHandler(NSURLSessionAuthChallengeUseCredential, credential);
+    }
+    else
+    {
+        // handle the fact that the previous attempt failed
+        NSLog(@"%s: challenge.error = %@", __FUNCTION__, challenge.error);
+        completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, nil);
+    }
+}
+
+- (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error
+{
+    
+}
+- (void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session
+{
+    
+}
+
+#pragma  mark - NSURLSessionTaskDelegate
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
+willPerformHTTPRedirection:(NSHTTPURLResponse *)response
+        newRequest:(NSURLRequest *)request
+ completionHandler:(void (^)(NSURLRequest *))completionHandler
+{
+    
+}
+
+/* The task has received a request specific authentication challenge.
+ * If this delegate is not implemented, the session specific authentication challenge
+ * will *NOT* be called and the behavior will be the same as using the default handling
+ * disposition.
+ */
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
+didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
+ completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler
+{
+    if (challenge.previousFailureCount == 0)
+    {
+        NSURLCredentialPersistence persistence = NSURLCredentialPersistenceForSession;
+        NSURLCredential *credential = [NSURLCredential credentialWithUser:self.urbanAirshipAppKey password:self.urbanAirshipAppSecret persistence:persistence];
+        completionHandler(NSURLSessionAuthChallengeUseCredential, credential);
+    }
+    else
+    {
+        // handle the fact that the previous attempt failed
+        NSLog(@"%s: challenge.error = %@", __FUNCTION__, challenge.error);
+        completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, nil);
+    }
+}
+
+/* Sent if a task requires a new, unopened body stream.  This may be
+ * necessary when authentication has failed for any request that
+ * involves a body stream.
+ */
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
+ needNewBodyStream:(void (^)(NSInputStream *bodyStream))completionHandler
+{
+    
+}
+
+/* Sent periodically to notify the delegate of upload progress.  This
+ * information is also available as properties of the task.
+ */
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
+   didSendBodyData:(int64_t)bytesSent
+    totalBytesSent:(int64_t)totalBytesSent
+totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend
+{
+    
+}
+
+/* Sent as the last message related to a specific task.  Error may be
+ * nil, which implies that no error occurred and this task is complete.
+ */
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
+didCompleteWithError:(NSError *)error
+{
+    NSLog(@"%@",error);
+    return;
+}
+
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
+didReceiveResponse:(NSURLResponse *)response
+ completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler
+{
+    
+}
+
+/* Notification that a data task has become a download task.  No
+ * future messages will be sent to the data task.
+ */
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
+didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask
+{
+    
+}
+
+/* Sent when data is available for the delegate to consume.  It is
+ * assumed that the delegate will retain and not copy the data.  As
+ * the data may be discontiguous, you should use
+ * [NSData enumerateByteRangesUsingBlock:] to access it.
+ */
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
+    didReceiveData:(NSData *)data
+{
+    
+}
+
+/* Invoke the completion routine with a valid NSCachedURLResponse to
+ * allow the resulting data to be cached, or pass nil to prevent
+ * caching. Note that there is no guarantee that caching will be
+ * attempted for a given resource, and you should not rely on this
+ * message to receive the resource data.
+ */
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
+ willCacheResponse:(NSCachedURLResponse *)proposedResponse
+ completionHandler:(void (^)(NSCachedURLResponse *cachedResponse))completionHandler
+{
+    
+}
 @end
