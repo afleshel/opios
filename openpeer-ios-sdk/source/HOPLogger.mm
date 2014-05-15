@@ -141,9 +141,14 @@ void HOPLog(HOPLoggerLevels logLevel, NSString* format,...)
     return ret;
 }
 
-+ (void) installStdOutLogger: (BOOL) colorizeOutput
++ (void) installStdOutLoggerWithColorizedOutput: (BOOL) colorizeOutput
 {
     ILogger::installStdOutLogger(colorizeOutput);
+}
+
++ (void) installStdOutLogger
+{
+    ILogger::installStdOutLogger(NO);
 }
 
 + (void) installFileLogger: (NSString*) filename colorizeOutput: (BOOL) colorizeOutput

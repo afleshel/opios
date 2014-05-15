@@ -63,8 +63,8 @@ SDK_EXTERN void HOPLog(HOPLoggerLevels logLevel, NSString* format,...);
  Install a logger to output to the standard out.
  @param colorizeOutput BOOL Flag to enable/disable output colorization
  */
-+ (void) installStdOutLogger: (BOOL) colorizeOutput;
-
++ (void) installStdOutLoggerWithColorizedOutput: (BOOL) colorizeOutput;
++ (void) installStdOutLogger;
 /**
  Install a logger to output to a file.
  @param filename NSString Name of the log file
