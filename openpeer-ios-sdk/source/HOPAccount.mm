@@ -33,6 +33,7 @@
 #import "HOPIdentity_Internal.h"
 
 #import "OpenPeerStorageManager.h"
+#import "OpenPeerUUIDManager.h"
 
 #import <openpeer/core/IAccount.h>
 #import <openpeer/core/IContact.h>
@@ -80,9 +81,10 @@ using namespace openpeer::core;
 }
 
 
-- (BOOL) loginWithAccountDelegate:(id<HOPAccountDelegate>) inAccountDelegate conversationThreadDelegate:(id<HOPConversationThreadDelegate>) inConversationThreadDelegate callDelegate:(id<HOPCallDelegate>) inCallDelegate namespaceGrantOuterFrameURLUponReload:(NSString*) namespaceGrantOuterFrameURLUponReload  grantID:(NSString*) grantID lockboxServiceDomain:(NSString*) lockboxServiceDomain forceCreateNewLockboxAccount:(BOOL) forceCreateNewLockboxAccount
+- (BOOL) loginWithAccountDelegate:(id<HOPAccountDelegate>) inAccountDelegate conversationThreadDelegate:(id<HOPConversationThreadDelegate>) inConversationThreadDelegate callDelegate:(id<HOPCallDelegate>) inCallDelegate namespaceGrantOuterFrameURLUponReload:(NSString*) namespaceGrantOuterFrameURLUponReload lockboxServiceDomain:(NSString*) lockboxServiceDomain forceCreateNewLockboxAccount:(BOOL) forceCreateNewLockboxAccount
 {
     BOOL passedWithoutErrors = NO;
+    NSString* grantID = [[OpenPeerUUIDManager sharedUUIDManager] getUUID];
     
     //Check if valid parameters are passed
     if (!inAccountDelegate || !inConversationThreadDelegate || !inCallDelegate || [namespaceGrantOuterFrameURLUponReload length] == 0 || [grantID length] == 0  || [lockboxServiceDomain length] == 0 )

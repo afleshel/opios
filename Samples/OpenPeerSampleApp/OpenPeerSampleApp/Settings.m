@@ -713,7 +713,7 @@
 - (void) updateDeviceInfo
 {
     //Get device info: device ID, iOS, platform and user agent
-    NSString* deviceId = [HOPUtility hashString:[Utility getGUIDstring]];
+    NSString* deviceId = [HOPUtility hashString:[HOPUtility getGUIDstring]];
     if ([deviceId length] > 0)
         [[HOPSettings sharedSettings] storeCalculatedSettingObject:deviceId key:@"openpeer/calculated/device-id"];
 

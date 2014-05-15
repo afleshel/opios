@@ -31,7 +31,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface UUIDManager : NSObject
+@interface OpenPeerUUIDManager : NSObject
 {
     NSMutableDictionary        *keychainData;
     NSMutableDictionary        *genericPasswordQuery;

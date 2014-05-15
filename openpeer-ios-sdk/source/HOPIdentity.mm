@@ -392,6 +392,11 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 {
     if(identityPtr)
     {
+        self.flushAllRolodexContacts = NO;
+        self.versionDownloadedStr = nil;
+        self.arrayLastDownloadedRolodexContacts = nil;
+        self.rolodexContactsObtained = NO;
+        
         identityPtr->startRolodexDownload([lastDownloadedVersion UTF8String]);
     }
     else
@@ -419,7 +424,13 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     BOOL ret = NO;
     if(identityPtr)
     {
-        bool flushAllRolodexContacts;
+        *outFlushAllRolodexContacts = self.flushAllRolodexContacts;
+        if ([self.versionDownloadedStr length] > 0)
+            *outVersionDownloaded = self.versionDownloadedStr;
+        
+        *outRolodexContacts = self.arrayLastDownloadedRolodexContacts;
+        ret = self.rolodexContactsObtained;
+        /*bool flushAllRolodexContacts;
         String versionDownloadedStr;
         RolodexContactListPtr rolodexContacts;
         ret = identityPtr->getDownloadedRolodexContacts(flushAllRolodexContacts,versionDownloadedStr, rolodexContacts);
@@ -482,7 +493,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
             
             if ([tempArray count] > 0)
                 *outRolodexContacts = [NSArray arrayWithArray:tempArray];
-        }
+        }*/
     }
     else
     {

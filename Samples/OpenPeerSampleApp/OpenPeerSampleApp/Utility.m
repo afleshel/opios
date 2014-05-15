@@ -262,15 +262,15 @@ static const short _base64DecodingTable[256] = {
         [cookieStorage deleteCookie:each];
     }
 }
-
-+ (NSString *)getGUIDstring
-{
-    // get new UUID(in windows world is guid)
-    CFUUIDRef guid = CFUUIDCreate(nil);
-    NSString *strGuid = (NSString *)CFBridgingRelease(CFUUIDCreateString(nil, guid));
-    CFRelease(guid);
-    return strGuid;
-}
+//
+//+ (NSString *)getGUIDstring
+//{
+//    // get new UUID(in windows world is guid)
+//    CFUUIDRef guid = CFUUIDCreate(nil);
+//    NSString *strGuid = (NSString *)CFBridgingRelease(CFUUIDCreateString(nil, guid));
+//    CFRelease(guid);
+//    return strGuid;
+//}
 
 + (NSString*) getCallStateAsString:(HOPCallStates) callState
 {

@@ -50,4 +50,6 @@ public:
     static boost::shared_ptr<OpenPeerIdentityLookupDelegate> create(id<HOPIdentityLookupDelegate> inIdentityLookupDelegate);
     
     virtual void onIdentityLookupCompleted(IIdentityLookupPtr lookup);
+    
+    void updateContactsReceivedOnIdentityLookup(IIdentityLookupPtr identityLookupPtr);
 };

@@ -40,7 +40,7 @@
 + (NSString*) getPlatform;
 + (NSString*) getUserAgentName;
 + (void) removeCookiesAndClearCredentials;
-+ (NSString *) getGUIDstring;
+//+ (NSString *) getGUIDstring;
 + (NSString*) getCallStateAsString:(HOPCallStates) callState;
 + (NSString*) getMessageDeliveryStateAsString:(HOPConversationThreadMessageDeliveryStates) messageState;
 + (NSString*) getFunctionNameForRequest:(NSString*) requestString;

@@ -37,6 +37,7 @@
 @property (nonatomic, assign) BOOL wasSuccessful;
 @property (nonatomic, assign) unsigned short errorCode;
 @property (nonatomic, strong) NSString* errorReason;
+
 @end
 
 @interface HOPIdentityLookup : NSObject

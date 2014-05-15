@@ -33,6 +33,8 @@
 #import "OpenPeerIdentityLookupDelegate.h"
 #import "HOPIdentityLookup_Internal.h"
 #import "OpenPeerStorageManager.h"
+#import "HOPIdentityContact_Internal.h"
+#import "HOPModelManager.h"
 #import <openpeer/core/ILogger.h>
 
 ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
@@ -54,6 +56,58 @@ boost::shared_ptr<OpenPeerIdentityLookupDelegate> OpenPeerIdentityLookupDelegate
 
 void OpenPeerIdentityLookupDelegate::onIdentityLookupCompleted(IIdentityLookupPtr lookup)
 {
+    this->updateContactsReceivedOnIdentityLookup(lookup);
+    
     HOPIdentityLookup* identityLookup = [[OpenPeerStorageManager sharedStorageManager] getIdentityLookupForPUID:lookup->getID()];
     [identityLookupDelegate onIdentityLookupCompleted:identityLookup];
+}
+
+void OpenPeerIdentityLookupDelegate::updateContactsReceivedOnIdentityLookup(IIdentityLookupPtr identityLookupPtr)
+{
+    if(identityLookupPtr)
+    {
+        HOPIdentityLookup* identityLookup = [[OpenPeerStorageManager sharedStorageManager] getIdentityLookupForPUID:identityLookupPtr->getID()];
+        
+        IdentityContactListPtr identityContactListPtr = identityLookupPtr->getUpdatedIdentities();
+        if (identityContactListPtr)
+        {
+            if (identityLookup.arrayLastUpdatedContacts)
+                [identityLookup.arrayLastUpdatedContacts removeAllObjects];
+            else
+                identityLookup.arrayLastUpdatedContacts = [[NSMutableArray alloc] init];
+            
+            for (IdentityContactList::iterator identityContactInfo = identityContactListPtr->begin(); identityContactInfo != identityContactListPtr->end(); ++identityContactInfo)
+            {
+                IdentityContact identityContact = *identityContactInfo;
+                if (identityContact.hasData())
+                {
+                    NSString* sId = [NSString stringWithUTF8String:identityContact.mStableID];
+                    NSString* identityURI = [NSString stringWithUTF8String:identityContact.mIdentityURI];
+                    HOPIdentityContact* hopIdentityContact = [[HOPModelManager sharedModelManager] getIdentityContactByStableID:sId identityURI:identityURI];
+                    
+                    if (!hopIdentityContact)
+                    {
+                        NSManagedObject* managedObject = [[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPIdentityContact"];
+                        if (managedObject && [managedObject isKindOfClass:[HOPIdentityContact class]])
+                        {
+                            hopIdentityContact = (HOPIdentityContact*) managedObject;
+                        }
+                    }
+                    
+                    if (hopIdentityContact)
+                    {
+                        [hopIdentityContact updateWithIdentityContact:identityContact];
+                        
+                        [identityLookup.arrayLastUpdatedContacts addObject:hopIdentityContact];
+                    }
+                }
+            }
+            [[HOPModelManager sharedModelManager] saveContext];
+        }
+    }
+    else
+    {
+        ZS_LOG_ERROR(Debug, zsLib::String("Invalid identity lookup object!"));
+        [NSException raise:NSInvalidArgumentException format:@"Invalid identity lookup object!"];
+    }
 }

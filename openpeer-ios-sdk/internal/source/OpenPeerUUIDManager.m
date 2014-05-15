@@ -29,11 +29,11 @@
  
  */
 
-#import "UUIDManager.h"
+#import "OpenPeerUUIDManager.h"
 #import <Security/Security.h>
-#import "Utility.h"
+#import "HOPUtility.h"
 
-@interface UUIDManager()
+@interface OpenPeerUUIDManager()
 
 - (NSMutableDictionary *)secItemFormatToDictionary:(NSDictionary *)dictionaryToConvert;
 - (NSMutableDictionary *)dictionaryToSecItemFormat:(NSDictionary *)dictionaryToConvert;
@@ -44,7 +44,7 @@
 //Unique string used to identify the keychain item:
 static const UInt8 kKeychainItemIdentifier[]    = "com.Hookflash.Keychain\\GrantId";
 
-@implementation UUIDManager
+@implementation OpenPeerUUIDManager
 
 @synthesize keychainData = _keychainData;
 @synthesize genericPasswordQuery = _genericPasswordQuery;
@@ -107,7 +107,7 @@ static const UInt8 kKeychainItemIdentifier[]    = "com.Hookflash.Keychain\\Grant
 
 - (NSString *)generateUUID
 {
-    NSString* ret = [Utility getGUIDstring];
+    NSString* ret = [HOPUtility getGUIDstring];
     [self saveUUID:ret];
     return ret;
 }

@@ -120,6 +120,7 @@
  
     //Set settigns delegate
     [[HOPSettings sharedSettings] setup];
+    [[HOPSettings sharedSettings] applyDefaults];
     
     //Cleare expired cookies and set delegate
     [[HOPCache sharedCache] removeExpiredCookies];
