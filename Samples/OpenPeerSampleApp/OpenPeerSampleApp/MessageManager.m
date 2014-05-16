@@ -51,6 +51,7 @@
 #import <OpenpeerSDK/HOPContact.h>
 #import <OpenpeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPMessageRecord.h>
+#import <OpenPeerSDK/HOPAccount.h>
 
 #import "UIDevice+Networking.h"
 
@@ -236,7 +237,7 @@
     
     [[HOPModelManager sharedModelManager] addMessage:message type:messageTypeText date:hopMessage.date session:[inSession.conversationThread getThreadId] rolodexContact:nil messageId:hopMessage.messageID];
     
-    if ([UIDevice isNetworkReachable])
+    if ([UIDevice isNetworkReachable] && [[HOPAccount sharedAccount] isCoreAccountCreated] && ([[HOPAccount sharedAccount] getState].state == HOPAccountStateReady))
     {
         //Send message
         [inSession.conversationThread sendMessage:hopMessage];

@@ -64,6 +64,7 @@
 @property (nonatomic, strong) NSURLSession *urlSession;
 @property (nonatomic, strong) NSURLSessionUploadTask *sessionDataTask;
 
+@property (nonatomic, strong) NSMutableDictionary* dictionaryOfSentFiles;
 - (id) initSingleton;
 
 - (void) pushData:(NSDictionary*) dataToPush sendingRich:(BOOL) sendingRich;
@@ -102,6 +103,14 @@
 #endif
         self.apiPushURL = [[NSUserDefaults standardUserDefaults] stringForKey: settingsKeyUrbanAirShipAPIPushURL];
         self.apnsHisotry = [[NSMutableDictionary alloc] init];
+        
+        self.dictionaryOfSentFiles = [[NSMutableDictionary alloc] init];
+        
+        NSString* sessionIdentifier = [NSString stringWithFormat:@"com.hookflash.backgroundSession.%@",@""];
+        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration backgroundSessionConfiguration:sessionIdentifier];
+        //NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+        
+        self.urlSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:[NSOperationQueue mainQueue]];
     }
     return self;
 }
@@ -156,31 +165,34 @@
     }
 }
 
-- (void) pushData2:(NSDictionary*) dataToPush sendingRich:(BOOL) sendingRich
+- (void) pushData2:(NSString*) filePath sendingRich:(BOOL) sendingRich
 {
-    NSString* sessionIdentifier = [NSString stringWithFormat:@"com.hookflash.backgroundSession.%@",@""];
-    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration backgroundSessionConfiguration:sessionIdentifier];
-//NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-    
-    self.urlSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:[NSOperationQueue mainQueue]];
-    
-    NSMutableURLRequest * request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:self.apiPushURL]];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    if (sendingRich)
-        [request setValue:@"application/vnd.urbanairship+json; version=3;" forHTTPHeaderField:@"Accept"];
-    
-    NSData * pushdata = [NSJSONSerialization dataWithJSONObject:dataToPush options:0 error:NULL];
-    //[request setHTTPBody:pushdata];
-    
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *filePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, @"myData.json"];
-    
-    NSURL *filePAth = [NSURL fileURLWithPath:filePath];
-    self.sessionDataTask = [self.urlSession uploadTaskWithRequest:request fromFile:filePAth];
-    
-    [self.sessionDataTask resume];
+    if ([filePath length] > 0)
+    {
+    //    NSString* sessionIdentifier = [NSString stringWithFormat:@"com.hookflash.backgroundSession.%@",@""];
+    //    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration backgroundSessionConfiguration:sessionIdentifier];
+    ////NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    //    
+    //    self.urlSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:[NSOperationQueue mainQueue]];
+        
+        NSMutableURLRequest * request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:self.apiPushURL]];
+        [request setHTTPMethod:@"POST"];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+        if (sendingRich)
+            [request setValue:@"application/vnd.urbanairship+json; version=3;" forHTTPHeaderField:@"Accept"];
+        
+    //    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    //    NSString *documentsDirectory = [paths objectAtIndex:0];
+    //    NSString *filePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, @"myData.json"];
+    //    
+        NSURL *fileURL = [NSURL fileURLWithPath:filePath];
+        if (fileURL)
+        {
+            self.sessionDataTask = [self.urlSession uploadTaskWithRequest:request fromFile:fileURL];
+            [self.sessionDataTask resume];
+            [self.dictionaryOfSentFiles setObject:filePath forKey:[NSNumber numberWithInt:self.sessionDataTask.taskIdentifier]];
+        }
+    }
     
 }
 
@@ -310,7 +322,7 @@
                 
                 if ([dataToPush count] > 0)
                 {
-                    [self pushData2:dataToPush sendingRich:NO];
+                    [self pushData:dataToPush sendingRich:NO];
                     
                     [self.apnsHisotry setObject:[NSDate date] forKey:peerURI];
                 }
@@ -353,14 +365,14 @@
 
             NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
             NSString *documentsDirectory = [paths objectAtIndex:0];
-            NSString *filePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, @"myData.json"];
+            NSString *filePath = [NSString stringWithFormat:@"%@/%@%@", documentsDirectory, message.messageID,@".json"];
             NSLog(@"filePath %@", filePath);
             
-            if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]) { // if file is not exist, create it.
+            //if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]) { // if file is not exist, create it.
                                                                                // NSString *helloStr = @"hello world";
                 NSError *error;
                 [stringToSend writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
-            }
+            //}
             
             if ([[NSFileManager defaultManager] isWritableFileAtPath:filePath]) {
                 NSLog(@"Writable");
@@ -369,7 +381,7 @@
             }
             
             if ([dataToPush count] > 0)
-                [self pushData2:dataToPush sendingRich:YES];
+                [self pushData2:filePath sendingRich:YES];
         }
         [self.apnsHisotry setObject:[NSDate date] forKey:[message.contact getPeerURI]];
     }
@@ -516,6 +528,19 @@ totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend
 didCompleteWithError:(NSError *)error
 {
     NSLog(@"%@",error);
+    if (!error)
+    {
+        NSError* fileError;
+        NSString* filePath = [self.dictionaryOfSentFiles objectForKey:[NSNumber numberWithInt:task.taskIdentifier]];
+        if ([filePath length] > 0)
+        {
+            [[NSFileManager defaultManager] removeItemAtPath:filePath error:&fileError];
+            if (fileError)
+            {
+                
+            }
+        }
+    }
     return;
 }
 

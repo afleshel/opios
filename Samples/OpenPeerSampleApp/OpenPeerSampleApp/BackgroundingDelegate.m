@@ -34,8 +34,9 @@
 #endif
 #import "BackgroundingDelegate.h"
 #import "OpenPeer.h"
+#import "LoginManager.h"
 #import <OpenPeerSDK/HOPBackgrounding.h>
-
+#import <OpenPeerSDK/HOPAccount.h>
 
 
 @implementation BackgroundingDelegate
@@ -81,6 +82,10 @@
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Returning from the background.");
     [self.backgroundingNotifier destroy];
     self.backgroundingNotifier = nil;
+    if (![[HOPAccount sharedAccount] isCoreAccountCreated] || [[HOPAccount sharedAccount] getState].state != HOPAccountStateReady)
+    {
+        [[LoginManager sharedLoginManager] setIsRecovering:YES];
+    }
 }
 
 - (void) onBackgroundingApplicationWillQuit:(HOPBackgroundingSubscription*) subscription
