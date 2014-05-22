@@ -34,61 +34,75 @@
 #import "HOPProtocols.h"
 
 /**
- Singleton class to represent the openpeer stack.
+ Singleton class that represents the openpeer stack.
  */
 @interface HOPStack : NSObject
 
 /**
- Returns singleton object of this class.
+ Returns singleton object of HOPStack class.
  */
 + (id)sharedStack;
+
+/**
+ *  This init method is not available, because HOPAccount is a singleton class.
+ *
+ */
 - (id) init __attribute__((unavailable("HOPStack is singleton class.")));
 
 /**
- Initialise delegates objects required for communication between core and client.
- @param stackDelegate HOPStackDelegate delegate
- @param mediaEngineDelegate HOPMediaEngineDelegate delegate
-
+ *  Setup stack and initialize delegates objects required for communication between core and client.
+ *
+ *  @param stackDelegate       Delegate object that implements the HOPStackDelegate protocol
+ *  @param mediaEngineDelegate Delegate object that implements the HOPMediaEngineDelegate protocol
  */
 - (void) setupWithStackDelegate:(id<HOPStackDelegate>) stackDelegate mediaEngineDelegate:(id<HOPMediaEngineDelegate>) mediaEngineDelegate;
 
 /**
- Shutdown stack.
+ Shutdowns stack.
  */
 - (void) shutdown;
 
-/** 
- Creates an authorized application ID from an application ID
- @param applicationID NSString* applicationID obtained from Hookflash customer portal.
- @param applicationIDSharedSecret NSString* Secret obtained from service provider
- @param expires NSDate* date when authorized application ID expires
- @return NSString authorized application ID
+/**
+ *  Creates an authorized application ID based on application ID and application shred secret.
+ *
+ *  @param inApplicationID Application ID
+ *  @param applicationIDSharedSecret Application shared secret
+ *  @param expires                   Date when authorized application ID expires
+ *
+ *  @return A generated authorized application ID
  */
-+ (NSString*) createAuthorizedApplicationID:(NSString*) inAuthorizedApplicationID applicationIDSharedSecret:(NSString*) applicationIDSharedSecret expires:(NSDate*) expires;
++ (NSString*) createAuthorizedApplicationID:(NSString*) inApplicationID applicationIDSharedSecret:(NSString*) applicationIDSharedSecret expires:(NSDate*) expires;
+
 
 /**
- Get expiry time for specified authorized application id.
- @param inAuthorizedApplicationID NSString* authorized application id
- @return long time in seconds till expiry
+ *  Returns expiry time in seconds for authrized application ID.
+ *
+ *  @param inAuthorizedApplicationID Authorized application ID
+ *
+ *  @return Time in seconds till expiry
  */
 + (long) getExpiryForAuthorizedApplicationID:(NSString*) inAuthorizedApplicationID;
 
 /**
- Check if authorized application id will be valid in some time frame
- @param inAuthorizedApplicationID NSString* authorized application id
- @param minimumValidityWindowRequired long time in seconds for desired time frame
- @return BOOL YES if it is valid in that ime frame
+ *  Checks if authorized application id will be valid in some time frame.
+ *
+ *  @param inAuthorizedApplicationID     Authorized application ID
+ *  @param minimumValidityWindowRequired Tiem frame in seconds for which check will be performed
+ *
+ *  @return YES if authorized application id will be valid in specified time frame, otherwise NO
  */
 + (BOOL) isAuthorizedApplicationExpiryWindowStillValid:(NSString*) inAuthorizedApplicationID minimumValidityWindowRequired:(long) minimumValidityWindowRequired;
 
 /**
- Check if stack object is ready.
- @return BOOL YES if ready, NO if not ready or shutdown precuderu is started
+ *  Checks if stack is ready.
+ *
+ *  @return YES if it is ready, NO if it is not ready or shutdown precuderu is started
  */
 - (BOOL) isStackReady;
 
+
 /**
- Clean all core objects, except stack, on logout
+ *  Cleans all core objects, except stack, on logout.
  */
 - (void) doLogoutCleanup;
 @end

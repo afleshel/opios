@@ -64,23 +64,28 @@ using namespace openpeer::core;
     return self;
 }
 
-+ (id) placeCall:(HOPConversationThread*) conversationThread toContact:(HOPContact*) toContact includeAudio:(BOOL) includeAudio includeVideo:(BOOL) includeVideo
++ (id) placeCall:(HOPConversationThread*) conversationThread includeAudio:(BOOL) includeAudio includeVideo:(BOOL) includeVideo
 {
     HOPCall* ret = nil;
-    if (conversationThread != nil && toContact != nil)
+    if (conversationThread != nil)
     {
-        //Create the core call object and start placing call procedure
-        ICallPtr tempCallPtr = ICall::placeCall([conversationThread getConversationThreadPtr], [toContact getContactPtr], includeAudio, includeVideo);
-        
-        if (tempCallPtr)
+        HOPContact* toContact = nil;
+        if ([[conversationThread getContacts] count] > 0)
         {
-            //If core call object is create, create HOPCall object
-            ret = [[self alloc] initWithCallPtr:tempCallPtr];
-            [[OpenPeerStorageManager sharedStorageManager] setCall:ret forId:[NSString stringWithUTF8String:tempCallPtr->getCallID()]];
-        }
-        else
-        {
-            ZS_LOG_ERROR(Debug, "Call object is not created!");
+            toContact = [[conversationThread getContacts] objectAtIndex:0];
+            //Create the core call object and start placing call procedure
+            ICallPtr tempCallPtr = ICall::placeCall([conversationThread getConversationThreadPtr], [toContact getContactPtr], includeAudio, includeVideo);
+            
+            if (tempCallPtr)
+            {
+                //If core call object is create, create HOPCall object
+                ret = [[self alloc] initWithCallPtr:tempCallPtr];
+                [[OpenPeerStorageManager sharedStorageManager] setCall:ret forId:[NSString stringWithUTF8String:tempCallPtr->getCallID()]];
+            }
+            else
+            {
+                ZS_LOG_ERROR(Debug, "Call object is not created!");
+            }
         }
     }
     return ret;

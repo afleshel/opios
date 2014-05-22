@@ -201,53 +201,12 @@ using namespace openpeer::core;
     return contactArray;
 }
 
-//- (NSString*) getProfileBundle: (HOPContact*) contact
-//{
-//    NSString* ret = nil;
-//    if (conversationThreadPtr)
-//    {
-//#define WARNING_FIX_ME 1
-//#define WARNING_FIX_ME 2
-//        ret = @"";
-//    }
-//    else
-//    {
-//        ZS_LOG_ERROR(Debug, [self log:@"Invalid conversation thread object!"]);
-//        [NSException raise:NSInvalidArgumentException format:@"Invalid conversation thread object!"];
-//    }
-//    return ret;
-//}
 
 - (NSArray*) getIdentityContactListForContact:(HOPContact*) contact
 {
     NSMutableArray* ret = nil;
     if(conversationThreadPtr)
     {
-        //ret = [[NSMutableArray alloc] init];
-        /*IdentityContactListPtr identityList = conversationThreadPtr->getIdentityContactList([contact getContactPtr]);
-        for (IdentityContactList::iterator contact = identityList->begin(); contact != identityList->end(); ++contact)
-        {
-            HOPRolodexContact* hopRolodexContact = nil;
-            IdentityContact identityContact = *contact;
-            NSString* contactIdentityURI = [NSString stringWithCString:identityContact.mIdentityURI encoding:NSUTF8StringEncoding];
-            
-            if ([contactIdentityURI length] > 0)
-            {
-                hopRolodexContact = nil;//[[HOPModelManager sharedModelManager] getRolodexContactByIdentityURI:contactIdentityURI];
-                if (!hopRolodexContact)
-                {
-                    //Create a new menaged object for new rolodex contact
-                    NSManagedObject* managedObject = [[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPRolodexContact"];
-                    if ([managedObject isKindOfClass:[HOPRolodexContact class]])
-                    {
-                        hopRolodexContact = (HOPRolodexContact*)managedObject;
-                        [hopRolodexContact updateWithCoreRolodexContact:identityContact identityProviderDomain:[NSString stringWithCString:identityContact.mIdentityProvider encoding:NSUTF8StringEncoding] homeUserIdentityURI:[NSString stringWithCString:identityContact.mIdentityURI encoding:NSUTF8StringEncoding]];
-                        [[HOPModelManager sharedModelManager] saveContext];
-                    }
-                }
-            }
-        }*/
-
         IdentityContactListPtr identityContactListPtr = conversationThreadPtr->getIdentityContactList([contact getContactPtr]);
         if (identityContactListPtr)
         {

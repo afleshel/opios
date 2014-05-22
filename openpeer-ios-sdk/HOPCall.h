@@ -36,131 +36,150 @@
 @class HOPContact;
 @class HOPRolodexContact;
 
+
 @interface HOPCall : NSObject
 
 /**
  Creates outgoing call.
- @param conversationThread HOPConversationThread Thread which will own the call
- @param toContact HOPContact Remote contact
+ @param conversationThread Thread which will own the call
  @param includeAudio BOOL YES if call should include audio
  @param includeVideo BOOL YES if call should include video
- @returns HOPCall object if ICallPtr object is created sucessfully, otherwise nil
+ @return HOPCall object if ICallPtr object is created sucessfully, otherwise nil
  */
-+ (id) placeCall:(HOPConversationThread*) conversationThread toContact:(HOPContact*) toContact includeAudio:(BOOL) includeAudio includeVideo:(BOOL) includeVideo;
++ (id) placeCall:(HOPConversationThread*) conversationThread includeAudio:(BOOL) includeAudio includeVideo:(BOOL) includeVideo;
+
+/**
+ *  This init method is not available. You need to use class method placeCall:toContact:includeAudio:includeVideo.
+ *
+ */
 - (id) init __attribute__((unavailable("Use static placeCall:toContact:includeAudio:includeVideo method to create a call object.")));
 
 /**
- Converts call state enum to string
- @param state HOPCallStates Call state enum
- @returns String representation of call state
+ Converts call state enum to string.
+ @param state Call state
+ @return A string representation of call state.
  */
 + (NSString*) stateToString: (HOPCallStates) state __attribute__((deprecated("use method stringForCallState instead")));
+
+/**
+ *  Converts call state enum to string. (Deprecated)
+ *
+ *  @param state Call state
+ *
+ *  @return A string representation of call state.
+ */
 + (NSString*) stringForCallState:(HOPCallStates) state;
 
 /**
- Converts call closed reason enum to string
- @param reason HOPCallClosedReasons Call closed reason enum
- @returns String representation of call closed reason enum
+ Converts call closed reason enum to string. (Deprecated)
+ @param reason Call closed reason enum
+ @return A String representation of call closed reason enum
  */
 + (NSString*) reasonToString: (HOPCallClosedReasons) reason __attribute__((deprecated("use method stringForClosingReason instead")));
+
+/**
+ Converts call closed reason enum to string.
+ @param reason Call closed reason enum
+ @return A String representation of call closed reason enum
+ */
 + (NSString*) stringForClosingReason:(HOPCallClosedReasons) reason;
 
 /**
- Retrieves call ID
- @returns String representation of call ID
+ Returns call ID.
+ @return A string representation of call ID
  */
 - (NSString*) getCallID;
 
 /**
- Retrieves conversation thread which owns the call
- @returns Pointer to the conversation thread object
+ Returns conversation thread which owns the call
+ @return Pointer to the conversation thread object
  */
 - (HOPConversationThread*) getConversationThread;
 
 /**
- Retrieves caller contact
- @returns Pointer to the caller contact object
+ Returns caller contact.
+ @return Pointer to the caller HOPContact object
  */
 - (HOPContact*) getCaller;
 
 /**
- Retrieves callee contact
- @returns Pointer to the callee contact object
+ Returns callee contact.
+ @return Pointer to the callee HOPContact object
  */
 - (HOPContact*) getCallee;
 
 /**
- Check if call has audio stream
- @returns YES if call has audio stream
+ Checks if call has audio stream.
+ @return YES if call has audio stream, otherwise NO
  */
 - (BOOL) hasAudio;
 
 /**
- Check if call has video stream
- @returns YES if call has video stream
+ Checks if call has a video stream.
+ @return YES if call has video stream, otherwise NO
  */
 - (BOOL) hasVideo;
 
 /**
- Retrieves call state
- @returns Call state enum
+ Returns call state.
+ @return Call state enum
  */
 - (HOPCallStates) getState;
 
 /**
- Retrieves call closed reason
- @returns Call closed reason enum
+ Returns call closed reason.
+ @return Call closed reason enum
  */
 - (HOPCallClosedReasons) getClosedReason;
 
 /**
- Retrieves call creation time.
- @returns NSDate representation of call creation time
+ Returns call creation time.
+ @returns Call creation time
  */
 - (NSDate*) getCreationTime;
 
 /**
- Retrieves call ring time.
- @returns NSDate representation of call ring time
+ Returns call ring time.
+ @returns Call ring time
  */
 - (NSDate*) getRingTime;
 
 /**
  Retrieves call answer time.
- @returns NSDate representation of call answer time
+ @returns Call answer time
  */
 - (NSDate*) getAnswerTime;
 
 /**
  Retrieves call closed time.
- @returns NSDate representation of call closed time
+ @returns Call closing time
  */
 - (NSDate*) getClosedTime;
 
 /**
- Start ringing.
+ Starts ringing.
  */
 - (void) ring;
 
 /**
- Answer incoming call.
+ Answers on incoming call.
  */
 - (void) answer;
 
 /**
- Set call hold ON/OFF.
+ Sets call hold ON/OFF.
  @param YES to hold the call, NO to unhold
  */
 - (void) hold:(BOOL) hold;
 
 /**
  Ends current call.
- @param HOPCallClosedReasons Reason for call closure.
+ @param Call closure reason.
  */
 - (void) hangup:(HOPCallClosedReasons) reason;
 
 /**
- Destroy core object.
+ Destroya call core object.
  */
 - (void) destroyCoreObject;
 @end

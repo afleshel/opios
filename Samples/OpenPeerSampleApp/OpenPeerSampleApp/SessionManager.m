@@ -349,7 +349,7 @@
         
         //Place a audio or video call for chosen contact
         inSession.isRedial = isRedial;
-        inSession.currentCall = [HOPCall placeCall:inSession.conversationThread toContact:contact includeAudio:YES includeVideo:includeVideo];
+        inSession.currentCall = [HOPCall placeCall:inSession.conversationThread includeAudio:YES includeVideo:includeVideo];
         [self setActiveCallSession:inSession callActive:YES];
     }
     else
