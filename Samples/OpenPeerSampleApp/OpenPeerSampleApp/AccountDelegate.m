@@ -65,7 +65,7 @@
 }
 
 //This method handles account state changes from SDK.
-- (void) account:(HOPAccount*) account stateChanged:(HOPAccountStates) accountState
+- (void) account:(HOPAccount*) account stateChanged:(HOPAccountState) accountState
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Account login state: %@", [HOPAccount stringForAccountState:accountState]);
     
@@ -128,7 +128,7 @@
                 
             case HOPAccountStateShutdown:
             {
-                HOPAccountState* accountState = [account getState];
+                HOPAccState* accountState = [account getState];
                 if (accountState.errorCode && ![[OpenPeer sharedOpenPeer] appEnteredForeground])
                 {
                     [[[OpenPeer sharedOpenPeer] mainViewController]  onAccountLoginError:accountState.errorReason];

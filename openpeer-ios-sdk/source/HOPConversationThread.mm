@@ -65,20 +65,20 @@ using namespace openpeer::core;
     return ret;
 }
 
-+ (NSString*) deliveryStateToString: (HOPConversationThreadMessageDeliveryStates) state
++ (NSString*) deliveryStateToString: (HOPConversationThreadMessageDeliveryState) state
 {
     return [NSString stringWithUTF8String: IConversationThread::toString((IConversationThread::MessageDeliveryStates) state)];
 }
-+ (NSString*) stringForMessageDeliveryState:(HOPConversationThreadMessageDeliveryStates) state
++ (NSString*) stringForMessageDeliveryState:(HOPConversationThreadMessageDeliveryState) state
 {
     return [NSString stringWithUTF8String: IConversationThread::toString((IConversationThread::MessageDeliveryStates) state)];
 }
 
-+ (NSString*) stateToString: (HOPConversationThreadContactStates) state
++ (NSString*) stateToString: (HOPConversationThreadContactState) state
 {
     return [NSString stringWithUTF8String: IConversationThread::toString((IConversationThread::ContactStates) state)];
 }
-+ (NSString*) stringForContactState:(HOPConversationThreadContactStates) state
++ (NSString*) stringForContactState:(HOPConversationThreadContactState) state
 {
     return [NSString stringWithUTF8String: IConversationThread::toString((IConversationThread::ContactStates) state)];
 }
@@ -245,12 +245,12 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (HOPConversationThreadContactStates) getContactState: (HOPContact*) contact
+- (HOPConversationThreadContactState) getContactState: (HOPContact*) contact
 {
-    HOPConversationThreadContactStates ret = HOPConversationThreadContactStateNotApplicable;
+    HOPConversationThreadContactState ret = HOPConversationThreadContactStateNotApplicable;
     if(conversationThreadPtr)
     {
-        ret = (HOPConversationThreadContactStates) conversationThreadPtr->getContactState([contact getContactPtr]);
+        ret = (HOPConversationThreadContactState) conversationThreadPtr->getContactState([contact getContactPtr]);
     }
     else
     {
@@ -395,7 +395,7 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (BOOL) getMessageDeliveryState: (NSString*) messageID outDeliveryState:(HOPConversationThreadMessageDeliveryStates*) outDeliveryState
+- (BOOL) getMessageDeliveryState: (NSString*) messageID outDeliveryState:(HOPConversationThreadMessageDeliveryState*) outDeliveryState
 {
     BOOL ret = NO;
     IConversationThread::MessageDeliveryStates tmpState;
@@ -405,7 +405,7 @@ using namespace openpeer::core;
         if ([messageID length] > 0)
         {
             ret = conversationThreadPtr->getMessageDeliveryState([messageID UTF8String], tmpState);
-            *outDeliveryState = (HOPConversationThreadMessageDeliveryStates) tmpState;
+            *outDeliveryState = (HOPConversationThreadMessageDeliveryState) tmpState;
         }
     }
     else

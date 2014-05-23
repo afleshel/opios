@@ -36,7 +36,7 @@
 
 ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
-void OpenPeerLog(HOPLoggerLevels logLevel, NSString* format,...)
+void OpenPeerLog(HOPLoggerLevel logLevel, NSString* format,...)
 {
     va_list argumentList;
     va_start(argumentList, format);

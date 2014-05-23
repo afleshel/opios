@@ -101,7 +101,7 @@ void OpenPeerConversationThreadDelegate::onConversationThreadMessageDeliveryStat
     NSString* messageId = [NSString stringWithUTF8String:messageID];
     
     if (hopConversationThread && [messageId length] > 0)
-        [conversationThreadDelegate onConversationThreadMessageDeliveryStateChanged:hopConversationThread messageID:messageId messageDeliveryStates:(HOPConversationThreadMessageDeliveryStates)state];
+        [conversationThreadDelegate onConversationThreadMessageDeliveryStateChanged:hopConversationThread messageID:messageId messageDeliveryStates:(HOPConversationThreadMessageDeliveryState)state];
 }
 
 void OpenPeerConversationThreadDelegate::onConversationThreadPushMessage(IConversationThreadPtr conversationThread,const char *messageID,IContactPtr contact)
@@ -120,5 +120,5 @@ void OpenPeerConversationThreadDelegate::onConversationThreadContactStateChanged
     HOPContact* hopContact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:[NSString stringWithUTF8String:contact->getPeerURI()]];
     
     if (hopConversationThread && hopContact)
-        [conversationThreadDelegate onConversationThreadContactStateChanged:hopConversationThread contact:hopContact contactState:(HOPConversationThreadContactStates)state];
+        [conversationThreadDelegate onConversationThreadContactStateChanged:hopConversationThread contact:hopContact contactState:(HOPConversationThreadContactState)state];
 }

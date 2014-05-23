@@ -234,9 +234,9 @@
     return ret;
 }
 
-- (HOPLoggerLevels) getLoggerLevelForAppModule:(Modules) module
+- (HOPLoggerLevel) getLoggerLevelForAppModule:(Modules) module
 {
-    HOPLoggerLevels ret = HOPLoggerLevelNone;
+    HOPLoggerLevel ret = HOPLoggerLevelNone;
     
     NSString* archiveString = [self getArchiveStringForModule:module];
     if ([archiveString length] > 0)
@@ -245,18 +245,18 @@
     return ret;
 }
 
-- (HOPLoggerLevels) getLoggerLevelForAppModuleKey:(NSString*) moduleKey
+- (HOPLoggerLevel) getLoggerLevelForAppModuleKey:(NSString*) moduleKey
 {
-    HOPLoggerLevels ret = HOPLoggerLevelNone;
+    HOPLoggerLevel ret = HOPLoggerLevelNone;
     
     NSNumber* retNumber = [self.appModulesLoggerLevel objectForKey:moduleKey];
     if (retNumber)
-        ret = (HOPLoggerLevels)[retNumber intValue];
+        ret = (HOPLoggerLevel)[retNumber intValue];
     
     return ret;
 }
 
-- (void) setLoggerLevel:(HOPLoggerLevels) level forAppModule:(Modules) module
+- (void) setLoggerLevel:(HOPLoggerLevel) level forAppModule:(Modules) module
 {
     NSString* archiveString = [self getArchiveStringForModule:module];
     [self.appModulesLoggerLevel setObject:[NSNumber numberWithInt:level] forKey:archiveString];
@@ -444,7 +444,7 @@
     return ret;
 }
 
-- (NSString*) getStringForLogLevel:(HOPLoggerLevels) level
+- (NSString*) getStringForLogLevel:(HOPLoggerLevel) level
 {
     switch (level)
     {

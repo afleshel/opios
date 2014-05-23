@@ -49,7 +49,7 @@
 
 @optional
 - (void) onNewSubsystem:(unsigned short) subsystemUniqueID subsystemName:(NSString*) subsystemName;
-- (void) onLog:(unsigned short) subsystemUniqueID subsystemName:(NSString*)subsystemName severity:(HOPLoggerSeverities) severity level:(HOPLoggerLevels) level message:(NSString*) message function:(NSString*) function filePath:(NSString*) filePath lineNumber:(unsigned long) lineNumber;
+- (void) onLog:(unsigned short) subsystemUniqueID subsystemName:(NSString*)subsystemName severity:(HOPLoggerSeverity) severity level:(HOPLoggerLevel) level message:(NSString*) message function:(NSString*) function filePath:(NSString*) filePath lineNumber:(unsigned long) lineNumber;
 @end
 
 
@@ -64,7 +64,7 @@
  *
  *  @param audioRoute New active audio route.
  */
-- (void) onMediaEngineAudioRouteChanged:(HOPMediaEngineOutputAudioRoutes) audioRoute;
+- (void) onMediaEngineAudioRouteChanged:(HOPMediaEngineOutputAudioRoute) audioRoute;
 - (void) onMediaEngineFaceDetected;
 - (void) onMediaEngineVideoCaptureRecordStopped;
 /**
@@ -92,7 +92,7 @@
  *  @param account      HOPAccount object whose state is changed.
  *  @param accountState A new account object state
  */
-- (void) account:(HOPAccount*) account stateChanged:(HOPAccountStates) accountState;
+- (void) account:(HOPAccount*) account stateChanged:(HOPAccountState) accountState;
 /**
  *  Notifies the receiver about change in list of associated identities.
  *
@@ -121,7 +121,7 @@
  *  @param call      Call object whose state is changed.
  *  @param callState A new call state.
  */
-- (void) onCallStateChanged:(HOPCall*) call callState:(HOPCallStates) callState;
+- (void) onCallStateChanged:(HOPCall*) call callState:(HOPCallState) callState;
 @end
 
 
@@ -154,7 +154,7 @@
  *  @param contact            Participant whose state in conversation thredad has changed.
  *  @param contactState       A new participant state
  */
-- (void) onConversationThreadContactStateChanged:(HOPConversationThread*) conversationThread contact:(HOPContact*) contact contactState:(HOPConversationThreadContactStates) contactState;
+- (void) onConversationThreadContactStateChanged:(HOPConversationThread*) conversationThread contact:(HOPContact*) contact contactState:(HOPConversationThreadContactState) contactState;
 /**
  *  Notifies the receiver about new message for conversation.
  *
@@ -169,7 +169,7 @@
  *  @param messageID             An ID of message whose delivery state has changed.
  *  @param messageDeliveryStates A new message delivery state.
  */
-- (void) onConversationThreadMessageDeliveryStateChanged:(HOPConversationThread*) conversationThread messageID:(NSString*) messageID messageDeliveryStates:(HOPConversationThreadMessageDeliveryStates) messageDeliveryStates;
+- (void) onConversationThreadMessageDeliveryStateChanged:(HOPConversationThread*) conversationThread messageID:(NSString*) messageID messageDeliveryStates:(HOPConversationThreadMessageDeliveryState) messageDeliveryStates;
 /**
  *  Notifies the receiver that message is not delivered and it is good time to send a push notification if application supports it.
  *
@@ -194,7 +194,7 @@
  *  @param account      Identity object whose state is changed.
  *  @param accountState A new identity object state
  */
-- (void) identity:(HOPIdentity*) identity stateChanged:(HOPIdentityStates) state;
+- (void) identity:(HOPIdentity*) identity stateChanged:(HOPIdentityState) state;
 
 /**
  *  Notifies the receiver about core message for inner browser frame.

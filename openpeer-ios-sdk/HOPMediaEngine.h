@@ -39,17 +39,17 @@
 
 /**
  Retrieves string representation of camera type.
- @param type HOPMediaEngineCameraTypes Camera type enum
+ @param type HOPMediaEngineCameraType Camera type enum
  @returns String representation of camera type
  */
-+ (NSString*) cameraTypeToString: (HOPMediaEngineCameraTypes) type;
++ (NSString*) cameraTypeToString: (HOPMediaEngineCameraType) type;
 
 /**
  Retrieves string representation of the audio route.
- @param route HOPMediaEngineOutputAudioRoutes Audio route enum
+ @param route HOPMediaEngineOutputAudioRoute Audio route enum
  @returns String representation of audio route
  */
-+ (NSString*) audioRouteToString: (HOPMediaEngineOutputAudioRoutes) route;
++ (NSString*) audioRouteToString: (HOPMediaEngineOutputAudioRoute) route;
 
 /**
  Returns singleton object of this class.
@@ -65,25 +65,25 @@
  Sets default orientation that is used when defice is in face up / face down position.
  @param orientation Default video orientation
  */
-- (void) setDefaultVideoOrientation: (HOPMediaEngineVideoOrientations) orientation;
+- (void) setDefaultVideoOrientation: (HOPMediaEngineVideoOrientation) orientation;
 
 /**
  Retrieves default orientation that is used when defice is in face up / face down position.
  @return Default video orientation
  */
-- (HOPMediaEngineVideoOrientations) getDefaultVideoOrientation;
+- (HOPMediaEngineVideoOrientation) getDefaultVideoOrientation;
 
 /**
  Sets orientation that is used when recording is active. Video orientation is locked during video recording. Must be set before video recording is started.
  @param orientation Default video orientation
  */
-- (void) setRecordVideoOrientation: (HOPMediaEngineVideoOrientations) orientation;
+- (void) setRecordVideoOrientation: (HOPMediaEngineVideoOrientation) orientation;
 
 /**
  Retrieves orientation that is used when recording is active.
  @return Video orientation used during video recording
  */
-- (HOPMediaEngineVideoOrientations) getRecordVideoOrientation;
+- (HOPMediaEngineVideoOrientation) getRecordVideoOrientation;
 
 /**
  Sets window for rendering local capture video.
@@ -155,19 +155,19 @@
  Retrieves output audio route.
  @return Output audio route enum
  */
-- (HOPMediaEngineOutputAudioRoutes) getOutputAudioRoute;
+- (HOPMediaEngineOutputAudioRoute) getOutputAudioRoute;
 
 /**
  Retrieves camera type.
  @return Camera type enum
  */
-- (HOPMediaEngineCameraTypes) getCameraType;
+- (HOPMediaEngineCameraType) getCameraType;
 
 /**
  Sets provided camera type as active.
- @param type HOPMediaEngineCameraTypes Camera type
+ @param type HOPMediaEngineCameraType Camera type
  */
-- (void) setCameraType: (HOPMediaEngineCameraTypes) type;
+- (void) setCameraType: (HOPMediaEngineCameraType) type;
 
 /**
  Retrieves video transport statistics.

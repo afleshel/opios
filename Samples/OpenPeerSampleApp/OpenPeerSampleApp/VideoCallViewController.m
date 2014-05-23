@@ -101,7 +101,7 @@
 
 - (IBAction) actionSwitchCamera:(id)sender
 {
-    HOPMediaEngineCameraTypes currentCameraType =  [[HOPMediaEngine sharedInstance] getCameraType];
+    HOPMediaEngineCameraType currentCameraType =  [[HOPMediaEngine sharedInstance] getCameraType];
     currentCameraType = currentCameraType == HOPMediaEngineCameraTypeFront ? HOPMediaEngineCameraTypeBack : HOPMediaEngineCameraTypeFront;
     [[HOPMediaEngine sharedInstance] setCameraType:currentCameraType];
 }

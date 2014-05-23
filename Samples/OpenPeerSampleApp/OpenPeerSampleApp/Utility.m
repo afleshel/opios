@@ -272,7 +272,7 @@ static const short _base64DecodingTable[256] = {
 //    return strGuid;
 //}
 
-+ (NSString*) getCallStateAsString:(HOPCallStates) callState
++ (NSString*) getCallStateAsString:(HOPCallState) callState
 {
     NSString *res = nil;
     
@@ -323,7 +323,7 @@ static const short _base64DecodingTable[256] = {
     return res;
 }
 
-+ (NSString*) getMessageDeliveryStateAsString:(HOPConversationThreadMessageDeliveryStates) messageState
++ (NSString*) getMessageDeliveryStateAsString:(HOPConversationThreadMessageDeliveryState) messageState
 {
     NSString *res = nil;
     

@@ -35,9 +35,9 @@
 
 @class HOPIdentity;
 
-@interface HOPAccountState : NSObject
+@interface HOPAccState : NSObject
 
-@property (nonatomic, assign) HOPAccountStates state;
+@property (nonatomic, assign) HOPAccountState state;
 @property (nonatomic, assign) unsigned short errorCode;
 @property (nonatomic, strong) NSString* errorReason;
 
@@ -66,7 +66,7 @@ Singleton class that represents the logged in OpenPeer user.
  *
  *  @return A string representation of account state.
  */
-+ (NSString*) stateToString:(HOPAccountStates) state __attribute__((deprecated("use method stringForAccountState instead")));
++ (NSString*) stateToString:(HOPAccountState) state __attribute__((deprecated("use method stringForAccountState instead")));
 
 /**
  *  Converts account state enum to string. (Deprecated)
@@ -75,7 +75,7 @@ Singleton class that represents the logged in OpenPeer user.
  *
  *  @return A string representation of account state.
  */
-+ (NSString*) stringForAccountState:(HOPAccountStates) state;
++ (NSString*) stringForAccountState:(HOPAccountState) state;
 
 /**
  *  Starts account login procedure.
@@ -109,7 +109,7 @@ Singleton class that represents the logged in OpenPeer user.
  *
  *  @return Account state enum
  */
-- (HOPAccountState*) getState;
+- (HOPAccState*) getState;
 
 
 /**

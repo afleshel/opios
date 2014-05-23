@@ -59,7 +59,7 @@
  @param state Call state
  @return A string representation of call state.
  */
-+ (NSString*) stateToString: (HOPCallStates) state __attribute__((deprecated("use method stringForCallState instead")));
++ (NSString*) stateToString: (HOPCallState) state __attribute__((deprecated("use method stringForCallState instead")));
 
 /**
  *  Converts call state enum to string. (Deprecated)
@@ -68,21 +68,21 @@
  *
  *  @return A string representation of call state.
  */
-+ (NSString*) stringForCallState:(HOPCallStates) state;
++ (NSString*) stringForCallState:(HOPCallState) state;
 
 /**
  Converts call closed reason enum to string. (Deprecated)
  @param reason Call closed reason enum
  @return A String representation of call closed reason enum
  */
-+ (NSString*) reasonToString: (HOPCallClosedReasons) reason __attribute__((deprecated("use method stringForClosingReason instead")));
++ (NSString*) reasonToString: (HOPCallClosingReason) reason __attribute__((deprecated("use method stringForClosingReason instead")));
 
 /**
  Converts call closed reason enum to string.
  @param reason Call closed reason enum
  @return A String representation of call closed reason enum
  */
-+ (NSString*) stringForClosingReason:(HOPCallClosedReasons) reason;
++ (NSString*) stringForClosingReason:(HOPCallClosingReason) reason;
 
 /**
  Returns call ID.
@@ -124,13 +124,13 @@
  Returns call state.
  @return Call state enum
  */
-- (HOPCallStates) getState;
+- (HOPCallState) getState;
 
 /**
  Returns call closed reason.
  @return Call closed reason enum
  */
-- (HOPCallClosedReasons) getClosedReason;
+- (HOPCallClosingReason) getClosedReason;
 
 /**
  Returns call creation time.
@@ -176,7 +176,7 @@
  Ends current call.
  @param Call closure reason.
  */
-- (void) hangup:(HOPCallClosedReasons) reason;
+- (void) hangup:(HOPCallClosingReason) reason;
 
 /**
  Destroya call core object.

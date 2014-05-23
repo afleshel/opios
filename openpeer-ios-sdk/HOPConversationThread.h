@@ -75,26 +75,26 @@
  @param state Message delivery state to convert to string
  @return A string representation of message delivery state
  */
-+ (NSString*) deliveryStateToString: (HOPConversationThreadMessageDeliveryStates) state __attribute__((deprecated("use method stringForMessageDeliveryState instead")));
++ (NSString*) deliveryStateToString: (HOPConversationThreadMessageDeliveryState) state __attribute__((deprecated("use method stringForMessageDeliveryState instead")));
 /**
  Returns a string representation of the message delivery state.
  @param state Message delivery state to convert to string
  @return A string representation of message delivery state
  */
-+ (NSString*) stringForMessageDeliveryState:(HOPConversationThreadMessageDeliveryStates) state;
++ (NSString*) stringForMessageDeliveryState:(HOPConversationThreadMessageDeliveryState) state;
 
 /**
  Returns a  string representation of the contact state. Deprecated.
  @param state Contact state to convert to string
  @returns A string representation of contact state
  */
-+ (NSString*) stateToString: (HOPConversationThreadContactStates) state __attribute__((deprecated("use method stringForContactState instead")));
++ (NSString*) stateToString: (HOPConversationThreadContactState) state __attribute__((deprecated("use method stringForContactState instead")));
 /**
  Returns a  string representation of the contact state.
  @param state Contact state to convert to string
  @return A string representation of contact state
  */
-+ (NSString*) stringForContactState:(HOPConversationThreadContactStates) state;
++ (NSString*) stringForContactState:(HOPConversationThreadContactState) state;
 
 
 /**
@@ -132,7 +132,7 @@
  @param contact HOPContact object
  @returns Contact state enum
  */
-- (HOPConversationThreadContactStates) getContactState: (HOPContact*) contact;
+- (HOPConversationThreadContactState) getContactState: (HOPContact*) contact;
 
 /**
  Adds array of contacts to the conversation thread.
@@ -183,7 +183,7 @@
  @param outDeliveryState A message delivery state
  @returns YES if delivery state is retrieved, otherwise NO
  */
-- (BOOL) getMessageDeliveryState: (NSString*) messageID outDeliveryState:(HOPConversationThreadMessageDeliveryStates*) outDeliveryState;
+- (BOOL) getMessageDeliveryState: (NSString*) messageID outDeliveryState:(HOPConversationThreadMessageDeliveryState*) outDeliveryState;
 
 /**
   Destroys conversation thread core object.

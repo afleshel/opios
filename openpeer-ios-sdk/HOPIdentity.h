@@ -39,9 +39,9 @@
 /**
  Wrapper for identity state data.
  */
-@interface HOPIdentityState : NSObject
+@interface HOPIdnState : NSObject
 
-@property (nonatomic, assign) HOPIdentityStates state;
+@property (nonatomic, assign) HOPIdentityState state;
 @property (nonatomic, assign) unsigned short lastErrorCode;
 @property (nonatomic, strong) NSString* lastErrorReason;
 @end
@@ -60,7 +60,7 @@
 *
 *  @return A string representation of identity state.
 */
-+ stateToString:(HOPIdentityStates) state __attribute__((deprecated("use method stringForIdentityState instead")));
++ stateToString:(HOPIdentityState) state __attribute__((deprecated("use method stringForIdentityState instead")));
 
 /**
  *  Converts identity state enum to string.
@@ -69,7 +69,7 @@
  *
  *  @return A string representation of identity state.
  */
-+ (NSString*) stringForIdentityState:(HOPIdentityStates) state;
++ (NSString*) stringForIdentityState:(HOPIdentityState) state;
 
 
 /**
@@ -116,7 +116,7 @@
  *
  *  @return Identity state enum
  */
-- (HOPIdentityState*) getState;
+- (HOPIdnState*) getState;
 
 /**
  Returns whether identiy is attached or not.
