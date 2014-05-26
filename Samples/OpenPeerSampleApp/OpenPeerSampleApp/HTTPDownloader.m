@@ -71,8 +71,8 @@
 {
     BOOL ret = YES;
     NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:self.url]
-                                                            cachePolicy:NSURLRequestUseProtocolCachePolicy
-                                                        timeoutInterval:50.0];
+                                                            cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
+                                                        timeoutInterval:20.0];
     
     self.receivedData = [NSMutableData dataWithCapacity: 0];
     

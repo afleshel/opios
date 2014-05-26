@@ -44,6 +44,7 @@
 
 @interface Settings ()
 @property (nonatomic, strong) HTTPDownloader* settingsDownloader;
+@property (nonatomic) int timeoutCounter;
 
 - (NSString*) getArchiveStringForModule:(Modules) module;
 @end
@@ -96,6 +97,8 @@
         
         if (!self.appModulesLoggerLevel)
             self.appModulesLoggerLevel = [[NSMutableDictionary alloc] init];
+        
+        self.timeoutCounter = 0;
     }
     return self;
 }
@@ -978,13 +981,32 @@
 
 - (void) httpDownloader:(HTTPDownloader *) downloader didFailWithError:(NSError *)error
 {
-    OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Settings download failed. Reason:%@",error);
-    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Downloading login settings failed!"
-                                                        message:@"Login will proceed with previous settings."
-                                                       delegate:nil
-                                              cancelButtonTitle:nil
-                                              otherButtonTitles:@"Ok",nil];
-    [alertView show];
-    [[OpenPeer sharedOpenPeer] finishPreSetup];
+    BOOL showErrorMessage = NO;
+    if (error.code == kCFURLErrorTimedOut)
+    {
+        OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Settings download failed. Reason:%@",error);
+        self.timeoutCounter++;
+        if (self.timeoutCounter > 2)
+        {
+            showErrorMessage = YES;
+            [[OpenPeer sharedOpenPeer] finishPreSetup];
+        }
+        else
+        {
+            [self downloadLatestSettings];
+        }
+    }
+    //OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Settings download failed. Reason:%@",error);
+    
+    if (showErrorMessage)
+    {
+        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Downloading login settings failed!"
+                                                            message:@"Login will proceed with previous settings."
+                                                           delegate:nil
+                                                  cancelButtonTitle:nil
+                                                  otherButtonTitles:@"Ok",nil];
+        [alertView show];
+    }
+    
 }
 @end
