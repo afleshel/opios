@@ -62,6 +62,13 @@ String OpenPeerCacheDelegate::fetch(const char *cookieNamePath)
     return ret;
 }
 
+SecureByteBlockPtr OpenPeerCacheDelegate::fetchBinary(const char *cookieNamePath)
+{
+#define WARNING_TO_DO_IMPLEMENT_THIS_FETCH_BINARY 1
+#define WARNING_TO_DO_IMPLEMENT_THIS_FETCH_BINARY 2
+  return SecureByteBlockPtr();
+}
+
 void OpenPeerCacheDelegate::store(const char *cookieNamePath,Time expires,const char *str)
 {
     NSString* cookie = [NSString stringWithUTF8String:str];
@@ -75,6 +82,12 @@ void OpenPeerCacheDelegate::store(const char *cookieNamePath,Time expires,const 
         [cacheDelegate storeCookie:cookie cookieNamePath:path expireTime:date];
     else
         [[HOPModelManager sharedModelManager]setCookie:cookie withPath:path expires:date];
+}
+
+void OpenPeerCacheDelegate::storeBinary(const char *cookieNamePath,Time expires,const SecureByteBlock &buffer)
+{
+#define WARNING_TO_DO_IMPLEMENT_THIS_STORE_BINARY 1
+#define WARNING_TO_DO_IMPLEMENT_THIS_STORE_BINARY 2
 }
 
 void OpenPeerCacheDelegate::clear(const char *cookieNamePath)
