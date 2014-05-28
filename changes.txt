@@ -1,4 +1,11 @@
 
+opios SDK v1.0.9 changes
+- fix for ICE using TURN
+- fix for ICE where local/remote candidate could become reversed
+- fix for compiling some architectures
+- moved UUID generator to SDK
+- authorised application is regenerated on every login/relogin
+
 opios SDK v1.0.8 changes
 - add "final" flag to ice candidates to better detect when ice negotiation has failed
 - improved rich push experience (more to come)
