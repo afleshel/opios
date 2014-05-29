@@ -234,7 +234,8 @@ static const short _base64DecodingTable[256] = {
 
 + (NSString*) getUserAgentName
 {
-    NSString* developerId = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"Hookflash Developer ID"];
+    NSString* developerId = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"Hookflash Developer ID"] == nil ? @"" : [[[NSBundle mainBundle] infoDictionary] objectForKey:@"Hookflash Developer ID"];
+    
     
     NSString* appName = [[[NSBundle mainBundle] infoDictionary]   objectForKey:@"CFBundleName"];
     NSString* appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
