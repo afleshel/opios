@@ -1,6 +1,6 @@
 Thank you for downloading Hookflash's Open Peer iOS SDK.
 
-This release is a 1.0.8 release of the SDK and Hookflash will be publishing updates to the SDK regularly.
+This release is a 1.0.9 release of the SDK and Hookflash will be publishing updates to the SDK regularly.
 
 For a quick introduction to the code please read the following. For more detailed instructions please go to http://docs.hookflash.com.
 
