@@ -152,6 +152,10 @@
             self.pushesToSend++;
         }
     }
+    else
+    {
+        OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Push URL is invalid.");
+    }
 }
 
 /*- (void) sendPushNotificationForDeviceToken:(NSString*) deviceToken message:(NSString*) message
@@ -274,6 +278,10 @@
 
             if ([dataToPush count] > 0)
                 [self pushData:dataToPush sendingRich:YES];
+            else
+            {
+                OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Dictionary with push data is not valid. Push notification is not sent.");
+            }
         }
         [self.apnsHisotry setObject:[NSDate date] forKey:[message.contact getPeerURI]];
     }
