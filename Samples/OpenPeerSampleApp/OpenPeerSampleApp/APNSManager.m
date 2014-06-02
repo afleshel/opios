@@ -68,7 +68,7 @@
 - (id) initSingleton;
 
 - (void) pushDataOld:(NSDictionary*) dataToPush sendingRich:(BOOL) sendingRich;
-- (void) pushData:(NSDictionary*) dataToPush sendingRich:(BOOL) sendingRich;
+- (void) pushData:(NSString*) filePath sendingRich:(BOOL) sendingRich;
 - (BOOL) canSendPushNotificationForPeerURI:(NSString*) peerURI;
 - (NSArray*) getDeviceTokensForContact:(HOPContact*) contact;
 - (NSString*) prepareMessageForRichPush:(HOPMessage*) message peerURI:(NSString*) peerURI location:(NSString*) location;
@@ -191,58 +191,6 @@
     
 }
 
-- (void) pushData3:(NSDictionary*) dataToPush sendingRich:(BOOL) sendingRich
-{
-    NSURL *feedsURL = [NSURL URLWithString:self.apiPushURL];
-    
-    NSString *user = self.urbanAirshipAppKey;
-    NSString *password = self.urbanAirshipAppSecret;
-    NSURLCredential *defaultCredential = [NSURLCredential credentialWithUser:user password:password persistence:NSURLCredentialPersistencePermanent];
-    
-    NSString *host = [feedsURL host];
-    NSInteger port = [[feedsURL port] integerValue];
-    NSString *protocol = [feedsURL scheme];
-    NSURLProtectionSpace *protectionSpace = [[NSURLProtectionSpace alloc] initWithHost:host port:port protocol:protocol realm:nil authenticationMethod:NSURLAuthenticationMethodServerTrust];
-    
-    NSURLCredentialStorage *credentials = [NSURLCredentialStorage sharedCredentialStorage];
-    [credentials setDefaultCredential:defaultCredential forProtectionSpace:protectionSpace];
-    
-    NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
-    [config setURLCredentialStorage:credentials];
-    
-    NSMutableURLRequest * request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:self.apiPushURL]];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    if (sendingRich)
-        [request setValue:@"application/vnd.urbanairship+json; version=3;" forHTTPHeaderField:@"Accept"];
-    
-    NSData * pushdata = [NSJSONSerialization dataWithJSONObject:dataToPush options:0 error:NULL];
-    [request setHTTPBody:pushdata];
-    
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:config delegate:self delegateQueue:nil];
-    [[session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        if (!error) {
-            NSHTTPURLResponse *httpResp = (NSHTTPURLResponse*) response;
-            if (httpResp.statusCode == 200) {
-                NSLog(@"Woo! everything is working");
-            } else {
-                NSLog(@"Hrmmm... error %@ occured", error);
-            }
-        } else {
-            NSLog(@"Hrmmm... error %@ occured", error);
-        }
-        
-    }] resume];
-}
-/*- (void) sendPushNotificationForDeviceToken:(NSString*) deviceToken message:(NSString*) message
-{
-    NSDictionary * dataToPush = @{@"device_tokens":@[deviceToken], @"aps":@{@"alert":message, @"sound":@"calling"}};
-    
-    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Sending push notification: %@",message);
-    
-    [self pushData:dataToPush sendingRich:NO];
-}*/
-
 - (void) registerDeviceToken:(NSData*) devToken
 {
     [[UAPush shared] registerDeviceToken:devToken];
@@ -317,7 +265,7 @@
                 
                 if ([dataToPush count] > 0)
                 {
-                    [self pushData:dataToPush sendingRich:NO];
+                    [self pushDataOld:dataToPush sendingRich:NO];
                     
                     [self.apnsHisotry setObject:[NSDate date] forKey:peerURI];
                 }
@@ -375,8 +323,8 @@
                 NSLog(@"Not Writable");
             }
             
-            if ([dataToPush count] > 0)
-                [self pushData:dataToPush sendingRich:YES];
+            if ([filePath length] > 0 && [dataToPush count] > 0)
+                [self pushData:filePath sendingRich:YES];
             else
             {
                 OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Dictionary with push data is not valid. Push notification is not sent.");
@@ -436,14 +384,6 @@
 - (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
  completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler
 {
-//    if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
-//    {
-//        if ([self.urbanAirshipAppSecret length] > 0 || [self.urbanAirshipAppKey length] > 0)
-//        {
-//            NSURLCredential * credential = [[NSURLCredential alloc] initWithUser:self.urbanAirshipAppKey password:self.urbanAirshipAppSecret persistence:NSURLCredentialPersistenceForSession];
-//            [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
-//        }
-//    }
     if (challenge.previousFailureCount == 0)
     {
         NSURLCredentialPersistence persistence = NSURLCredentialPersistenceForSession;

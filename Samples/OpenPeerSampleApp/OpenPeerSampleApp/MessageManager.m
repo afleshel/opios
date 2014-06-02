@@ -244,12 +244,6 @@
     {
         //Send message
         [inSession.conversationThread sendMessage:hopMessage];
-        
-        /*Message* messageObj = [[Message alloc] initWithMessageText:message senderContact:nil sentTime:hopMessage.date];
-        //[inSession.messageArray addObject:messageObj];
-
-        NSUInteger addedIndex = [inSession.messageArray indexOfObject:messageObj inSortedRange:NSMakeRange(0, inSession.messageArray.count) options:NSBinarySearchingInsertionIndex usingComparator:self.comparator];
-        [inSession.messageArray insertObject:messageObj atIndex:addedIndex];*/
     }
     else
     {

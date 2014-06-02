@@ -111,13 +111,11 @@
 - (void) onConversationThreadPushMessage:(HOPConversationThread*) conversationThread messageID:(NSString*) messageID contact:(HOPContact*) coreContact
 {
 #ifdef APNS_ENABLED
-    //NSArray* contacts = [conversationThread getContacts];
-    //if ([contacts count] > 0)
     if (coreContact)
     {
         BOOL missedCall = NO;
         HOPMessage* message = [conversationThread getMessageForID:messageID];
-        //HOPContact* coreContact = [contacts objectAtIndex:0];
+
         if (message)
         {
             message.contact = coreContact;
@@ -126,7 +124,7 @@
             if (contact)
             {
                 NSString* messageText = nil;
-                //if ([message.type isEqualToString:messageTypeSystem])
+
                 if ([[MessageManager sharedMessageManager] getTypeForSystemMessage:message] == SystemMessage_CheckAvailability)
                 {
                     messageText  = [NSString stringWithFormat:@"%@  %@",[[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser] getFullName],@"Missed call"];
@@ -135,14 +133,9 @@
                 }
                 else if (![message.type isEqualToString:messageTypeSystem])
                 {
-                    //NSString* msg = [message.text length] > 22 ? [NSString stringWithFormat:@"%@...",[message.text substringToIndex:22]] : message.text;
-                    
-                    messageText  = message.text;//[NSString stringWithFormat:@"%@ \n %@",[[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser] getFullName],msg];
+                    messageText  = message.text;
                     [[APNSManager sharedAPNSManager]sendRichPushNotificationForMessage:message missedCall:NO];
                 }
-                //[[APNSManager sharedAPNSManager] sendPushNotificationForContact:coreContact message:messageText missedCall:missedCall];
-                //[[APNSManager sharedAPNSManager]sendRichPushNotificationForContact:coreContact message:messageText messageId:messageID missedCall:missedCall];
-//                [[APNSManager sharedAPNSManager]sendRichPushNotificationForMessage:message missedCall:NO];
             }
         }
     }
