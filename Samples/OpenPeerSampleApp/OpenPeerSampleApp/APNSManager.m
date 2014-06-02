@@ -67,6 +67,7 @@
 @property (nonatomic, strong) NSMutableDictionary* dictionaryOfSentFiles;
 - (id) initSingleton;
 
+- (void) pushDataOld:(NSDictionary*) dataToPush sendingRich:(BOOL) sendingRich;
 - (void) pushData:(NSDictionary*) dataToPush sendingRich:(BOOL) sendingRich;
 - (BOOL) canSendPushNotificationForPeerURI:(NSString*) peerURI;
 - (NSArray*) getDeviceTokensForContact:(HOPContact*) contact;
@@ -143,7 +144,7 @@
     [[UAPush shared] resetBadge];
 }
 
-- (void) pushData:(NSDictionary*) dataToPush sendingRich:(BOOL) sendingRich
+- (void) pushDataOld:(NSDictionary*) dataToPush sendingRich:(BOOL) sendingRich
 {
     if ([self.apiPushURL length] > 0)
     {
@@ -163,28 +164,22 @@
             self.pushesToSend++;
         }
     }
+    else
+    {
+        OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Push URL is invalid.");
+    }
 }
 
-- (void) pushData2:(NSString*) filePath sendingRich:(BOOL) sendingRich
+- (void) pushData:(NSString*) filePath sendingRich:(BOOL) sendingRich
 {
     if ([filePath length] > 0)
     {
-    //    NSString* sessionIdentifier = [NSString stringWithFormat:@"com.hookflash.backgroundSession.%@",@""];
-    //    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration backgroundSessionConfiguration:sessionIdentifier];
-    ////NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-    //    
-    //    self.urlSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:[NSOperationQueue mainQueue]];
-        
         NSMutableURLRequest * request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:self.apiPushURL]];
         [request setHTTPMethod:@"POST"];
         [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
         if (sendingRich)
             [request setValue:@"application/vnd.urbanairship+json; version=3;" forHTTPHeaderField:@"Accept"];
         
-    //    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    //    NSString *documentsDirectory = [paths objectAtIndex:0];
-    //    NSString *filePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, @"myData.json"];
-    //    
         NSURL *fileURL = [NSURL fileURLWithPath:filePath];
         if (fileURL)
         {
@@ -381,7 +376,11 @@
             }
             
             if ([dataToPush count] > 0)
-                [self pushData2:filePath sendingRich:YES];
+                [self pushData:dataToPush sendingRich:YES];
+            else
+            {
+                OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Dictionary with push data is not valid. Push notification is not sent.");
+            }
         }
         [self.apnsHisotry setObject:[NSDate date] forKey:[message.contact getPeerURI]];
     }

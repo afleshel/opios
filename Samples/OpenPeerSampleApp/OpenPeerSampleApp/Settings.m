@@ -678,7 +678,8 @@
                     toAppend = str;
                 }
                 
-                ret = [ret stringByAppendingString:toAppend];
+                if ([toAppend length] > 0)
+                    ret = [ret stringByAppendingString:toAppend];
             }
             
             if ([ret length] > 0)
