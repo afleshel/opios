@@ -61,7 +61,7 @@ void OpenPeerIdentityDelegate::onIdentityStateChanged(IIdentityPtr identity,Iden
     //HOPIdentity* hopIdentity = this->getHOPIdentity(identity);
     HOPIdentity* hopIdentity = this->getHOPIdentity(identity, state != HOPIdentityStateShutdown);
     
-    [identityDelegate identity:hopIdentity stateChanged:(HOPIdentityStates) state];
+    [identityDelegate identity:hopIdentity stateChanged:(HOPIdentityState) state];
 }
 
 void OpenPeerIdentityDelegate::onIdentityPendingMessageForInnerBrowserWindowFrame(IIdentityPtr identity)

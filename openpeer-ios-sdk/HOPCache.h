@@ -33,39 +33,51 @@
 #import <Foundation/Foundation.h>
 #import "HOPProtocols.h"
 
+/**
+ *  Singleton class for work with cache.
+ */
 @interface HOPCache : NSObject
 
 /**
- Returns singleton object of this class.
+ *  Returns singleton object of HOPCache class.
  */
 + (HOPCache*) sharedCache;
+
+/**
+ *  This init method is not available, because HOPCache is a singleton class.
+ *
+ */
 - (id) init __attribute__((unavailable("HOPCache is singleton class.")));
 
-- (void) setup;
 /**
- Set cache delegate implemented in client app
- @param cacheDelegate id<HOPCacheDelegate> cache delegate
+ *  Set default cache delegate. In this case there is no need to implement delegate in application
+ */
+- (void) setup;
+
+/**
+ Set cache delegate implemented in client application.
+ @param cacheDelegate Delegate object that implements the HOPCacheDelegate protocol
  */
 - (void) setDelegate:(id<HOPCacheDelegate>) cacheDelegate;
 
 /**
- Fetches data for specified path
- @param cookieNamePath NSString path
- @return NSString fetched data
+ Returns cookie for the path.
+ @param cookieNamePath Cookie path
+ @return A string that represents a cookie.
  */
 - (NSString*) fetchForCookieNamePath:(NSString*) cookieNamePath;
 
 /**
- Stored data to cache for specified path
- @param stringToStore NSString data to store
- @param expireDate NSDate data expire date
- @param cookieNamePath NSString path
+ Stores cookie to cache for specified path.
+ @param stringToStore Cookie value
+ @param expireDate Expiry date
+ @param cookieNamePath Cookie path
  */
 - (void) store:(NSString*) stringToStore expireDate:(NSDate*) expireDate cookieNamePath:(NSString*) cookieNamePath;
 
 /**
- Removes data from cache for specified path
- @param cookieNamePath NSString path
+ Removes cookies from the cache for specified path
+ @param cookieNamePath Cookie path
  */
 - (void) removeCookieWithNamePath:(NSString*) cookieNamePath;
 

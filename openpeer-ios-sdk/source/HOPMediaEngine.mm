@@ -43,13 +43,13 @@ using namespace openpeer::core;
 @end
 @implementation HOPMediaEngine
 
-+ (NSString*) cameraTypeToString: (HOPMediaEngineCameraTypes) type
++ (NSString*) cameraTypeToString: (HOPMediaEngineCameraType) type
 {
   return [NSString stringWithUTF8String: IMediaEngine::toString((IMediaEngine::CameraTypes) type)];
 }
 
 
-+ (NSString*) audioRouteToString: (HOPMediaEngineOutputAudioRoutes) route
++ (NSString*) audioRouteToString: (HOPMediaEngineOutputAudioRoute) route
 {
   return [NSString stringWithUTF8String: IMediaEngine::toString((IMediaEngine::OutputAudioRoutes) route)];
 }
@@ -84,7 +84,7 @@ using namespace openpeer::core;
         [NSException raise:NSInvalidArgumentException format:@"Invalid Media engine pointer!"];
     }
 }
-- (void) setDefaultVideoOrientation: (HOPMediaEngineVideoOrientations) orientation
+- (void) setDefaultVideoOrientation: (HOPMediaEngineVideoOrientation) orientation
 {
     if(mediaEnginePtr)
     {
@@ -95,13 +95,13 @@ using namespace openpeer::core;
         [NSException raise:NSInvalidArgumentException format:@"Invalid Media engine pointer!"];
     }
 }
-- (HOPMediaEngineVideoOrientations) getDefaultVideoOrientation
+- (HOPMediaEngineVideoOrientation) getDefaultVideoOrientation
 {
-    HOPMediaEngineVideoOrientations ret = HOPMediaEngineVideoOrientationLandscapeLeft;
+    HOPMediaEngineVideoOrientation ret = HOPMediaEngineVideoOrientationLandscapeLeft;
     
     if(mediaEnginePtr)
     {
-        ret = (HOPMediaEngineVideoOrientations)mediaEnginePtr->getDefaultVideoOrientation();
+        ret = (HOPMediaEngineVideoOrientation)mediaEnginePtr->getDefaultVideoOrientation();
     }
     else
     {
@@ -109,7 +109,7 @@ using namespace openpeer::core;
     }
     return ret;
 }
-- (void) setRecordVideoOrientation: (HOPMediaEngineVideoOrientations) orientation
+- (void) setRecordVideoOrientation: (HOPMediaEngineVideoOrientation) orientation
 {
     if(mediaEnginePtr)
     {
@@ -120,13 +120,13 @@ using namespace openpeer::core;
         [NSException raise:NSInvalidArgumentException format:@"Invalid Media engine pointer!"];
     }
 }
-- (HOPMediaEngineVideoOrientations) getRecordVideoOrientation
+- (HOPMediaEngineVideoOrientation) getRecordVideoOrientation
 {
-    HOPMediaEngineVideoOrientations ret = HOPMediaEngineVideoOrientationLandscapeLeft;
+    HOPMediaEngineVideoOrientation ret = HOPMediaEngineVideoOrientationLandscapeLeft;
     
     if(mediaEnginePtr)
     {
-        ret = (HOPMediaEngineVideoOrientations)mediaEnginePtr->getRecordVideoOrientation();
+        ret = (HOPMediaEngineVideoOrientation)mediaEnginePtr->getRecordVideoOrientation();
     }
     else
     {
@@ -279,13 +279,13 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (HOPMediaEngineOutputAudioRoutes) getOutputAudioRoute
+- (HOPMediaEngineOutputAudioRoute) getOutputAudioRoute
 {
-    HOPMediaEngineOutputAudioRoutes ret = HOPMediaEngineOutputAudioRouteHeadphone;
+    HOPMediaEngineOutputAudioRoute ret = HOPMediaEngineOutputAudioRouteHeadphone;
     
     if(mediaEnginePtr)
     {
-        ret = (HOPMediaEngineOutputAudioRoutes) mediaEnginePtr->getOutputAudioRoute();
+        ret = (HOPMediaEngineOutputAudioRoute) mediaEnginePtr->getOutputAudioRoute();
     }
     else
     {
@@ -294,13 +294,13 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (HOPMediaEngineCameraTypes) getCameraType
+- (HOPMediaEngineCameraType) getCameraType
 {
-    HOPMediaEngineCameraTypes ret = HOPMediaEngineCameraTypeNone;
+    HOPMediaEngineCameraType ret = HOPMediaEngineCameraTypeNone;
     
     if(mediaEnginePtr)
     {
-        ret = (HOPMediaEngineCameraTypes) mediaEnginePtr->getCameraType();
+        ret = (HOPMediaEngineCameraType) mediaEnginePtr->getCameraType();
     }
     else
     {
@@ -309,7 +309,7 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (void) setCameraType: (HOPMediaEngineCameraTypes) type
+- (void) setCameraType: (HOPMediaEngineCameraType) type
 {
     if(mediaEnginePtr)
     {

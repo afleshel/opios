@@ -37,7 +37,6 @@
 @class HOPCall;
 @class HOPConversationThread;
 @class HOPContact;
-@class HOPProvisioningAccount;
 @class HOPIdentity;
 @class HOPIdentityLookup;
 @class HOPBackgroundingNotifier;

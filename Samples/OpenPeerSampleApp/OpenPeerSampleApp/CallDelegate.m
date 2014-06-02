@@ -45,7 +45,7 @@
 #import <OpenpeerSDK/HOPMediaEngine.h>
 @implementation CallDelegate
 
-- (void) onCallStateChanged:(HOPCall*) call callState:(HOPCallStates) callState
+- (void) onCallStateChanged:(HOPCall*) call callState:(HOPCallState) callState
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Call state: %@", [Utility getCallStateAsString:[call getState]]);
     [[SessionManager sharedSessionManager] setLatestValidConversationThread:[call getConversationThread]];

@@ -207,10 +207,10 @@ using namespace openpeer::core;
     
     
     //Set cache path
-    NSString *cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+    self.cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
 
     
-    NSString *pathCache = [cachePath stringByAppendingPathComponent:[NSString stringWithFormat:@"/%@",cacheDatabaseName]];
+    NSString *pathCache = [self.cachePath stringByAppendingPathComponent:[NSString stringWithFormat:@"/%@",cacheDatabaseName]];
     NSURL *storeCacheURL = [NSURL fileURLWithPath:pathCache];
 
     
@@ -507,12 +507,6 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (NSArray*) getAllIdentitiesInfoForHomeUserIdentityURI:(NSString*) identityURI
-{
-    NSArray* ret = [self getResultsForEntity:@"HOPAssociatedIdentity" withPredicateString:[NSString stringWithFormat:@"(homeUserProfile.identityURI MATCHES '%@')", identityURI] orderDescriptors:nil];
-    
-    return ret;
-}
 
 - (HOPAvatar*) getAvatarByURL:(NSString*) url
 {

@@ -39,7 +39,10 @@
 
 @property (nonatomic, strong) WebLoginViewController *preloadedWebLoginViewController;
 @property (nonatomic) BOOL isLogin;
+@property (nonatomic) BOOL isRelogin;
+@property (nonatomic) BOOL isLoggedin;
 @property (nonatomic) BOOL isAssociation;
+@property (nonatomic) BOOL isRecovering;
 
 + (id) sharedLoginManager;
 

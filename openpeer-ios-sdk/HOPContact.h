@@ -40,51 +40,51 @@
 - (id) init __attribute__((unavailable("Don't use init for HOPContact object creation. Use class method contactWithPeerFile.")));
 
 /**
- Contact initializer used when the contact's data (stableUniqueId and peerFile) are stored locally
- @param publicPeerFile NSString Public peer file of the contact that will be created (self or remote). This is passed if peer file is sored locally. Otherwise it is nil
- @returns Ponter to the created contact object
+ Contact initializer used when the contact's data (stableUniqueId and peerFile) are stored locally.
+ @param publicPeerFile Public peer file of the contact that will be created (self or remote). This is passed if peer file is sored locally. Otherwise it is nil
+ @return Ponter to the created HOPContact object
  */
 - (id) initWithPeerFile:(NSString*) publicPeerFile;
 
 /**
- Returns HOPContact object for logged in user
- @returns HOPContact object
+ Returns HOPContact object for logged in user.
+ @return HOPContact object
  */
 + (HOPContact*) getForSelf;
 
 /**
- Check if contact object is self contact
- @returns YES if contact is self, NO if contact is remote
+ Checks if HOPContact object is self contact.
+ @return YES if contact is self, NO if contact is remote
  */
 - (BOOL) isSelf;
 
 /**
- Retrieves peer URI from the contact object
- @returns NSString representation of peer URI
+ Returns peer URI from the HOPContact object.
+ @return A string representation of peer URI
  */
 - (NSString*) getPeerURI;
 
 /**
- Retrieves peer file public from the contact object
- @returns NSString peer file public
+ Returns peer file public from the contact object.
+ @return A string peer file public
  */
 - (NSString*) getPeerFilePublic;
 
 
 /**
- Retrieves account object of logged user
- @returns HOPAccount account object
+ Returns HOPAccount object of logged user.
+ @return Account object
  */
 - (HOPAccount*) getAssociatedAccount;
 
 /**
- Retrieves contact location id received from external method
- @returns HOPAccount account object
+ Gives a hint to core about contact location
+ @returns Contact location id.
  */
 - (void) hintAboutLocation:(NSString*) contactsLocationID;
 
 /**
- Destroy core object.
+ Destroys contact core object.
  */
 - (void) destroyCoreObject;
 @end

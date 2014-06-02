@@ -32,9 +32,9 @@
 #import "AppLog.h"
 
 BOOL isLoggerStarted;
-HOPLoggerLevels applicationLogerLevel;
+HOPLoggerLevel applicationLogerLevel;
 
-void AppLog(NSString* functionName, NSString* filePath, unsigned long lineNumber, HOPLoggerSeverities severity, HOPLoggerLevels level, NSString* format,...)
+void AppLog(NSString* functionName, NSString* filePath, unsigned long lineNumber, HOPLoggerSeverity severity, HOPLoggerLevel level, NSString* format,...)
 {
     va_list argumentList;
     va_start(argumentList, format);

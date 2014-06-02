@@ -80,6 +80,7 @@ extern NSString * const userAgentVariableVersionOS;
 extern NSString * const userAgentVariableDeviceModel;
 extern NSString * const userAgentVariableDeveloperID;
 
+extern NSString * const localNotificationKey;
 
 #ifdef APNS_ENABLED
 extern NSString* const settingsKeyUrbanAirShipMasterAppSecretDev;

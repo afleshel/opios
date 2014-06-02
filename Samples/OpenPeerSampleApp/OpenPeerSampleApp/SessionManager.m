@@ -53,6 +53,8 @@
 #import <OpenpeerSDK/HOPHomeUser+External.h>
 #import <OpenpeerSDK/HOPRolodexContact+External.h>
 
+#import "UIDevice+Networking.h"
+
 @interface SessionManager()
 
 @property (nonatomic, assign) Session* sessionWithActiveCall;
@@ -109,6 +111,12 @@
     
     if (!ret)
     {
+        if (![UIDevice isNetworkReachable])
+        {
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Network Error" message:[NSString stringWithFormat:@"Unable to make a session because of network issue. Please, check your internet connection."] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [alert show];
+            return ret;
+        }
         //NSString* profileBundle = [[ContactsManager sharedContactsManager] createProfileBundleForCommunicationWithContact:contact];
         //NSArray* identityContacts = [[ContactsManager sharedContactsManager]  getIdentityContactsForHomeUser];
         //Create a conversation thread
@@ -119,39 +127,45 @@
         //HOPConversationThread* conversationThread = [HOPConversationThread conversationThreadWithProfileBundle:profileBundle];
         HOPConversationThread* conversationThread = [HOPConversationThread conversationThreadWithIdentities:[[HOPAccount sharedAccount] getAssociatedIdentities]];
         
-        //Create a session with new conversation thread
-        ret = [[Session alloc] initWithContact:contact conversationThread:conversationThread];
-        
-        //Add list of all participants. Currently only one participant is added
-        if (ret)
+        if (conversationThread)
         {
-            NSArray* participants = [NSArray arrayWithObject:[contact getCoreContact]];
-            [conversationThread addContacts:participants];
-#ifdef APNS_ENABLED
-            for (HOPContact* coreContact in participants)
+            //Create a session with new conversation thread
+            ret = [[Session alloc] initWithContact:contact conversationThread:conversationThread];
+            
+            //Add list of all participants. Currently only one participant is added
+            if (ret)
             {
-                NSArray* apnsData = [[HOPModelManager sharedModelManager]getAPNSDataForPeerURI:[coreContact getPeerURI]];
-                if ([apnsData count] == 0)
+                NSArray* participants = [NSArray arrayWithObject:[contact getCoreContact]];
+                [conversationThread addContacts:participants];
+    #ifdef APNS_ENABLED
+                for (HOPContact* coreContact in participants)
                 {
-                    if ([[[OpenPeer sharedOpenPeer]deviceToken] length] > 0)
+                    NSArray* apnsData = [[HOPModelManager sharedModelManager]getAPNSDataForPeerURI:[coreContact getPeerURI]];
+                    if ([apnsData count] == 0)
                     {
-                        HOPMessage* apnsMessage = [[MessageManager sharedMessageManager] createSystemMessageWithType:SystemMessage_APNS_Request andText:[[OpenPeer sharedOpenPeer]deviceToken] andRecipient:contact];
-                        [conversationThread sendMessage:apnsMessage];
+                        if ([[[OpenPeer sharedOpenPeer]deviceToken] length] > 0)
+                        {
+                            HOPMessage* apnsMessage = [[MessageManager sharedMessageManager] createSystemMessageWithType:SystemMessage_APNS_Request andText:[[OpenPeer sharedOpenPeer]deviceToken] andRecipient:contact];
+                            [conversationThread sendMessage:apnsMessage];
+                        }
                     }
                 }
+    #endif
+                OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Creating session record from conversation thread id: %@", [conversationThread getThreadId]);
+                [[HOPModelManager sharedModelManager] addSession:[conversationThread getThreadId] type:nil date:nil name:nil participants:[NSArray arrayWithObject:contact]];
             }
-#endif
-            OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Creating session record from conversation thread id: %@", [conversationThread getThreadId]);
-            [[HOPModelManager sharedModelManager] addSession:[conversationThread getThreadId] type:nil date:nil name:nil participants:[NSArray arrayWithObject:contact]];
-        }
+            
+            if (ret)
+            {
+                //Store session object in dictionary
+                [self.sessionsDictionary setObject:ret forKey:[conversationThread getThreadId]];
+            }
         
-        if (ret)
+        }
+        else
         {
-            //Store session object in dictionary
-            [self.sessionsDictionary setObject:ret forKey:[conversationThread getThreadId]];
+            OPLog(HOPLoggerSeverityError, HOPLoggerLevelTrace, @"Conversation thread is not created");
         }
-        
-        
     }
     
     return ret;
@@ -339,22 +353,30 @@
  */
 - (void) makeCallForSession:(Session*) inSession includeVideo:(BOOL) includeVideo isRedial:(BOOL) isRedial
 {
-    if (!inSession.currentCall)
+    if ([UIDevice isNetworkReachable])
     {
-        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Making a call for the session <%p>", inSession);
-        
-        [[MessageManager sharedMessageManager]sendSystemMessageToCheckAvailability:inSession];
-        //Currently we are not supporting group conferences, so only one participant is possible
-        HOPContact* contact = [[[inSession participantsArray] objectAtIndex:0] getCoreContact];
-        
-        //Place a audio or video call for chosen contact
-        inSession.isRedial = isRedial;
-        inSession.currentCall = [HOPCall placeCall:inSession.conversationThread toContact:contact includeAudio:YES includeVideo:includeVideo];
-        [self setActiveCallSession:inSession callActive:YES];
+        if (!inSession.currentCall)
+        {
+            OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Making a call for the session <%p>", inSession);
+            
+            [[MessageManager sharedMessageManager]sendSystemMessageToCheckAvailability:inSession];
+            //Currently we are not supporting group conferences, so only one participant is possible
+            HOPContact* contact = [[[inSession participantsArray] objectAtIndex:0] getCoreContact];
+            
+            //Place a audio or video call for chosen contact
+            inSession.isRedial = isRedial;
+            inSession.currentCall = [HOPCall placeCall:inSession.conversationThread includeAudio:YES includeVideo:includeVideo];
+            [self setActiveCallSession:inSession callActive:YES];
+        }
+        else
+        {
+            OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Call is already in a progress");
+        }
     }
     else
     {
-        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Call is already in a progress");
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Network Error" message:[NSString stringWithFormat:@"Unable to establich call because of network issue. Please, check your internet connection."] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
     }
 }
 
@@ -664,6 +686,7 @@
 
 - (void) recreateExistingSessions
 {
+    OPLog(HOPLoggerSeverityError, HOPLoggerLevelTrace, @"Recreate existing sessions");
     //for (Session* session in [self.sessionsDictionary allValues])
     for ( NSString* key in [self.sessionsDictionary allKeys])
     {

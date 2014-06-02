@@ -37,7 +37,7 @@ ZS_DECLARE_SUBSYSTEM(application)
 using namespace openpeer;
 using namespace openpeer::core;
 
-void HOPLog(HOPLoggerLevels logLevel, NSString* format,...)
+void HOPLog(HOPLoggerLevel logLevel, NSString* format,...)
 {
     va_list argumentList;
     va_start(argumentList, format);
@@ -75,7 +75,7 @@ void HOPLog(HOPLoggerLevels logLevel, NSString* format,...)
 @implementation HOPLogger
 
 
-+ (NSString*) stringForSeverity:(HOPLoggerSeverities) severity
++ (NSString*) stringForSeverity:(HOPLoggerSeverity) severity
 {
     NSString* ret = nil;
     switch (severity)
@@ -104,7 +104,7 @@ void HOPLog(HOPLoggerLevels logLevel, NSString* format,...)
     return ret;
 }
 
-+ (NSString*) stringForLevel:(HOPLoggerLevels) level
++ (NSString*) stringForLevel:(HOPLoggerLevel) level
 {
     NSString* ret = nil;
     switch (level)
@@ -141,9 +141,14 @@ void HOPLog(HOPLoggerLevels logLevel, NSString* format,...)
     return ret;
 }
 
-+ (void) installStdOutLogger: (BOOL) colorizeOutput
++ (void) installStdOutLoggerWithColorizedOutput: (BOOL) colorizeOutput
 {
     ILogger::installStdOutLogger(colorizeOutput);
+}
+
++ (void) installStdOutLogger
+{
+    ILogger::installStdOutLogger(NO);
 }
 
 + (void) installFileLogger: (NSString*) filename colorizeOutput: (BOOL) colorizeOutput
@@ -184,22 +189,22 @@ void HOPLog(HOPLoggerLevels logLevel, NSString* format,...)
     return ILogger::getApplicationSubsystemID();
 }
 
-+ (HOPLoggerLevels) getLogLevel: (unsigned int) subsystemUniqueID
++ (HOPLoggerLevel) getLogLevel: (unsigned int) subsystemUniqueID
 {
-    return (HOPLoggerLevels) ILogger::getLogLevel(subsystemUniqueID);
+    return (HOPLoggerLevel) ILogger::getLogLevel(subsystemUniqueID);
 }
 
-+ (void) setLogLevel: (HOPLoggerLevels) level
++ (void) setLogLevel: (HOPLoggerLevel) level
 {
     ILogger::setLogLevel((ILogger::Level) level);
 }
 
-+ (void) setLogLevelByID: (unsigned long) subsystemUniqueID level: (HOPLoggerLevels) level
++ (void) setLogLevelByID: (unsigned long) subsystemUniqueID level: (HOPLoggerLevel) level
 {
     ILogger::setLogLevel((zsLib::PTRNUMBER)subsystemUniqueID, (ILogger::Level) level);
 }
 
-+ (void) setLogLevelbyName: (NSString*) subsystemName level: (HOPLoggerLevels) level
++ (void) setLogLevelbyName: (NSString*) subsystemName level: (HOPLoggerLevel) level
 {
     if ([subsystemName length] > 0)
         ILogger::setLogLevel([subsystemName UTF8String], (ILogger::Level) level);
@@ -207,7 +212,7 @@ void HOPLog(HOPLoggerLevels logLevel, NSString* format,...)
         [NSException raise:NSInvalidArgumentException format:@"Invalid subsystem name!"];
 }
 
-+ (void) log: (unsigned int) subsystemUniqueID severity: (HOPLoggerSeverities) severity level: (HOPLoggerLevels) level message: (NSString*) message function: (NSString*) function filePath: (NSString*) filePath lineNumber: (unsigned long) lineNumber
++ (void) log: (unsigned int) subsystemUniqueID severity: (HOPLoggerSeverity) severity level: (HOPLoggerLevel) level message: (NSString*) message function: (NSString*) function filePath: (NSString*) filePath lineNumber: (unsigned long) lineNumber
 {
     NSString* strMessage = message ? message : @"";
     NSString* strFunction = function ? function : @"";

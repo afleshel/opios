@@ -38,7 +38,7 @@
 #define SDK_EXTERN extern
 #endif
 
-SDK_EXTERN void HOPLog(HOPLoggerLevels logLevel, NSString* format,...);
+SDK_EXTERN void HOPLog(HOPLoggerLevel logLevel, NSString* format,...);
 
 /**
  Singleton class to represent the openpeer stack.
@@ -47,24 +47,24 @@ SDK_EXTERN void HOPLog(HOPLoggerLevels logLevel, NSString* format,...);
 
 /**
  Converts logger severity enum to string
- @param severity HOPLoggerSeverities Logger severity enum
+ @param severity HOPLoggerSeverity Logger severity enum
  @returns String representation of logger severitiy
  */
-+ (NSString*) stringForSeverity:(HOPLoggerSeverities) severity;
++ (NSString*) stringForSeverity:(HOPLoggerSeverity) severity;
 
 /**
  Converts logger level enum to string
- @param level HOPLoggerSeverities Logger level enum
+ @param level HOPLoggerSeverity Logger level enum
  @returns String representation of logger severitiy
  */
-+ (NSString*) stringForLevel:(HOPLoggerLevels) level;
++ (NSString*) stringForLevel:(HOPLoggerLevel) level;
 
 /**
  Install a logger to output to the standard out.
  @param colorizeOutput BOOL Flag to enable/disable output colorization
  */
-+ (void) installStdOutLogger: (BOOL) colorizeOutput;
-
++ (void) installStdOutLoggerWithColorizedOutput: (BOOL) colorizeOutput;
++ (void) installStdOutLogger;
 /**
  Install a logger to output to a file.
  @param filename NSString Name of the log file
@@ -109,40 +109,40 @@ SDK_EXTERN void HOPLog(HOPLoggerLevels logLevel, NSString* format,...);
  @param subsystemUniqueID unsigned int Unique ID of the log subsystem
  @returns Log level enum
  */
-+ (HOPLoggerLevels) getLogLevel: (unsigned int) subsystemUniqueID;
++ (HOPLoggerLevel) getLogLevel: (unsigned int) subsystemUniqueID;
 
 /**
  Sets all subsystems to a specific log level.
- @param level HOPLoggerLevels Level to set
+ @param level HOPLoggerLevel Level to set
  */
-+ (void) setLogLevel: (HOPLoggerLevels) level;
++ (void) setLogLevel: (HOPLoggerLevel) level;
 
 /**
  Sets a particular subsystem's log level by unique ID.
  @param subsystemUniqueID unsigned long Unique ID of the log subsystem
- @param level HOPLoggerLevels Level to set
+ @param level HOPLoggerLevel Level to set
  */
-+ (void) setLogLevelByID: (unsigned long) subsystemUniqueID level: (HOPLoggerLevels) level;
++ (void) setLogLevelByID: (unsigned long) subsystemUniqueID level: (HOPLoggerLevel) level;
 
 /**
  Sets a particular subsystem's log level by its subsystem name.
  @param subsystemName NSString Name of the log subsystem
- @param level HOPLoggerLevels Level to set
+ @param level HOPLoggerLevel Level to set
  */
-+ (void) setLogLevelbyName: (NSString*) subsystemName level: (HOPLoggerLevels) level;
++ (void) setLogLevelbyName: (NSString*) subsystemName level: (HOPLoggerLevel) level;
 
 /**
  Sends a message to the logger(s) for a particular subsystem.
  @param subsystemUniqueID unsigned long Unique ID of the log subsystem
- @param severity HOPLoggerSeverities Log severity
- @param level HOPLoggerLevels Log level
+ @param severity HOPLoggerSeverity Log severity
+ @param level HOPLoggerLevel Log level
  @param message NSString Message to log
  @param function NSString Log function
  @param filePath NSString Path to log file
  @param lineNumber unsigned long Number of the log line
  @returns String representation of call closed reason enum
  */
-+ (void) log: (unsigned int) subsystemUniqueID severity: (HOPLoggerSeverities) severity level: (HOPLoggerLevels) level message: (NSString*) message function: (NSString*) function filePath: (NSString*) filePath lineNumber: (unsigned long) lineNumber;
++ (void) log: (unsigned int) subsystemUniqueID severity: (HOPLoggerSeverity) severity level: (HOPLoggerLevel) level message: (NSString*) message function: (NSString*) function filePath: (NSString*) filePath lineNumber: (unsigned long) lineNumber;
 
 /**
  Uninstall various types of loggers.

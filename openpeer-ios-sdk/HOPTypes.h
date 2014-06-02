@@ -33,6 +33,9 @@
 #define openpeer_ios_sdk_OpenPeerTypes_h
 
 #pragma mark - HOPCall enums
+/**
+ *  Call states.
+ */
 typedef enum 
 {
     HOPCallStateNone,       // call has no state yet
@@ -48,8 +51,11 @@ typedef enum
     HOPCallStateHold,       // call is open but on hold
     HOPCallStateClosing,    // call is hanging up
     HOPCallStateClosed,     // call has ended
-} HOPCallStates;
+} HOPCallState;
 
+/**
+ *  Ending call reasons.
+ */
 typedef enum
 {
     HOPCallClosedReasonNone                     = 0,
@@ -65,27 +71,34 @@ typedef enum
     CallClosedReasonServerInternalError      = 500,
     
     CallClosedReasonDecline                  = 603,
-} HOPCallClosedReasons;
+} HOPCallClosingReason;
 
 #pragma mark - HOPConversationThread enums
+
+/**
+ *  Message delivery states.
+ */
 typedef enum 
 {
     HOPConversationThreadMessageDeliveryStateDiscovering      = 0,
     HOPConversationThreadMessageDeliveryStateUserNotAvailable = 1,
     HOPConversationThreadMessageDeliveryStateDelivered        = 2,
-} HOPConversationThreadMessageDeliveryStates;
+} HOPConversationThreadMessageDeliveryState;
 
+/**
+ *  Thread's contact states.
+ */
 typedef enum 
 {
     HOPConversationThreadContactStateNotApplicable,
     HOPConversationThreadContactStateFinding,
     HOPConversationThreadContactStateConnected,
     HOPConversationThreadContactStateDisconnected
-} HOPConversationThreadContactStates;
+} HOPConversationThreadContactState;
 
 #pragma mark - Provisioning account for future use enum
 /**
- Enumerator to represent the openpeer account states.
+ Account states.
  */
 typedef enum 
 {
@@ -98,9 +111,12 @@ typedef enum
     HOPAccountStateReady,
     HOPAccountStateShuttingDown,
     HOPAccountStateShutdown,
-} HOPAccountStates;
+} HOPAccountState;
 
 #pragma mark - HOPIdentity enums
+/**
+ *  Identity state.
+ */
 typedef enum
 {
     HOPIdentityStatePending,
@@ -111,17 +127,20 @@ typedef enum
     HOPIdentityStateWaitingForBrowserWindowToClose,
     HOPIdentityStateReady,
     HOPIdentityStateShutdown
-} HOPIdentityStates;
+} HOPIdentityState;
 
 
 #pragma mark - HOPClientLog enums
+/**
+ *  Log severities.
+ */
 typedef enum
 {
     HOPLoggerSeverityInformational,
     HOPLoggerSeverityWarning,
     HOPLoggerSeverityError,
     HOPLoggerSeverityFatal
-} HOPLoggerSeverities; //Replacing HOPClientLogSeverities
+} HOPLoggerSeverity;
 
 typedef enum
 {
@@ -133,14 +152,14 @@ typedef enum
     HOPLoggerLevelInsane,
 
     HOPLoggerTotalNumberOfLevels
-} HOPLoggerLevels; //Replacing HOPClientLogSeverities
+} HOPLoggerLevel; //Replacing HOPClientLogSeverities
 
 #pragma mark - Client enums
 typedef enum 
 {
     HOPContactTypeOpenPeer,
     HOPContactTypeExternal
-} HOPContactTypes;
+} HOPContactType;
 
 #pragma mark - HOPMediaEngine enums
 typedef enum 
@@ -148,7 +167,7 @@ typedef enum
     HOPMediaEngineCameraTypeNone,
     HOPMediaEngineCameraTypeFront,
     HOPMediaEngineCameraTypeBack
-} HOPMediaEngineCameraTypes;
+} HOPMediaEngineCameraType;
 
 typedef enum
 {
@@ -156,12 +175,12 @@ typedef enum
     HOPMediaEngineVideoOrientationPortraitUpsideDown,
     HOPMediaEngineVideoOrientationLandscapeRight,
     HOPMediaEngineVideoOrientationPortrait
-} HOPMediaEngineVideoOrientations;
+} HOPMediaEngineVideoOrientation;
 
 typedef enum
 {
     HOPMediaEngineOutputAudioRouteHeadphone,
     HOPMediaEngineOutputAudioRouteBuiltInReceiver,
     HOPMediaEngineOutputAudioRouteBuiltInSpeaker
-} HOPMediaEngineOutputAudioRoutes;
+} HOPMediaEngineOutputAudioRoute;
 #endif

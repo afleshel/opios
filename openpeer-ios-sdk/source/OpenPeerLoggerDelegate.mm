@@ -58,5 +58,5 @@ void OpenPeerLoggerDelegate::onLog(
                                   zsLib::ULONG inLineNumber
                                   )
 {
-    [loggerDelegate onLog:subsystemID subsystemName:[NSString stringWithUTF8String:subsystemName] severity:(HOPLoggerSeverities) inSeverity level:(HOPLoggerLevels) inLevel message:[NSString stringWithUTF8String:inMessage] function:[NSString stringWithUTF8String:inFunction] filePath:[NSString stringWithUTF8String:inFilePath] lineNumber:inLineNumber];
+    [loggerDelegate onLog:subsystemID subsystemName:[NSString stringWithUTF8String:subsystemName] severity:(HOPLoggerSeverity) inSeverity level:(HOPLoggerLevel) inLevel message:[NSString stringWithUTF8String:inMessage] function:[NSString stringWithUTF8String:inFunction] filePath:[NSString stringWithUTF8String:inFilePath] lineNumber:inLineNumber];
 }

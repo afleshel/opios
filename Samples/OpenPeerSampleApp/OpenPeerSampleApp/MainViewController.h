@@ -91,6 +91,7 @@ typedef  enum
 - (void) removeSplashScreen;
 - (void) onLogout;
 - (void) onContactsLoadingStarted;
+- (void) onNetworkProblemResolved;
 
 - (void) showQRScanner;
 - (void) showSplashScreen;

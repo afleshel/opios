@@ -327,7 +327,7 @@
 		872C728618C5E94F007846AB /* KeyMappings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = KeyMappings.plist; sourceTree = "<group>"; };
 		872DA9E5175CEC9C000CCA76 /* HOPCache.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HOPCache.mm; sourceTree = "<group>"; };
 		872DA9E7175CECB1000CCA76 /* HOPCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HOPCache.h; sourceTree = "<group>"; };
-		872E40771653CFE2006ECA60 /* HOPTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HOPTypes.h; sourceTree = "<group>"; };
+		872E40771653CFE2006ECA60 /* HOPTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = HOPTypes.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		87320E6118A0F13C007F16B1 /* HOPSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HOPSettings.h; sourceTree = "<group>"; };
 		87320E6218A0F15D007F16B1 /* HOPSettings.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HOPSettings.mm; sourceTree = "<group>"; };
 		87320E6618A0F628007F16B1 /* HOPSettings_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HOPSettings_Internal.h; sourceTree = "<group>"; };
@@ -344,10 +344,10 @@
 		874ADC38166DF0F30095FE33 /* libresolv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libresolv.dylib; path = usr/lib/libresolv.dylib; sourceTree = SDKROOT; };
 		874BB09E1924DE8C002472D1 /* OpenPeerUUIDManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenPeerUUIDManager.h; sourceTree = "<group>"; };
 		874BB0A01924DE99002472D1 /* OpenPeerUUIDManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenPeerUUIDManager.m; sourceTree = "<group>"; };
-		874F65731652628500E580F0 /* HOPCall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HOPCall.h; sourceTree = "<group>"; };
+		874F65731652628500E580F0 /* HOPCall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = HOPCall.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		874F6579165264BF00E580F0 /* HOPConversationThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HOPConversationThread.h; sourceTree = "<group>"; };
 		874F657C1652652A00E580F0 /* HOPMediaEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HOPMediaEngine.h; sourceTree = "<group>"; };
-		874F65A716528FCF00E580F0 /* HOPProtocols.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HOPProtocols.h; sourceTree = "<group>"; };
+		874F65A716528FCF00E580F0 /* HOPProtocols.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = HOPProtocols.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		8758405917B17CB0006B9A21 /* HOPModelManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HOPModelManager.h; sourceTree = "<group>"; };
 		8758405B17B17CD0006B9A21 /* HOPModelManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = HOPModelManager.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		875FD1341806AF74001A5BEA /* HOPHomeUser+External.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HOPHomeUser+External.h"; sourceTree = "<group>"; };
@@ -373,7 +373,7 @@
 		8798231A186B181A0089D34C /* HOPPublicPeerFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HOPPublicPeerFile.h; sourceTree = "<group>"; };
 		8798231B186B181A0089D34C /* HOPPublicPeerFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HOPPublicPeerFile.m; sourceTree = "<group>"; };
 		87A5B18C16EDE5EB007E825A /* HOPAccount.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HOPAccount.mm; sourceTree = "<group>"; };
-		87A5B18E16EDE5EB007E825A /* HOPCall.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HOPCall.mm; sourceTree = "<group>"; };
+		87A5B18E16EDE5EB007E825A /* HOPCall.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = HOPCall.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		87A5B18F16EDE5EB007E825A /* HOPContact.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HOPContact.mm; sourceTree = "<group>"; };
 		87A5B19016EDE5EB007E825A /* HOPConversationThread.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HOPConversationThread.mm; sourceTree = "<group>"; };
 		87A5B19116EDE5EB007E825A /* HOPIdentity.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HOPIdentity.mm; sourceTree = "<group>"; };
@@ -402,7 +402,7 @@
 		87A5B1CF16EDE5F9007E825A /* OpenPeerUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenPeerUtility.h; sourceTree = "<group>"; };
 		87A5B1D116EDE5F9007E825A /* OpenPeerAccountDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenPeerAccountDelegate.mm; sourceTree = "<group>"; };
 		87A5B1D216EDE5F9007E825A /* OpenPeerIdentityLookupDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenPeerIdentityLookupDelegate.mm; sourceTree = "<group>"; };
-		87A5B1D516EDE5F9007E825A /* OpenPeerCallDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenPeerCallDelegate.mm; sourceTree = "<group>"; };
+		87A5B1D516EDE5F9007E825A /* OpenPeerCallDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = OpenPeerCallDelegate.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		87A5B1D616EDE5F9007E825A /* OpenPeerConversationThreadDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenPeerConversationThreadDelegate.mm; sourceTree = "<group>"; };
 		87A5B1D716EDE5F9007E825A /* OpenPeerIdentityDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenPeerIdentityDelegate.mm; sourceTree = "<group>"; };
 		87A5B1D816EDE5F9007E825A /* OpenPeerMediaEngineDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenPeerMediaEngineDelegate.mm; sourceTree = "<group>"; };

@@ -234,7 +234,8 @@ static const short _base64DecodingTable[256] = {
 
 + (NSString*) getUserAgentName
 {
-    NSString* developerId = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"Hookflash Developer ID"];
+    NSString* developerId = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"Hookflash Developer ID"] == nil ? @"" : [[[NSBundle mainBundle] infoDictionary] objectForKey:@"Hookflash Developer ID"];
+    
     
     NSString* appName = [[[NSBundle mainBundle] infoDictionary]   objectForKey:@"CFBundleName"];
     NSString* appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
@@ -272,7 +273,7 @@ static const short _base64DecodingTable[256] = {
 //    return strGuid;
 //}
 
-+ (NSString*) getCallStateAsString:(HOPCallStates) callState
++ (NSString*) getCallStateAsString:(HOPCallState) callState
 {
     NSString *res = nil;
     
@@ -323,7 +324,7 @@ static const short _base64DecodingTable[256] = {
     return res;
 }
 
-+ (NSString*) getMessageDeliveryStateAsString:(HOPConversationThreadMessageDeliveryStates) messageState
++ (NSString*) getMessageDeliveryStateAsString:(HOPConversationThreadMessageDeliveryState) messageState
 {
     NSString *res = nil;
     
@@ -492,5 +493,18 @@ static const short _base64DecodingTable[256] = {
         [[NSUserDefaults standardUserDefaults] setObject:lastModificationDate forKey:@"appUpdateDate"];
         
     return ret;
+}
+
++ (void) showLocalNotification:(NSString*) messageText additionalData:(NSDictionary*) additionalData
+{
+    UILocalNotification *notification = [[UILocalNotification alloc] init];
+    notification.fireDate = [NSDate dateWithTimeIntervalSinceNow:1];
+    notification.alertBody = messageText;
+    notification.timeZone = [NSTimeZone defaultTimeZone];
+    notification.soundName = @"message-received.wav";
+    notification.userInfo = additionalData;
+    //notification.applicationIconBadgeNumber = 10;
+    
+    [[UIApplication sharedApplication] scheduleLocalNotification:notification];
 }
 @end
