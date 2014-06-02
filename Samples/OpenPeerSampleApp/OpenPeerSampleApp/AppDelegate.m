@@ -76,6 +76,12 @@
     {
         [[APNSInboxManager sharedAPNSInboxManager] handleAPNS:apnsInfo];
     }
+    else
+    {
+        NSDictionary *localInfo = [launchOptions valueForKey:localNotificationKey];
+        if ([localInfo count] > 0)
+            [[APNSInboxManager sharedAPNSInboxManager] setLocalNotificationDictionary:localInfo];
+    }
 #endif
     return YES;
 }

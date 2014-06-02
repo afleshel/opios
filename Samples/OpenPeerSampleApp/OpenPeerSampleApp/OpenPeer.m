@@ -124,6 +124,7 @@
      
         //Set settigns delegate
         [[HOPSettings sharedSettings] setup];
+        [[HOPSettings sharedSettings] applyDefaults];
         
         //Cleare expired cookies and set delegate
         [[HOPCache sharedCache] removeExpiredCookies];
@@ -169,8 +170,10 @@
 - (void) setup
 {
     //If authorized application id is missing, generate it 
-    if ([[[HOPSettings sharedSettings] getAuthorizedApplicationId] length] == 0)
-        [[HOPSettings sharedSettings] storeAuthorizedApplicationId:[[OpenPeer sharedOpenPeer] authorizedApplicationId]];
+//    if ([[[HOPSettings sharedSettings] getAuthorizedApplicationId] length] == 0)
+//        [[HOPSettings sharedSettings] storeAuthorizedApplicationId:[[OpenPeer sharedOpenPeer] authorizedApplicationId]];
+    [self refreshAuthorizedApplicationId];
+    
     long secondsTillExpire = [HOPStack getExpiryForAuthorizedApplicationID:[[HOPSettings sharedSettings] getAuthorizedApplicationId]];
     [NSTimer scheduledTimerWithTimeInterval:secondsTillExpire target:self selector:@selector(refreshAuthorizedApplicationId) userInfo:nil repeats:NO];
 #ifdef DEBUG

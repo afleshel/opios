@@ -36,6 +36,7 @@
 
 @interface APNSInboxManager : NSObject<UAInboxPushHandlerDelegate,UAPushNotificationDelegate,HTTPDownloaderDelegate,UAInboxMessageListDelegate>
 
+@property (nonatomic, strong) NSDictionary* localNotificationDictionary;
 + (id) sharedAPNSInboxManager;
 
 - (void) setup;

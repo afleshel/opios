@@ -38,5 +38,5 @@
 + (BOOL) isBaseIdentityURI:(NSString*) identityURI;
 
 + (NSString*) hashString:(NSString*) stringToHash;
-
++ (NSString *) getGUIDstring;
 @end

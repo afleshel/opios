@@ -58,7 +58,11 @@ public:
     static boost::shared_ptr<OpenPeerCacheDelegate>  create(id<HOPCacheDelegate> inCacheDelegate);
     
     virtual String fetch(const char *cookieNamePath);
+    virtual SecureByteBlockPtr fetchBinary(const char *cookieNamePath);
+
     virtual void store(const char *cookieNamePath,Time expires,const char *str);
+    virtual void storeBinary(const char *cookieNamePath,Time expires,const SecureByteBlock &buffer);
+
     virtual void clear(const char *cookieNamePath);
     
 };

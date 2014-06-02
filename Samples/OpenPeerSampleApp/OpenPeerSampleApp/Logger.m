@@ -69,7 +69,7 @@
 {
     if (start)
     {
-        [HOPLogger installStdOutLogger:NO];
+        [HOPLogger installStdOutLogger];
     }
     else
         [HOPLogger uninstallStdOutLogger];

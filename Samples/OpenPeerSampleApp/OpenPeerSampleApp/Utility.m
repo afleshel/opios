@@ -262,17 +262,17 @@ static const short _base64DecodingTable[256] = {
         [cookieStorage deleteCookie:each];
     }
 }
+//
+//+ (NSString *)getGUIDstring
+//{
+//    // get new UUID(in windows world is guid)
+//    CFUUIDRef guid = CFUUIDCreate(nil);
+//    NSString *strGuid = (NSString *)CFBridgingRelease(CFUUIDCreateString(nil, guid));
+//    CFRelease(guid);
+//    return strGuid;
+//}
 
-+ (NSString *)getGUIDstring
-{
-    // get new UUID(in windows world is guid)
-    CFUUIDRef guid = CFUUIDCreate(nil);
-    NSString *strGuid = (NSString *)CFBridgingRelease(CFUUIDCreateString(nil, guid));
-    CFRelease(guid);
-    return strGuid;
-}
-
-+ (NSString*) getCallStateAsString:(HOPCallStates) callState
++ (NSString*) getCallStateAsString:(HOPCallState) callState
 {
     NSString *res = nil;
     
@@ -323,7 +323,7 @@ static const short _base64DecodingTable[256] = {
     return res;
 }
 
-+ (NSString*) getMessageDeliveryStateAsString:(HOPConversationThreadMessageDeliveryStates) messageState
++ (NSString*) getMessageDeliveryStateAsString:(HOPConversationThreadMessageDeliveryState) messageState
 {
     NSString *res = nil;
     
@@ -492,5 +492,18 @@ static const short _base64DecodingTable[256] = {
         [[NSUserDefaults standardUserDefaults] setObject:lastModificationDate forKey:@"appUpdateDate"];
         
     return ret;
+}
+
++ (void) showLocalNotification:(NSString*) messageText additionalData:(NSDictionary*) additionalData
+{
+    UILocalNotification *notification = [[UILocalNotification alloc] init];
+    notification.fireDate = [NSDate dateWithTimeIntervalSinceNow:1];
+    notification.alertBody = messageText;
+    notification.timeZone = [NSTimeZone defaultTimeZone];
+    notification.soundName = @"message-received.wav";
+    notification.userInfo = additionalData;
+    //notification.applicationIconBadgeNumber = 10;
+    
+    [[UIApplication sharedApplication] scheduleLocalNotification:notification];
 }
 @end

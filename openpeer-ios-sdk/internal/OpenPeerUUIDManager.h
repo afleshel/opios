@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2012, SMB Phone Inc.
+ Copyright (c) 2014, SMB Phone Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,39 +29,20 @@
  
  */
 
-
 #import <Foundation/Foundation.h>
 
-@interface HOPProvisioningAccountPeerFileLookupQuery : NSObject
+@interface OpenPeerUUIDManager : NSObject
+{
+    NSMutableDictionary        *keychainData;
+    NSMutableDictionary        *genericPasswordQuery;
+}
 
-/**
- Check if peer file lookup query is completed.
- @return YES if completed, NO if not
- */
-- (BOOL) isComplete;
+@property (nonatomic, strong) NSMutableDictionary *keychainData;
+@property (nonatomic, strong) NSMutableDictionary *genericPasswordQuery;
 
-/**
- Check if peer file lookup query was successful.
- @return YES if succeeded, NO if not
- */
-- (BOOL) didSucceed;
++ (id) sharedUUIDManager;
 
-/**
- Cancel the peer file lookup query.
- */
-- (void) cancel;
-
-/**
- Retrieve user IDs from peer file.
- @return outUserIDs NSArray List of retrieved user IDs
- */
-- (NSArray*) getUserIDs;
-
-/**
- Retrieves public peer file.
- @param userID NSString User ID of the profile to retrieve
- @return Public peer file string
- */
-- (NSString*) getPublicPeerFileString: (NSString*) userID;
-
+- (NSString*) getUUID;
+- (void) saveUUID:(NSString*) uuid;
+- (NSString *)generateUUID;
 @end

@@ -34,7 +34,8 @@
 #import "HOPIdentity_Internal.h"
 #import "OpenPeerStorageManager.h"
 #import "HOPUtility.h"
-
+#import "HOPRolodexContact_Internal.h"
+#import "HOPModelManager.h"
 #import <openpeer/core/ILogger.h>
 
 ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
@@ -60,7 +61,7 @@ void OpenPeerIdentityDelegate::onIdentityStateChanged(IIdentityPtr identity,Iden
     //HOPIdentity* hopIdentity = this->getHOPIdentity(identity);
     HOPIdentity* hopIdentity = this->getHOPIdentity(identity, state != HOPIdentityStateShutdown);
     
-    [identityDelegate identity:hopIdentity stateChanged:(HOPIdentityStates) state];
+    [identityDelegate identity:hopIdentity stateChanged:(HOPIdentityState) state];
 }
 
 void OpenPeerIdentityDelegate::onIdentityPendingMessageForInnerBrowserWindowFrame(IIdentityPtr identity)
@@ -72,6 +73,8 @@ void OpenPeerIdentityDelegate::onIdentityPendingMessageForInnerBrowserWindowFram
 
 void OpenPeerIdentityDelegate::onIdentityRolodexContactsDownloaded(IIdentityPtr identity)
 {
+    this->storeDownloadedContactsForIdentity(identity);
+    
     HOPIdentity* hopIdentity = this->getHOPIdentity(identity);
     
     [identityDelegate onIdentityRolodexContactsDownloaded:hopIdentity];
@@ -104,4 +107,85 @@ HOPIdentity* OpenPeerIdentityDelegate::getHOPIdentity(IIdentityPtr identity, BOO
             [[OpenPeerStorageManager sharedStorageManager] setIdentity:hopIdentity forPUID:identity->getID()];
     }
     return hopIdentity;
+}
+
+void OpenPeerIdentityDelegate::storeDownloadedContactsForIdentity(IIdentityPtr identityPtr)
+{
+    if(identityPtr)
+    {
+        HOPIdentity* hopIdentity = this->getHOPIdentity(identityPtr);
+        
+        bool flushAllRolodexContacts;
+        String versionDownloadedStr;
+        RolodexContactListPtr rolodexContacts;
+        hopIdentity.rolodexContactsObtained = identityPtr->getDownloadedRolodexContacts(flushAllRolodexContacts,versionDownloadedStr, rolodexContacts);
+        
+        hopIdentity.flushAllRolodexContacts = flushAllRolodexContacts;
+        if (versionDownloadedStr)
+            hopIdentity.versionDownloadedStr = [NSString stringWithCString:versionDownloadedStr encoding:NSUTF8StringEncoding];
+        
+        if (rolodexContacts && rolodexContacts->size() > 0)
+        {
+            NSMutableArray* tempArray = [[NSMutableArray alloc] init];
+            
+            for (RolodexContactList::iterator contact = rolodexContacts->begin(); contact != rolodexContacts->end(); ++contact)
+            {
+                HOPRolodexContact* hopRolodexContact = nil;
+                RolodexContact rolodexContact = *contact;
+                NSString* contactIdentityURI = [NSString stringWithCString:rolodexContact.mIdentityURI encoding:NSUTF8StringEncoding];
+                
+                if ([contactIdentityURI length] > 0)
+                {
+                    if (rolodexContact.mDisposition == RolodexContact::Disposition_Update)
+                    {
+                        hopRolodexContact = [[HOPModelManager sharedModelManager] getRolodexContactByIdentityURI:contactIdentityURI];
+                        if (hopRolodexContact)
+                        {
+                            //Update existing rolodex contact
+                            [hopRolodexContact updateWithCoreRolodexContact:rolodexContact identityProviderDomain:[hopIdentity getIdentityProviderDomain] homeUserIdentityURI:[hopIdentity getIdentityURI]];
+                            [[HOPModelManager sharedModelManager] saveContext];
+                        }
+                        else
+                        {
+                            //Create a new menaged object for new rolodex contact
+                            NSManagedObject* managedObject = [[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPRolodexContact"];
+                            if ([managedObject isKindOfClass:[HOPRolodexContact class]])
+                            {
+                                hopRolodexContact = (HOPRolodexContact*)managedObject;
+                                [hopRolodexContact updateWithCoreRolodexContact:rolodexContact identityProviderDomain:[hopIdentity getIdentityProviderDomain] homeUserIdentityURI:[hopIdentity getIdentityURI]];
+                                [[HOPModelManager sharedModelManager] saveContext];
+                            }
+                        }
+                    }
+                    else if (rolodexContact.mDisposition == RolodexContact::Disposition_Remove)
+                    {
+                        hopRolodexContact = [[HOPModelManager sharedModelManager] getRolodexContactByIdentityURI:contactIdentityURI];
+                        [[HOPModelManager sharedModelManager] deleteObject:hopRolodexContact];
+                    }
+                    else if (rolodexContact.mDisposition == RolodexContact::Disposition_NA)
+                    {
+                        
+                    }
+                    else
+                    {
+                        
+                    }
+                }
+                
+                if (hopRolodexContact)
+                    [tempArray addObject:hopRolodexContact];
+            }
+            
+            if ([tempArray count] > 0)
+            {
+                hopIdentity.arrayLastDownloadedRolodexContacts = nil;
+                hopIdentity.arrayLastDownloadedRolodexContacts = [NSArray arrayWithArray:tempArray];
+            }
+        }
+    }
+    else
+    {
+        ZS_LOG_ERROR(Debug, zsLib::String("Invalid identity object!"));
+        [NSException raise:NSInvalidArgumentException format:@"Invalid core identity object!"];
+    }
 }

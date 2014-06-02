@@ -86,9 +86,7 @@
 		87272850166CC1810089CBB6 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8727284E166CC1810089CBB6 /* MainViewController.m */; };
 		87272851166CC1810089CBB6 /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8727284F166CC1810089CBB6 /* MainViewController.xib */; };
 		87272859166CC45B0089CBB6 /* LoginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87272858166CC45B0089CBB6 /* LoginManager.m */; };
-		872B1EB21918F7AE000E21C9 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 872B1EB11918F7AE000E21C9 /* AudioToolbox.framework */; };
 		872B1EB41918FB1C000E21C9 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 872B1EB31918FB1C000E21C9 /* AudioUnit.framework */; };
-		872B1EB51918FB6A000E21C9 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 872B1EB11918F7AE000E21C9 /* AudioToolbox.framework */; };
 		872B1EBC191A1C47000E21C9 /* OfflineManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 872B1EBB191A1C47000E21C9 /* OfflineManager.m */; };
 		872B1EBD191A1C47000E21C9 /* OfflineManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 872B1EBB191A1C47000E21C9 /* OfflineManager.m */; };
 		872D7E9E1897E19A005D8335 /* QRScannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D7E9C1897E19A005D8335 /* QRScannerViewController.m */; };
@@ -187,6 +185,7 @@
 		874AD9DB166CEB530095FE33 /* ConversationThreadDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 874AD9DA166CEB530095FE33 /* ConversationThreadDelegate.m */; };
 		874AD9DE166CEB780095FE33 /* CallDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 874AD9DD166CEB780095FE33 /* CallDelegate.m */; };
 		874AD9E5166D4C900095FE33 /* OpenPeer.m in Sources */ = {isa = PBXBuildFile; fileRef = 874AD9E4166D4C900095FE33 /* OpenPeer.m */; };
+		874B135C1935F96800993F8D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 874B135B1935F96800993F8D /* AudioToolbox.framework */; };
 		874FE10E17FD7FF0007A791B /* AppLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 874FE10D17FD7FF0007A791B /* AppLog.m */; };
 		8754280918C7A2FD007F626F /* CustomerSpecific_Release.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8754280818C7A2FD007F626F /* CustomerSpecific_Release.plist */; };
 		87570E46172ED183006E1C2F /* OpenpeerSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87570E45172ED183006E1C2F /* OpenpeerSDK.framework */; };
@@ -239,10 +238,8 @@
 		87B541D11897E2440038D427 /* QRScannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D7E9C1897E19A005D8335 /* QRScannerViewController.m */; };
 		87B5EAC318683E4300D25C3B /* APNSManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87B5EABF18683E3B00D25C3B /* APNSManager.m */; };
 		87BFEDBA183A885C00A48821 /* AppConsts.m in Sources */ = {isa = PBXBuildFile; fileRef = 87BFEDB8183A885C00A48821 /* AppConsts.m */; };
-		87CCF63118C0B53C000DF636 /* UUIDManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D4904E18C081A400D34115 /* UUIDManager.m */; };
 		87CCF64418C0FFDB000DF636 /* BackgroundingDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 87CCF64318C0FFDB000DF636 /* BackgroundingDelegate.m */; };
 		87CD91F318C7BF900070F42A /* CustomerSpecific_Release.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8754280818C7A2FD007F626F /* CustomerSpecific_Release.plist */; };
-		87D4904F18C081A400D34115 /* UUIDManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D4904E18C081A400D34115 /* UUIDManager.m */; };
 		87D4BCDC18675368008C2D30 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 87272838166CBF9B0089CBB6 /* main.m */; };
 		87D4BCDD18675368008C2D30 /* AppLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 874FE10D17FD7FF0007A791B /* AppLog.m */; };
 		87D4BCDE18675368008C2D30 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8757E1CA1827E85700D7BDA1 /* TTTAttributedLabel.m */; };
@@ -737,7 +734,6 @@
 		87272858166CC45B0089CBB6 /* LoginManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginManager.m; sourceTree = "<group>"; };
 		872729CF166CDF530089CBB6 /* openpeer-ios-sdk.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "openpeer-ios-sdk.xcodeproj"; path = "../../openpeer-ios-sdk.xcodeproj"; sourceTree = "<group>"; };
 		872B1EB01918F7AD000E21C9 /* OpenPeerSampleApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = OpenPeerSampleApp.entitlements; sourceTree = "<group>"; };
-		872B1EB11918F7AE000E21C9 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		872B1EB31918FB1C000E21C9 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		872B1EBA191A1C47000E21C9 /* OfflineManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OfflineManager.h; sourceTree = "<group>"; };
 		872B1EBB191A1C47000E21C9 /* OfflineManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OfflineManager.m; sourceTree = "<group>"; };
@@ -841,13 +837,15 @@
 		874AD9D9166CEB530095FE33 /* ConversationThreadDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConversationThreadDelegate.h; sourceTree = "<group>"; };
 		874AD9DA166CEB530095FE33 /* ConversationThreadDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConversationThreadDelegate.m; sourceTree = "<group>"; };
 		874AD9DC166CEB780095FE33 /* CallDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CallDelegate.h; sourceTree = "<group>"; };
-		874AD9DD166CEB780095FE33 /* CallDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CallDelegate.m; sourceTree = "<group>"; };
+		874AD9DD166CEB780095FE33 /* CallDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CallDelegate.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		874AD9E3166D4C900095FE33 /* OpenPeer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = OpenPeer.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		874AD9E4166D4C900095FE33 /* OpenPeer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = OpenPeer.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		874ADDB4166E138A0095FE33 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		874ADDB6166E13910095FE33 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		874ADDB8166E13970095FE33 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		874ADDBC166E14440095FE33 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		874B135A1935F3D600993F8D /* openpeersample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = openpeersample.entitlements; sourceTree = "<group>"; };
+		874B135B1935F96800993F8D /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		874FE10D17FD7FF0007A791B /* AppLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppLog.m; sourceTree = "<group>"; };
 		874FE11117FD8DA9007A791B /* AppLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppLog.h; sourceTree = "<group>"; };
 		8754280818C7A2FD007F626F /* CustomerSpecific_Release.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CustomerSpecific_Release.plist; sourceTree = "<group>"; };
@@ -906,8 +904,6 @@
 		87BFEDB9183A885C00A48821 /* AppConsts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppConsts.h; sourceTree = "<group>"; };
 		87CCF64218C0FFDB000DF636 /* BackgroundingDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackgroundingDelegate.h; sourceTree = "<group>"; };
 		87CCF64318C0FFDB000DF636 /* BackgroundingDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BackgroundingDelegate.m; sourceTree = "<group>"; };
-		87D4904D18C081A400D34115 /* UUIDManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UUIDManager.h; sourceTree = "<group>"; };
-		87D4904E18C081A400D34115 /* UUIDManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UUIDManager.m; sourceTree = "<group>"; };
 		87D4BDD318675368008C2D30 /* openpeersample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = openpeersample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		87D4BDF318683B16008C2D30 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		87D4BDF518683B38008C2D30 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -997,8 +993,8 @@
 		87F09EE1171EBB1B0045F6A6 /* ChatMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatMessageCell.h; sourceTree = "<group>"; };
 		87F09EE5171EBB2A0045F6A6 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
 		87F09EE6171EBB2A0045F6A6 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
-		87F24B5D166FF0C900A5389F /* Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utility.h; sourceTree = "<group>"; };
-		87F24B5E166FF0C900A5389F /* Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utility.m; sourceTree = "<group>"; };
+		87F24B5D166FF0C900A5389F /* Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = Utility.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		87F24B5E166FF0C900A5389F /* Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = Utility.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		87F24B60167003F300A5389F /* ContactsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactsManager.h; sourceTree = "<group>"; };
 		87F24B61167003F300A5389F /* ContactsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactsManager.m; sourceTree = "<group>"; };
 		87FC39F51709BB36002030D1 /* MessageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageManager.m; sourceTree = "<group>"; };
@@ -1052,7 +1048,6 @@
 				87FF988E170EDB5D0017C627 /* AssetsLibrary.framework in Frameworks */,
 				87EE5FF8166E9625002C5FA3 /* AVFoundation.framework in Frameworks */,
 				87EE5FF4166E9615002C5FA3 /* CoreAudio.framework in Frameworks */,
-				872B1EB21918F7AE000E21C9 /* AudioToolbox.framework in Frameworks */,
 				871BC9A7179EECC400AEA4A6 /* CoreData.framework in Frameworks */,
 				87272831166CBF9B0089CBB6 /* CoreGraphics.framework in Frameworks */,
 				87FF9892170EDB7D0017C627 /* CoreImage.framework in Frameworks */,
@@ -1072,7 +1067,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				872B1EB51918FB6A000E21C9 /* AudioToolbox.framework in Frameworks */,
 				8770C34318BB7ABB006F28F0 /* libstdc++.6.0.9.dylib in Frameworks */,
 				8774AC7B18992D86006B91FA /* libZXingObjC-iOS.a in Frameworks */,
 				8774AC4E1897E305006B91FA /* ImageIO.framework in Frameworks */,
@@ -1092,6 +1086,7 @@
 				87D4BD1F18675368008C2D30 /* CoreData.framework in Frameworks */,
 				87D4BD2018675368008C2D30 /* CoreGraphics.framework in Frameworks */,
 				87D4BD2118675368008C2D30 /* CoreImage.framework in Frameworks */,
+				874B135C1935F96800993F8D /* AudioToolbox.framework in Frameworks */,
 				87D4BD2218675368008C2D30 /* CoreText.framework in Frameworks */,
 				87D4BD2318675368008C2D30 /* CoreMedia.framework in Frameworks */,
 				87D4BD2418675368008C2D30 /* CoreVideo.framework in Frameworks */,
@@ -1115,8 +1110,6 @@
 				8799239C1917C85500FBD21E /* UIDevice+Networking.h */,
 				8799239D1917C85500FBD21E /* UIDevice+Networking.m */,
 				879923911917B05400FBD21E /* Reachability */,
-				87D4904D18C081A400D34115 /* UUIDManager.h */,
-				87D4904E18C081A400D34115 /* UUIDManager.m */,
 				8774AC6618992D53006B91FA /* ZXingObjC.xcodeproj */,
 				872D7E9B1897E19A005D8335 /* QRScannerViewController.h */,
 				872D7E9C1897E19A005D8335 /* QRScannerViewController.m */,
@@ -1388,6 +1381,7 @@
 		8727281D166CBF9B0089CBB6 = {
 			isa = PBXGroup;
 			children = (
+				874B135A1935F3D600993F8D /* openpeersample.entitlements */,
 				872729CF166CDF530089CBB6 /* openpeer-ios-sdk.xcodeproj */,
 				87272832166CBF9B0089CBB6 /* OpenPeerSampleApp */,
 				8727282B166CBF9B0089CBB6 /* Frameworks */,
@@ -1407,8 +1401,8 @@
 		8727282B166CBF9B0089CBB6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				874B135B1935F96800993F8D /* AudioToolbox.framework */,
 				872B1EB31918FB1C000E21C9 /* AudioUnit.framework */,
-				872B1EB11918F7AE000E21C9 /* AudioToolbox.framework */,
 				8770C34218BB7ABB006F28F0 /* libstdc++.6.0.9.dylib */,
 				87796E8318A8DDA7002F4B43 /* boost.a */,
 				87796E8418A8DDA7002F4B43 /* libcurl.a */,
@@ -1798,6 +1792,11 @@
 					};
 					87D4BCD818675368008C2D30 = {
 						DevelopmentTeam = Z5WRU4N5VJ;
+						SystemCapabilities = {
+							com.apple.InterAppAudio = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -2264,7 +2263,6 @@
 				874AD9DE166CEB780095FE33 /* CallDelegate.m in Sources */,
 				87091144184762F300E65465 /* ImageManager.m in Sources */,
 				871C7B8D17FEBED200BE641B /* SplashViewController.m in Sources */,
-				87D4904F18C081A400D34115 /* UUIDManager.m in Sources */,
 				8757E1A21827BD2200D7BDA1 /* ContactsViewController.m in Sources */,
 				874AD9E5166D4C900095FE33 /* OpenPeer.m in Sources */,
 				87EE5FFB166F5A7F002C5FA3 /* WebLoginViewController.m in Sources */,
@@ -2344,7 +2342,6 @@
 				87D4BCF418675368008C2D30 /* WaitingVideoViewController.m in Sources */,
 				87D4BCF518675368008C2D30 /* Settings.m in Sources */,
 				87D4BCF618675368008C2D30 /* ActivityIndicatorViewController.m in Sources */,
-				87CCF63118C0B53C000DF636 /* UUIDManager.m in Sources */,
 				87B5EAC318683E4300D25C3B /* APNSManager.m in Sources */,
 				87D4BCF718675368008C2D30 /* IdentityDelegate.m in Sources */,
 				87B541D11897E2440038D427 /* QRScannerViewController.m in Sources */,
@@ -2576,6 +2573,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_ENTITLEMENTS = openpeersample.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_ENABLE_CPP_RTTI = YES;
@@ -2608,7 +2606,7 @@
 					"-lstdc++",
 				);
 				PRODUCT_NAME = openpeersample;
-				PROVISIONING_PROFILE = "04DA01E5-197E-472B-BF94-92FACFC7642C";
+				PROVISIONING_PROFILE = "";
 				SUPPORTED_PLATFORMS = iphoneos;
 				VALID_ARCHS = "armv7 armv7s";
 				WARNING_CFLAGS = (
@@ -2623,6 +2621,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_ENTITLEMENTS = openpeersample.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_ENABLE_CPP_RTTI = YES;
@@ -2653,7 +2652,7 @@
 					"-lstdc++",
 				);
 				PRODUCT_NAME = openpeersample;
-				PROVISIONING_PROFILE = "987C75BB-0A8E-4C93-971A-EE49F4C09048";
+				PROVISIONING_PROFILE = "";
 				SUPPORTED_PLATFORMS = iphoneos;
 				VALID_ARCHS = "armv7 armv7s";
 				WARNING_CFLAGS = (

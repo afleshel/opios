@@ -89,4 +89,14 @@
     
     return ret;
 }
+
+
++ (NSString *)getGUIDstring
+{
+    // get new UUID(in windows world is guid)
+    CFUUIDRef guid = CFUUIDCreate(nil);
+    NSString *strGuid = (NSString *)CFBridgingRelease(CFUUIDCreateString(nil, guid));
+    CFRelease(guid);
+    return strGuid;
+}
 @end

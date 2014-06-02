@@ -35,7 +35,7 @@
 #import <OpenpeerSDK/HOPMediaEngine.h>
 @implementation MediaEngineDelegate
 
-- (void) onMediaEngineAudioRouteChanged:(HOPMediaEngineOutputAudioRoutes) audioRoute
+- (void) onMediaEngineAudioRouteChanged:(HOPMediaEngineOutputAudioRoute) audioRoute
 {
     dispatch_async(dispatch_get_main_queue(), ^{
     });

@@ -146,7 +146,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
 - (NSArray*) getUpdatedIdentities
 {
-    NSMutableArray* ret = nil;
+    /*NSMutableArray* ret = nil;
     if(identityLookupPtr)
     {
         IdentityContactListPtr identityContactListPtr = identityLookupPtr->getUpdatedIdentities();
@@ -187,7 +187,9 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
         ZS_LOG_ERROR(Debug, [self log:@"Invalid identity lookup object!"]);
         [NSException raise:NSInvalidArgumentException format:@"Invalid identity lookup object!"];
     }
-    return ret;
+    return ret;*/
+    
+    return self.arrayLastUpdatedContacts;
 }
 
 - (NSArray*) getUnchangedIdentities

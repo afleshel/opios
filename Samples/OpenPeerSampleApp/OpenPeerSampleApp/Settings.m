@@ -44,6 +44,7 @@
 
 @interface Settings ()
 @property (nonatomic, strong) HTTPDownloader* settingsDownloader;
+@property (nonatomic) int timeoutCounter;
 
 - (NSString*) getArchiveStringForModule:(Modules) module;
 @end
@@ -96,6 +97,8 @@
         
         if (!self.appModulesLoggerLevel)
             self.appModulesLoggerLevel = [[NSMutableDictionary alloc] init];
+        
+        self.timeoutCounter = 0;
     }
     return self;
 }
@@ -234,9 +237,9 @@
     return ret;
 }
 
-- (HOPLoggerLevels) getLoggerLevelForAppModule:(Modules) module
+- (HOPLoggerLevel) getLoggerLevelForAppModule:(Modules) module
 {
-    HOPLoggerLevels ret = HOPLoggerLevelNone;
+    HOPLoggerLevel ret = HOPLoggerLevelNone;
     
     NSString* archiveString = [self getArchiveStringForModule:module];
     if ([archiveString length] > 0)
@@ -245,18 +248,18 @@
     return ret;
 }
 
-- (HOPLoggerLevels) getLoggerLevelForAppModuleKey:(NSString*) moduleKey
+- (HOPLoggerLevel) getLoggerLevelForAppModuleKey:(NSString*) moduleKey
 {
-    HOPLoggerLevels ret = HOPLoggerLevelNone;
+    HOPLoggerLevel ret = HOPLoggerLevelNone;
     
     NSNumber* retNumber = [self.appModulesLoggerLevel objectForKey:moduleKey];
     if (retNumber)
-        ret = (HOPLoggerLevels)[retNumber intValue];
+        ret = (HOPLoggerLevel)[retNumber intValue];
     
     return ret;
 }
 
-- (void) setLoggerLevel:(HOPLoggerLevels) level forAppModule:(Modules) module
+- (void) setLoggerLevel:(HOPLoggerLevel) level forAppModule:(Modules) module
 {
     NSString* archiveString = [self getArchiveStringForModule:module];
     [self.appModulesLoggerLevel setObject:[NSNumber numberWithInt:level] forKey:archiveString];
@@ -445,7 +448,7 @@
     return ret;
 }
 
-- (NSString*) getStringForLogLevel:(HOPLoggerLevels) level
+- (NSString*) getStringForLogLevel:(HOPLoggerLevel) level
 {
     switch (level)
     {
@@ -714,7 +717,7 @@
 - (void) updateDeviceInfo
 {
     //Get device info: device ID, iOS, platform and user agent
-    NSString* deviceId = [HOPUtility hashString:[Utility getGUIDstring]];
+    NSString* deviceId = [HOPUtility hashString:[HOPUtility getGUIDstring]];
     if ([deviceId length] > 0)
         [[HOPSettings sharedSettings] storeCalculatedSettingObject:deviceId key:@"openpeer/calculated/device-id"];
 
@@ -979,13 +982,37 @@
 
 - (void) httpDownloader:(HTTPDownloader *) downloader didFailWithError:(NSError *)error
 {
-    OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Settings download failed. Reason:%@",error);
-    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Downloading login settings failed!"
-                                                        message:@"Login will proceed with previous settings."
-                                                       delegate:nil
-                                              cancelButtonTitle:nil
-                                              otherButtonTitles:@"Ok",nil];
-    [alertView show];
-    [[OpenPeer sharedOpenPeer] finishPreSetup];
+    BOOL showErrorMessage = NO;
+    if (error.code == kCFURLErrorTimedOut)
+    {
+        OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Settings download failed. Reason:%@",error);
+        self.timeoutCounter++;
+        if (self.timeoutCounter > 2)
+        {
+            showErrorMessage = YES;
+            [[OpenPeer sharedOpenPeer] finishPreSetup];
+        }
+        else
+        {
+            [self downloadLatestSettings];
+        }
+    }
+    else
+    {
+        [[OpenPeer sharedOpenPeer] finishPreSetup];
+        showErrorMessage = YES;
+    }
+    //OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Settings download failed. Reason:%@",error);
+    
+    if (showErrorMessage)
+    {
+        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Downloading login settings failed!"
+                                                            message:@"Login will proceed with previous settings."
+                                                           delegate:nil
+                                                  cancelButtonTitle:nil
+                                                  otherButtonTitles:@"Ok",nil];
+        [alertView show];
+    }
+    
 }
 @end

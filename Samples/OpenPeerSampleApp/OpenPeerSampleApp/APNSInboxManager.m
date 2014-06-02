@@ -90,6 +90,9 @@
 {
     if ([[LoginManager sharedLoginManager] isUserFullyLoggedIn])
     {
+        if ([self.localNotificationDictionary count] > 0)
+            [self createMessageFromRichPushDict:self.localNotificationDictionary];
+        
         for (UAInboxMessage* message in self.arrayRichPushMessages)
             [self loadMessage:message];
     }
@@ -146,6 +149,72 @@
     HOPPublicPeerFile* publicPerFile = [[HOPModelManager sharedModelManager] getPublicPeerFileForPeerURI:peerURI];
     HOPContact* contact = [[HOPContact alloc] initWithPeerFile:publicPerFile.peerFile];
     [contact hintAboutLocation:locationID];
+}
+
+
+- (void)createMessageFromRichPushDict:(NSDictionary *)richPushDictionary
+{
+    if ([richPushDictionary count] > 0)
+    {
+        NSString* senderPeerURI = [richPushDictionary objectForKey:@"peerURI"];
+        if ([senderPeerURI length] > 0)
+        {
+            NSArray* rolodexContacts = [[HOPModelManager sharedModelManager]  getRolodexContactsByPeerURI:senderPeerURI];
+            HOPRolodexContact* contact = nil;
+            
+            if ([rolodexContacts count] > 0)
+                contact = [rolodexContacts objectAtIndex:0];
+            
+            if (contact)
+            {
+                Session* session = [[SessionManager sharedSessionManager] getSessionForContact:contact];
+                if (!session)
+                    session = [[SessionManager sharedSessionManager]createSessionForContact:contact];
+                
+                NSString* messageID = [richPushDictionary objectForKey:@"messageId"];
+                NSString* messageText = [richPushDictionary objectForKey:@"message"];
+                NSString* location = [richPushDictionary objectForKey:@"location"];
+                NSNumber* timeInterval = [richPushDictionary objectForKey:@"date"];
+                NSDate* date = [NSDate dateWithTimeIntervalSince1970:timeInterval.doubleValue];
+                
+                if ([messageID length] > 0 && [messageText length] > 0  && date)
+                {
+                    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push content \"%@\" for message %@ is ready.",messageText,messageID);
+                    
+                    HOPPublicPeerFile* publicPerFile = [[HOPModelManager sharedModelManager] getPublicPeerFileForPeerURI:senderPeerURI];
+                    HOPContact* coreContact = [[HOPContact alloc] initWithPeerFile:publicPerFile.peerFile];
+                    if ([location length] > 0)
+                    {
+                        [coreContact hintAboutLocation:location];
+                        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push hit location");
+                    }
+                    else
+                    {
+                        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Local notification withut location is hit");
+                    }
+                    
+                    HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:messageText type:messageTypeText date:date session:[session.conversationThread getThreadId] rolodexContact:contact messageId:messageID];
+                    
+                    
+                    if (messageObj)
+                    {
+                        [session.unreadMessageArray addObject:messageObj];
+                        
+                        //If session view controller with message sender is not yet shown, show it
+                        [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForSession:session forIncomingCall:NO forIncomingMessage:YES];
+                    }
+                    else
+                    {
+                        OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"%@ message is not saved - message id %@ - session id %@ - date %@",messageText,messageID,[session.conversationThread getThreadId],date);
+                    }
+                }
+                else
+                {
+                    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push content is corrupted");
+                }
+            }
+        }
+    }
 }
 
 #pragma mark - UAPushNotificationDelegate
@@ -262,6 +331,7 @@
 //    completionHandler(UIBackgroundFetchResultNoData);
 //}
 
+
 #pragma mark - HTTPDownloaderDelegate
 - (void) httpDownloader:(HTTPDownloader*) downloader downloaded:(NSString*) downloaded
 {
@@ -269,60 +339,7 @@
     SBJsonParser* parser = [[SBJsonParser alloc] init];
     NSDictionary* richPushDictionary = [parser objectWithString: downloaded];
     
-    if ([richPushDictionary count] > 0)
-    {
-        NSString* senderPeerURI = [richPushDictionary objectForKey:@"peerURI"];
-        if ([senderPeerURI length] > 0)
-        {
-            NSArray* rolodexContacts = [[HOPModelManager sharedModelManager]  getRolodexContactsByPeerURI:senderPeerURI];
-            HOPRolodexContact* contact = nil;
-            
-            if ([rolodexContacts count] > 0)
-                contact = [rolodexContacts objectAtIndex:0];
-            
-            if (contact)
-            {
-                Session* session = [[SessionManager sharedSessionManager] getSessionForContact:contact];
-                if (!session)
-                    session = [[SessionManager sharedSessionManager]createSessionForContact:contact];
-                
-                NSString* messageID = [richPushDictionary objectForKey:@"messageId"];
-                NSString* messageText = [richPushDictionary objectForKey:@"message"];
-                NSString* location = [richPushDictionary objectForKey:@"location"];
-                NSNumber* timeInterval = [richPushDictionary objectForKey:@"date"];
-                NSDate* date = [NSDate dateWithTimeIntervalSince1970:timeInterval.doubleValue];
-                
-                if ([messageID length] > 0 && [messageText length] > 0 && [location length] > 0 && date)
-                {
-                    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push content \"%@\" for message %@ is ready.",messageText,messageID);
-                    
-                    HOPPublicPeerFile* publicPerFile = [[HOPModelManager sharedModelManager] getPublicPeerFileForPeerURI:senderPeerURI];
-                    HOPContact* coreContact = [[HOPContact alloc] initWithPeerFile:publicPerFile.peerFile];
-                    [coreContact hintAboutLocation:location];
-                    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push hit location");
-
-                    HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:messageText type:messageTypeText date:date session:[session.conversationThread getThreadId] rolodexContact:contact messageId:messageID];
-                    
-                    
-                    if (messageObj)
-                    {
-                        [session.unreadMessageArray addObject:messageObj];
-                        
-                        //If session view controller with message sender is not yet shown, show it
-                        [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForSession:session forIncomingCall:NO forIncomingMessage:YES];
-                    }
-                    else
-                    {
-                        OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"%@ message is not saved - message id %@ - session id %@ - date %@",messageText,messageID,[session.conversationThread getThreadId],date);
-                    }
-                }
-                else
-                {
-                    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push content is corrupted");
-                }
-            }
-        }
-    }
+    [self createMessageFromRichPushDict:richPushDictionary];
     
     return;
 }

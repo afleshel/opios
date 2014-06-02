@@ -46,7 +46,7 @@
 
 ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
-@implementation HOPIdentityState
+@implementation HOPIdnState
 
 
 @end
@@ -134,12 +134,12 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     return objectId;
 }
 
-- (HOPIdentityState*) getState
+- (HOPIdnState*) getState
 {
     WORD lastErrorCode;
     zsLib::String lastErrorReason;
-    HOPIdentityStates state = (HOPIdentityStates)identityPtr->getState(&lastErrorCode, &lastErrorReason);
-    HOPIdentityState* ret = [[HOPIdentityState alloc] init];
+    HOPIdentityState state = (HOPIdentityState)identityPtr->getState(&lastErrorCode, &lastErrorReason);
+    HOPIdnState* ret = [[HOPIdnState alloc] init];
     ret.state = state;
     ret.lastErrorCode = lastErrorCode;
     ret.lastErrorReason = [NSString stringWithCString:lastErrorReason encoding:NSUTF8StringEncoding];
@@ -367,11 +367,11 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     }
 }
 
-+ stateToString:(HOPIdentityStates) state
++ stateToString:(HOPIdentityState) state
 {
     return [NSString stringWithUTF8String: IIdentity::toString((IIdentity::IdentityStates) state)];
 }
-+ (NSString*) stringForIdentityState:(HOPIdentityStates) state
++ (NSString*) stringForIdentityState:(HOPIdentityState) state
 {
     return [NSString stringWithUTF8String: IIdentity::toString((IIdentity::IdentityStates) state)];
 }
@@ -392,6 +392,11 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 {
     if(identityPtr)
     {
+        self.flushAllRolodexContacts = NO;
+        self.versionDownloadedStr = nil;
+        self.arrayLastDownloadedRolodexContacts = nil;
+        self.rolodexContactsObtained = NO;
+        
         identityPtr->startRolodexDownload([lastDownloadedVersion UTF8String]);
     }
     else
@@ -419,7 +424,13 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     BOOL ret = NO;
     if(identityPtr)
     {
-        bool flushAllRolodexContacts;
+        *outFlushAllRolodexContacts = self.flushAllRolodexContacts;
+        if ([self.versionDownloadedStr length] > 0)
+            *outVersionDownloaded = self.versionDownloadedStr;
+        
+        *outRolodexContacts = self.arrayLastDownloadedRolodexContacts;
+        ret = self.rolodexContactsObtained;
+        /*bool flushAllRolodexContacts;
         String versionDownloadedStr;
         RolodexContactListPtr rolodexContacts;
         ret = identityPtr->getDownloadedRolodexContacts(flushAllRolodexContacts,versionDownloadedStr, rolodexContacts);
@@ -482,7 +493,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
             
             if ([tempArray count] > 0)
                 *outRolodexContacts = [NSArray arrayWithArray:tempArray];
-        }
+        }*/
     }
     else
     {

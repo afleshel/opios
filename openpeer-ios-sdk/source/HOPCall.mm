@@ -64,43 +64,47 @@ using namespace openpeer::core;
     return self;
 }
 
-//TODO: remove toContact:(HOPContact*) toContact
-+ (id) placeCall:(HOPConversationThread*) conversationThread toContact:(HOPContact*) toContact includeAudio:(BOOL) includeAudio includeVideo:(BOOL) includeVideo
++ (id) placeCall:(HOPConversationThread*) conversationThread includeAudio:(BOOL) includeAudio includeVideo:(BOOL) includeVideo
 {
     HOPCall* ret = nil;
-    if (conversationThread != nil && toContact != nil)
+    if (conversationThread != nil)
     {
-        //Create the core call object and start placing call procedure
-        ICallPtr tempCallPtr = ICall::placeCall([conversationThread getConversationThreadPtr], [toContact getContactPtr], includeAudio, includeVideo);
-        
-        if (tempCallPtr)
+        HOPContact* toContact = nil;
+        if ([[conversationThread getContacts] count] > 0)
         {
-            //If core call object is create, create HOPCall object
-            ret = [[self alloc] initWithCallPtr:tempCallPtr];
-            [[OpenPeerStorageManager sharedStorageManager] setCall:ret forId:[NSString stringWithUTF8String:tempCallPtr->getCallID()]];
-        }
-        else
-        {
-            ZS_LOG_ERROR(Debug, "Call object is not created!");
+            toContact = [[conversationThread getContacts] objectAtIndex:0];
+            //Create the core call object and start placing call procedure
+            ICallPtr tempCallPtr = ICall::placeCall([conversationThread getConversationThreadPtr], [toContact getContactPtr], includeAudio, includeVideo);
+            
+            if (tempCallPtr)
+            {
+                //If core call object is create, create HOPCall object
+                ret = [[self alloc] initWithCallPtr:tempCallPtr];
+                [[OpenPeerStorageManager sharedStorageManager] setCall:ret forId:[NSString stringWithUTF8String:tempCallPtr->getCallID()]];
+            }
+            else
+            {
+                ZS_LOG_ERROR(Debug, "Call object is not created!");
+            }
         }
     }
     return ret;
 }
 
-+ (NSString*) stateToString: (HOPCallStates) state
++ (NSString*) stateToString: (HOPCallState) state
 {
     return [NSString stringWithUTF8String: ICall::toString((ICall::CallStates) state)];
 }
-+ (NSString*) stringForCallState:(HOPCallStates) state
++ (NSString*) stringForCallState:(HOPCallState) state
 {
     return [NSString stringWithUTF8String: ICall::toString((ICall::CallStates) state)];
 }
 
-+ (NSString*) reasonToString: (HOPCallClosedReasons) reason
++ (NSString*) reasonToString: (HOPCallClosingReason) reason
 {
     return [NSString stringWithUTF8String: ICall::toString((ICall::CallClosedReasons) reason)];
 }
-+ (NSString*) stringForClosingReason:(HOPCallClosedReasons) reason
++ (NSString*) stringForClosingReason:(HOPCallClosingReason) reason
 {
     return [NSString stringWithUTF8String: ICall::toString((ICall::CallClosedReasons) reason)];
 }
@@ -228,12 +232,12 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (HOPCallStates) getState
+- (HOPCallState) getState
 {
-    HOPCallStates hopCallStates = HOPCallStateNone;
+    HOPCallState hopCallState = HOPCallStateNone;
     if(callPtr)
     {
-        hopCallStates = (HOPCallStates)callPtr->getState();
+        hopCallState = (HOPCallState)callPtr->getState();
     }
     else
     {
@@ -241,16 +245,16 @@ using namespace openpeer::core;
         [NSException raise:NSInvalidArgumentException format:@"Invalid call object!"];
     }
     
-    return hopCallStates;
+    return hopCallState;
 }
 
 
-- (HOPCallClosedReasons) getClosedReason
+- (HOPCallClosingReason) getClosedReason
 {
-    HOPCallClosedReasons hopCallClosedReasons = HOPCallClosedReasonNone;
+    HOPCallClosingReason hopCallClosedReason = HOPCallClosedReasonNone;
     if(callPtr)
     {
-        hopCallClosedReasons = (HOPCallClosedReasons)callPtr->getClosedReason();
+        hopCallClosedReason = (HOPCallClosingReason)callPtr->getClosedReason();
     }
     else
     {
@@ -258,7 +262,7 @@ using namespace openpeer::core;
         [NSException raise:NSInvalidArgumentException format:@"Invalid call object!"];
     }
     
-    return hopCallClosedReasons;
+    return hopCallClosedReason;
 }
 
 
@@ -368,7 +372,7 @@ using namespace openpeer::core;
 }
 
 
-- (void) hangup:(HOPCallClosedReasons) reason
+- (void) hangup:(HOPCallClosingReason) reason
 {
     if(callPtr)
     {

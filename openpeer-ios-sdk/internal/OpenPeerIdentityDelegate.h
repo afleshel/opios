@@ -67,4 +67,5 @@ public:
 private:
     HOPIdentity* getHOPIdentity(IIdentityPtr identity);
     HOPIdentity* getHOPIdentity(IIdentityPtr identity, BOOL createNewIfMissing);
+    void storeDownloadedContactsForIdentity(IIdentityPtr identity);
 };

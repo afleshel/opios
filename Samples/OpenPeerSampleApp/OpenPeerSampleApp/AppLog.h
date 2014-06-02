@@ -35,9 +35,9 @@
 #import "AppConsts.h"
 
 extern BOOL isLoggerStarted;
-extern HOPLoggerLevels applicationLogerLevel;
+extern HOPLoggerLevel applicationLogerLevel;
 
 #define OPLog(severity, level,...) if (isLoggerStarted && applicationLogerLevel >= level) AppLog([NSString stringWithUTF8String:__PRETTY_FUNCTION__], [NSString stringWithUTF8String:__FILE__], __LINE__, severity, level, __VA_ARGS__)
 
-void AppLog(NSString* functionName, NSString* filePath, unsigned long lineNumber, HOPLoggerSeverities severity, HOPLoggerLevels level,  NSString* format,...);
+void AppLog(NSString* functionName, NSString* filePath, unsigned long lineNumber, HOPLoggerSeverity severity, HOPLoggerLevel level,  NSString* format,...);
 

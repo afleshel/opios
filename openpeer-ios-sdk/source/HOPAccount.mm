@@ -33,6 +33,7 @@
 #import "HOPIdentity_Internal.h"
 
 #import "OpenPeerStorageManager.h"
+#import "OpenPeerUUIDManager.h"
 
 #import <openpeer/core/IAccount.h>
 #import <openpeer/core/IContact.h>
@@ -44,7 +45,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 using namespace openpeer;
 using namespace openpeer::core;
 
-@implementation HOPAccountState
+@implementation HOPAccState
 
 @end
 
@@ -60,11 +61,11 @@ using namespace openpeer::core;
     return _sharedObject;
 }
 
-+ (NSString*) stateToString:(HOPAccountStates) state
++ (NSString*) stateToString:(HOPAccountState) state
 {
     return [NSString stringWithUTF8String: IAccount::toString((IAccount::AccountStates) state)];
 }
-+ (NSString*) stringForAccountState:(HOPAccountStates) state
++ (NSString*) stringForAccountState:(HOPAccountState) state
 {
     return [NSString stringWithUTF8String: IAccount::toString((IAccount::AccountStates) state)];
 }
@@ -80,9 +81,10 @@ using namespace openpeer::core;
 }
 
 
-- (BOOL) loginWithAccountDelegate:(id<HOPAccountDelegate>) inAccountDelegate conversationThreadDelegate:(id<HOPConversationThreadDelegate>) inConversationThreadDelegate callDelegate:(id<HOPCallDelegate>) inCallDelegate namespaceGrantOuterFrameURLUponReload:(NSString*) namespaceGrantOuterFrameURLUponReload  grantID:(NSString*) grantID lockboxServiceDomain:(NSString*) lockboxServiceDomain forceCreateNewLockboxAccount:(BOOL) forceCreateNewLockboxAccount
+- (BOOL) loginWithAccountDelegate:(id<HOPAccountDelegate>) inAccountDelegate conversationThreadDelegate:(id<HOPConversationThreadDelegate>) inConversationThreadDelegate callDelegate:(id<HOPCallDelegate>) inCallDelegate namespaceGrantOuterFrameURLUponReload:(NSString*) namespaceGrantOuterFrameURLUponReload lockboxServiceDomain:(NSString*) lockboxServiceDomain forceCreateNewLockboxAccount:(BOOL) forceCreateNewLockboxAccount
 {
     BOOL passedWithoutErrors = NO;
+    NSString* grantID = [[OpenPeerUUIDManager sharedUUIDManager] getUUID];
     
     //Check if valid parameters are passed
     if (!inAccountDelegate || !inConversationThreadDelegate || !inCallDelegate || [namespaceGrantOuterFrameURLUponReload length] == 0 || [grantID length] == 0  || [lockboxServiceDomain length] == 0 )
@@ -150,16 +152,16 @@ using namespace openpeer::core;
     return passedWithoutErrors;
 }
 
-- (HOPAccountState*) getState
+- (HOPAccState*) getState
 {
-    HOPAccountState* ret = nil;
+    HOPAccState* ret = nil;
     
     if(accountPtr)
     {
-        ret = [[HOPAccountState alloc] init];
+        ret = [[HOPAccState alloc] init];
         WORD errorCode;
         String errorReason;
-        ret.state  = (HOPAccountStates) accountPtr->getState(&errorCode, &errorReason);
+        ret.state  = (HOPAccountState) accountPtr->getState(&errorCode, &errorReason);
         ret.errorCode = errorCode;
         ret.errorReason = [NSString stringWithUTF8String:errorReason];
     }

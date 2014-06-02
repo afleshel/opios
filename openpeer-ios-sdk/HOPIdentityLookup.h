@@ -37,57 +37,67 @@
 @property (nonatomic, assign) BOOL wasSuccessful;
 @property (nonatomic, assign) unsigned short errorCode;
 @property (nonatomic, strong) NSString* errorReason;
+
 @end
 
 @interface HOPIdentityLookup : NSObject
 
 /**
- Initializer for HOPIdentityLookup with passed HOPIdentityLookupDelegate delegate and list of identity URIs
- @param inDelegate HOPIdentityLookupDelegate delegate
- @param identityLookupInfos NSArray list of HOPIdentityLookupInfo objects
- @returns HOPIdentityLookup object
- */
+*  Identity lookup initializer for HOPIdentityLookup with passed HOPIdentityLookupDelegate delegate and list of identity URIs.
+*
+*  @param inDelegate             Delegate object that implements the HOPIdentityLookupDelegate protocol
+*  @param identityLookupInfos   An array of HOPIdentityLookupInfo objects
+*  @param identityServiceDomain Identity provider domain
+*
+*  @return HOPIdentityLookup object
+*/
 - (id) initWithDelegate:(id<HOPIdentityLookupDelegate>) inDelegate identityLookupInfos:(NSArray*) identityLookupInfos identityServiceDomain:(NSString*) identityServiceDomain;
 
 /**
- Retrieves whether identiy lookup is completed or not.
- @param error NSError this parameter will be initiated if some error occurs during lookup
- @returns BOOL YES if completed, otherwise NO
+ *  Returns whether identiy lookup is completed or not.
+ *
+ *  @param error This parameter will be initiated if some error occurs during lookup
+ *
+ *  @return YES if completed, otherwise NO
  */
 - (BOOL) isComplete:(NSError**) error;
 
 
 /**
- Retrieves identity lookup result.
- @returns HOPIdentityLookupResult Lookup result
+ *  Returns identity lookup result.
+ *
+ *  @return Identity lookup result
  */
 - (HOPIdentityLookupResult*) getLookupResult;
 
 /**
- Cancels identity lookup.
+ *  Cancels identity lookup.
  */
 - (void) cancel;
 
 /**
- Retrieves list of updated identity profiles received from lookup server
- @return NSArray List of updated identity profiles for contacts that are registered in OpenPeer system
+ *  Returns array of updated identity profiles received from lookup server.
+ *
+ *  @return An array of updated identity profiles for contacts that are registered in open peer system
  */
 - (NSArray*) getUpdatedIdentities;
 
 /**
- Retrieves list of unchanged identity profiles received from lookup server
- @return NSArray List of unchanged identity profiles for contacts that are registered in OpenPeer system
+ *   Returns array of unchanged identity profiles received from lookup server.
+ *
+ *  @return An array of unchanged identity profiles for contacts that are registered in open peer system
  */
 - (NSArray*) getUnchangedIdentities;
 
 /**
- Retrieves list of invalid identity profiles received from lookup server
- @return NSArray List of invalid identity profiles for contacts that were registered in OpenPeer system
+ *  Returns array of invalid identity profiles received from the lookup server.
+ *
+ *  @return An array of invalid identity profiles for contacts that were registered in open peer system
  */
 - (NSArray*) getInvalidIdentities;
 
 /**
- Destroy core object.
+ *  Destroys identity lookup core object.
  */
 - (void) destroyCoreObject;
 @end

@@ -44,6 +44,12 @@ using namespace openpeer::core;
     NSNumber* objectId;
 }
 
+
+@property (nonatomic, strong) NSArray* arrayLastDownloadedRolodexContacts;
+@property (nonatomic, copy) NSString* versionDownloadedStr;
+@property (nonatomic) BOOL flushAllRolodexContacts;
+@property (nonatomic) BOOL rolodexContactsObtained;
+
 - (id) initWithIdentityPtr:(IIdentityPtr) inIdentityPtr;
 - (id) initWithIdentityPtr:(IIdentityPtr) inIdentityPtr openPeerIdentityDelegate:(boost::shared_ptr<OpenPeerIdentityDelegate>) inOpenPeerIdentityDelegate;
 - (void) setLocalDelegate:(id<HOPIdentityDelegate>) inIdentityDelegate;

@@ -40,9 +40,9 @@
 + (NSString*) getPlatform;
 + (NSString*) getUserAgentName;
 + (void) removeCookiesAndClearCredentials;
-+ (NSString *) getGUIDstring;
-+ (NSString*) getCallStateAsString:(HOPCallStates) callState;
-+ (NSString*) getMessageDeliveryStateAsString:(HOPConversationThreadMessageDeliveryStates) messageState;
+//+ (NSString *) getGUIDstring;
++ (NSString*) getCallStateAsString:(HOPCallState) callState;
++ (NSString*) getMessageDeliveryStateAsString:(HOPConversationThreadMessageDeliveryState) messageState;
 + (NSString*) getFunctionNameForRequest:(NSString*) requestString;
 + (NSString*) getParametersNameForRequest:(NSString*) requestString;
 + (UIBarButtonItem*) createNavigationBackButtonForTarget:(id) target;
@@ -55,4 +55,5 @@
 + (NSString *) stringFromDate: (NSDate*) date;
 + (NSDate *) dateFromTimeString: (NSString*) timeStr;
 + (BOOL) isAppUpdated;
++ (void) showLocalNotification:(NSString*) messageText additionalData:(NSDictionary*) additionalData;
 @end

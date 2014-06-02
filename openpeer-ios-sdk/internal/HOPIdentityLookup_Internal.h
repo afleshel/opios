@@ -44,6 +44,8 @@ using namespace openpeer::core;
     boost::shared_ptr<OpenPeerIdentityLookupDelegate> openPeerIdentityLookupDelegatePtr;
 }
 
+@property (nonatomic, strong) NSMutableArray* arrayLastUpdatedContacts;
+
 - (void) setLocalDelegates:(id<HOPIdentityLookupDelegate>) inIdentityLookupDelegate;
 
 - (IIdentityLookupPtr) getIdentityLookupPtr;
