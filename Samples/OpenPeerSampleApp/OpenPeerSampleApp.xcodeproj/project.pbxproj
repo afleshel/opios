@@ -86,7 +86,6 @@
 		87272850166CC1810089CBB6 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8727284E166CC1810089CBB6 /* MainViewController.m */; };
 		87272851166CC1810089CBB6 /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8727284F166CC1810089CBB6 /* MainViewController.xib */; };
 		87272859166CC45B0089CBB6 /* LoginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87272858166CC45B0089CBB6 /* LoginManager.m */; };
-		872B1EB41918FB1C000E21C9 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 872B1EB31918FB1C000E21C9 /* AudioUnit.framework */; };
 		872B1EBC191A1C47000E21C9 /* OfflineManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 872B1EBB191A1C47000E21C9 /* OfflineManager.m */; };
 		872B1EBD191A1C47000E21C9 /* OfflineManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 872B1EBB191A1C47000E21C9 /* OfflineManager.m */; };
 		872D7E9E1897E19A005D8335 /* QRScannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D7E9C1897E19A005D8335 /* QRScannerViewController.m */; };
@@ -235,6 +234,8 @@
 		87A1086A1802C116001F705D /* Logger.m in Sources */ = {isa = PBXBuildFile; fileRef = 87A108691802C116001F705D /* Logger.m */; };
 		87A1086C1802CBDC001F705D /* logger.png in Resources */ = {isa = PBXBuildFile; fileRef = 87A1086B1802CBDC001F705D /* logger.png */; };
 		87A1086E1802CD92001F705D /* logger@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 87A1086D1802CD92001F705D /* logger@2x.png */; };
+		87A73518193D00F700769011 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 874B135B1935F96800993F8D /* AudioToolbox.framework */; };
+		87A73519193D078A00769011 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87D4BDF518683B38008C2D30 /* SystemConfiguration.framework */; };
 		87B541D11897E2440038D427 /* QRScannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D7E9C1897E19A005D8335 /* QRScannerViewController.m */; };
 		87B5EAC318683E4300D25C3B /* APNSManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87B5EABF18683E3B00D25C3B /* APNSManager.m */; };
 		87BFEDBA183A885C00A48821 /* AppConsts.m in Sources */ = {isa = PBXBuildFile; fileRef = 87BFEDB8183A885C00A48821 /* AppConsts.m */; };
@@ -734,7 +735,6 @@
 		87272858166CC45B0089CBB6 /* LoginManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginManager.m; sourceTree = "<group>"; };
 		872729CF166CDF530089CBB6 /* openpeer-ios-sdk.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "openpeer-ios-sdk.xcodeproj"; path = "../../openpeer-ios-sdk.xcodeproj"; sourceTree = "<group>"; };
 		872B1EB01918F7AD000E21C9 /* OpenPeerSampleApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = OpenPeerSampleApp.entitlements; sourceTree = "<group>"; };
-		872B1EB31918FB1C000E21C9 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		872B1EBA191A1C47000E21C9 /* OfflineManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OfflineManager.h; sourceTree = "<group>"; };
 		872B1EBB191A1C47000E21C9 /* OfflineManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OfflineManager.m; sourceTree = "<group>"; };
 		872D7E9B1897E19A005D8335 /* QRScannerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRScannerViewController.h; sourceTree = "<group>"; };
@@ -1035,7 +1035,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				872B1EB41918FB1C000E21C9 /* AudioUnit.framework in Frameworks */,
 				8770C34B18BB903A006F28F0 /* libstdc++.6.0.9.dylib in Frameworks */,
 				87F9DAF9189AB7E100D96FF3 /* libZXingObjC-iOS.a in Frameworks */,
 				8774AC4B1897E2F2006B91FA /* ImageIO.framework in Frameworks */,
@@ -1048,11 +1047,13 @@
 				87FF988E170EDB5D0017C627 /* AssetsLibrary.framework in Frameworks */,
 				87EE5FF8166E9625002C5FA3 /* AVFoundation.framework in Frameworks */,
 				87EE5FF4166E9615002C5FA3 /* CoreAudio.framework in Frameworks */,
+				87A73518193D00F700769011 /* AudioToolbox.framework in Frameworks */,
 				871BC9A7179EECC400AEA4A6 /* CoreData.framework in Frameworks */,
 				87272831166CBF9B0089CBB6 /* CoreGraphics.framework in Frameworks */,
 				87FF9892170EDB7D0017C627 /* CoreImage.framework in Frameworks */,
 				8757E1CE1827ED5600D7BDA1 /* CoreText.framework in Frameworks */,
 				87EE5FF5166E9615002C5FA3 /* CoreMedia.framework in Frameworks */,
+				87A73519193D078A00769011 /* SystemConfiguration.framework in Frameworks */,
 				87EE5FF6166E9615002C5FA3 /* CoreVideo.framework in Frameworks */,
 				8727282F166CBF9B0089CBB6 /* Foundation.framework in Frameworks */,
 				87FF9890170EDB6D0017C627 /* MobileCoreServices.framework in Frameworks */,
@@ -1402,7 +1403,6 @@
 			isa = PBXGroup;
 			children = (
 				874B135B1935F96800993F8D /* AudioToolbox.framework */,
-				872B1EB31918FB1C000E21C9 /* AudioUnit.framework */,
 				8770C34218BB7ABB006F28F0 /* libstdc++.6.0.9.dylib */,
 				87796E8318A8DDA7002F4B43 /* boost.a */,
 				87796E8418A8DDA7002F4B43 /* libcurl.a */,
