@@ -14,6 +14,9 @@
 		<dict>
 			<key>CFBundleIconFiles</key>
 			<array>
+				<string>ApplicationLogo58</string>
+				<string>ApplicationLogo80</string>
+				<string>ApplicationLogo120</string>
 				<string>OpenPeerLogo80</string>
 				<string>OpenPeerLogo58</string>
 				<string>OpenPeerLogo29</string>
