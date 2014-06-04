@@ -32,6 +32,9 @@
 #import "MessageManager.h"
 #import "SessionManager.h"
 #import "ContactsManager.h"
+#ifdef APNS_ENABLED
+    #import "APNSManager.h"
+#endif
 
 #import "AppConsts.h"
 #import "Session.h"
@@ -247,7 +250,17 @@
     }
     else
     {
-        OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Message %@ cannot be sent because of network problem.",hopMessage.messageID);
+        if (![UIDevice isNetworkReachable])
+        {
+            OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Message %@ cannot be sent because of a network problem.",hopMessage.messageID);
+        }
+        else
+        {
+            OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Message %@ cannot be sent because account is not in the ready state.",hopMessage.messageID);
+        #ifdef APNS_ENABLED
+            [[APNSManager sharedAPNSManager]sendRichPushNotificationForMessage:hopMessage missedCall:NO];
+        #endif
+        }
         //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resendMessages) name:kReachabilityChangedNotification object:nil];
         [inSession.setOfNotSentMessages addObject:hopMessage];
     }
@@ -321,8 +334,16 @@
             [dict setObject:message.messageID forKey:@"messageId"];
             [dict setObject:message.text forKey:@"message"];
             [dict setObject:message.date forKey:@"date"];
-            NSDictionary* packedDict = @{localNotificationKey: dict};
-            [Utility showLocalNotification:message.text additionalData:packedDict];
+            if ([dict count] > 0)
+            {
+                NSDictionary* packedDict = @{localNotificationKey: dict};
+                [Utility showLocalNotification:message.text additionalData:packedDict];
+                OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Local notification for message: \" %@ \" with id %@ is shown.",message.text,message.messageID);
+            }
+            else
+            {
+                OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Local notification for message: \" %@ \" with id %@ is NOT shown.",message.text,message.messageID);
+            }
         }
     }
     else

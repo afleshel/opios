@@ -133,7 +133,6 @@
                 }
                 else if (![message.type isEqualToString:messageTypeSystem])
                 {
-                    messageText  = message.text;
                     [[APNSManager sharedAPNSManager]sendRichPushNotificationForMessage:message missedCall:NO];
                 }
             }
