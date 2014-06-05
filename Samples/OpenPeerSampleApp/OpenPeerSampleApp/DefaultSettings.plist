@@ -17,7 +17,7 @@
 	<key>localTelnetLoggerPort</key>
 	<string>59999</string>
 	<key>applicationSettingsBackgroundingPhaseRichPush</key>
-	<integer>4</integer>
+	<integer>2</integer>
 	<key>openpeer/core/core-thread-priority</key>
 	<string>normal</string>
 	<key>openpeer/core/media-thread-priority</key>
@@ -35,7 +35,9 @@
 	<key>openpeer/stack/key-generation-thread-priority</key>
 	<string>low</string>
 	<key>openpeer/stack/backgrounding-phase-account</key>
-	<integer>2</integer>
+	<integer>3</integer>
+	<key>openpeer/stack/backgrounding-phase-push-mailbox</key>
+	<integer>3</integer>
 	<key>openpeer/stack/bootstrapper-force-well-known-over-insecure-http</key>
 	<true/>
 	<key>openpeer/stack/bootstrapper-force-well-known-using-post</key>
@@ -79,13 +81,13 @@
 	<key>openpeer/services/http-thread-priority</key>
 	<string>normal</string>
 	<key>openpeer/services/backgrounding-phase-ice-socket-session</key>
-	<integer>3</integer>
+	<integer>4</integer>
 	<key>openpeer/services/backgrounding-phase-turn</key>
-	<integer>3</integer>
+	<integer>4</integer>
 	<key>openpeer/services/backgrounding-phase-tcp-messaging</key>
-	<integer>3</integer>
-	<key>openpeer/services/backgrounding-phase-telnet-logger</key>
 	<integer>5</integer>
+	<key>openpeer/services/backgrounding-phase-telnet-logger</key>
+	<integer>6</integer>
 	<key>openpeer/services/backgrounding-phase-1-timeout-in-seconds</key>
 	<integer>8</integer>
 	<key>openpeer/services/backgrounding-phase-2-timeout-in-seconds</key>
@@ -95,6 +97,8 @@
 	<key>openpeer/services/backgrounding-phase-4-timeout-in-seconds</key>
 	<integer>0</integer>
 	<key>openpeer/services/backgrounding-phase-5-timeout-in-seconds</key>
+	<integer>0</integer>
+	<key>openpeer/services/backgrounding-phase-6-timeout-in-seconds</key>
 	<integer>0</integer>
 	<key>openpeer/services/process-application-message-queue-on-quit</key>
 	<true/>
