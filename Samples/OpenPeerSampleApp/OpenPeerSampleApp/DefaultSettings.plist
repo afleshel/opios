@@ -42,12 +42,18 @@
 	<true/>
 	<key>openpeer/stack/bootstrapper-skip-signature-validation</key>
 	<true/>
+	<key>openpeer/stack/finder-total-servers-to-get</key>
+	<integer>2</integer>
 	<key>openpeer/stack/finder-max-client-session-keep-alive-in-seconds</key>
 	<integer>300</integer>
 	<key>openpeer/stack/finder-connection-send-ping-keep-alive-after-in-seconds</key>
 	<integer>0</integer>
 	<key>openpeer/stack/move-publication-to-cache-time-in-seconds</key>
 	<integer>120</integer>
+	<key>openpeer/stack/push-mailbox-total-servers-to-get</key>
+	<integer>2</integer>
+	<key>openpeer/stack/push-mailbox-servers-get-timeout-in-seconds</key>
+	<integer>60</integer>
 	<key>openpeer/stack/push-mailbox-inactivity-timeout</key>
 	<integer>600</integer>
 	<key>openpeer/stack/push-mailbox-retry-connection-in-seconds</key>
