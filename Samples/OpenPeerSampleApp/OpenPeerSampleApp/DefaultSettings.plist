@@ -62,6 +62,8 @@
 	<integer>60</integer>
 	<key>openpeer/stack/push-mailbox-peer-validate-timeout-in-seconds</key>
 	<integer>60</integer>
+	<key>openpeer/stack/push-mailbox-register-push-timeout-in-seconds</key>
+	<integer>60</integer>
 	<key>openpeer/stack/push-mailbox-inactivity-timeout</key>
 	<integer>600</integer>
 	<key>openpeer/stack/push-mailbox-retry-connection-in-seconds</key>
