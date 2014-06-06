@@ -507,4 +507,19 @@ static const short _base64DecodingTable[256] = {
     
     [[UIApplication sharedApplication] scheduleLocalNotification:notification];
 }
+
++ (BOOL) isRuningForTheFirstTime
+{
+    BOOL ret = YES;
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"isRuningForTheFirstTime"])
+    {
+        ret = NO;
+    }
+    else
+    {
+        [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:NO] forKey:@"isRuningForTheFirstTime"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+    return ret;
+}
 @end
