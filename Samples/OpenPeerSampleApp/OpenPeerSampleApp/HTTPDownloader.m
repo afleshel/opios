@@ -120,7 +120,6 @@
     self.receivedData = nil;
     
     //Inform the user that there was an error with download
-    //NSLog(@"Connection failed! Error - %@ %@", [error localizedDescription], [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
     OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Downloading failed for url %@. Error: %@ %@",self.url,[error localizedDescription], [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
     
     [self.delegate httpDownloader:self didFailWithError:error];

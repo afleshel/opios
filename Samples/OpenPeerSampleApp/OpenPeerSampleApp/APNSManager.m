@@ -294,7 +294,10 @@
         
         NSString* messageText  = [NSString stringWithFormat:@"%@  %@",[[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser] getFullName],msg];
         
-        NSString* content = [self prepareMessageForRichPush:message peerURI:[[HOPContact getForSelf]getPeerURI] location:[[HOPAccount sharedAccount] getLocationID]];
+        //NSString* content = [self prepareMessageForRichPush:message peerURI:[[HOPContact getForSelf]getPeerURI] location:[[HOPAccount sharedAccount] getLocationID]];
+        
+        NSString* location = [[HOPAccount sharedAccount] isCoreAccountCreated] && ([[HOPAccount sharedAccount] getState].state == HOPAccountStateReady) ? [[HOPAccount sharedAccount] getLocationID] : @"";
+         NSString* content = [self prepareMessageForRichPush:message peerURI:[[HOPModelManager sharedModelManager]getPeerURIForHomeUser] location:location];
         
         for (NSString* deviceToken in deviceTokens)
         {
@@ -317,10 +320,9 @@
                 [stringToSend writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
             //}
             
-            if ([[NSFileManager defaultManager] isWritableFileAtPath:filePath]) {
-                NSLog(@"Writable");
-            }else {
-                NSLog(@"Not Writable");
+            if (![[NSFileManager defaultManager] isWritableFileAtPath:filePath])
+            {
+                OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Unable to save rich push notification in file for sendig.");
             }
             
             if ([filePath length] > 0 && [dataToPush count] > 0)
@@ -393,7 +395,7 @@
     else
     {
         // handle the fact that the previous attempt failed
-        NSLog(@"%s: challenge.error = %@", __FUNCTION__, challenge.error);
+        //NSLog(@"%s: challenge.error = %@", __FUNCTION__, challenge.error);
         completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, nil);
     }
 }
@@ -479,6 +481,10 @@ didCompleteWithError:(NSError *)error
                 
             }
         }
+    }
+    else
+    {
+        
     }
     return;
 }

@@ -282,4 +282,6 @@
  Removes all session and message records.
  */
 - (void) clearSessionRecords;
+
+- (NSString*) getPeerURIForHomeUser;
 @end

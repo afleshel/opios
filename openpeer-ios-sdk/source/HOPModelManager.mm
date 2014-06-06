@@ -852,6 +852,14 @@ using namespace openpeer::core;
     
     [self saveContext];
 }
+
+- (NSString*) getPeerURIForHomeUser
+{
+    HOPHomeUser* homeUser = [self getLastLoggedInHomeUser];
+    HOPAssociatedIdentity* associatedIdentity = [[homeUser.associatedIdentities allObjects] objectAtIndex:0];
+    return associatedIdentity.homeUserProfile.identityContact.peerFile.peerURI;
+}
+
 @end
 
 

@@ -123,6 +123,7 @@
     
     if (![[Settings sharedSettings] checkIfReloginInfoIsValid])
     {
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Relogin info is not valid");
         HOPHomeUser* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
         homeUser.loggedIn = [NSNumber numberWithBool:NO];
         [[HOPModelManager sharedModelManager] saveContext];
@@ -213,6 +214,7 @@
 
 - (void) startLogin
 {
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Login is started");
     [self startLoginUsingIdentityURI:[[Settings sharedSettings] getIdentityFederateBaseURI]];
     self.isLogin = YES;
 }
