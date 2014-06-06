@@ -47,6 +47,7 @@
 #import "WebLoginViewController.h"
 #import "ContactsViewController.h"
 #import "SessionViewController_iPhone.h"
+#import "ActiveSessionsViewController.h"
 
 #import "MainViewController.h"
 #import "ChatViewController.h"
@@ -165,6 +166,22 @@
          
         UINavigationController *contactsNavigationController = [[UINavigationController alloc] initWithRootViewController:self.contactsTableViewController];
         contactsNavigationController.navigationBar.translucent = NO;
+        
+        //Active sessions tab
+        self.activeSessionsViewController = [[ActiveSessionsViewController alloc] initWithNibName:@"ActiveSessionsViewController" bundle:nil];
+        self.activeSessionsViewController.title = @"Chats";
+        self.tabBarItem.title = @"CHATS";
+        
+        //[self.contactsTableViewController.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"iPhone_tabBar_contacts_active.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"iPhone_tabBar_contacts_inactive.png"]];
+        
+        
+        [self.activeSessionsViewController.tabBarItem setImage:[[UIImage imageNamed:@"iPhone_tabBar_contacts_inactive.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+        [self.activeSessionsViewController.tabBarItem setSelectedImage:[[UIImage imageNamed:@"iPhone_tabBar_contacts_active.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+        
+        
+        UINavigationController *activeSessionsNavigationController = [[UINavigationController alloc] initWithRootViewController:self.activeSessionsViewController];
+        activeSessionsNavigationController.navigationBar.translucent = NO;
+        
         //Settings tab
         SettingsViewController* settingsViewController = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
         settingsViewController.title = @"Settings";
@@ -180,7 +197,7 @@
         //Tab
         self.tabBarController = [[UITabBarController alloc] init];
         self.tabBarController.delegate = self;
-        self.tabBarController.viewControllers = [NSArray arrayWithObjects:contactsNavigationController, settingsNavigationController, nil];
+        self.tabBarController.viewControllers = [NSArray arrayWithObjects:contactsNavigationController, activeSessionsNavigationController,settingsNavigationController, nil];
         
         self.tabBarController.view.frame = self.view.bounds;
         [self.tabBarController.tabBar setBackgroundImage:[UIImage imageNamed:@"iPhone_tabBar_bkgd.png"]];
