@@ -70,6 +70,8 @@
 	<integer>2</integer>
 	<key>openpeer/stack/push-mailbox-max-retry-connection-in-seconds</key>
 	<integer>14400</integer>
+	<key>openpeer/stack/service-peer-lookup-peer-files-get-timeout-in-seconds</key>
+	<integer>60</integer>
 	<key>openpeer/stack/debug/force-p2p-messages-over-finder-relay</key>
 	<false/>
 	<key>openpeer/services/services-thread-priority</key>
