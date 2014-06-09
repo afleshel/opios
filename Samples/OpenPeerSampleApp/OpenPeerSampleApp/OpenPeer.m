@@ -129,7 +129,8 @@
      
         //Set settigns delegate
         [[HOPSettings sharedSettings] setup];
-        [[HOPSettings sharedSettings] applyDefaults];
+        if ([Utility isRuningForTheFirstTime])
+            [[HOPSettings sharedSettings] applyDefaults];
         
         BOOL startDownloadingSettings = [[Settings sharedSettings] updateAppSettings];
         
