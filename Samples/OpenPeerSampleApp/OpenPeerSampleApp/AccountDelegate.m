@@ -108,6 +108,12 @@
             }
                 break;
                 
+            case HOPAccountWaitingForBrowserWindowToBeRedirected:
+            {
+#define WARNING_NEED_TO_IMPLEMENT_THIS_CASE 1
+#define WARNING_NEED_TO_IMPLEMENT_THIS_CASE 2
+              break;
+            }
             case HOPAccountWaitingForBrowserWindowToClose:
             {
                 [[[OpenPeer sharedOpenPeer] mainViewController] closeWebLoginView:self.webLoginViewController];

@@ -107,6 +107,7 @@ typedef enum
     HOPAccountWaitingForAssociationToIdentity,
     HOPAccountWaitingForBrowserWindowToBeLoaded,
     HOPAccountWaitingForBrowserWindowToBeMadeVisible,
+    HOPAccountWaitingForBrowserWindowToBeRedirected,
     HOPAccountWaitingForBrowserWindowToClose,
     HOPAccountStateReady,
     HOPAccountStateShuttingDown,
@@ -124,6 +125,7 @@ typedef enum
     HOPIdentityStateWaitingAttachmentOfDelegate,
     HOPIdentityStateWaitingForBrowserWindowToBeLoaded,
     HOPIdentityStateWaitingForBrowserWindowToBeMadeVisible,
+    HOPIdentityStateWaitingForBrowserWindowToBeRedirected,
     HOPIdentityStateWaitingForBrowserWindowToClose,
     HOPIdentityStateReady,
     HOPIdentityStateShutdown

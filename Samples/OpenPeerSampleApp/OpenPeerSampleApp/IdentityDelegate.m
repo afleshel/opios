@@ -180,6 +180,12 @@
             }
                 break;
                 
+            case HOPIdentityStateWaitingForBrowserWindowToBeRedirected:
+            {
+#define WARNING_NEED_TO_IMPLEMENT_THIS_CASE 1
+#define WARNING_NEED_TO_IMPLEMENT_THIS_CASE 2
+              break;
+            }
             case HOPIdentityStateWaitingForBrowserWindowToClose:
             {
                 webLoginViewController = [self getLoginWebViewForIdentity:identity create:NO];
