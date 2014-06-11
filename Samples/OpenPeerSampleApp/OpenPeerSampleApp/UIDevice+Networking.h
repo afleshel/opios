@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2012, SMB Phone Inc.
+ Copyright (c) 2014, SMB Phone Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,26 +29,17 @@
  
  */
 
+#import <UIKit/UIKit.h>
+#import <SystemConfiguration/SCNetworkReachability.h>
+#import "Reachability.h"
 
-#import "OpenPeerProvisioningAccountOAuthIdentityAssociationDelegate.h"
+@interface UIDevice (Networking)
 
++(NetworkStatus)networkStatusForInternetConnection;
++(BOOL)cellularConnected; // EDGE or GPRS
++(BOOL)wiFiConnected;
++(BOOL)isNetworkReachable;
++(void)startNotifier;
++(void)stopNotifier;
 
-OpenPeerProvisioningAccountOAuthIdentityAssociationDelegate::OpenPeerProvisioningAccountOAuthIdentityAssociationDelegate(id<HOPProvisioningAccountOAuthIdentityAssociationDelegate> inAccountOAuthIdentityAssociationDelegate)
-{
-    accountOAuthIdentityAssociationDelegate = inAccountOAuthIdentityAssociationDelegate;
-}
-
-boost::shared_ptr<OpenPeerProvisioningAccountOAuthIdentityAssociationDelegate> OpenPeerProvisioningAccountOAuthIdentityAssociationDelegate::create(id<HOPProvisioningAccountOAuthIdentityAssociationDelegate> inAccountOAuthIdentityAssociationDelegate)
-{
-    return boost::shared_ptr<OpenPeerProvisioningAccountOAuthIdentityAssociationDelegate> (new OpenPeerProvisioningAccountOAuthIdentityAssociationDelegate(inAccountOAuthIdentityAssociationDelegate));
-}
-
-void OpenPeerProvisioningAccountOAuthIdentityAssociationDelegate::onIdentityStateChanged(IIdentityPtr identity, IdentityStates state)
-{
-    //[accountOAuthIdentityAssociationDelegate onAccountOAuthIdentityAssociationProviderURLReady
-}
-
-void OpenPeerProvisioningAccountOAuthIdentityAssociationDelegate::onIdentityPendingMessageForInnerBrowserWindowFrame(IIdentityPtr identity)
-{
-    //[accountOAuthIdentityAssociationDelegate onAccountOAuthIdentityAssociationComplete
-}
+@end

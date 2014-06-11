@@ -46,7 +46,7 @@
 
 ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
-@implementation HOPIdentityState
+@implementation HOPIdnState
 
 
 @end
@@ -134,12 +134,12 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     return objectId;
 }
 
-- (HOPIdentityState*) getState
+- (HOPIdnState*) getState
 {
     WORD lastErrorCode;
     zsLib::String lastErrorReason;
-    HOPIdentityStates state = (HOPIdentityStates)identityPtr->getState(&lastErrorCode, &lastErrorReason);
-    HOPIdentityState* ret = [[HOPIdentityState alloc] init];
+    HOPIdentityState state = (HOPIdentityState)identityPtr->getState(&lastErrorCode, &lastErrorReason);
+    HOPIdnState* ret = [[HOPIdnState alloc] init];
     ret.state = state;
     ret.lastErrorCode = lastErrorCode;
     ret.lastErrorReason = [NSString stringWithCString:lastErrorReason encoding:NSUTF8StringEncoding];
@@ -367,11 +367,11 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     }
 }
 
-+ stateToString:(HOPIdentityStates) state
++ stateToString:(HOPIdentityState) state
 {
     return [NSString stringWithUTF8String: IIdentity::toString((IIdentity::IdentityStates) state)];
 }
-+ (NSString*) stringForIdentityState:(HOPIdentityStates) state
++ (NSString*) stringForIdentityState:(HOPIdentityState) state
 {
     return [NSString stringWithUTF8String: IIdentity::toString((IIdentity::IdentityStates) state)];
 }
@@ -519,7 +519,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
 - (void) deleteMarkedRolodexContacts
 {
-    
+    //[[HOPModelManager sharedModelManager] deleteAllMarkedRolodexContactsForHomeUserIdentityURI:[self getIdentityURI]];
 }
 
 - (void) destroyCoreObject

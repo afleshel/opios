@@ -39,9 +39,9 @@
 /**
  Wrapper for identity state data.
  */
-@interface HOPIdentityState : NSObject
+@interface HOPIdnState : NSObject
 
-@property (nonatomic, assign) HOPIdentityStates state;
+@property (nonatomic, assign) HOPIdentityState state;
 @property (nonatomic, assign) unsigned short lastErrorCode;
 @property (nonatomic, strong) NSString* lastErrorReason;
 @end
@@ -54,127 +54,154 @@
 @property (nonatomic, strong) NSTimer* deletionTimer;
 
 /**
- Converts identity state enum to string
- @param state HOPIdentityStates Identity state enum
- @return String representation of identity state
- */
-+ stateToString:(HOPIdentityStates) state __attribute__((deprecated("use method stringForIdentityState instead")));
-+ (NSString*) stringForIdentityState:(HOPIdentityStates) state;
+*  Converts identity state enum to string. (Deprecated)
+*
+*  @param state Identity state
+*
+*  @return A string representation of identity state.
+*/
++ stateToString:(HOPIdentityState) state __attribute__((deprecated("use method stringForIdentityState instead")));
 
 /**
- Creates identity object and starts identity login. This method is called only on login procedure. During relogin procedure this method is not invoked.
- @param inIdentityDelegate HOPIdentityDelegate delegate
- @param identityProviderDomain NSString Used when identity URI is of legacy or oauth-type
- @param identityURIOridentityBaseURI NSString Base URI of identity provider (e.g. identity://facebook.com/),  or contact specific identity URI (e.g. identity://facebook.com/contact_facebook_id)
-@param outerFrameURLUponReload NSString String that will be passed from JS after login is completed.
- @return HOPIdentity object if IIdentityPtr object is created sucessfully, otherwise nil
+ *  Converts identity state enum to string.
+ *
+ *  @param state Identity state
+ *
+ *  @return A string representation of identity state.
+ */
++ (NSString*) stringForIdentityState:(HOPIdentityState) state;
+
+
+/**
+ *  Creates identity object and starts identity login. This method is called only on login procedure. During relogin procedure this method is not called.
+ *
+ *  @param inIdentityDelegate           Delegate object that implements the HOPIdentityDelegate protocol
+ *  @param identityProviderDomain       Identity provider domain
+ *  @param identityURIOridentityBaseURI Base URI of identity provider (e.g. identity://facebook.com/),  or contact specific identity URI (e.g. identity://facebook.com/contact_facebook_id)
+ *  @param outerFrameURLUponReload      Outer frame URL on reload
+ *
+ *  @return HOPIdentity object if login is started successfully
  */
 + (id) loginWithDelegate:(id<HOPIdentityDelegate>) inIdentityDelegate identityProviderDomain:(NSString*) identityProviderDomain  identityURIOridentityBaseURI:(NSString*) identityURIOridentityBaseURI outerFrameURLUponReload:(NSString*) outerFrameURLUponReload;
-- (id) init __attribute__((unavailable("Use one of loginWithDelegate: static methods to create an identity object.")));
 
 /**
- Creates identity object and starts identity login for preauthorized identites. This method is called only on login procedure. During relogin procedure this method is not invoked.
- @param inIdentityDelegate HOPIdentityDelegate delegate
- @param identityProviderDomain NSString Used when identity URI is of legacy or oauth-type
- @param identityPreauthorizedURI NSString Contact identity URI provided by identity provider (e.g. identity://name_provider_domain.com/contact_id),  or contact specific identity URI (e.g. identity://facebook.com/contact_facebook_id)
- @param identityAccessToken NSString Access token obtained from YOUR server.
- @param identityAccessSecret NSString Access secret obtained from YOUR server.
- @param identityAccessSecretExpires NSDate Access secret expire date.
- @return HOPIdentity object if IIdentityPtr object is created sucessfully, otherwise nil
+ *  Creates identity object and starts identity login for preauthorized identites. This method is called only on login procedure. During relogin procedure this method is not invoked.
+ *
+ *  @param inIdentityDelegate          Delegate object that implements the HOPIdentityDelegate protocol
+ *  @param identityProviderDomain      Identity provider domain
+ *  @param identityURI                 Contact identity URI provided by identity provider (e.g. identity://name_provider_domain.com/contact_id),  or contact specific identity URI (e.g. identity://facebook.com/contact_facebook_id)
+ *  @param identityAccessToken         Access token obtained from YOUR server.
+ *  @param identityAccessSecret        Access secret obtained from YOUR server.
+ *  @param identityAccessSecretExpires Access secret expiry date.
+ *
+ *  @return HOPIdentity object if login is started successfully
  */
 + (id) loginWithDelegate:(id<HOPIdentityDelegate>) inIdentityDelegate identityProviderDomain:(NSString*) identityProviderDomain identityPreauthorizedURI:(NSString*) identityURI identityAccessToken:(NSString*) identityAccessToken identityAccessSecret:(NSString*) identityAccessSecret identityAccessSecretExpires:(NSDate*) identityAccessSecretExpires;
 
 /**
- Retrieves unique object id
- @returns NSNumber Unique object id
+ *  This init method is not available. You need to use class method loginWithDelegate:identityProviderDomain:identityURIOridentityBaseURI:outerFrameURLUponReload:.
+ *
+ */
+- (id) init __attribute__((unavailable("Use one of loginWithDelegate: static methods to create an identity object.")));
+
+/**
+ *  Returns unique object id
+ *
+ *  @return Unique object id
  */
 - (NSNumber*) getObjectId;
 
 /**
- Retrieves identity state
- @returns HOPIdentityState Identity state
+ *  Returns the identity state.
+ *
+ *  @return Identity state enum
  */
-- (HOPIdentityState*) getState;
+- (HOPIdnState*) getState;
 
 /**
- Retrieves whether identiy is attached or not.
- @returns BOOL YES if attached, otherwise NO
+ Returns whether identiy is attached or not.
+ @return YES if attached, otherwise NO
  */
 - (BOOL) isDelegateAttached;
 
+
 /**
- Attaches identity delegate with specified redirection URL
- @param inIdentityDelegate HOPIdentityDelegate IIdentityDelegate delegate
- @param redirectAfterLoginCompleteURL NSString Redirection URL that will be received after login is completed
+ *  Attaches identity delegate with specified redirection URL.
+ *
+ *  @param inIdentityDelegate Delegate object that implements the HOPIdentityDelegate protocol
+ *  @param redirectionURL     Redirection URL that will be received after login is completed
  */
 - (void) attachDelegate:(id<HOPIdentityDelegate>) inIdentityDelegate redirectionURL:(NSString*) redirectionURL;
 
 /**
- Attaches identity delegate for preauthorized login.
- @param inIdentityDelegate HOPIdentityDelegate IIdentityDelegate delegate
- @param identityAccessToken NSString Access token obtained from YOUR server.
- @param identityAccessSecret NSString Access secret obtained from YOUR server.
- @param identityAccessSecretExpires NSDate Access secret expire date.
+ *  Attaches identity delegate for preauthorized login.
+ *
+ *  @param inIdentityDelegate          Delegate object that implements the HOPIdentityDelegate protocol
+ *  @param identityAccessToken         Access token obtained from YOUR server
+ *  @param identityAccessSecret        Access secret obtained from YOUR server
+ *  @param identityAccessSecretExpires Access secret expiry date
  */
 - (void) attachDelegateAndPreauthorizedLogin:(id<HOPIdentityDelegate>) inIdentityDelegate identityAccessToken:(NSString*) identityAccessToken identityAccessSecret:(NSString*) identityAccessSecret identityAccessSecretExpires:(NSDate*) identityAccessSecretExpires;
 
 /**
- Retrieves identity URI
- @return NSString identity URI
+ Returns identity URI.
+ @return Identity URI
  */
 - (NSString*) getIdentityURI;
 
 /**
- Retrieves base identity URI
- @returns NSString base identity URI
+ Returns base identity URI.
+ @return Base identity URI
  */
 - (NSString*) getBaseIdentityURI;
 
 /**
- Retrieves identity provider domain
- @returns NSString identity provider domain
+ Returns identity provider domain.
+ @return Identity provider domain
  */
 - (NSString*) getIdentityProviderDomain;
 
 /**
- Retrieves identity contact for logged in user
- @returns HOPIdentityContact identity contact
+ Returns identity contact for logged in user
+ @return HOPIdentityContact object
  */
 - (HOPIdentityContact*) getSelfIdentityContact;
 
 
 /**
- Retrieves identity inner browser frame URL
- @return NSString inner browser frame URL
+ Returns identity inner browser frame URL.
+ @return Inner browser frame URL
  */
 - (NSString*) getInnerBrowserWindowFrameURL;
 
 
 /**
- Notifies core that web wiev is now visible.
+ Notifies SDK that web wiev is now visible.
  */
 - (void) notifyBrowserWindowVisible;
 
 /**
- Notifies core that redirection URL for completed login is received, and that web view can be closed.
+ Notifies SDK that redirection URL for completed login is received, and that web view can be closed.
  */
 - (void) notifyBrowserWindowClosed;
 
 /**
- Retrieves JSON message from core that needs to be passed to inner browser frame.
- @returns NSString JSON message
+ Returns JSON message from SDK that needs to be passed to inner browser frame.
+ @return JSON message
  */
 - (NSString*) getNextMessageForInnerBrowerWindowFrame;
 
 /**
- Passes JSON message from inner browser frame to core.
- @param NSString JSON message
+ Passes JSON message from inner browser frame to the SDK.
+ @param JSON message
  */
 - (void) handleMessageFromInnerBrowserWindowFrame:(NSString*) message;
 
+
 /**
- Starts indentity contacts downloading using rolodex service. 
- @param lastDownloadedVersion NSString If a previous version of the rolodex was downloaded/stored, pass in the version of the last information downloaded to prevent redownloading infomration again
+ *  Starts contacts download using rolodex service.
+ *
+ *  @param lastDownloadedVersion If a previous version of the rolodex was downloaded/stored, pass in the version of the last information downloaded to prevent redownloading infomration again
  */
 - (void) startRolodexDownload:(NSString*) lastDownloadedVersion;
 
@@ -184,11 +211,11 @@
 - (void) refreshRolodexContacts;
 
 /**
- Retrieves list of contacts downloaded using rolodex service.
- @param outFlushAllRolodexContacts BOOL This value is returned by core and if its value is YES, be prepeared to remove all your rolodex contacts stored locally if they are not downloaded in some period of time
- @param outVersionDownloaded NSString This is output parameter that will hold information about rolodex download version
- @param outRolodexContacts NSArray This is outpit list of all downloaded contacts
- @return BOOL Returns YES if contacts are downloaded
+ Returns list of contacts downloaded using rolodex service.
+ @param outFlushAllRolodexContacts  This value is returned by core and if its value is YES, be prepeared to remove all your rolodex contacts stored locally if they are not downloaded in some period of time
+ @param outVersionDownloaded  This is output parameter that will hold information about rolodex download version
+ @param outRolodexContacts  This is outpit list of all downloaded contacts
+ @return BOOL Returns YES if contacts are downloaded, otherwise NO
  */
 - (BOOL) getDownloadedRolodexContacts:(BOOL*) outFlushAllRolodexContacts outVersionDownloaded:(NSString**) outVersionDownloaded outRolodexContacts:(NSArray**) outRolodexContacts;
 
@@ -203,12 +230,12 @@
 - (void) startTimerForContactsDeletion;
 
 /**
- Stops deletion timer..
+ Stops deletion timer.
  */
 - (void) stopTimerForContactsDeletion;
 
 /**
- Destroy core object.
+ Destroys identity core object.
  */
 - (void) destroyCoreObject;
 @end

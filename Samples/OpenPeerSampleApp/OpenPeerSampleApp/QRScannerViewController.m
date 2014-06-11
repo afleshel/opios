@@ -241,7 +241,7 @@
 - (void) httpDownloader:(HTTPDownloader*) downloader downloaded:(NSString*) downloaded
 {
     NSDictionary* settingsDictionary = nil;
-    
+    BOOL showErrorNotification = YES;
     //Apply downloaded settings
     if ([downloaded length] > 0 && [downloaded rangeOfString:@">404<"].location == NSNotFound)
     {
@@ -252,6 +252,7 @@
             [[Settings sharedSettings] snapshotCurrentSettings];
             [[Settings sharedSettings] storeQRSettings:settingsDictionary];
             [[HOPSettings sharedSettings] storeSettingsFromDictionary:settingsDictionary];
+            showErrorNotification = NO;
         }
     }
     else
@@ -264,7 +265,10 @@
         {
             OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Received empty settings string.");
         }
-        
+    }
+    
+    if (showErrorNotification)
+    {
         UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Downloading login settings failed!"
                                                             message:@"Login will proceed with default settings."
                                                            delegate:nil

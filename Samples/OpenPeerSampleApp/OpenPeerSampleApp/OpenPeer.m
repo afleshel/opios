@@ -46,6 +46,7 @@
 //Managers
 #import "LoginManager.h"
 #import "SessionManager.h"
+#import "OfflineManager.h"
 //Delegates
 #import "StackDelegate.h"
 #import "MediaEngineDelegate.h"
@@ -60,6 +61,7 @@
 #import "MainViewController.h"
 //#import "HTTPDownloader.h"
 
+#import "UIDevice+Networking.h"
 
 //Private methods
 @interface OpenPeer ()
@@ -112,34 +114,40 @@
     //Set log levels and start logging
     [Logger startAllSelectedLoggers];
     
-    //Set persistent stores
-    NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
-    NSString *dataPathDirectory = [libraryPath stringByAppendingPathComponent:@"db"];
-    [[HOPModelManager sharedModelManager] setDataPath:dataPathDirectory backupData:NO];
-    [[HOPModelManager sharedModelManager] clearSessionRecords];
- 
-    //Set settigns delegate
-    [[HOPSettings sharedSettings] setup];
-    [[HOPSettings sharedSettings] applyDefaults];
-    
-    //Cleare expired cookies and set delegate
-    [[HOPCache sharedCache] removeExpiredCookies];
-    [[HOPCache sharedCache] setup];
-
-    BOOL startDownloadingSettings = [[Settings sharedSettings] updateAppSettings];
-    
-    if (![[HOPModelManager sharedModelManager] getLastLoggedInHomeUser])
+    if ([UIDevice isNetworkReachable])
     {
-        //Start settings download. If download is not started finish presetup
-        if (!startDownloadingSettings)
-            [self finishPreSetup];
+        //Set persistent stores
+        NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
+        NSString *dataPathDirectory = [libraryPath stringByAppendingPathComponent:@"db"];
+        [[HOPModelManager sharedModelManager] setDataPath:dataPathDirectory backupData:NO];
+        [[HOPModelManager sharedModelManager] clearSessionRecords];
+     
+        //Set settigns delegate
+        [[HOPSettings sharedSettings] setup];
+        if ([Utility isRuningForTheFirstTime])
+            [[HOPSettings sharedSettings] applyDefaults];
+        
+        //Cleare expired cookies and set delegate
+        [[HOPCache sharedCache] removeExpiredCookies];
+        [[HOPCache sharedCache] setup];
+
+        BOOL startDownloadingSettings = [[Settings sharedSettings] updateAppSettings];
+        
+        if (![[HOPModelManager sharedModelManager] getLastLoggedInHomeUser])
+        {
+            //Start settings download. If download is not started finish presetup
+            if (!startDownloadingSettings)
+                [self finishPreSetup];
+        }
+        else
+        {
+            //Start settings download. If download is not started finish setup
+            if (!startDownloadingSettings)
+                [self setup];
+        }
     }
     else
-    {
-        //Start settings download. If download is not started finish setup
-        if (!startDownloadingSettings)
-            [self setup];
-    }
+        [[OfflineManager sharedOfflineManager]showInfoAboutNetworkProblem];
 }
 
 - (void) finishPreSetup

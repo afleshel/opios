@@ -121,7 +121,7 @@
     [self.loginWebViewsDictionary removeObjectForKey:[identity getObjectId]];
 }
 
-- (void)identity:(HOPIdentity *)identity stateChanged:(HOPIdentityStates)state
+- (void)identity:(HOPIdentity *)identity stateChanged:(HOPIdentityState)state
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"<%p> Identity login state has changed to: %@ - identityURI: %@",identity, [HOPIdentity stringForIdentityState:state], [identity getIdentityURI]);
     
@@ -210,7 +210,7 @@
                 
             case HOPIdentityStateShutdown:
             {
-                HOPIdentityState* identityState = [identity getState];
+                HOPIdnState* identityState = [identity getState];
                 if (identityState.lastErrorCode)
                     [self.loginDelegate onIdentityLoginError:identityState.lastErrorReason];
                 [identity destroyCoreObject];

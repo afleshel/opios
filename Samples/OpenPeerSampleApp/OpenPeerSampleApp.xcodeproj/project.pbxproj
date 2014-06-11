@@ -48,8 +48,8 @@
 		871BC9A7179EECC400AEA4A6 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 871BC9A6179EECC400AEA4A6 /* CoreData.framework */; };
 		871C7B8D17FEBED200BE641B /* SplashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 871C7B8B17FEBED200BE641B /* SplashViewController.m */; };
 		871C7B8E17FEBED200BE641B /* SplashViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 871C7B8C17FEBED200BE641B /* SplashViewController.xib */; };
-		871C7B9617FEDC3600BE641B /* OpenPeerLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 871C7B9517FEDC3600BE641B /* OpenPeerLogo.png */; };
-		871C7B9817FEDCEE00BE641B /* OpenPeerLogo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 871C7B9717FEDCEE00BE641B /* OpenPeerLogo@2x.png */; };
+		871C7B9617FEDC3600BE641B /* ApplicationLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 871C7B9517FEDC3600BE641B /* ApplicationLogo.png */; };
+		871C7B9817FEDCEE00BE641B /* ApplicationLogo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 871C7B9717FEDCEE00BE641B /* ApplicationLogo@2x.png */; };
 		871C7B9A17FEDD8900BE641B /* gear_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 871C7B9917FEDD8900BE641B /* gear_icon.png */; };
 		87224729182D01AB0027DA50 /* iPhone_lightning_bolt.png in Resources */ = {isa = PBXBuildFile; fileRef = 87224727182D01AB0027DA50 /* iPhone_lightning_bolt.png */; };
 		8722472A182D01AB0027DA50 /* iPhone_lightning_bolt@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 87224728182D01AB0027DA50 /* iPhone_lightning_bolt@2x.png */; };
@@ -86,6 +86,8 @@
 		87272850166CC1810089CBB6 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8727284E166CC1810089CBB6 /* MainViewController.m */; };
 		87272851166CC1810089CBB6 /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8727284F166CC1810089CBB6 /* MainViewController.xib */; };
 		87272859166CC45B0089CBB6 /* LoginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87272858166CC45B0089CBB6 /* LoginManager.m */; };
+		872B1EBC191A1C47000E21C9 /* OfflineManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 872B1EBB191A1C47000E21C9 /* OfflineManager.m */; };
+		872B1EBD191A1C47000E21C9 /* OfflineManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 872B1EBB191A1C47000E21C9 /* OfflineManager.m */; };
 		872D7E9E1897E19A005D8335 /* QRScannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D7E9C1897E19A005D8335 /* QRScannerViewController.m */; };
 		872D7E9F1897E19A005D8335 /* QRScannerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 872D7E9D1897E19A005D8335 /* QRScannerViewController.xib */; };
 		872DC43B18D9AFED009B6005 /* APNSInboxManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 872DC43218D9AFE4009B6005 /* APNSInboxManager.m */; };
@@ -182,6 +184,7 @@
 		874AD9DB166CEB530095FE33 /* ConversationThreadDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 874AD9DA166CEB530095FE33 /* ConversationThreadDelegate.m */; };
 		874AD9DE166CEB780095FE33 /* CallDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 874AD9DD166CEB780095FE33 /* CallDelegate.m */; };
 		874AD9E5166D4C900095FE33 /* OpenPeer.m in Sources */ = {isa = PBXBuildFile; fileRef = 874AD9E4166D4C900095FE33 /* OpenPeer.m */; };
+		874B135C1935F96800993F8D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 874B135B1935F96800993F8D /* AudioToolbox.framework */; };
 		874FE10E17FD7FF0007A791B /* AppLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 874FE10D17FD7FF0007A791B /* AppLog.m */; };
 		8754280918C7A2FD007F626F /* CustomerSpecific_Release.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8754280818C7A2FD007F626F /* CustomerSpecific_Release.plist */; };
 		87570E46172ED183006E1C2F /* OpenpeerSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87570E45172ED183006E1C2F /* OpenpeerSDK.framework */; };
@@ -220,6 +223,10 @@
 		878E880C19105076000DAA8A /* OpenPeerSampleAPNSApp-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 878E880B19105076000DAA8A /* OpenPeerSampleAPNSApp-Info.plist */; };
 		87904E9818D06FD1004BC06C /* AppInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87904E9618D06FD1004BC06C /* AppInfoViewController.m */; };
 		87904EA118D07725004BC06C /* AppInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87904E9618D06FD1004BC06C /* AppInfoViewController.m */; };
+		879923941917B05400FBD21E /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 879923931917B05400FBD21E /* Reachability.m */; };
+		879923951917B05400FBD21E /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 879923931917B05400FBD21E /* Reachability.m */; };
+		8799239E1917C85500FBD21E /* UIDevice+Networking.m in Sources */ = {isa = PBXBuildFile; fileRef = 8799239D1917C85500FBD21E /* UIDevice+Networking.m */; };
+		8799239F1917C85500FBD21E /* UIDevice+Networking.m in Sources */ = {isa = PBXBuildFile; fileRef = 8799239D1917C85500FBD21E /* UIDevice+Networking.m */; };
 		879D7B9717FB1224008C78E2 /* LoggerSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 879D7B9617FB1224008C78E2 /* LoggerSettingsViewController.m */; };
 		879DC5F418C92FE800DA60C0 /* BackgroundingDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 87CCF64318C0FFDB000DF636 /* BackgroundingDelegate.m */; };
 		879DC62A18C9F77400DA60C0 /* Template_CustomerSpecific_Release.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8731272118C670AD00507144 /* Template_CustomerSpecific_Release.plist */; };
@@ -227,6 +234,8 @@
 		87A1086A1802C116001F705D /* Logger.m in Sources */ = {isa = PBXBuildFile; fileRef = 87A108691802C116001F705D /* Logger.m */; };
 		87A1086C1802CBDC001F705D /* logger.png in Resources */ = {isa = PBXBuildFile; fileRef = 87A1086B1802CBDC001F705D /* logger.png */; };
 		87A1086E1802CD92001F705D /* logger@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 87A1086D1802CD92001F705D /* logger@2x.png */; };
+		87A73518193D00F700769011 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 874B135B1935F96800993F8D /* AudioToolbox.framework */; };
+		87A73519193D078A00769011 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87D4BDF518683B38008C2D30 /* SystemConfiguration.framework */; };
 		87B541D11897E2440038D427 /* QRScannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D7E9C1897E19A005D8335 /* QRScannerViewController.m */; };
 		87B5EAC318683E4300D25C3B /* APNSManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87B5EABF18683E3B00D25C3B /* APNSManager.m */; };
 		87BFEDBA183A885C00A48821 /* AppConsts.m in Sources */ = {isa = PBXBuildFile; fileRef = 87BFEDB8183A885C00A48821 /* AppConsts.m */; };
@@ -293,7 +302,6 @@
 		87D4BD1818675368008C2D30 /* libresolv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 87EE5FE8166E917B002C5FA3 /* libresolv.dylib */; };
 		87D4BD1918675368008C2D30 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87E0FFB317BB8ADD00F30484 /* AddressBook.framework */; };
 		87D4BD1A18675368008C2D30 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87FF988D170EDB5C0017C627 /* AssetsLibrary.framework */; };
-		87D4BD1B18675368008C2D30 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 874ADDBA166E14000095FE33 /* AudioToolbox.framework */; };
 		87D4BD1C18675368008C2D30 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 874ADDB8166E13970095FE33 /* AVFoundation.framework */; };
 		87D4BD1E18675368008C2D30 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 874ADDB4166E138A0095FE33 /* CoreAudio.framework */; };
 		87D4BD1F18675368008C2D30 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 871BC9A6179EECC400AEA4A6 /* CoreData.framework */; };
@@ -313,7 +321,7 @@
 		87D4BD2E18675368008C2D30 /* VideoCallViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8730D6E21832601C008D1D37 /* VideoCallViewController.xib */; };
 		87D4BD2F18675368008C2D30 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 87272835166CBF9B0089CBB6 /* InfoPlist.strings */; };
 		87D4BD3018675368008C2D30 /* IncomingCallView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 874408C7182FE873004AD8FC /* IncomingCallView_iPhone.xib */; };
-		87D4BD3118675368008C2D30 /* OpenPeerLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 871C7B9517FEDC3600BE641B /* OpenPeerLogo.png */; };
+		87D4BD3118675368008C2D30 /* ApplicationLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 871C7B9517FEDC3600BE641B /* ApplicationLogo.png */; };
 		87D4BD3218675368008C2D30 /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8727284F166CC1810089CBB6 /* MainViewController.xib */; };
 		87D4BD3318675368008C2D30 /* iPhone_loader_00024.png in Resources */ = {isa = PBXBuildFile; fileRef = 8730D7A11833A63D008D1D37 /* iPhone_loader_00024.png */; };
 		87D4BD3418675368008C2D30 /* audio-call-mic-active.png in Resources */ = {isa = PBXBuildFile; fileRef = 8722474E182D165A0027DA50 /* audio-call-mic-active.png */; };
@@ -359,7 +367,7 @@
 		87D4BD5D18675368008C2D30 /* tableViewCell_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8719AB0517CE0710007E991B /* tableViewCell_selected@2x.png */; };
 		87D4BD5E18675368008C2D30 /* tableViewCell_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 8719AB0617CE0710007E991B /* tableViewCell_selected.png */; };
 		87D4BD5F18675368008C2D30 /* iPhone_Button-end-baritem.png in Resources */ = {isa = PBXBuildFile; fileRef = 8730D75A183398A5008D1D37 /* iPhone_Button-end-baritem.png */; };
-		87D4BD6018675368008C2D30 /* OpenPeerLogo57.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E4D99C180BE07F002CA2D4 /* OpenPeerLogo57.png */; };
+		87D4BD6018675368008C2D30 /* ApplicationLogo57.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E4D99C180BE07F002CA2D4 /* ApplicationLogo57.png */; };
 		87D4BD6118675368008C2D30 /* calling.wav in Resources */ = {isa = PBXBuildFile; fileRef = 87E4DA07180D5082002CA2D4 /* calling.wav */; };
 		87D4BD6218675368008C2D30 /* SplashViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 871C7B8C17FEBED200BE641B /* SplashViewController.xib */; };
 		87D4BD6318675368008C2D30 /* iPhone_video_bottomBar_bkgd@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8730D76918339DBF008D1D37 /* iPhone_video_bottomBar_bkgd@2x.png */; };
@@ -378,7 +386,7 @@
 		87D4BD7018675368008C2D30 /* iPhone_loader_00016@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8730D7921833A63D008D1D37 /* iPhone_loader_00016@2x.png */; };
 		87D4BD7118675368008C2D30 /* iPhone_chat_textfield_bkgd@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8757E1B91827E5A200D7BDA1 /* iPhone_chat_textfield_bkgd@2x.png */; };
 		87D4BD7218675368008C2D30 /* iPhone_loader_00005@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8730D77C1833A63D008D1D37 /* iPhone_loader_00005@2x.png */; };
-		87D4BD7318675368008C2D30 /* OpenPeerLogo29.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E4D9A4180BE199002CA2D4 /* OpenPeerLogo29.png */; };
+		87D4BD7318675368008C2D30 /* ApplicationLogo29.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E4D9A4180BE199002CA2D4 /* ApplicationLogo29.png */; };
 		87D4BD7418675368008C2D30 /* iPhone_loader_00005.png in Resources */ = {isa = PBXBuildFile; fileRef = 8730D77B1833A63D008D1D37 /* iPhone_loader_00005.png */; };
 		87D4BD7518675368008C2D30 /* ContactTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8722A67017CF7FAD002A3BB6 /* ContactTableViewCell.xib */; };
 		87D4BD7618675368008C2D30 /* iPhone_loader_00022@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8730D79E1833A63D008D1D37 /* iPhone_loader_00022@2x.png */; };
@@ -387,7 +395,7 @@
 		87D4BD7918675368008C2D30 /* iPhone_lightning_bolt@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 87224728182D01AB0027DA50 /* iPhone_lightning_bolt@2x.png */; };
 		87D4BD7A18675368008C2D30 /* video_indicator_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 8722A67B17D35AB3002A3BB6 /* video_indicator_blue.png */; };
 		87D4BD7B18675368008C2D30 /* chat_indicator_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 8722A67C17D35AB3002A3BB6 /* chat_indicator_blue.png */; };
-		87D4BD7C18675368008C2D30 /* OpenPeerLogo114.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E4D99D180BE07F002CA2D4 /* OpenPeerLogo114.png */; };
+		87D4BD7C18675368008C2D30 /* ApplicationLogo114.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E4D99D180BE07F002CA2D4 /* ApplicationLogo114.png */; };
 		87D4BD7D18675368008C2D30 /* iPhone_loader_00013@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8730D78C1833A63D008D1D37 /* iPhone_loader_00013@2x.png */; };
 		87D4BD7E18675368008C2D30 /* iPhone_loader_00015@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8730D7901833A63D008D1D37 /* iPhone_loader_00015@2x.png */; };
 		87D4BD7F18675368008C2D30 /* audio-call-speaker-press.png in Resources */ = {isa = PBXBuildFile; fileRef = 87224753182D165A0027DA50 /* audio-call-speaker-press.png */; };
@@ -426,7 +434,7 @@
 		87D4BDA018675368008C2D30 /* iPhone_tabBar_settings_active_Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8712BE6C17D8CC7C00665F42 /* iPhone_tabBar_settings_active_Icon.png */; };
 		87D4BDA118675368008C2D30 /* iPhone_tabBar_contacts_inactive@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8712BE6D17D8CC7C00665F42 /* iPhone_tabBar_contacts_inactive@2x.png */; };
 		87D4BDA218675368008C2D30 /* ringing.caf in Resources */ = {isa = PBXBuildFile; fileRef = 87E4DA0D180D5082002CA2D4 /* ringing.caf */; };
-		87D4BDA318675368008C2D30 /* OpenPeerLogo120.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E4D99E180BE07F002CA2D4 /* OpenPeerLogo120.png */; };
+		87D4BDA318675368008C2D30 /* ApplicationLogo120.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E4D99E180BE07F002CA2D4 /* ApplicationLogo120.png */; };
 		87D4BDA418675368008C2D30 /* chat_bubble_right.png in Resources */ = {isa = PBXBuildFile; fileRef = 8757E1C51827E7AE00D7BDA1 /* chat_bubble_right.png */; };
 		87D4BDA518675368008C2D30 /* iPhone_loader_00009.png in Resources */ = {isa = PBXBuildFile; fileRef = 8730D7831833A63D008D1D37 /* iPhone_loader_00009.png */; };
 		87D4BDA618675368008C2D30 /* iPhone_audio_add_caller@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 87224755182D165A0027DA50 /* iPhone_audio_add_caller@2x.png */; };
@@ -445,7 +453,7 @@
 		87D4BDB318675368008C2D30 /* facebook_tag@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E4D9FE180D3545002CA2D4 /* facebook_tag@2x.png */; };
 		87D4BDB418675368008C2D30 /* iPhone_tabBar_contacts_active.png in Resources */ = {isa = PBXBuildFile; fileRef = 8712BE7017D8CC7C00665F42 /* iPhone_tabBar_contacts_active.png */; };
 		87D4BDB518675368008C2D30 /* iPhone_switch_camera.png in Resources */ = {isa = PBXBuildFile; fileRef = 8730D6FC18328D6A008D1D37 /* iPhone_switch_camera.png */; };
-		87D4BDB618675368008C2D30 /* OpenPeerLogo58.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E4D9A5180BE199002CA2D4 /* OpenPeerLogo58.png */; };
+		87D4BDB618675368008C2D30 /* ApplicationLogo58.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E4D9A5180BE199002CA2D4 /* ApplicationLogo58.png */; };
 		87D4BDB718675368008C2D30 /* iPhone_tabBar_bkgd@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8712BE7117D8CC7C00665F42 /* iPhone_tabBar_bkgd@2x.png */; };
 		87D4BDB818675368008C2D30 /* iPhone_lightning_bolt.png in Resources */ = {isa = PBXBuildFile; fileRef = 87224727182D01AB0027DA50 /* iPhone_lightning_bolt.png */; };
 		87D4BDB918675368008C2D30 /* iPhone_switch_camera@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8730D6FD18328D6A008D1D37 /* iPhone_switch_camera@2x.png */; };
@@ -461,7 +469,7 @@
 		87D4BDC318675368008C2D30 /* iPhone_loader_00019.png in Resources */ = {isa = PBXBuildFile; fileRef = 8730D7971833A63D008D1D37 /* iPhone_loader_00019.png */; };
 		87D4BDC418675368008C2D30 /* audio-call-mic-active@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8722474F182D165A0027DA50 /* audio-call-mic-active@2x.png */; };
 		87D4BDC518675368008C2D30 /* iPhone_loader_00014@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8730D78E1833A63D008D1D37 /* iPhone_loader_00014@2x.png */; };
-		87D4BDC618675368008C2D30 /* OpenPeerLogo80.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E4D9A6180BE199002CA2D4 /* OpenPeerLogo80.png */; };
+		87D4BDC618675368008C2D30 /* ApplicationLogo80.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E4D9A6180BE199002CA2D4 /* ApplicationLogo80.png */; };
 		87D4BDC718675368008C2D30 /* chat_bubble_left.png in Resources */ = {isa = PBXBuildFile; fileRef = 8757E1C41827E7AE00D7BDA1 /* chat_bubble_left.png */; };
 		87D4BDC818675368008C2D30 /* chat-bottom@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8730D76118339AFE008D1D37 /* chat-bottom@2x.png */; };
 		87D4BDC918675368008C2D30 /* iPhone_loader_00026.png in Resources */ = {isa = PBXBuildFile; fileRef = 8730D7A51833A63D008D1D37 /* iPhone_loader_00026.png */; };
@@ -469,7 +477,7 @@
 		87D4BDCB18675368008C2D30 /* iPhone_tabBar_bkgd.png in Resources */ = {isa = PBXBuildFile; fileRef = 8712BE7217D8CC7C00665F42 /* iPhone_tabBar_bkgd.png */; };
 		87D4BDCC18675368008C2D30 /* iPhone_back_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8712BE7317D8CC7C00665F42 /* iPhone_back_button@2x.png */; };
 		87D4BDCD18675368008C2D30 /* iPhone_back_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 8712BE7417D8CC7C00665F42 /* iPhone_back_button.png */; };
-		87D4BDCE18675368008C2D30 /* OpenPeerLogo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 871C7B9717FEDCEE00BE641B /* OpenPeerLogo@2x.png */; };
+		87D4BDCE18675368008C2D30 /* ApplicationLogo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 871C7B9717FEDCEE00BE641B /* ApplicationLogo@2x.png */; };
 		87D4BDF418683B16008C2D30 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87D4BDF318683B16008C2D30 /* CFNetwork.framework */; };
 		87D4BDF618683B39008C2D30 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87D4BDF518683B38008C2D30 /* SystemConfiguration.framework */; };
 		87D4BDF818683B4C008C2D30 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 87D4BDF718683B4C008C2D30 /* libsqlite3.dylib */; };
@@ -481,12 +489,12 @@
 		87DBAFD81910433000BD6F76 /* OpenPeerSampleApp-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 87272834166CBF9B0089CBB6 /* OpenPeerSampleApp-Info.plist */; };
 		87E0FFB417BB8ADD00F30484 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87E0FFB317BB8ADD00F30484 /* AddressBook.framework */; };
 		87E3CCE7172A814F00084D2F /* IdentityLookupDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 87E3CCE6172A814F00084D2F /* IdentityLookupDelegate.m */; };
-		87E4D99F180BE07F002CA2D4 /* OpenPeerLogo57.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E4D99C180BE07F002CA2D4 /* OpenPeerLogo57.png */; };
-		87E4D9A0180BE07F002CA2D4 /* OpenPeerLogo114.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E4D99D180BE07F002CA2D4 /* OpenPeerLogo114.png */; };
-		87E4D9A1180BE07F002CA2D4 /* OpenPeerLogo120.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E4D99E180BE07F002CA2D4 /* OpenPeerLogo120.png */; };
-		87E4D9A7180BE199002CA2D4 /* OpenPeerLogo29.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E4D9A4180BE199002CA2D4 /* OpenPeerLogo29.png */; };
-		87E4D9A8180BE199002CA2D4 /* OpenPeerLogo58.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E4D9A5180BE199002CA2D4 /* OpenPeerLogo58.png */; };
-		87E4D9A9180BE199002CA2D4 /* OpenPeerLogo80.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E4D9A6180BE199002CA2D4 /* OpenPeerLogo80.png */; };
+		87E4D99F180BE07F002CA2D4 /* ApplicationLogo57.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E4D99C180BE07F002CA2D4 /* ApplicationLogo57.png */; };
+		87E4D9A0180BE07F002CA2D4 /* ApplicationLogo114.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E4D99D180BE07F002CA2D4 /* ApplicationLogo114.png */; };
+		87E4D9A1180BE07F002CA2D4 /* ApplicationLogo120.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E4D99E180BE07F002CA2D4 /* ApplicationLogo120.png */; };
+		87E4D9A7180BE199002CA2D4 /* ApplicationLogo29.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E4D9A4180BE199002CA2D4 /* ApplicationLogo29.png */; };
+		87E4D9A8180BE199002CA2D4 /* ApplicationLogo58.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E4D9A5180BE199002CA2D4 /* ApplicationLogo58.png */; };
+		87E4D9A9180BE199002CA2D4 /* ApplicationLogo80.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E4D9A6180BE199002CA2D4 /* ApplicationLogo80.png */; };
 		87E4D9FF180D3545002CA2D4 /* facebook_tag.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E4D9FD180D3545002CA2D4 /* facebook_tag.png */; };
 		87E4DA00180D3545002CA2D4 /* facebook_tag@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E4D9FE180D3545002CA2D4 /* facebook_tag@2x.png */; };
 		87E4DA05180D4E8D002CA2D4 /* SoundsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87E4DA04180D4E8D002CA2D4 /* SoundsManager.m */; };
@@ -498,7 +506,6 @@
 		87EE5FF4166E9615002C5FA3 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 874ADDB4166E138A0095FE33 /* CoreAudio.framework */; };
 		87EE5FF5166E9615002C5FA3 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 874ADDBC166E14440095FE33 /* CoreMedia.framework */; };
 		87EE5FF6166E9615002C5FA3 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 874ADDB6166E13910095FE33 /* CoreVideo.framework */; };
-		87EE5FF7166E961F002C5FA3 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 874ADDBA166E14000095FE33 /* AudioToolbox.framework */; };
 		87EE5FF8166E9625002C5FA3 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 874ADDB8166E13970095FE33 /* AVFoundation.framework */; };
 		87EE5FFB166F5A7F002C5FA3 /* WebLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87EE5FFA166F5A7F002C5FA3 /* WebLoginViewController.m */; };
 		87EE6070166F667C002C5FA3 /* WebLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 87EE606F166F667B002C5FA3 /* WebLoginViewController.xib */; };
@@ -678,8 +685,8 @@
 		871C7B8A17FEBED200BE641B /* SplashViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplashViewController.h; sourceTree = "<group>"; };
 		871C7B8B17FEBED200BE641B /* SplashViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SplashViewController.m; sourceTree = "<group>"; };
 		871C7B8C17FEBED200BE641B /* SplashViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SplashViewController.xib; sourceTree = "<group>"; };
-		871C7B9517FEDC3600BE641B /* OpenPeerLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OpenPeerLogo.png; sourceTree = "<group>"; };
-		871C7B9717FEDCEE00BE641B /* OpenPeerLogo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "OpenPeerLogo@2x.png"; sourceTree = "<group>"; };
+		871C7B9517FEDC3600BE641B /* ApplicationLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ApplicationLogo.png; sourceTree = "<group>"; };
+		871C7B9717FEDCEE00BE641B /* ApplicationLogo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ApplicationLogo@2x.png"; sourceTree = "<group>"; };
 		871C7B9917FEDD8900BE641B /* gear_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gear_icon.png; sourceTree = "<group>"; };
 		87224727182D01AB0027DA50 /* iPhone_lightning_bolt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPhone_lightning_bolt.png; sourceTree = "<group>"; };
 		87224728182D01AB0027DA50 /* iPhone_lightning_bolt@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone_lightning_bolt@2x.png"; sourceTree = "<group>"; };
@@ -727,6 +734,9 @@
 		87272857166CC45A0089CBB6 /* LoginManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginManager.h; sourceTree = "<group>"; };
 		87272858166CC45B0089CBB6 /* LoginManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginManager.m; sourceTree = "<group>"; };
 		872729CF166CDF530089CBB6 /* openpeer-ios-sdk.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "openpeer-ios-sdk.xcodeproj"; path = "../../openpeer-ios-sdk.xcodeproj"; sourceTree = "<group>"; };
+		872B1EB01918F7AD000E21C9 /* OpenPeerSampleApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = OpenPeerSampleApp.entitlements; sourceTree = "<group>"; };
+		872B1EBA191A1C47000E21C9 /* OfflineManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OfflineManager.h; sourceTree = "<group>"; };
+		872B1EBB191A1C47000E21C9 /* OfflineManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OfflineManager.m; sourceTree = "<group>"; };
 		872D7E9B1897E19A005D8335 /* QRScannerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRScannerViewController.h; sourceTree = "<group>"; };
 		872D7E9C1897E19A005D8335 /* QRScannerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRScannerViewController.m; sourceTree = "<group>"; };
 		872D7E9D1897E19A005D8335 /* QRScannerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QRScannerViewController.xib; sourceTree = "<group>"; };
@@ -827,14 +837,15 @@
 		874AD9D9166CEB530095FE33 /* ConversationThreadDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConversationThreadDelegate.h; sourceTree = "<group>"; };
 		874AD9DA166CEB530095FE33 /* ConversationThreadDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConversationThreadDelegate.m; sourceTree = "<group>"; };
 		874AD9DC166CEB780095FE33 /* CallDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CallDelegate.h; sourceTree = "<group>"; };
-		874AD9DD166CEB780095FE33 /* CallDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CallDelegate.m; sourceTree = "<group>"; };
+		874AD9DD166CEB780095FE33 /* CallDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CallDelegate.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		874AD9E3166D4C900095FE33 /* OpenPeer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = OpenPeer.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		874AD9E4166D4C900095FE33 /* OpenPeer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = OpenPeer.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		874ADDB4166E138A0095FE33 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		874ADDB6166E13910095FE33 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		874ADDB8166E13970095FE33 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		874ADDBA166E14000095FE33 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		874ADDBC166E14440095FE33 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		874B135A1935F3D600993F8D /* openpeersample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = openpeersample.entitlements; sourceTree = "<group>"; };
+		874B135B1935F96800993F8D /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		874FE10D17FD7FF0007A791B /* AppLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppLog.m; sourceTree = "<group>"; };
 		874FE11117FD8DA9007A791B /* AppLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppLog.h; sourceTree = "<group>"; };
 		8754280818C7A2FD007F626F /* CustomerSpecific_Release.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CustomerSpecific_Release.plist; sourceTree = "<group>"; };
@@ -875,6 +886,10 @@
 		878E880B19105076000DAA8A /* OpenPeerSampleAPNSApp-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "OpenPeerSampleAPNSApp-Info.plist"; sourceTree = "<group>"; };
 		87904E9518D06FD1004BC06C /* AppInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppInfoViewController.h; sourceTree = "<group>"; };
 		87904E9618D06FD1004BC06C /* AppInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppInfoViewController.m; sourceTree = "<group>"; };
+		879923921917B05400FBD21E /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		879923931917B05400FBD21E /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		8799239C1917C85500FBD21E /* UIDevice+Networking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+Networking.h"; sourceTree = "<group>"; };
+		8799239D1917C85500FBD21E /* UIDevice+Networking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+Networking.m"; sourceTree = "<group>"; };
 		879D7B9517FB1224008C78E2 /* LoggerSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoggerSettingsViewController.h; sourceTree = "<group>"; };
 		879D7B9617FB1224008C78E2 /* LoggerSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = LoggerSettingsViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		879DC66018CA0F1C00DA60C0 /* HTTPDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPDownloader.h; sourceTree = "<group>"; };
@@ -953,12 +968,12 @@
 		87E0FFB317BB8ADD00F30484 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		87E3CCE5172A814F00084D2F /* IdentityLookupDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdentityLookupDelegate.h; sourceTree = "<group>"; };
 		87E3CCE6172A814F00084D2F /* IdentityLookupDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdentityLookupDelegate.m; sourceTree = "<group>"; };
-		87E4D99C180BE07F002CA2D4 /* OpenPeerLogo57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OpenPeerLogo57.png; sourceTree = "<group>"; };
-		87E4D99D180BE07F002CA2D4 /* OpenPeerLogo114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OpenPeerLogo114.png; sourceTree = "<group>"; };
-		87E4D99E180BE07F002CA2D4 /* OpenPeerLogo120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OpenPeerLogo120.png; sourceTree = "<group>"; };
-		87E4D9A4180BE199002CA2D4 /* OpenPeerLogo29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OpenPeerLogo29.png; sourceTree = "<group>"; };
-		87E4D9A5180BE199002CA2D4 /* OpenPeerLogo58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OpenPeerLogo58.png; sourceTree = "<group>"; };
-		87E4D9A6180BE199002CA2D4 /* OpenPeerLogo80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OpenPeerLogo80.png; sourceTree = "<group>"; };
+		87E4D99C180BE07F002CA2D4 /* ApplicationLogo57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ApplicationLogo57.png; sourceTree = "<group>"; };
+		87E4D99D180BE07F002CA2D4 /* ApplicationLogo114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ApplicationLogo114.png; sourceTree = "<group>"; };
+		87E4D99E180BE07F002CA2D4 /* ApplicationLogo120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ApplicationLogo120.png; sourceTree = "<group>"; };
+		87E4D9A4180BE199002CA2D4 /* ApplicationLogo29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ApplicationLogo29.png; sourceTree = "<group>"; };
+		87E4D9A5180BE199002CA2D4 /* ApplicationLogo58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ApplicationLogo58.png; sourceTree = "<group>"; };
+		87E4D9A6180BE199002CA2D4 /* ApplicationLogo80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ApplicationLogo80.png; sourceTree = "<group>"; };
 		87E4D9FD180D3545002CA2D4 /* facebook_tag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebook_tag.png; sourceTree = "<group>"; };
 		87E4D9FE180D3545002CA2D4 /* facebook_tag@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "facebook_tag@2x.png"; sourceTree = "<group>"; };
 		87E4DA03180D4E8D002CA2D4 /* SoundsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundsManager.h; sourceTree = "<group>"; };
@@ -978,8 +993,8 @@
 		87F09EE1171EBB1B0045F6A6 /* ChatMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatMessageCell.h; sourceTree = "<group>"; };
 		87F09EE5171EBB2A0045F6A6 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
 		87F09EE6171EBB2A0045F6A6 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
-		87F24B5D166FF0C900A5389F /* Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utility.h; sourceTree = "<group>"; };
-		87F24B5E166FF0C900A5389F /* Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utility.m; sourceTree = "<group>"; };
+		87F24B5D166FF0C900A5389F /* Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = Utility.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		87F24B5E166FF0C900A5389F /* Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = Utility.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		87F24B60167003F300A5389F /* ContactsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactsManager.h; sourceTree = "<group>"; };
 		87F24B61167003F300A5389F /* ContactsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactsManager.m; sourceTree = "<group>"; };
 		87FC39F51709BB36002030D1 /* MessageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageManager.m; sourceTree = "<group>"; };
@@ -1030,14 +1045,15 @@
 				87796E8618A8DDA7002F4B43 /* libcurl.a in Frameworks */,
 				87E0FFB417BB8ADD00F30484 /* AddressBook.framework in Frameworks */,
 				87FF988E170EDB5D0017C627 /* AssetsLibrary.framework in Frameworks */,
-				87EE5FF7166E961F002C5FA3 /* AudioToolbox.framework in Frameworks */,
 				87EE5FF8166E9625002C5FA3 /* AVFoundation.framework in Frameworks */,
 				87EE5FF4166E9615002C5FA3 /* CoreAudio.framework in Frameworks */,
+				87A73518193D00F700769011 /* AudioToolbox.framework in Frameworks */,
 				871BC9A7179EECC400AEA4A6 /* CoreData.framework in Frameworks */,
 				87272831166CBF9B0089CBB6 /* CoreGraphics.framework in Frameworks */,
 				87FF9892170EDB7D0017C627 /* CoreImage.framework in Frameworks */,
 				8757E1CE1827ED5600D7BDA1 /* CoreText.framework in Frameworks */,
 				87EE5FF5166E9615002C5FA3 /* CoreMedia.framework in Frameworks */,
+				87A73519193D078A00769011 /* SystemConfiguration.framework in Frameworks */,
 				87EE5FF6166E9615002C5FA3 /* CoreVideo.framework in Frameworks */,
 				8727282F166CBF9B0089CBB6 /* Foundation.framework in Frameworks */,
 				87FF9890170EDB6D0017C627 /* MobileCoreServices.framework in Frameworks */,
@@ -1065,13 +1081,13 @@
 				87D4BD1818675368008C2D30 /* libresolv.dylib in Frameworks */,
 				87D4BD1918675368008C2D30 /* AddressBook.framework in Frameworks */,
 				87D4BD1A18675368008C2D30 /* AssetsLibrary.framework in Frameworks */,
-				87D4BD1B18675368008C2D30 /* AudioToolbox.framework in Frameworks */,
 				87D4BD1C18675368008C2D30 /* AVFoundation.framework in Frameworks */,
 				87D4BD1E18675368008C2D30 /* CoreAudio.framework in Frameworks */,
 				87D4BECA18683C0D008C2D30 /* libUAirship-3.0.2.a in Frameworks */,
 				87D4BD1F18675368008C2D30 /* CoreData.framework in Frameworks */,
 				87D4BD2018675368008C2D30 /* CoreGraphics.framework in Frameworks */,
 				87D4BD2118675368008C2D30 /* CoreImage.framework in Frameworks */,
+				874B135C1935F96800993F8D /* AudioToolbox.framework in Frameworks */,
 				87D4BD2218675368008C2D30 /* CoreText.framework in Frameworks */,
 				87D4BD2318675368008C2D30 /* CoreMedia.framework in Frameworks */,
 				87D4BD2418675368008C2D30 /* CoreVideo.framework in Frameworks */,
@@ -1092,6 +1108,9 @@
 		870C5E181672345A00A3AA4F /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				8799239C1917C85500FBD21E /* UIDevice+Networking.h */,
+				8799239D1917C85500FBD21E /* UIDevice+Networking.m */,
+				879923911917B05400FBD21E /* Reachability */,
 				8774AC6618992D53006B91FA /* ZXingObjC.xcodeproj */,
 				872D7E9B1897E19A005D8335 /* QRScannerViewController.h */,
 				872D7E9C1897E19A005D8335 /* QRScannerViewController.m */,
@@ -1123,6 +1142,8 @@
 				87B5EABF18683E3B00D25C3B /* APNSManager.m */,
 				872DC43118D9AFE4009B6005 /* APNSInboxManager.h */,
 				872DC43218D9AFE4009B6005 /* APNSInboxManager.m */,
+				872B1EBA191A1C47000E21C9 /* OfflineManager.h */,
+				872B1EBB191A1C47000E21C9 /* OfflineManager.m */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -1341,14 +1362,14 @@
 				8712BE6717D8CC7C00665F42 /* iPhone_top_bar_background@2x.png */,
 				87A1086B1802CBDC001F705D /* logger.png */,
 				87A1086D1802CD92001F705D /* logger@2x.png */,
-				871C7B9517FEDC3600BE641B /* OpenPeerLogo.png */,
-				87E4D99D180BE07F002CA2D4 /* OpenPeerLogo114.png */,
-				87E4D99E180BE07F002CA2D4 /* OpenPeerLogo120.png */,
-				87E4D9A4180BE199002CA2D4 /* OpenPeerLogo29.png */,
-				87E4D99C180BE07F002CA2D4 /* OpenPeerLogo57.png */,
-				87E4D9A5180BE199002CA2D4 /* OpenPeerLogo58.png */,
-				87E4D9A6180BE199002CA2D4 /* OpenPeerLogo80.png */,
-				871C7B9717FEDCEE00BE641B /* OpenPeerLogo@2x.png */,
+				871C7B9517FEDC3600BE641B /* ApplicationLogo.png */,
+				87E4D99D180BE07F002CA2D4 /* ApplicationLogo114.png */,
+				87E4D99E180BE07F002CA2D4 /* ApplicationLogo120.png */,
+				87E4D9A4180BE199002CA2D4 /* ApplicationLogo29.png */,
+				87E4D99C180BE07F002CA2D4 /* ApplicationLogo57.png */,
+				87E4D9A5180BE199002CA2D4 /* ApplicationLogo58.png */,
+				87E4D9A6180BE199002CA2D4 /* ApplicationLogo80.png */,
+				871C7B9717FEDCEE00BE641B /* ApplicationLogo@2x.png */,
 				8719AB0017CE0523007E991B /* tableViewCell.png */,
 				8719AAFF17CE0523007E991B /* tableViewCell@2x.png */,
 				8719AB0617CE0710007E991B /* tableViewCell_selected.png */,
@@ -1361,6 +1382,7 @@
 		8727281D166CBF9B0089CBB6 = {
 			isa = PBXGroup;
 			children = (
+				874B135A1935F3D600993F8D /* openpeersample.entitlements */,
 				872729CF166CDF530089CBB6 /* openpeer-ios-sdk.xcodeproj */,
 				87272832166CBF9B0089CBB6 /* OpenPeerSampleApp */,
 				8727282B166CBF9B0089CBB6 /* Frameworks */,
@@ -1380,6 +1402,7 @@
 		8727282B166CBF9B0089CBB6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				874B135B1935F96800993F8D /* AudioToolbox.framework */,
 				8770C34218BB7ABB006F28F0 /* libstdc++.6.0.9.dylib */,
 				87796E8318A8DDA7002F4B43 /* boost.a */,
 				87796E8418A8DDA7002F4B43 /* libcurl.a */,
@@ -1395,7 +1418,6 @@
 				87EE5FE8166E917B002C5FA3 /* libresolv.dylib */,
 				87E0FFB317BB8ADD00F30484 /* AddressBook.framework */,
 				87FF988D170EDB5C0017C627 /* AssetsLibrary.framework */,
-				874ADDBA166E14000095FE33 /* AudioToolbox.framework */,
 				874ADDB8166E13970095FE33 /* AVFoundation.framework */,
 				874ADDB4166E138A0095FE33 /* CoreAudio.framework */,
 				871BC9A6179EECC400AEA4A6 /* CoreData.framework */,
@@ -1417,6 +1439,7 @@
 		87272832166CBF9B0089CBB6 /* OpenPeerSampleApp */ = {
 			isa = PBXGroup;
 			children = (
+				872B1EB01918F7AD000E21C9 /* OpenPeerSampleApp.entitlements */,
 				8711BE1D1861EF1300DBF8B5 /* templates */,
 				8712BE8517D8CC9900665F42 /* Settings */,
 				87FC39F81709BB66002030D1 /* Session */,
@@ -1510,6 +1533,16 @@
 			);
 			name = Products;
 			sourceTree = "<group>";
+		};
+		879923911917B05400FBD21E /* Reachability */ = {
+			isa = PBXGroup;
+			children = (
+				879923921917B05400FBD21E /* Reachability.h */,
+				879923931917B05400FBD21E /* Reachability.m */,
+			);
+			name = Reachability;
+			path = 3rdParties/Reachability;
+			sourceTree = SOURCE_ROOT;
 		};
 		87D4BDFD18683BED008C2D30 /* Airship */ = {
 			isa = PBXGroup;
@@ -1751,9 +1784,19 @@
 				TargetAttributes = {
 					87272827166CBF9B0089CBB6 = {
 						DevelopmentTeam = Z5WRU4N5VJ;
+						SystemCapabilities = {
+							com.apple.InterAppAudio = {
+								enabled = 1;
+							};
+						};
 					};
 					87D4BCD818675368008C2D30 = {
 						DevelopmentTeam = Z5WRU4N5VJ;
+						SystemCapabilities = {
+							com.apple.InterAppAudio = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -1848,7 +1891,7 @@
 				8730D6E41832601C008D1D37 /* VideoCallViewController.xib in Resources */,
 				87272837166CBF9B0089CBB6 /* InfoPlist.strings in Resources */,
 				874408CA182FE873004AD8FC /* IncomingCallView_iPhone.xib in Resources */,
-				871C7B9617FEDC3600BE641B /* OpenPeerLogo.png in Resources */,
+				871C7B9617FEDC3600BE641B /* ApplicationLogo.png in Resources */,
 				87272851166CC1810089CBB6 /* MainViewController.xib in Resources */,
 				8730D7DB1833A63D008D1D37 /* iPhone_loader_00024.png in Resources */,
 				87224758182D165A0027DA50 /* audio-call-mic-active.png in Resources */,
@@ -1896,7 +1939,7 @@
 				8766DB6719083F7E004D7264 /* OpenpeerDataModel.bundle in Resources */,
 				8719AB0817CE0710007E991B /* tableViewCell_selected.png in Resources */,
 				8730D75C183398A5008D1D37 /* iPhone_Button-end-baritem.png in Resources */,
-				87E4D99F180BE07F002CA2D4 /* OpenPeerLogo57.png in Resources */,
+				87E4D99F180BE07F002CA2D4 /* ApplicationLogo57.png in Resources */,
 				87E4DA0E180D5082002CA2D4 /* calling.wav in Resources */,
 				871C7B8E17FEBED200BE641B /* SplashViewController.xib in Resources */,
 				8730D76B18339DBF008D1D37 /* iPhone_video_bottomBar_bkgd@2x.png in Resources */,
@@ -1915,7 +1958,7 @@
 				8730D7CC1833A63D008D1D37 /* iPhone_loader_00016@2x.png in Resources */,
 				8757E1BD1827E5A200D7BDA1 /* iPhone_chat_textfield_bkgd@2x.png in Resources */,
 				8730D7B61833A63D008D1D37 /* iPhone_loader_00005@2x.png in Resources */,
-				87E4D9A7180BE199002CA2D4 /* OpenPeerLogo29.png in Resources */,
+				87E4D9A7180BE199002CA2D4 /* ApplicationLogo29.png in Resources */,
 				8730D7B51833A63D008D1D37 /* iPhone_loader_00005.png in Resources */,
 				8722A67317CF7FAE002A3BB6 /* ContactTableViewCell.xib in Resources */,
 				8730D7D81833A63D008D1D37 /* iPhone_loader_00022@2x.png in Resources */,
@@ -1925,7 +1968,7 @@
 				871952AD18E3521500E15F2A /* readme.txt in Resources */,
 				8722A67E17D35AB3002A3BB6 /* video_indicator_blue.png in Resources */,
 				8722A67F17D35AB3002A3BB6 /* chat_indicator_blue.png in Resources */,
-				87E4D9A0180BE07F002CA2D4 /* OpenPeerLogo114.png in Resources */,
+				87E4D9A0180BE07F002CA2D4 /* ApplicationLogo114.png in Resources */,
 				8730D7C61833A63D008D1D37 /* iPhone_loader_00013@2x.png in Resources */,
 				8730D7CA1833A63D008D1D37 /* iPhone_loader_00015@2x.png in Resources */,
 				8722475D182D165A0027DA50 /* audio-call-speaker-press.png in Resources */,
@@ -1965,7 +2008,7 @@
 				8712BE7A17D8CC7C00665F42 /* iPhone_tabBar_settings_active_Icon.png in Resources */,
 				8712BE7B17D8CC7C00665F42 /* iPhone_tabBar_contacts_inactive@2x.png in Resources */,
 				87E4DA14180D5082002CA2D4 /* ringing.caf in Resources */,
-				87E4D9A1180BE07F002CA2D4 /* OpenPeerLogo120.png in Resources */,
+				87E4D9A1180BE07F002CA2D4 /* ApplicationLogo120.png in Resources */,
 				876CD4C718A385900069C296 /* Template_CustomerSpecific.plist in Resources */,
 				876CD4C918A38B370069C296 /* CustomerSpecific.plist in Resources */,
 				8757E1C71827E7AE00D7BDA1 /* chat_bubble_right.png in Resources */,
@@ -1987,7 +2030,7 @@
 				87E4DA00180D3545002CA2D4 /* facebook_tag@2x.png in Resources */,
 				8712BE7E17D8CC7C00665F42 /* iPhone_tabBar_contacts_active.png in Resources */,
 				8730D6FE18328D6A008D1D37 /* iPhone_switch_camera.png in Resources */,
-				87E4D9A8180BE199002CA2D4 /* OpenPeerLogo58.png in Resources */,
+				87E4D9A8180BE199002CA2D4 /* ApplicationLogo58.png in Resources */,
 				8712BE7F17D8CC7C00665F42 /* iPhone_tabBar_bkgd@2x.png in Resources */,
 				87224729182D01AB0027DA50 /* iPhone_lightning_bolt.png in Resources */,
 				8730D6FF18328D6A008D1D37 /* iPhone_switch_camera@2x.png in Resources */,
@@ -2004,7 +2047,7 @@
 				87224759182D165A0027DA50 /* audio-call-mic-active@2x.png in Resources */,
 				8730D7C81833A63D008D1D37 /* iPhone_loader_00014@2x.png in Resources */,
 				8754280918C7A2FD007F626F /* CustomerSpecific_Release.plist in Resources */,
-				87E4D9A9180BE199002CA2D4 /* OpenPeerLogo80.png in Resources */,
+				87E4D9A9180BE199002CA2D4 /* ApplicationLogo80.png in Resources */,
 				8757E1C61827E7AE00D7BDA1 /* chat_bubble_left.png in Resources */,
 				8730D76518339AFE008D1D37 /* chat-bottom@2x.png in Resources */,
 				8730D7DF1833A63D008D1D37 /* iPhone_loader_00026.png in Resources */,
@@ -2012,7 +2055,7 @@
 				8712BE8017D8CC7C00665F42 /* iPhone_tabBar_bkgd.png in Resources */,
 				8712BE8117D8CC7C00665F42 /* iPhone_back_button@2x.png in Resources */,
 				8712BE8217D8CC7C00665F42 /* iPhone_back_button.png in Resources */,
-				871C7B9817FEDCEE00BE641B /* OpenPeerLogo@2x.png in Resources */,
+				871C7B9817FEDCEE00BE641B /* ApplicationLogo@2x.png in Resources */,
 				8731272218C670AD00507144 /* Template_CustomerSpecific_Release.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2026,7 +2069,7 @@
 				87D4BD2E18675368008C2D30 /* VideoCallViewController.xib in Resources */,
 				87D4BD2F18675368008C2D30 /* InfoPlist.strings in Resources */,
 				87D4BD3018675368008C2D30 /* IncomingCallView_iPhone.xib in Resources */,
-				87D4BD3118675368008C2D30 /* OpenPeerLogo.png in Resources */,
+				87D4BD3118675368008C2D30 /* ApplicationLogo.png in Resources */,
 				87D4BD3218675368008C2D30 /* MainViewController.xib in Resources */,
 				87D4BD3318675368008C2D30 /* iPhone_loader_00024.png in Resources */,
 				87CD91F318C7BF900070F42A /* CustomerSpecific_Release.plist in Resources */,
@@ -2075,7 +2118,7 @@
 				876CD4CA18A3BAFA0069C296 /* DefaultSettings.plist in Resources */,
 				87D4BD5E18675368008C2D30 /* tableViewCell_selected.png in Resources */,
 				87D4BD5F18675368008C2D30 /* iPhone_Button-end-baritem.png in Resources */,
-				87D4BD6018675368008C2D30 /* OpenPeerLogo57.png in Resources */,
+				87D4BD6018675368008C2D30 /* ApplicationLogo57.png in Resources */,
 				87D4BD6118675368008C2D30 /* calling.wav in Resources */,
 				87D4BD6218675368008C2D30 /* SplashViewController.xib in Resources */,
 				87D4BD6318675368008C2D30 /* iPhone_video_bottomBar_bkgd@2x.png in Resources */,
@@ -2096,7 +2139,7 @@
 				87D4BD7018675368008C2D30 /* iPhone_loader_00016@2x.png in Resources */,
 				87D4BD7118675368008C2D30 /* iPhone_chat_textfield_bkgd@2x.png in Resources */,
 				87D4BD7218675368008C2D30 /* iPhone_loader_00005@2x.png in Resources */,
-				87D4BD7318675368008C2D30 /* OpenPeerLogo29.png in Resources */,
+				87D4BD7318675368008C2D30 /* ApplicationLogo29.png in Resources */,
 				878E880C19105076000DAA8A /* OpenPeerSampleAPNSApp-Info.plist in Resources */,
 				87D4BD7418675368008C2D30 /* iPhone_loader_00005.png in Resources */,
 				87D4BD7518675368008C2D30 /* ContactTableViewCell.xib in Resources */,
@@ -2106,7 +2149,7 @@
 				87D4BD7918675368008C2D30 /* iPhone_lightning_bolt@2x.png in Resources */,
 				87D4BD7A18675368008C2D30 /* video_indicator_blue.png in Resources */,
 				87D4BD7B18675368008C2D30 /* chat_indicator_blue.png in Resources */,
-				87D4BD7C18675368008C2D30 /* OpenPeerLogo114.png in Resources */,
+				87D4BD7C18675368008C2D30 /* ApplicationLogo114.png in Resources */,
 				87D4BD7D18675368008C2D30 /* iPhone_loader_00013@2x.png in Resources */,
 				87D4BD7E18675368008C2D30 /* iPhone_loader_00015@2x.png in Resources */,
 				87D4BD7F18675368008C2D30 /* audio-call-speaker-press.png in Resources */,
@@ -2145,7 +2188,7 @@
 				87D4BDA018675368008C2D30 /* iPhone_tabBar_settings_active_Icon.png in Resources */,
 				87D4BDA118675368008C2D30 /* iPhone_tabBar_contacts_inactive@2x.png in Resources */,
 				87D4BDA218675368008C2D30 /* ringing.caf in Resources */,
-				87D4BDA318675368008C2D30 /* OpenPeerLogo120.png in Resources */,
+				87D4BDA318675368008C2D30 /* ApplicationLogo120.png in Resources */,
 				87D4BDA418675368008C2D30 /* chat_bubble_right.png in Resources */,
 				87D4BDA518675368008C2D30 /* iPhone_loader_00009.png in Resources */,
 				87D4BDA618675368008C2D30 /* iPhone_audio_add_caller@2x.png in Resources */,
@@ -2164,7 +2207,7 @@
 				87D4BDB318675368008C2D30 /* facebook_tag@2x.png in Resources */,
 				87D4BDB418675368008C2D30 /* iPhone_tabBar_contacts_active.png in Resources */,
 				87D4BDB518675368008C2D30 /* iPhone_switch_camera.png in Resources */,
-				87D4BDB618675368008C2D30 /* OpenPeerLogo58.png in Resources */,
+				87D4BDB618675368008C2D30 /* ApplicationLogo58.png in Resources */,
 				87D4BDB718675368008C2D30 /* iPhone_tabBar_bkgd@2x.png in Resources */,
 				87D4BDB818675368008C2D30 /* iPhone_lightning_bolt.png in Resources */,
 				87D4BDB918675368008C2D30 /* iPhone_switch_camera@2x.png in Resources */,
@@ -2180,7 +2223,7 @@
 				87D4BDC318675368008C2D30 /* iPhone_loader_00019.png in Resources */,
 				87D4BDC418675368008C2D30 /* audio-call-mic-active@2x.png in Resources */,
 				87D4BDC518675368008C2D30 /* iPhone_loader_00014@2x.png in Resources */,
-				87D4BDC618675368008C2D30 /* OpenPeerLogo80.png in Resources */,
+				87D4BDC618675368008C2D30 /* ApplicationLogo80.png in Resources */,
 				87D4BDC718675368008C2D30 /* chat_bubble_left.png in Resources */,
 				87D4BDC818675368008C2D30 /* chat-bottom@2x.png in Resources */,
 				87D4BDC918675368008C2D30 /* iPhone_loader_00026.png in Resources */,
@@ -2189,7 +2232,7 @@
 				87D4BDCB18675368008C2D30 /* iPhone_tabBar_bkgd.png in Resources */,
 				87D4BDCC18675368008C2D30 /* iPhone_back_button@2x.png in Resources */,
 				87D4BDCD18675368008C2D30 /* iPhone_back_button.png in Resources */,
-				87D4BDCE18675368008C2D30 /* OpenPeerLogo@2x.png in Resources */,
+				87D4BDCE18675368008C2D30 /* ApplicationLogo@2x.png in Resources */,
 				879DC62A18C9F77400DA60C0 /* Template_CustomerSpecific_Release.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2241,11 +2284,14 @@
 				87224734182D02F30027DA50 /* CallViewController.m in Sources */,
 				874408CB182FE873004AD8FC /* IncomingCallViewController.m in Sources */,
 				87FC3A191709BD8D002030D1 /* SBJsonStreamParserAdapter.m in Sources */,
+				872B1EBC191A1C47000E21C9 /* OfflineManager.m in Sources */,
 				870059EE184F563800B6B826 /* UIBadgeView.m in Sources */,
+				879923941917B05400FBD21E /* Reachability.m in Sources */,
 				872D7E9E1897E19A005D8335 /* QRScannerViewController.m in Sources */,
 				87FC3A1A1709BD8D002030D1 /* SBJsonStreamParserState.m in Sources */,
 				87FC3A1B1709BD8D002030D1 /* SBJsonStreamTokeniser.m in Sources */,
 				87FC3A1C1709BD8D002030D1 /* SBJsonStreamWriter.m in Sources */,
+				8799239E1917C85500FBD21E /* UIDevice+Networking.m in Sources */,
 				87FC3A1D1709BD8D002030D1 /* SBJsonStreamWriterAccumulator.m in Sources */,
 				87FC3A1E1709BD8D002030D1 /* SBJsonStreamWriterState.m in Sources */,
 				87FC3A1F1709BD8D002030D1 /* SBJsonWriter.m in Sources */,
@@ -2269,6 +2315,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				87D4BCDC18675368008C2D30 /* main.m in Sources */,
+				872B1EBD191A1C47000E21C9 /* OfflineManager.m in Sources */,
 				87D4BCDD18675368008C2D30 /* AppLog.m in Sources */,
 				87D4BCDE18675368008C2D30 /* TTTAttributedLabel.m in Sources */,
 				87D4BCDF18675368008C2D30 /* AppDelegate.m in Sources */,
@@ -2315,6 +2362,7 @@
 				87D4BD0418675368008C2D30 /* SBJsonStreamWriter.m in Sources */,
 				87D4BD0518675368008C2D30 /* SBJsonStreamWriterAccumulator.m in Sources */,
 				87D4BD0718675368008C2D30 /* SBJsonStreamWriterState.m in Sources */,
+				8799239F1917C85500FBD21E /* UIDevice+Networking.m in Sources */,
 				87D4BD0818675368008C2D30 /* SBJsonWriter.m in Sources */,
 				87D4BD0918675368008C2D30 /* RXMLElement.m in Sources */,
 				87D4BD0A18675368008C2D30 /* ChatViewController.m in Sources */,
@@ -2325,6 +2373,7 @@
 				87D4BD0E18675368008C2D30 /* AudioCallViewController.m in Sources */,
 				87D4BD0F18675368008C2D30 /* CacheDelegate.m in Sources */,
 				87D4BD1018675368008C2D30 /* ContactTableViewCell.m in Sources */,
+				879923951917B05400FBD21E /* Reachability.m in Sources */,
 				872DC43B18D9AFED009B6005 /* APNSInboxManager.m in Sources */,
 				87D4BD1118675368008C2D30 /* SettingsViewController.m in Sources */,
 				87D4BD1218675368008C2D30 /* LoggerSettingsViewController.m in Sources */,
@@ -2437,6 +2486,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_ENTITLEMENTS = OpenPeerSampleApp/OpenPeerSampleApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = "";
@@ -2478,6 +2528,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_ENTITLEMENTS = OpenPeerSampleApp/OpenPeerSampleApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = "";
@@ -2522,6 +2573,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_ENTITLEMENTS = openpeersample.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_ENABLE_CPP_RTTI = YES;
@@ -2554,7 +2606,7 @@
 					"-lstdc++",
 				);
 				PRODUCT_NAME = openpeersample;
-				PROVISIONING_PROFILE = "04DA01E5-197E-472B-BF94-92FACFC7642C";
+				PROVISIONING_PROFILE = "";
 				SUPPORTED_PLATFORMS = iphoneos;
 				VALID_ARCHS = "armv7 armv7s";
 				WARNING_CFLAGS = (
@@ -2569,6 +2621,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_ENTITLEMENTS = openpeersample.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_ENABLE_CPP_RTTI = YES;
@@ -2599,7 +2652,7 @@
 					"-lstdc++",
 				);
 				PRODUCT_NAME = openpeersample;
-				PROVISIONING_PROFILE = "987C75BB-0A8E-4C93-971A-EE49F4C09048";
+				PROVISIONING_PROFILE = "";
 				SUPPORTED_PLATFORMS = iphoneos;
 				VALID_ARCHS = "armv7 armv7s";
 				WARNING_CFLAGS = (

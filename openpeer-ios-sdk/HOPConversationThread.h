@@ -50,112 +50,120 @@
 @interface HOPConversationThread : NSObject
 
 /**
- Creation of new conversation thread.
- @param account HOPAccount Account which owns the conversation thread
- @param profileBundleEl NSString Profile bundle
- @returns HOPConversationThread object if core conversation thread object is created
- */
-//+ (id) conversationThreadWithProfileBundle:(NSString*) profileBundle;
+*  Creates a new conversation thread.
+*
+*  @param identities List of identities that are shared with conversation thread participants
+*
+*  @return HOPConversationThread object
+*/
 + (id) conversationThreadWithIdentities:(NSArray*) identities;
 /**
- Retrieves list of all created conversation threads.
- @returns NSArray List of HOPConversationThread objects
+ Returns list of all active conversation threads.
+ @return List of HOPConversationThread objects
  */
 + (NSArray*) getConversationThreadsForAccount;
 
 /**
- Retrieves conversation thread object for specific thread id
- @param threadID NSString Id of disered conversation thread.
- @returns HOPConversationThread Conversation thread object
+ Returns a conversation thread object for specific thread ID
+ @param threadID Conversation thread ID
+ @return HOPConversationThread object
  */
 + (HOPConversationThread*) getConversationThreadForID:(NSString*) threadID;
 
 /**
- Retrieves string representation of the message delivery state.
- @param state HOPConversationThreadMessageDeliveryStates Message delivery state to convert to string
- @returns String representation of message delivery state
+ Returns a string representation of the message delivery state. Deprecated.
+ @param state Message delivery state to convert to string
+ @return A string representation of message delivery state
  */
-+ (NSString*) deliveryStateToString: (HOPConversationThreadMessageDeliveryStates) state __attribute__((deprecated("use method stringForMessageDeliveryState instead")));
-+ (NSString*) stringForMessageDeliveryState:(HOPConversationThreadMessageDeliveryStates) state;
++ (NSString*) deliveryStateToString: (HOPConversationThreadMessageDeliveryState) state __attribute__((deprecated("use method stringForMessageDeliveryState instead")));
+/**
+ Returns a string representation of the message delivery state.
+ @param state Message delivery state to convert to string
+ @return A string representation of message delivery state
+ */
++ (NSString*) stringForMessageDeliveryState:(HOPConversationThreadMessageDeliveryState) state;
 
 /**
- Retrieves string representation of the contact state.
- @param state HOPConversationThreadContactStates Contact state to convert to string
- @returns String representation of contact state
+ Returns a  string representation of the contact state. Deprecated.
+ @param state Contact state to convert to string
+ @returns A string representation of contact state
  */
-+ (NSString*) stateToString: (HOPConversationThreadContactStates) state __attribute__((deprecated("use method stringForContactState instead")));
-+ (NSString*) stringForContactState:(HOPConversationThreadContactStates) state;
++ (NSString*) stateToString: (HOPConversationThreadContactState) state __attribute__((deprecated("use method stringForContactState instead")));
+/**
+ Returns a  string representation of the contact state.
+ @param state Contact state to convert to string
+ @return A string representation of contact state
+ */
++ (NSString*) stringForContactState:(HOPConversationThreadContactState) state;
 
 
 /**
- Retrieves conversation thread ID.
- @returns String representation of conversation thread ID
+ Returns a conversation thread ID.
+ @return A conversation thread ID
  */
 - (NSString*) getThreadId;
 
 /**
- Check if self is host of the conversation thread.
- @returns YES if self is host, NO if not
+ Checks if self is host of the conversation thread.
+ @return YES if self is host, NO if not
  */
 - (BOOL) amIHost;
 
 /**
- Retrieves the associated account object.
- @returns HOPAccount account object
+ Returns the associated account object.
+ @Returns HOPAccount  object
  */
 - (HOPAccount*) getAssociatedAccount;
 
 /**
- Retrieves the array of contacts participating in current conversation thread.
- @returns Array of conversation thread contacts
+ Returns the array of contacts participating in the conversation thread.
+ @returns Array of HOPContact objects
  */
 - (NSArray*) getContacts;
 
 /**
- Retrieves profile bundle for provided contact.
- @param contact HOPContact Contact object reference
- @returns String representation of profile bundle of the provided contact object
+ Returns list of HOPIdentity objects for associated with HOPContact object.
+ @param coAn array for HOPIdentity objects
  */
-//- (NSString*) getProfileBundle: (HOPContact*) contact;
 - (NSArray*) getIdentityContactListForContact:(HOPContact*) contact;
 
 /**
- Retrieves state of the provided contact.
- @param contact HOPContact Contact object reference
+ Returns a state of the provided contact.
+ @param contact HOPContact object
  @returns Contact state enum
  */
-- (HOPConversationThreadContactStates) getContactState: (HOPContact*) contact;
+- (HOPConversationThreadContactState) getContactState: (HOPContact*) contact;
 
 /**
  Adds array of contacts to the conversation thread.
- @param contacts NSArray Array of contacts to be added to conversation thread
+ @param contacts  Array of HOPContact objects to be added to the conversation thread
  */
 - (void) addContacts: (NSArray*) contacts;
 
 /**
- Removes an array of contacts from conversation thread.
- @param contacts NSArray Array of contacts to be removed from conversation thread
+ Removes an array of contacts from the conversation thread.
+ @param contacts Array of HOPContact objects to be removed from the conversation thread
  */
 - (void) removeContacts: (NSArray*) contacts;
 
 /**
- Send message to all contacts in conversation thread.
- @param messageID NSString Message ID
- @param messageType NSString Message type
- @param message NSString Message
+ Sends message to all contacts in the conversation thread. Deprecated.
+ @param messageID  Message ID
+ @param messageType Message type
+ @param message Message
  */
 - (void) sendMessage: (NSString*) messageID messageType:(NSString*) messageType message:(NSString*) message DEPRECATED_ATTRIBUTE;
 
 /**
- Send message to all contacts in conversation thread.
- @param message HOPMessage message object
+ Sends message to all contacts in the conversation thread.
+ @param message Message object
  */
 - (void) sendMessage: (HOPMessage*) message;
 
 /**
- Receive message to from conversation thread.
+ Returns message for specified message ID. Deprecated.
  @param messageID NSString Received message ID
- @param outFrom HOPContact Message owner contact object 
+ @param outFrom HOPContact Message owner contact object
  @param outMessageType NSString Received message type
  @param outMessage NSString Received message
  @param outTime NSDate Received message timestamp
@@ -163,22 +171,22 @@
 - (BOOL) getMessage: (NSString*) messageID outFrom:(HOPContact**) outFrom outMessageType:(NSString**) outMessageType outMessage:(NSString**) outMessage outTime:(NSDate**) outTime DEPRECATED_ATTRIBUTE;
 
 /**
- Receive message to from conversation thread.
- @param messageID NSString Received message ID
- @return message object
+ Returns message for specified message ID.
+ @param messageID  A received message ID
+ @return HOPMessage object
  */
 - (HOPMessage*) getMessageForID: (NSString*) messageID;
 
 /**
  Retrieves delivery state of the message.
- @param messageID NSString Message ID
- @param outDeliveryState HOPConversationThreadMessageDeliveryStates Message delivery state
- @returns YES if delivery state is retrieved, NO if failure
+ @param messageID A message ID
+ @param outDeliveryState A message delivery state
+ @returns YES if delivery state is retrieved, otherwise NO
  */
-- (BOOL) getMessageDeliveryState: (NSString*) messageID outDeliveryState:(HOPConversationThreadMessageDeliveryStates*) outDeliveryState;
+- (BOOL) getMessageDeliveryState: (NSString*) messageID outDeliveryState:(HOPConversationThreadMessageDeliveryState*) outDeliveryState;
 
 /**
- Destroy core object.
+  Destroys conversation thread core object.
  */
 - (void) destroyCoreObject;
 @end

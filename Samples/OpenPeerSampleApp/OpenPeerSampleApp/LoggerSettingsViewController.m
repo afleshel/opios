@@ -275,7 +275,7 @@ typedef enum
             if (!cell)
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
             
-            HOPLoggerLevels level = [[Settings sharedSettings] getLoggerLevelForAppModule:indexPath.row];
+            HOPLoggerLevel level = [[Settings sharedSettings] getLoggerLevelForAppModule:indexPath.row];
             NSString* titleStr = [[Settings sharedSettings] getStringForModule:indexPath.row];
             cell.textLabel.text = [titleStr stringByAppendingString:[NSString stringWithFormat:@": %@",[[Settings sharedSettings] getStringForLogLevel:level]]];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;

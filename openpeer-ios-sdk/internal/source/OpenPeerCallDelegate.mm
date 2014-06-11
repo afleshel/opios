@@ -66,7 +66,7 @@ void OpenPeerCallDelegate::onCallStateChanged(ICallPtr call,CallStates state)
             [[OpenPeerStorageManager sharedStorageManager] setCall:hopCall forId:[NSString stringWithUTF8String:call->getCallID()]];
             //[hopCall release];
         }
-        [callDelegate onCallStateChanged:hopCall callState:(HOPCallStates) state];
+        [callDelegate onCallStateChanged:hopCall callState:(HOPCallState) state];
     }
     
     //[_pool release];

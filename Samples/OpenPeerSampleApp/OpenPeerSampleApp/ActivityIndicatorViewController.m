@@ -89,7 +89,6 @@
              activityFrame.origin.y = (inView.frame.size.height - activityFrame.size.height)/2;
              [self.view setFrame:activityFrame];
              
-             
              [self.activityIndicator startAnimating];
              [self.activityLabel setText:text];
          }

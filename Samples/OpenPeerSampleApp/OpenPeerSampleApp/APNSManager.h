@@ -35,7 +35,7 @@
 @class HOPContact;
 @class HOPMessage;
 
-@interface APNSManager : NSObject
+@interface APNSManager : NSObject<NSURLSessionDelegate, NSURLSessionTaskDelegate>
 
 @property (nonatomic, strong) NSString* deviceToken;
 @property  (nonatomic) int pushesToSend;

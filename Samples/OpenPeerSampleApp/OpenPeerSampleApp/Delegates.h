@@ -61,6 +61,8 @@
 
 - (void) onAccountLoginError:(NSString*) error;
 - (void) onAccountLoginWebViewClose:(WebLoginViewController*) webLoginViewController;
+
+- (void) onNetworkProblem;
 @end
 
 @protocol HTTPDownloaderDelegate <NSObject>

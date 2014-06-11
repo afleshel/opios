@@ -1,10 +1,33 @@
-//
-//  APNSInboxManager.m
-//  OpenPeerSampleApp
-//
-//  Created by Sergej on 3/19/14.
-//  Copyright (c) 2014 Hookflash. All rights reserved.
-//
+/*
+ 
+ Copyright (c) 2014, SMB Phone Inc.
+ All rights reserved.
+ 
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions are met:
+ 
+ 1. Redistributions of source code must retain the above copyright notice, this
+ list of conditions and the following disclaimer.
+ 2. Redistributions in binary form must reproduce the above copyright notice,
+ this list of conditions and the following disclaimer in the documentation
+ and/or other materials provided with the distribution.
+ 
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 
+ The views and conclusions contained in the software and documentation are those
+ of the authors and should not be interpreted as representing official policies,
+ either expressed or implied, of the FreeBSD Project.
+ 
+ */
 
 #import "APNSInboxManager.h"
 #import "UAInbox.h"
@@ -67,6 +90,9 @@
 {
     if ([[LoginManager sharedLoginManager] isUserFullyLoggedIn])
     {
+        if ([self.localNotificationDictionary count] > 0)
+            [self createMessageFromRichPushDict:self.localNotificationDictionary];
+        
         for (UAInboxMessage* message in self.arrayRichPushMessages)
             [self loadMessage:message];
     }
@@ -123,6 +149,72 @@
     HOPPublicPeerFile* publicPerFile = [[HOPModelManager sharedModelManager] getPublicPeerFileForPeerURI:peerURI];
     HOPContact* contact = [[HOPContact alloc] initWithPeerFile:publicPerFile.peerFile];
     [contact hintAboutLocation:locationID];
+}
+
+
+- (void)createMessageFromRichPushDict:(NSDictionary *)richPushDictionary
+{
+    if ([richPushDictionary count] > 0)
+    {
+        NSString* senderPeerURI = [richPushDictionary objectForKey:@"peerURI"];
+        if ([senderPeerURI length] > 0)
+        {
+            NSArray* rolodexContacts = [[HOPModelManager sharedModelManager]  getRolodexContactsByPeerURI:senderPeerURI];
+            HOPRolodexContact* contact = nil;
+            
+            if ([rolodexContacts count] > 0)
+                contact = [rolodexContacts objectAtIndex:0];
+            
+            if (contact)
+            {
+                Session* session = [[SessionManager sharedSessionManager] getSessionForContact:contact];
+                if (!session)
+                    session = [[SessionManager sharedSessionManager]createSessionForContact:contact];
+                
+                NSString* messageID = [richPushDictionary objectForKey:@"messageId"];
+                NSString* messageText = [richPushDictionary objectForKey:@"message"];
+                NSString* location = [richPushDictionary objectForKey:@"location"];
+                NSNumber* timeInterval = [richPushDictionary objectForKey:@"date"];
+                NSDate* date = [NSDate dateWithTimeIntervalSince1970:timeInterval.doubleValue];
+                
+                if ([messageID length] > 0 && [messageText length] > 0  && date)
+                {
+                    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push content \"%@\" for message %@ is ready.",messageText,messageID);
+                    
+                    HOPPublicPeerFile* publicPerFile = [[HOPModelManager sharedModelManager] getPublicPeerFileForPeerURI:senderPeerURI];
+                    HOPContact* coreContact = [[HOPContact alloc] initWithPeerFile:publicPerFile.peerFile];
+                    if ([location length] > 0)
+                    {
+                        [coreContact hintAboutLocation:location];
+                        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push hit location");
+                    }
+                    else
+                    {
+                        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Local notification withut location is hit");
+                    }
+                    
+                    HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:messageText type:messageTypeText date:date session:[session.conversationThread getThreadId] rolodexContact:contact messageId:messageID];
+                    
+                    
+                    if (messageObj)
+                    {
+                        [session.unreadMessageArray addObject:messageObj];
+                        
+                        //If session view controller with message sender is not yet shown, show it
+                        [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForSession:session forIncomingCall:NO forIncomingMessage:YES];
+                    }
+                    else
+                    {
+                        OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"%@ message is not saved - message id %@ - session id %@ - date %@",messageText,messageID,[session.conversationThread getThreadId],date);
+                    }
+                }
+                else
+                {
+                    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push content is corrupted");
+                }
+            }
+        }
+    }
 }
 
 #pragma mark - UAPushNotificationDelegate
@@ -239,6 +331,7 @@
 //    completionHandler(UIBackgroundFetchResultNoData);
 //}
 
+
 #pragma mark - HTTPDownloaderDelegate
 - (void) httpDownloader:(HTTPDownloader*) downloader downloaded:(NSString*) downloaded
 {
@@ -246,60 +339,7 @@
     SBJsonParser* parser = [[SBJsonParser alloc] init];
     NSDictionary* richPushDictionary = [parser objectWithString: downloaded];
     
-    if ([richPushDictionary count] > 0)
-    {
-        NSString* senderPeerURI = [richPushDictionary objectForKey:@"peerURI"];
-        if ([senderPeerURI length] > 0)
-        {
-            NSArray* rolodexContacts = [[HOPModelManager sharedModelManager]  getRolodexContactsByPeerURI:senderPeerURI];
-            HOPRolodexContact* contact = nil;
-            
-            if ([rolodexContacts count] > 0)
-                contact = [rolodexContacts objectAtIndex:0];
-            
-            if (contact)
-            {
-                Session* session = [[SessionManager sharedSessionManager] getSessionForContact:contact];
-                if (!session)
-                    session = [[SessionManager sharedSessionManager]createSessionForContact:contact];
-                
-                NSString* messageID = [richPushDictionary objectForKey:@"messageId"];
-                NSString* messageText = [richPushDictionary objectForKey:@"message"];
-                NSString* location = [richPushDictionary objectForKey:@"location"];
-                NSNumber* timeInterval = [richPushDictionary objectForKey:@"date"];
-                NSDate* date = [NSDate dateWithTimeIntervalSince1970:timeInterval.doubleValue];
-                
-                if ([messageID length] > 0 && [messageText length] > 0 && [location length] > 0 && date)
-                {
-                    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push content \"%@\" for message %@ is ready.",messageText,messageID);
-                    
-                    HOPPublicPeerFile* publicPerFile = [[HOPModelManager sharedModelManager] getPublicPeerFileForPeerURI:senderPeerURI];
-                    HOPContact* coreContact = [[HOPContact alloc] initWithPeerFile:publicPerFile.peerFile];
-                    [coreContact hintAboutLocation:location];
-                    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push hit location");
-
-                    HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:messageText type:messageTypeText date:date session:[session.conversationThread getThreadId] rolodexContact:contact messageId:messageID];
-                    
-                    
-                    if (messageObj)
-                    {
-                        [session.unreadMessageArray addObject:messageObj];
-                        
-                        //If session view controller with message sender is not yet shown, show it
-                        [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForSession:session forIncomingCall:NO forIncomingMessage:YES];
-                    }
-                    else
-                    {
-                        OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"%@ message is not saved - message id %@ - session id %@ - date %@",messageText,messageID,[session.conversationThread getThreadId],date);
-                    }
-                }
-                else
-                {
-                    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push content is corrupted");
-                }
-            }
-        }
-    }
+    [self createMessageFromRichPushDict:richPushDictionary];
     
     return;
 }
@@ -311,6 +351,7 @@
 
 - (void)getAllMessages
 {
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Get all messages from the UA inbox.");
     [[UAInbox shared].messageList retrieveMessageListWithDelegate:self];
 }
 
@@ -319,13 +360,15 @@
  */
 - (void)messageListLoadSucceeded
 {
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push message list load succeeded.");
     NSMutableIndexSet *set = [NSMutableIndexSet indexSet];
     NSMutableArray* arrayOfMessages = [UAInbox shared].messageList.messages;
     int counter = 0;
     
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Numbe of reach push messages is %d",[arrayOfMessages count]);
+    
     for (UAInboxMessage* message in arrayOfMessages)
     {
-        
         [message markAsReadWithDelegate:self];
         //UAInboxMessage *message = [[UAInbox shared].messageList messageForID:self.lastMeesageId];
         [set addIndex:counter];

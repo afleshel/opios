@@ -80,6 +80,8 @@ NSString * const archiveEnabled = @"enabled";
 NSString * const archiveServer = @"Server";
 NSString * const archiveColorized = @"colorized";
 
+NSString * const localNotificationKey = @"localNotification";
+
 #ifdef APNS_ENABLED
 NSString* const settingsKeyUrbanAirShipMasterAppSecretDev = @"masterAppSecretDev";
 NSString* const settingsKeyUrbanAirShipMasterAppSecret = @"masterAppSecret";
@@ -91,8 +93,6 @@ NSString* const settingsKeyUrbanAirShipAPIPushURL = @"apiPushURL";
 
 NSString* const settingsKeyAPNSTimeOut = @"applicationTimeBetweenTwoPushes";
 #endif
-
-
 
 //Contact Profile xml tags
 NSString* const profileXmlTagProfile = @"profile";

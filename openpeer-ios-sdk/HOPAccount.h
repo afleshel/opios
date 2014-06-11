@@ -35,145 +35,187 @@
 
 @class HOPIdentity;
 
-@interface HOPAccountState : NSObject
+@interface HOPAccState : NSObject
 
-@property (nonatomic, assign) HOPAccountStates state;
+@property (nonatomic, assign) HOPAccountState state;
 @property (nonatomic, assign) unsigned short errorCode;
 @property (nonatomic, strong) NSString* errorReason;
 
 @end
 
 /**
- Singleton class to represent the logged in openpeer user.
+Singleton class that represents the logged in OpenPeer user.
  */
 @interface HOPAccount : NSObject
 
+/**
+ Returns singleton object of HOPAccount class.
+ */
 + (HOPAccount*) sharedAccount;
+
+/**
+ *  This init method is not available, because HOPAccount is a singleton class.
+ *
+ */
 - (id) init __attribute__((unavailable("HOPAccount is singleton class.")));
 
 /**
- Converts account state enum to string
- @param state HOPAccountStates Account state enum
- @returns String representation of account state
+ *  Converts account state enum to string.
+ *
+ *  @param state Account state
+ *
+ *  @return A string representation of account state.
  */
-+ (NSString*) stateToString:(HOPAccountStates) state __attribute__((deprecated("use method stringForAccountState instead")));
-+ (NSString*) stringForAccountState:(HOPAccountStates) state;
++ (NSString*) stateToString:(HOPAccountState) state __attribute__((deprecated("use method stringForAccountState instead")));
 
 /**
- Login method for verified identity.
- @param inAccountDelegate HOPAccountDelegate delegate
- @param inConversationThreadDelegate HOPConversationThreadDelegate delegate
- @param inCallDelegate HOPCallDelegate delegate
- @param namespaceGrantOuterFrameURLUponReload NSString
- @param grantID NSString
- @param lockboxServiceDomain NSString lockbox service domain
- @param forceCreateNewLockboxAccount BOOL flag that it telling core to create a new user if old user data is corrupted
- @returns YES if IAccount object is created sucessfully
+ *  Converts account state enum to string. (Deprecated)
+ *
+ *  @param state Account state
+ *
+ *  @return A string representation of account state.
+ */
++ (NSString*) stringForAccountState:(HOPAccountState) state;
+
+/**
+ *  Starts account login procedure.
+ *
+ *  @param inAccountDelegate                     Delegate object that implements the HOPAccountDelegate protocol
+ *  @param inConversationThreadDelegate          Delegate object that implements the HOPConversationThreadDelegate protocol
+ *  @param inCallDelegate                        Delegate object that implements the HOPCallDelegate protocol
+ *  @param namespaceGrantOuterFrameURLUponReload An outer frame URL
+ *  @param lockboxServiceDomain                  Lockbox service domain
+ *  @param forceCreateNewLockboxAccount          A flag that tells core to create a new user if old user data is corrupted
+ *
+ *  @return YES if IAccount object is created sucessfull, otherwise, NO
  */
 - (BOOL) loginWithAccountDelegate:(id<HOPAccountDelegate>) inAccountDelegate conversationThreadDelegate:(id<HOPConversationThreadDelegate>) inConversationThreadDelegate callDelegate:(id<HOPCallDelegate>) inCallDelegate namespaceGrantOuterFrameURLUponReload:(NSString*) namespaceGrantOuterFrameURLUponReload lockboxServiceDomain:(NSString*) lockboxServiceDomain forceCreateNewLockboxAccount:(BOOL) forceCreateNewLockboxAccount;
 
-
 /**
- Relogin method for exisitng user.
- @param inAccountDelegate HOPAccountDelegate delegate
- @param inConversationThreadDelegate HOPConversationThreadDelegate delegate
- @param inCallDelegate HOPCallDelegate delegate
- @param lockboxOuterFrameURLUponReload NSString private peer file
- @param reloginInformation NSString login information retrieved from the local storage and packed in xml form
- @returns YES if IAccount object is created sucessfully
+ *  Starts relogin procedure.
+ *
+ *  @param inAccountDelegate              Delegate object that implements the HOPAccountDelegate protocol
+ *  @param inConversationThreadDelegate   Delegate object that implements the HOPConversationThreadDelegate protocol
+ *  @param inCallDelegate                 Delegate object that implements the HOPCallDelegate protocol
+ *  @param lockboxOuterFrameURLUponReload An outer frame URL
+ *  @param reloginInformation             A relogin information stored on login.
+ *
+ *  @return YES, if relogin procedure started succesfully, otherwise NO
  */
 - (BOOL) reloginWithAccountDelegate:(id<HOPAccountDelegate>) inAccountDelegate conversationThreadDelegate:(id<HOPConversationThreadDelegate>) inConversationThreadDelegate callDelegate:(id<HOPCallDelegate>) inCallDelegate lockboxOuterFrameURLUponReload:(NSString *)lockboxOuterFrameURLUponReload reloginInformation:(NSString *)reloginInformation;
 
 /**
- Retrieves account state
- @returns Account state enum
+ *  Returns the account state.
+ *
+ *  @return Account state enum
  */
-- (HOPAccountState*) getState;
+- (HOPAccState*) getState;
 
 
 /**
- Retrieves account atable id
- @returns NSString stable id
+ *  Returns the account stable ID.
+ *
+ *  @return Account state ID
  */
 - (NSString*) getStableID;
 
 
 /**
- Retrieves relogin info for logged user. Relogin info contains": lockboxDomain, accountID, grandID, keyIdentityHalf, keyLockboxHalf.
- @returns NSString relogin info in packed in JSON format.
+ *  Returns a relogin info for the logged in user. Relogin info contains": lockboxDomain, accountID, grandID, keyIdentityHalf, keyLockboxHalf.
+ *
+ *  @returns Relogin info packed in JSON format.
  */
 - (NSString*) getReloginInformation;
 
+
 /**
- Retrieves user location id.
- @returns location id
+ *  Returns the home user location ID.
+ *
+ *  @return Location ID.
  */
 - (NSString*) getLocationID;
 
 /**
- Shutdowns account object. Called on logout.
+ *  Shutdowns account object. Called on logout.
  */
 - (void) shutdown;
 
 /**
- Retrieves user private peer file.
- @returns NSString private peer file
+ *  Returns user's private peer file.
+ *
+ *  @return Private peer file
  */
 - (NSString*) getPeerFilePrivate;
 
 /**
- Retrieves user's private peer file secret.
- @returns private peer file secret
+ *  Returns user's private peer file secret.
+ *
+ *  @return Private peer file secret
  */
 - (NSData*) getPeerFilePrivateSecret;
 
 /**
- Retrieves list of associated identites.
- @returns list of associated identites
+ *  Returns list of associated identites.
+ *
+ *  @return Array of associated identites
  */
 - (NSArray*) getAssociatedIdentities;
 
 /**
- Removes associated identities.
- @params identities NSArray list of HOPIdentities objects
+ *  Removes associated identities.
+ *
+ *  @param identities Array of HOPIdentities objects (identities) to remove from the list of associated identities
  */
 - (void) removeIdentities:(NSArray*) identities;
 
+
 /**
- Retrieves inner browser frame URL that needs to be loaded during account login process.
- @returns NSString inner browser frame URL
+ *  Returns inner browser frame URL that needs to be loaded during account login process.
+ *
+ *  @return Inner browser frame URL
  */
 - (NSString*) getInnerBrowserWindowFrameURL;
 
 /**
- Notifies core that web wiev is now visible.
+ *  Notifies SDK that web wiev is now visible.
  */
 - (void) notifyBrowserWindowVisible;
 
 /**
- Notifies core that that web view is closed.
+ *  Notifies SDK that web view is closed
  */
 - (void) notifyBrowserWindowClosed;
 
 /**
- Retrieves JSON message from core that needs to be passed to inner browser frame.
- @returns NSString JSON message
+ *  Returns JSON message that needs to be passed to inner browser frame.
+ *
+ *  @return JSON message
  */
 - (NSString*) getNextMessageForInnerBrowerWindowFrame;
 
 /**
- Passes JSON message from inner browser frame to core.
- @param NSString JSON message
+ *  Passes JSON message from inner browser frame to the SDK.
+ *
+ *  @param message JSON message
  */
 - (void) handleMessageFromInnerBrowserWindowFrame:(NSString*) message;
 
 /**
- Check if core account is created.
+ *  Checks if account core object is properly created.
+ *
+ *  @return YES, if it is created, otherwise NO
  */
 - (BOOL) isCoreAccountCreated;
 
 /**
- Destroy core account object.
+ *  Destroys account core object.
  */
 - (void) destroyCoreObject;
+
+/**
+ *  Returns a string that represents the contents of the receiving class.
+ *
+ *  @return A string that represents the contents of the receiving class.
+ */
+- (NSString *)description;
 @end

@@ -117,12 +117,12 @@ typedef enum
 - (void) setColorizedOutput:(BOOL) colorized logger:(LoggerTypes) type;
 - (BOOL) isColorizedOutputForLogger:(LoggerTypes) type;
 
-- (HOPLoggerLevels) getLoggerLevelForAppModule:(Modules) module;
-- (HOPLoggerLevels) getLoggerLevelForAppModuleKey:(NSString*) moduleKey;
-- (void) setLoggerLevel:(HOPLoggerLevels) level forAppModule:(Modules) module;
+- (HOPLoggerLevel) getLoggerLevelForAppModule:(Modules) module;
+- (HOPLoggerLevel) getLoggerLevelForAppModuleKey:(NSString*) moduleKey;
+- (void) setLoggerLevel:(HOPLoggerLevel) level forAppModule:(Modules) module;
 
 - (NSString*) getStringForModule:(Modules) module;
-- (NSString*) getStringForLogLevel:(HOPLoggerLevels) level;
+- (NSString*) getStringForLogLevel:(HOPLoggerLevel) level;
 
 - (void) saveDefaultsLoggerSettings;
 
