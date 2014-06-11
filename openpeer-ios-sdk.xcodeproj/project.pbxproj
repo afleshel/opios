@@ -182,7 +182,6 @@
 		E23390FE1934EAAF004A62FD /* libwebrtc_vp8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E23390D81934EAAF004A62FD /* libwebrtc_vp8.a */; };
 		E23390FF1934EAAF004A62FD /* libyuv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E23390D91934EAAF004A62FD /* libyuv.a */; };
 		E236EC42193012DF009FC1E6 /* libwebrtc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E236EC3F1930100E009FC1E6 /* libwebrtc.a */; };
-		E236EC47193012E0009FC1E6 /* lib_core_neon_offsets.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E236EC43193012DF009FC1E6 /* lib_core_neon_offsets.a */; };
 		E236EC48193012E0009FC1E6 /* libacm2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E236EC44193012DF009FC1E6 /* libacm2.a */; };
 		E236EC49193012E0009FC1E6 /* librbe_components.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E236EC45193012DF009FC1E6 /* librbe_components.a */; };
 		E236EC4A193012E0009FC1E6 /* libyuv_neon.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E236EC46193012DF009FC1E6 /* libyuv_neon.a */; };
@@ -493,7 +492,6 @@
 		E23390D81934EAAF004A62FD /* libwebrtc_vp8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libwebrtc_vp8.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E23390D91934EAAF004A62FD /* libyuv.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libyuv.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E236EC291930100B009FC1E6 /* webrtc_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = webrtc_ios.xcodeproj; path = "libs/op/libs/ortc-lib/libs/webrtc/webrtc/webrtc_ios.xcodeproj"; sourceTree = SOURCE_ROOT; };
-		E236EC43193012DF009FC1E6 /* lib_core_neon_offsets.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = lib_core_neon_offsets.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E236EC44193012DF009FC1E6 /* libacm2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libacm2.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E236EC45193012DF009FC1E6 /* librbe_components.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = librbe_components.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E236EC46193012DF009FC1E6 /* libyuv_neon.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libyuv_neon.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -542,7 +540,6 @@
 				E23390FD1934EAAF004A62FD /* libwebrtc_video_coding.a in Frameworks */,
 				E23390FE1934EAAF004A62FD /* libwebrtc_vp8.a in Frameworks */,
 				E23390FF1934EAAF004A62FD /* libyuv.a in Frameworks */,
-				E236EC47193012E0009FC1E6 /* lib_core_neon_offsets.a in Frameworks */,
 				E236EC48193012E0009FC1E6 /* libacm2.a in Frameworks */,
 				E236EC49193012E0009FC1E6 /* librbe_components.a in Frameworks */,
 				E236EC4A193012E0009FC1E6 /* libyuv_neon.a in Frameworks */,
@@ -742,7 +739,6 @@
 				E23390D71934EAAF004A62FD /* libwebrtc_video_coding.a */,
 				E23390D81934EAAF004A62FD /* libwebrtc_vp8.a */,
 				E23390D91934EAAF004A62FD /* libyuv.a */,
-				E236EC43193012DF009FC1E6 /* lib_core_neon_offsets.a */,
 				E236EC44193012DF009FC1E6 /* libacm2.a */,
 				E236EC45193012DF009FC1E6 /* librbe_components.a */,
 				E236EC46193012DF009FC1E6 /* libyuv_neon.a */,
