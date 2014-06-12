@@ -58,7 +58,7 @@
     self.displayImage.layer.borderWidth = 1.0;
     self.displayImage.layer.borderColor = [[UIColor whiteColor] CGColor];
     
-    Session* session = [[SessionManager sharedSessionManager] getSessionForSessionId:self.sessionRecord.sessionID];
+    Session* session = [[SessionManager sharedSessionManager] getSessionForSessionRecord:self.sessionRecord];
     if ([session.unreadMessageArray count] > 0)
     {
         NSString* numberToDisplay = [NSString stringWithFormat:@"%d",[session.unreadMessageArray count]];

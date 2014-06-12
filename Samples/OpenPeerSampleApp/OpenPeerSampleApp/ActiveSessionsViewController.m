@@ -47,6 +47,11 @@
 	}
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [self.tableViewSessions reloadRowsAtIndexPaths:[self.tableViewSessions indexPathsForVisibleRows]
+                                  withRowAnimation:UITableViewRowAnimationNone];
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
