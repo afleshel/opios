@@ -175,8 +175,8 @@
         //[self.contactsTableViewController.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"iPhone_tabBar_contacts_active.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"iPhone_tabBar_contacts_inactive.png"]];
         
         
-        [self.activeSessionsViewController.tabBarItem setImage:[[UIImage imageNamed:@"iPhone_tabBar_contacts_inactive.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-        [self.activeSessionsViewController.tabBarItem setSelectedImage:[[UIImage imageNamed:@"iPhone_tabBar_contacts_active.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+        [self.activeSessionsViewController.tabBarItem setImage:[[UIImage imageNamed:@"iPhone_tabBar_sessions_inactive.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+        [self.activeSessionsViewController.tabBarItem setSelectedImage:[[UIImage imageNamed:@"iPhone_tabBar_sessions_active.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
         
         
         UINavigationController *activeSessionsNavigationController = [[UINavigationController alloc] initWithRootViewController:self.activeSessionsViewController];
@@ -270,7 +270,18 @@
     NSString* title = [[[session participantsArray] objectAtIndex:0] name];
     
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Transition %d for session with id:%@ and for participant:%@",transition,[session.conversationThread getThreadId],title);
-    UINavigationController* navigationController = (UINavigationController*)[[self.tabBarController viewControllers] objectAtIndex:0];
+    UINavigationController* navigationController = nil;
+    
+    switch ([self.tabBarController selectedIndex])
+    {
+        case 1:
+            navigationController = (UINavigationController*)[[self.tabBarController viewControllers] objectAtIndex:1];
+            break;
+            
+        default:
+            navigationController = (UINavigationController*)[[self.tabBarController viewControllers] objectAtIndex:0];
+            break;
+    }
     switch (transition)
     {
         case NEW_SESSION_SWITCH:
@@ -351,7 +362,18 @@
 {
     //If session view controller is laredy created for this session get it from dictionary
     SessionViewController_iPhone* sessionViewContorller = [self.sessionViewControllersDictionary objectForKey:sessionId];
-    UINavigationController* navigationController = (UINavigationController*)[[self.tabBarController viewControllers] objectAtIndex:0];
+    UINavigationController* navigationController = nil;//(UINavigationController*)[[self.tabBarController viewControllers] objectAtIndex:0];
+    
+    switch ([self.tabBarController selectedIndex])
+    {
+        case 1:
+            navigationController = (UINavigationController*)[[self.tabBarController viewControllers] objectAtIndex:1];
+            break;
+            
+        default:
+            navigationController = (UINavigationController*)[[self.tabBarController viewControllers] objectAtIndex:0];
+            break;
+    }
     
     if (!sessionViewContorller)
     {
@@ -407,7 +429,7 @@
 //            {
 //                return EXISTING_SESSION_REFRESH_CHAT; //Already displayed chat view, so just refresh messages
 //            }
-            else if ([navigationController.visibleViewController isKindOfClass:[ContactsViewController class]])
+            else if ([navigationController.visibleViewController isKindOfClass:[ContactsViewController class]] || [navigationController.visibleViewController isKindOfClass:[ActiveSessionsViewController class]])
             {
                 return EXISITNG_SESSION_SWITCH; //Move from the contacts list to the chat view for session
             }

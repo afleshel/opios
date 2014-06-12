@@ -12,6 +12,9 @@
 #import "SessionManager.h"
 #import "OpenPeer.h"
 #import "MainViewController.h"
+#import "ActiveSessionTableViewCell.h"
+
+#define TABLE_CELL_HEIGHT 55.0
 
 @interface ActiveSessionsViewController ()
 @property (weak, nonatomic) IBOutlet UITableView *tableViewSessions;
@@ -33,6 +36,15 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    
+    self.navigationController.navigationBar.titleTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], NSForegroundColorAttributeName, [UIFont fontWithName:@"Helvetica-Bold" size:22.0], NSFontAttributeName, nil];
+    
+    NSError *error;
+    if (![self.fetchedResultsController performFetch:&error])
+    {
+		OPLog(HOPLoggerSeverityFatal, HOPLoggerLevelDebug, @"Fetching sessions has failed with an error: %@, error description: %@", error, [error userInfo]);
+		exit(-1);  // Fail
+	}
 }
 
 - (void)didReceiveMemoryWarning
@@ -57,12 +69,11 @@
 {
     static NSString *cellIdentifier = @"SessionCell";
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    ActiveSessionTableViewCell *cell = (ActiveSessionTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil)
     {
-//        NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"ContactTableViewCell" owner:self options:nil];
-//        cell = [topLevelObjects objectAtIndex:0];
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
+        NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"ActiveSessionTableViewCell" owner:self options:nil];
+        cell = [topLevelObjects objectAtIndex:0];
     }
     
     cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"tableViewCell.png"] stretchableImageWithLeftCapWidth:0.0 topCapHeight:5.0]];
@@ -72,13 +83,17 @@
     
     //[cell setContact:contact inTable:self.contactsTableView atIndexPath:indexPath];
     
-    cell.textLabel.text = record.name;
+    //cell.textLabel.text = record.name;
+    
+    if (record)
+        [cell setSession:record];
+    
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 50;//TABLE_CELL_HEIGHT;
+    return TABLE_CELL_HEIGHT;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -105,6 +120,8 @@
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPSessionRecord" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];
+//    NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPRolodexContact" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];
+    
     [fetchRequest setEntity:entity];
     
 //    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(associatedIdentity.homeUser.stableId MATCHES '%@')",[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser].stableId]];
@@ -112,14 +129,14 @@
     
 //	[fetchRequest setFetchBatchSize:20];
 //	
-//	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
-//	NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
-//	
-//	[fetchRequest setSortDescriptors:sortDescriptors];
+	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
+	NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+	
+	[fetchRequest setSortDescriptors:sortDescriptors];
     
 	//_fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext] sectionNameKeyPath:@"firstLetter" cacheName:@"RolodexContacts"];
     
-    _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext] sectionNameKeyPath:nil cacheName:@"SessionRecords"];
+    _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext] sectionNameKeyPath:nil cacheName:nil];
     _fetchedResultsController.delegate = self;
     
 	return _fetchedResultsController;

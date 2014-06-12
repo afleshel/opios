@@ -771,9 +771,9 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (HOPSessionRecord *) getMessageRecordByID:(NSString*) messageID
+- (HOPMessageRecord *) getMessageRecordByID:(NSString*) messageID
 {
-    HOPSessionRecord* ret = nil;
+    HOPMessageRecord* ret = nil;
     
     NSArray* results = [self getResultsForEntity:@"HOPMessageRecord" withPredicateString:[NSString stringWithFormat:@"(messageID MATCHES '%@')", messageID] orderDescriptors:nil];
     

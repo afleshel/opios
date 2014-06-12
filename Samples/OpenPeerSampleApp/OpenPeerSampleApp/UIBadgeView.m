@@ -74,7 +74,7 @@
     self.bagdeFont = [UIFont boldSystemFontOfSize:13.0];
     self.badgeTextColor = [UIColor whiteColor];
     
-    self.badgeBackgroundColor = [UIColor colorWithRed:58.0/355.0 green:101.0/255.0 blue:237.0/255.0 alpha:0.8];
+    self.badgeBackgroundColor = [UIColor colorWithRed:27.0/355.0 green:88.0/255.0 blue:106.0/255.0 alpha:0.8];
     
     self.backgroundColor = [UIColor clearColor];
     self.layer.masksToBounds = YES;

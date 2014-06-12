@@ -217,9 +217,11 @@
 #pragma mark - UITextViewDelegate
 - (BOOL) textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-    if([text isEqualToString:@"\n"] && [textView.text length] > 0)
+    //if([text isEqualToString:@"\n"] && [textView.text length] > 0)
+    if([text isEqualToString:@"\n"])
     {
-        [self sendIMmessage:textView.text];
+        if ([textView.text length] > 0)
+            [self sendIMmessage:textView.text];
         return NO;
     }
     return YES;

@@ -33,6 +33,7 @@
 #import "IconDownloader.h"
 
 #import <OpenpeerSDK/HOPAvatar+External.h>
+#import <OpenpeerSDK/HOPRolodexContact+External.h>
 
 @interface ImageManager ()
 
@@ -114,5 +115,19 @@
         [self.dictionaryDownloadingInProgress setObject:iconDownloader forKey:avatar.url];
         [iconDownloader startDownloadForURL:avatar.url];
     }
+}
+
+- (UIImage*) getAvatarImageForRolodexContact:(HOPRolodexContact*) rolodexContact
+{
+    UIImage* ret = nil;
+    if (rolodexContact)
+    {
+        HOPAvatar* avatar = [rolodexContact getAvatarForWidth:[NSNumber numberWithFloat:AVATAR_WIDTH] height:[NSNumber numberWithFloat:AVATAR_HEIGHT]];
+        if (avatar)
+        {
+            ret = [avatar getImage];
+        }
+    }
+    return ret;
 }
 @end

@@ -284,4 +284,8 @@
 - (void) clearSessionRecords;
 
 - (NSString*) getPeerURIForHomeUser;
+
+- (HOPSessionRecord *) getSessionRecordByID:(NSString*) sessionID;
+
+- (HOPMessageRecord *) getMessageRecordByID:(NSString*) messageID;
 @end

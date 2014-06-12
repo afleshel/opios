@@ -52,7 +52,7 @@
 #import <OpenpeerSDK/HOPContact.h>
 #import <OpenpeerSDK/HOPHomeUser+External.h>
 #import <OpenpeerSDK/HOPRolodexContact+External.h>
-
+#import <OpenpeerSDK/HOPSessionRecord.h>
 #import "UIDevice+Networking.h"
 
 @interface SessionManager()
@@ -152,7 +152,8 @@
                 }
     #endif
                 OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Creating session record from conversation thread id: %@", [conversationThread getThreadId]);
-                [[HOPModelManager sharedModelManager] addSession:[conversationThread getThreadId] type:nil date:nil name:nil participants:[NSArray arrayWithObject:contact]];
+                
+                [[HOPModelManager sharedModelManager] addSession:[conversationThread getThreadId] type:nil date:[NSDate date] name:[contact name] participants:[NSArray arrayWithObject:contact]];
             }
             
             if (ret)
@@ -218,7 +219,7 @@
         {
             [self.sessionsDictionary setObject:ret forKey:[inConversationThread getThreadId]];
             OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Creating session record from conversation thread id: %@", [inConversationThread getThreadId]);
-            [[HOPModelManager sharedModelManager] addSession:[inConversationThread getThreadId] type:nil date:nil name:nil participants:contactAaray];
+            [[HOPModelManager sharedModelManager] addSession:[inConversationThread getThreadId] type:nil date:[NSDate date] name:[rolodexContact name] participants:contactAaray];
         }
     }
     return ret;
@@ -318,8 +319,11 @@
         NSArray* contacts = [inConversationThread getContacts];
         NSArray* contactAaray = [[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:[[contacts objectAtIndex:0] getPeerURI]];
         OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Creating session record from conversation thread id: %@", [inConversationThread getThreadId]);
-        [[HOPModelManager sharedModelManager] addSession:[inConversationThread getThreadId] type:nil date:nil name:nil participants:contactAaray];
+        //[[HOPModelManager sharedModelManager] addSession:[inConversationThread getThreadId] type:nil date:nil name:nil participants:contactAaray];
         
+        HOPSessionRecord* sessionRecord = [[HOPModelManager sharedModelManager] getSessionRecordByID:oldSessionId];
+        sessionRecord.sessionID = newSessionId;
+        [[HOPModelManager sharedModelManager] saveContext];
         [self setValidSession:ret newSessionId:newSessionId oldSessionId:oldSessionId];
     }
     return ret;
