@@ -101,8 +101,8 @@
     HOPSessionRecord* record = [self.fetchedResultsController objectAtIndexPath:indexPath];
     if (record)
     {
-        Session* session = [[SessionManager sharedSessionManager] getSessionForSessionId:record.sessionID];
-            
+//        Session* session = [[SessionManager sharedSessionManager] getSessionForSessionId:record.sessionID];
+        Session* session = [[SessionManager sharedSessionManager] getSessionForSessionRecord:record];
         if (session)
             [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForSession:session forIncomingCall:NO forIncomingMessage:NO];
     }

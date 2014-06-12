@@ -153,7 +153,8 @@
     #endif
                 OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Creating session record from conversation thread id: %@", [conversationThread getThreadId]);
                 
-                [[HOPModelManager sharedModelManager] addSession:[conversationThread getThreadId] type:nil date:[NSDate date] name:[contact name] participants:[NSArray arrayWithObject:contact]];
+                //[[HOPModelManager sharedModelManager] addSession:[conversationThread getThreadId] type:nil date:[NSDate date] name:[contact name] participants:[NSArray arrayWithObject:contact]];
+                ret.sessionRecord = [[HOPModelManager sharedModelManager] createSessionRecordForConversationThread:conversationThread type:nil date:[NSDate date] name:[contact name] participants:[NSArray arrayWithObject:contact]];
             }
             
             if (ret)
@@ -219,7 +220,8 @@
         {
             [self.sessionsDictionary setObject:ret forKey:[inConversationThread getThreadId]];
             OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Creating session record from conversation thread id: %@", [inConversationThread getThreadId]);
-            [[HOPModelManager sharedModelManager] addSession:[inConversationThread getThreadId] type:nil date:[NSDate date] name:[rolodexContact name] participants:contactAaray];
+            //[[HOPModelManager sharedModelManager] addSession:[inConversationThread getThreadId] type:nil date:[NSDate date] name:[rolodexContact name] participants:contactAaray];
+            ret.sessionRecord = [[HOPModelManager sharedModelManager] createSessionRecordForConversationThread:inConversationThread type:nil date:[NSDate date] name:[rolodexContact name] participants:contactAaray];
         }
     }
     return ret;
@@ -321,8 +323,10 @@
         OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Creating session record from conversation thread id: %@", [inConversationThread getThreadId]);
         //[[HOPModelManager sharedModelManager] addSession:[inConversationThread getThreadId] type:nil date:nil name:nil participants:contactAaray];
         
-        HOPSessionRecord* sessionRecord = [[HOPModelManager sharedModelManager] getSessionRecordByID:oldSessionId];
-        sessionRecord.sessionID = newSessionId;
+        [[HOPModelManager sharedModelManager] createSessionRecordForConversationThread:inConversationThread type:nil date:nil name:nil participants:contactAaray];
+         
+//        HOPSessionRecord* sessionRecord = [[HOPModelManager sharedModelManager] getSessionRecordByID:oldSessionId];
+//        sessionRecord.sessionID = newSessionId;
         [[HOPModelManager sharedModelManager] saveContext];
         [self setValidSession:ret newSessionId:newSessionId oldSessionId:oldSessionId];
     }
@@ -346,6 +350,16 @@
 - (Session*) getSessionForSessionId:(NSString*) sessionId
 {
     return [self.sessionsDictionary objectForKey:sessionId];
+}
+
+- (Session*) getSessionForSessionRecord:(HOPSessionRecord*) sessionRecord
+{
+    for (Session* session in [self.sessionsDictionary allValues])
+    {
+        if (session.sessionRecord == sessionRecord)
+            return session;
+    }
+    return nil;
 }
 
 
@@ -723,7 +737,8 @@
                 NSArray* contactsArray = [[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:[[participants objectAtIndex:0] getPeerURI]];
                 if (contactsArray)
                 {
-                    [[HOPModelManager sharedModelManager] addSession:[conversationThread getThreadId] type:nil date:nil name:nil participants:contactsArray];
+                    //[[HOPModelManager sharedModelManager] addSession:[conversationThread getThreadId] type:nil date:nil name:nil participants:contactsArray];
+                    [[HOPModelManager sharedModelManager] createSessionRecordForConversationThread:conversationThread type:nil date:nil name:nil participants:contactsArray];
                 
                     [self setValidSession:session newSessionId:newSessionId oldSessionId:oldSessionId];
                 }
