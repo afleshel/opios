@@ -92,12 +92,16 @@
         
         if ([[NSUserDefaults standardUserDefaults] objectForKey:settingsKeyStdOutLogger])
             self.enabledStdLogger = [[[NSUserDefaults standardUserDefaults] objectForKey:settingsKeyStdOutLogger] boolValue];
-        
-        self.appModulesLoggerLevel =[[[NSUserDefaults standardUserDefaults] objectForKey:archiveModulesLogLevels] mutableCopy];
+
+        self.appModulesLoggerLevel = [[[NSUserDefaults standardUserDefaults] objectForKey:archiveModulesLogLevels] mutableCopy];
         
         if (!self.appModulesLoggerLevel)
             self.appModulesLoggerLevel = [[NSMutableDictionary alloc] init];
-        
+
+        if ([self.instanceId length] < 1) {
+            self.instanceId = [[HOPSettings sharedSettings] getInstanceId];
+        }
+
         self.timeoutCounter = 0;
     }
     return self;

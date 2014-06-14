@@ -86,6 +86,12 @@
 - (NSString*) getAuthorizedApplicationId;
 
 /**
+ Retrieves unique run-time instance Id
+ @return NSString* unique run-time instance Id
+ */
+- (NSString*) getInstanceId;
+
+/**
  Use this method to store following values device id, iOS version, platgorm name, user agent
  @param object NSString* one of above mentioned settings
  @param key NSString* settings key

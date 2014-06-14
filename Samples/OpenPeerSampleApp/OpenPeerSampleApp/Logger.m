@@ -100,7 +100,7 @@
         NSString* server =[[Settings sharedSettings] getServerPortForLogger:LOGGER_OUTGOING_TELNET];
         BOOL colorized = [[Settings sharedSettings] isColorizedOutputForLogger:LOGGER_OUTGOING_TELNET];
         if ([server length] > 0)
-            [HOPLogger installOutgoingTelnetLogger:server colorizeOutput:colorized stringToSendUponConnection:[[HOPSettings sharedSettings] getAuthorizedApplicationId]];
+            [HOPLogger installOutgoingTelnetLogger:server colorizeOutput:colorized stringToSendUponConnection:[[Settings sharedSettings] instanceId]];
     }
     else
     {

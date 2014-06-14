@@ -39,6 +39,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 @interface HOPSettings ()
 
 @property (nonatomic, strong) NSString* authorizedApplicationId;
+@property (nonatomic, strong) NSString* instanceId;
 @property (nonatomic, strong) NSMutableDictionary* mappingDictionary;   //Maps keys from the application property lists and keys that re used in the core
 @property (nonatomic, strong) NSDictionary* currentSettingsDictionary;
 
@@ -61,6 +62,8 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     self = [super init];
     if (self)
     {
+        openPeerSettingsDelegatePtr = OpenPeerSettingsDelegate::create();
+
         NSString *filePath = nil;
         NSBundle* bundle = [NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:@"OpenpeerDataModel" ofType:@"bundle"]];
         if (bundle)
@@ -73,6 +76,10 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
         {
             self.mappingDictionary = [[NSMutableDictionary alloc] init];
         }
+
+        NSString *instanceId = [[[NSUUID UUID] UUIDString] stringByReplacingOccurrencesOfString:@"-" withString:@""];
+        self.instanceId = instanceId;
+        [self storeCalculatedSettingObject:instanceId key:[NSString stringWithUTF8String:OPENPEER_COMMON_SETTING_INSTANCE_ID]];
     }
     return self;
 }
@@ -84,7 +91,6 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
 - (void) setup
 {
-    openPeerSettingsDelegatePtr = OpenPeerSettingsDelegate::create();
     ISettings::setup(openPeerSettingsDelegatePtr);
 }
 
@@ -171,6 +177,11 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
             self.authorizedApplicationId = [[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithUTF8String:OPENPEER_COMMON_SETTING_APPLICATION_AUTHORIZATION_ID]];
     }
     return self.authorizedApplicationId;
+}
+
+- (NSString*) getInstanceId
+{
+  return self.instanceId;
 }
 
 - (void) storeCalculatedSettingObject:(NSString*) setting key:(NSString*) key
