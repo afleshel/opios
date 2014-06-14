@@ -86,6 +86,12 @@
 - (NSString*) getAuthorizedApplicationId;
 
 /**
+ Retrieves unique vendor specific device Id
+ @return NSString* unique vendor specific device Id
+ */
+- (NSString*) getDeviceId;
+
+/**
  Retrieves unique run-time instance Id
  @return NSString* unique run-time instance Id
  */

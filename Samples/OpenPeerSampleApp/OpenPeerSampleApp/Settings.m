@@ -98,6 +98,9 @@
         if (!self.appModulesLoggerLevel)
             self.appModulesLoggerLevel = [[NSMutableDictionary alloc] init];
 
+        if ([self.deviceId length] < 1) {
+            self.deviceId = [[HOPSettings sharedSettings] deviceId];
+        }
         if ([self.instanceId length] < 1) {
             self.instanceId = [[HOPSettings sharedSettings] getInstanceId];
         }
@@ -721,11 +724,7 @@
 
 - (void) updateDeviceInfo
 {
-    //Get device info: device ID, iOS, platform and user agent
-    NSString* deviceId = [HOPUtility hashString:[HOPUtility getGUIDstring]];
-    if ([deviceId length] > 0)
-        [[HOPSettings sharedSettings] storeCalculatedSettingObject:deviceId key:@"openpeer/calculated/device-id"];
-
+    //Get device info: iOS, platform and user agent
     NSString* str = [Utility getDeviceOs];
     if ([str length] > 0)
         [[HOPSettings sharedSettings] storeCalculatedSettingObject:str key:@"openpeer/calculated/os"];
