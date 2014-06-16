@@ -39,8 +39,6 @@
 #import "Session.h"
 #import "UIBadgeView.h"
 
-#define AVATAR_WIDTH 0 //31.0
-#define AVATAR_HEIGHT 0 //31.0
 
 @interface ContactTableViewCell ()
 
@@ -70,6 +68,10 @@
         else
             self.displayImage.image = img;
     }
+    
+    self.displayImage.layer.cornerRadius = 5.0;
+    self.displayImage.layer.borderWidth = 1.0;
+    self.displayImage.layer.borderColor = [[UIColor whiteColor] CGColor];
     
     if ([inContact.associatedIdentity.baseIdentityURI isEqualToString:identityFacebookBaseURI])
     {

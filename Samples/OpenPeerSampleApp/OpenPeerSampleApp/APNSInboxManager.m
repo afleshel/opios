@@ -148,7 +148,9 @@
     
     HOPPublicPeerFile* publicPerFile = [[HOPModelManager sharedModelManager] getPublicPeerFileForPeerURI:peerURI];
     HOPContact* contact = [[HOPContact alloc] initWithPeerFile:publicPerFile.peerFile];
-    [contact hintAboutLocation:locationID];
+    
+    if ([locationID length] > 0)
+        [contact hintAboutLocation:locationID];
 }
 
 

@@ -65,6 +65,8 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 {
     HOPIdentity* ret = nil;
     
+    ZS_LOG(Debug,"Starting identity login");
+    
     if (!inIdentityDelegate || [outerFrameURLUponReload length] == 0 || [identityURIOridentityBaseURI length] == 0 || [identityProviderDomain length] == 0)
     {
         ZS_LOG_ERROR(Debug, "Invalid input parameters!");

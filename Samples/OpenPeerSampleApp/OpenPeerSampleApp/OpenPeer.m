@@ -108,11 +108,16 @@
 
 - (void) preSetup
 {
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Pre setup");
     //Create all delegates required for communication with core
     [self createDelegates];
     
     //Set log levels and start logging
     [Logger startAllSelectedLoggers];
+    
+    //Cleare expired cookies and set delegate
+    [[HOPCache sharedCache] removeExpiredCookies];
+    [[HOPCache sharedCache] setup];
     
     if ([UIDevice isNetworkReachable])
     {
@@ -124,12 +129,9 @@
      
         //Set settigns delegate
         [[HOPSettings sharedSettings] setup];
-        [[HOPSettings sharedSettings] applyDefaults];
+        if ([Utility isRuningForTheFirstTime])
+            [[HOPSettings sharedSettings] applyDefaults];
         
-        //Cleare expired cookies and set delegate
-        [[HOPCache sharedCache] removeExpiredCookies];
-        [[HOPCache sharedCache] setup];
-
         BOOL startDownloadingSettings = [[Settings sharedSettings] updateAppSettings];
         
         if (![[HOPModelManager sharedModelManager] getLastLoggedInHomeUser])
@@ -151,8 +153,10 @@
 
 - (void) finishPreSetup
 {
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Pre setup finished");
     if (![[HOPModelManager sharedModelManager] getLastLoggedInHomeUser])
     {
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"There is no logged in user");
         if ([[NSUserDefaults standardUserDefaults] boolForKey: settingsKeyQRScannerShownAtStart])
             [[self mainViewController] showQRScanner]; //Show QR scanner if user wants to change settings by reading QR code
         else if ([[NSUserDefaults standardUserDefaults] boolForKey:settingsKeySplashScreenAllowsQRScannerGesture])
@@ -161,7 +165,10 @@
             [self setup];
     }
     else
+    {
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Starting setup for logged in user");
         [self setup];
+    }
 }
 /**
  Initializes the open peer stack. After initialization succeeds, login screen is displayed, or user relogin started.
@@ -169,6 +176,7 @@
  */
 - (void) setup
 {
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Started setup");
     //If authorized application id is missing, generate it 
 //    if ([[[HOPSettings sharedSettings] getAuthorizedApplicationId] length] == 0)
 //        [[HOPSettings sharedSettings] storeAuthorizedApplicationId:[[OpenPeer sharedOpenPeer] authorizedApplicationId]];
@@ -268,6 +276,7 @@
 
 - (void) prepareAppForBackground
 {
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Preparing app for the background");
     UIBackgroundTaskIdentifier bgTask = UIBackgroundTaskInvalid;
     
     bgTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^

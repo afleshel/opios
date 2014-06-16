@@ -56,4 +56,5 @@
 + (NSDate *) dateFromTimeString: (NSString*) timeStr;
 + (BOOL) isAppUpdated;
 + (void) showLocalNotification:(NSString*) messageText additionalData:(NSDictionary*) additionalData;
++ (BOOL) isRuningForTheFirstTime;
 @end

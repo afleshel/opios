@@ -69,6 +69,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
 - (void) notifyReturningFromBackground
 {
+    ZS_LOG(Trace, [self log:@"Notifying core about returning to forground."]);
     IBackgrounding::notifyReturningFromBackground();
 }
 

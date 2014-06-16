@@ -95,6 +95,8 @@ typedef enum
 @property (strong, nonatomic) NSMutableDictionary* outgoingTelnetLoggerSettings;
 @property (strong, nonatomic) NSMutableDictionary* loginSettings;
 
+@property (strong, nonatomic) NSString *deviceId;
+@property (strong, nonatomic) NSString *instanceId;
 
 
 + (id) sharedSettings;
