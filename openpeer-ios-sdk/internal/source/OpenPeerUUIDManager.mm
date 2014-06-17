@@ -32,6 +32,10 @@
 #import "OpenPeerUUIDManager.h"
 #import <Security/Security.h>
 #import "HOPUtility.h"
+#include <zsLib/types.h>
+#import <openpeer/core/ILogger.h>
+
+ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
 @interface OpenPeerUUIDManager()
 
@@ -135,13 +139,13 @@ static const UInt8 kKeychainItemIdentifier[]    = "com.Hookflash.Keychain\\Grant
     else if (keychainErr == errSecItemNotFound) 
     {
         ret = NO;
-        NSLog(@"UUID not found in keychain");
+        ZS_LOG_DEBUG(zsLib::String("SDK - UUID not found in keychain"));
     } 
     else 
     {
         ret = NO;
         // Any other error is unexpected.
-        NSLog(@"Reading keychain serious error.\n");
+        ZS_LOG_DEBUG(zsLib::String("SDK - Reading keychain serious error"));
     }
     return ret;
 }
@@ -231,12 +235,12 @@ static const UInt8 kKeychainItemIdentifier[]    = "com.Hookflash.Keychain\\Grant
     }
     // Don't do anything if nothing is found.
     else if (keychainError == errSecItemNotFound) {
-        NSLog(@"Nothing was found in the keychain.\n");
+        ZS_LOG_DEBUG(zsLib::String("SDK - Nothing was found in the keychain"));
     }
     // Any other error is unexpected.
     else
     {
-        NSLog(@"Serious error.\n");
+        ZS_LOG_DEBUG(zsLib::String("SDK - Serious error"));
     }
     
     return returnDictionary;

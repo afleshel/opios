@@ -39,6 +39,7 @@
 #import "ChatMessageCell.h"
 #import <OpenPeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPMessageRecord.h>
+#import <OpenPeerSDK/HOPSessionRecord.h>
 #import <OpenPeerSDK/HOPConversationThread.h>
 
 
@@ -217,9 +218,11 @@
 #pragma mark - UITextViewDelegate
 - (BOOL) textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-    if([text isEqualToString:@"\n"] && [textView.text length] > 0)
+    //if([text isEqualToString:@"\n"] && [textView.text length] > 0)
+    if([text isEqualToString:@"\n"])
     {
-        [self sendIMmessage:textView.text];
+        if ([textView.text length] > 0)
+            [self sendIMmessage:textView.text];
         return NO;
     }
     return YES;
@@ -398,9 +401,9 @@
     //self.predicateString = [NSString stringWithFormat:@"(session.sessionID MATCHES '%@')",[self.session.conversationThread getThreadId]];
     //NSPredicate *predicate = [NSPredicate predicateWithFormat:self.predicateString];
     NSMutableArray* arrayOfPredicates = [[NSMutableArray alloc] init];
-    for (NSString* sessionID in [self.session.sessionIdsHistory allObjects])
+    //for (NSString* sessionID in [self.session.sessionIdsHistory allObjects])
     {
-        NSPredicate* predicateSessionID = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(session.sessionID MATCHES '%@')",sessionID]];
+        NSPredicate* predicateSessionID = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(session.sessionID MATCHES '%@')",self.session.sessionRecord.sessionID]];
         [arrayOfPredicates addObject:predicateSessionID];
     }
     NSPredicate *predicate = [NSCompoundPredicate andPredicateWithSubpredicates:arrayOfPredicates];

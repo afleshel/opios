@@ -31,8 +31,12 @@
 
 #import <Foundation/Foundation.h>
 
+#define AVATAR_WIDTH 0 //31.0
+#define AVATAR_HEIGHT 0 //31.0
+
 @class HOPAvatar;
 @class HOPImage;
+@class HOPRolodexContact;
 
 @interface ImageManager : NSObject
 
@@ -41,4 +45,6 @@
 - (id) init __attribute__((unavailable("ImageManager is singleton class.")));
 
 - (void) donwloadImageForAvatar:(HOPAvatar*) avatar tableView:(UITableView*) inTableView indexPath:(NSIndexPath*) inIndexPath;
+
+- (UIImage*) getAvatarImageForRolodexContact:(HOPRolodexContact*) inRolodexContact;
 @end

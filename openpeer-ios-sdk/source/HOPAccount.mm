@@ -83,6 +83,7 @@ using namespace openpeer::core;
 
 - (BOOL) loginWithAccountDelegate:(id<HOPAccountDelegate>) inAccountDelegate conversationThreadDelegate:(id<HOPConversationThreadDelegate>) inConversationThreadDelegate callDelegate:(id<HOPCallDelegate>) inCallDelegate namespaceGrantOuterFrameURLUponReload:(NSString*) namespaceGrantOuterFrameURLUponReload lockboxServiceDomain:(NSString*) lockboxServiceDomain forceCreateNewLockboxAccount:(BOOL) forceCreateNewLockboxAccount
 {
+    ZS_LOG_DEBUG([self log:@"Starting account login"]);
     BOOL passedWithoutErrors = NO;
     NSString* grantID = [[OpenPeerUUIDManager sharedUUIDManager] getUUID];
     

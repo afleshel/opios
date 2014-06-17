@@ -111,14 +111,15 @@ using namespace openpeer::core;
         [identity getIdentityPtr]->getSelfIdentityContact(identityContact);
         
         identityContactsList.push_back(identityContact);
-        
-        IConversationThreadPtr tempConversationThreadPtr = IConversationThread::create([[HOPAccount sharedAccount] getAccountPtr], identityContactsList);
-        
-        if (tempConversationThreadPtr)
-        {
-            ret = [[self alloc] initWithConversationThread:tempConversationThreadPtr];
-        }
     }
+    
+    IConversationThreadPtr tempConversationThreadPtr = IConversationThread::create([[HOPAccount sharedAccount] getAccountPtr], identityContactsList);
+    
+    if (tempConversationThreadPtr)
+    {
+        ret = [[self alloc] initWithConversationThread:tempConversationThreadPtr];
+    }
+    
     return ret;
 }
 

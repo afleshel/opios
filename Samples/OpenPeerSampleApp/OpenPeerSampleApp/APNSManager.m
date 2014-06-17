@@ -107,14 +107,28 @@
         
         self.dictionaryOfSentFiles = [[NSMutableDictionary alloc] init];
         
-        NSString* sessionIdentifier = [NSString stringWithFormat:@"com.hookflash.backgroundSession.%@",@""];
-        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration backgroundSessionConfiguration:sessionIdentifier];
-        //NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-        
-        self.urlSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:[NSOperationQueue mainQueue]];
+//        NSString* sessionIdentifier = [NSString stringWithFormat:@"com.hookflash.backgroundSession.%@",@""];
+//        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration backgroundSessionConfiguration:sessionIdentifier];
+//        //NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+//        
+//        self.urlSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:[NSOperationQueue mainQueue]];
     }
     return self;
 }
+
+- (NSURLSession*) urlSession
+{
+    if (_urlSession != nil)
+        return _urlSession;
+    
+    NSString* sessionIdentifier = [NSString stringWithFormat:@"com.hookflash.backgroundSession.%@",@""];
+    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration backgroundSessionConfiguration:sessionIdentifier];
+    
+    _urlSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:[NSOperationQueue mainQueue]];
+    
+    return _urlSession;
+}
+
 - (void) prepareUrbanAirShip
 {
     [UAirship setLogging:NO];
@@ -183,10 +197,33 @@
         NSURL *fileURL = [NSURL fileURLWithPath:filePath];
         if (fileURL)
         {
-            self.sessionDataTask = [self.urlSession uploadTaskWithRequest:request fromFile:fileURL];
-            [self.sessionDataTask resume];
-            [self.dictionaryOfSentFiles setObject:filePath forKey:[NSNumber numberWithInt:self.sessionDataTask.taskIdentifier]];
+            if (self.urlSession)
+            {
+                self.sessionDataTask = [self.urlSession uploadTaskWithRequest:request fromFile:fileURL];
+                if (self.sessionDataTask)
+                {
+                    [self.sessionDataTask resume];
+                    [self.dictionaryOfSentFiles setObject:filePath forKey:[NSNumber numberWithInt:self.sessionDataTask.taskIdentifier]];
+                    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Started sending push notification");
+                }
+                else
+                {
+                    OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Push notification is not sent, because session upload task is not created");
+                }
+            }
+            else
+            {
+                OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Push notification is not sent, because url session is invalid");
+            }
         }
+        else
+        {
+            OPLog(HOPLoggerSeverityError, HOPLoggerLevelTrace, @"Invalid file url for sending push notification");
+        }
+    }
+    else
+    {
+        OPLog(HOPLoggerSeverityError, HOPLoggerLevelTrace, @"Invalid path for sending push notification");
     }
     
 }
@@ -294,7 +331,10 @@
         
         NSString* messageText  = [NSString stringWithFormat:@"%@  %@",[[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser] getFullName],msg];
         
-        NSString* content = [self prepareMessageForRichPush:message peerURI:[[HOPContact getForSelf]getPeerURI] location:[[HOPAccount sharedAccount] getLocationID]];
+        //NSString* content = [self prepareMessageForRichPush:message peerURI:[[HOPContact getForSelf]getPeerURI] location:[[HOPAccount sharedAccount] getLocationID]];
+        
+        NSString* location = [[HOPAccount sharedAccount] isCoreAccountCreated] && ([[HOPAccount sharedAccount] getState].state == HOPAccountStateReady) ? [[HOPAccount sharedAccount] getLocationID] : @"";
+         NSString* content = [self prepareMessageForRichPush:message peerURI:[[HOPModelManager sharedModelManager]getPeerURIForHomeUser] location:location];
         
         for (NSString* deviceToken in deviceTokens)
         {
@@ -317,10 +357,9 @@
                 [stringToSend writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
             //}
             
-            if ([[NSFileManager defaultManager] isWritableFileAtPath:filePath]) {
-                NSLog(@"Writable");
-            }else {
-                NSLog(@"Not Writable");
+            if (![[NSFileManager defaultManager] isWritableFileAtPath:filePath])
+            {
+                OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Unable to save rich push notification in file for sendig.");
             }
             
             if ([filePath length] > 0 && [dataToPush count] > 0)
@@ -384,6 +423,8 @@
 - (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
  completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler
 {
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"URL session %@ has received auth challenge", session);
+    
     if (challenge.previousFailureCount == 0)
     {
         NSURLCredentialPersistence persistence = NSURLCredentialPersistenceForSession;
@@ -393,7 +434,7 @@
     else
     {
         // handle the fact that the previous attempt failed
-        NSLog(@"%s: challenge.error = %@", __FUNCTION__, challenge.error);
+        //NSLog(@"%s: challenge.error = %@", __FUNCTION__, challenge.error);
         completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, nil);
     }
 }
@@ -425,6 +466,8 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)response
 didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
  completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler
 {
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"URL session %@ has received auth challenge for task %@", session, [task originalRequest]);
+    
     if (challenge.previousFailureCount == 0)
     {
         NSURLCredentialPersistence persistence = NSURLCredentialPersistenceForSession;
@@ -466,7 +509,8 @@ totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
 didCompleteWithError:(NSError *)error
 {
-    NSLog(@"%@",error);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Push notification response: %@", [task response]);
+    
     if (!error)
     {
         NSError* fileError;
@@ -476,9 +520,13 @@ didCompleteWithError:(NSError *)error
             [[NSFileManager defaultManager] removeItemAtPath:filePath error:&fileError];
             if (fileError)
             {
-                
+                OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Error occured while deleting sent file: %@", fileError);
             }
         }
+    }
+    else
+    {
+        OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Error occured while sending push notification: %@", error);
     }
     return;
 }

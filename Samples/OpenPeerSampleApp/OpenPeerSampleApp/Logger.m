@@ -35,6 +35,7 @@
 
 #import "OpenpeerSDK/HOPSettings.h"
 #import "OpenpeerSDK/HOPLogger.h"
+#import "OpenpeerSDK/HOPUtility.h"
 
 @implementation Logger
 
@@ -99,8 +100,13 @@
     {
         NSString* server =[[Settings sharedSettings] getServerPortForLogger:LOGGER_OUTGOING_TELNET];
         BOOL colorized = [[Settings sharedSettings] isColorizedOutputForLogger:LOGGER_OUTGOING_TELNET];
-        if ([server length] > 0)
-            [HOPLogger installOutgoingTelnetLogger:server colorizeOutput:colorized stringToSendUponConnection:[[HOPSettings sharedSettings] getAuthorizedApplicationId]];
+        if ([server length] > 0) {
+            NSString* deviceId = [[Settings sharedSettings] deviceId];
+            NSString* instanceId = [[Settings sharedSettings] instanceId];
+            NSString* connectionString = [[deviceId stringByAppendingString:@"-"] stringByAppendingString:instanceId];
+
+            [HOPLogger installOutgoingTelnetLogger:server colorizeOutput:colorized stringToSendUponConnection:connectionString];
+        }
     }
     else
     {

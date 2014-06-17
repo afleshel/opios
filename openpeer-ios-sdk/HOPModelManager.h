@@ -44,7 +44,8 @@
 @class HOPAvatar;
 @class HOPSessionRecord;
 @class HOPMessageRecord;
-
+@class HOPConversationThreadRecord;
+@class HOPConversationThread;
 /**
  *  This is the singleton class and it is used for manipulation with core data.
  */
@@ -282,4 +283,17 @@
  Removes all session and message records.
  */
 - (void) clearSessionRecords;
+
+- (NSString*) getPeerURIForHomeUser;
+
+- (HOPSessionRecord *) getSessionRecordByID:(NSString*) sessionID;
+
+- (HOPMessageRecord *) getMessageRecordByID:(NSString*) messageID;
+
+- (HOPSessionRecord*) getSessionRecordForConversationThread:(HOPConversationThread*) conversationThread;
+- (HOPConversationThreadRecord*) getConversationThreadRecordForThreadID:(NSString*) threadID;
+- (NSArray*) getSessionRecordsForThreadID:(NSString*) threadID;
+- (HOPConversationThreadRecord*) createRecordForConversationThread:(HOPConversationThread*) conversationThread sessionRecord:(HOPSessionRecord*) sessionRecord;
+
+- (HOPSessionRecord*) createSessionRecordForConversationThread:(HOPConversationThread*) conversationThread type:(NSString*) type date:(NSDate*) date name:(NSString*) name participants:(NSArray*) participants;
 @end
