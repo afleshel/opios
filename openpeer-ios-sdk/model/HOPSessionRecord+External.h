@@ -29,12 +29,9 @@
  
  */
 
-#import <UIKit/UIKit.h>
+#import "HOPSessionRecord.h"
 
-@class HOPSessionRecord;
+@interface HOPSessionRecord (External)
 
-@interface ActiveSessionTableViewCell : UITableViewCell
-
-- (void) setSession:(HOPSessionRecord *)inSessionRecord;
-
+- (NSString *)sectionIdentifier;
 @end

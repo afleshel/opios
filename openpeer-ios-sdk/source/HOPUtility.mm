@@ -99,4 +99,56 @@
     CFRelease(guid);
     return strGuid;
 }
+
++ (NSString *) getTimeSectionForDate:(NSDate*) date
+{
+    NSString* ret = nil;
+    NSDate *now = [NSDate date];
+    double deltaSeconds = fabs([date timeIntervalSinceDate:now]);
+    double deltaMinutes = deltaSeconds / 60.0f;
+    int minutes;
+    
+    if (deltaMinutes < (24 * 60))
+    {
+        ret = @"Today";
+    }
+    else if (deltaMinutes < (24 * 60 * 2))
+    {
+        ret = @"Yesterday";
+    }
+    else if (deltaMinutes < (24 * 60 * 7))
+    {
+        minutes = (int)floor(deltaMinutes/(60 * 24));
+        ret = [NSString stringWithFormat:@"%d Days ago",minutes];
+    }
+    else if (deltaMinutes < (24 * 60 * 14))
+    {
+        ret = @"Week ago";
+    }
+    else if (deltaMinutes < (24 * 60 * 31))
+    {
+        minutes = (int)floor(deltaMinutes/(60 * 24 * 7));
+        ret = [NSString stringWithFormat:@"%d Weeks ago",minutes];
+    }
+    else if (deltaMinutes < (24 * 60 * 61))
+    {
+        ret = @"Month ago";
+    }
+    else if (deltaMinutes < (24 * 60 * 365.25))
+    {
+        minutes = (int)floor(deltaMinutes/(60 * 24 * 30));
+        ret = [NSString stringWithFormat:@"%d Months ago",minutes];
+    }
+    else if (deltaMinutes < (24 * 60 * 731))
+    {
+        ret = @"Year ago";
+    }
+    else
+    {
+        minutes = (int)floor(deltaMinutes/(60 * 24 * 365));
+        ret = [NSString stringWithFormat:@"%d Years ago",minutes];
+    }
+
+    return ret;
+}
 @end

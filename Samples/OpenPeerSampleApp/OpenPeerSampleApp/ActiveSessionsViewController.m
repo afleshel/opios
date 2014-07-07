@@ -1,20 +1,43 @@
-//
-//  ActiveSessionsViewController ViewController.m
-//  OpenPeerSampleApp
-//
-//  Created by Sergej on 6/6/14.
-//  Copyright (c) 2014 Hookflash. All rights reserved.
-//
+/*
+ 
+ Copyright (c) 2014, SMB Phone Inc.
+ All rights reserved.
+ 
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions are met:
+ 
+ 1. Redistributions of source code must retain the above copyright notice, this
+ list of conditions and the following disclaimer.
+ 2. Redistributions in binary form must reproduce the above copyright notice,
+ this list of conditions and the following disclaimer in the documentation
+ and/or other materials provided with the distribution.
+ 
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 
+ The views and conclusions contained in the software and documentation are those
+ of the authors and should not be interpreted as representing official policies,
+ either expressed or implied, of the FreeBSD Project.
+ 
+ */
 
 #import "ActiveSessionsViewController.h"
-#import <OpenPeerSDK/HOPSessionRecord.h>
+#import <OpenPeerSDK/HOPSessionRecord+External.h>
 #import <OpenPeerSDK/HOPModelManager.h>
 #import "SessionManager.h"
 #import "OpenPeer.h"
 #import "MainViewController.h"
 #import "ActiveSessionTableViewCell.h"
 
-#define TABLE_CELL_HEIGHT 55.0
+#define TABLE_CELL_HEIGHT 60.0
 
 @interface ActiveSessionsViewController ()
 @property (weak, nonatomic) IBOutlet UITableView *tableViewSessions;
@@ -35,6 +58,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.tableViewSessions.separatorStyle = UITableViewCellSeparatorStyleNone;
+    
     // Do any additional setup after loading the view from its nib.
     
     self.navigationController.navigationBar.titleTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], NSForegroundColorAttributeName, [UIFont fontWithName:@"Helvetica-Bold" size:22.0], NSFontAttributeName, nil];
@@ -113,7 +139,38 @@
     }
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
-
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+	id <NSFetchedResultsSectionInfo> theSection = [[self.fetchedResultsController sections] objectAtIndex:section];
+    
+    /*
+     Section information derives from an event's sectionIdentifier, which is a string representing the number (year * 1000) + month.
+     To display the section title, convert the year and month components to a string representation.
+     */
+    static NSDateFormatter *formatter = nil;
+    
+    if (!formatter)
+    {
+        formatter = [[NSDateFormatter alloc] init];
+        [formatter setCalendar:[NSCalendar currentCalendar]];
+        
+        NSString *formatTemplate = [NSDateFormatter dateFormatFromTemplate:@"MMMM YYYY" options:0 locale:[NSLocale currentLocale]];
+        [formatter setDateFormat:formatTemplate];
+    }
+    
+    NSInteger numericSection = [[theSection name] integerValue];
+	NSInteger year = numericSection / 1000;
+	NSInteger month = numericSection - (year * 1000);
+    
+    NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
+    dateComponents.year = year;
+    dateComponents.month = month;
+    NSDate *date = [[NSCalendar currentCalendar] dateFromComponents:dateComponents];
+    
+	NSString *titleString = [formatter stringFromDate:date];
+    
+	return [theSection name];
+}
 
 #pragma mark - NSFetchedResultsController
 - (NSFetchedResultsController *)fetchedResultsController
@@ -141,7 +198,7 @@
     
 	//_fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext] sectionNameKeyPath:@"firstLetter" cacheName:@"RolodexContacts"];
     
-    _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext] sectionNameKeyPath:nil cacheName:nil];
+    _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext] sectionNameKeyPath:@"sectionIdentifier" cacheName:nil];
     _fetchedResultsController.delegate = self;
     
 	return _fetchedResultsController;
