@@ -167,6 +167,18 @@
         UINavigationController *contactsNavigationController = [[UINavigationController alloc] initWithRootViewController:self.contactsTableViewController];
         contactsNavigationController.navigationBar.translucent = NO;
         
+        //Favorites tab
+        self.favoritesTableViewController = [[ContactsViewController alloc] initInFavoritesMode:YES];
+        self.favoritesTableViewController.title = @"Favorites";
+        self.tabBarItem.title = @"FAVORITES";
+        
+        [self.favoritesTableViewController.tabBarItem setImage:[[UIImage imageNamed:@"iPhone_tabBar_contacts_inactive.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+        [self.favoritesTableViewController.tabBarItem setSelectedImage:[[UIImage imageNamed:@"iPhone_tabBar_contacts_active.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+        
+        
+        UINavigationController *favoritesNavigationController = [[UINavigationController alloc] initWithRootViewController:self.favoritesTableViewController];
+        favoritesNavigationController.navigationBar.translucent = NO;
+        
         //Active sessions tab
         self.activeSessionsViewController = [[ActiveSessionsViewController alloc] initWithNibName:@"ActiveSessionsViewController" bundle:nil];
         self.activeSessionsViewController.title = @"Chats";
@@ -197,7 +209,7 @@
         //Tab
         self.tabBarController = [[UITabBarController alloc] init];
         self.tabBarController.delegate = self;
-        self.tabBarController.viewControllers = [NSArray arrayWithObjects:contactsNavigationController, activeSessionsNavigationController,settingsNavigationController, nil];
+        self.tabBarController.viewControllers = [NSArray arrayWithObjects:contactsNavigationController, favoritesNavigationController, activeSessionsNavigationController,settingsNavigationController, nil];
         
         self.tabBarController.view.frame = self.view.bounds;
         [self.tabBarController.tabBar setBackgroundImage:[UIImage imageNamed:@"iPhone_tabBar_bkgd.png"]];
@@ -272,16 +284,21 @@
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Transition %d for session with id:%@ and for participant:%@",transition,[session.conversationThread getThreadId],title);
     UINavigationController* navigationController = nil;
     
-    switch ([self.tabBarController selectedIndex])
-    {
-        case 1:
-            navigationController = (UINavigationController*)[[self.tabBarController viewControllers] objectAtIndex:1];
-            break;
-            
-        default:
-            navigationController = (UINavigationController*)[[self.tabBarController viewControllers] objectAtIndex:0];
-            break;
-    }
+//    switch ([self.tabBarController selectedIndex])
+//    {
+//        case 2:
+//            navigationController = (UINavigationController*)[[self.tabBarController viewControllers] objectAtIndex:2];
+//            break;
+//            
+//        default:
+//            navigationController = (UINavigationController*)[[self.tabBarController viewControllers] objectAtIndex:0];
+//            break;
+//    }
+    
+    int tabIndex = [self.tabBarController selectedIndex] < 3 ? [self.tabBarController selectedIndex] : 2;
+    
+    navigationController = (UINavigationController*)[[self.tabBarController viewControllers] objectAtIndex:tabIndex];
+    
     switch (transition)
     {
         case NEW_SESSION_SWITCH:
@@ -364,16 +381,20 @@
     SessionViewController_iPhone* sessionViewContorller = [self.sessionViewControllersDictionary objectForKey:sessionId];
     UINavigationController* navigationController = nil;//(UINavigationController*)[[self.tabBarController viewControllers] objectAtIndex:0];
     
-    switch ([self.tabBarController selectedIndex])
-    {
-        case 1:
-            navigationController = (UINavigationController*)[[self.tabBarController viewControllers] objectAtIndex:1];
-            break;
-            
-        default:
-            navigationController = (UINavigationController*)[[self.tabBarController viewControllers] objectAtIndex:0];
-            break;
-    }
+//    switch ([self.tabBarController selectedIndex])
+//    {
+//        case 2:
+//            navigationController = (UINavigationController*)[[self.tabBarController viewControllers] objectAtIndex:1];
+//            break;
+//            
+//        default:
+//            navigationController = (UINavigationController*)[[self.tabBarController viewControllers] objectAtIndex:0];
+//            break;
+//    }
+    
+    int tabIndex = [self.tabBarController selectedIndex] < 3 ? [self.tabBarController selectedIndex] : 2;
+    
+    navigationController = (UINavigationController*)[[self.tabBarController viewControllers] objectAtIndex:tabIndex];
     
     if (!sessionViewContorller)
     {

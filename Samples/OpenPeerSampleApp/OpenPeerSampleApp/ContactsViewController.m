@@ -73,12 +73,23 @@
     return _listOfSelectedContacts;
 }
 
+- (id) initInFavoritesMode:(BOOL) favoritesMode
+{
+    self = [self initWithNibName:@"ContactsViewController" bundle:nil];
+    if (self)
+    {
+        self.isInFavoritesMode = YES;
+    }
+    return self;
+}
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self)
     {
         self.keyboardIsHidden = YES;
+        self.isInFavoritesMode = NO;
     }
     return self;
 }
@@ -120,7 +131,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    self.navigationItem.title = @"Contacts";
+    self.navigationItem.title = self.isInFavoritesMode ? @"Favorites" : @"Contacts";
     [self.contactsTableView reloadRowsAtIndexPaths:[self.contactsTableView indexPathsForVisibleRows]
                      withRowAnimation:UITableViewRowAnimationNone];
 }
@@ -285,13 +296,31 @@
         return _fetchedResultsController;
     }
     
+    NSString *cacheName = nil;
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPRolodexContact" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];
     [fetchRequest setEntity:entity];
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(associatedIdentity.homeUser.stableId MATCHES '%@')",[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser].stableId]];
-    [fetchRequest setPredicate:predicate];
+    NSMutableArray *predicatesArray = [[NSMutableArray alloc] init];
+    NSPredicate *predicateOnlyOpenPeerContacts = nil;
+    if (self.isInFavoritesMode)
+    {
+        predicateOnlyOpenPeerContacts = [NSPredicate predicateWithFormat:@"identityContact != nil"];
+        [predicatesArray addObject:predicateOnlyOpenPeerContacts];
+        cacheName = @"FavoritesContacts";
+    }
+    else
+    {
+        cacheName = @"RolodexContacts";
+    }
+    
+    NSPredicate *predicateAllContacts = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(associatedIdentity.homeUser.stableId MATCHES '%@')",[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser].stableId]];
+    
+    [predicatesArray addObject:predicateAllContacts];
+    
+    NSPredicate *mainPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:predicatesArray];
+    [fetchRequest setPredicate:mainPredicate];
     
 	[fetchRequest setFetchBatchSize:20];
 	
@@ -302,7 +331,11 @@
     
 	//_fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext] sectionNameKeyPath:@"firstLetter" cacheName:@"RolodexContacts"];
     
-    _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext] sectionNameKeyPath:nil cacheName:@"RolodexContacts"];
+    if (!self.isInFavoritesMode)
+        _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext] sectionNameKeyPath:nil cacheName:@"RolodexContacts"];
+    else
+        _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext] sectionNameKeyPath:nil cacheName:@"FavoritesContacts"];
+    
     _fetchedResultsController.delegate = self;
     
 	return _fetchedResultsController;
@@ -313,7 +346,10 @@
 	switch (type)
     {
 		case NSFetchedResultsChangeInsert:
-			[self.contactsTableView  insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            //if (!self.isInFavoritesMode)
+                [self.contactsTableView  insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+//            else
+//                [self.contactsTableView reloadData];
 			break;
 		case NSFetchedResultsChangeUpdate:
 			//[[self.contactsTableView cellForRowAtIndexPath:indexPath].textLabel setText:((HOPRolodexContact*)[[[self.fetchedResultsController sections] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]).name];

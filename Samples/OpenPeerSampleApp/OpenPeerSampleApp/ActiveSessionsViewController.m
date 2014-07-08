@@ -32,6 +32,7 @@
 #import "ActiveSessionsViewController.h"
 #import <OpenPeerSDK/HOPSessionRecord+External.h>
 #import <OpenPeerSDK/HOPModelManager.h>
+#import <OpenPeerSDK/HOPPublicPeerFile.h>
 #import "SessionManager.h"
 #import "OpenPeer.h"
 #import "MainViewController.h"
@@ -132,8 +133,25 @@
     HOPSessionRecord* record = [self.fetchedResultsController objectAtIndexPath:indexPath];
     if (record)
     {
-//        Session* session = [[SessionManager sharedSessionManager] getSessionForSessionId:record.sessionID];
         Session* session = [[SessionManager sharedSessionManager] getSessionForSessionRecord:record];
+        if (!session)
+        {
+            NSMutableArray* listOfRolodexContacts = [[NSMutableArray alloc] init];
+            for (HOPPublicPeerFile* publicPeerFile in record.participants)
+            {
+                NSArray* rolodexContactsArray = [[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:publicPeerFile.peerURI];
+                HOPRolodexContact* rolodexContact = [rolodexContactsArray objectAtIndex:0];
+                
+                if (rolodexContact)
+                    [listOfRolodexContacts addObject:rolodexContact];
+            }
+            
+            if([listOfRolodexContacts count] > 0)
+            {
+                session = [[SessionManager sharedSessionManager] createSessionForContact:[listOfRolodexContacts objectAtIndex:0]];
+            }
+        }
+        
         if (session)
             [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForSession:session forIncomingCall:NO forIncomingMessage:NO];
     }

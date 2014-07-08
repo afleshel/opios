@@ -60,11 +60,11 @@
 
 - (void)awakeFromNib
 {
-    self.messageView.layer.cornerRadius = 5.0;
-    self.messageView.layer.borderColor = [[UIColor whiteColor] CGColor];
-    self.messageView.layer.borderWidth = 1.0;
-    self.messageView.layer.shadowColor = [[UIColor blackColor] CGColor];
-    self.messageView.layer.shadowOffset = CGSizeMake(1.0, 1.0);
+//    self.messageView.layer.cornerRadius = 5.0;
+//    self.messageView.layer.borderColor = [[UIColor whiteColor] CGColor];
+//    self.messageView.layer.borderWidth = 1.0;
+//    self.messageView.layer.shadowColor = [[UIColor blackColor] CGColor];
+//    self.messageView.layer.shadowOffset = CGSizeMake(1.0, 1.0);
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -112,6 +112,30 @@
     }
     else
         self.labelLastMessage.hidden = YES;
+    //[self drawInnerShadowOnView:self.messageView];
 }
 
+-(void)drawInnerShadowOnView:(UIView *)view
+{
+    UIImageView *innerShadowView = [[UIImageView alloc] initWithFrame:view.bounds];
+    
+    innerShadowView.contentMode = UIViewContentModeScaleToFill;
+    innerShadowView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    
+    [view addSubview:innerShadowView];
+    
+    [innerShadowView.layer setMasksToBounds:YES];
+    
+    [innerShadowView.layer setBorderColor:[UIColor lightGrayColor].CGColor];
+    [innerShadowView.layer setShadowColor:[UIColor blackColor].CGColor];
+    [innerShadowView.layer setBorderWidth:1.0f];
+    
+    [innerShadowView.layer setShadowOffset:CGSizeMake(0, 0)];
+    [innerShadowView.layer setShadowOpacity:1.0];
+    
+    [innerShadowView.layer setCornerRadius:5.0];
+    
+    // this is the inner shadow thickness
+    [innerShadowView.layer setShadowRadius:1.5];
+}
 @end
