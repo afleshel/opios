@@ -74,6 +74,18 @@
     // Configure the view for the selected state
 }
 
+- (void)setLastMessage
+{
+    HOPMessageRecord* messageRecord = [[HOPModelManager sharedModelManager] getLastMessageRecordForSessionID:self.sessionRecord.sessionID];
+    if (messageRecord)
+    {
+        self.labelLastMessage.hidden = NO;
+        self.labelLastMessage.text = messageRecord.text;
+    }
+    else
+        self.labelLastMessage.hidden = YES;
+}
+
 - (void) setSession:(HOPSessionRecord *)inSessionRecord
 {
     self.sessionRecord = inSessionRecord;
@@ -103,16 +115,10 @@
         self.badgeView.hidden = YES;
     }
     
-    self.labelCreationDate.text = [Utility stringFromDate:inSessionRecord.creationTime];
-    HOPMessageRecord* messageRecord = [[HOPModelManager sharedModelManager] getLastMessageRecordForSessionID:inSessionRecord.sessionID];
-    if (messageRecord)
-    {
-        self.labelLastMessage.hidden = NO;
-        self.labelLastMessage.text = messageRecord.text;
-    }
-    else
-        self.labelLastMessage.hidden = YES;
+    self.labelCreationDate.text = [Utility stringFromDate:inSessionRecord.lastActivity];
+    [self setLastMessage];
     //[self drawInnerShadowOnView:self.messageView];
+    //[self drawBackground];
 }
 
 -(void)drawInnerShadowOnView:(UIView *)view
@@ -137,5 +143,32 @@
     
     // this is the inner shadow thickness
     [innerShadowView.layer setShadowRadius:1.5];
+}
+
+- (void) setBackground
+{
+    [self setBackgroundColor:[UIColor clearColor]];
+    
+    CAGradientLayer *grad = [CAGradientLayer layer];
+    grad.frame = self.bounds;
+    grad.colors = [NSArray arrayWithObjects:(id)[[UIColor whiteColor] CGColor], (id)[[UIColor colorWithRed:237.0/255.0 green:237.0/255.0 blue:237.0/255.0 alpha:1] CGColor], nil];
+    
+    [self setBackgroundView:[[UIView alloc] init]];
+    [self.backgroundView.layer insertSublayer:grad atIndex:0];
+    
+    /*CAGradientLayer *selectedGrad = [CAGradientLayer layer];
+    selectedGrad.frame = self.bounds;
+    selectedGrad.colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithRed:237.0/255.0 green:237.0/255.0 blue:237.0/255.0 alpha:1] CGColor], (id)[[UIColor whiteColor] CGColor], nil];
+    
+    [self setSelectedBackgroundView:[[UIView alloc] init]];
+    [self.selectedBackgroundView.layer insertSublayer:selectedGrad atIndex:0];*/
+    
+    self.selectedBackgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"tableViewCell_selected.png"] stretchableImageWithLeftCapWidth:0.0 topCapHeight:5.0]];
+}
+
+- (void) updateActivity
+{
+    self.labelCreationDate.text = [Utility stringFromDate:self.sessionRecord.lastActivity];
+    [self setLastMessage];
 }
 @end

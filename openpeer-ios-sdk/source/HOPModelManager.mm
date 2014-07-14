@@ -828,6 +828,7 @@ using namespace openpeer::core;
                 messageRecord.fromPeer = rolodexContact.identityContact.peerFile;
                 messageRecord.session = sessionRecord;
                 messageRecord.messageID = messageId;
+                sessionRecord.lastActivity = [NSDate date];
             }
         }
         

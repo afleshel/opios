@@ -32,6 +32,9 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 
+@class ActiveSessionTableViewCell;
 @interface ActiveSessionsViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, NSFetchedResultsControllerDelegate>
+
+@property (nonatomic, weak) IBOutlet ActiveSessionTableViewCell *activeSessionTableViewCell;
 
 @end

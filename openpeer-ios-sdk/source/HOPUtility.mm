@@ -104,51 +104,48 @@
 {
     NSString* ret = nil;
     NSDate *now = [NSDate date];
-    double deltaSeconds = fabs([date timeIntervalSinceDate:now]);
-    double deltaMinutes = deltaSeconds / 60.0f;
-    int minutes;
     
-    if (deltaMinutes < (24 * 60))
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    
+    NSUInteger dayInYear = [calendar ordinalityOfUnit:NSDayCalendarUnit inUnit:NSYearCalendarUnit forDate:date];
+    NSUInteger dayInYearNow = [calendar ordinalityOfUnit:NSDayCalendarUnit inUnit:NSYearCalendarUnit forDate:now];
+    
+    int deltaDays = dayInYearNow - dayInYear;
+    
+    NSUInteger monthInYear = [calendar ordinalityOfUnit:NSMonthCalendarUnit inUnit:NSYearCalendarUnit forDate:date];
+    NSUInteger monthInYearNow = [calendar ordinalityOfUnit:NSMonthCalendarUnit inUnit:NSYearCalendarUnit forDate:now];
+    
+    int deltaMonths = monthInYearNow - monthInYear;
+    
+    int daltaYears = round(((double)deltaMonths)/12.0);
+    
+    if (daltaYears > 1)
     {
-        ret = @"Today";
+        ret = [NSString stringWithFormat:@"%d Years ago",daltaYears];
     }
-    else if (deltaMinutes < (24 * 60 * 2))
-    {
-        ret = @"Yesterday";
-    }
-    else if (deltaMinutes < (24 * 60 * 7))
-    {
-        minutes = (int)floor(deltaMinutes/(60 * 24));
-        ret = [NSString stringWithFormat:@"%d Days ago",minutes];
-    }
-    else if (deltaMinutes < (24 * 60 * 14))
-    {
-        ret = @"Week ago";
-    }
-    else if (deltaMinutes < (24 * 60 * 31))
-    {
-        minutes = (int)floor(deltaMinutes/(60 * 24 * 7));
-        ret = [NSString stringWithFormat:@"%d Weeks ago",minutes];
-    }
-    else if (deltaMinutes < (24 * 60 * 61))
-    {
-        ret = @"Month ago";
-    }
-    else if (deltaMinutes < (24 * 60 * 365.25))
-    {
-        minutes = (int)floor(deltaMinutes/(60 * 24 * 30));
-        ret = [NSString stringWithFormat:@"%d Months ago",minutes];
-    }
-    else if (deltaMinutes < (24 * 60 * 731))
+    else if (daltaYears == 1)
     {
         ret = @"Year ago";
     }
-    else
+    else if (deltaMonths  > 1)
     {
-        minutes = (int)floor(deltaMinutes/(60 * 24 * 365));
-        ret = [NSString stringWithFormat:@"%d Years ago",minutes];
+        ret = [NSString stringWithFormat:@"%d Months ago",deltaMonths];
     }
-
+    else if (deltaMonths == 1)
+    {
+        ret = @"Month ago";
+    }
+    else if (deltaDays > 1)
+    {
+        ret = [NSString stringWithFormat:@"%d Days ago",deltaDays];
+    }
+    else if (deltaDays == 1)
+    {
+        ret = @"Yesterday";
+    }
+    else
+        ret = @"Today";
+        
     return ret;
 }
 @end

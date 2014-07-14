@@ -38,7 +38,7 @@
 #import "MainViewController.h"
 #import "ActiveSessionTableViewCell.h"
 
-#define TABLE_CELL_HEIGHT 60.0
+#define TABLE_CELL_HEIGHT 55.0
 
 @interface ActiveSessionsViewController ()
 @property (weak, nonatomic) IBOutlet UITableView *tableViewSessions;
@@ -62,6 +62,10 @@
     
     self.tableViewSessions.separatorStyle = UITableViewCellSeparatorStyleNone;
     
+    UIImageView *tempImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table_background.png"]];
+    [tempImageView setFrame:self.tableViewSessions.frame];
+    self.tableViewSessions.backgroundView = tempImageView;
+    
     // Do any additional setup after loading the view from its nib.
     
     self.navigationController.navigationBar.titleTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], NSForegroundColorAttributeName, [UIFont fontWithName:@"Helvetica-Bold" size:22.0], NSFontAttributeName, nil];
@@ -76,8 +80,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [self.tableViewSessions reloadRowsAtIndexPaths:[self.tableViewSessions indexPathsForVisibleRows]
-                                  withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableViewSessions reloadRowsAtIndexPaths:[self.tableViewSessions indexPathsForVisibleRows] withRowAnimation:UITableViewRowAnimationNone];
 }
 - (void)didReceiveMemoryWarning
 {
@@ -86,7 +89,6 @@
 }
 
 #pragma mark - UITableViewDataSource
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return [[self.fetchedResultsController sections] count];
@@ -106,16 +108,13 @@
     {
         NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"ActiveSessionTableViewCell" owner:self options:nil];
         cell = [topLevelObjects objectAtIndex:0];
+        [cell setBackground];
     }
     
     cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"tableViewCell.png"] stretchableImageWithLeftCapWidth:0.0 topCapHeight:5.0]];
     cell.selectedBackgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"tableViewCell_selected.png"] stretchableImageWithLeftCapWidth:0.0 topCapHeight:5.0]];
     
     HOPSessionRecord* record = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    
-    //[cell setContact:contact inTable:self.contactsTableView atIndexPath:indexPath];
-    
-    //cell.textLabel.text = record.name;
     
     if (record)
         [cell setSession:record];
@@ -127,6 +126,53 @@
 {
     return TABLE_CELL_HEIGHT;
 }
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 40;
+}
+
+//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+//{
+//    return 3;
+//}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *customTitleView = [[UIView alloc] initWithFrame:CGRectMake(10, 0, 320, 40)];
+    UIImage* separator = [UIImage imageNamed:@"table_cell_separator.png"];
+    UIImageView *upperSeparatorView = section == 0 ? [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table_header.png"]] :[[UIImageView alloc] initWithImage:separator];
+    CGRect rect = upperSeparatorView.frame;
+    rect.origin = CGPointMake(0.0, 0.0);
+    upperSeparatorView.frame = rect;
+    UIImageView *lowerSeparatorView = [[UIImageView alloc] initWithImage:separator];
+    rect = lowerSeparatorView.frame;
+    rect.origin = CGPointMake(0.0, 38.0);
+    lowerSeparatorView.frame = rect;
+    
+    UILabel *titleLabel = [ [UILabel alloc] initWithFrame:CGRectMake(10.0, 2, 300, 36)];
+    
+    id <NSFetchedResultsSectionInfo> theSection = [[self.fetchedResultsController sections] objectAtIndex:section];
+    
+    titleLabel.text = [theSection name];
+    
+    titleLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:15];
+    titleLabel.textColor = [UIColor colorWithRed:24.0/255.0 green:85.0/255.0 blue:103.0/255.0 alpha:1];
+    
+    titleLabel.backgroundColor = [UIColor clearColor];
+    
+    [customTitleView addSubview:titleLabel];
+    [customTitleView addSubview:upperSeparatorView];
+    [customTitleView addSubview:lowerSeparatorView];
+    
+    return customTitleView;
+}
+
+//- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+//{
+//    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table_footer.png"]];
+//    return imageView;
+//}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -157,14 +203,11 @@
     }
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+/*- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
 	id <NSFetchedResultsSectionInfo> theSection = [[self.fetchedResultsController sections] objectAtIndex:section];
     
-    /*
-     Section information derives from an event's sectionIdentifier, which is a string representing the number (year * 1000) + month.
-     To display the section title, convert the year and month components to a string representation.
-     */
+
     static NSDateFormatter *formatter = nil;
     
     if (!formatter)
@@ -188,7 +231,7 @@
 	NSString *titleString = [formatter stringFromDate:date];
     
 	return [theSection name];
-}
+}*/
 
 #pragma mark - NSFetchedResultsController
 - (NSFetchedResultsController *)fetchedResultsController
@@ -200,26 +243,31 @@
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPSessionRecord" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];
-//    NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPRolodexContact" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];
     
     [fetchRequest setEntity:entity];
     
 //    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(associatedIdentity.homeUser.stableId MATCHES '%@')",[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser].stableId]];
 //    [fetchRequest setPredicate:predicate];
     
-//	[fetchRequest setFetchBatchSize:20];
+	[fetchRequest setFetchBatchSize:20];
 //	
-	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
+	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"lastActivity" ascending:NO];
 	NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
 	
 	[fetchRequest setSortDescriptors:sortDescriptors];
     
-	//_fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext] sectionNameKeyPath:@"firstLetter" cacheName:@"RolodexContacts"];
-    
-    _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext] sectionNameKeyPath:@"sectionIdentifier" cacheName:nil];
+	_fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext] sectionNameKeyPath:@"sectionIdentifier" cacheName:@"SessionRecord"];
     _fetchedResultsController.delegate = self;
     
 	return _fetchedResultsController;
+}
+
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
+    [self.tableViewSessions beginUpdates];
+}
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+    [self.tableViewSessions endUpdates];
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
@@ -228,9 +276,11 @@
     {
 		case NSFetchedResultsChangeInsert:
 			[self.tableViewSessions  insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            [self.tableViewSessions reloadData];
 			break;
 		case NSFetchedResultsChangeUpdate:
-			//[[self.contactsTableView cellForRowAtIndexPath:indexPath].textLabel setText:((HOPRolodexContact*)[[[self.fetchedResultsController sections] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]).name];
+            [((ActiveSessionTableViewCell*) [self.tableViewSessions cellForRowAtIndexPath:indexPath]) updateActivity];
+//			[[self.tableViewSessions cellForRowAtIndexPath:indexPath].textLabel setText:((HOPRolodexContact*)[[[self.fetchedResultsController sections] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]).name];
 			break;
 		case NSFetchedResultsChangeDelete:
 			[self.tableViewSessions  deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
@@ -242,5 +292,18 @@
 		default:
 			break;
 	}
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
+{
+    switch(type) {
+        case NSFetchedResultsChangeInsert:
+            [self.tableViewSessions insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+        case NSFetchedResultsChangeDelete:
+            [self.tableViewSessions deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+    }
 }
 @end

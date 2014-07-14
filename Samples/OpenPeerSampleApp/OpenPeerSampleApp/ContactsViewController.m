@@ -169,7 +169,7 @@
 {
     return [[self.fetchedResultsController sections] count];
     
-    [self.refreshControl endRefreshing];
+//    [self.refreshControl endRefreshing];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -341,15 +341,20 @@
 	return _fetchedResultsController;
 }
 
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
+    [self.contactsTableView beginUpdates];
+}
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+    [self.contactsTableView endUpdates];
+}
+
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
 	
 	switch (type)
     {
 		case NSFetchedResultsChangeInsert:
-            //if (!self.isInFavoritesMode)
-                [self.contactsTableView  insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-//            else
-//                [self.contactsTableView reloadData];
+            [self.contactsTableView  insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
 			break;
 		case NSFetchedResultsChangeUpdate:
 			//[[self.contactsTableView cellForRowAtIndexPath:indexPath].textLabel setText:((HOPRolodexContact*)[[[self.fetchedResultsController sections] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]).name];

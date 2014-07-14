@@ -413,7 +413,7 @@
         }
         else if (incomingMessage)
         {
-            if (navigationController.visibleViewController && ![navigationController.visibleViewController isKindOfClass:[ContactsViewController class]])
+            if (navigationController.visibleViewController && ![navigationController.visibleViewController isKindOfClass:[ContactsViewController class]] && ![navigationController.visibleViewController isKindOfClass:[ActiveSessionsViewController class]])
                 return NEW_SESSION_REFRESH_CHAT; //Create a new session and update chat, but don't switch from existing session
             else
                 return NEW_SESSION_WITH_CHAT; //Create and show a new session with incomming message
@@ -506,7 +506,7 @@
 
 - (void) showNotification:(NSString*) message
 {
-    UINavigationController* navigationController = (UINavigationController*)[[self.tabBarController viewControllers] objectAtIndex:0];
+    UINavigationController* navigationController = (UINavigationController*)[[self.tabBarController viewControllers] objectAtIndex:[self.tabBarController selectedIndex]];
     
     UILabel* labelNotification = [[UILabel alloc] initWithFrame:CGRectMake(5.0, 20.0, self.view.frame.size.width - 10.0, 40.0)];
     labelNotification.text = message;//[NSString stringWithFormat:@"New message from %@",contactName];

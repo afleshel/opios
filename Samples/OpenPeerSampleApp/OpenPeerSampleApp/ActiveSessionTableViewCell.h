@@ -36,5 +36,7 @@
 @interface ActiveSessionTableViewCell : UITableViewCell
 
 - (void) setSession:(HOPSessionRecord *)inSessionRecord;
+- (void) updateActivity;
+- (void) setBackground;
 
 @end

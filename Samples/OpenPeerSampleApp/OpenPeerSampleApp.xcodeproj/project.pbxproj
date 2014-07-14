@@ -238,6 +238,16 @@
 		8774AC7B18992D86006B91FA /* libZXingObjC-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8774AC7018992D5A006B91FA /* libZXingObjC-iOS.a */; };
 		87796E8518A8DDA7002F4B43 /* boost.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87796E8318A8DDA7002F4B43 /* boost.a */; };
 		87796E8618A8DDA7002F4B43 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87796E8418A8DDA7002F4B43 /* libcurl.a */; };
+		8781C572196C86740030E113 /* table_footer@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8781C56D196C86740030E113 /* table_footer@2x.png */; };
+		8781C573196C86740030E113 /* table_footer@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8781C56D196C86740030E113 /* table_footer@2x.png */; };
+		8781C574196C86740030E113 /* table_cell_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8781C56E196C86740030E113 /* table_cell_background@2x.png */; };
+		8781C575196C86740030E113 /* table_cell_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8781C56E196C86740030E113 /* table_cell_background@2x.png */; };
+		8781C576196C86740030E113 /* table_cell_separator@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8781C56F196C86740030E113 /* table_cell_separator@2x.png */; };
+		8781C577196C86740030E113 /* table_cell_separator@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8781C56F196C86740030E113 /* table_cell_separator@2x.png */; };
+		8781C578196C86740030E113 /* table_header@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8781C570196C86740030E113 /* table_header@2x.png */; };
+		8781C579196C86740030E113 /* table_header@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8781C570196C86740030E113 /* table_header@2x.png */; };
+		8781C57A196C86740030E113 /* table_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8781C571196C86740030E113 /* table_background@2x.png */; };
+		8781C57B196C86740030E113 /* table_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8781C571196C86740030E113 /* table_background@2x.png */; };
 		878E880C19105076000DAA8A /* OpenPeerSampleAPNSApp-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 878E880B19105076000DAA8A /* OpenPeerSampleAPNSApp-Info.plist */; };
 		87904E9818D06FD1004BC06C /* AppInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87904E9618D06FD1004BC06C /* AppInfoViewController.m */; };
 		87904EA118D07725004BC06C /* AppInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87904E9618D06FD1004BC06C /* AppInfoViewController.m */; };
@@ -912,6 +922,11 @@
 		8774AC6618992D53006B91FA /* ZXingObjC.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZXingObjC.xcodeproj; path = ../../../libs/ZXingObjC/ZXingObjC.xcodeproj; sourceTree = "<group>"; };
 		87796E8318A8DDA7002F4B43 /* boost.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = boost.a; path = OpenpeerSDK.framework/Versions/C/Libraries/boost.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		87796E8418A8DDA7002F4B43 /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = OpenpeerSDK.framework/Versions/C/Libraries/libcurl.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		8781C56D196C86740030E113 /* table_footer@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "table_footer@2x.png"; sourceTree = "<group>"; };
+		8781C56E196C86740030E113 /* table_cell_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "table_cell_background@2x.png"; sourceTree = "<group>"; };
+		8781C56F196C86740030E113 /* table_cell_separator@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "table_cell_separator@2x.png"; sourceTree = "<group>"; };
+		8781C570196C86740030E113 /* table_header@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "table_header@2x.png"; sourceTree = "<group>"; };
+		8781C571196C86740030E113 /* table_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "table_background@2x.png"; sourceTree = "<group>"; };
 		878E880B19105076000DAA8A /* OpenPeerSampleAPNSApp-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "OpenPeerSampleAPNSApp-Info.plist"; sourceTree = "<group>"; };
 		87904E9518D06FD1004BC06C /* AppInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppInfoViewController.h; sourceTree = "<group>"; };
 		87904E9618D06FD1004BC06C /* AppInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppInfoViewController.m; sourceTree = "<group>"; };
@@ -1262,6 +1277,11 @@
 		8713363517CCBD6F008C91F7 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				8781C56D196C86740030E113 /* table_footer@2x.png */,
+				8781C56E196C86740030E113 /* table_cell_background@2x.png */,
+				8781C56F196C86740030E113 /* table_cell_separator@2x.png */,
+				8781C570196C86740030E113 /* table_header@2x.png */,
+				8781C571196C86740030E113 /* table_background@2x.png */,
 				87238721194737B5002643D6 /* iPhone_tabBar_sessions_inactive@2x.png */,
 				87238722194737B5002643D6 /* iPhone_tabBar_sessions_active@2x.png */,
 				8723871B1947358D002643D6 /* iPhone_tabBar_sessions_inactive.png */,
@@ -1972,6 +1992,7 @@
 				8719AB0117CE0523007E991B /* tableViewCell@2x.png in Resources */,
 				87A1086E1802CD92001F705D /* logger@2x.png in Resources */,
 				8730D7B41833A63D008D1D37 /* iPhone_loader_00004@2x.png in Resources */,
+				8781C576196C86740030E113 /* table_cell_separator@2x.png in Resources */,
 				8730D76618339AFE008D1D37 /* iPhone_video_showMe.png in Resources */,
 				8730D7031832AF6E008D1D37 /* iPhone_Button-end-(small)@2x.png in Resources */,
 				8730D7021832AF6E008D1D37 /* iPhone_Button-end-(small).png in Resources */,
@@ -1987,6 +2008,7 @@
 				871C7B8E17FEBED200BE641B /* SplashViewController.xib in Resources */,
 				8730D76B18339DBF008D1D37 /* iPhone_video_bottomBar_bkgd@2x.png in Resources */,
 				8719AB0C17CE0CEE007E991B /* iPhone_background_navigation_mode@2x.png in Resources */,
+				8781C578196C86740030E113 /* table_header@2x.png in Resources */,
 				8730D76A18339DBF008D1D37 /* iPhone_video_bottomBar_bkgd.png in Resources */,
 				8719AB0D17CE0CEE007E991B /* iPhone_background_navigation_mode.png in Resources */,
 				8719AB0E17CE0CEE007E991B /* iPhone_background_navigation_mode-568h@2x.png in Resources */,
@@ -2019,6 +2041,7 @@
 				8722A68017D35AB3002A3BB6 /* audio_indicator_blue.png in Resources */,
 				874408D1182FFD6D004AD8FC /* handset_decline_icon.png in Resources */,
 				8730D7D01833A63D008D1D37 /* iPhone_loader_00018@2x.png in Resources */,
+				8781C57A196C86740030E113 /* table_background@2x.png in Resources */,
 				8722A69717D375E4002A3BB6 /* avatar.png in Resources */,
 				8730D7D31833A63D008D1D37 /* iPhone_loader_00020.png in Resources */,
 				8730D76718339AFE008D1D37 /* iPhone_video_showMe@2x.png in Resources */,
@@ -2061,6 +2084,7 @@
 				8722475F182D165A0027DA50 /* iPhone_audio_add_caller@2x.png in Resources */,
 				87E4D9FF180D3545002CA2D4 /* facebook_tag.png in Resources */,
 				8730D75D183398A5008D1D37 /* iPhone_Button-end-baritem@2x.png in Resources */,
+				8781C574196C86740030E113 /* table_cell_background@2x.png in Resources */,
 				8712BE7C17D8CC7C00665F42 /* iPhone_tabBar_contacts_inactive.png in Resources */,
 				8730D7E11833A63D008D1D37 /* iPhone_loader_00027.png in Resources */,
 				872D7E9F1897E19A005D8335 /* QRScannerViewController.xib in Resources */,
@@ -2079,6 +2103,7 @@
 				87E4D9A8180BE199002CA2D4 /* ApplicationLogo58.png in Resources */,
 				8712BE7F17D8CC7C00665F42 /* iPhone_tabBar_bkgd@2x.png in Resources */,
 				87224729182D01AB0027DA50 /* iPhone_lightning_bolt.png in Resources */,
+				8781C572196C86740030E113 /* table_footer@2x.png in Resources */,
 				8730D6FF18328D6A008D1D37 /* iPhone_switch_camera@2x.png in Resources */,
 				8730D7B01833A63D008D1D37 /* iPhone_loader_00002@2x.png in Resources */,
 				8730D7BC1833A63D008D1D37 /* iPhone_loader_00008@2x.png in Resources */,
@@ -2115,6 +2140,7 @@
 				87D4BD2D18675368008C2D30 /* iPhone_loader_00007@2x.png in Resources */,
 				8723871119465A57002643D6 /* ActiveSessionTableViewCell.xib in Resources */,
 				87D4BD2E18675368008C2D30 /* VideoCallViewController.xib in Resources */,
+				8781C575196C86740030E113 /* table_cell_background@2x.png in Resources */,
 				87D4BD2F18675368008C2D30 /* InfoPlist.strings in Resources */,
 				87D4BD3018675368008C2D30 /* IncomingCallView_iPhone.xib in Resources */,
 				87D4BD3118675368008C2D30 /* ApplicationLogo.png in Resources */,
@@ -2159,6 +2185,8 @@
 				87D4BD5618675368008C2D30 /* iPhone_loader_00004@2x.png in Resources */,
 				8746093418AD687E002F7DC8 /* CustomerSpecific.plist in Resources */,
 				87D4BD5718675368008C2D30 /* iPhone_video_showMe.png in Resources */,
+				8781C57B196C86740030E113 /* table_background@2x.png in Resources */,
+				8781C579196C86740030E113 /* table_header@2x.png in Resources */,
 				87D4BD5818675368008C2D30 /* iPhone_Button-end-(small)@2x.png in Resources */,
 				87D4BD5918675368008C2D30 /* iPhone_Button-end-(small).png in Resources */,
 				87D4BD5A18675368008C2D30 /* tableViewCell.png in Resources */,
@@ -2239,6 +2267,7 @@
 				87D4BD9F18675368008C2D30 /* iPhone_loader_00028.png in Resources */,
 				87D4BDA018675368008C2D30 /* iPhone_tabBar_settings_active_Icon.png in Resources */,
 				87D4BDA118675368008C2D30 /* iPhone_tabBar_contacts_inactive@2x.png in Resources */,
+				8781C573196C86740030E113 /* table_footer@2x.png in Resources */,
 				87D4BDA218675368008C2D30 /* ringing.caf in Resources */,
 				87D4BDA318675368008C2D30 /* ApplicationLogo120.png in Resources */,
 				87D4BDA418675368008C2D30 /* chat_bubble_right.png in Resources */,
@@ -2260,6 +2289,7 @@
 				87D4BDB318675368008C2D30 /* facebook_tag@2x.png in Resources */,
 				87D4BDB418675368008C2D30 /* iPhone_tabBar_contacts_active.png in Resources */,
 				87D4BDB518675368008C2D30 /* iPhone_switch_camera.png in Resources */,
+				8781C577196C86740030E113 /* table_cell_separator@2x.png in Resources */,
 				87D4BDB618675368008C2D30 /* ApplicationLogo58.png in Resources */,
 				87D4BDB718675368008C2D30 /* iPhone_tabBar_bkgd@2x.png in Resources */,
 				87D4BDB818675368008C2D30 /* iPhone_lightning_bolt.png in Resources */,
