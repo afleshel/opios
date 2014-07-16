@@ -33,6 +33,7 @@
 #import <OpenPeerSDK/HOPSessionRecord+External.h>
 #import <OpenPeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPPublicPeerFile.h>
+#import <OpenPeerSDK/HOPHomeUser.h>
 #import "SessionManager.h"
 #import "OpenPeer.h"
 #import "MainViewController.h"
@@ -246,8 +247,8 @@
     
     [fetchRequest setEntity:entity];
     
-//    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(associatedIdentity.homeUser.stableId MATCHES '%@')",[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser].stableId]];
-//    [fetchRequest setPredicate:predicate];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(homeUser.stableId MATCHES '%@')",[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser].stableId]];
+    [fetchRequest setPredicate:predicate];
     
 	[fetchRequest setFetchBatchSize:20];
 //	

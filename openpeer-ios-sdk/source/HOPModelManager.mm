@@ -909,8 +909,7 @@ using namespace openpeer::core;
         
         NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"lastActivity" ascending:NO];
         
-//        result = [self getResultsForEntity:@"HOPSessionRecord" withPredicateString:[NSString stringWithFormat:@"ALL participants.peerURI IN %@",arrayOfPeerURIs] orderDescriptors:@[sortDescriptor]];
-        results = [self getResultsForEntity:@"HOPSessionRecord" withPredicateString:nil orderDescriptors:@[sortDescriptor]];
+        results = [self getResultsForEntity:@"HOPSessionRecord" withPredicateString:[NSString stringWithFormat:@"homeUser.stableId MATCHES '%@'",[self getLastLoggedInHomeUser].stableId] orderDescriptors:@[sortDescriptor]];
         
         for (HOPSessionRecord* sessionRecord in results)
         {
@@ -978,6 +977,7 @@ using namespace openpeer::core;
             if (!ret)
             {
                 ret = (HOPSessionRecord*)[self createObjectForEntity:@"HOPSessionRecord"];
+                ret.homeUser = [self getLastLoggedInHomeUser];
                 ret.sessionID = [HOPUtility getGUIDstring];
                 ret.creationTime = date;
                 ret.type = type;
