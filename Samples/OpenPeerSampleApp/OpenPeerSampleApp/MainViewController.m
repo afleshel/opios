@@ -145,7 +145,9 @@
 - (void) showTabBarController
 {
     //[self removeAllSubViews];
-    
+    [UITabBarItem.appearance setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor] } forState:UIControlStateNormal];
+    [UITabBarItem.appearance setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor blackColor] }     forState:UIControlStateSelected];
+
     [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"iPhone_top_bar_background.png"] forBarMetrics:UIBarMetricsDefault];
     
     if (!self.tabBarController)
@@ -217,6 +219,7 @@
     
     self.tabBarController.view.alpha = 0.0;
     [self.view addSubview:self.tabBarController.view];
+    
     
     [UIView animateWithDuration:1 animations:^
      {
