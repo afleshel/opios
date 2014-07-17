@@ -149,6 +149,10 @@
     
     [self.session.unreadMessageArray removeAllObjects];
     
+    if ([[[self fetchedResultsController] fetchedObjects] count] > 0)
+        [self.chatTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[[[self fetchedResultsController] fetchedObjects] count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    //[self.chatTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[[[self fetchedResultsController] fetchedObjects] count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    
     [super viewWillAppear:animated];
 }
 
