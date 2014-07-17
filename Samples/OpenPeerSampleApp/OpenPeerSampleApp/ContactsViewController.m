@@ -377,14 +377,30 @@
 {
     NSString* predicateString = nil;
     
+    NSMutableArray *predicatesArray = [[NSMutableArray alloc] init];
+    NSPredicate *predicateOnlyOpenPeerContacts = nil;
+    if (self.isInFavoritesMode)
+    {
+        predicateOnlyOpenPeerContacts = [NSPredicate predicateWithFormat:@"identityContact != nil"];
+        [predicatesArray addObject:predicateOnlyOpenPeerContacts];
+    }
+    
     if ([searchText length] > 0)
         predicateString = [NSString stringWithFormat:@"(associatedIdentity.homeUser.stableId MATCHES '%@' AND name CONTAINS[c] '%@') ",[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser].stableId,searchText];
     else
         predicateString = [NSString stringWithFormat:@"(associatedIdentity.homeUser.stableId MATCHES '%@') ",[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser].stableId];
     
-    [NSFetchedResultsController deleteCacheWithName:@"RolodexContacts"];
+    NSPredicate *predicateAllContacts = [NSPredicate predicateWithFormat:predicateString];
+    [predicatesArray addObject:predicateAllContacts];
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:predicateString];
+    NSPredicate *predicate = [NSCompoundPredicate andPredicateWithSubpredicates:predicatesArray];
+    
+    if (self.isInFavoritesMode)
+        [NSFetchedResultsController deleteCacheWithName:@"FavoritesContacts"];
+    else
+        [NSFetchedResultsController deleteCacheWithName:@"RolodexContacts"];
+    
+    //NSPredicate *predicate = [NSPredicate predicateWithFormat:predicateString];
     [self.fetchedResultsController.fetchRequest setPredicate:predicate];
     
     NSError *error;

@@ -174,8 +174,8 @@
         self.favoritesTableViewController.title = @"Favorites";
         self.tabBarItem.title = @"FAVORITES";
         
-        [self.favoritesTableViewController.tabBarItem setImage:[[UIImage imageNamed:@"iPhone_tabBar_contacts_inactive.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-        [self.favoritesTableViewController.tabBarItem setSelectedImage:[[UIImage imageNamed:@"iPhone_tabBar_contacts_active.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+        [self.favoritesTableViewController.tabBarItem setImage:[[UIImage imageNamed:@"iPhone_tabBar_favorites_inactive.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+        [self.favoritesTableViewController.tabBarItem setSelectedImage:[[UIImage imageNamed:@"iPhone_tabBar_favorites_active.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
         
         
         UINavigationController *favoritesNavigationController = [[UINavigationController alloc] initWithRootViewController:self.favoritesTableViewController];
