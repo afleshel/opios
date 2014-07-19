@@ -62,6 +62,8 @@
 	<integer>2</integer>
 	<key>openpeer/stack/push-mailbox-max-retry-connection-in-seconds</key>
 	<integer>14400</integer>
+	<key>openpeer/stack/push-mailbox-default-dh-key-domain</key>
+	<string>https://meta.openpeer.org/dh/modp/4096</string>
 	<key>openpeer/stack/service-peer-lookup-peer-files-get-timeout-in-seconds</key>
 	<integer>60</integer>
 	<key>openpeer/stack/account-shutdown-on-ice-socket-failure</key>
