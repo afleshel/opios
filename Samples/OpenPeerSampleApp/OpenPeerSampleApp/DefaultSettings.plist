@@ -56,6 +56,10 @@
 	<integer>2</integer>
 	<key>openpeer/stack/push-mailbox-request-timeout-in-seconds</key>
 	<integer>60</integer>
+	<key>openpeer/stack/push-mailbox-max-message-upload-time-in-seconds</key>
+	<integer>7200</integer>
+	<key>openpeer/stack/push-mailbox-max-message-upload-chunk-size-in-bytes</key>
+	<integer>10240</integer>
 	<key>openpeer/stack/push-mailbox-inactivity-timeout</key>
 	<integer>600</integer>
 	<key>openpeer/stack/push-mailbox-retry-connection-in-seconds</key>
