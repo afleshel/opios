@@ -34,6 +34,7 @@
 #import <OpenPeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPPublicPeerFile.h>
 #import <OpenPeerSDK/HOPHomeUser.h>
+#import <OpenPeerSDK/HOPUtility.h>
 #import "SessionManager.h"
 #import "OpenPeer.h"
 #import "MainViewController.h"
@@ -44,6 +45,8 @@
 @interface ActiveSessionsViewController ()
 @property (weak, nonatomic) IBOutlet UITableView *tableViewSessions;
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
+@property (nonatomic, strong) NSDate *lastRefresh;
+@property (nonatomic, strong) NSTimer *refreshTimer;
 @end
 
 @implementation ActiveSessionsViewController
@@ -61,6 +64,7 @@
 {
     [super viewDidLoad];
     
+    self.lastRefresh = [NSDate date];
     self.tableViewSessions.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     UIImageView *tempImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table_background.png"]];
@@ -71,17 +75,46 @@
     
     self.navigationController.navigationBar.titleTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], NSForegroundColorAttributeName, [UIFont fontWithName:@"Helvetica-Bold" size:22.0], NSFontAttributeName, nil];
     
+    [self fetchData];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadData) name:notifictionAppReturnedFromBackground object:nil];
+}
+
+- (void)fetchData
+{
     NSError *error;
+    self.fetchedResultsController = nil;
     if (![self.fetchedResultsController performFetch:&error])
     {
-		OPLog(HOPLoggerSeverityFatal, HOPLoggerLevelDebug, @"Fetching sessions has failed with an error: %@, error description: %@", error, [error userInfo]);
-		exit(-1);  // Fail
-	}
+        OPLog(HOPLoggerSeverityFatal, HOPLoggerLevelDebug, @"Fetching sessions has failed with an error: %@, error description: %@", error, [error userInfo]);
+        exit(-1);  // Fail
+    }
+}
+
+- (void) reloadData
+{
+    [self fetchData];
+    [self.tableViewSessions reloadData];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [self.tableViewSessions reloadRowsAtIndexPaths:[self.tableViewSessions indexPathsForVisibleRows] withRowAnimation:UITableViewRowAnimationNone];
+    if (![[HOPUtility getTimeSectionForDate:self.lastRefresh] isEqualToString:@"Today"])
+    {
+        [self reloadData];
+    }
+    else
+    {
+        NSInteger currentSeconds = [[NSCalendar currentCalendar] ordinalityOfUnit:NSSecondCalendarUnit inUnit:NSDayCalendarUnit forDate:[NSDate date]];
+        NSInteger secondsForTimer = 24 * 60 * 60 - currentSeconds;
+        self.refreshTimer = [NSTimer scheduledTimerWithTimeInterval:secondsForTimer target:self selector:@selector(reloadData) userInfo:nil repeats:NO];
+        [self.tableViewSessions reloadRowsAtIndexPaths:[self.tableViewSessions indexPathsForVisibleRows] withRowAnimation:UITableViewRowAnimationNone];
+    }
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [self.refreshTimer invalidate];
+    self.refreshTimer = nil;
 }
 - (void)didReceiveMemoryWarning
 {
@@ -241,6 +274,7 @@
     {
         return _fetchedResultsController;
     }
+    [NSFetchedResultsController deleteCacheWithName:@"SessionRecord"];
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPSessionRecord" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];

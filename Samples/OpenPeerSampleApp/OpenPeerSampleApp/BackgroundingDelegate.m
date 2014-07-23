@@ -87,6 +87,10 @@
     {
         [[LoginManager sharedLoginManager] setIsRecovering:YES];
     }
+    else
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:notifictionAppReturnedFromBackground object:nil];
+    }
 }
 
 - (void) onBackgroundingApplicationWillQuit:(HOPBackgroundingSubscription*) subscription

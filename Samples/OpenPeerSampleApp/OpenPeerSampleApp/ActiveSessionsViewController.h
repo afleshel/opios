@@ -37,4 +37,5 @@
 
 @property (nonatomic, weak) IBOutlet ActiveSessionTableViewCell *activeSessionTableViewCell;
 
+- (void) reloadData;
 @end

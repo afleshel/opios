@@ -586,6 +586,13 @@
 			remoteGlobalIDString = 8792E86816519CFF00DEAC58;
 			remoteInfo = OpenpeerSDK;
 		};
+		87226B5F197FBD3B00E7A660 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 872729CF166CDF530089CBB6 /* openpeer-ios-sdk.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8792E86716519CFF00DEAC58;
+			remoteInfo = OpenpeerSDK;
+		};
 		8774AC6F18992D5A006B91FA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8774AC6618992D53006B91FA /* ZXingObjC.xcodeproj */;
@@ -634,13 +641,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 87C981F917BE37CF002B947B;
 			remoteInfo = OpenPeerDataModel;
-		};
-		87D4BCDA18675368008C2D30 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 872729CF166CDF530089CBB6 /* openpeer-ios-sdk.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 87C9820717BE38A7002B947B;
-			remoteInfo = HOPSDK;
 		};
 		87F9DAF0189AB7C800D96FF3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1841,8 +1841,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				87226B60197FBD3B00E7A660 /* PBXTargetDependency */,
 				8774AC7A18992D6C006B91FA /* PBXTargetDependency */,
-				87D4BCD918675368008C2D30 /* PBXTargetDependency */,
 			);
 			name = OpenPeerSampleAPNSApp;
 			productName = OpenPeerSampleApp;
@@ -2502,15 +2502,15 @@
 			name = HOPSDK;
 			targetProxy = 87098FD917C2361B007C9093 /* PBXContainerItemProxy */;
 		};
+		87226B60197FBD3B00E7A660 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = OpenpeerSDK;
+			targetProxy = 87226B5F197FBD3B00E7A660 /* PBXContainerItemProxy */;
+		};
 		8774AC7A18992D6C006B91FA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "ZXingObjC-iOS";
 			targetProxy = 8774AC7918992D6C006B91FA /* PBXContainerItemProxy */;
-		};
-		87D4BCD918675368008C2D30 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = HOPSDK;
-			targetProxy = 87D4BCDA18675368008C2D30 /* PBXContainerItemProxy */;
 		};
 		87F9DAF1189AB7C800D96FF3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -2686,7 +2686,7 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = openpeersample.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Sergej Jovanovic (YGZ7PTJK96)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_ENABLE_CPP_RTTI = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -2734,7 +2734,7 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = openpeersample.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Sergej Jovanovic (YGZ7PTJK96)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_ENABLE_CPP_RTTI = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;

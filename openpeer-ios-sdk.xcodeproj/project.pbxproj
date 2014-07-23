@@ -11,6 +11,7 @@
 			isa = PBXAggregateTarget;
 			buildConfigurationList = 87C9820817BE38A7002B947B /* Build configuration list for PBXAggregateTarget "HOPSDK" */;
 			buildPhases = (
+				87D7EF93197926CA003B1746 /* ShellScript */,
 			);
 			dependencies = (
 				87C9820C17BE38B1002B947B /* PBXTargetDependency */,
@@ -290,6 +291,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 0063B94816CA91F000E6DB4D;
 			remoteInfo = hfstack_ios;
+		};
+		87C16C3E1979A9B00054A29C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8792E85F16519CFF00DEAC58 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 87C981F817BE37CE002B947B;
+			remoteInfo = OpenpeerDataModel;
 		};
 		87C9820B17BE38B1002B947B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1010,7 +1018,7 @@
 				8792E86416519CFF00DEAC58 /* Sources */,
 				8792E86516519CFF00DEAC58 /* Frameworks */,
 				87B013B716611FAA00E8938B /* Headers */,
-				87B013E41661327800E8938B /* ShellScript */,
+				87226B78197FC26900E7A660 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1022,6 +1030,7 @@
 				00EB8DBE177D158100FFD40F /* PBXTargetDependency */,
 				00EB8DC0177D158100FFD40F /* PBXTargetDependency */,
 				00EB8DC2177D158100FFD40F /* PBXTargetDependency */,
+				87C16C3F1979A9B00054A29C /* PBXTargetDependency */,
 				E236EC411930106F009FC1E6 /* PBXTargetDependency */,
 			);
 			name = OpenpeerSDK;
@@ -1179,7 +1188,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		87B013E41661327800E8938B /* ShellScript */ = {
+		87226B78197FC26900E7A660 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1191,6 +1200,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\n: ${BOOST_LIB_PATH:=./libs/op/libs/ortc-lib/libs/boost/ios/library/boost.a}\n: ${CURL_LIB_PATH:=./libs/op/libs/ortc-lib/libs/curl/staging/libcurl.a}\n\nFMK_VERSION=C\n\n# Delete old framework folder\nrm -rf \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework\"\n\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Headers\"\n#mkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Frameworks\"\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Libraries\"\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Resources\"\n\n# Link the \"Current\" version to \"C\"\n/bin/ln -sfh ${FMK_VERSION} \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/Current\"\n/bin/ln -sfh Versions/Current/Headers \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Headers\"\n#/bin/ln -sfh Versions/Current/Frameworks \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Frameworks\"\n/bin/ln -sfh Versions/Current/Libraries \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Libraries\"\n/bin/ln -sfh Versions/Current/Resources \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Resources\"\n/bin/ln -sfh \"Versions/Current/${PRODUCT_NAME}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/${PRODUCT_NAME}\"\n\n# The -a ensures that the headers maintain the source modification date so that we don't constantly\n# cause propagating rebuilds of files that import these headers.\n/bin/cp -a \"${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Headers\"\n\n/bin/cp -a \"${BOOST_LIB_PATH}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Libraries\"\n\n/bin/cp -a \"${CURL_LIB_PATH}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Libraries\"\n\n/bin/cp -R  \"${TARGET_BUILD_DIR}/${PUBLIC_RESOURCES_FOLDER_PATH}/OpenpeerDataModel.bundle\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Resources\"\n\n/bin/cp -a \"${BUILT_PRODUCTS_DIR}/lib${PRODUCT_NAME}.a\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/${PRODUCT_NAME}\"\n";
+		};
+		87D7EF93197926CA003B1746 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1301,6 +1323,11 @@
 			isa = PBXTargetDependency;
 			name = hfstack_ios;
 			targetProxy = 00EB8DD3177D1C2400FFD40F /* PBXContainerItemProxy */;
+		};
+		87C16C3F1979A9B00054A29C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 87C981F817BE37CE002B947B /* OpenpeerDataModel */;
+			targetProxy = 87C16C3E1979A9B00054A29C /* PBXContainerItemProxy */;
 		};
 		87C9820C17BE38B1002B947B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
