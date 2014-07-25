@@ -210,9 +210,12 @@
                     if ([messageText length] > 0 && [[inMessage.contact getPeerURI] length] > 0)
                         [[HOPModelManager sharedModelManager] setAPNSData:messageText PeerURI: [inMessage.contact getPeerURI]];
                     
-                    HOPMessage* message = [self createSystemMessageWithType:SystemMessage_APNS_Response andText:[[OpenPeer sharedOpenPeer] deviceToken] andRecipient:[[inSession participantsArray] objectAtIndex:0]];
-                    if (message)
-                        [inSession.conversationThread sendMessage:message];
+                    if ([[[OpenPeer sharedOpenPeer] deviceToken] length] > 0)
+                    {
+                        HOPMessage* message = [self createSystemMessageWithType:SystemMessage_APNS_Response andText:[[OpenPeer sharedOpenPeer] deviceToken] andRecipient:[[inSession participantsArray] objectAtIndex:0]];
+                        if (message)
+                            [inSession.conversationThread sendMessage:message];
+                    }
                 }
                 break;
                     

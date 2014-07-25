@@ -201,7 +201,7 @@
     }
     
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane,@"Clear session records from the database");
-    [[HOPModelManager sharedModelManager] clearSessionRecords];
+    //[[HOPModelManager sharedModelManager] clearSessionRecords];
     
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane,@"Release all core objects");
     [[HOPStack sharedStack] doLogoutCleanup];

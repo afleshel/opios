@@ -118,6 +118,8 @@ NSString * const TagText            = @"text";
 
 NSString * const systemMessageRequest = @"?";
 
+//Notifications
+NSString * const notifictionAppReturnedFromBackground = @"notifictionAppReturnedFromBackground";
 NSString * const notificationRemoteSessionModeChanged = @"notificationRemoteSessionModeChanged";
 
 NSString * const defaultTelnetPort = @"59999";
@@ -149,3 +151,5 @@ NSString * const moduleServicesTransport = @"openpeer_services_transport_stream"
 NSString * const moduleZsLib = @"zsLib";
 NSString * const moduleZsLibSocket = @"zsLib_socket";
 NSString * const moduleJavaScript = @"openpeer_javascript";
+
+

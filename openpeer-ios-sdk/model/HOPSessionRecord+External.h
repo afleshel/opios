@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2014, SMB Phone Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,17 +29,9 @@
  
  */
 
-#import <UIKit/UIKit.h>
-#import <CoreData/CoreData.h>
+#import "HOPSessionRecord.h"
 
-@class ContactTableViewCell;
+@interface HOPSessionRecord (External)
 
-@interface ContactsViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, UISearchBarDelegate, NSFetchedResultsControllerDelegate>
-
-@property (nonatomic, weak) IBOutlet ContactTableViewCell *contactsTableViewCell;
-@property (nonatomic) BOOL isInFavoritesMode;
-
-- (id) initInFavoritesMode:(BOOL) favoritesMode;
-- (void) onContactsLoaded;
-
+- (NSString *)sectionIdentifier;
 @end

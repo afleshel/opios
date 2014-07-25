@@ -55,6 +55,7 @@
 @property (weak, nonatomic) NSDictionary* userInfo;
 @property (nonatomic) BOOL keyboardIsHidden;
 @property (nonatomic) BOOL isRefreshed;
+@property (nonatomic) BOOL isFirstRun;
 @property (nonatomic) CGFloat keyboardLastChange;
 @property (nonatomic,strong) UITapGestureRecognizer *tapGesture;
 
@@ -107,7 +108,7 @@
     [super viewDidLoad];
     
     self.keyboardIsHidden = NO;
-    
+    self.isFirstRun = YES;
     //[self.chatTableView setTranslatesAutoresizingMaskIntoConstraints:NO];
     //[self.typingMessageView setTranslatesAutoresizingMaskIntoConstraints:NO];
     //[self.containerView setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -121,7 +122,7 @@
     self.tapGesture.numberOfTapsRequired = 1;
     
     
-    [self registerForNotifications:YES];
+    //[self registerForNotifications:YES];
     
     if (!self.keyboardIsHidden)
     {
@@ -140,16 +141,28 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     [self registerForNotifications:YES];
     
-    if (!self.keyboardIsHidden)
-    {
-        [self.messageTextbox becomeFirstResponder];
-    }
+//    if (!self.keyboardIsHidden)
+//    {
+//        [self.messageTextbox becomeFirstResponder];
+//    }
     
     [self.session.unreadMessageArray removeAllObjects];
     
-    [super viewWillAppear:animated];
+//    if ([[[self fetchedResultsController] fetchedObjects] count] > 0)
+//        [self.chatTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[[[self fetchedResultsController] fetchedObjects] count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    //[self.chatTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[[[self fetchedResultsController] fetchedObjects] count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    
+//    if ([[[self fetchedResultsController] fetchedObjects] count] > 0)
+//    {
+//        [self.chatTableView reloadRowsAtIndexPaths:[self.chatTableView indexPathsForVisibleRows]
+//                                  withRowAnimation:UITableViewRowAnimationNone];
+//        [self.chatTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[[[self fetchedResultsController] fetchedObjects] count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+//    }
+    
+    
 }
 
 
@@ -173,6 +186,47 @@
     [self.messageTextbox resignFirstResponder];
 }
 
+- (void) setFramesSizesForUserInfo:(NSDictionary*) userInfo
+{
+    CGFloat keyboardHeight = 0;
+    
+    if (userInfo != nil)
+    {
+        CGRect keyboardFrame;
+        NSValue *ks = [userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey];
+        keyboardFrame = [ks CGRectValue];
+        keyboardHeight = self.keyboardIsHidden ? 0 : keyboardFrame.size.height;
+        
+        NSTimeInterval animD;
+        UIViewAnimationCurve animC;
+        
+        [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] getValue:&animC];
+        [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animD];
+        
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDuration: animD];
+        [UIView setAnimationCurve:animC];
+    }
+    
+    // set initial size, chat view
+    CGRect contactsTableViewRect = self.chatTableView.frame;
+    
+    if (!self.keyboardIsHidden)
+        contactsTableViewRect.size.height = self.view.frame.size.height - self.typingMessageView.viewForBaselineLayout.frame.size.height - keyboardHeight - 20.0;
+    else
+        contactsTableViewRect.size.height = self.view.frame.size.height - self.typingMessageView.viewForBaselineLayout.frame.size.height - 20.0;
+    
+    if (self.isFirstRun)
+    {
+        contactsTableViewRect.size.height+=160.0; //Temporary hack
+        self.isFirstRun = NO;
+    }
+    self.chatTableView.frame = contactsTableViewRect;
+    
+    
+    if (userInfo)
+        [UIView commitAnimations];
+}
 #pragma mark - Keyboard handling
 -(void)resetKeyboard:(NSNotification *)notification
 {
@@ -184,6 +238,10 @@
     [self.chatTableView addGestureRecognizer:self.tapGesture];
     self.keyboardIsHidden = NO;
     [self.delegate prepareForKeyboard:[notification userInfo] showKeyboard:YES];
+    [self setFramesSizesForUserInfo:[notification userInfo]];
+    
+    if ([[[self fetchedResultsController] fetchedObjects] count] > 0)
+        [self.chatTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[[[self fetchedResultsController] fetchedObjects] count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
 }
 
 -(void)keyboardWillHide:(NSNotification *)notification
@@ -191,6 +249,7 @@
     [self.chatTableView addGestureRecognizer:self.tapGesture];
     self.keyboardIsHidden = YES;
     [self.delegate prepareForKeyboard:[notification userInfo] showKeyboard:NO];
+    [self setFramesSizesForUserInfo:[notification userInfo]];
 }
 
 
@@ -323,8 +382,6 @@
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return [[self.fetchedResultsController fetchedObjects] count];
-
-    //return [self.session.messageArray count];
 }
 
 
@@ -394,7 +451,7 @@
         return _fetchedResultsController;
     }
     
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    /*NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPMessageRecord" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];
     [fetchRequest setEntity:entity];
     
@@ -418,6 +475,8 @@
 	[fetchRequest setSortDescriptors:sortDescriptors];
     
 	//_fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext] sectionNameKeyPath:nil cacheName:[NSString stringWithFormat:@"messageCache_%@",[self.session.conversationThread getThreadId]]];
+     */
+    NSFetchRequest *fetchRequest = [[HOPModelManager sharedModelManager] getMessagesFetchRequestForSessionID:self.session.sessionRecord.sessionID sortAscending:YES];
     _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext] sectionNameKeyPath:nil cacheName:nil];
     
     _fetchedResultsController.delegate = self;

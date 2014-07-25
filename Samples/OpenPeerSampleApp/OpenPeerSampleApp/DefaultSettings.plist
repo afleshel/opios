@@ -13,7 +13,7 @@
 	<key>lockBoxServiceDomain</key>
 	<string>lockbox-v1-rel-lespaul-i.hcs.io</string>
 	<key>defaultOutgoingTelnetServer</key>
-	<string>tcp-logger-v1-rel-lespaul-i.hcs.io:8055</string>
+	<string>log.opp.me:8115</string>
 	<key>localTelnetLoggerPort</key>
 	<string>59999</string>
 	<key>applicationSettingsBackgroundingPhaseRichPush</key>

@@ -71,6 +71,7 @@ typedef  enum
 
 @property (nonatomic, strong) LoginViewController *loginViewController;
 @property (nonatomic, strong) ContactsViewController *contactsTableViewController;
+@property (nonatomic, strong) ContactsViewController *favoritesTableViewController;
 @property (nonatomic, strong) ActiveSessionsViewController *activeSessionsViewController;
 @property (nonatomic, strong) UITabBarController *tabBarController;
 

@@ -1,6 +1,6 @@
 Thank you for downloading Hookflash's Open Peer iOS SDK.
 
-This release is a 1.0.9 release of the SDK and Hookflash will be publishing updates to the SDK regularly.
+This release is a 1.0.11 release of the SDK and Hookflash will be publishing updates to the SDK regularly.
 
 For a quick introduction to the code please read the following. For more detailed instructions please go to http://docs.hookflash.com.
 
@@ -115,7 +115,7 @@ Core Projects/cryptopp   – C++ cryptography language
 Core Projects/hfservices - C++ Hookflash Open Peer communication services layer
 Core Projects/hfstack    – C++ Hookflash Open Peer stack
 Core Projects/hfcore     – C++ Hookflash Open Peer core API (works on the Open Peer stack)
-Core Projects/WebRTC     – iPhone port of the webRTC media stack
+Core Projects/webrtc     – iPhone port of the webRTC media stack
 
 
 Exploring the SDK:

@@ -39,4 +39,6 @@
 
 + (NSString*) hashString:(NSString*) stringToHash;
 + (NSString *) getGUIDstring;
+
++ (NSString *) getTimeSectionForDate:(NSDate*) date;
 @end

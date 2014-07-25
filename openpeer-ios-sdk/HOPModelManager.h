@@ -35,6 +35,8 @@
 @class NSManagedObjectModel;
 @class NSPersistentStoreCoordinator;
 @class NSManagedObject;
+@class NSFetchRequest;
+
 
 @class HOPRolodexContact;
 @class HOPAssociatedIdentity;
@@ -296,4 +298,7 @@
 - (HOPConversationThreadRecord*) createRecordForConversationThread:(HOPConversationThread*) conversationThread sessionRecord:(HOPSessionRecord*) sessionRecord;
 
 - (HOPSessionRecord*) createSessionRecordForConversationThread:(HOPConversationThread*) conversationThread type:(NSString*) type date:(NSDate*) date name:(NSString*) name participants:(NSArray*) participants;
+
+- (NSFetchRequest*) getMessagesFetchRequestForSessionID:(NSString*) sessionID sortAscending:(BOOL) ascending;
+- (HOPMessageRecord *) getLastMessageRecordForSessionID:(NSString*) sessionID;
 @end

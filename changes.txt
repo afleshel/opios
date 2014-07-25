@@ -1,3 +1,5 @@
+opios SDK v1.0.11 changes
+- WebRTC library updated to revision 5852 (April 7, 2014) 
 
 opios SDK v1.0.9 changes
 - fix for ICE using TURN

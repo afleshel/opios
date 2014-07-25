@@ -216,7 +216,7 @@
     if (![self.settingsDownloader startDownload])
     {
         UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Downloading login settings failed!"
-                                                            message:@"Please, ckeck you internet connection and try to scan QR code again or proceed login with default values."
+                                                            message:@"Please, check your Internet connection and try to scan QR code again or proceed login with default values."
                                                            delegate:nil
                                                   cancelButtonTitle:nil
                                                   otherButtonTitles:@"Ok",nil];
@@ -282,7 +282,7 @@
 - (void) httpDownloader:(HTTPDownloader *) downloader didFailWithError:(NSError *)error
 {
     UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Downloading login settings failed!"
-                                                        message:@"Please, ckeck you internet connection and try to scan QR code again or proceed login with default values."
+                                                        message:@"Please, check your Internet connection and try to scan QR code again or proceed login with default values."
                                                        delegate:nil
                                               cancelButtonTitle:nil
                                               otherButtonTitles:@"Ok",nil];

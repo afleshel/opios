@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2014, SMB Phone Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,17 +29,37 @@
  
  */
 
-#import <UIKit/UIKit.h>
-#import <CoreData/CoreData.h>
+#import "HOPSessionRecord+External.h"
+#import "HOPUtility.h"
+//
+//@interface HOPSessionRecord ()
+//
+//@property (nonatomic) NSString *primitiveSectionIdentifier;
+//
+//@end
 
-@class ContactTableViewCell;
+@implementation HOPSessionRecord (External)
 
-@interface ContactsViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, UISearchBarDelegate, NSFetchedResultsControllerDelegate>
+- (NSString *)sectionIdentifier
+{
+    return [HOPUtility getTimeSectionForDate:self.lastActivity];
+    /*
+//    [self willAccessValueForKey:@"sectionIdentifier"];
+    NSString *ret = nil;//[self primitiveSectionIdentifier];
+//    [self didAccessValueForKey:@"sectionIdentifier"];
+    
+//    if (!ret)
+    {
 
-@property (nonatomic, weak) IBOutlet ContactTableViewCell *contactsTableViewCell;
-@property (nonatomic) BOOL isInFavoritesMode;
+        NSCalendar *calendar = [NSCalendar currentCalendar];
+        
+        NSDateComponents *components = [calendar components:(NSYearCalendarUnit | NSMonthCalendarUnit) fromDate:[self lastActivity]];
+        ret = [NSString stringWithFormat:@"%d", ([components year] * 1000) + [components month]];
+        //self.primitiveSectionIdentifier = ret;
+    }
+    //return tmp;
+    return ret;*/
+}
 
-- (id) initInFavoritesMode:(BOOL) favoritesMode;
-- (void) onContactsLoaded;
 
 @end

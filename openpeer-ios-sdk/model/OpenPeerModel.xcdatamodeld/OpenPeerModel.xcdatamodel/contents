@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13D65" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13E28" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="HOPAPNSData" representedClassName="HOPAPNSData" syncable="YES">
         <attribute name="deviceToken" attributeType="String" syncable="YES"/>
         <relationship name="publicPeer" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HOPPublicPeerFile" inverseName="apnsData" inverseEntity="HOPPublicPeerFile" syncable="YES"/>
@@ -38,6 +38,7 @@
         <attribute name="reloginInfo" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="stableId" attributeType="String" indexed="YES" syncable="YES"/>
         <relationship name="associatedIdentities" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="HOPAssociatedIdentity" inverseName="homeUser" inverseEntity="HOPAssociatedIdentity" syncable="YES"/>
+        <relationship name="sessionRecords" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HOPSessionRecord" inverseName="homeUser" inverseEntity="HOPSessionRecord" syncable="YES"/>
     </entity>
     <entity name="HOPIdentityContact" representedClassName="HOPIdentityContact" syncable="YES">
         <attribute name="expires" optional="YES" attributeType="Date" syncable="YES"/>
@@ -89,6 +90,7 @@
         <attribute name="sessionID" attributeType="String" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="conversationThreadRecords" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HOPConversationThreadRecord" inverseName="sessionReords" inverseEntity="HOPConversationThreadRecord" syncable="YES"/>
+        <relationship name="homeUser" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HOPHomeUser" inverseName="sessionRecords" inverseEntity="HOPHomeUser" syncable="YES"/>
         <relationship name="messages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HOPMessageRecord" inverseName="session" inverseEntity="HOPMessageRecord" syncable="YES"/>
         <relationship name="participants" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HOPPublicPeerFile" inverseName="sessions" inverseEntity="HOPPublicPeerFile" syncable="YES"/>
     </entity>
@@ -112,14 +114,14 @@
         <element name="HOPAPNSData" positionX="-101" positionY="-675" width="128" height="75"/>
         <element name="HOPAssociatedIdentity" positionX="286" positionY="-177" width="128" height="150"/>
         <element name="HOPAvatar" positionX="430" positionY="-486" width="128" height="135"/>
-        <element name="HOPCacheData" positionX="97" positionY="-204" width="128" height="105"/>
+        <element name="HOPCacheData" positionX="448" positionY="-297" width="128" height="105"/>
         <element name="HOPConversationThreadRecord" positionX="-90" positionY="-133" width="128" height="103"/>
-        <element name="HOPHomeUser" positionX="504" positionY="-162" width="128" height="105"/>
+        <element name="HOPHomeUser" positionX="106" positionY="-270" width="128" height="118"/>
         <element name="HOPIdentityContact" positionX="70" positionY="-513" width="128" height="165"/>
         <element name="HOPImage" positionX="583" positionY="-477" width="128" height="90"/>
         <element name="HOPMessageRecord" positionX="-315" positionY="-462" width="128" height="165"/>
         <element name="HOPPublicPeerFile" positionX="-92" positionY="-513" width="128" height="120"/>
         <element name="HOPRolodexContact" positionX="268" positionY="-513" width="128" height="180"/>
-        <element name="HOPSessionRecord" positionX="-99" positionY="-333" width="128" height="163"/>
+        <element name="HOPSessionRecord" positionX="-99" positionY="-333" width="128" height="178"/>
     </elements>
 </model>

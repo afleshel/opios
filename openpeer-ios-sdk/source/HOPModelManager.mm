@@ -828,6 +828,7 @@ using namespace openpeer::core;
                 messageRecord.fromPeer = rolodexContact.identityContact.peerFile;
                 messageRecord.session = sessionRecord;
                 messageRecord.messageID = messageId;
+                sessionRecord.lastActivity = [NSDate date];
             }
         }
         
@@ -908,8 +909,7 @@ using namespace openpeer::core;
         
         NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"lastActivity" ascending:NO];
         
-//        result = [self getResultsForEntity:@"HOPSessionRecord" withPredicateString:[NSString stringWithFormat:@"ALL participants.peerURI IN %@",arrayOfPeerURIs] orderDescriptors:@[sortDescriptor]];
-        results = [self getResultsForEntity:@"HOPSessionRecord" withPredicateString:nil orderDescriptors:@[sortDescriptor]];
+        results = [self getResultsForEntity:@"HOPSessionRecord" withPredicateString:[NSString stringWithFormat:@"homeUser.stableId MATCHES '%@'",[self getLastLoggedInHomeUser].stableId] orderDescriptors:@[sortDescriptor]];
         
         for (HOPSessionRecord* sessionRecord in results)
         {
@@ -977,6 +977,7 @@ using namespace openpeer::core;
             if (!ret)
             {
                 ret = (HOPSessionRecord*)[self createObjectForEntity:@"HOPSessionRecord"];
+                ret.homeUser = [self getLastLoggedInHomeUser];
                 ret.sessionID = [HOPUtility getGUIDstring];
                 ret.creationTime = date;
                 ret.type = type;
@@ -996,6 +997,47 @@ using namespace openpeer::core;
         }
     }
     return ret;
+}
+
+- (NSFetchRequest*) getMessagesFetchRequestForSessionID:(NSString*) sessionID sortAscending:(BOOL) ascending
+{
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPMessageRecord" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];
+    [fetchRequest setEntity:entity];
+    
+    /*NSMutableArray* arrayOfPredicates = [[NSMutableArray alloc] init];
+    {
+        NSPredicate* predicateSessionID = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(session.sessionID MATCHES '%@')",sessionID]];
+        [arrayOfPredicates addObject:predicateSessionID];
+    }
+    NSPredicate *predicate = [NSCompoundPredicate andPredicateWithSubpredicates:arrayOfPredicates];
+    */
+    
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(session.sessionID MATCHES '%@')",sessionID]];
+    
+    [fetchRequest setPredicate:predicate];
+    
+	[fetchRequest setFetchBatchSize:20];
+	
+	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"date" ascending:ascending];
+	NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+	
+	[fetchRequest setSortDescriptors:sortDescriptors];
+    
+    return fetchRequest;
+}
+
+- (HOPMessageRecord *) getLastMessageRecordForSessionID:(NSString*) sessionID
+{
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"date" ascending:NO];
+	NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+    
+    NSArray* results = [self getResultsForEntity:@"HOPMessageRecord" withPredicateString:[NSString stringWithFormat:@"(session.sessionID MATCHES '%@')", sessionID] orderDescriptors:sortDescriptors];
+    
+    if ([results count] > 0)
+        return [results objectAtIndex:0];
+    else
+        return nil;
 }
 
 @end
