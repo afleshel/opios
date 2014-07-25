@@ -30,6 +30,12 @@
 	<string>-</string>
 	<key>openpeer/core/auto-find-peers-added-to-conversation-in-seconds</key>
 	<integer>600</integer>
+	<key>openpeer/core/push-messaging-default-push-mailbox-folder</key>
+	<string>inbox</string>
+	<key>openpeer/core/push-messaging-default-push-message-type</key>
+	<string>push</string>
+	<key>openpeer/core/push-messaging-default-push-expires-in-seconds</key>
+	<real>15768000</real>
 	<key>openpeer/stack/stack-thread-priority</key>
 	<string>normal</string>
 	<key>openpeer/stack/key-generation-thread-priority</key>
