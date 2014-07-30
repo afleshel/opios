@@ -42,9 +42,22 @@
 @property (nonatomic, copy) NSString* url;
 @property (nonatomic, copy) NSString* postData;
 @property (nonatomic, copy) NSString* auth;
+@property (nonatomic) BOOL isPost;
 @end
 
 @implementation HTTPDownloader
+
+- (id) initDownloadFromURL:(NSString*) inURL data:(NSString*) inData post:(BOOL) inPost
+{
+    self = [super init];
+    if (self)
+    {
+        self.url = inURL;
+        self.postData = inData;
+        self.isPost = inPost;
+    }
+    return self;
+}
 
 - (id) initSettingsDownloadFromURL:(NSString*) inURL postDate:(NSString*) inPostData
 {
@@ -53,6 +66,7 @@
     {
         self.url = inURL;
         self.postData = inPostData;
+        self.isPost = YES;
     }
     return self;
 }
@@ -70,18 +84,34 @@
 - (BOOL)startDownload
 {
     BOOL ret = YES;
-    NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:self.url]
-                                                            cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
-                                                        timeoutInterval:20.0];
+    NSMutableURLRequest *theRequest = nil; //[NSMutableURLRequest requestWithURL:[NSURL URLWithString:self.url]
+//                                                            cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
+//                                                        timeoutInterval:20.0];
     
     self.receivedData = [NSMutableData dataWithCapacity: 0];
     
-    if (self.postData)
+    if (self.isPost)
     {
-        [theRequest setHTTPMethod:@"POST"];
-        //[theRequest setValue:@"application/x-www-form-urlencoded; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
-        [theRequest setValue:@"application/json; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
-        [theRequest setHTTPBody:[self.postData dataUsingEncoding:NSUTF8StringEncoding]];
+        theRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:self.url]
+                                                  cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
+                                              timeoutInterval:20.0];
+        if (self.postData)
+        {
+            [theRequest setHTTPMethod:@"POST"];
+           
+            //[theRequest setValue:@"application/x-www-form-urlencoded; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+            [theRequest setValue:@"application/json; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+            [theRequest setHTTPBody:[self.postData dataUsingEncoding:NSUTF8StringEncoding]];
+        }
+    }
+    else
+    {
+        NSString* url = [NSString stringWithFormat:@"%@%@",self.url,self.postData];
+        theRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]
+                                                  cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
+                                              timeoutInterval:20.0];
+        
+        [theRequest setHTTPMethod:@"GET"];
     }
     
     if ([self.auth length] > 0)

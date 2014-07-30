@@ -138,18 +138,18 @@
                 NSArray* participants = [NSArray arrayWithObject:[contact getCoreContact]];
                 [conversationThread addContacts:participants];
     #ifdef APNS_ENABLED
-                for (HOPContact* coreContact in participants)
-                {
-                    NSArray* apnsData = [[HOPModelManager sharedModelManager]getAPNSDataForPeerURI:[coreContact getPeerURI]];
-                    if ([apnsData count] == 0)
-                    {
-                        if ([[[OpenPeer sharedOpenPeer]deviceToken] length] > 0)
-                        {
-                            HOPMessage* apnsMessage = [[MessageManager sharedMessageManager] createSystemMessageWithType:SystemMessage_APNS_Request andText:[[OpenPeer sharedOpenPeer]deviceToken] andRecipient:contact];
-                            [conversationThread sendMessage:apnsMessage];
-                        }
-                    }
-                }
+//                for (HOPContact* coreContact in participants)
+//                {
+//                    NSArray* apnsData = [[HOPModelManager sharedModelManager]getAPNSDataForPeerURI:[coreContact getPeerURI]];
+//                    if ([apnsData count] == 0)
+//                    {
+//                        if ([[[OpenPeer sharedOpenPeer]deviceToken] length] > 0)
+//                        {
+//                            HOPMessage* apnsMessage = [[MessageManager sharedMessageManager] createSystemMessageWithType:SystemMessage_APNS_Request andText:[[OpenPeer sharedOpenPeer]deviceToken] andRecipient:contact];
+//                            [conversationThread sendMessage:apnsMessage];
+//                        }
+//                    }
+//                }
     #endif
                 OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Creating session record from conversation thread id: %@", [conversationThread getThreadId]);
                 
