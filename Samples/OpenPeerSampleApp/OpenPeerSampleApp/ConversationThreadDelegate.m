@@ -81,13 +81,21 @@
     });
 }
 
-- (void) onConversationThreadContactStateChanged:(HOPConversationThread*) conversationThread contact:(HOPContact*) contact contactState:(HOPConversationThreadContactState) contactState
+- (void) onConversationThreadContactConnectionStateChanged:(HOPConversationThread*) conversationThread contact:(HOPContact*) contact contactConnectionState:(HOPConversationThreadContactConnectionState) contactConnectionState
 {
-    //OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread <%@> contact <%@> state: %@",conversationThread, contact,[HOPConversationThread stringForContactState:contactState]);
-    //OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread %@ contact <%@> state: %@",[conversationThread getThreadId], contact,[HOPConversationThread stringForContactState:contactState]);
+    //OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread <%@> contact <%@> state: %@",conversationThread, contact,[HOPConversationThread stringForContactConnectionState:contactState]);
+    //OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread %@ contact <%@> state: %@",[conversationThread getThreadId], contact,[HOPConversationThread stringForContactConnectionState:contactConnectionState]);
     dispatch_async(dispatch_get_main_queue(), ^
     {
     });
+}
+
+- (void) onConversationThreadContactStatusChanged:(HOPConversationThread*) conversationThread contact:(HOPContact*) contact
+{
+  //OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread <%@> contact <%@> state: %@",conversationThread, contact,[HOPConversationThread stringForContactConnectionState:contactState]);
+  dispatch_async(dispatch_get_main_queue(), ^
+                 {
+                 });
 }
 
 - (void) onConversationThreadMessage:(HOPConversationThread*) conversationThread messageID:(NSString*) messageID

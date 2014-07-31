@@ -339,6 +339,9 @@ static const short _base64DecodingTable[256] = {
         case HOPConversationThreadMessageDeliveryStateDelivered:
             res = NSLocalizedString(@"delivered", @"");
             break;
+      case HOPConversationThreadMessageDeliveryStateRead:
+            res = NSLocalizedString(@"read", @"");
+            break;
     }
     return res;
 }

@@ -127,7 +127,7 @@
     
     if (messageBody)
     {
-        hopMessage = [[HOPMessage alloc] initWithMessageId:[HOPUtility getGUIDstring] andMessage:messageBody andContact:[contact getCoreContact] andMessageType:messageTypeSystem andMessageDate:[NSDate date]];
+        hopMessage = [[HOPMessage alloc] initWithMessageId:[HOPUtility getGUIDstring] andReplacesMessageID:@"" andMessage:messageBody andContact:[contact getCoreContact] andMessageType:messageTypeSystem andMessageDate:[NSDate date] andValidated:NO];
         
         OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Created system messsage with id:%@ %@\n",hopMessage.messageID,messageBody);
     }
@@ -240,7 +240,7 @@
     //Currently it is not available group chat, so we can have only one message recipients
     HOPRolodexContact* contact = [[inSession participantsArray] objectAtIndex:0];
     //Create a message object
-    HOPMessage* hopMessage = [[HOPMessage alloc] initWithMessageId:[HOPUtility getGUIDstring] andMessage:message andContact:[contact getCoreContact] andMessageType:messageTypeText andMessageDate:[NSDate date]];
+    HOPMessage* hopMessage = [[HOPMessage alloc] initWithMessageId:[HOPUtility getGUIDstring] andReplacesMessageID:@""  andMessage:message andContact:[contact getCoreContact] andMessageType:messageTypeText andMessageDate:[NSDate date] andValidated:NO];
     
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Sending message: %@ - message id: %@ - for session with id: %@",message,hopMessage.messageID,[inSession.conversationThread getThreadId]);
     
@@ -371,7 +371,7 @@
 
 - (HOPMessage*) createMessageFromRichPush:(NSDictionary*) richPush
 {
-    //HOPMessage* hopMessage = [[HOPMessage alloc] initWithMessageId:[HOPUtility getGUIDstring] andMessage:message andContact:[contact getCoreContact] andMessageType:messageTypeText andMessageDate:[NSDate date]];
+    //HOPMessage* hopMessage = [[HOPMessage alloc] initWithMessageId:[HOPUtility getGUIDstring] andReplacesMessageID:@"" andMessage:message andContact:[contact getCoreContact] andMessageType:messageTypeText andMessageDate:[NSDate date] andValidated:NO];
     
 //    NSString* senderPeerURI = [richPush objectForKey:@"peerURI"];
 //    NSString* messageId = [richPush objectForKey:@"messageId"];
