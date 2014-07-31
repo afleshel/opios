@@ -41,10 +41,6 @@
 		871BC9A5179EEB4000AEA4A6 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 871BC9A4179EEB3F00AEA4A6 /* CoreData.framework */; };
 		871BC9C517A1233800AEA4A6 /* HOPIdentityContact_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 871BC9C317A1233500AEA4A6 /* HOPIdentityContact_Internal.h */; };
 		871BC9C617A1233800AEA4A6 /* HOPIdentityContact_Internal.mm in Sources */ = {isa = PBXBuildFile; fileRef = 871BC9C417A1233600AEA4A6 /* HOPIdentityContact_Internal.mm */; };
-		8723875719498C84002643D6 /* HOPSessionRecord.h in Headers */ = {isa = PBXBuildFile; fileRef = 8723875519498C83002643D6 /* HOPSessionRecord.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8723875819498C84002643D6 /* HOPSessionRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 8723875619498C84002643D6 /* HOPSessionRecord.m */; };
-		8723875B19498C85002643D6 /* HOPConversationThreadRecord.h in Headers */ = {isa = PBXBuildFile; fileRef = 8723875919498C85002643D6 /* HOPConversationThreadRecord.h */; };
-		8723875C19498C85002643D6 /* HOPConversationThreadRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 8723875A19498C85002643D6 /* HOPConversationThreadRecord.m */; };
 		872725C3166636F50089CBB6 /* HOPMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 872725C1166636F50089CBB6 /* HOPMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		872C728718C5E955007846AB /* KeyMappings.plist in Sources */ = {isa = PBXBuildFile; fileRef = 872C728618C5E94F007846AB /* KeyMappings.plist */; };
 		872DA9E6175CEC9C000CCA76 /* HOPCache.mm in Sources */ = {isa = PBXBuildFile; fileRef = 872DA9E5175CEC9C000CCA76 /* HOPCache.mm */; };
@@ -341,10 +337,6 @@
 		871BC9A4179EEB3F00AEA4A6 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		871BC9C317A1233500AEA4A6 /* HOPIdentityContact_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HOPIdentityContact_Internal.h; sourceTree = "<group>"; };
 		871BC9C417A1233600AEA4A6 /* HOPIdentityContact_Internal.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HOPIdentityContact_Internal.mm; sourceTree = "<group>"; };
-		8723875519498C83002643D6 /* HOPSessionRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HOPSessionRecord.h; path = "openpeer-ios-sdk/model/HOPSessionRecord.h"; sourceTree = "<group>"; };
-		8723875619498C84002643D6 /* HOPSessionRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HOPSessionRecord.m; path = "openpeer-ios-sdk/model/HOPSessionRecord.m"; sourceTree = "<group>"; };
-		8723875919498C85002643D6 /* HOPConversationThreadRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HOPConversationThreadRecord.h; path = "openpeer-ios-sdk/model/HOPConversationThreadRecord.h"; sourceTree = "<group>"; };
-		8723875A19498C85002643D6 /* HOPConversationThreadRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HOPConversationThreadRecord.m; path = "openpeer-ios-sdk/model/HOPConversationThreadRecord.m"; sourceTree = "<group>"; };
 		872725C1166636F50089CBB6 /* HOPMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HOPMessage.h; sourceTree = "<group>"; };
 		872C728618C5E94F007846AB /* KeyMappings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = KeyMappings.plist; sourceTree = "<group>"; };
 		872DA9E5175CEC9C000CCA76 /* HOPCache.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HOPCache.mm; sourceTree = "<group>"; };
@@ -701,10 +693,6 @@
 		8792E85D16519CFF00DEAC58 = {
 			isa = PBXGroup;
 			children = (
-				8723875919498C85002643D6 /* HOPConversationThreadRecord.h */,
-				8723875A19498C85002643D6 /* HOPConversationThreadRecord.m */,
-				8723875519498C83002643D6 /* HOPSessionRecord.h */,
-				8723875619498C84002643D6 /* HOPSessionRecord.m */,
 				8792E8F21651A01400DEAC58 /* Core Projects */,
 				8792E86D16519CFF00DEAC58 /* openpeer-ios-sdk */,
 				0012C521177D10110017FF5E /* Libraries */,
@@ -979,7 +967,6 @@
 				87CCF64D18C100B2000DF636 /* HOPBackgrounding.h in Headers */,
 				8719457F18DF8F4000B3B626 /* HOPCacheData.h in Headers */,
 				8758C5B11976947200CB8099 /* HOPHomeUser.h in Headers */,
-				8723875719498C84002643D6 /* HOPSessionRecord.h in Headers */,
 				870911491847691100E65465 /* HOPImage.h in Headers */,
 				870059F81850BC6400B6B826 /* HOPCache.h in Headers */,
 				87E3CD24172A89E300084D2F /* HOPIdentityLookupInfo_Internal.h in Headers */,
@@ -998,8 +985,6 @@
 				87A5B1F116EDE5F9007E825A /* OpenPeerIdentityDelegate.h in Headers */,
 				87A5B1F216EDE5F9007E825A /* OpenPeerLoggerDelegate.h in Headers */,
 				87A5B1F316EDE5F9007E825A /* OpenPeerMediaEngineDelegate.h in Headers */,
-				8723875719498C84002643D6 /* HOPSessionRecord.h in Headers */,
-				8723875B19498C85002643D6 /* HOPConversationThreadRecord.h in Headers */,
 				87A5B1F616EDE5F9007E825A /* OpenPeerStackDelegate.h in Headers */,
 				87A5B1F716EDE5F9007E825A /* OpenPeerStorageManager.h in Headers */,
 				87A5B1F816EDE5F9007E825A /* OpenPeerUtility.h in Headers */,
@@ -1252,7 +1237,6 @@
 				87E3CD21172A859600084D2F /* HOPIdentityLookupInfo.mm in Sources */,
 				875FD1371806AF74001A5BEA /* HOPHomeUser+External.m in Sources */,
 				8719458018DF8F4000B3B626 /* HOPCacheData.m in Sources */,
-				8723875819498C84002643D6 /* HOPSessionRecord.m in Sources */,
 				87EE110A1966D242002340AA /* HOPSessionRecord+External.m in Sources */,
 				87320E6418A0F15D007F16B1 /* HOPSettings.mm in Sources */,
 				872DA9E6175CEC9C000CCA76 /* HOPCache.mm in Sources */,
@@ -1265,7 +1249,6 @@
 				87DD73E017AFD1BE0086C295 /* OpenPeerConstants.m in Sources */,
 				87320E6A18A0F7B4007F16B1 /* OpenPeerSettingsDelegate.mm in Sources */,
 				8758405C17B17CD0006B9A21 /* HOPModelManager.mm in Sources */,
-				8723875C19498C85002643D6 /* HOPConversationThreadRecord.m in Sources */,
 				87FCB15517B8D85C00E913AD /* HOPIdentityContact.m in Sources */,
 				87FCB15E17B8D85D00E913AD /* HOPAvatar.m in Sources */,
 				87098FCA17C20739007C9093 /* OpenPeerModel.xcdatamodeld in Sources */,

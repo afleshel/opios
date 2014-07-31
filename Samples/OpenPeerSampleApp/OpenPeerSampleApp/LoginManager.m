@@ -45,6 +45,7 @@
 
 #ifdef APNS_ENABLED
 #import "APNSInboxManager.h"
+#import "APNSManager.h"
 #endif
 //SDK
 #import <OpenPeerSDK/HOPAccount.h>
@@ -416,6 +417,10 @@
                 [[SessionManager sharedSessionManager] recreateExistingSessions];
             }
             self.isLoggedin = YES;
+#ifdef APNS_ENABLED
+            if ([[[HOPModelManager sharedModelManager] getAPNSDataForPeerURI:[[HOPModelManager sharedModelManager] getPeerURIForHomeUser]] count] == 0)
+                [[APNSManager sharedAPNSManager] registerDeviceToken];
+#endif
         }
         else
         {
