@@ -158,8 +158,9 @@
         {
             OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Push notification deviceToken:%@",hexString);
 
-            [[APNSManager sharedAPNSManager] registerDeviceToken:deviceToken];
             [[APNSManager sharedAPNSManager] setDeviceToken:hexString];
+            [[APNSManager sharedAPNSManager] registerDeviceToken:deviceToken];
+            
             [[OpenPeer sharedOpenPeer] setDeviceToken:hexString];
         }
         else

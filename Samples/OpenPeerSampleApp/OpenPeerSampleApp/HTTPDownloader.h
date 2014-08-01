@@ -36,6 +36,7 @@
 
 @property (nonatomic, weak) id<HTTPDownloaderDelegate> delegate;
 
+- (id) initDownloadFromURL:(NSString*) inURL data:(NSString*) inData post:(BOOL) inPost;
 - (id) initSettingsDownloadFromURL:(NSString*) url postDate:(NSString*) postData;
 - (id) initSettingsDownloadFromURL:(NSString*) url postDate:(NSString*) postData auth:(NSString*) auth;
 - (BOOL) startDownload;
