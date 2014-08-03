@@ -123,6 +123,9 @@ extern NSString * const systemMessageRequest;
 extern NSString * const notificationRemoteSessionModeChanged;
 extern NSString * const notifictionAppReturnedFromBackground;
 
+extern NSString * const notificationTypeApple;
+extern NSString * const notificationTypeAndroid;
+
 //Settings
 extern NSString * const defaultTelnetPort;
 
