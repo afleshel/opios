@@ -30,6 +30,10 @@
 	<string>-</string>
 	<key>openpeer/core/auto-find-peers-added-to-conversation-in-seconds</key>
 	<integer>600</integer>
+	<key>openpeer/core/move-message-to-cache-time-in-seconds</key>
+	<integer>120</integer>
+	<key>openpeer/core/conversation-thread-host-inactive-close-time-in-seconds</key>
+	<integer>60</integer>
 	<key>openpeer/stack/stack-thread-priority</key>
 	<string>normal</string>
 	<key>openpeer/stack/key-generation-thread-priority</key>
