@@ -122,6 +122,9 @@ NSString * const systemMessageRequest = @"?";
 NSString * const notifictionAppReturnedFromBackground = @"notifictionAppReturnedFromBackground";
 NSString * const notificationRemoteSessionModeChanged = @"notificationRemoteSessionModeChanged";
 
+NSString * const notificationTypeApple = @"apns";
+NSString * const notificationTypeAndroid = @"apid";
+
 NSString * const defaultTelnetPort = @"59999";
 
 

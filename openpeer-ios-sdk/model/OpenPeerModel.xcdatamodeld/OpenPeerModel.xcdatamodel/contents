@@ -2,6 +2,7 @@
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13E28" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="HOPAPNSData" representedClassName="HOPAPNSData" syncable="YES">
         <attribute name="deviceToken" attributeType="String" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" defaultValueString="apns" syncable="YES"/>
         <relationship name="publicPeer" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HOPPublicPeerFile" inverseName="apnsData" inverseEntity="HOPPublicPeerFile" syncable="YES"/>
     </entity>
     <entity name="HOPAssociatedIdentity" representedClassName="HOPAssociatedIdentity" syncable="YES">
@@ -111,7 +112,7 @@
         <memberEntity name="HOPConversationThreadRecord"/>
     </configuration>
     <elements>
-        <element name="HOPAPNSData" positionX="-101" positionY="-675" width="128" height="75"/>
+        <element name="HOPAPNSData" positionX="-101" positionY="-675" width="128" height="88"/>
         <element name="HOPAssociatedIdentity" positionX="286" positionY="-177" width="128" height="150"/>
         <element name="HOPAvatar" positionX="430" positionY="-486" width="128" height="135"/>
         <element name="HOPCacheData" positionX="448" positionY="-297" width="128" height="105"/>

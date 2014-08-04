@@ -52,6 +52,7 @@
 #import <OpenPeerSDK/HOPMessage.h>
 #import <OpenPeerSDK/HOPBackgrounding.h>
 #import <OpenPeerSDK/HOPUtility.h>
+#import <OpenPeerSDK/HOPAPNSData.h>
 
 #define  timeBetweenPushNotificationsInSeconds 1
 
@@ -65,6 +66,7 @@
 @property (nonatomic, strong) NSMutableDictionary* apnsHisotry;
 @property (nonatomic, strong) NSURLSession *urlSession;
 @property (nonatomic, strong) NSURLSessionUploadTask *sessionDataTask;
+@property (nonatomic, strong) NSURLConnection* urlConnection;
 
 @property (nonatomic, strong) NSMutableDictionary* dictionaryOfSentFiles;
 
@@ -173,13 +175,13 @@
         NSMutableURLRequest * request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:self.apiPushURL]];
         [request setHTTPMethod:@"POST"];
         [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-        if (sendingRich)
+        //if (sendingRich)
             [request setValue:@"application/vnd.urbanairship+json; version=3;" forHTTPHeaderField:@"Accept"];
         
         NSData * pushdata = [NSJSONSerialization dataWithJSONObject:dataToPush options:0 error:NULL];
         [request setHTTPBody:pushdata];
         
-        [NSURLConnection connectionWithRequest:request delegate:self];
+        self.urlConnection = [NSURLConnection connectionWithRequest:request delegate:self];
         OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push is sent");
         @synchronized (self)
         {
@@ -199,7 +201,7 @@
         NSMutableURLRequest * request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:self.apiPushURL]];
         [request setHTTPMethod:@"POST"];
         [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-        if (sendingRich)
+        //if (sendingRich)
             [request setValue:@"application/vnd.urbanairship+json; version=3;" forHTTPHeaderField:@"Accept"];
         
         NSURL *fileURL = [NSURL fileURLWithPath:filePath];
@@ -336,10 +338,15 @@
     NSString* location = [[HOPAccount sharedAccount] isCoreAccountCreated] && ([[HOPAccount sharedAccount] getState].state == HOPAccountStateReady) ? [[HOPAccount sharedAccount] getLocationID] : @"";
     NSString* content = [self prepareMessageForRichPush:message peerURI:[[HOPModelManager sharedModelManager]getPeerURIForHomeUser] location:location];
     
-    for (NSString* deviceToken in deviceTokens)
+    for (HOPAPNSData* pushNotificationData in deviceTokens)
     {
-        NSString* stringToSend = [NSString stringWithFormat:@"{\"audience\" : {\"device_token\" : \"%@\"}, \"device_types\" : [ \"ios\" ], \"notification\" : {\"ios\" : {\"sound\":\"message-received\",\"alert\": \"%@\",\"content-available\": true,\"priority\": 10}}, \"message\" : {\"title\" : \"%@\", \"body\" : \"%@\", \"content_type\" : \"text/html\"} }",deviceToken,messageText,messageText,content];
+        NSString* stringToSend = nil;
         
+        if ([pushNotificationData.type isEqualToString:notificationTypeApple])
+            stringToSend = [NSString stringWithFormat:@"{\"audience\" : {\"device_token\" : \"%@\"}, \"device_types\" : [ \"ios\" ], \"notification\" : {\"ios\" : {\"sound\":\"message-received\",\"alert\": \"%@\",\"content-available\": true,\"priority\": 10}}, \"message\" : {\"title\" : \"%@\", \"body\" : \"%@\", \"content_type\" : \"text/html\"} }",pushNotificationData.deviceToken,messageText,messageText,content];
+        else if ([pushNotificationData.type isEqualToString:notificationTypeAndroid])
+            stringToSend = [NSString stringWithFormat:@"{\"audience\" : {\"apid\" : \"%@\"}, \"device_types\" : [ \"android\" ],  \"notification\" : {\"android\" : {\"extra\" : {\"date\": \"%.0f\",\"messageId\": \"%@\",\"location\": \"%@\",\"peerURI\": \"%@\"}}, \"alert\" : \"%@\"} }",pushNotificationData.deviceToken,[message.date timeIntervalSince1970],message.messageID,location,[[HOPModelManager sharedModelManager]getPeerURIForHomeUser],message.text];
+
         OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelTrace, @"Rich push content: %@",stringToSend);
         SBJsonParser* parser = [[SBJsonParser alloc] init];
         NSDictionary* dataToPush = [parser objectWithString: stringToSend];
@@ -369,8 +376,7 @@
 
 - (void) sendRichPushNotificationForMessage:(HOPMessage*) message missedCall:(BOOL) missedCall
 {
-    
-    NSArray* deviceTokens = [self getDeviceTokensForContact:message.contact];
+    NSArray* deviceTokens = [self getDeviceTokensForContact2:message.contact];
     
     if ([deviceTokens count] > 0)
     {
@@ -380,7 +386,6 @@
     {
         [self requestDeviceTokenForPeerURI:[message.contact getPeerURI]];
         [self.dictionaryOfPushNotificationsToSend setObject:message forKey:[message.contact getPeerURI]];
-        //OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Unable to send a message because lack of device token for contact with peer uri: ", [message.contact getPeerURI]);
     }
 }
 
@@ -401,6 +406,21 @@
         if ([self canSendPushNotificationForPeerURI:peerURI])
         {
             ret = [[HOPModelManager sharedModelManager] getAPNSDataForPeerURI:peerURI];
+        }
+    }
+    return ret;
+}
+
+- (NSArray*) getDeviceTokensForContact2:(HOPContact*) contact
+{
+    NSArray* ret = nil;
+    
+    NSString* peerURI = [contact getPeerURI];
+    if ([peerURI length] > 0)
+    {
+        if ([self canSendPushNotificationForPeerURI:peerURI])
+        {
+            ret = [[HOPModelManager sharedModelManager] getPushNotificationDataForPeerURI:peerURI];
         }
     }
     return ret;
@@ -699,22 +719,26 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask
                 if (![peerURI isEqualToString:[[HOPModelManager sharedModelManager] getPeerURIForHomeUser]])
                 {
                     NSString* type = [result objectForKey:@"type"];
-                    if ([type isEqualToString:@"apns"])
+                    //if ([type isEqualToString:@"apns"])
+                    if ([type length] > 0)
                     {
                         NSString* deviceToken = [result objectForKey:@"deviceToken"];
                         if ([deviceToken length] > 0)
                         {
-                            [[HOPModelManager sharedModelManager] setAPNSData:deviceToken PeerURI: peerURI];
+                            [[HOPModelManager sharedModelManager] setAPNSData:deviceToken type:type PeerURI:peerURI];
                             HOPMessage* msg = [self.dictionaryOfPushNotificationsToSend objectForKey:peerURI];
                             if (msg)
-                                [self sendRichPush:msg deviceTokens:@[deviceToken]];
+                            {
+                                NSArray* deviceTokens = [self getDeviceTokensForContact2:msg.contact];
+                                [self sendRichPush:msg deviceTokens:deviceTokens];
+                            }
                         }
                         
                     }
                 }
                 else
                 {
-                    [[HOPModelManager sharedModelManager] setAPNSData:self.deviceToken PeerURI: [[HOPModelManager sharedModelManager] getPeerURIForHomeUser]];
+                    [[HOPModelManager sharedModelManager] setAPNSData:self.deviceToken type:notificationTypeApple PeerURI: [[HOPModelManager sharedModelManager] getPeerURIForHomeUser]];
                 }
             }
         }
