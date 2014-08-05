@@ -227,12 +227,19 @@
  */
 - (NSArray*) getAPNSDataForPeerURI:(NSString*) peerURI;
 
+- (NSArray*) getPushNotificationDataForPeerURI:(NSString*) peerURI;
 /**
  Sets device token for specific peer URI.
  @param deviceToken Device token used for sending push notification
+ @param type Type of push
  @param peerURI Contacts peer uri
  */
-- (void) setAPNSData:(NSString*) deviceToken PeerURI:(NSString*) peerURI;
+- (void) setAPNSData:(NSString*) deviceToken type:(NSString*) type PeerURI:(NSString*) peerURI;
+
+/**
+ *  Delete push notification data for all contacts
+ */
+- (void) clearAPNSData;
 
 /**
  Gets cookie for path.

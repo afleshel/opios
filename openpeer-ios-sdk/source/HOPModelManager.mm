@@ -601,7 +601,14 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (void) setAPNSData:(NSString*) deviceToken PeerURI:(NSString*) peerURI
+- (NSArray*) getPushNotificationDataForPeerURI:(NSString*) peerURI
+{
+    NSArray* ret = [self getResultsForEntity:@"HOPAPNSData" withPredicateString:[NSString stringWithFormat:@"(publicPeer.peerURI MATCHES '%@')",peerURI] orderDescriptors:nil];
+    
+    return ret;
+}
+
+- (void) setAPNSData:(NSString*) deviceToken type:(NSString*) type PeerURI:(NSString*) peerURI
 {
     if ([[self getAPNSDataForPeerURI:peerURI] count] == 0)
     {
@@ -611,6 +618,7 @@ using namespace openpeer::core;
             HOPAPNSData* apnsData = (HOPAPNSData*)[self createObjectForEntity:@"HOPAPNSData"];
             apnsData.deviceToken = deviceToken;
             apnsData.publicPeer = publicPeerFile;
+            apnsData.type = type;
             [self saveContext];
         }
     }
@@ -622,6 +630,16 @@ using namespace openpeer::core;
     return ret;
 }
 
+- (void) clearAPNSData
+{
+    NSArray* ret = [self getResultsForEntity:@"HOPAPNSData" withPredicateString:nil orderDescriptors:nil];
+    
+    for (HOPAPNSData* data in ret)
+    {
+        [self deleteObject:data];
+    }
+    [self saveContext];
+}
 - (void)saveBackgroundContext
 {
     NSError *error = nil;

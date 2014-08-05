@@ -273,6 +273,8 @@
 {
     NSArray* associatedIdentities = [[HOPAccount sharedAccount] getAssociatedIdentities];
     
+    [[HOPModelManager sharedModelManager] clearAPNSData];
+    
     for (HOPIdentity* identity in associatedIdentities)
     {
         if (![self.setOfIdentitiesWhoseContactsDownloadInProgress containsObject:[identity getIdentityURI]])

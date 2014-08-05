@@ -208,7 +208,7 @@
                 case SystemMessage_APNS_Request:
                 {
                     if ([messageText length] > 0 && [[inMessage.contact getPeerURI] length] > 0)
-                        [[HOPModelManager sharedModelManager] setAPNSData:messageText PeerURI: [inMessage.contact getPeerURI]];
+                        [[HOPModelManager sharedModelManager] setAPNSData:messageText type: notificationTypeApple PeerURI: [inMessage.contact getPeerURI]];
                     
                     if ([[[OpenPeer sharedOpenPeer] deviceToken] length] > 0)
                     {
@@ -222,7 +222,7 @@
                 case SystemMessage_APNS_Response:
                 {
                     if ([messageText length] > 0 && [[inMessage.contact getPeerURI] length] > 0)
-                        [[HOPModelManager sharedModelManager] setAPNSData:messageText PeerURI: [inMessage.contact getPeerURI]];
+                        [[HOPModelManager sharedModelManager] setAPNSData:messageText type: notificationTypeApple PeerURI: [inMessage.contact getPeerURI]];
                 }
                 break;
 #endif
