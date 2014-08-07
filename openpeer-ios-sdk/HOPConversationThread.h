@@ -88,13 +88,13 @@
  @param state Contact state to convert to string
  @returns A string representation of contact state
  */
-+ (NSString*) stateToString: (HOPConversationThreadContactState) state __attribute__((deprecated("use method stringForContactState instead")));
++ (NSString*) stateToString: (HOPConversationThreadContactConnectionState) state __attribute__((deprecated("use method stringForContactConnectionState instead")));
 /**
  Returns a  string representation of the contact state.
  @param state Contact state to convert to string
  @return A string representation of contact state
  */
-+ (NSString*) stringForContactState:(HOPConversationThreadContactState) state;
++ (NSString*) stringForContactConnectionState:(HOPConversationThreadContactConnectionState) state;
 
 
 /**
@@ -132,7 +132,7 @@
  @param contact HOPContact object
  @returns Contact state enum
  */
-- (HOPConversationThreadContactState) getContactState: (HOPContact*) contact;
+- (HOPConversationThreadContactConnectionState) getContactConnectionState: (HOPContact*) contact;
 
 /**
  Adds array of contacts to the conversation thread.

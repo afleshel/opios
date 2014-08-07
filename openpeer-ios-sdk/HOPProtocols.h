@@ -148,13 +148,20 @@
  */
 - (void) onConversationThreadContactsChanged:(HOPConversationThread*) conversationThread;
 /**
- *  Notifies the receiver about conversation thread participant state.
+ *  Notifies the receiver about conversation thread participant connection state.
  *
- *  @param conversationThread Conversation thread object.
- *  @param contact            Participant whose state in conversation thredad has changed.
- *  @param contactState       A new participant state
+ *  @param conversationThread     Conversation thread object.
+ *  @param contact                Participant whose state in conversation thredad has changed.
+ *  @param contactConnectionState A new participant state
  */
-- (void) onConversationThreadContactStateChanged:(HOPConversationThread*) conversationThread contact:(HOPContact*) contact contactState:(HOPConversationThreadContactState) contactState;
+- (void) onConversationThreadContactConnectionStateChanged:(HOPConversationThread*) conversationThread contact:(HOPContact*) contact contactConnectionState:(HOPConversationThreadContactConnectionState) contactConnectionState;
+/**
+ *  Notifies the receiver about conversation thread participant status.
+ *
+ *  @param conversationThread     Conversation thread object.
+ *  @param contact                Participant whose status in conversation thredad has changed.
+ */
+- (void) onConversationThreadContactStatusChanged:(HOPConversationThread*) conversationThread contact:(HOPContact*) contact;
 /**
  *  Notifies the receiver about new message for conversation.
  *

@@ -83,6 +83,7 @@ typedef enum
     HOPConversationThreadMessageDeliveryStateDiscovering      = 0,
     HOPConversationThreadMessageDeliveryStateUserNotAvailable = 1,
     HOPConversationThreadMessageDeliveryStateDelivered        = 2,
+    HOPConversationThreadMessageDeliveryStateRead             = 3,
 } HOPConversationThreadMessageDeliveryState;
 
 /**
@@ -90,11 +91,11 @@ typedef enum
  */
 typedef enum 
 {
-    HOPConversationThreadContactStateNotApplicable,
-    HOPConversationThreadContactStateFinding,
-    HOPConversationThreadContactStateConnected,
-    HOPConversationThreadContactStateDisconnected
-} HOPConversationThreadContactState;
+    HOPConversationThreadContactConnectionStateNotApplicable,
+    HOPConversationThreadContactConnectionStateFinding,
+    HOPConversationThreadContactConnectionStateConnected,
+    HOPConversationThreadContactConnectionStateDisconnected
+} HOPConversationThreadContactConnectionState;
 
 #pragma mark - Provisioning account for future use enum
 /**

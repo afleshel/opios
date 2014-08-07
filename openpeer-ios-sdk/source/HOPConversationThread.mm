@@ -74,13 +74,13 @@ using namespace openpeer::core;
     return [NSString stringWithUTF8String: IConversationThread::toString((IConversationThread::MessageDeliveryStates) state)];
 }
 
-+ (NSString*) stateToString: (HOPConversationThreadContactState) state
++ (NSString*) stateToString: (HOPConversationThreadContactConnectionState) state
 {
-    return [NSString stringWithUTF8String: IConversationThread::toString((IConversationThread::ContactStates) state)];
+    return [NSString stringWithUTF8String: IConversationThread::toString((IConversationThread::ContactConnectionStates) state)];
 }
-+ (NSString*) stringForContactState:(HOPConversationThreadContactState) state
++ (NSString*) stringForContactConnectionState:(HOPConversationThreadContactConnectionState) state
 {
-    return [NSString stringWithUTF8String: IConversationThread::toString((IConversationThread::ContactStates) state)];
+    return [NSString stringWithUTF8String: IConversationThread::toString((IConversationThread::ContactConnectionStates) state)];
 }
 
 - (id)init
@@ -246,12 +246,12 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (HOPConversationThreadContactState) getContactState: (HOPContact*) contact
+- (HOPConversationThreadContactConnectionState) getContactConnectionState: (HOPContact*) contact
 {
-    HOPConversationThreadContactState ret = HOPConversationThreadContactStateNotApplicable;
+    HOPConversationThreadContactConnectionState ret = HOPConversationThreadContactConnectionStateNotApplicable;
     if(conversationThreadPtr)
     {
-        ret = (HOPConversationThreadContactState) conversationThreadPtr->getContactState([contact getContactPtr]);
+        ret = (HOPConversationThreadContactConnectionState) conversationThreadPtr->getContactConnectionState([contact getContactPtr]);
     }
     else
     {
@@ -309,11 +309,11 @@ using namespace openpeer::core;
 
 }
 
-- (void) sendMessage: (NSString*) messageID messageType:(NSString*) messageType message:(NSString*) message
+- (void) sendMessage: (NSString*) messageID replacesMessageID:(NSString*) replacesMessageID messageType:(NSString*) messageType validated:(BOOL) validated message:(NSString*) message
 {
     if(conversationThreadPtr)
     {
-        conversationThreadPtr->sendMessage([messageID UTF8String], [messageType UTF8String], [message UTF8String], false);
+        conversationThreadPtr->sendMessage([messageID UTF8String], [replacesMessageID UTF8String], [messageType UTF8String], [message UTF8String], validated ? true : false);
     }
     else
     {
@@ -326,7 +326,7 @@ using namespace openpeer::core;
 {
     if(conversationThreadPtr)
     {
-        conversationThreadPtr->sendMessage([message.messageID UTF8String], [message.type UTF8String], [message.text UTF8String], false);
+        conversationThreadPtr->sendMessage([message.messageID UTF8String], [message.replacesMessageID UTF8String], [message.type UTF8String], [message.text UTF8String], message.validated ? true : false);
     }
     else
     {
@@ -343,9 +343,11 @@ using namespace openpeer::core;
         IContactPtr fromContact;
         zsLib::String messageType;
         zsLib::String message;
+        zsLib::String replacesMessageID;
         zsLib::Time messageTime;
-        
-        conversationThreadPtr->getMessage([messageID UTF8String], fromContact, messageType, message, messageTime);
+        bool validated = false;
+
+        conversationThreadPtr->getMessage([messageID UTF8String], replacesMessageID, fromContact, messageType, message, messageTime, validated);
         
         if (fromContact && messageType && message)
         {
@@ -356,6 +358,8 @@ using namespace openpeer::core;
             hopMessage.text = [NSString stringWithUTF8String:message];
             hopMessage.date = [OpenPeerUtility convertPosixTimeToDate:messageTime];
             hopMessage.messageID = messageID;
+            hopMessage.replacesMessageID = [NSString stringWithUTF8String:replacesMessageID];
+            hopMessage.validated = (validated ? YES : NO);
         }
     }
     else
@@ -366,24 +370,28 @@ using namespace openpeer::core;
 
     return hopMessage;
 }
-- (BOOL) getMessage: (NSString*) messageID outFrom:(HOPContact**) outFrom outMessageType:(NSString**) outMessageType outMessage:(NSString**) outMessage outTime:(NSDate**) outTime
+- (BOOL) getMessage: (NSString*) messageID outReplacesMessageID:(NSString**) outReplacesMessageID outFrom:(HOPContact**) outFrom outMessageType:(NSString**) outMessageType outMessage:(NSString**) outMessage outTime:(NSDate**) outTime outValidated:(BOOL*) outValidated
 {
     BOOL ret = NO;
     if(conversationThreadPtr)
     {
+        zsLib::String replacesMessageID;
         IContactPtr fromContact;
         zsLib::String messageType;
         zsLib::String message;
         zsLib::Time messageTime;
+        bool validated = false;
     
-        conversationThreadPtr->getMessage([messageID UTF8String], fromContact, messageType, message, messageTime);
+        conversationThreadPtr->getMessage([messageID UTF8String], replacesMessageID, fromContact, messageType, message, messageTime, validated);
         
         if (fromContact && messageType && message)
         {
+            *outReplacesMessageID = [NSString stringWithUTF8String:replacesMessageID];
             *outFrom = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:[NSString stringWithUTF8String:fromContact->getPeerURI()]];
             *outMessageType = [NSString stringWithUTF8String:messageType];
             *outMessage = [NSString stringWithUTF8String:message];
             *outTime = [OpenPeerUtility convertPosixTimeToDate:messageTime];
+            *outValidated = (validated ? YES : NO);
             ret = YES;
         }
         

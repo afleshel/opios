@@ -36,6 +36,10 @@
 	<string>push</string>
 	<key>openpeer/core/push-messaging-default-push-expires-in-seconds</key>
 	<real>15768000</real>
+	<key>openpeer/core/move-message-to-cache-time-in-seconds</key>
+	<integer>120</integer>
+	<key>openpeer/core/conversation-thread-host-inactive-close-time-in-seconds</key>
+	<integer>600</integer>
 	<key>openpeer/stack/stack-thread-priority</key>
 	<string>normal</string>
 	<key>openpeer/stack/key-generation-thread-priority</key>

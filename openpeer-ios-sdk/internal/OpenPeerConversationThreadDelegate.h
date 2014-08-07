@@ -67,5 +67,8 @@ public:
     
     virtual void onConversationThreadPushMessage(IConversationThreadPtr conversationThread,const char *messageID,IContactPtr contact);
     
-    virtual void onConversationThreadContactStateChanged(IConversationThreadPtr conversationThread,IContactPtr contact,ContactStates state);
+    virtual void onConversationThreadContactConnectionStateChanged(IConversationThreadPtr conversationThread,IContactPtr contact,ContactConnectionStates state);
+
+    virtual void onConversationThreadContactStatusChanged(IConversationThreadPtr conversationThread,IContactPtr contact);
+
 };

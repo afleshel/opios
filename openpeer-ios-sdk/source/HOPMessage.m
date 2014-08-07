@@ -35,22 +35,26 @@
 @implementation HOPMessage
 
 @synthesize messageID = _messageID;
+@synthesize replacesMessageID = _replacesMessageID;
 @synthesize contact = _contact;
 @synthesize type = _type;
 @synthesize text = _text;
 @synthesize date = _date;
+@synthesize validated = _validated;
 
 
-- (id) initWithMessageId:(NSString*) inMessageId andMessage:(NSString*) messageText andContact:(HOPContact*) inContact andMessageType:(NSString*) inMessageType andMessageDate:(NSDate*) inMessageDate
+- (id) initWithMessageId:(NSString*) inMessageId andReplacesMessageID:(NSString*) inReplacesMessageID andMessage:(NSString*) messageText andContact:(HOPContact*) inContact andMessageType:(NSString*) inMessageType andMessageDate:(NSDate*) inMessageDate  andValidated:(BOOL) inValidated
 {
     self = [super init];
     if (self)
     {
         self.messageID = inMessageId;
+        self.replacesMessageID = inReplacesMessageID;
         self.text = messageText;
         self.contact = inContact;
         self.type = inMessageType;
         self.date = inMessageDate;
+        self.validated = inValidated;
     }
     return self;
 }
