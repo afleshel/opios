@@ -93,6 +93,12 @@
     [self.view addGestureRecognizer:self.tapGesture];
 }
 
+- (void)dealloc
+{
+    [[HOPMediaEngine sharedInstance] setCaptureRenderView:nil];
+    [[HOPMediaEngine sharedInstance] setChannelRenderView:nil];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
