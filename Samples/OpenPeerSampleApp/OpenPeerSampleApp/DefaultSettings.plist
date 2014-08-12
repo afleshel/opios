@@ -40,6 +40,8 @@
 	<integer>120</integer>
 	<key>openpeer/core/conversation-thread-host-inactive-close-time-in-seconds</key>
 	<integer>600</integer>
+	<key>openpeer/core/encrypt-block-size</key>
+	<integer>10240</integer>
 	<key>openpeer/stack/stack-thread-priority</key>
 	<string>normal</string>
 	<key>openpeer/stack/key-generation-thread-priority</key>
@@ -82,6 +84,8 @@
 	<integer>2592000</integer>
 	<key>openpeer/stack/push-mailbox-sending-key-expires-after-in-seconds</key>
 	<integer>12960000</integer>
+	<key>openpeer/stack/push-mailbox-encrypt-block-size</key>
+	<integer>10240</integer>
 	<key>openpeer/stack/service-peer-lookup-peer-files-get-timeout-in-seconds</key>
 	<integer>60</integer>
 	<key>openpeer/stack/account-shutdown-on-ice-socket-failure</key>
