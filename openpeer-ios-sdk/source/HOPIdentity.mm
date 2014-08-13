@@ -101,8 +101,13 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     }
     
     boost::shared_ptr<OpenPeerIdentityDelegate> identityDelegatePtr = OpenPeerIdentityDelegate::create(inIdentityDelegate);
-    
-    IIdentityPtr identity = IIdentity::loginWithIdentityPreauthorized([[HOPAccount sharedAccount]getAccountPtr], identityDelegatePtr, [identityProviderDomain UTF8String], [identityURI UTF8String],[identityAccessToken UTF8String], [identityAccessSecret UTF8String], boost::posix_time::from_time_t([identityAccessSecretExpires timeIntervalSince1970]));
+
+    IIdentity::Token identityToken;
+    identityToken.mID = [identityAccessToken UTF8String];
+    identityToken.mSecret = [identityAccessSecret UTF8String];
+    identityToken.mExpires = boost::posix_time::from_time_t([identityAccessSecretExpires timeIntervalSince1970]);
+
+    IIdentityPtr identity = IIdentity::loginWithIdentityPreauthorized([[HOPAccount sharedAccount]getAccountPtr], identityDelegatePtr, [identityProviderDomain UTF8String], [identityURI UTF8String], identityToken);
     
     if (identity)
     {
@@ -186,8 +191,12 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     {
         if (inIdentityDelegate && [identityAccessToken length] > 0 && [identityAccessSecret length] > 0 )
         {
+            IIdentity::Token token;
+            token.mID = [identityAccessToken UTF8String];
+            token.mSecret = [identityAccessSecret UTF8String];
+            token.mExpires = boost::posix_time::from_time_t([identityAccessSecretExpires timeIntervalSince1970]);
             boost::shared_ptr<OpenPeerIdentityDelegate> identityDelegatePtr = OpenPeerIdentityDelegate::create(inIdentityDelegate);
-            identityPtr->attachDelegateAndPreauthorizedLogin(identityDelegatePtr, [identityAccessToken UTF8String], [identityAccessSecret UTF8String], boost::posix_time::from_time_t([identityAccessSecretExpires timeIntervalSince1970]));
+            identityPtr->attachDelegateAndPreauthorizedLogin(identityDelegatePtr, token);
         }
         else
         {
