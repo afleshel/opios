@@ -628,11 +628,21 @@
     NSDictionary* inputDictionary = [parser objectWithString: jsonString];
     
     //Check if downloaded JSON is having root object
-    if ([inputDictionary count] > 0 && [inputDictionary objectForKey:@"root"] != nil)
+    if ([inputDictionary count] > 0)
     {
-        ret = [NSMutableDictionary dictionaryWithDictionary:[inputDictionary objectForKey:@"root"]];
-        if (ret)
-            [self createUserAgentFromDictionary:ret];
+        NSString* key = nil;
+        
+        if ([inputDictionary objectForKey:@"root"] != nil)
+            key = @"root";
+        else if ([inputDictionary objectForKey:@"op"] != nil)
+            key = @"op";
+        
+        if ([key length] > 0)
+        {
+            ret = [NSMutableDictionary dictionaryWithDictionary:[inputDictionary objectForKey:@"root"]];
+            if (ret)
+                [self createUserAgentFromDictionary:ret];
+        }
     }
     
     return ret;
