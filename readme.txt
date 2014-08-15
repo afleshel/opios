@@ -1,6 +1,8 @@
 Thank you for downloading Hookflash's Open Peer iOS SDK.
 
-This release is a 1.0.11 release of the SDK and Hookflash will be publishing updates to the SDK regularly.
+Prebuilt sdk version and sample application project you can download from this here: http://openpeer.org/open-peer-sdk-for-ios/
+
+This release is a 1.0.16 release of the SDK and Hookflash will be publishing updates to the SDK regularly.
 
 For a quick introduction to the code please read the following. For more detailed instructions please go to http://docs.hookflash.com.
 
@@ -35,13 +37,11 @@ popd
 
 2) From X-code, load sdk project:
 
-opios/openpeer-ios-sdk.xcodeproj (project/workspace)
+opios/SampleWithSDK.xcworkspace
 
-or sample project with included SDK project
+3) Select OpenPeerSDK scheme and make a build. This will build framework with debug symbols and save it in the opios/ folder. To make a production framework run archiving.
 
-opios/Samples/OpenPeerSampleApp/OpenPeerSampleApp.xcodeproj
-
-3) If you open OpenPeerSampleApp project, it is required to update following files:
+4) After OpenPeerSDK is successfully built, select OpenPeerSampleApp project and update following files:
 
 	CustomerSpecific.plist (this file is added in git.ignore)
 		applicationId = @"<-- insert application ID here (e.g. com.domain.appName) -->";
@@ -78,34 +78,35 @@ opios/Samples/OpenPeerSampleApp/OpenPeerSampleApp.xcodeproj
 	
 	
 
-4) Select HOPSDK > iOS Device (builds only SDK) or OpenPeerSampleApp (builds SDK and sample app) schema and then build
+5) Now you can hit the run on OpenPeerSampleApp scheme
 
-The OpenpeerSDK.framework and OpenpeerDataModel.bundle will be built inside:
-project_derived_data_folder/Build/Products/Debug-iphoneos/		- in debug mode
-project_derived_data_folder/Build/Products/Release-iphoneos/	- in release mode
 
-5) In case you just want to add OpenPeerSDK.framework to your project, beside adding frameworks liste below, it is required to add path to boost.framework that is embed in our framework. (e.g. "path_to_OpenPeerSDK_framework"/OpenPeerSDK.framework/Frameworks/)
+6) In case you just want to add OpenPeerSDK.framework to your project, beside adding frameworks liste below, it is required to add boost and curl libraries and data model bundle OpenpeerDataModel.bundle. Libraries are in OpenPeerSDK.framework/Libraries, and bundle in OpenPeerSDK.framework/Resources
 
 
 Required frameworks:
-CoreAudio
-CoreVideo
-CoreMedia
-CoreData
-CoreGraphics
-CoreImage
-Foundation
-MobileCoreServices
-QuartzCore
-AssetLibrary
-AudioToolbox
-AVFoundation
-Security
-Boost
-UIKIT
-libresolve.dylib
-libz.dylib
-libxml2.dylib
+	CoreAudio.framework
+	CoreVideo.framework
+	CoreMedia.framework
+	CoreImage.framework
+	CoreGraphics.framework
+	AudioToolbox.framework
+	AVFoundation.framework
+	AssetsLibrary.framework
+	MobileCoreServices.framework
+	CFNetwork.framework
+	Foundation.framework
+	Security.framework
+	SystemConfiguration.framework
+	UIKit.framework
+	CoreTelephony.framework
+	AudioToolbox.framework
+	CoreData.framework
+	libresolve.dylib
+	libz.dylib
+	libsqlite3.dylib
+	libstdc++.6.0.9.dylib
+
 
 
 Exploring the dependency libraries:
@@ -175,6 +176,8 @@ HOPStack.h
 HOPTypes.h
 - Place where are defined most of enums used in SDK
 
+HOPUtility.h
+- Exposed some helper methods
 
 Branches:
 
