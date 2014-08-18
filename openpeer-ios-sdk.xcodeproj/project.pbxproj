@@ -1009,9 +1009,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		8792E86716519CFF00DEAC58 /* OpenpeerSDK */ = {
+		8792E86716519CFF00DEAC58 /* OpenPeerSDK */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8792E87616519CFF00DEAC58 /* Build configuration list for PBXNativeTarget "OpenpeerSDK" */;
+			buildConfigurationList = 8792E87616519CFF00DEAC58 /* Build configuration list for PBXNativeTarget "OpenPeerSDK" */;
 			buildPhases = (
 				8792E86416519CFF00DEAC58 /* Sources */,
 				8792E86516519CFF00DEAC58 /* Frameworks */,
@@ -1031,7 +1031,7 @@
 				87C16C3F1979A9B00054A29C /* PBXTargetDependency */,
 				E236EC411930106F009FC1E6 /* PBXTargetDependency */,
 			);
-			name = OpenpeerSDK;
+			name = OpenPeerSDK;
 			productName = "openpeer-ios-sdk";
 			productReference = 8792E86816519CFF00DEAC58 /* libOpenpeerSDK.a */;
 			productType = "com.apple.product-type.library.static";
@@ -1108,7 +1108,7 @@
 			);
 			projectRoot = "";
 			targets = (
-				8792E86716519CFF00DEAC58 /* OpenpeerSDK */,
+				8792E86716519CFF00DEAC58 /* OpenPeerSDK */,
 				87C981F817BE37CE002B947B /* OpenpeerDataModel */,
 				87C9820717BE38A7002B947B /* HOPSDK */,
 			);
@@ -1328,7 +1328,7 @@
 		};
 		87C9820C17BE38B1002B947B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 8792E86716519CFF00DEAC58 /* OpenpeerSDK */;
+			target = 8792E86716519CFF00DEAC58 /* OpenPeerSDK */;
 			targetProxy = 87C9820B17BE38B1002B947B /* PBXContainerItemProxy */;
 		};
 		87C9820E17BE38B1002B947B /* PBXTargetDependency */ = {
@@ -1609,7 +1609,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8792E87616519CFF00DEAC58 /* Build configuration list for PBXNativeTarget "OpenpeerSDK" */ = {
+		8792E87616519CFF00DEAC58 /* Build configuration list for PBXNativeTarget "OpenPeerSDK" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8792E87716519CFF00DEAC58 /* Debug */,

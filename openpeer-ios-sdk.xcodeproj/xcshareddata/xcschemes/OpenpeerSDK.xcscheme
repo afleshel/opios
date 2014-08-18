@@ -16,7 +16,7 @@
                      BuildableIdentifier = "primary"
                      BlueprintIdentifier = "8792E86716519CFF00DEAC58"
                      BuildableName = "libOpenpeerSDK.a"
-                     BlueprintName = "OpenpeerSDK"
+                     BlueprintName = "OpenPeerSDK"
                      ReferencedContainer = "container:openpeer-ios-sdk.xcodeproj">
                   </BuildableReference>
                </EnvironmentBuildable>
@@ -34,7 +34,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8792E86716519CFF00DEAC58"
                BuildableName = "libOpenpeerSDK.a"
-               BlueprintName = "OpenpeerSDK"
+               BlueprintName = "OpenPeerSDK"
                ReferencedContainer = "container:openpeer-ios-sdk.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -84,7 +84,7 @@
                      BuildableIdentifier = "primary"
                      BlueprintIdentifier = "8792E86716519CFF00DEAC58"
                      BuildableName = "libOpenpeerSDK.a"
-                     BlueprintName = "OpenpeerSDK"
+                     BlueprintName = "OpenPeerSDK"
                      ReferencedContainer = "container:openpeer-ios-sdk.xcodeproj">
                   </BuildableReference>
                </EnvironmentBuildable>

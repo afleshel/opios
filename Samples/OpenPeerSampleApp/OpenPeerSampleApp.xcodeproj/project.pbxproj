@@ -201,14 +201,6 @@
 		874B135C1935F96800993F8D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 874B135B1935F96800993F8D /* AudioToolbox.framework */; };
 		874FE10E17FD7FF0007A791B /* AppLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 874FE10D17FD7FF0007A791B /* AppLog.m */; };
 		8754280918C7A2FD007F626F /* CustomerSpecific_Release.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8754280818C7A2FD007F626F /* CustomerSpecific_Release.plist */; };
-		875799E4199BAE1F00887C69 /* OpenpeerSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 875799E3199BAE1F00887C69 /* OpenpeerSDK.framework */; };
-		875799E5199BAE1F00887C69 /* OpenpeerSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 875799E3199BAE1F00887C69 /* OpenpeerSDK.framework */; };
-		875799E8199BAE4200887C69 /* boost.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 875799E6199BAE4200887C69 /* boost.a */; };
-		875799E9199BAE4200887C69 /* boost.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 875799E6199BAE4200887C69 /* boost.a */; };
-		875799EA199BAE4200887C69 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 875799E7199BAE4200887C69 /* libcurl.a */; };
-		875799EB199BAE4200887C69 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 875799E7199BAE4200887C69 /* libcurl.a */; };
-		875799ED199BAE6F00887C69 /* OpenpeerDataModel.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 875799EC199BAE6F00887C69 /* OpenpeerDataModel.bundle */; };
-		875799EE199BAE6F00887C69 /* OpenpeerDataModel.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 875799EC199BAE6F00887C69 /* OpenpeerDataModel.bundle */; };
 		8757E17F1827A0BF00D7BDA1 /* SessionViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = 8757E17E1827A0BF00D7BDA1 /* SessionViewController_iPhone.m */; };
 		8757E1831827A10E00D7BDA1 /* SessionViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8757E1821827A10E00D7BDA1 /* SessionViewController_iPhone.xib */; };
 		8757E1A11827BD2200D7BDA1 /* ContactsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8757E19E1827BD2200D7BDA1 /* ContactsViewController.xib */; };
@@ -261,6 +253,14 @@
 		87A1086A1802C116001F705D /* Logger.m in Sources */ = {isa = PBXBuildFile; fileRef = 87A108691802C116001F705D /* Logger.m */; };
 		87A1086C1802CBDC001F705D /* logger.png in Resources */ = {isa = PBXBuildFile; fileRef = 87A1086B1802CBDC001F705D /* logger.png */; };
 		87A1086E1802CD92001F705D /* logger@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 87A1086D1802CD92001F705D /* logger@2x.png */; };
+		87A1F57F19A26AF60054A6B8 /* boost.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87A1F57D19A26AF60054A6B8 /* boost.a */; };
+		87A1F58019A26AF60054A6B8 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87A1F57E19A26AF60054A6B8 /* libcurl.a */; };
+		87A1F58319A26B370054A6B8 /* OpenpeerDataModel.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 87A1F58219A26B370054A6B8 /* OpenpeerDataModel.bundle */; };
+		87A1F58519A26C130054A6B8 /* OpenPeerSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87A1F58419A26C130054A6B8 /* OpenPeerSDK.framework */; };
+		87A1F58619A26D8F0054A6B8 /* OpenPeerSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87A1F58419A26C130054A6B8 /* OpenPeerSDK.framework */; };
+		87A1F58719A26DAF0054A6B8 /* boost.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87A1F57D19A26AF60054A6B8 /* boost.a */; };
+		87A1F58819A26DAF0054A6B8 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87A1F57E19A26AF60054A6B8 /* libcurl.a */; };
+		87A1F58919A26DB20054A6B8 /* OpenpeerDataModel.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 87A1F58219A26B370054A6B8 /* OpenpeerDataModel.bundle */; };
 		87A73518193D00F700769011 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 874B135B1935F96800993F8D /* AudioToolbox.framework */; };
 		87A73519193D078A00769011 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87D4BDF518683B38008C2D30 /* SystemConfiguration.framework */; };
 		87B541D11897E2440038D427 /* QRScannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D7E9C1897E19A005D8335 /* QRScannerViewController.m */; };
@@ -806,10 +806,6 @@
 		874FE10D17FD7FF0007A791B /* AppLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppLog.m; sourceTree = "<group>"; };
 		874FE11117FD8DA9007A791B /* AppLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppLog.h; sourceTree = "<group>"; };
 		8754280818C7A2FD007F626F /* CustomerSpecific_Release.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CustomerSpecific_Release.plist; sourceTree = "<group>"; };
-		875799E3199BAE1F00887C69 /* OpenpeerSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenpeerSDK.framework; path = ../../OpenpeerSDK.framework; sourceTree = "<group>"; };
-		875799E6199BAE4200887C69 /* boost.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = boost.a; path = ../../OpenpeerSDK.framework/Versions/C/Libraries/boost.a; sourceTree = "<group>"; };
-		875799E7199BAE4200887C69 /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = ../../OpenpeerSDK.framework/Versions/C/Libraries/libcurl.a; sourceTree = "<group>"; };
-		875799EC199BAE6F00887C69 /* OpenpeerDataModel.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = OpenpeerDataModel.bundle; path = ../../../OpenpeerSDK.framework/Versions/C/Resources/OpenpeerDataModel.bundle; sourceTree = "<group>"; };
 		8757E17D1827A0BF00D7BDA1 /* SessionViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SessionViewController_iPhone.h; sourceTree = "<group>"; };
 		8757E17E1827A0BF00D7BDA1 /* SessionViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionViewController_iPhone.m; sourceTree = "<group>"; };
 		8757E1821827A10E00D7BDA1 /* SessionViewController_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SessionViewController_iPhone.xib; sourceTree = "<group>"; };
@@ -862,6 +858,10 @@
 		87A108691802C116001F705D /* Logger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Logger.m; sourceTree = "<group>"; };
 		87A1086B1802CBDC001F705D /* logger.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logger.png; sourceTree = "<group>"; };
 		87A1086D1802CD92001F705D /* logger@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logger@2x.png"; sourceTree = "<group>"; };
+		87A1F57D19A26AF60054A6B8 /* boost.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = boost.a; path = ../../OpenPeerSDK.framework/Versions/C/Libraries/boost.a; sourceTree = SOURCE_ROOT; };
+		87A1F57E19A26AF60054A6B8 /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = ../../OpenPeerSDK.framework/Versions/C/Libraries/libcurl.a; sourceTree = SOURCE_ROOT; };
+		87A1F58219A26B370054A6B8 /* OpenpeerDataModel.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = OpenpeerDataModel.bundle; path = ../../OpenPeerSDK.framework/Versions/C/Resources/OpenpeerDataModel.bundle; sourceTree = SOURCE_ROOT; };
+		87A1F58419A26C130054A6B8 /* OpenPeerSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenPeerSDK.framework; path = ../../OpenPeerSDK.framework; sourceTree = SOURCE_ROOT; };
 		87B5EABE18683E3B00D25C3B /* APNSManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APNSManager.h; sourceTree = "<group>"; };
 		87B5EABF18683E3B00D25C3B /* APNSManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APNSManager.m; sourceTree = "<group>"; };
 		87BFEDB8183A885C00A48821 /* AppConsts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppConsts.m; sourceTree = "<group>"; };
@@ -1004,7 +1004,8 @@
 				0012C552177D11DB0017FF5E /* libz.dylib in Frameworks */,
 				87FF9862170EDAF10017C627 /* libxml2.dylib in Frameworks */,
 				87EE5FE9166E917B002C5FA3 /* libresolv.dylib in Frameworks */,
-				875799EA199BAE4200887C69 /* libcurl.a in Frameworks */,
+				87A1F58519A26C130054A6B8 /* OpenPeerSDK.framework in Frameworks */,
+				87A1F58019A26AF60054A6B8 /* libcurl.a in Frameworks */,
 				87E0FFB417BB8ADD00F30484 /* AddressBook.framework in Frameworks */,
 				87FF988E170EDB5D0017C627 /* AssetsLibrary.framework in Frameworks */,
 				87EE5FF8166E9625002C5FA3 /* AVFoundation.framework in Frameworks */,
@@ -1015,13 +1016,12 @@
 				87FF9892170EDB7D0017C627 /* CoreImage.framework in Frameworks */,
 				8757E1CE1827ED5600D7BDA1 /* CoreText.framework in Frameworks */,
 				87EE5FF5166E9615002C5FA3 /* CoreMedia.framework in Frameworks */,
-				875799E4199BAE1F00887C69 /* OpenpeerSDK.framework in Frameworks */,
 				87A73519193D078A00769011 /* SystemConfiguration.framework in Frameworks */,
 				87EE5FF6166E9615002C5FA3 /* CoreVideo.framework in Frameworks */,
 				8727282F166CBF9B0089CBB6 /* Foundation.framework in Frameworks */,
 				87FF9890170EDB6D0017C627 /* MobileCoreServices.framework in Frameworks */,
 				87448B0517905FFC00E374EE /* QuartzCore.framework in Frameworks */,
-				875799E8199BAE4200887C69 /* boost.a in Frameworks */,
+				87A1F57F19A26AF60054A6B8 /* boost.a in Frameworks */,
 				0024393C178F55BF00B79368 /* Security.framework in Frameworks */,
 				8727282D166CBF9B0089CBB6 /* UIKit.framework in Frameworks */,
 			);
@@ -1036,7 +1036,7 @@
 				87D4BDFC18683B65008C2D30 /* CoreLocation.framework in Frameworks */,
 				87D4BDFA18683B59008C2D30 /* CoreTelephony.framework in Frameworks */,
 				87D4BDF818683B4C008C2D30 /* libsqlite3.dylib in Frameworks */,
-				875799EB199BAE4200887C69 /* libcurl.a in Frameworks */,
+				87A1F58819A26DAF0054A6B8 /* libcurl.a in Frameworks */,
 				87D4BDF618683B39008C2D30 /* SystemConfiguration.framework in Frameworks */,
 				87D4BDF418683B16008C2D30 /* CFNetwork.framework in Frameworks */,
 				87D4BD1618675368008C2D30 /* libz.dylib in Frameworks */,
@@ -1045,11 +1045,11 @@
 				87D4BD1918675368008C2D30 /* AddressBook.framework in Frameworks */,
 				87D4BD1A18675368008C2D30 /* AssetsLibrary.framework in Frameworks */,
 				87D4BD1C18675368008C2D30 /* AVFoundation.framework in Frameworks */,
+				87A1F58619A26D8F0054A6B8 /* OpenPeerSDK.framework in Frameworks */,
 				87D4BD1E18675368008C2D30 /* CoreAudio.framework in Frameworks */,
 				87D4BECA18683C0D008C2D30 /* libUAirship-3.0.2.a in Frameworks */,
 				87D4BD1F18675368008C2D30 /* CoreData.framework in Frameworks */,
 				87D4BD2018675368008C2D30 /* CoreGraphics.framework in Frameworks */,
-				875799E5199BAE1F00887C69 /* OpenpeerSDK.framework in Frameworks */,
 				87D4BD2118675368008C2D30 /* CoreImage.framework in Frameworks */,
 				874B135C1935F96800993F8D /* AudioToolbox.framework in Frameworks */,
 				87D4BD2218675368008C2D30 /* CoreText.framework in Frameworks */,
@@ -1060,7 +1060,7 @@
 				87D4BD2818675368008C2D30 /* QuartzCore.framework in Frameworks */,
 				87D4BD2918675368008C2D30 /* Security.framework in Frameworks */,
 				87D4BD2A18675368008C2D30 /* UIKit.framework in Frameworks */,
-				875799E9199BAE4200887C69 /* boost.a in Frameworks */,
+				87A1F58719A26DAF0054A6B8 /* boost.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1357,9 +1357,9 @@
 		8727282B166CBF9B0089CBB6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				875799E6199BAE4200887C69 /* boost.a */,
-				875799E7199BAE4200887C69 /* libcurl.a */,
-				875799E3199BAE1F00887C69 /* OpenpeerSDK.framework */,
+				87A1F58419A26C130054A6B8 /* OpenPeerSDK.framework */,
+				87A1F57D19A26AF60054A6B8 /* boost.a */,
+				87A1F57E19A26AF60054A6B8 /* libcurl.a */,
 				874B135B1935F96800993F8D /* AudioToolbox.framework */,
 				8770C34218BB7ABB006F28F0 /* libstdc++.6.0.9.dylib */,
 				8774AC4A1897E2F2006B91FA /* ImageIO.framework */,
@@ -1411,7 +1411,7 @@
 		87272833166CBF9B0089CBB6 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				875799EC199BAE6F00887C69 /* OpenpeerDataModel.bundle */,
+				87A1F58219A26B370054A6B8 /* OpenpeerDataModel.bundle */,
 				878E880B19105076000DAA8A /* OpenPeerSampleAPNSApp-Info.plist */,
 				876CD4C818A38B370069C296 /* CustomerSpecific.plist */,
 				8754280818C7A2FD007F626F /* CustomerSpecific_Release.plist */,
@@ -1936,7 +1936,7 @@
 				8730D7AD1833A63D008D1D37 /* iPhone_loader_00001.png in Resources */,
 				8722474C182D15750027DA50 /* iPhone_menu_grid_background.png in Resources */,
 				8722475C182D165A0027DA50 /* audio-call-speaker-active@2x.png in Resources */,
-				875799ED199BAE6F00887C69 /* OpenpeerDataModel.bundle in Resources */,
+				87A1F58319A26B370054A6B8 /* OpenpeerDataModel.bundle in Resources */,
 				8730D7D11833A63D008D1D37 /* iPhone_loader_00019.png in Resources */,
 				87224759182D165A0027DA50 /* audio-call-mic-active@2x.png in Resources */,
 				8730D7C81833A63D008D1D37 /* iPhone_loader_00014@2x.png in Resources */,
@@ -2127,7 +2127,7 @@
 				87D4BDC018675368008C2D30 /* iPhone_loader_00001.png in Resources */,
 				87D4BDC118675368008C2D30 /* iPhone_menu_grid_background.png in Resources */,
 				87D7EF5E19785CDC003B1746 /* iPhone_tabBar_favorites_active.png in Resources */,
-				875799EE199BAE6F00887C69 /* OpenpeerDataModel.bundle in Resources */,
+				87A1F58919A26DB20054A6B8 /* OpenpeerDataModel.bundle in Resources */,
 				87D4BDC218675368008C2D30 /* audio-call-speaker-active@2x.png in Resources */,
 				87D4BDC318675368008C2D30 /* iPhone_loader_00019.png in Resources */,
 				87D4BDC418675368008C2D30 /* audio-call-mic-active@2x.png in Resources */,
@@ -2318,7 +2318,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = ./;
+				FRAMEWORK_SEARCH_PATHS = ../../;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
@@ -2333,11 +2333,13 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"\"$(SDK_DIR)\"/usr/include/libxml2",
-					"../../libs/ZXingObjC/**",
-					./OpenpeerSDK.framework/Headers,
+					../../OpenPeerSDK.framework/Headers,
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = (
+					../../OpenpeerSDK.framework/Libraries,
+					"$(SDKROOT)/usr/lib/system",
+				);
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
@@ -2353,7 +2355,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
-				FRAMEWORK_SEARCH_PATHS = ./;
+				FRAMEWORK_SEARCH_PATHS = ../../;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
@@ -2362,11 +2364,13 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"\"$(SDK_DIR)\"/usr/include/libxml2",
-					"../../libs/ZXingObjC/**",
-					./OpenpeerSDK.framework/Headers,
+					../../OpenPeerSDK.framework/Headers,
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = (
+					../../OpenpeerSDK.framework/Libraries,
+					"$(SDKROOT)/usr/lib/system",
+				);
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -2380,23 +2384,14 @@
 				CODE_SIGN_ENTITLEMENTS = OpenPeerSampleApp/OpenPeerSampleApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(PROJECT_DIR)",
-					/Users/Sergej/Repos/GitHUB/docPreparation/opios,
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_ENABLE_CPP_RTTI = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OpenPeerSampleApp/OpenPeerSampleApp-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "OpenPeerSampleApp/OpenPeerSampleApp-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SDKROOT)/usr/lib/system",
-					"$(CONFIGURATION_BUILD_DIR)/OpenpeerSDK.framework/Libraries",
-					"$(PROJECT_DIR)/OpenpeerSDK.framework/Versions/C/Libraries",
-					/Users/Sergej/Repos/GitHUB/docPreparation/opios/OpenpeerSDK.framework/Versions/C/Libraries,
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
@@ -2427,26 +2422,14 @@
 				CODE_SIGN_ENTITLEMENTS = OpenPeerSampleApp/OpenPeerSampleApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(PROJECT_DIR)",
-					/Users/Sergej/Repos/GitHUB/docPreparation/opios,
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_ENABLE_CPP_RTTI = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OpenPeerSampleApp/OpenPeerSampleApp-Prefix.pch";
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts\"",
-				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "OpenPeerSampleApp/OpenPeerSampleApp-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SDKROOT)/usr/lib/system",
-					"$(CONFIGURATION_BUILD_DIR)/OpenpeerSDK.framework/Libraries",
-					"$(PROJECT_DIR)/OpenpeerSDK.framework/Versions/C/Libraries",
-					/Users/Sergej/Repos/GitHUB/docPreparation/opios/OpenpeerSDK.framework/Versions/C/Libraries,
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
@@ -2477,11 +2460,7 @@
 				CODE_SIGN_ENTITLEMENTS = openpeersample.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Sergej Jovanovic (YGZ7PTJK96)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-					/Users/Sergej/Repos/GitHUB/docPreparation/opios,
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_ENABLE_CPP_RTTI = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OpenPeerSampleApp/OpenPeerSampleApp-Prefix.pch";
@@ -2495,11 +2474,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SDKROOT)/usr/lib/system",
 					./3rdParties/Airship/,
-					"$(CONFIGURATION_BUILD_DIR)/OpenpeerSDK.framework/Libraries",
-					"$(PROJECT_DIR)/OpenpeerSDK.framework/Versions/C/Libraries",
-					/Users/Sergej/Repos/GitHUB/docPreparation/opios/OpenpeerSDK.framework/Versions/C/Libraries,
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "";
@@ -2532,28 +2507,17 @@
 				CODE_SIGN_ENTITLEMENTS = openpeersample.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Sergej Jovanovic (YGZ7PTJK96)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-					/Users/Sergej/Repos/GitHUB/docPreparation/opios,
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_ENABLE_CPP_RTTI = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OpenPeerSampleApp/OpenPeerSampleApp-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "APNS_ENABLED=1";
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts\"",
-				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "OpenPeerSampleApp/OpenPeerSampleAPNSApp-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SDKROOT)/usr/lib/system",
 					./3rdParties/Airship/,
-					"$(CONFIGURATION_BUILD_DIR)/OpenpeerSDK.framework/Libraries",
-					"$(PROJECT_DIR)/OpenpeerSDK.framework/Versions/C/Libraries",
-					/Users/Sergej/Repos/GitHUB/docPreparation/opios/OpenpeerSDK.framework/Versions/C/Libraries,
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CPLUSPLUSFLAGS = (
