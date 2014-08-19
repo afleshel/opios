@@ -382,7 +382,7 @@
 		876D1F771823BD120024D30C /* HOPUtility.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HOPUtility.mm; sourceTree = "<group>"; };
 		8783858F17A84FAA003C6EEA /* HOPRolodexContact+External.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HOPRolodexContact+External.h"; sourceTree = "<group>"; };
 		8783859017A84FAA003C6EEA /* HOPRolodexContact+External.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "HOPRolodexContact+External.mm"; sourceTree = "<group>"; };
-		8792E86816519CFF00DEAC58 /* libOpenpeerSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libOpenpeerSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		8792E86816519CFF00DEAC58 /* libOpenPeerSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libOpenPeerSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8792E86B16519CFF00DEAC58 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		8792E86F16519CFF00DEAC58 /* openpeer-ios-sdk-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "openpeer-ios-sdk-Prefix.pch"; sourceTree = "<group>"; };
 		8792E8F41651A04800DEAC58 /* zsLib_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = zsLib_ios.xcodeproj; path = "libs/op/libs/ortc-lib/libs/zsLib/projects/xcode/zsLib_ios/zsLib_ios.xcodeproj"; sourceTree = SOURCE_ROOT; };
@@ -714,7 +714,7 @@
 		8792E86916519CFF00DEAC58 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8792E86816519CFF00DEAC58 /* libOpenpeerSDK.a */,
+				8792E86816519CFF00DEAC58 /* libOpenPeerSDK.a */,
 				87C981F917BE37CF002B947B /* OpenpeerDataModel.bundle */,
 			);
 			name = Products;
@@ -1033,7 +1033,7 @@
 			);
 			name = OpenPeerSDK;
 			productName = "openpeer-ios-sdk";
-			productReference = 8792E86816519CFF00DEAC58 /* libOpenpeerSDK.a */;
+			productReference = 8792E86816519CFF00DEAC58 /* libOpenPeerSDK.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		87C981F817BE37CE002B947B /* OpenpeerDataModel */ = {
