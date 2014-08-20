@@ -65,6 +65,44 @@
     applicationLogerLevel = [[Settings sharedSettings] getLoggerLevelForAppModuleKey:moduleApplication];
 }
 
++ (void) setAllLogLevelsToNone
+{
+    //For each system you can choose log level from HOPClientLogLevelNone (turned off) to HOPClientLogLevelInsane (most detail).
+    [HOPLogger setLogLevelbyName:moduleApplication level:HOPLoggerLevelNone];
+    [HOPLogger setLogLevelbyName:moduleServices level:HOPLoggerLevelNone];
+    [HOPLogger setLogLevelbyName:moduleServicesWire level:HOPLoggerLevelNone];
+    [HOPLogger setLogLevelbyName:moduleServicesIce level:HOPLoggerLevelNone];
+    [HOPLogger setLogLevelbyName:moduleServicesTurn level:HOPLoggerLevelNone];
+    [HOPLogger setLogLevelbyName:moduleServicesRudp level:HOPLoggerLevelNone];
+    [HOPLogger setLogLevelbyName:moduleServicesHttp level:HOPLoggerLevelNone];
+    [HOPLogger setLogLevelbyName:moduleServicesMls level:HOPLoggerLevelNone];
+    [HOPLogger setLogLevelbyName:moduleServicesTcp level:HOPLoggerLevelNone];
+    [HOPLogger setLogLevelbyName:moduleServicesTransport level:HOPLoggerLevelNone];
+    [HOPLogger setLogLevelbyName:moduleCore level:HOPLoggerLevelNone];
+    [HOPLogger setLogLevelbyName:moduleStackMessage level:HOPLoggerLevelNone];
+    [HOPLogger setLogLevelbyName:moduleStack level:HOPLoggerLevelNone];
+    [HOPLogger setLogLevelbyName:moduleWebRTC level:HOPLoggerLevelNone];
+    [HOPLogger setLogLevelbyName:moduleZsLib level:HOPLoggerLevelNone];
+    [HOPLogger setLogLevelbyName:moduleZsLibSocket level:HOPLoggerLevelNone];
+    [HOPLogger setLogLevelbyName:moduleSDK level:HOPLoggerLevelNone];
+    [HOPLogger setLogLevelbyName:moduleMedia level:HOPLoggerLevelNone];
+    [HOPLogger setLogLevelbyName:moduleJavaScript level:HOPLoggerLevelNone];
+    
+    applicationLogerLevel = HOPLoggerLevelNone;
+}
+
++ (void) startAll:(BOOL) start
+{
+    if (start)
+    {
+        [self startAllSelectedLoggers];
+    }
+    else
+    {
+        [self setAllLogLevelsToNone];
+        [HOPLogger uninstallStdOutLogger];
+    }
+}
 
 + (void) startStdLogger:(BOOL) start
 {
@@ -116,10 +154,13 @@
 
 + (void) startAllSelectedLoggers
 {
-    [self setLogLevels];
-    [self start:[[Settings sharedSettings] isLoggerEnabled:LOGGER_STD_OUT] logger:LOGGER_STD_OUT];
-    [self start:[[Settings sharedSettings] isLoggerEnabled:LOGGER_TELNET] logger:LOGGER_TELNET];
-    [self start:[[Settings sharedSettings] isLoggerEnabled:LOGGER_OUTGOING_TELNET] logger:LOGGER_OUTGOING_TELNET];
+    if ([[Settings sharedSettings] isLoggerEnabled:LOGGER_ENABLED])
+    {
+        [self setLogLevels];
+        [self start:[[Settings sharedSettings] isLoggerEnabled:LOGGER_STD_OUT] logger:LOGGER_STD_OUT];
+        [self start:[[Settings sharedSettings] isLoggerEnabled:LOGGER_TELNET] logger:LOGGER_TELNET];
+        [self start:[[Settings sharedSettings] isLoggerEnabled:LOGGER_OUTGOING_TELNET] logger:LOGGER_OUTGOING_TELNET];
+    }
 }
 
 
@@ -127,6 +168,10 @@
 {
     switch (type)
     {
+        case LOGGER_ENABLED:
+            [self startAll:start];
+            break;
+            
         case LOGGER_STD_OUT:
             [self startStdLogger:start];
             break;

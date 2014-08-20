@@ -151,6 +151,10 @@
     
     switch (type)
     {
+        case LOGGER_ENABLED:
+            key = settingsKeyEnabledLogger;
+            break;
+            
         case LOGGER_STD_OUT:
             key = settingsKeyStdOutLogger;
             break;
@@ -515,6 +519,7 @@
     [self setColorizedOutput:YES logger:LOGGER_TELNET];
     [self setColorizedOutput:YES logger:LOGGER_OUTGOING_TELNET];
     
+    [self enable:YES logger:LOGGER_ENABLED];
     [self enable:YES logger:LOGGER_STD_OUT];
     [self enable:YES logger:LOGGER_TELNET];
     [self enable:YES logger:LOGGER_OUTGOING_TELNET];

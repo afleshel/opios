@@ -35,6 +35,7 @@
 
 typedef enum
 {
+    LOGGER_ENABLED,
     LOGGER_STD_OUT,
     LOGGER_TELNET,
     LOGGER_OUTGOING_TELNET
