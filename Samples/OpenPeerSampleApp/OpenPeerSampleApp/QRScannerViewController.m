@@ -131,6 +131,7 @@
             else
             {
                 self.buttonCancel.hidden = YES;
+                self.buttonLogger.hidden = NO;
                 UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Invalid login settings!"
                                                                     message:@"Please, scan another QR code or proceed with already set login settings"
                                                                    delegate:nil
@@ -149,6 +150,9 @@
 }
 - (IBAction)actionReadQRCode:(id)sender
 {
+    self.buttonCancel.hidden = NO;
+    self.buttonLogger.hidden = YES;
+    
     self.session = [[AVCaptureSession alloc] init];
     AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
     NSError *error = nil;
@@ -174,6 +178,8 @@
     self.previewLayer.bounds = self.view.bounds;
     self.previewLayer.position = CGPointMake(CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds));
     [self.view.layer addSublayer:self.previewLayer];
+    
+    [self.view bringSubviewToFront:self.buttonCancel];
 }
 
 - (void)captureOutput:(AVCaptureOutput *)captureOutput
@@ -239,6 +245,7 @@ didOutputMetadataObjects:(NSArray *)metadataObjects
 - (IBAction)actionCancelScan:(id)sender
 {
     self.buttonCancel.hidden = YES;
+    self.buttonLogger.hidden = NO;
     [self.session stopRunning];
     [self.previewLayer removeFromSuperlayer];
 }
