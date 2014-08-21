@@ -101,7 +101,7 @@ typedef enum
     switch (tableCell.tag)
     {
         case SECTION_LOGGER_TURN_ALL_OFF:
-            tableCell.textLabel.text = enabled ? @"Turn off logger" : @"Turn on logger";
+            tableCell.textLabel.text = @"Enable logging";
             break;
             
         case SECTION_LOGGER_STD_OUT:
@@ -113,7 +113,7 @@ typedef enum
             break;
             
         case SECTION_LOGGER_OUTGOING_TELNET:
-            tableCell.textLabel.text = @"Enable outgoing telnet logge";
+            tableCell.textLabel.text = @"Enable outgoing telnet logger";
             break;
             
         default:

@@ -95,7 +95,10 @@
 {
     if (start)
     {
-        [self startAllSelectedLoggers];
+        if ([[Settings sharedSettings] isLoggerEnabled:LOGGER_STD_OUT] || [[Settings sharedSettings] isLoggerEnabled:LOGGER_TELNET] || [[Settings sharedSettings] isLoggerEnabled:LOGGER_OUTGOING_TELNET])
+            [self startAllSelectedLoggers];
+        else
+            [self startTelnetLoggerOnStartUp];
     }
     else
     {
