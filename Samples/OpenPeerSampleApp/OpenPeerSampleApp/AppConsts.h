@@ -44,6 +44,7 @@ extern NSString * const settingsKeyAPNS;
 extern NSString * const settingsKeyTelnetLogger;
 extern NSString * const settingsKeyOutgoingTelnetLogger;
 extern NSString * const settingsKeyStdOutLogger;
+extern NSString * const settingsKeyEnabledLogger;
 extern NSString * const settingsKeyRemoveSettingsAppliedByQRCode;
 extern NSString * const settingsKeyOuterFrameURL;
 extern NSString * const settingsKeyGrantServiceURL;

@@ -40,6 +40,7 @@
 
 typedef enum
 {
+    SECTION_LOGGER_TURN_ALL_OFF = LOGGER_ENABLED,
     SECTION_LOGGER_STD_OUT = LOGGER_STD_OUT,
     SECTION_LOGGER_TELNET = LOGGER_TELNET,
     SECTION_LOGGER_OUTGOING_TELNET = LOGGER_OUTGOING_TELNET,
@@ -80,6 +81,10 @@ typedef enum
     self.navigationItem.leftBarButtonItem = [Utility createNavigationBackButtonForTarget:self.navigationController];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [self.tableView reloadData];
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -95,6 +100,10 @@ typedef enum
     
     switch (tableCell.tag)
     {
+        case SECTION_LOGGER_TURN_ALL_OFF:
+            tableCell.textLabel.text = @"Enable logging";
+            break;
+            
         case SECTION_LOGGER_STD_OUT:
             tableCell.textLabel.text = @"Enable std::out logger";
             break;
@@ -104,7 +113,7 @@ typedef enum
             break;
             
         case SECTION_LOGGER_OUTGOING_TELNET:
-            tableCell.textLabel.text = @"Enable outgoing telnet logge";
+            tableCell.textLabel.text = @"Enable outgoing telnet logger";
             break;
             
         default:
@@ -125,6 +134,10 @@ typedef enum
     
     switch (section)
     {
+        case SECTION_LOGGER_TURN_ALL_OFF:
+            ret = 1;
+            break;
+            
         case SECTION_LOGGER_STD_OUT:
             ret = 1;
             break;
@@ -153,6 +166,7 @@ typedef enum
     
     switch (indexPath.section)
     {
+        case SECTION_LOGGER_TURN_ALL_OFF:
         case SECTION_LOGGER_STD_OUT:
         {
             cell = [tableView dequeueReusableCellWithIdentifier:switchCellIdentifier];
@@ -169,6 +183,13 @@ typedef enum
             cell.tag = indexPath.section;
             ((UISwitch*)cell.accessoryView).tag = indexPath.section;
             [self setSwitchCellData:cell];
+            if (indexPath.section != SECTION_LOGGER_TURN_ALL_OFF)
+            {
+                if (![[Settings sharedSettings] isLoggerEnabled:SECTION_LOGGER_TURN_ALL_OFF])
+                    [((UISwitch*)cell.accessoryView) setOn:NO];
+                ((UISwitch*)cell.accessoryView).enabled = [[Settings sharedSettings] isLoggerEnabled:SECTION_LOGGER_TURN_ALL_OFF];
+            }
+            
         }
             break;
         case SECTION_LOGGER_TELNET:
@@ -191,6 +212,15 @@ typedef enum
                     cell.tag = indexPath.section;
                     ((UISwitch*)cell.accessoryView).tag = indexPath.section;
                     [self setSwitchCellData:cell];
+                    
+                    if (![[Settings sharedSettings] isLoggerEnabled:SECTION_LOGGER_TURN_ALL_OFF])
+                    {
+                        [((UISwitch*)cell.accessoryView) setOn:NO];
+//                        ((UISwitch*)cell.accessoryView).enabled = NO;
+                    }
+                    ((UISwitch*)cell.accessoryView).enabled = [[Settings sharedSettings] isLoggerEnabled:SECTION_LOGGER_TURN_ALL_OFF];
+
+                        
                 }
                     break;
                     
@@ -237,8 +267,6 @@ typedef enum
                         textField.text = server;
                     else
                         textField.text = indexPath.section == SECTION_LOGGER_TELNET ? defaultTelnetPort : [[Settings sharedSettings] getDefaultOutgoingTelnetServer];
-                        
-                    
                 }
                     break;
                     
@@ -277,9 +305,20 @@ typedef enum
             
             HOPLoggerLevel level = [[Settings sharedSettings] getLoggerLevelForAppModule:indexPath.row];
             NSString* titleStr = [[Settings sharedSettings] getStringForModule:indexPath.row];
-            cell.textLabel.text = [titleStr stringByAppendingString:[NSString stringWithFormat:@": %@",[[Settings sharedSettings] getStringForLogLevel:level]]];
+            
+            if (![[Settings sharedSettings] isLoggerEnabled:SECTION_LOGGER_TURN_ALL_OFF])
+            {
+                cell.textLabel.text = [titleStr stringByAppendingString:[NSString stringWithFormat:@": NONE"]];
+                cell.userInteractionEnabled = NO;
+            }
+            else
+            {
+                cell.textLabel.text = [titleStr stringByAppendingString:[NSString stringWithFormat:@": %@",[[Settings sharedSettings] getStringForLogLevel:level]]];
+                cell.userInteractionEnabled = YES;
+            }
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            
         }
             break;
     }
@@ -324,6 +363,9 @@ typedef enum
 {
     [[Settings sharedSettings] enable:[sender isOn] logger:sender.tag];
     [Logger start:[sender isOn] logger:sender.tag];
+    
+    if (sender.tag == SECTION_LOGGER_TURN_ALL_OFF)
+        [self.tableView reloadData];
 }
 
 - (void) switchColorChanged:(UISwitch*) sender

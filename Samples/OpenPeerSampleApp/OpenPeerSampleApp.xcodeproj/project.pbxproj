@@ -35,7 +35,6 @@
 		8713363B17CCBD6F008C91F7 /* iPhone_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8713363817CCBD6F008C91F7 /* iPhone_background@2x.png */; };
 		8713363E17CCC10B008C91F7 /* iPhone_blue_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8713363C17CCC10B008C91F7 /* iPhone_blue_button@2x.png */; };
 		8713363F17CCC10B008C91F7 /* iPhone_blue_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 8713363D17CCC10B008C91F7 /* iPhone_blue_button.png */; };
-		871952AD18E3521500E15F2A /* readme.txt in Resources */ = {isa = PBXBuildFile; fileRef = 871952AC18E3521500E15F2A /* readme.txt */; };
 		8719AB0117CE0523007E991B /* tableViewCell@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8719AAFF17CE0523007E991B /* tableViewCell@2x.png */; };
 		8719AB0217CE0523007E991B /* tableViewCell.png in Resources */ = {isa = PBXBuildFile; fileRef = 8719AB0017CE0523007E991B /* tableViewCell.png */; };
 		8719AB0717CE0710007E991B /* tableViewCell_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8719AB0517CE0710007E991B /* tableViewCell_selected@2x.png */; };
@@ -183,7 +182,6 @@
 		8730D7E21833A63D008D1D37 /* iPhone_loader_00027@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8730D7A81833A63D008D1D37 /* iPhone_loader_00027@2x.png */; };
 		8730D7E31833A63D008D1D37 /* iPhone_loader_00028.png in Resources */ = {isa = PBXBuildFile; fileRef = 8730D7A91833A63D008D1D37 /* iPhone_loader_00028.png */; };
 		8730D7E41833A63D008D1D37 /* iPhone_loader_00028@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8730D7AA1833A63D008D1D37 /* iPhone_loader_00028@2x.png */; };
-		8731272218C670AD00507144 /* Template_CustomerSpecific_Release.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8731272118C670AD00507144 /* Template_CustomerSpecific_Release.plist */; };
 		87355FE517CCA7E3006151E7 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 87355FE417CCA7E3006151E7 /* Default.png */; };
 		87355FE917CCA8AF006151E7 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 87355FE817CCA8AF006151E7 /* Default@2x.png */; };
 		873D174318CD31E100FD88C3 /* HTTPDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 879DC66118CA0F1C00DA60C0 /* HTTPDownloader.m */; };
@@ -194,8 +192,6 @@
 		874408D5182FFE43004AD8FC /* video_indicator_white_big.png in Resources */ = {isa = PBXBuildFile; fileRef = 874408D3182FFE43004AD8FC /* video_indicator_white_big.png */; };
 		87448B0517905FFC00E374EE /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87448B0417905FFC00E374EE /* QuartzCore.framework */; };
 		8746093418AD687E002F7DC8 /* CustomerSpecific.plist in Resources */ = {isa = PBXBuildFile; fileRef = 876CD4C818A38B370069C296 /* CustomerSpecific.plist */; };
-		8746093518AD6CB1002F7DC8 /* boost.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87796E8318A8DDA7002F4B43 /* boost.a */; };
-		8746093618AD6CB1002F7DC8 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87796E8418A8DDA7002F4B43 /* libcurl.a */; };
 		874AD9D1166CE6540095FE33 /* AccountDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 874AD9D0166CE6540095FE33 /* AccountDelegate.m */; };
 		874AD9D5166CEAFB0095FE33 /* StackDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 874AD9D4166CEAFB0095FE33 /* StackDelegate.m */; };
 		874AD9D8166CEB390095FE33 /* MediaEngineDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 874AD9D7166CEB390095FE33 /* MediaEngineDelegate.m */; };
@@ -205,7 +201,6 @@
 		874B135C1935F96800993F8D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 874B135B1935F96800993F8D /* AudioToolbox.framework */; };
 		874FE10E17FD7FF0007A791B /* AppLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 874FE10D17FD7FF0007A791B /* AppLog.m */; };
 		8754280918C7A2FD007F626F /* CustomerSpecific_Release.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8754280818C7A2FD007F626F /* CustomerSpecific_Release.plist */; };
-		87570E46172ED183006E1C2F /* OpenpeerSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87570E45172ED183006E1C2F /* OpenpeerSDK.framework */; };
 		8757E17F1827A0BF00D7BDA1 /* SessionViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = 8757E17E1827A0BF00D7BDA1 /* SessionViewController_iPhone.m */; };
 		8757E1831827A10E00D7BDA1 /* SessionViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8757E1821827A10E00D7BDA1 /* SessionViewController_iPhone.xib */; };
 		8757E1A11827BD2200D7BDA1 /* ContactsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8757E19E1827BD2200D7BDA1 /* ContactsViewController.xib */; };
@@ -226,22 +221,15 @@
 		8758C5F41978454800CB8099 /* iPhone_tabBar_favorites_inactive@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8758C5F01978454800CB8099 /* iPhone_tabBar_favorites_inactive@2x.png */; };
 		875CD7E2167A14810037396B /* SessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 875CD7E1167A14810037396B /* SessionManager.m */; };
 		875CD7E5167A14960037396B /* Session.m in Sources */ = {isa = PBXBuildFile; fileRef = 875CD7E4167A14960037396B /* Session.m */; };
-		8766DB6719083F7E004D7264 /* OpenpeerDataModel.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8766DB6619083F7E004D7264 /* OpenpeerDataModel.bundle */; };
-		8766DB6819083F83004D7264 /* OpenpeerDataModel.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8766DB6619083F7E004D7264 /* OpenpeerDataModel.bundle */; };
 		876CBCBB16F20A88004D542B /* IdentityDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 876CBCBA16F20A88004D542B /* IdentityDelegate.m */; };
-		876CD4C718A385900069C296 /* Template_CustomerSpecific.plist in Resources */ = {isa = PBXBuildFile; fileRef = 876CD4C618A385900069C296 /* Template_CustomerSpecific.plist */; };
 		876CD4C918A38B370069C296 /* CustomerSpecific.plist in Resources */ = {isa = PBXBuildFile; fileRef = 876CD4C818A38B370069C296 /* CustomerSpecific.plist */; };
 		876CD4CA18A3BAFA0069C296 /* DefaultSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 877038E518A24774000B7AA1 /* DefaultSettings.plist */; };
-		876CD4CB18A3BB000069C296 /* Template_CustomerSpecific.plist in Resources */ = {isa = PBXBuildFile; fileRef = 876CD4C618A385900069C296 /* Template_CustomerSpecific.plist */; };
 		877038E618A24774000B7AA1 /* DefaultSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 877038E518A24774000B7AA1 /* DefaultSettings.plist */; };
 		8770C34318BB7ABB006F28F0 /* libstdc++.6.0.9.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8770C34218BB7ABB006F28F0 /* libstdc++.6.0.9.dylib */; };
 		8770C34B18BB903A006F28F0 /* libstdc++.6.0.9.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8770C34218BB7ABB006F28F0 /* libstdc++.6.0.9.dylib */; };
 		8774AC4B1897E2F2006B91FA /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8774AC4A1897E2F2006B91FA /* ImageIO.framework */; };
 		8774AC4E1897E305006B91FA /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8774AC4A1897E2F2006B91FA /* ImageIO.framework */; };
 		8774AC6518981094006B91FA /* QRScannerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 872D7E9D1897E19A005D8335 /* QRScannerViewController.xib */; };
-		8774AC7B18992D86006B91FA /* libZXingObjC-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8774AC7018992D5A006B91FA /* libZXingObjC-iOS.a */; };
-		87796E8518A8DDA7002F4B43 /* boost.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87796E8318A8DDA7002F4B43 /* boost.a */; };
-		87796E8618A8DDA7002F4B43 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87796E8418A8DDA7002F4B43 /* libcurl.a */; };
 		8781C572196C86740030E113 /* table_footer@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8781C56D196C86740030E113 /* table_footer@2x.png */; };
 		8781C573196C86740030E113 /* table_footer@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8781C56D196C86740030E113 /* table_footer@2x.png */; };
 		8781C574196C86740030E113 /* table_cell_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8781C56E196C86740030E113 /* table_cell_background@2x.png */; };
@@ -261,11 +249,18 @@
 		8799239F1917C85500FBD21E /* UIDevice+Networking.m in Sources */ = {isa = PBXBuildFile; fileRef = 8799239D1917C85500FBD21E /* UIDevice+Networking.m */; };
 		879D7B9717FB1224008C78E2 /* LoggerSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 879D7B9617FB1224008C78E2 /* LoggerSettingsViewController.m */; };
 		879DC5F418C92FE800DA60C0 /* BackgroundingDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 87CCF64318C0FFDB000DF636 /* BackgroundingDelegate.m */; };
-		879DC62A18C9F77400DA60C0 /* Template_CustomerSpecific_Release.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8731272118C670AD00507144 /* Template_CustomerSpecific_Release.plist */; };
 		879DC66218CA0F1C00DA60C0 /* HTTPDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 879DC66118CA0F1C00DA60C0 /* HTTPDownloader.m */; };
 		87A1086A1802C116001F705D /* Logger.m in Sources */ = {isa = PBXBuildFile; fileRef = 87A108691802C116001F705D /* Logger.m */; };
 		87A1086C1802CBDC001F705D /* logger.png in Resources */ = {isa = PBXBuildFile; fileRef = 87A1086B1802CBDC001F705D /* logger.png */; };
 		87A1086E1802CD92001F705D /* logger@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 87A1086D1802CD92001F705D /* logger@2x.png */; };
+		87A1F57F19A26AF60054A6B8 /* boost.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87A1F57D19A26AF60054A6B8 /* boost.a */; };
+		87A1F58019A26AF60054A6B8 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87A1F57E19A26AF60054A6B8 /* libcurl.a */; };
+		87A1F58319A26B370054A6B8 /* OpenpeerDataModel.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 87A1F58219A26B370054A6B8 /* OpenpeerDataModel.bundle */; };
+		87A1F58519A26C130054A6B8 /* OpenPeerSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87A1F58419A26C130054A6B8 /* OpenPeerSDK.framework */; };
+		87A1F58619A26D8F0054A6B8 /* OpenPeerSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87A1F58419A26C130054A6B8 /* OpenPeerSDK.framework */; };
+		87A1F58719A26DAF0054A6B8 /* boost.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87A1F57D19A26AF60054A6B8 /* boost.a */; };
+		87A1F58819A26DAF0054A6B8 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87A1F57E19A26AF60054A6B8 /* libcurl.a */; };
+		87A1F58919A26DB20054A6B8 /* OpenpeerDataModel.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 87A1F58219A26B370054A6B8 /* OpenpeerDataModel.bundle */; };
 		87A73518193D00F700769011 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 874B135B1935F96800993F8D /* AudioToolbox.framework */; };
 		87A73519193D078A00769011 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87D4BDF518683B38008C2D30 /* SystemConfiguration.framework */; };
 		87B541D11897E2440038D427 /* QRScannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D7E9C1897E19A005D8335 /* QRScannerViewController.m */; };
@@ -344,7 +339,6 @@
 		87D4BD2418675368008C2D30 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 874ADDB6166E13910095FE33 /* CoreVideo.framework */; };
 		87D4BD2518675368008C2D30 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8727282E166CBF9B0089CBB6 /* Foundation.framework */; };
 		87D4BD2618675368008C2D30 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87FF988F170EDB6C0017C627 /* MobileCoreServices.framework */; };
-		87D4BD2718675368008C2D30 /* OpenpeerSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87570E45172ED183006E1C2F /* OpenpeerSDK.framework */; };
 		87D4BD2818675368008C2D30 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87448B0417905FFC00E374EE /* QuartzCore.framework */; };
 		87D4BD2918675368008C2D30 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0024393B178F55BF00B79368 /* Security.framework */; };
 		87D4BD2A18675368008C2D30 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8727282C166CBF9B0089CBB6 /* UIKit.framework */; };
@@ -551,7 +545,6 @@
 		87F09EE7171EBB2A0045F6A6 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F09EE5171EBB2A0045F6A6 /* Message.m */; };
 		87F24B5F166FF0C900A5389F /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F24B5E166FF0C900A5389F /* Utility.m */; };
 		87F24B62167003F400A5389F /* ContactsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F24B61167003F300A5389F /* ContactsManager.m */; };
-		87F9DAF9189AB7E100D96FF3 /* libZXingObjC-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8774AC7018992D5A006B91FA /* libZXingObjC-iOS.a */; };
 		87FC39F71709BB39002030D1 /* MessageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC39F51709BB36002030D1 /* MessageManager.m */; };
 		87FC3A151709BD8D002030D1 /* XMLWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC39FB1709BD8C002030D1 /* XMLWriter.m */; };
 		87FC3A161709BD8D002030D1 /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC39FF1709BD8C002030D1 /* SBJsonParser.m */; };
@@ -570,86 +563,6 @@
 		87FF9890170EDB6D0017C627 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87FF988F170EDB6C0017C627 /* MobileCoreServices.framework */; };
 		87FF9892170EDB7D0017C627 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87FF9891170EDB7D0017C627 /* CoreImage.framework */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		87098FD917C2361B007C9093 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 872729CF166CDF530089CBB6 /* openpeer-ios-sdk.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 87C9820717BE38A7002B947B;
-			remoteInfo = HOPSDK;
-		};
-		870E0B6F175C93BF00C93CC1 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 872729CF166CDF530089CBB6 /* openpeer-ios-sdk.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 8792E86816519CFF00DEAC58;
-			remoteInfo = OpenpeerSDK;
-		};
-		87226B5F197FBD3B00E7A660 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 872729CF166CDF530089CBB6 /* openpeer-ios-sdk.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 8792E86716519CFF00DEAC58;
-			remoteInfo = OpenpeerSDK;
-		};
-		8774AC6F18992D5A006B91FA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8774AC6618992D53006B91FA /* ZXingObjC.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 25403CB3166A96FA00E13304;
-			remoteInfo = "ZXingObjC-iOS";
-		};
-		8774AC7118992D5A006B91FA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8774AC6618992D53006B91FA /* ZXingObjC.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 25403CC4166A96FA00E13304;
-			remoteInfo = "ZXingObjCTests-iOS";
-		};
-		8774AC7318992D5A006B91FA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8774AC6618992D53006B91FA /* ZXingObjC.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 25404166166AADAC00E13304;
-			remoteInfo = "ZXingObjC-osx";
-		};
-		8774AC7518992D5A006B91FA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8774AC6618992D53006B91FA /* ZXingObjC.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 25404178166AADAC00E13304;
-			remoteInfo = "ZXingObjCTests-osx";
-		};
-		8774AC7718992D5A006B91FA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8774AC6618992D53006B91FA /* ZXingObjC.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 2540439E166ABA0A00E13304;
-			remoteInfo = "OS X Framework";
-		};
-		8774AC7918992D6C006B91FA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8774AC6618992D53006B91FA /* ZXingObjC.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 25403CB2166A96FA00E13304;
-			remoteInfo = "ZXingObjC-iOS";
-		};
-		87C9821117BE38C0002B947B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 872729CF166CDF530089CBB6 /* openpeer-ios-sdk.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 87C981F917BE37CF002B947B;
-			remoteInfo = OpenPeerDataModel;
-		};
-		87F9DAF0189AB7C800D96FF3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8774AC6618992D53006B91FA /* ZXingObjC.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 25403CB2166A96FA00E13304;
-			remoteInfo = "ZXingObjC-iOS";
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		87098FD017C20DAB007C9093 /* CopyFiles */ = {
@@ -707,7 +620,6 @@
 		8713363817CCBD6F008C91F7 /* iPhone_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone_background@2x.png"; sourceTree = "<group>"; };
 		8713363C17CCC10B008C91F7 /* iPhone_blue_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone_blue_button@2x.png"; sourceTree = "<group>"; };
 		8713363D17CCC10B008C91F7 /* iPhone_blue_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPhone_blue_button.png; sourceTree = "<group>"; };
-		871952AC18E3521500E15F2A /* readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = readme.txt; path = ../../../readme.txt; sourceTree = "<group>"; };
 		8719AAFF17CE0523007E991B /* tableViewCell@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tableViewCell@2x.png"; sourceTree = "<group>"; };
 		8719AB0017CE0523007E991B /* tableViewCell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tableViewCell.png; sourceTree = "<group>"; };
 		8719AB0517CE0710007E991B /* tableViewCell_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tableViewCell_selected@2x.png"; sourceTree = "<group>"; };
@@ -780,7 +692,6 @@
 		8727284F166CC1810089CBB6 /* MainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainViewController.xib; sourceTree = "<group>"; };
 		87272857166CC45A0089CBB6 /* LoginManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginManager.h; sourceTree = "<group>"; };
 		87272858166CC45B0089CBB6 /* LoginManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginManager.m; sourceTree = "<group>"; };
-		872729CF166CDF530089CBB6 /* openpeer-ios-sdk.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "openpeer-ios-sdk.xcodeproj"; path = "../../openpeer-ios-sdk.xcodeproj"; sourceTree = "<group>"; };
 		872B1EB01918F7AD000E21C9 /* OpenPeerSampleApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = OpenPeerSampleApp.entitlements; sourceTree = "<group>"; };
 		872B1EBA191A1C47000E21C9 /* OfflineManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OfflineManager.h; sourceTree = "<group>"; };
 		872B1EBB191A1C47000E21C9 /* OfflineManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OfflineManager.m; sourceTree = "<group>"; };
@@ -865,7 +776,6 @@
 		8730D7A81833A63D008D1D37 /* iPhone_loader_00027@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone_loader_00027@2x.png"; sourceTree = "<group>"; };
 		8730D7A91833A63D008D1D37 /* iPhone_loader_00028.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPhone_loader_00028.png; sourceTree = "<group>"; };
 		8730D7AA1833A63D008D1D37 /* iPhone_loader_00028@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone_loader_00028@2x.png"; sourceTree = "<group>"; };
-		8731272118C670AD00507144 /* Template_CustomerSpecific_Release.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Template_CustomerSpecific_Release.plist; sourceTree = "<group>"; };
 		87355FE417CCA7E3006151E7 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = ../Default.png; sourceTree = "<group>"; };
 		87355FE817CCA8AF006151E7 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = SOURCE_ROOT; };
 		874408C7182FE873004AD8FC /* IncomingCallView_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IncomingCallView_iPhone.xib; sourceTree = "<group>"; };
@@ -896,7 +806,6 @@
 		874FE10D17FD7FF0007A791B /* AppLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppLog.m; sourceTree = "<group>"; };
 		874FE11117FD8DA9007A791B /* AppLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppLog.h; sourceTree = "<group>"; };
 		8754280818C7A2FD007F626F /* CustomerSpecific_Release.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CustomerSpecific_Release.plist; sourceTree = "<group>"; };
-		87570E45172ED183006E1C2F /* OpenpeerSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OpenpeerSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8757E17D1827A0BF00D7BDA1 /* SessionViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SessionViewController_iPhone.h; sourceTree = "<group>"; };
 		8757E17E1827A0BF00D7BDA1 /* SessionViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionViewController_iPhone.m; sourceTree = "<group>"; };
 		8757E1821827A10E00D7BDA1 /* SessionViewController_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SessionViewController_iPhone.xib; sourceTree = "<group>"; };
@@ -923,17 +832,12 @@
 		875CD7E1167A14810037396B /* SessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionManager.m; sourceTree = "<group>"; };
 		875CD7E3167A14960037396B /* Session.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Session.h; sourceTree = "<group>"; };
 		875CD7E4167A14960037396B /* Session.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Session.m; sourceTree = "<group>"; };
-		8766DB6619083F7E004D7264 /* OpenpeerDataModel.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = OpenpeerDataModel.bundle; path = OpenpeerSDK.framework/Versions/C/Resources/OpenpeerDataModel.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		876CBCB916F20A88004D542B /* IdentityDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdentityDelegate.h; sourceTree = "<group>"; };
 		876CBCBA16F20A88004D542B /* IdentityDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdentityDelegate.m; sourceTree = "<group>"; };
-		876CD4C618A385900069C296 /* Template_CustomerSpecific.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Template_CustomerSpecific.plist; sourceTree = "<group>"; };
 		876CD4C818A38B370069C296 /* CustomerSpecific.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CustomerSpecific.plist; sourceTree = "<group>"; };
 		877038E518A24774000B7AA1 /* DefaultSettings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DefaultSettings.plist; sourceTree = "<group>"; };
 		8770C34218BB7ABB006F28F0 /* libstdc++.6.0.9.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.6.0.9.dylib"; path = "usr/lib/libstdc++.6.0.9.dylib"; sourceTree = SDKROOT; };
 		8774AC4A1897E2F2006B91FA /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
-		8774AC6618992D53006B91FA /* ZXingObjC.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZXingObjC.xcodeproj; path = ../../../libs/ZXingObjC/ZXingObjC.xcodeproj; sourceTree = "<group>"; };
-		87796E8318A8DDA7002F4B43 /* boost.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = boost.a; path = OpenpeerSDK.framework/Versions/C/Libraries/boost.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		87796E8418A8DDA7002F4B43 /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = OpenpeerSDK.framework/Versions/C/Libraries/libcurl.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8781C56D196C86740030E113 /* table_footer@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "table_footer@2x.png"; sourceTree = "<group>"; };
 		8781C56E196C86740030E113 /* table_cell_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "table_cell_background@2x.png"; sourceTree = "<group>"; };
 		8781C56F196C86740030E113 /* table_cell_separator@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "table_cell_separator@2x.png"; sourceTree = "<group>"; };
@@ -954,6 +858,10 @@
 		87A108691802C116001F705D /* Logger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Logger.m; sourceTree = "<group>"; };
 		87A1086B1802CBDC001F705D /* logger.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logger.png; sourceTree = "<group>"; };
 		87A1086D1802CD92001F705D /* logger@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logger@2x.png"; sourceTree = "<group>"; };
+		87A1F57D19A26AF60054A6B8 /* boost.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = boost.a; path = ../../OpenPeerSDK.framework/Versions/C/Libraries/boost.a; sourceTree = SOURCE_ROOT; };
+		87A1F57E19A26AF60054A6B8 /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = ../../OpenPeerSDK.framework/Versions/C/Libraries/libcurl.a; sourceTree = SOURCE_ROOT; };
+		87A1F58219A26B370054A6B8 /* OpenpeerDataModel.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = OpenpeerDataModel.bundle; path = ../../OpenPeerSDK.framework/Versions/C/Resources/OpenpeerDataModel.bundle; sourceTree = SOURCE_ROOT; };
+		87A1F58419A26C130054A6B8 /* OpenPeerSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenPeerSDK.framework; path = ../../OpenPeerSDK.framework; sourceTree = SOURCE_ROOT; };
 		87B5EABE18683E3B00D25C3B /* APNSManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APNSManager.h; sourceTree = "<group>"; };
 		87B5EABF18683E3B00D25C3B /* APNSManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APNSManager.m; sourceTree = "<group>"; };
 		87BFEDB8183A885C00A48821 /* AppConsts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppConsts.m; sourceTree = "<group>"; };
@@ -1092,13 +1000,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				8770C34B18BB903A006F28F0 /* libstdc++.6.0.9.dylib in Frameworks */,
-				87F9DAF9189AB7E100D96FF3 /* libZXingObjC-iOS.a in Frameworks */,
 				8774AC4B1897E2F2006B91FA /* ImageIO.framework in Frameworks */,
 				0012C552177D11DB0017FF5E /* libz.dylib in Frameworks */,
 				87FF9862170EDAF10017C627 /* libxml2.dylib in Frameworks */,
 				87EE5FE9166E917B002C5FA3 /* libresolv.dylib in Frameworks */,
-				87796E8518A8DDA7002F4B43 /* boost.a in Frameworks */,
-				87796E8618A8DDA7002F4B43 /* libcurl.a in Frameworks */,
+				87A1F58519A26C130054A6B8 /* OpenPeerSDK.framework in Frameworks */,
+				87A1F58019A26AF60054A6B8 /* libcurl.a in Frameworks */,
 				87E0FFB417BB8ADD00F30484 /* AddressBook.framework in Frameworks */,
 				87FF988E170EDB5D0017C627 /* AssetsLibrary.framework in Frameworks */,
 				87EE5FF8166E9625002C5FA3 /* AVFoundation.framework in Frameworks */,
@@ -1113,8 +1020,8 @@
 				87EE5FF6166E9615002C5FA3 /* CoreVideo.framework in Frameworks */,
 				8727282F166CBF9B0089CBB6 /* Foundation.framework in Frameworks */,
 				87FF9890170EDB6D0017C627 /* MobileCoreServices.framework in Frameworks */,
-				87570E46172ED183006E1C2F /* OpenpeerSDK.framework in Frameworks */,
 				87448B0517905FFC00E374EE /* QuartzCore.framework in Frameworks */,
+				87A1F57F19A26AF60054A6B8 /* boost.a in Frameworks */,
 				0024393C178F55BF00B79368 /* Security.framework in Frameworks */,
 				8727282D166CBF9B0089CBB6 /* UIKit.framework in Frameworks */,
 			);
@@ -1125,11 +1032,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				8770C34318BB7ABB006F28F0 /* libstdc++.6.0.9.dylib in Frameworks */,
-				8774AC7B18992D86006B91FA /* libZXingObjC-iOS.a in Frameworks */,
 				8774AC4E1897E305006B91FA /* ImageIO.framework in Frameworks */,
 				87D4BDFC18683B65008C2D30 /* CoreLocation.framework in Frameworks */,
 				87D4BDFA18683B59008C2D30 /* CoreTelephony.framework in Frameworks */,
 				87D4BDF818683B4C008C2D30 /* libsqlite3.dylib in Frameworks */,
+				87A1F58819A26DAF0054A6B8 /* libcurl.a in Frameworks */,
 				87D4BDF618683B39008C2D30 /* SystemConfiguration.framework in Frameworks */,
 				87D4BDF418683B16008C2D30 /* CFNetwork.framework in Frameworks */,
 				87D4BD1618675368008C2D30 /* libz.dylib in Frameworks */,
@@ -1138,6 +1045,7 @@
 				87D4BD1918675368008C2D30 /* AddressBook.framework in Frameworks */,
 				87D4BD1A18675368008C2D30 /* AssetsLibrary.framework in Frameworks */,
 				87D4BD1C18675368008C2D30 /* AVFoundation.framework in Frameworks */,
+				87A1F58619A26D8F0054A6B8 /* OpenPeerSDK.framework in Frameworks */,
 				87D4BD1E18675368008C2D30 /* CoreAudio.framework in Frameworks */,
 				87D4BECA18683C0D008C2D30 /* libUAirship-3.0.2.a in Frameworks */,
 				87D4BD1F18675368008C2D30 /* CoreData.framework in Frameworks */,
@@ -1149,12 +1057,10 @@
 				87D4BD2418675368008C2D30 /* CoreVideo.framework in Frameworks */,
 				87D4BD2518675368008C2D30 /* Foundation.framework in Frameworks */,
 				87D4BD2618675368008C2D30 /* MobileCoreServices.framework in Frameworks */,
-				8746093518AD6CB1002F7DC8 /* boost.a in Frameworks */,
-				8746093618AD6CB1002F7DC8 /* libcurl.a in Frameworks */,
-				87D4BD2718675368008C2D30 /* OpenpeerSDK.framework in Frameworks */,
 				87D4BD2818675368008C2D30 /* QuartzCore.framework in Frameworks */,
 				87D4BD2918675368008C2D30 /* Security.framework in Frameworks */,
 				87D4BD2A18675368008C2D30 /* UIKit.framework in Frameworks */,
+				87A1F58719A26DAF0054A6B8 /* boost.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1167,7 +1073,6 @@
 				8799239C1917C85500FBD21E /* UIDevice+Networking.h */,
 				8799239D1917C85500FBD21E /* UIDevice+Networking.m */,
 				879923911917B05400FBD21E /* Reachability */,
-				8774AC6618992D53006B91FA /* ZXingObjC.xcodeproj */,
 				872D7E9B1897E19A005D8335 /* QRScannerViewController.h */,
 				872D7E9C1897E19A005D8335 /* QRScannerViewController.m */,
 				872D7E9D1897E19A005D8335 /* QRScannerViewController.xib */,
@@ -1246,25 +1151,6 @@
 				871C7B8C17FEBED200BE641B /* SplashViewController.xib */,
 			);
 			name = Main;
-			sourceTree = "<group>";
-		};
-		870E0B6C175C93BF00C93CC1 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				870E0B70175C93BF00C93CC1 /* libOpenpeerSDK.a */,
-				87C9821217BE38C0002B947B /* OpenpeerDataModel.bundle */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		8711BE1D1861EF1300DBF8B5 /* templates */ = {
-			isa = PBXGroup;
-			children = (
-				876CD4C618A385900069C296 /* Template_CustomerSpecific.plist */,
-				8731272118C670AD00507144 /* Template_CustomerSpecific_Release.plist */,
-			);
-			name = templates;
-			path = ../../../templates;
 			sourceTree = "<group>";
 		};
 		8712BE8517D8CC9900665F42 /* Settings */ = {
@@ -1453,7 +1339,6 @@
 			isa = PBXGroup;
 			children = (
 				874B135A1935F3D600993F8D /* openpeersample.entitlements */,
-				872729CF166CDF530089CBB6 /* openpeer-ios-sdk.xcodeproj */,
 				87272832166CBF9B0089CBB6 /* OpenPeerSampleApp */,
 				8727282B166CBF9B0089CBB6 /* Frameworks */,
 				87272829166CBF9B0089CBB6 /* Products */,
@@ -1472,10 +1357,11 @@
 		8727282B166CBF9B0089CBB6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				87A1F58419A26C130054A6B8 /* OpenPeerSDK.framework */,
+				87A1F57D19A26AF60054A6B8 /* boost.a */,
+				87A1F57E19A26AF60054A6B8 /* libcurl.a */,
 				874B135B1935F96800993F8D /* AudioToolbox.framework */,
 				8770C34218BB7ABB006F28F0 /* libstdc++.6.0.9.dylib */,
-				87796E8318A8DDA7002F4B43 /* boost.a */,
-				87796E8418A8DDA7002F4B43 /* libcurl.a */,
 				8774AC4A1897E2F2006B91FA /* ImageIO.framework */,
 				87D4BDFB18683B65008C2D30 /* CoreLocation.framework */,
 				87D4BDF918683B59008C2D30 /* CoreTelephony.framework */,
@@ -1501,7 +1387,6 @@
 				87448B0417905FFC00E374EE /* QuartzCore.framework */,
 				0024393B178F55BF00B79368 /* Security.framework */,
 				8727282C166CBF9B0089CBB6 /* UIKit.framework */,
-				87570E45172ED183006E1C2F /* OpenpeerSDK.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1510,7 +1395,6 @@
 			isa = PBXGroup;
 			children = (
 				872B1EB01918F7AD000E21C9 /* OpenPeerSampleApp.entitlements */,
-				8711BE1D1861EF1300DBF8B5 /* templates */,
 				8712BE8517D8CC9900665F42 /* Settings */,
 				87FC39F81709BB66002030D1 /* Session */,
 				87368AE0167600A900166F35 /* Model */,
@@ -1527,9 +1411,8 @@
 		87272833166CBF9B0089CBB6 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				87A1F58219A26B370054A6B8 /* OpenpeerDataModel.bundle */,
 				878E880B19105076000DAA8A /* OpenPeerSampleAPNSApp-Info.plist */,
-				8766DB6619083F7E004D7264 /* OpenpeerDataModel.bundle */,
-				871952AC18E3521500E15F2A /* readme.txt */,
 				876CD4C818A38B370069C296 /* CustomerSpecific.plist */,
 				8754280818C7A2FD007F626F /* CustomerSpecific_Release.plist */,
 				87272838166CBF9B0089CBB6 /* main.m */,
@@ -1591,18 +1474,6 @@
 			name = TTTAttributedLabel;
 			path = 3rdParties/TTTAttributedLabel;
 			sourceTree = SOURCE_ROOT;
-		};
-		8774AC6718992D53006B91FA /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				8774AC7018992D5A006B91FA /* libZXingObjC-iOS.a */,
-				8774AC7218992D5A006B91FA /* ZXingObjCTests-iOS.octest */,
-				8774AC7418992D5A006B91FA /* libZXingObjC-osx.a */,
-				8774AC7618992D5A006B91FA /* ZXingObjCTests-osx.octest */,
-				8774AC7818992D5A006B91FA /* ZXingObjC.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
 		};
 		879923911917B05400FBD21E /* Reachability */ = {
 			isa = PBXGroup;
@@ -1821,8 +1692,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				87F9DAF1189AB7C800D96FF3 /* PBXTargetDependency */,
-				87098FDA17C2361B007C9093 /* PBXTargetDependency */,
 			);
 			name = OpenPeerSampleApp;
 			productName = OpenPeerSampleApp;
@@ -1841,8 +1710,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				87226B60197FBD3B00E7A660 /* PBXTargetDependency */,
-				8774AC7A18992D6C006B91FA /* PBXTargetDependency */,
 			);
 			name = OpenPeerSampleAPNSApp;
 			productName = OpenPeerSampleApp;
@@ -1887,16 +1754,6 @@
 			mainGroup = 8727281D166CBF9B0089CBB6;
 			productRefGroup = 87272829166CBF9B0089CBB6 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 870E0B6C175C93BF00C93CC1 /* Products */;
-					ProjectRef = 872729CF166CDF530089CBB6 /* openpeer-ios-sdk.xcodeproj */;
-				},
-				{
-					ProductGroup = 8774AC6718992D53006B91FA /* Products */;
-					ProjectRef = 8774AC6618992D53006B91FA /* ZXingObjC.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				87272827166CBF9B0089CBB6 /* OpenPeerSampleApp */,
@@ -1904,58 +1761,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		870E0B70175C93BF00C93CC1 /* libOpenpeerSDK.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libOpenpeerSDK.a;
-			remoteRef = 870E0B6F175C93BF00C93CC1 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		8774AC7018992D5A006B91FA /* libZXingObjC-iOS.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libZXingObjC-iOS.a";
-			remoteRef = 8774AC6F18992D5A006B91FA /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		8774AC7218992D5A006B91FA /* ZXingObjCTests-iOS.octest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = "ZXingObjCTests-iOS.octest";
-			remoteRef = 8774AC7118992D5A006B91FA /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		8774AC7418992D5A006B91FA /* libZXingObjC-osx.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libZXingObjC-osx.a";
-			remoteRef = 8774AC7318992D5A006B91FA /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		8774AC7618992D5A006B91FA /* ZXingObjCTests-osx.octest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = "ZXingObjCTests-osx.octest";
-			remoteRef = 8774AC7518992D5A006B91FA /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		8774AC7818992D5A006B91FA /* ZXingObjC.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = ZXingObjC.framework;
-			remoteRef = 8774AC7718992D5A006B91FA /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		87C9821217BE38C0002B947B /* OpenpeerDataModel.bundle */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = OpenpeerDataModel.bundle;
-			remoteRef = 87C9821117BE38C0002B947B /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		87272826166CBF9B0089CBB6 /* Resources */ = {
@@ -2017,7 +1822,6 @@
 				874408D5182FFE43004AD8FC /* video_indicator_white_big.png in Resources */,
 				8730D76418339AFE008D1D37 /* chat-bottom.png in Resources */,
 				8719AB0717CE0710007E991B /* tableViewCell_selected@2x.png in Resources */,
-				8766DB6719083F7E004D7264 /* OpenpeerDataModel.bundle in Resources */,
 				8719AB0817CE0710007E991B /* tableViewCell_selected.png in Resources */,
 				8730D75C183398A5008D1D37 /* iPhone_Button-end-baritem.png in Resources */,
 				87E4D99F180BE07F002CA2D4 /* ApplicationLogo57.png in Resources */,
@@ -2047,7 +1851,6 @@
 				87224761182D165A0027DA50 /* iPhone_audio_camera@2x.png in Resources */,
 				8730D7D61833A63D008D1D37 /* iPhone_loader_00021@2x.png in Resources */,
 				8722472A182D01AB0027DA50 /* iPhone_lightning_bolt@2x.png in Resources */,
-				871952AD18E3521500E15F2A /* readme.txt in Resources */,
 				8722A67E17D35AB3002A3BB6 /* video_indicator_blue.png in Resources */,
 				8722A67F17D35AB3002A3BB6 /* chat_indicator_blue.png in Resources */,
 				87E4D9A0180BE07F002CA2D4 /* ApplicationLogo114.png in Resources */,
@@ -2094,7 +1897,6 @@
 				8712BE7B17D8CC7C00665F42 /* iPhone_tabBar_contacts_inactive@2x.png in Resources */,
 				87E4DA14180D5082002CA2D4 /* ringing.caf in Resources */,
 				87E4D9A1180BE07F002CA2D4 /* ApplicationLogo120.png in Resources */,
-				876CD4C718A385900069C296 /* Template_CustomerSpecific.plist in Resources */,
 				876CD4C918A38B370069C296 /* CustomerSpecific.plist in Resources */,
 				8758C5F11978454800CB8099 /* iPhone_tabBar_favorites_active@2x.png in Resources */,
 				8757E1C71827E7AE00D7BDA1 /* chat_bubble_right.png in Resources */,
@@ -2134,6 +1936,7 @@
 				8730D7AD1833A63D008D1D37 /* iPhone_loader_00001.png in Resources */,
 				8722474C182D15750027DA50 /* iPhone_menu_grid_background.png in Resources */,
 				8722475C182D165A0027DA50 /* audio-call-speaker-active@2x.png in Resources */,
+				87A1F58319A26B370054A6B8 /* OpenpeerDataModel.bundle in Resources */,
 				8730D7D11833A63D008D1D37 /* iPhone_loader_00019.png in Resources */,
 				87224759182D165A0027DA50 /* audio-call-mic-active@2x.png in Resources */,
 				8730D7C81833A63D008D1D37 /* iPhone_loader_00014@2x.png in Resources */,
@@ -2148,7 +1951,6 @@
 				8712BE8117D8CC7C00665F42 /* iPhone_back_button@2x.png in Resources */,
 				8712BE8217D8CC7C00665F42 /* iPhone_back_button.png in Resources */,
 				871C7B9817FEDCEE00BE641B /* ApplicationLogo@2x.png in Resources */,
-				8731272218C670AD00507144 /* Template_CustomerSpecific_Release.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2222,7 +2024,6 @@
 				87D4BD6218675368008C2D30 /* SplashViewController.xib in Resources */,
 				87D4BD6318675368008C2D30 /* iPhone_video_bottomBar_bkgd@2x.png in Resources */,
 				87D4BD6418675368008C2D30 /* iPhone_background_navigation_mode@2x.png in Resources */,
-				876CD4CB18A3BB000069C296 /* Template_CustomerSpecific.plist in Resources */,
 				87D4BD6518675368008C2D30 /* iPhone_video_bottomBar_bkgd.png in Resources */,
 				87D4BD6618675368008C2D30 /* iPhone_background_navigation_mode.png in Resources */,
 				87D4BD6718675368008C2D30 /* iPhone_background_navigation_mode-568h@2x.png in Resources */,
@@ -2233,7 +2034,6 @@
 				87D4BD6C18675368008C2D30 /* iPhone_loader_00016.png in Resources */,
 				87D4BD6D18675368008C2D30 /* call_recording_white_button.png in Resources */,
 				87D4BD6E18675368008C2D30 /* audio_call_incoming_accept_button.png in Resources */,
-				8766DB6819083F83004D7264 /* OpenpeerDataModel.bundle in Resources */,
 				87D4BD6F18675368008C2D30 /* iPhone_loader_00013.png in Resources */,
 				87D4BD7018675368008C2D30 /* iPhone_loader_00016@2x.png in Resources */,
 				87D4BD7118675368008C2D30 /* iPhone_chat_textfield_bkgd@2x.png in Resources */,
@@ -2327,6 +2127,7 @@
 				87D4BDC018675368008C2D30 /* iPhone_loader_00001.png in Resources */,
 				87D4BDC118675368008C2D30 /* iPhone_menu_grid_background.png in Resources */,
 				87D7EF5E19785CDC003B1746 /* iPhone_tabBar_favorites_active.png in Resources */,
+				87A1F58919A26DB20054A6B8 /* OpenpeerDataModel.bundle in Resources */,
 				87D4BDC218675368008C2D30 /* audio-call-speaker-active@2x.png in Resources */,
 				87D4BDC318675368008C2D30 /* iPhone_loader_00019.png in Resources */,
 				87D4BDC418675368008C2D30 /* audio-call-mic-active@2x.png in Resources */,
@@ -2341,7 +2142,6 @@
 				87D4BDCC18675368008C2D30 /* iPhone_back_button@2x.png in Resources */,
 				87D4BDCD18675368008C2D30 /* iPhone_back_button.png in Resources */,
 				87D4BDCE18675368008C2D30 /* ApplicationLogo@2x.png in Resources */,
-				879DC62A18C9F77400DA60C0 /* Template_CustomerSpecific_Release.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2496,29 +2296,6 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		87098FDA17C2361B007C9093 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = HOPSDK;
-			targetProxy = 87098FD917C2361B007C9093 /* PBXContainerItemProxy */;
-		};
-		87226B60197FBD3B00E7A660 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = OpenpeerSDK;
-			targetProxy = 87226B5F197FBD3B00E7A660 /* PBXContainerItemProxy */;
-		};
-		8774AC7A18992D6C006B91FA /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "ZXingObjC-iOS";
-			targetProxy = 8774AC7918992D6C006B91FA /* PBXContainerItemProxy */;
-		};
-		87F9DAF1189AB7C800D96FF3 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "ZXingObjC-iOS";
-			targetProxy = 87F9DAF0189AB7C800D96FF3 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin PBXVariantGroup section */
 		87272835166CBF9B0089CBB6 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
@@ -2541,7 +2318,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = ../../;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
@@ -2556,10 +2333,13 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"\"$(SDK_DIR)\"/usr/include/libxml2",
-					"../../libs/ZXingObjC/**",
+					../../OpenPeerSDK.framework/Headers,
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = (
+					../../OpenpeerSDK.framework/Libraries,
+					"$(SDKROOT)/usr/lib/system",
+				);
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
@@ -2575,7 +2355,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = ../../;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
@@ -2584,10 +2364,13 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"\"$(SDK_DIR)\"/usr/include/libxml2",
-					"../../libs/ZXingObjC/**",
+					../../OpenPeerSDK.framework/Headers,
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = (
+					../../OpenpeerSDK.framework/Libraries,
+					"$(SDKROOT)/usr/lib/system",
+				);
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -2601,18 +2384,14 @@
 				CODE_SIGN_ENTITLEMENTS = OpenPeerSampleApp/OpenPeerSampleApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_ENABLE_CPP_RTTI = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OpenPeerSampleApp/OpenPeerSampleApp-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "OpenPeerSampleApp/OpenPeerSampleApp-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SDKROOT)/usr/lib/system",
-					"$(CONFIGURATION_BUILD_DIR)/OpenpeerSDK.framework/Libraries",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
@@ -2643,21 +2422,14 @@
 				CODE_SIGN_ENTITLEMENTS = OpenPeerSampleApp/OpenPeerSampleApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_ENABLE_CPP_RTTI = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OpenPeerSampleApp/OpenPeerSampleApp-Prefix.pch";
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts\"",
-				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "OpenPeerSampleApp/OpenPeerSampleApp-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SDKROOT)/usr/lib/system",
-					"$(CONFIGURATION_BUILD_DIR)/OpenpeerSDK.framework/Libraries",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
@@ -2688,6 +2460,7 @@
 				CODE_SIGN_ENTITLEMENTS = openpeersample.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Sergej Jovanovic (YGZ7PTJK96)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_ENABLE_CPP_RTTI = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OpenPeerSampleApp/OpenPeerSampleApp-Prefix.pch";
@@ -2701,9 +2474,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SDKROOT)/usr/lib/system",
 					./3rdParties/Airship/,
-					"$(CONFIGURATION_BUILD_DIR)/OpenpeerSDK.framework/Libraries",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "";
@@ -2736,21 +2507,17 @@
 				CODE_SIGN_ENTITLEMENTS = openpeersample.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Sergej Jovanovic (YGZ7PTJK96)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_ENABLE_CPP_RTTI = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OpenPeerSampleApp/OpenPeerSampleApp-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "APNS_ENABLED=1";
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts\"",
-				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "OpenPeerSampleApp/OpenPeerSampleAPNSApp-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SDKROOT)/usr/lib/system",
 					./3rdParties/Airship/,
-					"$(CONFIGURATION_BUILD_DIR)/OpenpeerSDK.framework/Libraries",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CPLUSPLUSFLAGS = (
