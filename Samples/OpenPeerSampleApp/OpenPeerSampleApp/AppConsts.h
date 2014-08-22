@@ -123,6 +123,7 @@ extern NSString * const systemMessageRequest;
 //Notifications
 extern NSString * const notificationRemoteSessionModeChanged;
 extern NSString * const notifictionAppReturnedFromBackground;
+extern NSString * const notificationCrashReportSent;
 
 extern NSString * const notificationTypeApple;
 extern NSString * const notificationTypeAndroid;
