@@ -1,10 +1,11 @@
 Thank you for downloading Hookflash's Open Peer iOS SDK.
 
 Prebuilt sdk version and sample application project you can download from this here: http://openpeer.org/open-peer-sdk-for-ios/
+In case you download SampleApplicationWithSDK(...).zip, unpack it, open /Samples/OpenPeerSampleApp/OpenPeerSampleApp.xcodeproj and hit run.
 
-This release is a 1.0.16 release of the SDK and Hookflash will be publishing updates to the SDK regularly.
+This release is a 1.0.15 release of the SDK and Hookflash will be publishing updates to the SDK regularly.
 
-For a quick introduction to the code please read the following. For more detailed instructions please go to http://docs.hookflash.com.
+For a quick introduction to build the code, downloaded from github,  please read the following. For more detailed instructions please go to http://docs.hookflash.com.
 
 
 From your terminal, please clone the "opios" git repository:
