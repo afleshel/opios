@@ -45,7 +45,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 using namespace openpeer;
 using namespace openpeer::core;
 
-@implementation HOPAccountState
+@implementation HOPAccState
 
 @end
 
@@ -61,11 +61,11 @@ using namespace openpeer::core;
     return _sharedObject;
 }
 
-+ (NSString*) stateToString:(HOPAccountStates) state
++ (NSString*) stateToString:(HOPAccountState) state
 {
     return [NSString stringWithUTF8String: IAccount::toString((IAccount::AccountStates) state)];
 }
-+ (NSString*) stringForAccountState:(HOPAccountStates) state
++ (NSString*) stringForAccountState:(HOPAccountState) state
 {
     return [NSString stringWithUTF8String: IAccount::toString((IAccount::AccountStates) state)];
 }
@@ -83,6 +83,7 @@ using namespace openpeer::core;
 
 - (BOOL) loginWithAccountDelegate:(id<HOPAccountDelegate>) inAccountDelegate conversationThreadDelegate:(id<HOPConversationThreadDelegate>) inConversationThreadDelegate callDelegate:(id<HOPCallDelegate>) inCallDelegate namespaceGrantOuterFrameURLUponReload:(NSString*) namespaceGrantOuterFrameURLUponReload lockboxServiceDomain:(NSString*) lockboxServiceDomain forceCreateNewLockboxAccount:(BOOL) forceCreateNewLockboxAccount
 {
+    ZS_LOG_DEBUG([self log:@"Starting account login"]);
     BOOL passedWithoutErrors = NO;
     NSString* grantID = [[OpenPeerUUIDManager sharedUUIDManager] getUUID];
     
@@ -152,16 +153,16 @@ using namespace openpeer::core;
     return passedWithoutErrors;
 }
 
-- (HOPAccountState*) getState
+- (HOPAccState*) getState
 {
-    HOPAccountState* ret = nil;
+    HOPAccState* ret = nil;
     
     if(accountPtr)
     {
-        ret = [[HOPAccountState alloc] init];
+        ret = [[HOPAccState alloc] init];
         WORD errorCode;
         String errorReason;
-        ret.state  = (HOPAccountStates) accountPtr->getState(&errorCode, &errorReason);
+        ret.state  = (HOPAccountState) accountPtr->getState(&errorCode, &errorReason);
         ret.errorCode = errorCode;
         ret.errorReason = [NSString stringWithUTF8String:errorReason];
     }

@@ -52,7 +52,7 @@ boost::shared_ptr<OpenPeerMediaEngineDelegate> OpenPeerMediaEngineDelegate::crea
 
 void OpenPeerMediaEngineDelegate::onMediaEngineAudioRouteChanged(IMediaEngine::OutputAudioRoutes audioRoute)
 {
-    /*HOPMediaEngineOutputAudioRoutes audioRouteType;
+    /*HOPMediaEngineOutputAudioRoute audioRouteType;
     switch (audioRoute)
     {
         case IMediaEngine::OutputAudioRoute_Headphone:
@@ -69,7 +69,7 @@ void OpenPeerMediaEngineDelegate::onMediaEngineAudioRouteChanged(IMediaEngine::O
             break;
     }*/
   
-    [mediaEngineDelegate onMediaEngineAudioRouteChanged:(HOPMediaEngineOutputAudioRoutes) audioRoute];
+    [mediaEngineDelegate onMediaEngineAudioRouteChanged:(HOPMediaEngineOutputAudioRoute) audioRoute];
 }
 
 void OpenPeerMediaEngineDelegate::onMediaEngineAudioSessionInterruptionBegan()

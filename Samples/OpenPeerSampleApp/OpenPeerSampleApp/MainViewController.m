@@ -47,6 +47,7 @@
 #import "WebLoginViewController.h"
 #import "ContactsViewController.h"
 #import "SessionViewController_iPhone.h"
+#import "ActiveSessionsViewController.h"
 
 #import "MainViewController.h"
 #import "ChatViewController.h"
@@ -144,7 +145,9 @@
 - (void) showTabBarController
 {
     //[self removeAllSubViews];
-    
+    [UITabBarItem.appearance setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor] } forState:UIControlStateNormal];
+    [UITabBarItem.appearance setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor blackColor] }     forState:UIControlStateSelected];
+
     [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"iPhone_top_bar_background.png"] forBarMetrics:UIBarMetricsDefault];
     
     if (!self.tabBarController)
@@ -165,6 +168,34 @@
          
         UINavigationController *contactsNavigationController = [[UINavigationController alloc] initWithRootViewController:self.contactsTableViewController];
         contactsNavigationController.navigationBar.translucent = NO;
+        
+        //Favorites tab
+        self.favoritesTableViewController = [[ContactsViewController alloc] initInFavoritesMode:YES];
+        self.favoritesTableViewController.title = @"Favorites";
+        self.tabBarItem.title = @"FAVORITES";
+        
+        [self.favoritesTableViewController.tabBarItem setImage:[[UIImage imageNamed:@"iPhone_tabBar_favorites_inactive.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+        [self.favoritesTableViewController.tabBarItem setSelectedImage:[[UIImage imageNamed:@"iPhone_tabBar_favorites_active.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+        
+        
+        UINavigationController *favoritesNavigationController = [[UINavigationController alloc] initWithRootViewController:self.favoritesTableViewController];
+        favoritesNavigationController.navigationBar.translucent = NO;
+        
+        //Active sessions tab
+        self.activeSessionsViewController = [[ActiveSessionsViewController alloc] initWithNibName:@"ActiveSessionsViewController" bundle:nil];
+        self.activeSessionsViewController.title = @"Chats";
+        self.tabBarItem.title = @"CHATS";
+        
+        //[self.contactsTableViewController.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"iPhone_tabBar_contacts_active.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"iPhone_tabBar_contacts_inactive.png"]];
+        
+        
+        [self.activeSessionsViewController.tabBarItem setImage:[[UIImage imageNamed:@"iPhone_tabBar_sessions_inactive.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+        [self.activeSessionsViewController.tabBarItem setSelectedImage:[[UIImage imageNamed:@"iPhone_tabBar_sessions_active.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+        
+        
+        UINavigationController *activeSessionsNavigationController = [[UINavigationController alloc] initWithRootViewController:self.activeSessionsViewController];
+        activeSessionsNavigationController.navigationBar.translucent = NO;
+        
         //Settings tab
         SettingsViewController* settingsViewController = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
         settingsViewController.title = @"Settings";
@@ -180,7 +211,7 @@
         //Tab
         self.tabBarController = [[UITabBarController alloc] init];
         self.tabBarController.delegate = self;
-        self.tabBarController.viewControllers = [NSArray arrayWithObjects:contactsNavigationController, settingsNavigationController, nil];
+        self.tabBarController.viewControllers = [NSArray arrayWithObjects:contactsNavigationController, favoritesNavigationController, activeSessionsNavigationController,settingsNavigationController, nil];
         
         self.tabBarController.view.frame = self.view.bounds;
         [self.tabBarController.tabBar setBackgroundImage:[UIImage imageNamed:@"iPhone_tabBar_bkgd.png"]];
@@ -188,6 +219,7 @@
     
     self.tabBarController.view.alpha = 0.0;
     [self.view addSubview:self.tabBarController.view];
+    
     
     [UIView animateWithDuration:1 animations:^
      {
@@ -253,7 +285,23 @@
     NSString* title = [[[session participantsArray] objectAtIndex:0] name];
     
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Transition %d for session with id:%@ and for participant:%@",transition,[session.conversationThread getThreadId],title);
-    UINavigationController* navigationController = (UINavigationController*)[[self.tabBarController viewControllers] objectAtIndex:0];
+    UINavigationController* navigationController = nil;
+    
+//    switch ([self.tabBarController selectedIndex])
+//    {
+//        case 2:
+//            navigationController = (UINavigationController*)[[self.tabBarController viewControllers] objectAtIndex:2];
+//            break;
+//            
+//        default:
+//            navigationController = (UINavigationController*)[[self.tabBarController viewControllers] objectAtIndex:0];
+//            break;
+//    }
+    
+    int tabIndex = [self.tabBarController selectedIndex] < 3 ? [self.tabBarController selectedIndex] : 2;
+    
+    navigationController = (UINavigationController*)[[self.tabBarController viewControllers] objectAtIndex:tabIndex];
+    
     switch (transition)
     {
         case NEW_SESSION_SWITCH:
@@ -334,7 +382,22 @@
 {
     //If session view controller is laredy created for this session get it from dictionary
     SessionViewController_iPhone* sessionViewContorller = [self.sessionViewControllersDictionary objectForKey:sessionId];
-    UINavigationController* navigationController = (UINavigationController*)[[self.tabBarController viewControllers] objectAtIndex:0];
+    UINavigationController* navigationController = nil;//(UINavigationController*)[[self.tabBarController viewControllers] objectAtIndex:0];
+    
+//    switch ([self.tabBarController selectedIndex])
+//    {
+//        case 2:
+//            navigationController = (UINavigationController*)[[self.tabBarController viewControllers] objectAtIndex:1];
+//            break;
+//            
+//        default:
+//            navigationController = (UINavigationController*)[[self.tabBarController viewControllers] objectAtIndex:0];
+//            break;
+//    }
+    
+    int tabIndex = [self.tabBarController selectedIndex] < 3 ? [self.tabBarController selectedIndex] : 2;
+    
+    navigationController = (UINavigationController*)[[self.tabBarController viewControllers] objectAtIndex:tabIndex];
     
     if (!sessionViewContorller)
     {
@@ -353,7 +416,7 @@
         }
         else if (incomingMessage)
         {
-            if (navigationController.visibleViewController && ![navigationController.visibleViewController isKindOfClass:[ContactsViewController class]])
+            if (navigationController.visibleViewController && ![navigationController.visibleViewController isKindOfClass:[ContactsViewController class]] && ![navigationController.visibleViewController isKindOfClass:[ActiveSessionsViewController class]])
                 return NEW_SESSION_REFRESH_CHAT; //Create a new session and update chat, but don't switch from existing session
             else
                 return NEW_SESSION_WITH_CHAT; //Create and show a new session with incomming message
@@ -390,7 +453,7 @@
 //            {
 //                return EXISTING_SESSION_REFRESH_CHAT; //Already displayed chat view, so just refresh messages
 //            }
-            else if ([navigationController.visibleViewController isKindOfClass:[ContactsViewController class]])
+            else if ([navigationController.visibleViewController isKindOfClass:[ContactsViewController class]] || [navigationController.visibleViewController isKindOfClass:[ActiveSessionsViewController class]])
             {
                 return EXISITNG_SESSION_SWITCH; //Move from the contacts list to the chat view for session
             }
@@ -446,7 +509,7 @@
 
 - (void) showNotification:(NSString*) message
 {
-    UINavigationController* navigationController = (UINavigationController*)[[self.tabBarController viewControllers] objectAtIndex:0];
+    UINavigationController* navigationController = (UINavigationController*)[[self.tabBarController viewControllers] objectAtIndex:[self.tabBarController selectedIndex]];
     
     UILabel* labelNotification = [[UILabel alloc] initWithFrame:CGRectMake(5.0, 20.0, self.view.frame.size.width - 10.0, 40.0)];
     labelNotification.text = message;//[NSString stringWithFormat:@"New message from %@",contactName];
@@ -577,14 +640,24 @@
 
 - (void) onAccountLoginError:(NSString *)error
 {
-    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Account login error: %@",error);
+    OPLog(HOPLoggerSeverityError, HOPLoggerLevelTrace, @"Account login error: %@",error);
     
     if ([self.splashViewController.infoView superview])
         [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:YES withText:@"Error. Please restart the application" inView:self.splashViewController.infoView];
     
-    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Login Error" message:[NSString stringWithFormat:@"%@. Please check your internet connection and restart the application.",error] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"%@. Please check your internet connection and restart the application.",error] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
     [alert show];
     
+}
+
+- (void) onNetworkProblem
+{
+    [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:YES withText:@"Please, check your internet connection." inView:self.splashViewController.infoView];
+}
+
+- (void) onNetworkProblemResolved
+{
+    [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:YES withText:@"Recoverying from network lost ..." inView:self.view];
 }
 
 - (void) onAccountLoginWebViewClose:(WebLoginViewController*) webLoginViewController
@@ -611,6 +684,7 @@
     self.splashViewController.view.frame = self.view.bounds;
     [self.view addSubview:self.splashViewController.view];
 }
+
 - (void) waitingGestureTimerHasExpired
 {
     @synchronized(self)

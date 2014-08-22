@@ -33,6 +33,9 @@
 #include <zsLib/String.h>
 #import <openpeer/services/IHelper.h>
 
+#define secondsInYear 31536000.0
+#define secondsInFourWeeks 2419200.0
+#define secondsInWeek 604800.0
 @implementation HOPUtility
 
 + (NSString*) getBaseIdentityURIFromURI:(NSString*) identityURI
@@ -98,5 +101,77 @@
     NSString *strGuid = (NSString *)CFBridgingRelease(CFUUIDCreateString(nil, guid));
     CFRelease(guid);
     return strGuid;
+}
+
++ (NSString *) getTimeSectionForDate:(NSDate*) date
+{
+    NSString* ret = nil;
+    NSDate *now = [NSDate date];
+    
+    NSTimeInterval timeInterval = abs([date timeIntervalSinceNow]);
+    
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    
+    int daltaYears = floor(timeInterval/secondsInYear);//round(((double)deltaMonths)/12.0);
+    
+    if (daltaYears > 1)
+    {
+        ret = [NSString stringWithFormat:@"%d Years ago",daltaYears];
+    }
+    else if (daltaYears == 1)
+    {
+        ret = @"Year ago";
+    }
+    else
+    {
+        NSUInteger monthsToAdd = round(timeInterval/secondsInYear) > 0 ? 12 : 0;
+        NSUInteger monthInYear = [calendar ordinalityOfUnit:NSMonthCalendarUnit inUnit:NSYearCalendarUnit forDate:date];
+        NSUInteger monthInYearNow = [calendar ordinalityOfUnit:NSMonthCalendarUnit inUnit:NSYearCalendarUnit forDate:now] + monthsToAdd;
+        
+        int deltaMonths = abs(monthInYearNow - monthInYear);
+        int deltaRealMonth = floor(timeInterval/secondsInFourWeeks);
+        
+        if (deltaMonths > 1 && deltaRealMonth > 1)
+        {
+            ret = [NSString stringWithFormat:@"%d Months ago",deltaMonths];
+        }
+        else if (deltaMonths >= 1 && deltaRealMonth == 1)
+        {
+            ret = @"Month ago";
+        }
+        else
+        {
+            int deltaWeek = floor(timeInterval/secondsInWeek);
+            
+            if (deltaWeek > 1)
+            {
+                ret = [NSString stringWithFormat:@"%d Weeks ago",deltaWeek];
+            }
+            else if (deltaWeek == 1)
+            {
+                ret = @"Week ago";
+            }
+            else
+            {
+                NSUInteger dayInYear = [calendar ordinalityOfUnit:NSDayCalendarUnit inUnit:NSYearCalendarUnit forDate:date];
+                NSUInteger dayInYearNow = [calendar ordinalityOfUnit:NSDayCalendarUnit inUnit:NSYearCalendarUnit forDate:now];
+                
+                int deltaDays = abs(dayInYearNow - dayInYear);
+                
+                if (deltaDays > 1)
+                {
+                    ret = [NSString stringWithFormat:@"%d Days ago",deltaDays];
+                }
+                else if (deltaDays == 1)
+                {
+                    ret = @"Yesterday";
+                }
+                else
+                    ret = @"Today";
+            }
+        }
+    }
+    
+    return ret;
 }
 @end

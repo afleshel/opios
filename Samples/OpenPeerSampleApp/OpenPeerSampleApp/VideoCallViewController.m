@@ -93,6 +93,12 @@
     [self.view addGestureRecognizer:self.tapGesture];
 }
 
+- (void)dealloc
+{
+    [[HOPMediaEngine sharedInstance] setCaptureRenderView:nil];
+    [[HOPMediaEngine sharedInstance] setChannelRenderView:nil];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -101,7 +107,7 @@
 
 - (IBAction) actionSwitchCamera:(id)sender
 {
-    HOPMediaEngineCameraTypes currentCameraType =  [[HOPMediaEngine sharedInstance] getCameraType];
+    HOPMediaEngineCameraType currentCameraType =  [[HOPMediaEngine sharedInstance] getCameraType];
     currentCameraType = currentCameraType == HOPMediaEngineCameraTypeFront ? HOPMediaEngineCameraTypeBack : HOPMediaEngineCameraTypeFront;
     [[HOPMediaEngine sharedInstance] setCameraType:currentCameraType];
 }

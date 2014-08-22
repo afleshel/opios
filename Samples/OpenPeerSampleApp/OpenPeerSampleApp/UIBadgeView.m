@@ -74,7 +74,7 @@
     self.bagdeFont = [UIFont boldSystemFontOfSize:13.0];
     self.badgeTextColor = [UIColor whiteColor];
     
-    self.badgeBackgroundColor = [UIColor colorWithRed:58.0/355.0 green:101.0/255.0 blue:237.0/255.0 alpha:0.8];
+    self.badgeBackgroundColor = [UIColor colorWithRed:27.0/355.0 green:88.0/255.0 blue:106.0/255.0 alpha:0.8];
     
     self.backgroundColor = [UIColor clearColor];
     self.layer.masksToBounds = YES;
@@ -106,6 +106,15 @@
         
         CGContextAddPath(context, thePath);
 
+        CGMutablePathRef thePath2 = CGPathCreateMutable();
+        CGPathMoveToPoint(thePath2, NULL, CGRectGetMinX(bounds) + radius, CGRectGetMinY(bounds));
+        CGPathAddArc(thePath2, NULL, CGRectGetMaxX(bounds) - radius, CGRectGetMinY(bounds) + radius, radius, 3 * M_PI / 2, 0, 0);
+        CGPathAddArc(thePath2, NULL, CGRectGetMaxX(bounds) - radius, CGRectGetMaxY(bounds) - radius, radius, 0, M_PI / 2, 0);
+        CGPathAddArc(thePath2, NULL, CGRectGetMinX(bounds) + radius, CGRectGetMaxY(bounds) - radius, radius, M_PI / 2, M_PI, 0);
+        CGPathAddArc(thePath2, NULL, CGRectGetMinX(bounds) + radius, CGRectGetMinY(bounds) + radius, radius, M_PI, 3 * M_PI / 2, 0);
+        CGPathCloseSubpath(thePath2);
+        CGContextAddPath(context, thePath2);
+        
         if(self.badgeBackgroundColors)
         {
             // add gradient
@@ -141,7 +150,7 @@
         bounds.origin.y = (bounds.size.height - self.bagdeTextSize) / 2 - 8;
         CGContextSetBlendMode(context, kCGBlendModeNormal);
         //[_badgeText drawInRect:bounds withFont:_bagdeFont];
-        [_badgeText drawInRect:bounds withAttributes:@{ NSFontAttributeName: _bagdeFont}];
+        [_badgeText drawInRect:bounds withAttributes:@{ NSFontAttributeName: _bagdeFont, NSForegroundColorAttributeName:self.badgeTextColor}];
         
     }
 }

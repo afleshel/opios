@@ -41,6 +41,7 @@
 #import "Utility.h"
 #import "OpenPeer.h"
 #import "BackgroundingDelegate.h"
+#import "HTTPDownloader.h"
 
 #import <OpenPeerSDK/HOPRolodexContact.h>
 #import <OpenPeerSDK/HOPContact.h>
@@ -50,6 +51,8 @@
 #import <OpenPeerSDK/HOPHomeUser+External.h>
 #import <OpenPeerSDK/HOPMessage.h>
 #import <OpenPeerSDK/HOPBackgrounding.h>
+#import <OpenPeerSDK/HOPUtility.h>
+#import <OpenPeerSDK/HOPAPNSData.h>
 
 #define  timeBetweenPushNotificationsInSeconds 1
 
@@ -61,10 +64,19 @@
 @property (nonatomic, strong) NSString* urbanAirshipAppSecret;
 
 @property (nonatomic, strong) NSMutableDictionary* apnsHisotry;
+@property (nonatomic, strong) NSURLSession *urlSession;
+@property (nonatomic, strong) NSURLSessionUploadTask *sessionDataTask;
+@property (nonatomic, strong) NSURLConnection* urlConnection;
+
+@property (nonatomic, strong) NSMutableDictionary* dictionaryOfSentFiles;
+
+@property (nonatomic, strong) NSMutableDictionary* dictionaryOfHTTPRequests;
+@property (nonatomic, strong) NSMutableDictionary* dictionaryOfPushNotificationsToSend;
 
 - (id) initSingleton;
 
-- (void) pushData:(NSDictionary*) dataToPush sendingRich:(BOOL) sendingRich;
+- (void) pushDataOld:(NSDictionary*) dataToPush sendingRich:(BOOL) sendingRich;
+- (void) pushData:(NSString*) filePath sendingRich:(BOOL) sendingRich;
 - (BOOL) canSendPushNotificationForPeerURI:(NSString*) peerURI;
 - (NSArray*) getDeviceTokensForContact:(HOPContact*) contact;
 - (NSString*) prepareMessageForRichPush:(HOPMessage*) message peerURI:(NSString*) peerURI location:(NSString*) location;
@@ -100,9 +112,33 @@
 #endif
         self.apiPushURL = [[NSUserDefaults standardUserDefaults] stringForKey: settingsKeyUrbanAirShipAPIPushURL];
         self.apnsHisotry = [[NSMutableDictionary alloc] init];
+        
+        self.dictionaryOfSentFiles = [[NSMutableDictionary alloc] init];
+        self.dictionaryOfHTTPRequests = [[NSMutableDictionary alloc] init];
+        self.dictionaryOfPushNotificationsToSend = [[NSMutableDictionary alloc] init];
+        
+//        NSString* sessionIdentifier = [NSString stringWithFormat:@"com.hookflash.backgroundSession.%@",@""];
+//        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration backgroundSessionConfiguration:sessionIdentifier];
+//        //NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+//        
+//        self.urlSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:[NSOperationQueue mainQueue]];
     }
     return self;
 }
+
+- (NSURLSession*) urlSession
+{
+    if (_urlSession != nil)
+        return _urlSession;
+    
+    NSString* sessionIdentifier = [NSString stringWithFormat:@"com.hookflash.backgroundSession.%@",@""];
+    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration backgroundSessionConfiguration:sessionIdentifier];
+    
+    _urlSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:[NSOperationQueue mainQueue]];
+    
+    return _urlSession;
+}
+
 - (void) prepareUrbanAirShip
 {
     [UAirship setLogging:NO];
@@ -132,36 +168,75 @@
     [[UAPush shared] resetBadge];
 }
 
-- (void) pushData:(NSDictionary*) dataToPush sendingRich:(BOOL) sendingRich
+- (void) pushDataOld:(NSDictionary*) dataToPush sendingRich:(BOOL) sendingRich
 {
     if ([self.apiPushURL length] > 0)
     {
         NSMutableURLRequest * request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:self.apiPushURL]];
         [request setHTTPMethod:@"POST"];
         [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-        if (sendingRich)
+        //if (sendingRich)
             [request setValue:@"application/vnd.urbanairship+json; version=3;" forHTTPHeaderField:@"Accept"];
         
         NSData * pushdata = [NSJSONSerialization dataWithJSONObject:dataToPush options:0 error:NULL];
         [request setHTTPBody:pushdata];
         
-        [NSURLConnection connectionWithRequest:request delegate:self];
+        self.urlConnection = [NSURLConnection connectionWithRequest:request delegate:self];
         OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push is sent");
         @synchronized (self)
         {
             self.pushesToSend++;
         }
     }
+    else
+    {
+        OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Push URL is invalid.");
+    }
 }
 
-/*- (void) sendPushNotificationForDeviceToken:(NSString*) deviceToken message:(NSString*) message
+- (void) pushData:(NSString*) filePath sendingRich:(BOOL) sendingRich
 {
-    NSDictionary * dataToPush = @{@"device_tokens":@[deviceToken], @"aps":@{@"alert":message, @"sound":@"calling"}};
+    if ([filePath length] > 0)
+    {
+        NSMutableURLRequest * request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:self.apiPushURL]];
+        [request setHTTPMethod:@"POST"];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+        //if (sendingRich)
+            [request setValue:@"application/vnd.urbanairship+json; version=3;" forHTTPHeaderField:@"Accept"];
+        
+        NSURL *fileURL = [NSURL fileURLWithPath:filePath];
+        if (fileURL)
+        {
+            if (self.urlSession)
+            {
+                self.sessionDataTask = [self.urlSession uploadTaskWithRequest:request fromFile:fileURL];
+                if (self.sessionDataTask)
+                {
+                    [self.sessionDataTask resume];
+                    [self.dictionaryOfSentFiles setObject:filePath forKey:[NSNumber numberWithInt:self.sessionDataTask.taskIdentifier]];
+                    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Started sending push notification");
+                }
+                else
+                {
+                    OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Push notification is not sent, because session upload task is not created");
+                }
+            }
+            else
+            {
+                OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Push notification is not sent, because url session is invalid");
+            }
+        }
+        else
+        {
+            OPLog(HOPLoggerSeverityError, HOPLoggerLevelTrace, @"Invalid file url for sending push notification");
+        }
+    }
+    else
+    {
+        OPLog(HOPLoggerSeverityError, HOPLoggerLevelTrace, @"Invalid path for sending push notification");
+    }
     
-    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Sending push notification: %@",message);
-    
-    [self pushData:dataToPush sendingRich:NO];
-}*/
+}
 
 - (void) registerDeviceToken:(NSData*) devToken
 {
@@ -190,7 +265,7 @@
 - (void) connection:(NSURLConnection *) connection didReceiveResponse:(NSURLResponse *) response
 {
     NSHTTPURLResponse * res = (NSHTTPURLResponse *) response;
-    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Sending rivh push response code %i: response: %@",res.statusCode, res);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Sending rich push response code %i: response: %@",res.statusCode, res);
     @synchronized (self)
     {
         self.pushesToSend--;
@@ -200,6 +275,11 @@
             [[[OpenPeer sharedOpenPeer] backgroundingDelegate] setBackgroundingNotifier:nil];
         }
     }
+}
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error;
+{
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Sending rich push failed. Error: %@",error);
 }
 
 - (void) sendPushNotificationForContact:(HOPContact*) contact message:(NSString*) message missedCall:(BOOL) missedCall
@@ -232,7 +312,7 @@
                 
                 if ([dataToPush count] > 0)
                 {
-                    [self pushData:dataToPush sendingRich:NO];
+                    [self pushDataOld:dataToPush sendingRich:NO];
                     
                     [self.apnsHisotry setObject:[NSDate date] forKey:peerURI];
                 }
@@ -249,33 +329,63 @@
     }
 }
 
+- (void)sendRichPush:(HOPMessage *)message deviceTokens:(NSArray *)deviceTokens
+{
+    NSString* msg = [message.text length] > 22 ? [NSString stringWithFormat:@"%@...",[message.text substringToIndex:22]] : message.text;
+    
+    NSString* messageText  = [NSString stringWithFormat:@"%@  %@",[[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser] getFullName],msg];
+    
+    NSString* location = [[HOPAccount sharedAccount] isCoreAccountCreated] && ([[HOPAccount sharedAccount] getState].state == HOPAccountStateReady) ? [[HOPAccount sharedAccount] getLocationID] : @"";
+    NSString* content = [self prepareMessageForRichPush:message peerURI:[[HOPModelManager sharedModelManager]getPeerURIForHomeUser] location:location];
+    
+    for (HOPAPNSData* pushNotificationData in deviceTokens)
+    {
+        NSString* stringToSend = nil;
+        
+        if ([pushNotificationData.type isEqualToString:notificationTypeApple])
+            stringToSend = [NSString stringWithFormat:@"{\"audience\" : {\"device_token\" : \"%@\"}, \"device_types\" : [ \"ios\" ], \"notification\" : {\"ios\" : {\"sound\":\"message-received\",\"alert\": \"%@\",\"content-available\": true,\"priority\": 10}}, \"message\" : {\"title\" : \"%@\", \"body\" : \"%@\", \"content_type\" : \"text/html\"} }",pushNotificationData.deviceToken,messageText,messageText,content];
+        else if ([pushNotificationData.type isEqualToString:notificationTypeAndroid])
+            stringToSend = [NSString stringWithFormat:@"{\"audience\" : {\"apid\" : \"%@\"}, \"device_types\" : [ \"android\" ],  \"notification\" : {\"android\" : {\"extra\" : {\"date\": \"%.0f\",\"messageId\": \"%@\",\"location\": \"%@\",\"peerURI\": \"%@\"}}, \"alert\" : \"%@\"} }",pushNotificationData.deviceToken,[message.date timeIntervalSince1970],message.messageID,location,[[HOPModelManager sharedModelManager]getPeerURIForHomeUser],message.text];
+
+        OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelTrace, @"Rich push content: %@",stringToSend);
+        SBJsonParser* parser = [[SBJsonParser alloc] init];
+        NSDictionary* dataToPush = [parser objectWithString: stringToSend];
+        
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *documentsDirectory = [paths objectAtIndex:0];
+        NSString *filePath = [NSString stringWithFormat:@"%@/%@%@", documentsDirectory, message.messageID,@".json"];
+        NSLog(@"filePath %@", filePath);
+        
+        NSError *error;
+        [stringToSend writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
+        
+        if (![[NSFileManager defaultManager] isWritableFileAtPath:filePath])
+        {
+            OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Unable to save rich push notification in file for sendig.");
+        }
+        
+        if ([filePath length] > 0 && [dataToPush count] > 0)
+            [self pushData:filePath sendingRich:YES];
+        else
+        {
+            OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Dictionary with push data is not valid. Push notification is not sent.");
+        }
+    }
+    [self.apnsHisotry setObject:[NSDate date] forKey:[message.contact getPeerURI]];
+}
+
 - (void) sendRichPushNotificationForMessage:(HOPMessage*) message missedCall:(BOOL) missedCall
 {
-    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Creating rich push for message: :%@", message.messageID);
-    NSArray* deviceTokens = [self getDeviceTokensForContact:message.contact];
+    NSArray* deviceTokens = [self getDeviceTokensForContact2:message.contact];
     
     if ([deviceTokens count] > 0)
     {
-        NSString* msg = [message.text length] > 22 ? [NSString stringWithFormat:@"%@...",[message.text substringToIndex:22]] : message.text;
-        
-        NSString* messageText  = [NSString stringWithFormat:@"%@  %@",[[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser] getFullName],msg];
-        
-        NSString* content = [self prepareMessageForRichPush:message peerURI:[[HOPContact getForSelf]getPeerURI] location:[[HOPAccount sharedAccount] getLocationID]];
-        
-        for (NSString* deviceToken in deviceTokens)
-        {
-            
-            //NSString* stringToSend = [NSString stringWithFormat:@"{\"audience\" : {\"device_token\" : \"%@\"}, \"device_types\" : [ \"ios\" ], \"notification\" : {\"ios\" : {\"badge\":\"auto\",\"sound\":\"default\",\"alert\": \"%@\",\"content-available\": true,\"priority\": 10}}, \"message\" : {\"title\" : \"%@\", \"body\" : \"%@\", \"content_type\" : \"text/html\"} }",deviceToken,messageText,messageText,content];
-            NSString* stringToSend = [NSString stringWithFormat:@"{\"audience\" : {\"device_token\" : \"%@\"}, \"device_types\" : [ \"ios\" ], \"notification\" : {\"ios\" : {\"sound\":\"message-received\",\"alert\": \"%@\",\"content-available\": true,\"priority\": 10}}, \"message\" : {\"title\" : \"%@\", \"body\" : \"%@\", \"content_type\" : \"text/html\"} }",deviceToken,messageText,messageText,content];
-
-            OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelTrace, @"Rich push content: %@",stringToSend);
-            SBJsonParser* parser = [[SBJsonParser alloc] init];
-            NSDictionary* dataToPush = [parser objectWithString: stringToSend];
-
-            if ([dataToPush count] > 0)
-                [self pushData:dataToPush sendingRich:YES];
-        }
-        [self.apnsHisotry setObject:[NSDate date] forKey:[message.contact getPeerURI]];
+        [self sendRichPush:message deviceTokens:deviceTokens];
+    }
+    else
+    {
+        [self requestDeviceTokenForPeerURI:[message.contact getPeerURI]];
+        [self.dictionaryOfPushNotificationsToSend setObject:message forKey:[message.contact getPeerURI]];
     }
 }
 
@@ -301,6 +411,21 @@
     return ret;
 }
 
+- (NSArray*) getDeviceTokensForContact2:(HOPContact*) contact
+{
+    NSArray* ret = nil;
+    
+    NSString* peerURI = [contact getPeerURI];
+    if ([peerURI length] > 0)
+    {
+        if ([self canSendPushNotificationForPeerURI:peerURI])
+        {
+            ret = [[HOPModelManager sharedModelManager] getPushNotificationDataForPeerURI:peerURI];
+        }
+    }
+    return ret;
+}
+
 - (BOOL) canSendPushNotificationForPeerURI:(NSString*) peerURI
 {
     BOOL ret = YES;
@@ -321,4 +446,332 @@
     return ret;
 }
 
+#pragma  mark - NSURLSessionDelegate
+- (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
+ completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler
+{
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"URL session %@ has received auth challenge", session);
+    
+    if (challenge.previousFailureCount == 0)
+    {
+        NSURLCredentialPersistence persistence = NSURLCredentialPersistenceForSession;
+        NSURLCredential *credential = [NSURLCredential credentialWithUser:self.urbanAirshipAppKey password:self.urbanAirshipAppSecret persistence:persistence];
+        completionHandler(NSURLSessionAuthChallengeUseCredential, credential);
+    }
+    else
+    {
+        // handle the fact that the previous attempt failed
+        //NSLog(@"%s: challenge.error = %@", __FUNCTION__, challenge.error);
+        completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, nil);
+    }
+}
+
+- (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error
+{
+    
+}
+- (void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session
+{
+    
+}
+
+#pragma  mark - NSURLSessionTaskDelegate
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
+willPerformHTTPRedirection:(NSHTTPURLResponse *)response
+        newRequest:(NSURLRequest *)request
+ completionHandler:(void (^)(NSURLRequest *))completionHandler
+{
+    
+}
+
+/* The task has received a request specific authentication challenge.
+ * If this delegate is not implemented, the session specific authentication challenge
+ * will *NOT* be called and the behavior will be the same as using the default handling
+ * disposition.
+ */
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
+didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
+ completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler
+{
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"URL session %@ has received auth challenge for task %@", session, [task originalRequest]);
+    
+    if (challenge.previousFailureCount == 0)
+    {
+        NSURLCredentialPersistence persistence = NSURLCredentialPersistenceForSession;
+        NSURLCredential *credential = [NSURLCredential credentialWithUser:self.urbanAirshipAppKey password:self.urbanAirshipAppSecret persistence:persistence];
+        completionHandler(NSURLSessionAuthChallengeUseCredential, credential);
+    }
+    else
+    {
+        // handle the fact that the previous attempt failed
+        NSLog(@"%s: challenge.error = %@", __FUNCTION__, challenge.error);
+        completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, nil);
+    }
+}
+
+/* Sent if a task requires a new, unopened body stream.  This may be
+ * necessary when authentication has failed for any request that
+ * involves a body stream.
+ */
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
+ needNewBodyStream:(void (^)(NSInputStream *bodyStream))completionHandler
+{
+    
+}
+
+/* Sent periodically to notify the delegate of upload progress.  This
+ * information is also available as properties of the task.
+ */
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
+   didSendBodyData:(int64_t)bytesSent
+    totalBytesSent:(int64_t)totalBytesSent
+totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend
+{
+    
+}
+
+/* Sent as the last message related to a specific task.  Error may be
+ * nil, which implies that no error occurred and this task is complete.
+ */
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
+didCompleteWithError:(NSError *)error
+{
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Push notification response: %@", [task response]);
+    
+    if (!error)
+    {
+        NSError* fileError;
+        NSString* filePath = [self.dictionaryOfSentFiles objectForKey:[NSNumber numberWithInt:task.taskIdentifier]];
+        if ([filePath length] > 0)
+        {
+            [[NSFileManager defaultManager] removeItemAtPath:filePath error:&fileError];
+            if (fileError)
+            {
+                OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Error occured while deleting sent file: %@", fileError);
+            }
+        }
+    }
+    else
+    {
+        OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Error occured while sending push notification: %@", error);
+    }
+    return;
+}
+
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
+didReceiveResponse:(NSURLResponse *)response
+ completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler
+{
+    
+}
+
+/* Notification that a data task has become a download task.  No
+ * future messages will be sent to the data task.
+ */
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
+didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask
+{
+    
+}
+
+/* Sent when data is available for the delegate to consume.  It is
+ * assumed that the delegate will retain and not copy the data.  As
+ * the data may be discontiguous, you should use
+ * [NSData enumerateByteRangesUsingBlock:] to access it.
+ */
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
+    didReceiveData:(NSData *)data
+{
+    
+}
+
+/* Invoke the completion routine with a valid NSCachedURLResponse to
+ * allow the resulting data to be cached, or pass nil to prevent
+ * caching. Note that there is no guarantee that caching will be
+ * attempted for a given resource, and you should not rely on this
+ * message to receive the resource data.
+ */
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
+ willCacheResponse:(NSCachedURLResponse *)proposedResponse
+ completionHandler:(void (^)(NSCachedURLResponse *cachedResponse))completionHandler
+{
+    
+}
+
+- (void) requestDeviceTokenForPeerURI:(NSString*) peerURI
+{
+    if ([peerURI length] > 0 && ![[self.dictionaryOfHTTPRequests allKeys] containsObject:peerURI])
+    {
+        NSMutableDictionary* dictRoot = [[NSMutableDictionary alloc] init];
+        NSMutableDictionary* dictData  = [[NSMutableDictionary alloc] init];
+        
+        [dictData setObject:[[Settings sharedSettings] getIdentityProviderDomain]  forKey:@"$domain"];
+        [dictData setObject:[[NSUserDefaults standardUserDefaults] stringForKey: @"applicationId"]  forKey:@"$appid"];
+        [dictData setObject:[HOPUtility getGUIDstring]  forKey:@"$id"];
+        [dictData setObject:@"push-hack" forKey:@"$handler"];
+        [dictData setObject:@"device-associate-get" forKey:@"$method"];
+        [dictData setObject:peerURI forKey:@"uri"];
+        
+        [dictRoot setObject:dictData forKey:@"request"];
+        
+        NSString* json = nil;
+        NSError* error = nil;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictRoot
+                                                           options:0 // Pass 0 if you don't care about the readability of the generated string
+                                                             error:&error];
+        
+        if (!jsonData)
+        {
+            OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"JSON data serialization has failed with an error: %@", error);
+        } else
+        {
+            json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        }
+        
+        HTTPDownloader* request = [[HTTPDownloader alloc] initDownloadFromURL:@"http://push-hack.hcs-stack-v2-i7957106-7.hcs.io/device-associate-get" data:json post:YES];
+        
+        request.delegate = self;
+        [self.dictionaryOfHTTPRequests setObject:request forKey:peerURI];
+        
+        if (![request startDownload])
+        {
+            OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Device token retrievel request is not sent.");
+            [self.dictionaryOfHTTPRequests removeObjectForKey:peerURI];
+        }
+    }
+
+}
+
+- (void) registerDeviceToken
+{
+    NSString* peerURI = [[HOPModelManager sharedModelManager] getPeerURIForHomeUser];
+    
+    if ([self.deviceToken length] > 0 && [peerURI length] > 0 && ![[self.dictionaryOfHTTPRequests allKeys] containsObject:peerURI])
+    {
+        NSMutableDictionary* dictRoot = [[NSMutableDictionary alloc] init];
+        NSMutableDictionary* dictData  = [[NSMutableDictionary alloc] init];
+        
+        [dictData setObject:[[Settings sharedSettings] getIdentityProviderDomain]  forKey:@"$domain"];
+        [dictData setObject:[[NSUserDefaults standardUserDefaults] stringForKey: @"applicationId"]  forKey:@"$appid"];
+        [dictData setObject:[HOPUtility getGUIDstring]  forKey:@"$id"];
+        [dictData setObject:@"push-hack" forKey:@"$handler"];
+        [dictData setObject:@"device-associate-set" forKey:@"$method"];
+        [dictData setObject:@"apns" forKey:@"type"];
+        [dictData setObject:peerURI forKey:@"uri"];
+        [dictData setObject:self.deviceToken forKey:@"deviceToken"];
+
+        [dictRoot setObject:dictData forKey:@"request"];
+        
+        NSString* json = nil;
+        NSError* error = nil;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictRoot
+                                                           options:0 // Pass 0 if you don't care about the readability of the generated string
+                                                             error:&error];
+        
+        if (!jsonData)
+        {
+            OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"JSON data serialization has failed with an error: %@", error);
+        } else
+        {
+            json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        }
+        
+        HTTPDownloader* request = [[HTTPDownloader alloc] initDownloadFromURL:@"http://push-hack.hcs-stack-v2-i7957106-7.hcs.io/device-associate-set" data:json post:YES];
+        
+        request.delegate = self;
+        [self.dictionaryOfHTTPRequests setObject:request forKey:peerURI];
+        
+        if (![request startDownload])
+        {
+            [self.dictionaryOfHTTPRequests removeObjectForKey:peerURI];
+            OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Device token registration request is not sent.");
+        }
+    }
+}
+
+#pragma mark - HTTPDownloaderDelegate
+
+- (void) httpDownloader:(HTTPDownloader*) downloader downloaded:(NSString*) downloaded
+{
+    NSDictionary* responseDictionary = nil;
+
+    NSString* peerURI = nil;
+    
+    for (NSString* key in [self.dictionaryOfHTTPRequests allKeys])
+    {
+        if ([self.dictionaryOfHTTPRequests objectForKey:key] == downloader)
+        {
+            peerURI = key;
+            break;
+        }
+    }
+    
+    if ([downloaded length] > 0 && [downloaded rangeOfString:@">404<"].location == NSNotFound)
+    {
+        SBJsonParser* parser = [[SBJsonParser alloc] init];
+        responseDictionary = [parser objectWithString: downloaded];
+        if ([responseDictionary count] > 0)
+        {
+            NSDictionary* result = [responseDictionary objectForKey:@"result"];
+            if ([result count] > 0)
+            {
+                OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Received valid response.");
+                if (![peerURI isEqualToString:[[HOPModelManager sharedModelManager] getPeerURIForHomeUser]])
+                {
+                    NSString* type = [result objectForKey:@"type"];
+                    //if ([type isEqualToString:@"apns"])
+                    if ([type length] > 0)
+                    {
+                        NSString* deviceToken = [result objectForKey:@"deviceToken"];
+                        if ([deviceToken length] > 0)
+                        {
+                            [[HOPModelManager sharedModelManager] setAPNSData:deviceToken type:type PeerURI:peerURI];
+                            HOPMessage* msg = [self.dictionaryOfPushNotificationsToSend objectForKey:peerURI];
+                            if (msg)
+                            {
+                                NSArray* deviceTokens = [self getDeviceTokensForContact2:msg.contact];
+                                [self sendRichPush:msg deviceTokens:deviceTokens];
+                            }
+                        }
+                        
+                    }
+                }
+                else
+                {
+                    [[HOPModelManager sharedModelManager] setAPNSData:self.deviceToken type:notificationTypeApple PeerURI: [[HOPModelManager sharedModelManager] getPeerURIForHomeUser]];
+                }
+            }
+        }
+    }
+    else
+    {
+        if ([downloaded length] > 0)
+        {
+            OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Response error: 404 Not found");
+        }
+        else
+        {
+            OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Received empty response.");
+        }
+    }
+    
+    [self.dictionaryOfHTTPRequests removeObjectForKey:peerURI];
+}
+
+- (void) httpDownloader:(HTTPDownloader *) downloader didFailWithError:(NSError *)error
+{
+    
+    OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Response error: %@", [error description]);
+    NSString* peerURI = nil;
+    
+    for (NSString* key in [self.dictionaryOfHTTPRequests allKeys])
+    {
+        if ([self.dictionaryOfHTTPRequests objectForKey:key] == downloader)
+        {
+            peerURI = key;
+            break;
+        }
+    }
+    [self.dictionaryOfHTTPRequests removeObjectForKey:peerURI];
+}
 @end

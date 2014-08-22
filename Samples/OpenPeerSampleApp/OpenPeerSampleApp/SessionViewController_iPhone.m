@@ -60,6 +60,7 @@
 - (void) actionCallMenu;
 - (void) updateCallDuration;
 - (void) setRightBarButtonWithEndCall:(BOOL) withEndCall forWaitingView:(BOOL)forWaitingView ;
+- (void) popNavigation;
 @end
 
 @implementation SessionViewController_iPhone
@@ -122,7 +123,8 @@
     
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [backButton setImage:[UIImage imageNamed:@"iPhone_back_button.png"] forState:UIControlStateNormal];
-    [backButton addTarget:self.navigationController action:@selector(popViewControllerAnimated:) forControlEvents:UIControlEventTouchUpInside];
+    //[backButton addTarget:self.navigationController action:@selector(popViewControllerAnimated:) forControlEvents:UIControlEventTouchUpInside];
+    [backButton addTarget:self action:@selector(popNavigation) forControlEvents:UIControlEventTouchUpInside];
     backButton.frame = CGRectMake(0.0, 0.0, 40.0, 40.0);
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView: backButton];
     
@@ -483,6 +485,11 @@
     
     self.navigationItem.rightBarButtonItem = nil;
     self.navigationItem.rightBarButtonItem = rightBarButtonItem;
+}
+
+- (void) popNavigation
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 @end
 

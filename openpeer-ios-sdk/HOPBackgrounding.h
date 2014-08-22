@@ -36,38 +36,52 @@
 @interface HOPBackgrounding : NSObject
 
 /**
- Singleton class to handle backgrounding.
+ Returns singleton object of HOPBackgrounding class.
  */
 + (HOPBackgrounding*) sharedBackgrounding;
-- (id) init __attribute__((unavailable("HOPAccount is singleton class.")));
 
 /**
- Notifies core that app is going to background.
- @param inDelegate id<HOPBackgroundingCompletionDelegate>* backgroundning delegate
+ *  This init method is not available, because HOPBackgrounding is a singleton class.
+ *
+ */
+- (id) init __attribute__((unavailable("HOPBackgrounding is a singleton class.")));
+
+/**
+ Notifies SDK that app is going to background.
+ @param inDelegate Delegate object that implements the HOPBackgroundingCompletionDelegate protocol
  */
 - (void) notifyGoingToBackground:(id<HOPBackgroundingCompletionDelegate>) inDelegate;
 
 /**
- Notifies core that app is going to background without chance for delay.
+ Notifies SDK that app is going to background without chance for delay.
  */
 - (void) notifyGoingToBackgroundNow;
 
 /**
- Notifies core that app is returning from the background without.
+ Notifies SDK that app is returning from the background.
  */
 - (void) notifyReturningFromBackground;
 
 
 /**
- Subscribes bacakgrouding delegate and add backgrounding phase.
+ *  Subscribes bacakgrouding delegate and add backgrounding phase.
+ *
+ *  @param inDelegate Delegate object that implements the HOPBackgroundingDelegate protocol
+ *  @param phase      Index of backgrounding phase
  */
 - (void) subscribeDelegate:(id<HOPBackgroundingDelegate>) inDelegate phase:(unsigned long) phase;
 
 @end
 
 
+/**
+ *  Represents subscribed backgrounding object.
+ */
 @interface HOPBackgroundingSubscription : NSObject
 
+/**
+ *  Cancel backgrounding subscription.
+ */
 - (void) cancel;
 
 @end

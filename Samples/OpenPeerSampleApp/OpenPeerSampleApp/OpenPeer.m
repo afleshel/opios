@@ -46,6 +46,7 @@
 //Managers
 #import "LoginManager.h"
 #import "SessionManager.h"
+#import "OfflineManager.h"
 //Delegates
 #import "StackDelegate.h"
 #import "MediaEngineDelegate.h"
@@ -60,6 +61,7 @@
 #import "MainViewController.h"
 //#import "HTTPDownloader.h"
 
+#import "UIDevice+Networking.h"
 
 //Private methods
 @interface OpenPeer ()
@@ -106,46 +108,55 @@
 
 - (void) preSetup
 {
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Pre setup");
     //Create all delegates required for communication with core
     [self createDelegates];
     
     //Set log levels and start logging
     [Logger startAllSelectedLoggers];
     
-    //Set persistent stores
-    NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
-    NSString *dataPathDirectory = [libraryPath stringByAppendingPathComponent:@"db"];
-    [[HOPModelManager sharedModelManager] setDataPath:dataPathDirectory backupData:NO];
-    [[HOPModelManager sharedModelManager] clearSessionRecords];
- 
-    //Set settigns delegate
-    [[HOPSettings sharedSettings] setup];
-    [[HOPSettings sharedSettings] applyDefaults];
-    
     //Cleare expired cookies and set delegate
     [[HOPCache sharedCache] removeExpiredCookies];
     [[HOPCache sharedCache] setup];
-
-    BOOL startDownloadingSettings = [[Settings sharedSettings] updateAppSettings];
     
-    if (![[HOPModelManager sharedModelManager] getLastLoggedInHomeUser])
+    if ([UIDevice isNetworkReachable])
     {
-        //Start settings download. If download is not started finish presetup
-        if (!startDownloadingSettings)
-            [self finishPreSetup];
+        //Set persistent stores
+        NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
+        NSString *dataPathDirectory = [libraryPath stringByAppendingPathComponent:@"db"];
+        [[HOPModelManager sharedModelManager] setDataPath:dataPathDirectory backupData:NO];
+        //[[HOPModelManager sharedModelManager] clearSessionRecords];
+     
+        //Set settigns delegate
+        [[HOPSettings sharedSettings] setup];
+        if ([Utility isRuningForTheFirstTime])
+            [[HOPSettings sharedSettings] applyDefaults];
+        
+        BOOL startDownloadingSettings = [[Settings sharedSettings] updateAppSettings];
+        
+        if (![[HOPModelManager sharedModelManager] getLastLoggedInHomeUser])
+        {
+            //Start settings download. If download is not started finish presetup
+            if (!startDownloadingSettings)
+                [self finishPreSetup];
+        }
+        else
+        {
+            //Start settings download. If download is not started finish setup
+            if (!startDownloadingSettings)
+                [self setup];
+        }
     }
     else
-    {
-        //Start settings download. If download is not started finish setup
-        if (!startDownloadingSettings)
-            [self setup];
-    }
+        [[OfflineManager sharedOfflineManager]showInfoAboutNetworkProblem];
 }
 
 - (void) finishPreSetup
 {
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Pre setup finished");
     if (![[HOPModelManager sharedModelManager] getLastLoggedInHomeUser])
     {
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"There is no logged in user");
         if ([[NSUserDefaults standardUserDefaults] boolForKey: settingsKeyQRScannerShownAtStart])
             [[self mainViewController] showQRScanner]; //Show QR scanner if user wants to change settings by reading QR code
         else if ([[NSUserDefaults standardUserDefaults] boolForKey:settingsKeySplashScreenAllowsQRScannerGesture])
@@ -154,7 +165,10 @@
             [self setup];
     }
     else
+    {
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Starting setup for logged in user");
         [self setup];
+    }
 }
 /**
  Initializes the open peer stack. After initialization succeeds, login screen is displayed, or user relogin started.
@@ -162,6 +176,7 @@
  */
 - (void) setup
 {
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Started setup");
     //If authorized application id is missing, generate it 
 //    if ([[[HOPSettings sharedSettings] getAuthorizedApplicationId] length] == 0)
 //        [[HOPSettings sharedSettings] storeAuthorizedApplicationId:[[OpenPeer sharedOpenPeer] authorizedApplicationId]];
@@ -261,6 +276,7 @@
 
 - (void) prepareAppForBackground
 {
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Preparing app for the background");
     UIBackgroundTaskIdentifier bgTask = UIBackgroundTaskInvalid;
     
     bgTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^

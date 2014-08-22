@@ -42,13 +42,15 @@
 @property (nonatomic, retain) NSDate* date;
 
 /**
- Message init method
- @param inMessageId NSString Message uique identifier.
- @param messageText NSString Message text.
- @param inContact HOPContact Message recipient.
- @param inMessageType NSString Message mime type. It is on user to create mime types. Currently there are no specified mime types.
- @param inMessageDate NSDate Message date.
- @returns Ponter to the created contact object
+ *  HOPMessage initializer.
+ *
+ *  @param inMessageId   Message ID
+ *  @param messageText   Message text
+ *  @param inContact     Message recipient
+ *  @param inMessageType  Message mime type. It is on user to create mime types.
+ *  @param inMessageDate Message date
+ *
+ *  @return HOPMessage object
  */
 - (id) initWithMessageId:(NSString*) inMessageId andMessage:(NSString*) messageText andContact:(HOPContact*) inContact andMessageType:(NSString*) inMessageType andMessageDate:(NSDate*) inMessageDate;
 @end

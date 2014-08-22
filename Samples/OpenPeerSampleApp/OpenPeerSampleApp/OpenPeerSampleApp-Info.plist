@@ -14,6 +14,9 @@
 		<dict>
 			<key>CFBundleIconFiles</key>
 			<array>
+				<string>ApplicationLogo58</string>
+				<string>ApplicationLogo80</string>
+				<string>ApplicationLogo120</string>
 				<string>OpenPeerLogo80</string>
 				<string>OpenPeerLogo58</string>
 				<string>OpenPeerLogo29</string>
@@ -32,11 +35,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.9</string>
+	<string>1.0.15</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1013</string>
+	<string>1059</string>
 	<key>Hookflash Developer ID</key>
 	<string>777</string>
 	<key>LSRequiresIPhoneOS</key>

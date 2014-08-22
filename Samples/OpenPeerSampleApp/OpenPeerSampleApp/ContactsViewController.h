@@ -37,7 +37,9 @@
 @interface ContactsViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, UISearchBarDelegate, NSFetchedResultsControllerDelegate>
 
 @property (nonatomic, weak) IBOutlet ContactTableViewCell *contactsTableViewCell;
+@property (nonatomic) BOOL isInFavoritesMode;
 
+- (id) initInFavoritesMode:(BOOL) favoritesMode;
 - (void) onContactsLoaded;
 
 @end

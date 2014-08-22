@@ -34,7 +34,7 @@
 #import <zsLib/types.h>
 #import "HOPTypes.h"
 
-void OpenPeerLog(HOPLoggerLevels logLevel, NSString* format,...);
+void OpenPeerLog(HOPLoggerLevel logLevel, NSString* format,...);
 
 @interface OpenPeerUtility : NSObject
 

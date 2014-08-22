@@ -62,6 +62,7 @@ NSString * const settingsKeyAPNS = @"APNS-UrbanAirShip";
 NSString * const settingsKeyTelnetLogger = @"localTelnetLoggerPort";
 NSString * const settingsKeyOutgoingTelnetLogger = @"defaultOutgoingTelnetServer";
 NSString * const settingsKeyStdOutLogger = @"archiveStdOutLogger";
+NSString * const settingsKeyEnabledLogger = @"archiveEnableLogger";
 NSString * const settingsKeyRemoveSettingsAppliedByQRCode = @"applicationRemoveSettingsAppliedByQRCode";
 NSString * const settingsKeyOuterFrameURL = @"outerFrameURL";
 NSString * const settingsKeyGrantServiceURL = @"namespaceGrantServiceURL";
@@ -80,6 +81,8 @@ NSString * const archiveEnabled = @"enabled";
 NSString * const archiveServer = @"Server";
 NSString * const archiveColorized = @"colorized";
 
+NSString * const localNotificationKey = @"localNotification";
+
 #ifdef APNS_ENABLED
 NSString* const settingsKeyUrbanAirShipMasterAppSecretDev = @"masterAppSecretDev";
 NSString* const settingsKeyUrbanAirShipMasterAppSecret = @"masterAppSecret";
@@ -91,8 +94,6 @@ NSString* const settingsKeyUrbanAirShipAPIPushURL = @"apiPushURL";
 
 NSString* const settingsKeyAPNSTimeOut = @"applicationTimeBetweenTwoPushes";
 #endif
-
-
 
 //Contact Profile xml tags
 NSString* const profileXmlTagProfile = @"profile";
@@ -118,7 +119,13 @@ NSString * const TagText            = @"text";
 
 NSString * const systemMessageRequest = @"?";
 
+//Notifications
+NSString * const notifictionAppReturnedFromBackground = @"notifictionAppReturnedFromBackground";
 NSString * const notificationRemoteSessionModeChanged = @"notificationRemoteSessionModeChanged";
+NSString * const notificationCrashReportSent = @"notificationCrashReportSent";
+
+NSString * const notificationTypeApple = @"apns";
+NSString * const notificationTypeAndroid = @"apid";
 
 NSString * const defaultTelnetPort = @"59999";
 
@@ -149,3 +156,5 @@ NSString * const moduleServicesTransport = @"openpeer_services_transport_stream"
 NSString * const moduleZsLib = @"zsLib";
 NSString * const moduleZsLibSocket = @"zsLib_socket";
 NSString * const moduleJavaScript = @"openpeer_javascript";
+
+

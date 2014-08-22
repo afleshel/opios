@@ -37,6 +37,8 @@
 #import <OpenPeerSDK/HOPBackgrounding.h>
 #import "BackgroundingDelegate.h"
 #import "SessionManager.h"
+#import "OfflineManager.h"
+#import "Logger.h"
 #ifdef APNS_ENABLED
 #import "APNSManager.h"
 #import "APNSInboxManager.h"
@@ -60,8 +62,11 @@
     
     [self.window makeKeyAndVisible];
 
+    [[OfflineManager sharedOfflineManager]  startNetworkMonitor];
+    
     [[OpenPeer sharedOpenPeer] setMainViewController:mainViewController];
     [[OpenPeer sharedOpenPeer] preSetup];
+    
 
 #ifdef APNS_ENABLED
     [[APNSManager sharedAPNSManager] prepareUrbanAirShip];
@@ -70,6 +75,12 @@
     if ([apnsInfo count] > 0)
     {
         [[APNSInboxManager sharedAPNSInboxManager] handleAPNS:apnsInfo];
+    }
+    else
+    {
+        NSDictionary *localInfo = [launchOptions valueForKey:localNotificationKey];
+        if ([localInfo count] > 0)
+            [[APNSInboxManager sharedAPNSInboxManager] setLocalNotificationDictionary:localInfo];
     }
 #endif
     return YES;
@@ -88,6 +99,8 @@
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Application did enter background.");
+    
     [[OpenPeer sharedOpenPeer] setAppEnteredBackground:YES];
     [[OpenPeer sharedOpenPeer] setAppEnteredForeground:NO];
     
@@ -104,6 +117,8 @@
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Application will enter foreground.");
+    [Logger startAllSelectedLoggers];
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     if ( [[OpenPeer sharedOpenPeer] appEnteredBackground])
     {
@@ -119,6 +134,7 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Application did become active");
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }
 
@@ -142,8 +158,9 @@
         {
             OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Push notification deviceToken:%@",hexString);
 
-            [[APNSManager sharedAPNSManager] registerDeviceToken:deviceToken];
             [[APNSManager sharedAPNSManager] setDeviceToken:hexString];
+            [[APNSManager sharedAPNSManager] registerDeviceToken:deviceToken];
+            
             [[OpenPeer sharedOpenPeer] setDeviceToken:hexString];
         }
         else
@@ -184,6 +201,11 @@
     // Notify UAPush that a push came in with the completion handler
 //    [[UAPush shared] handleNotification:userInfo applicationState:application.applicationState fetchCompletionHandler:completionHandler];
 }*/
+
+- (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler
+{
+    
+}
 
 - (void)handleNotification:(NSDictionary *)notification applicationState:(UIApplicationState)state
 {

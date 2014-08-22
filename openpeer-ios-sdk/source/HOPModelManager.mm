@@ -40,7 +40,11 @@
 #import "HOPCacheData.h"
 #import "HOPSessionRecord.h"
 #import "HOPMessageRecord.h"
+#import "HOPConversationThreadRecord.h"
 #import "HOPContact.h"
+#import "HOPConversationThread.h"
+#import "HOPUtility.h"
+
 #import "OpenPeerConstants.h"
 #import <CoreData/CoreData.h>
 #import <openpeer/core/IHelper.h>
@@ -207,10 +211,10 @@ using namespace openpeer::core;
     
     
     //Set cache path
-    NSString *cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+    self.cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
 
     
-    NSString *pathCache = [cachePath stringByAppendingPathComponent:[NSString stringWithFormat:@"/%@",cacheDatabaseName]];
+    NSString *pathCache = [self.cachePath stringByAppendingPathComponent:[NSString stringWithFormat:@"/%@",cacheDatabaseName]];
     NSURL *storeCacheURL = [NSURL fileURLWithPath:pathCache];
 
     
@@ -507,12 +511,6 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (NSArray*) getAllIdentitiesInfoForHomeUserIdentityURI:(NSString*) identityURI
-{
-    NSArray* ret = [self getResultsForEntity:@"HOPAssociatedIdentity" withPredicateString:[NSString stringWithFormat:@"(homeUserProfile.identityURI MATCHES '%@')", identityURI] orderDescriptors:nil];
-    
-    return ret;
-}
 
 - (HOPAvatar*) getAvatarByURL:(NSString*) url
 {
@@ -603,7 +601,14 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (void) setAPNSData:(NSString*) deviceToken PeerURI:(NSString*) peerURI
+- (NSArray*) getPushNotificationDataForPeerURI:(NSString*) peerURI
+{
+    NSArray* ret = [self getResultsForEntity:@"HOPAPNSData" withPredicateString:[NSString stringWithFormat:@"(publicPeer.peerURI MATCHES '%@')",peerURI] orderDescriptors:nil];
+    
+    return ret;
+}
+
+- (void) setAPNSData:(NSString*) deviceToken type:(NSString*) type PeerURI:(NSString*) peerURI
 {
     if ([[self getAPNSDataForPeerURI:peerURI] count] == 0)
     {
@@ -613,6 +618,7 @@ using namespace openpeer::core;
             HOPAPNSData* apnsData = (HOPAPNSData*)[self createObjectForEntity:@"HOPAPNSData"];
             apnsData.deviceToken = deviceToken;
             apnsData.publicPeer = publicPeerFile;
+            apnsData.type = type;
             [self saveContext];
         }
     }
@@ -624,6 +630,16 @@ using namespace openpeer::core;
     return ret;
 }
 
+- (void) clearAPNSData
+{
+    NSArray* ret = [self getResultsForEntity:@"HOPAPNSData" withPredicateString:nil orderDescriptors:nil];
+    
+    for (HOPAPNSData* data in ret)
+    {
+        [self deleteObject:data];
+    }
+    [self saveContext];
+}
 - (void)saveBackgroundContext
 {
     NSError *error = nil;
@@ -777,9 +793,9 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (HOPSessionRecord *) getMessageRecordByID:(NSString*) messageID
+- (HOPMessageRecord *) getMessageRecordByID:(NSString*) messageID
 {
-    HOPSessionRecord* ret = nil;
+    HOPMessageRecord* ret = nil;
     
     NSArray* results = [self getResultsForEntity:@"HOPMessageRecord" withPredicateString:[NSString stringWithFormat:@"(messageID MATCHES '%@')", messageID] orderDescriptors:nil];
     
@@ -791,7 +807,7 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (HOPSessionRecord*) addSession:(NSString*) sessionID type:(NSString*) type date:(NSDate*) date name:(NSString*) name participants:(NSArray*) participants
+/*- (HOPSessionRecord*) addSession:(NSString*) sessionID type:(NSString*) type date:(NSDate*) date name:(NSString*) name participants:(NSArray*) participants
 {
     HOPSessionRecord* sessionRecord = nil;
     if ([sessionID length] > 0)
@@ -810,7 +826,7 @@ using namespace openpeer::core;
         [self saveContext];
     }
     return sessionRecord;
-}
+}*/
 
 - (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date session:(NSString*) sessionRecordId rolodexContact:(HOPRolodexContact*) rolodexContact messageId:(NSString*)messageId
 {
@@ -819,14 +835,19 @@ using namespace openpeer::core;
     {
         if ([self getMessageRecordByID:messageId] == nil)
         {
-            HOPSessionRecord* sessionRecord = [self getSessionRecordByID:sessionRecordId];
-            messageRecord = (HOPMessageRecord*)[self createObjectForEntity:@"HOPMessageRecord"];
-            messageRecord.text = messageText;
-            messageRecord.date = date;
-            messageRecord.type = type;
-            messageRecord.fromPeer = rolodexContact.identityContact.peerFile;
-            messageRecord.session = sessionRecord;
-            messageRecord.messageID = messageId;
+            NSArray* sessionRecords = [self getSessionRecordsForThreadID:sessionRecordId];
+            if ([sessionRecords count] > 0)
+            {
+                HOPSessionRecord* sessionRecord = [sessionRecords objectAtIndex:0];//[self getSessionRecordByID:sessionRecordId];
+                messageRecord = (HOPMessageRecord*)[self createObjectForEntity:@"HOPMessageRecord"];
+                messageRecord.text = messageText;
+                messageRecord.date = date;
+                messageRecord.type = type;
+                messageRecord.fromPeer = rolodexContact.identityContact.peerFile;
+                messageRecord.session = sessionRecord;
+                messageRecord.messageID = messageId;
+                sessionRecord.lastActivity = [NSDate date];
+            }
         }
         
         [self saveContext];
@@ -858,6 +879,185 @@ using namespace openpeer::core;
     
     [self saveContext];
 }
+
+- (NSString*) getPeerURIForHomeUser
+{
+    HOPHomeUser* homeUser = [self getLastLoggedInHomeUser];
+    HOPAssociatedIdentity* associatedIdentity = [[homeUser.associatedIdentities allObjects] objectAtIndex:0];
+    return associatedIdentity.homeUserProfile.identityContact.peerFile.peerURI;
+}
+
+- (HOPConversationThreadRecord*) getConversationThreadRecordForThreadID:(NSString*) threadID
+{
+    HOPConversationThreadRecord* ret = nil;
+    
+    NSArray* results = [self getResultsForEntity:@"HOPConversationThreadRecord" withPredicateString:[NSString stringWithFormat:@"(threadID MATCHES '%@')", threadID] orderDescriptors:nil];
+    
+    if([results count] > 0)
+    {
+        ret = [results objectAtIndex:0];
+    }
+    
+    return ret;
+}
+
+- (NSArray*) getSessionRecordsForThreadID:(NSString*) threadID
+{
+    NSArray* ret = nil;
+    if ([threadID length] > 0)
+    {
+        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"lastActivity" ascending:NO];
+        ret = [self getResultsForEntity:@"HOPSessionRecord" withPredicateString:[NSString stringWithFormat:@"ANY conversationThreadRecords.threadID MATCHES '%@'",threadID] orderDescriptors:@[sortDescriptor]];
+    }
+    return ret;
+}
+
+- (HOPSessionRecord*) getSessionRecordForConversationThread:(HOPConversationThread*) conversationThread
+{
+    HOPSessionRecord* ret = nil;
+    if (conversationThread)
+    {
+        NSArray* results = nil;
+        NSMutableArray* arrayOfPeerURIs = [[NSMutableArray alloc]init];
+        
+        for (HOPContact* contact in [conversationThread getContacts])
+        {
+            [arrayOfPeerURIs addObject:[contact getPeerURI]];
+        }
+        
+        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"lastActivity" ascending:NO];
+        
+        results = [self getResultsForEntity:@"HOPSessionRecord" withPredicateString:[NSString stringWithFormat:@"homeUser.stableId MATCHES '%@'",[self getLastLoggedInHomeUser].stableId] orderDescriptors:@[sortDescriptor]];
+        
+        for (HOPSessionRecord* sessionRecord in results)
+        {
+            for (HOPPublicPeerFile* publicPeerFile in sessionRecord.participants)
+            {
+                if ([arrayOfPeerURIs containsObject:publicPeerFile.peerURI])
+                {
+                    return  sessionRecord;
+                    
+                }
+            }
+        }
+//        if ([result count] > 0)
+//            ret = [result objectAtIndex:0];
+    }
+    return ret;
+}
+
+- (NSArray*) getSessionRecordsForParticipants:(NSArray*) participants
+{
+    NSArray* ret = nil;
+    if ([participants count] > 0)
+    {
+        ret = [self getResultsForEntity:@"HOPSessionRecord" withPredicateString:[NSString stringWithFormat:@"ALL participants IN %@",participants] orderDescriptors:nil];
+    }
+    return ret;
+}
+
+- (HOPConversationThreadRecord*) createRecordForConversationThread:(HOPConversationThread*) conversationThread sessionRecord:(HOPSessionRecord*) sessionRecord
+{
+    HOPConversationThreadRecord* ret = nil;
+    
+    if (conversationThread)
+    {
+        ret = [self getConversationThreadRecordForThreadID:[conversationThread getThreadId]];
+        if (!ret)
+        {
+            ret = (HOPConversationThreadRecord*)[self createObjectForEntity:@"HOPConversationThreadRecord"];
+            ret.creationTime = [NSDate date];
+            ret.lastUpdate = [NSDate date];
+            ret.threadID = [conversationThread getThreadId];
+            
+            if (sessionRecord)
+            {
+                [ret addSessionReordsObject:sessionRecord];
+            }
+            [self saveContext];
+        }
+    }
+    
+    return ret;
+}
+
+- (HOPSessionRecord*) createSessionRecordForConversationThread:(HOPConversationThread*) conversationThread type:(NSString*) type date:(NSDate*) date name:(NSString*) name participants:(NSArray*) participants
+{
+    HOPSessionRecord* ret = nil;
+    if (conversationThread)
+    {
+        HOPConversationThreadRecord *conversationThreadRecord = [self createRecordForConversationThread:conversationThread sessionRecord:nil];
+        
+        if (conversationThreadRecord)
+        {
+            ret = [self getSessionRecordForConversationThread:conversationThread];
+            
+            if (!ret)
+            {
+                ret = (HOPSessionRecord*)[self createObjectForEntity:@"HOPSessionRecord"];
+                ret.homeUser = [self getLastLoggedInHomeUser];
+                ret.sessionID = [HOPUtility getGUIDstring];
+                ret.creationTime = date;
+                ret.type = type;
+                ret.name = name;
+            }
+        
+            ret.lastActivity = date;
+            [ret addConversationThreadRecordsObject:conversationThreadRecord];
+            
+            for (HOPRolodexContact* participant in participants)
+            {
+                HOPPublicPeerFile* publicPeerFile = participant.identityContact.peerFile;
+                [ret addParticipantsObject:publicPeerFile];
+            }
+            
+            [self saveContext];
+        }
+    }
+    return ret;
+}
+
+- (NSFetchRequest*) getMessagesFetchRequestForSessionID:(NSString*) sessionID sortAscending:(BOOL) ascending
+{
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPMessageRecord" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];
+    [fetchRequest setEntity:entity];
+    
+    /*NSMutableArray* arrayOfPredicates = [[NSMutableArray alloc] init];
+    {
+        NSPredicate* predicateSessionID = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(session.sessionID MATCHES '%@')",sessionID]];
+        [arrayOfPredicates addObject:predicateSessionID];
+    }
+    NSPredicate *predicate = [NSCompoundPredicate andPredicateWithSubpredicates:arrayOfPredicates];
+    */
+    
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(session.sessionID MATCHES '%@')",sessionID]];
+    
+    [fetchRequest setPredicate:predicate];
+    
+	[fetchRequest setFetchBatchSize:20];
+	
+	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"date" ascending:ascending];
+	NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+	
+	[fetchRequest setSortDescriptors:sortDescriptors];
+    
+    return fetchRequest;
+}
+
+- (HOPMessageRecord *) getLastMessageRecordForSessionID:(NSString*) sessionID
+{
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"date" ascending:NO];
+	NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+    
+    NSArray* results = [self getResultsForEntity:@"HOPMessageRecord" withPredicateString:[NSString stringWithFormat:@"(session.sessionID MATCHES '%@')", sessionID] orderDescriptors:sortDescriptors];
+    
+    if ([results count] > 0)
+        return [results objectAtIndex:0];
+    else
+        return nil;
+}
+
 @end
 
 

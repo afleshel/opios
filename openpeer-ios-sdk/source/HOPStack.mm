@@ -81,15 +81,15 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     return isReady;
 }
 #warning "createAuthorizedApplicationID SHOULD BE USED ONLY DURING DEVELOPMENT. AN AUTHORIZED APPLICATION ID SHOULD BE GENERATED FROM  A SERVER AND GIVEN TO THE APPLICATION."
-+ (NSString*) createAuthorizedApplicationID:(NSString*) inAuthorizedApplicationID applicationIDSharedSecret:(NSString*) applicationIDSharedSecret expires:(NSDate*) expires
++ (NSString*) createAuthorizedApplicationID:(NSString*) inApplicationID applicationIDSharedSecret:(NSString*) applicationIDSharedSecret expires:(NSDate*) expires
 {
     NSString* ret = nil;
     
     NSLog(@"!!!!!!!!!!!!!!!!!!!! WARNING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!/n THIS SHOULD BE USED ONLY DURING DEVELOPMENT. AN AUTHORIZED APPLICATION ID SHOULD BE GENERATED FROM  A SERVER AND GIVEN TO THE APPLICATION");
     
-    if ([inAuthorizedApplicationID length] > 0 && [applicationIDSharedSecret length] > 0)
+    if ([inApplicationID length] > 0 && [applicationIDSharedSecret length] > 0)
     {
-        String authorizedApplicationID = IStack::createAuthorizedApplicationID([inAuthorizedApplicationID UTF8String], [applicationIDSharedSecret UTF8String], boost::posix_time::from_time_t([expires timeIntervalSince1970]));
+        String authorizedApplicationID = IStack::createAuthorizedApplicationID([inApplicationID UTF8String], [applicationIDSharedSecret UTF8String], boost::posix_time::from_time_t([expires timeIntervalSince1970]));
         if (authorizedApplicationID)
         {
             ret = [NSString stringWithUTF8String:authorizedApplicationID];

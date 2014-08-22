@@ -35,17 +35,20 @@
 @class HOPCall;
 @class HOPConversationThread;
 @class HOPRolodexContact;
+@class HOPSessionRecord;
 
 @interface Session : NSObject
 
 @property (strong) NSMutableArray* participantsArray;
 @property (weak, nonatomic) HOPConversationThread* conversationThread;
+@property (weak, nonatomic) HOPSessionRecord* sessionRecord;
 @property (strong) HOPCall* currentCall;
 @property (assign) BOOL isRedial;
 @property (strong) NSMutableArray* messageArray;
 @property (strong) NSMutableArray* unreadMessageArray;
 @property (strong) NSMutableSet* sessionIdsHistory;
 @property (strong) NSMutableArray* arrayMergedConversationThreads;
+@property (strong) NSMutableSet* setOfNotSentMessages;
 
 - (id) initWithContact:(HOPRolodexContact*) inContact conversationThread:(HOPConversationThread*) inConverationThread;
 - (id) initWithContacts:(NSArray*) inContacts conversationThread:(HOPConversationThread*) inConverationThread;

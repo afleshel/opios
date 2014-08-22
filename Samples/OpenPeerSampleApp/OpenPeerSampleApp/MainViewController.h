@@ -36,6 +36,7 @@
 @class LoginViewController;
 @class WebLoginViewController;
 @class ContactsViewController;
+@class ActiveSessionsViewController;
 
 typedef enum
 {
@@ -70,6 +71,8 @@ typedef  enum
 
 @property (nonatomic, strong) LoginViewController *loginViewController;
 @property (nonatomic, strong) ContactsViewController *contactsTableViewController;
+@property (nonatomic, strong) ContactsViewController *favoritesTableViewController;
+@property (nonatomic, strong) ActiveSessionsViewController *activeSessionsViewController;
 @property (nonatomic, strong) UITabBarController *tabBarController;
 
 @property (nonatomic, strong) NSMutableDictionary *sessionViewControllersDictionary;
@@ -91,6 +94,7 @@ typedef  enum
 - (void) removeSplashScreen;
 - (void) onLogout;
 - (void) onContactsLoadingStarted;
+- (void) onNetworkProblemResolved;
 
 - (void) showQRScanner;
 - (void) showSplashScreen;

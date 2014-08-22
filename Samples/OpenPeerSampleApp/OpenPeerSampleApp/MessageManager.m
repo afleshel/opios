@@ -32,6 +32,9 @@
 #import "MessageManager.h"
 #import "SessionManager.h"
 #import "ContactsManager.h"
+#ifdef APNS_ENABLED
+    #import "APNSManager.h"
+#endif
 
 #import "AppConsts.h"
 #import "Session.h"
@@ -51,13 +54,19 @@
 #import <OpenpeerSDK/HOPContact.h>
 #import <OpenpeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPMessageRecord.h>
+#import <OpenPeerSDK/HOPAccount.h>
 #import <OpenPeerSDK/HOPUtility.h>
+
+#import "UIDevice+Networking.h"
+
+
 
 @interface MessageManager ()
 
 @property (nonatomic, strong) NSComparator comparator;
 
 - (id) initSingleton;
+
 @end
 
 @implementation MessageManager
@@ -199,18 +208,21 @@
                 case SystemMessage_APNS_Request:
                 {
                     if ([messageText length] > 0 && [[inMessage.contact getPeerURI] length] > 0)
-                        [[HOPModelManager sharedModelManager] setAPNSData:messageText PeerURI: [inMessage.contact getPeerURI]];
+                        [[HOPModelManager sharedModelManager] setAPNSData:messageText type: notificationTypeApple PeerURI: [inMessage.contact getPeerURI]];
                     
-                    HOPMessage* message = [self createSystemMessageWithType:SystemMessage_APNS_Response andText:[[OpenPeer sharedOpenPeer] deviceToken] andRecipient:[[inSession participantsArray] objectAtIndex:0]];
-                    if (message)
-                        [inSession.conversationThread sendMessage:message];
+                    if ([[[OpenPeer sharedOpenPeer] deviceToken] length] > 0)
+                    {
+                        HOPMessage* message = [self createSystemMessageWithType:SystemMessage_APNS_Response andText:[[OpenPeer sharedOpenPeer] deviceToken] andRecipient:[[inSession participantsArray] objectAtIndex:0]];
+                        if (message)
+                            [inSession.conversationThread sendMessage:message];
+                    }
                 }
                 break;
                     
                 case SystemMessage_APNS_Response:
                 {
                     if ([messageText length] > 0 && [[inMessage.contact getPeerURI] length] > 0)
-                        [[HOPModelManager sharedModelManager] setAPNSData:messageText PeerURI: [inMessage.contact getPeerURI]];
+                        [[HOPModelManager sharedModelManager] setAPNSData:messageText type: notificationTypeApple PeerURI: [inMessage.contact getPeerURI]];
                 }
                 break;
 #endif
@@ -224,6 +236,7 @@
 
 - (void) sendMessage:(NSString*) message forSession:(Session*) inSession
 {
+    
     //Currently it is not available group chat, so we can have only one message recipients
     HOPRolodexContact* contact = [[inSession participantsArray] objectAtIndex:0];
     //Create a message object
@@ -231,16 +244,29 @@
     
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Sending message: %@ - message id: %@ - for session with id: %@",message,hopMessage.messageID,[inSession.conversationThread getThreadId]);
     
-    //Send message
-    [inSession.conversationThread sendMessage:hopMessage];
-    
-    /*Message* messageObj = [[Message alloc] initWithMessageText:message senderContact:nil sentTime:hopMessage.date];
-    //[inSession.messageArray addObject:messageObj];
-
-    NSUInteger addedIndex = [inSession.messageArray indexOfObject:messageObj inSortedRange:NSMakeRange(0, inSession.messageArray.count) options:NSBinarySearchingInsertionIndex usingComparator:self.comparator];
-    [inSession.messageArray insertObject:messageObj atIndex:addedIndex];*/
-    
     [[HOPModelManager sharedModelManager] addMessage:message type:messageTypeText date:hopMessage.date session:[inSession.conversationThread getThreadId] rolodexContact:nil messageId:hopMessage.messageID];
+    
+    if ([UIDevice isNetworkReachable] && [[HOPAccount sharedAccount] isCoreAccountCreated] && ([[HOPAccount sharedAccount] getState].state == HOPAccountStateReady))
+    {
+        //Send message
+        [inSession.conversationThread sendMessage:hopMessage];
+    }
+    else
+    {
+        if (![UIDevice isNetworkReachable])
+        {
+            OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Message %@ cannot be sent because of a network problem.",hopMessage.messageID);
+        }
+        else
+        {
+            OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Message %@ cannot be sent because account is not in the ready state.",hopMessage.messageID);
+        #ifdef APNS_ENABLED
+            [[APNSManager sharedAPNSManager]sendRichPushNotificationForMessage:hopMessage missedCall:NO];
+        #endif
+        }
+        //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resendMessages) name:kReachabilityChangedNotification object:nil];
+        [inSession.setOfNotSentMessages addObject:hopMessage];
+    }
 }
 
 /**
@@ -303,6 +329,25 @@
         {
             OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"%@ message is not saved - message id %@ - session id %@",message.text,message.messageID,sessionId);
         }
+        
+        if ([[OpenPeer sharedOpenPeer] appEnteredBackground])
+        {
+            NSMutableDictionary* dict = [[NSMutableDictionary alloc] init];
+            [dict setObject:contact.identityContact.peerFile.peerURI forKey:@"peerURI"];
+            [dict setObject:message.messageID forKey:@"messageId"];
+            [dict setObject:message.text forKey:@"message"];
+            [dict setObject:message.date forKey:@"date"];
+            if ([dict count] > 0)
+            {
+                NSDictionary* packedDict = @{localNotificationKey: dict};
+                [Utility showLocalNotification:message.text additionalData:packedDict];
+                OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Local notification for message: \" %@ \" with id %@ is shown.",message.text,message.messageID);
+            }
+            else
+            {
+                OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Local notification for message: \" %@ \" with id %@ is NOT shown.",message.text,message.messageID);
+            }
+        }
     }
     else
     {
@@ -336,4 +381,22 @@
     return nil;
 }
 
+- (void) resendMessages
+{
+    OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Message resending");
+    NSArray* sessions = [[[SessionManager sharedSessionManager] sessionsDictionary] allValues];
+    for (Session* session in sessions)
+    {
+        NSArray* messages = [session.setOfNotSentMessages allObjects];
+        for (HOPMessage* message in messages)
+        {
+            if ([UIDevice isNetworkReachable])
+            {
+                OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Message %@ is being resent",message.messageID);
+                [session.conversationThread sendMessage:message];
+                [session.setOfNotSentMessages removeObject:message];
+            }
+        }
+    }
+}
 @end

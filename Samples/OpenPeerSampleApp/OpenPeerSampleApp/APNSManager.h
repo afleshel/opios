@@ -34,8 +34,9 @@
 @class HOPRolodexContact;
 @class HOPContact;
 @class HOPMessage;
+@class HTTPDownloaderDelegate;
 
-@interface APNSManager : NSObject
+@interface APNSManager : NSObject<NSURLSessionDelegate, NSURLSessionTaskDelegate,HTTPDownloaderDelegate>
 
 @property (nonatomic, strong) NSString* deviceToken;
 @property  (nonatomic) int pushesToSend;
@@ -50,4 +51,7 @@
 //- (void) sendRichPushNotificationForContact:(HOPContact*) contact message:(HOPMessage*) message missedCall:(BOOL) missedCall;
 - (void) sendRichPushNotificationForMessage:(HOPMessage*) message missedCall:(BOOL) missedCall;
 - (BOOL) areTherePushesForSending;
+
+- (void) requestDeviceTokenForPeerURI:(NSString*) peerURI;
+- (void) registerDeviceToken;
 @end

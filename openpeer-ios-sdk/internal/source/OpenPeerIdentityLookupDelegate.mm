@@ -101,6 +101,7 @@ void OpenPeerIdentityLookupDelegate::updateContactsReceivedOnIdentityLookup(IIde
                         [identityLookup.arrayLastUpdatedContacts addObject:hopIdentityContact];
                     }
                 }
+                //[[HOPModelManager sharedModelManager] saveContext];
             }
             [[HOPModelManager sharedModelManager] saveContext];
         }

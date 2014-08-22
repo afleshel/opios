@@ -44,6 +44,7 @@ extern NSString * const settingsKeyAPNS;
 extern NSString * const settingsKeyTelnetLogger;
 extern NSString * const settingsKeyOutgoingTelnetLogger;
 extern NSString * const settingsKeyStdOutLogger;
+extern NSString * const settingsKeyEnabledLogger;
 extern NSString * const settingsKeyRemoveSettingsAppliedByQRCode;
 extern NSString * const settingsKeyOuterFrameURL;
 extern NSString * const settingsKeyGrantServiceURL;
@@ -80,6 +81,7 @@ extern NSString * const userAgentVariableVersionOS;
 extern NSString * const userAgentVariableDeviceModel;
 extern NSString * const userAgentVariableDeveloperID;
 
+extern NSString * const localNotificationKey;
 
 #ifdef APNS_ENABLED
 extern NSString* const settingsKeyUrbanAirShipMasterAppSecretDev;
@@ -120,6 +122,11 @@ extern NSString * const systemMessageRequest;
 
 //Notifications
 extern NSString * const notificationRemoteSessionModeChanged;
+extern NSString * const notifictionAppReturnedFromBackground;
+extern NSString * const notificationCrashReportSent;
+
+extern NSString * const notificationTypeApple;
+extern NSString * const notificationTypeAndroid;
 
 //Settings
 extern NSString * const defaultTelnetPort;

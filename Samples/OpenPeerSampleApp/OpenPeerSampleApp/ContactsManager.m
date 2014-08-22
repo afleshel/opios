@@ -241,26 +241,16 @@
             if (![identity isDelegateAttached])
                 [[LoginManager sharedLoginManager] attachDelegateForIdentity:identity forceAttach:NO];
             
-            if ([[identity getBaseIdentityURI] isEqualToString:[[Settings sharedSettings] getIdentityFederateBaseURI]])
+            HOPHomeUser* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
+            HOPAssociatedIdentity* associatedIdentity = [[HOPModelManager sharedModelManager] getAssociatedIdentityBaseIdentityURI:[identity getBaseIdentityURI] homeUserStableId:homeUser.stableId];
+        
+            if ([[LoginManager sharedLoginManager] isLogin] || [[LoginManager sharedLoginManager] isAssociation])
             {
-                dispatch_queue_t taskQ = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-                dispatch_async(taskQ, ^{
-                    [self loadAddressBookContacts];
-                });
+                [[[OpenPeer sharedOpenPeer] mainViewController] onContactsLoadingStarted];
             }
-            else if ([[identity getBaseIdentityURI] isEqualToString:identityFacebookBaseURI])
-            {
-                HOPHomeUser* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
-                HOPAssociatedIdentity* associatedIdentity = [[HOPModelManager sharedModelManager] getAssociatedIdentityBaseIdentityURI:[identity getBaseIdentityURI] homeUserStableId:homeUser.stableId];
             
-                if ([[LoginManager sharedLoginManager] isLogin] || [[LoginManager sharedLoginManager] isAssociation])
-                {
-                    [[[OpenPeer sharedOpenPeer] mainViewController] onContactsLoadingStarted];
-                }
-                
-                [identity startRolodexDownload:associatedIdentity.downloadedVersion];
-                OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Start rolodex contacts download - identity URI: - Version: %@",[identity getIdentityURI], associatedIdentity.downloadedVersion);
-            }
+            [identity startRolodexDownload:associatedIdentity.downloadedVersion];
+            OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Start rolodex contacts download - identity URI: - Version: %@",[identity getIdentityURI], associatedIdentity.downloadedVersion);
         }
     }
     
@@ -282,6 +272,8 @@
 - (void) refreshRolodexContacts
 {
     NSArray* associatedIdentities = [[HOPAccount sharedAccount] getAssociatedIdentities];
+    
+    [[HOPModelManager sharedModelManager] clearAPNSData];
     
     for (HOPIdentity* identity in associatedIdentities)
     {

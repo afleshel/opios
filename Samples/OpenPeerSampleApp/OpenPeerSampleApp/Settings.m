@@ -44,6 +44,7 @@
 
 @interface Settings ()
 @property (nonatomic, strong) HTTPDownloader* settingsDownloader;
+@property (nonatomic) int timeoutCounter;
 
 - (NSString*) getArchiveStringForModule:(Modules) module;
 @end
@@ -91,11 +92,20 @@
         
         if ([[NSUserDefaults standardUserDefaults] objectForKey:settingsKeyStdOutLogger])
             self.enabledStdLogger = [[[NSUserDefaults standardUserDefaults] objectForKey:settingsKeyStdOutLogger] boolValue];
-        
-        self.appModulesLoggerLevel =[[[NSUserDefaults standardUserDefaults] objectForKey:archiveModulesLogLevels] mutableCopy];
+
+        self.appModulesLoggerLevel = [[[NSUserDefaults standardUserDefaults] objectForKey:archiveModulesLogLevels] mutableCopy];
         
         if (!self.appModulesLoggerLevel)
             self.appModulesLoggerLevel = [[NSMutableDictionary alloc] init];
+
+        if ([self.deviceId length] < 1) {
+            self.deviceId = [[HOPSettings sharedSettings] deviceId];
+        }
+        if ([self.instanceId length] < 1) {
+            self.instanceId = [[HOPSettings sharedSettings] getInstanceId];
+        }
+
+        self.timeoutCounter = 0;
     }
     return self;
 }
@@ -141,6 +151,10 @@
     
     switch (type)
     {
+        case LOGGER_ENABLED:
+            key = settingsKeyEnabledLogger;
+            break;
+            
         case LOGGER_STD_OUT:
             key = settingsKeyStdOutLogger;
             break;
@@ -234,9 +248,9 @@
     return ret;
 }
 
-- (HOPLoggerLevels) getLoggerLevelForAppModule:(Modules) module
+- (HOPLoggerLevel) getLoggerLevelForAppModule:(Modules) module
 {
-    HOPLoggerLevels ret = HOPLoggerLevelNone;
+    HOPLoggerLevel ret = HOPLoggerLevelNone;
     
     NSString* archiveString = [self getArchiveStringForModule:module];
     if ([archiveString length] > 0)
@@ -245,18 +259,18 @@
     return ret;
 }
 
-- (HOPLoggerLevels) getLoggerLevelForAppModuleKey:(NSString*) moduleKey
+- (HOPLoggerLevel) getLoggerLevelForAppModuleKey:(NSString*) moduleKey
 {
-    HOPLoggerLevels ret = HOPLoggerLevelNone;
+    HOPLoggerLevel ret = HOPLoggerLevelNone;
     
     NSNumber* retNumber = [self.appModulesLoggerLevel objectForKey:moduleKey];
     if (retNumber)
-        ret = (HOPLoggerLevels)[retNumber intValue];
+        ret = (HOPLoggerLevel)[retNumber intValue];
     
     return ret;
 }
 
-- (void) setLoggerLevel:(HOPLoggerLevels) level forAppModule:(Modules) module
+- (void) setLoggerLevel:(HOPLoggerLevel) level forAppModule:(Modules) module
 {
     NSString* archiveString = [self getArchiveStringForModule:module];
     [self.appModulesLoggerLevel setObject:[NSNumber numberWithInt:level] forKey:archiveString];
@@ -265,7 +279,8 @@
 
 - (void) saveModuleLogLevels
 {
-    [[HOPSettings sharedSettings] storeSettingsObject:self.appModulesLoggerLevel key:archiveModulesLogLevels];
+    [[NSUserDefaults standardUserDefaults] setObject:self.appModulesLoggerLevel forKey:archiveModulesLogLevels];
+    //[[HOPSettings sharedSettings] storeSettingsObject:self.appModulesLoggerLevel key:archiveModulesLogLevels];
 }
 
 - (NSString*) getStringForModule:(Modules) module
@@ -444,7 +459,7 @@
     return ret;
 }
 
-- (NSString*) getStringForLogLevel:(HOPLoggerLevels) level
+- (NSString*) getStringForLogLevel:(HOPLoggerLevel) level
 {
     switch (level)
     {
@@ -504,6 +519,7 @@
     [self setColorizedOutput:YES logger:LOGGER_TELNET];
     [self setColorizedOutput:YES logger:LOGGER_OUTGOING_TELNET];
     
+    [self enable:YES logger:LOGGER_ENABLED];
     [self enable:YES logger:LOGGER_STD_OUT];
     [self enable:YES logger:LOGGER_TELNET];
     [self enable:YES logger:LOGGER_OUTGOING_TELNET];
@@ -617,11 +633,21 @@
     NSDictionary* inputDictionary = [parser objectWithString: jsonString];
     
     //Check if downloaded JSON is having root object
-    if ([inputDictionary count] > 0 && [inputDictionary objectForKey:@"root"] != nil)
+    if ([inputDictionary count] > 0)
     {
-        ret = [NSMutableDictionary dictionaryWithDictionary:[inputDictionary objectForKey:@"root"]];
-        if (ret)
-            [self createUserAgentFromDictionary:ret];
+        NSString* key = nil;
+        
+        if ([inputDictionary objectForKey:@"root"] != nil)
+            key = @"root";
+        else if ([inputDictionary objectForKey:@"op"] != nil)
+            key = @"op";
+        
+        if ([key length] > 0)
+        {
+            ret = [NSMutableDictionary dictionaryWithDictionary:[inputDictionary objectForKey:@"root"]];
+            if (ret)
+                [self createUserAgentFromDictionary:ret];
+        }
     }
     
     return ret;
@@ -674,7 +700,8 @@
                     toAppend = str;
                 }
                 
-                ret = [ret stringByAppendingString:toAppend];
+                if ([toAppend length] > 0)
+                    ret = [ret stringByAppendingString:toAppend];
             }
             
             if ([ret length] > 0)
@@ -712,11 +739,7 @@
 
 - (void) updateDeviceInfo
 {
-    //Get device info: device ID, iOS, platform and user agent
-    NSString* deviceId = [HOPUtility hashString:[HOPUtility getGUIDstring]];
-    if ([deviceId length] > 0)
-        [[HOPSettings sharedSettings] storeCalculatedSettingObject:deviceId key:@"openpeer/calculated/device-id"];
-
+    //Get device info: iOS, platform and user agent
     NSString* str = [Utility getDeviceOs];
     if ([str length] > 0)
         [[HOPSettings sharedSettings] storeCalculatedSettingObject:str key:@"openpeer/calculated/os"];
@@ -978,13 +1001,37 @@
 
 - (void) httpDownloader:(HTTPDownloader *) downloader didFailWithError:(NSError *)error
 {
-    OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Settings download failed. Reason:%@",error);
-    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Downloading login settings failed!"
-                                                        message:@"Login will proceed with previous settings."
-                                                       delegate:nil
-                                              cancelButtonTitle:nil
-                                              otherButtonTitles:@"Ok",nil];
-    [alertView show];
-    [[OpenPeer sharedOpenPeer] finishPreSetup];
+    BOOL showErrorMessage = NO;
+    if (error.code == kCFURLErrorTimedOut)
+    {
+        OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Settings download failed. Reason:%@",error);
+        self.timeoutCounter++;
+        if (self.timeoutCounter > 2)
+        {
+            showErrorMessage = YES;
+            [[OpenPeer sharedOpenPeer] finishPreSetup];
+        }
+        else
+        {
+            [self downloadLatestSettings];
+        }
+    }
+    else
+    {
+        [[OpenPeer sharedOpenPeer] finishPreSetup];
+        showErrorMessage = YES;
+    }
+    //OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Settings download failed. Reason:%@",error);
+    
+    if (showErrorMessage)
+    {
+        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Downloading login settings failed!"
+                                                            message:@"Login will proceed with previous settings."
+                                                           delegate:nil
+                                                  cancelButtonTitle:nil
+                                                  otherButtonTitles:@"Ok",nil];
+        [alertView show];
+    }
+    
 }
 @end

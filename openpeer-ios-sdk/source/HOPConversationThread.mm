@@ -65,20 +65,20 @@ using namespace openpeer::core;
     return ret;
 }
 
-+ (NSString*) deliveryStateToString: (HOPConversationThreadMessageDeliveryStates) state
++ (NSString*) deliveryStateToString: (HOPConversationThreadMessageDeliveryState) state
 {
     return [NSString stringWithUTF8String: IConversationThread::toString((IConversationThread::MessageDeliveryStates) state)];
 }
-+ (NSString*) stringForMessageDeliveryState:(HOPConversationThreadMessageDeliveryStates) state
++ (NSString*) stringForMessageDeliveryState:(HOPConversationThreadMessageDeliveryState) state
 {
     return [NSString stringWithUTF8String: IConversationThread::toString((IConversationThread::MessageDeliveryStates) state)];
 }
 
-+ (NSString*) stateToString: (HOPConversationThreadContactStates) state
++ (NSString*) stateToString: (HOPConversationThreadContactState) state
 {
     return [NSString stringWithUTF8String: IConversationThread::toString((IConversationThread::ContactStates) state)];
 }
-+ (NSString*) stringForContactState:(HOPConversationThreadContactStates) state
++ (NSString*) stringForContactState:(HOPConversationThreadContactState) state
 {
     return [NSString stringWithUTF8String: IConversationThread::toString((IConversationThread::ContactStates) state)];
 }
@@ -111,14 +111,15 @@ using namespace openpeer::core;
         [identity getIdentityPtr]->getSelfIdentityContact(identityContact);
         
         identityContactsList.push_back(identityContact);
-        
-        IConversationThreadPtr tempConversationThreadPtr = IConversationThread::create([[HOPAccount sharedAccount] getAccountPtr], identityContactsList);
-        
-        if (tempConversationThreadPtr)
-        {
-            ret = [[self alloc] initWithConversationThread:tempConversationThreadPtr];
-        }
     }
+    
+    IConversationThreadPtr tempConversationThreadPtr = IConversationThread::create([[HOPAccount sharedAccount] getAccountPtr], identityContactsList);
+    
+    if (tempConversationThreadPtr)
+    {
+        ret = [[self alloc] initWithConversationThread:tempConversationThreadPtr];
+    }
+    
     return ret;
 }
 
@@ -201,53 +202,12 @@ using namespace openpeer::core;
     return contactArray;
 }
 
-//- (NSString*) getProfileBundle: (HOPContact*) contact
-//{
-//    NSString* ret = nil;
-//    if (conversationThreadPtr)
-//    {
-//#define WARNING_FIX_ME 1
-//#define WARNING_FIX_ME 2
-//        ret = @"";
-//    }
-//    else
-//    {
-//        ZS_LOG_ERROR(Debug, [self log:@"Invalid conversation thread object!"]);
-//        [NSException raise:NSInvalidArgumentException format:@"Invalid conversation thread object!"];
-//    }
-//    return ret;
-//}
 
 - (NSArray*) getIdentityContactListForContact:(HOPContact*) contact
 {
     NSMutableArray* ret = nil;
     if(conversationThreadPtr)
     {
-        //ret = [[NSMutableArray alloc] init];
-        /*IdentityContactListPtr identityList = conversationThreadPtr->getIdentityContactList([contact getContactPtr]);
-        for (IdentityContactList::iterator contact = identityList->begin(); contact != identityList->end(); ++contact)
-        {
-            HOPRolodexContact* hopRolodexContact = nil;
-            IdentityContact identityContact = *contact;
-            NSString* contactIdentityURI = [NSString stringWithCString:identityContact.mIdentityURI encoding:NSUTF8StringEncoding];
-            
-            if ([contactIdentityURI length] > 0)
-            {
-                hopRolodexContact = nil;//[[HOPModelManager sharedModelManager] getRolodexContactByIdentityURI:contactIdentityURI];
-                if (!hopRolodexContact)
-                {
-                    //Create a new menaged object for new rolodex contact
-                    NSManagedObject* managedObject = [[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPRolodexContact"];
-                    if ([managedObject isKindOfClass:[HOPRolodexContact class]])
-                    {
-                        hopRolodexContact = (HOPRolodexContact*)managedObject;
-                        [hopRolodexContact updateWithCoreRolodexContact:identityContact identityProviderDomain:[NSString stringWithCString:identityContact.mIdentityProvider encoding:NSUTF8StringEncoding] homeUserIdentityURI:[NSString stringWithCString:identityContact.mIdentityURI encoding:NSUTF8StringEncoding]];
-                        [[HOPModelManager sharedModelManager] saveContext];
-                    }
-                }
-            }
-        }*/
-
         IdentityContactListPtr identityContactListPtr = conversationThreadPtr->getIdentityContactList([contact getContactPtr]);
         if (identityContactListPtr)
         {
@@ -286,12 +246,12 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (HOPConversationThreadContactStates) getContactState: (HOPContact*) contact
+- (HOPConversationThreadContactState) getContactState: (HOPContact*) contact
 {
-    HOPConversationThreadContactStates ret = HOPConversationThreadContactStateNotApplicable;
+    HOPConversationThreadContactState ret = HOPConversationThreadContactStateNotApplicable;
     if(conversationThreadPtr)
     {
-        ret = (HOPConversationThreadContactStates) conversationThreadPtr->getContactState([contact getContactPtr]);
+        ret = (HOPConversationThreadContactState) conversationThreadPtr->getContactState([contact getContactPtr]);
     }
     else
     {
@@ -436,7 +396,7 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (BOOL) getMessageDeliveryState: (NSString*) messageID outDeliveryState:(HOPConversationThreadMessageDeliveryStates*) outDeliveryState
+- (BOOL) getMessageDeliveryState: (NSString*) messageID outDeliveryState:(HOPConversationThreadMessageDeliveryState*) outDeliveryState
 {
     BOOL ret = NO;
     IConversationThread::MessageDeliveryStates tmpState;
@@ -446,7 +406,7 @@ using namespace openpeer::core;
         if ([messageID length] > 0)
         {
             ret = conversationThreadPtr->getMessageDeliveryState([messageID UTF8String], tmpState);
-            *outDeliveryState = (HOPConversationThreadMessageDeliveryStates) tmpState;
+            *outDeliveryState = (HOPConversationThreadMessageDeliveryState) tmpState;
         }
     }
     else
