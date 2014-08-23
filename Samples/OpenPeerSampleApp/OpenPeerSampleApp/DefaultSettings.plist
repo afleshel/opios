@@ -50,6 +50,8 @@
 	<integer>3</integer>
 	<key>openpeer/stack/backgrounding-phase-push-mailbox</key>
 	<integer>3</integer>
+	<key>openpeer/stack/backgrounding-phase-server-messaging</key>
+	<integer>5</integer>
 	<key>openpeer/stack/bootstrapper-force-well-known-over-insecure-http</key>
 	<true/>
 	<key>openpeer/stack/bootstrapper-force-well-known-using-post</key>
@@ -90,6 +92,10 @@
 	<integer>60</integer>
 	<key>openpeer/stack/account-shutdown-on-ice-socket-failure</key>
 	<false/>
+	<key>openpeer/stack/account-default-key-domain</key>
+	<string>https://meta.openpeer.org/dh/modp/4096</string>
+	<key>openpeer/stack/server-messaging-default-key-domain</key>
+	<string>https://meta.openpeer.org/dh/modp/4096</string>
 	<key>openpeer/stack/debug/force-p2p-messages-over-finder-relay</key>
 	<false/>
 	<key>openpeer/services/services-thread-priority</key>
@@ -107,9 +113,9 @@
 	<key>openpeer/services/backgrounding-phase-turn</key>
 	<integer>4</integer>
 	<key>openpeer/services/backgrounding-phase-tcp-messaging</key>
-	<integer>5</integer>
-	<key>openpeer/services/backgrounding-phase-telnet-logger</key>
 	<integer>6</integer>
+	<key>openpeer/services/backgrounding-phase-telnet-logger</key>
+	<integer>7</integer>
 	<key>openpeer/services/backgrounding-phase-1-timeout-in-seconds</key>
 	<integer>8</integer>
 	<key>openpeer/services/backgrounding-phase-2-timeout-in-seconds</key>
@@ -121,6 +127,10 @@
 	<key>openpeer/services/backgrounding-phase-5-timeout-in-seconds</key>
 	<integer>0</integer>
 	<key>openpeer/services/backgrounding-phase-6-timeout-in-seconds</key>
+	<integer>0</integer>
+	<key>openpeer/services/backgrounding-phase-7-timeout-in-seconds</key>
+	<integer>0</integer>
+	<key>openpeer/services/backgrounding-phase-8-timeout-in-seconds</key>
 	<integer>0</integer>
 	<key>openpeer/services/process-application-message-queue-on-quit</key>
 	<true/>
@@ -134,6 +144,8 @@
 	<integer>60</integer>
 	<key>openpeer/services/ice-socket-fail-when-no-local-ips</key>
 	<false/>
+	<key>openpeer/services/mls-change-sending-key-after-in-seconds</key>
+	<integer>3600</integer>
 	<key>openpeer/services/debug/force-packets-over-turn</key>
 	<false/>
 	<key>openpeer/services/debug/force-turn-to-use-tcp</key>
