@@ -29,10 +29,40 @@
  
  */
 
-#import <UIKit/UIKit.h>
-#import "Delegates.h"
-#import <AVFoundation/AVFoundation.h>
 
-@interface QRScannerViewController : UIViewController <AVCaptureMetadataOutputObjectsDelegate,HTTPDownloaderDelegate>
+//Public headers
+#import "HOPAccount.h"
+#import "HOPCache.h"
+#import "HOPCall.h"
+#import "HOPContact.h"
+#import "HOPConversationThread.h"
+#import "HOPIdentity.h"
+#import "HOPIdentityLookup.h"
+#import "HOPIdentityLookupInfo.h"
+#import "HOPLogger.h"
+#import "HOPMediaEngine.h"
+#import "HOPMediaEngineRtpRtcpStatistics.h"
+#import "HOPMessage.h"
+#import "HOPModelManager.h"
+#import "HOPProtocols.h"
+#import "HOPStack.h"
+#import "HOPTypes.h"
+#import "HOPUtility.h"
+#import "HOPSettings.h"
+#import "HOPBackgrounding.h"
 
-@end
+
+//Model
+#import "HOPAPNSData.h"
+#import "HOPConversationThreadRecord.h"
+#import "HOPHomeUser+External.h"
+#import "HOPMessageRecord.h"
+#import "HOPAvatar+External.h"
+#import "HOPIdentityContact.h"
+#import "HOPRolodexContact+External.h"
+#import "HOPPublicPeerFile.h"
+#import "HOPImage.h"
+#import "HOPAssociatedIdentity.h"
+#import "HOPCacheData.h"
+#import "HOPSessionRecord+External.h"
+

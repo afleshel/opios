@@ -40,8 +40,10 @@
 
 @interface QRScannerViewController ()
 
-@property (nonatomic, strong) ZXCapture* capture;
 @property (nonatomic, strong) HTTPDownloader* settingsDownloader;
+@property (nonatomic, strong) AVCaptureSession *session;
+@property (nonatomic, strong) AVCaptureMetadataOutput *output;
+@property (nonatomic, strong) AVCaptureVideoPreviewLayer *previewLayer;
 
 @property (nonatomic, weak) IBOutlet UIButton* buttonLogger;
 @property (nonatomic, weak) IBOutlet UIButton* buttonCancel;
@@ -88,112 +90,122 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - ZXCaptureDelegate Methods
-- (void)captureResult:(ZXCapture*)capture result:(ZXResult*)result
+- (void) handleQRCode:(NSString*) value
 {
-    if (result)
+    if ([value length] > 0)
     {
-        // Vibrate
-        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+        NSString* jsonURL = nil;
+        NSString* postData = nil;
         
-        if (result.barcodeFormat == kBarcodeFormatQRCode)
+        if ([value rangeOfString:@"&post="].location != NSNotFound)
         {
-            NSString* str = result.text;
-
-            if ([str length] > 0)
+            NSArray* arrayOfStrings = [value componentsSeparatedByString:@"&post="];
+            if ([arrayOfStrings count] > 1)
             {
-                NSString* jsonURL = nil;
-                NSString* postData = nil;
-                
-                if ([str rangeOfString:@"&post="].location != NSNotFound)
-                {
-                    NSArray* arrayOfStrings = [str componentsSeparatedByString:@"&post="];
-                    if ([arrayOfStrings count] > 1)
-                    {
-                        jsonURL = [arrayOfStrings objectAtIndex:0];
-                        postData = [arrayOfStrings objectAtIndex:1];
-                    }
-                }
-                else
-                    jsonURL = str;
-                    
-                if ([Utility isValidURL:jsonURL])
-                {
-                    [self loadSettingsfromURL:jsonURL postDate:postData];
-                }
-                else
-                {
-                    //Check if JSON is valid
-                    if ([Utility isValidJSON:str])
-                    {
-                        //[[HOPSettings sharedSettings] applySettings:str];
-                        NSDictionary* settings = [[Settings sharedSettings] dictionaryForJSONString:str];
-                        if (settings)
-                        {
-                            [[Settings sharedSettings] snapshotCurrentSettings];
-                            [[Settings sharedSettings] storeQRSettings:settings];
-                            [[HOPSettings sharedSettings] storeSettingsFromDictionary:settings];
-                        }
-                        [self actionProceedWithlogin:nil];
-                    }
-                    else
-                    {
-                        self.buttonCancel.hidden = YES;
-                        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Invalid login settings!"
-                                                                            message:@"Please, scan another QR code or proceed with already set login settings"
-                                                                           delegate:nil
-                                                                  cancelButtonTitle:nil
-                                                                  otherButtonTitles:@"Ok",nil];
-                        [alertView show];
-                    }
-                    
-                }
-            }
-            else
-            {
-                [self actionProceedWithlogin:nil];
+                jsonURL = [arrayOfStrings objectAtIndex:0];
+                postData = [arrayOfStrings objectAtIndex:1];
             }
         }
         else
+            jsonURL = value;
+        
+        if ([Utility isValidURL:jsonURL])
         {
-            self.buttonCancel.hidden = YES;
-            UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Invalid QR code format!"
-                                                                message:@"Please, scan another QR code or proceed with already set login settings"
-                                                               delegate:nil
-                                                      cancelButtonTitle:nil
-                                                      otherButtonTitles:@"Ok",nil];
-            [alertView show];
+            [self loadSettingsfromURL:jsonURL postDate:postData];
+        }
+        else
+        {
+            //Check if JSON is valid
+            if ([Utility isValidJSON:value])
+            {
+                //[[HOPSettings sharedSettings] applySettings:str];
+                NSDictionary* settings = [[Settings sharedSettings] dictionaryForJSONString:value];
+                if (settings)
+                {
+                    [[Settings sharedSettings] snapshotCurrentSettings];
+                    [[Settings sharedSettings] storeQRSettings:settings];
+                    [[HOPSettings sharedSettings] storeSettingsFromDictionary:settings];
+                }
+                [self actionProceedWithlogin:nil];
+            }
+            else
+            {
+                self.buttonCancel.hidden = YES;
+                self.buttonLogger.hidden = NO;
+                UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Invalid login settings!"
+                                                                    message:@"Please, scan another QR code or proceed with already set login settings"
+                                                                   delegate:nil
+                                                          cancelButtonTitle:nil
+                                                          otherButtonTitles:@"Ok",nil];
+                [alertView show];
+            }
+            
         }
     }
-    
-    self.capture.delegate = nil;
-    [self.capture.layer removeFromSuperlayer];
-}
-
-- (void)captureSize:(ZXCapture*)capture width:(NSNumber*)width height:(NSNumber*)height
-{
+    else
+    {
+        [self actionProceedWithlogin:nil];
+    }
 
 }
-
 - (IBAction)actionReadQRCode:(id)sender
 {
-    if (!self.capture)
-    {
-        self.capture = [[ZXCapture alloc] init];
-        self.capture.rotation = 90.0f;
-        
-        // Use the back camera
-        self.capture.camera = self.capture.back;
-        
-        self.capture.layer.frame = self.view.bounds;
+    self.buttonCancel.hidden = NO;
+    self.buttonLogger.hidden = YES;
+    
+    self.session = [[AVCaptureSession alloc] init];
+    AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    NSError *error = nil;
+    
+    AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:device
+                                                                        error:&error];
+    if (input) {
+        [self.session addInput:input];
+    } else {
+        NSLog(@"Error: %@", error);
     }
     
-    [self.view.layer addSublayer:self.capture.layer];
-    self.capture.delegate = self;
-    [self.view bringSubviewToFront:self.buttonLogger];
-    [self.view bringSubviewToFront:self.buttonCancel];
-    self.buttonCancel.hidden = NO;
+    self.output = [[AVCaptureMetadataOutput alloc] init];
+    
+    [self.output setMetadataObjectsDelegate:self queue:dispatch_get_main_queue()];
+    [self.session addOutput:self.output];
+    [self.output setMetadataObjectTypes:@[AVMetadataObjectTypeQRCode]];
+    
+    [self.session startRunning];
 
+    self.previewLayer = [AVCaptureVideoPreviewLayer layerWithSession:self.session];
+    self.previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+    self.previewLayer.bounds = self.view.bounds;
+    self.previewLayer.position = CGPointMake(CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds));
+    [self.view.layer addSublayer:self.previewLayer];
+    
+    [self.view bringSubviewToFront:self.buttonCancel];
+}
+
+- (void)captureOutput:(AVCaptureOutput *)captureOutput
+didOutputMetadataObjects:(NSArray *)metadataObjects
+       fromConnection:(AVCaptureConnection *)connection
+{
+    @synchronized(self.session)
+    {
+        if (self.session.isRunning)
+        {
+            // Vibrate
+            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+            
+            for (AVMetadataObject *metadata in metadataObjects)
+            {
+                if ([metadata.type isEqualToString:AVMetadataObjectTypeQRCode])
+                {
+                    [self.session stopRunning];
+                    NSString* value = [(AVMetadataMachineReadableCodeObject *)metadata stringValue];
+                    [self.previewLayer removeFromSuperlayer];
+                    [self handleQRCode:value];
+                    break;
+                }
+            }
+        }
+    }
 }
 
 - (IBAction)actionProceedWithlogin:(id)sender
@@ -233,7 +245,9 @@
 - (IBAction)actionCancelScan:(id)sender
 {
     self.buttonCancel.hidden = YES;
-    [self.capture.layer removeFromSuperlayer];
+    self.buttonLogger.hidden = NO;
+    [self.session stopRunning];
+    [self.previewLayer removeFromSuperlayer];
 }
 
 #pragma mark - SettingsDownloaderDelegate

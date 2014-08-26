@@ -62,6 +62,7 @@ NSString * const settingsKeyAPNS = @"APNS-UrbanAirShip";
 NSString * const settingsKeyTelnetLogger = @"localTelnetLoggerPort";
 NSString * const settingsKeyOutgoingTelnetLogger = @"defaultOutgoingTelnetServer";
 NSString * const settingsKeyStdOutLogger = @"archiveStdOutLogger";
+NSString * const settingsKeyEnabledLogger = @"archiveEnableLogger";
 NSString * const settingsKeyRemoveSettingsAppliedByQRCode = @"applicationRemoveSettingsAppliedByQRCode";
 NSString * const settingsKeyOuterFrameURL = @"outerFrameURL";
 NSString * const settingsKeyGrantServiceURL = @"namespaceGrantServiceURL";
@@ -121,6 +122,7 @@ NSString * const systemMessageRequest = @"?";
 //Notifications
 NSString * const notifictionAppReturnedFromBackground = @"notifictionAppReturnedFromBackground";
 NSString * const notificationRemoteSessionModeChanged = @"notificationRemoteSessionModeChanged";
+NSString * const notificationCrashReportSent = @"notificationCrashReportSent";
 
 NSString * const notificationTypeApple = @"apns";
 NSString * const notificationTypeAndroid = @"apid";
