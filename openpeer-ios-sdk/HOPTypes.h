@@ -97,6 +97,30 @@ typedef enum
     HOPConversationThreadContactConnectionStateDisconnected
 } HOPConversationThreadContactConnectionState;
 
+/**
+ *  Thread's contact statuses.
+ */
+typedef enum
+{
+    HOPComposingStateNone,      // contact has no composing status
+    
+    HOPComposingStateInactive,  // contact is not actively participating in conversation (assumed default if "none")
+    HOPComposingStateActive,    // contact is active in the conversation
+    HOPComposingStateGone,      // contact is effectively gone from conversation
+    HOPComposingStateComposing, // contact is composing a message
+    HOPComposingStatePaused    // contact was composing a message but is no longer composing
+} HOPConversationThreadContactStatus;
+
+typedef enum
+{
+    HOPSystemMessageTypeNA,           // not a system message
+    HOPSystemMessageTypeUnknown,      // unknown system message type
+    
+    HOPSystemMessageTypeCallPlaced,   // call was placed
+    HOPSystemMessageTypeCallAnswered, // call was answered
+    HOPSystemMessageTypeCallHungup,   // call was hung-up
+} HOPSystemMessageType;
+
 #pragma mark - Provisioning account for future use enum
 /**
  Account states.

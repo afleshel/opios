@@ -31,6 +31,7 @@
 
 
 #import <openpeer/core/IConversationThread.h>
+#import <openpeer/core/IConversationThreadComposingStatus.h>
 #import <openpeer/core/IContact.h>
 #import <openpeer/core/IHelper.h>
 
@@ -52,7 +53,7 @@ using namespace openpeer::core;
 
 @implementation HOPConversationThread
 
-+ (NSArray*) getConversationThreadsForAccount
++ (NSArray*) getActiveConversationThreads
 {
     return [[OpenPeerStorageManager sharedStorageManager] getConversationThreads];
 }
@@ -202,6 +203,51 @@ using namespace openpeer::core;
     return contactArray;
 }
 
+- (void) addContacts: (NSArray*) contacts
+{
+    if(conversationThreadPtr)
+    {
+        if ([contacts count] > 0)
+        {
+            ContactProfileInfoList contactList;
+            for (HOPContact* contact in contacts)
+            {
+                ContactProfileInfo contactInfo;
+                contactInfo.mContact = [contact getContactPtr];
+                
+                contactList.push_back(contactInfo);
+            }
+            
+            conversationThreadPtr->addContacts(contactList);
+        }
+    }
+    else
+    {
+        ZS_LOG_ERROR(Debug, [self log:@"Invalid conversation thread object!"]);
+        [NSException raise:NSInvalidArgumentException format:@"Invalid conversation thread object!"];
+    }
+}
+
+- (void) removeContacts: (NSArray*) contacts
+{
+    if(conversationThreadPtr)
+    {
+        if ([contacts count] > 0)
+        {
+            ContactList contactList;
+            for (HOPContact* contact in contacts)
+            {
+                contactList.push_back([contact getContactPtr]);
+            }
+            conversationThreadPtr->removeContacts(contactList);
+        }
+    }
+    else
+    {
+        ZS_LOG_ERROR(Debug, [self log:@"Invalid conversation thread object!"]);
+        [NSException raise:NSInvalidArgumentException format:@"Invalid conversation thread object!"];
+    }
+}
 
 - (NSArray*) getIdentityContactListForContact:(HOPContact*) contact
 {
@@ -262,22 +308,17 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (void) addContacts: (NSArray*) contacts
+- (NSString*) getContactStatus:(HOPContact*) contact
 {
+    NSString* ret = nil;
     if(conversationThreadPtr)
     {
-        if ([contacts count] > 0)
+        IContactPtr contactPtr = [contact getContactPtr];
+        if (contactPtr)
         {
-            ContactProfileInfoList contactList;
-            for (HOPContact* contact in contacts)
-            {
-                ContactProfileInfo contactInfo;
-                contactInfo.mContact = [contact getContactPtr];
-
-                contactList.push_back(contactInfo);
-            }
-
-            conversationThreadPtr->addContacts(contactList);
+            ElementPtr contactStatusJSONPtr = conversationThreadPtr->getContactStatus(contactPtr);
+            String str = IHelper::convertToString(contactStatusJSONPtr);
+            ret = [NSString stringWithCString:str encoding:NSUTF8StringEncoding];
         }
     }
     else
@@ -285,28 +326,23 @@ using namespace openpeer::core;
         ZS_LOG_ERROR(Debug, [self log:@"Invalid conversation thread object!"]);
         [NSException raise:NSInvalidArgumentException format:@"Invalid conversation thread object!"];
     }
+    
+    return ret;
 }
 
-- (void) removeContacts: (NSArray*) contacts
+- (void) setStatusInThread:(HOPConversationThreadContactStatus) status aditioanlData:(NSString*) additionalData
 {
     if(conversationThreadPtr)
     {
-        if ([contacts count] > 0)
-        {
-            ContactList contactList;
-            for (HOPContact* contact in contacts)
-            {
-                contactList.push_back([contact getContactPtr]);
-            }
-            conversationThreadPtr->removeContacts(contactList);
-        }
+        ElementPtr statusElement;
+        IConversationThreadComposingStatus::updateComposingStatus(statusElement, (openpeer::core::IConversationThreadComposingStatus::ComposingStates) status);
+        conversationThreadPtr->setStatusInThread(statusElement);
     }
     else
     {
         ZS_LOG_ERROR(Debug, [self log:@"Invalid conversation thread object!"]);
         [NSException raise:NSInvalidArgumentException format:@"Invalid conversation thread object!"];
     }
-
 }
 
 - (void) sendMessage: (NSString*) messageID replacesMessageID:(NSString*) replacesMessageID messageType:(NSString*) messageType validated:(BOOL) validated message:(NSString*) message

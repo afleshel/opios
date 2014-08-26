@@ -61,7 +61,7 @@
  Returns list of all active conversation threads.
  @return List of HOPConversationThread objects
  */
-+ (NSArray*) getConversationThreadsForAccount;
++ (NSArray*) getActiveConversationThreads;
 
 /**
  Returns a conversation thread object for specific thread ID
@@ -82,6 +82,7 @@
  @return A string representation of message delivery state
  */
 + (NSString*) stringForMessageDeliveryState:(HOPConversationThreadMessageDeliveryState) state;
+
 
 /**
  Returns a  string representation of the contact state. Deprecated.
@@ -122,6 +123,18 @@
 - (NSArray*) getContacts;
 
 /**
+ Adds array of contacts to the conversation thread.
+ @param contacts  Array of HOPContact objects to be added to the conversation thread
+ */
+- (void) addContacts: (NSArray*) contacts;
+
+/**
+ Removes an array of contacts from the conversation thread.
+ @param contacts Array of HOPContact objects to be removed from the conversation thread
+ */
+- (void) removeContacts: (NSArray*) contacts;
+
+/**
  Returns list of HOPIdentity objects for associated with HOPContact object.
  @param coAn array for HOPIdentity objects
  */
@@ -135,16 +148,27 @@
 - (HOPConversationThreadContactConnectionState) getContactConnectionState: (HOPContact*) contact;
 
 /**
- Adds array of contacts to the conversation thread.
- @param contacts  Array of HOPContact objects to be added to the conversation thread
+ *  Get the status of a contact in the conversation thread.
+ *
+ *  @param contact Contact in the conversation thread
+ *
+ *  @return Contact status in JSON format
  */
-- (void) addContacts: (NSArray*) contacts;
+- (NSString*) getContactStatus:(HOPContact*) contact;
+
+
+//-----------------------------------------------------------------------
+// PURPOSE: Set the status of yourself in the conversation thread
+// NOTES:   Can use "IConversationThreadComposingStatus" to create
+//          composing related contact statuses.
 
 /**
- Removes an array of contacts from the conversation thread.
- @param contacts Array of HOPContact objects to be removed from the conversation thread
+ *  Set the status of yourself in the conversation thread.
+ *
+ *  @param status         Contact status
+ *  @param additionalData Additiona data that will describe user status
  */
-- (void) removeContacts: (NSArray*) contacts;
+- (void) setStatusInThread:(HOPConversationThreadContactStatus) status aditioanlData:(NSString*) additionalData;
 
 /**
  Sends message to all contacts in the conversation thread. Deprecated.

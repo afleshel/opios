@@ -1703,8 +1703,8 @@
 			buildConfigurationList = 87D4BDD018675368008C2D30 /* Build configuration list for PBXNativeTarget "OpenPeerSampleAPNSApp" */;
 			buildPhases = (
 				87D4BCDB18675368008C2D30 /* Sources */,
-				87D4BD1518675368008C2D30 /* Frameworks */,
 				87D4BD2B18675368008C2D30 /* Resources */,
+				87D4BD1518675368008C2D30 /* Frameworks */,
 				87D4BDCF18675368008C2D30 /* CopyFiles */,
 			);
 			buildRules = (
