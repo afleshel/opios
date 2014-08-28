@@ -36,6 +36,12 @@
 	<string>push</string>
 	<key>openpeer/core/push-messaging-default-push-expires-in-seconds</key>
 	<real>15768000</real>
+	<key>openpeer/core/push-presence-default-push-mailbox-folder</key>
+	<string>presence</string>
+	<key>openpeer/core/push-presence-default-push-message-type</key>
+	<string>push-presence</string>
+	<key>openpeer/core/push-presence-default-push-expires-in-seconds</key>
+	<real>21600</real>
 	<key>openpeer/core/move-message-to-cache-time-in-seconds</key>
 	<integer>120</integer>
 	<key>openpeer/core/conversation-thread-host-inactive-close-time-in-seconds</key>
