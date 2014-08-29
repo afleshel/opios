@@ -281,7 +281,7 @@
         if (sessionThatWillInitiateRemoteSession)
         {
             //Send system message, where is passed the slave contacts. Session will be established between slave contacts and master contact.
-            [[MessageManager sharedMessageManager] sendSystemMessageToInitSessionBetweenPeers:[NSArray arrayWithObject:slaveContact] forSession:sessionThatWillInitiateRemoteSession];
+            //[[MessageManager sharedMessageManager] sendSystemMessageToInitSessionBetweenPeers:[NSArray arrayWithObject:slaveContact] forSession:sessionThatWillInitiateRemoteSession];
         }
     }
     return sessionThatWillInitiateRemoteSession;
@@ -377,7 +377,8 @@
         {
             OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Making a call for the session <%p>", inSession);
             
-            [[MessageManager sharedMessageManager]sendSystemMessageToCheckAvailability:inSession];
+//            [[MessageManager sharedMessageManager]sendSystemMessageToCheckAvailability:inSession];
+            [[MessageManager sharedMessageManager] sendCallSystemMessage:HOPCallSystemMessageTypeCallPlaced session:inSession];
             //Currently we are not supporting group conferences, so only one participant is possible
             HOPContact* contact = [[[inSession participantsArray] objectAtIndex:0] getCoreContact];
             
@@ -625,12 +626,13 @@
     }
     
     [self setLastEndedCallSession: session];
+    //TODO: reimplement redial when call is ended because of weak network
     //If it is callee side, check the reasons why call is ended, and if it is not ended properly, try to redial
     if (![[call getCaller] isSelf] && ((OpenPeer*)[OpenPeer sharedOpenPeer]).isRedialModeOn)
     {
         if ([call getClosedReason] == HOPCallClosedReasonNone || [call getClosedReason] == HOPCallClosedReasonRequestTerminated || [call getClosedReason] == HOPCallClosedReasonTemporarilyUnavailable)
         {
-            [[MessageManager sharedMessageManager] sendSystemMessageToCallAgainForSession:session];
+            //[[MessageManager sharedMessageManager] sendSystemMessageToCallAgainForSession:session];
             session.isRedial = YES;
         }
         else

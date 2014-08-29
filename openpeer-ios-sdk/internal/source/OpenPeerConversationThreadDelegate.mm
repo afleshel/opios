@@ -49,9 +49,9 @@ OpenPeerConversationThreadDelegate::~OpenPeerConversationThreadDelegate()
     ZS_LOG_DEBUG(zsLib::String("SDK - OpenPeerConversationThreadDelegate destructor is called"));
 }
 
-boost::shared_ptr<OpenPeerConversationThreadDelegate> OpenPeerConversationThreadDelegate::create(id<HOPConversationThreadDelegate> inConversationThreadDelegate)
+OpenPeerConversationThreadDelegatePtr OpenPeerConversationThreadDelegate::create(id<HOPConversationThreadDelegate> inConversationThreadDelegate)
 {
-    return boost::shared_ptr<OpenPeerConversationThreadDelegate> (new OpenPeerConversationThreadDelegate(inConversationThreadDelegate));
+    return OpenPeerConversationThreadDelegatePtr (new OpenPeerConversationThreadDelegate(inConversationThreadDelegate));
 }
 
 HOPConversationThread* OpenPeerConversationThreadDelegate::getOpenPeerConversationThread(IConversationThreadPtr conversationThread)

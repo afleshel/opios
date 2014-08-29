@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,10 +29,38 @@
  
  */
 
-#import <UIKit/UIKit.h>
-#import "ChatCell.h"
+#import "HOPSystemMessage.h"
+#import <openpeer/core/ISystemMessage.h>
+#import <openpeer/core/IHelper.h>
 
-@interface ChatMessageCell : ChatCell
+using namespace openpeer;
+using namespace openpeer::core;
 
+@implementation HOPSystemMessage
+
+- (NSString*) createEmptySystemMessage
+{
+    NSString* ret = nil;
+    
+    ElementPtr emptyMessage = ISystemMessage::createEmptySystemMessage();
+    String str = IHelper::convertToString(emptyMessage);
+    
+    if (str.hasData())
+        ret = [NSString stringWithUTF8String:str];
+    
+    return ret;
+}
+
++ (NSString*) getMessageType
+{
+    NSString* ret = nil;
+    
+    String type = ISystemMessage::getMessageType();
+    
+    if (type.hasData())
+        ret = [NSString stringWithUTF8String:type];
+    
+    return ret;
+}
 
 @end

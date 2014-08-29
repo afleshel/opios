@@ -116,11 +116,17 @@ typedef enum
     HOPSystemMessageTypeNA,           // not a system message
     HOPSystemMessageTypeUnknown,      // unknown system message type
     
-    HOPSystemMessageTypeCallPlaced,   // call was placed
-    HOPSystemMessageTypeCallAnswered, // call was answered
-    HOPSystemMessageTypeCallHungup,   // call was hung-up
+    HOPSystemMessageTypeCall,   // call system message
 } HOPSystemMessageType;
 
+typedef enum
+{
+    HOPCallSystemMessageTypeUnknown,      // unknown system message type
+    
+    HOPCallSystemMessageTypeCallPlaced,   // call was placed
+    HOPCallSystemMessageTypeCallAnswered, // call was answered
+    HOPCallSystemMessageTypeCallHungup,   // call was hung-up
+} HOPCallSystemMessageType;
 #pragma mark - Provisioning account for future use enum
 /**
  Account states.

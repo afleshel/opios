@@ -55,7 +55,7 @@
 @property (nonatomic, strong) UIFont *chatNameFont;
 @property (nonatomic, strong) UIFont *chatTimestampFont;
 @property (nonatomic, strong) NSString *unicodeMessageText;
-@property (nonatomic, weak) HOPMessageRecord *message;
+
 
 - (void) setUnicodeChars:(NSString *)str;
 
@@ -229,11 +229,6 @@
     }
 }
 
-//- (void) setMessage:(Message*) message
-- (void)setMessage:(HOPMessageRecord *)message
-{
-    _message = message;
-}
 
 -(void)layoutSubviews
 {
@@ -260,7 +255,7 @@
             
             [self setUnicodeChars:self.message.text];
             
-            messageSize = [ChatMessageCell calcMessageHeight:_unicodeMessageText forScreenWidth:(self.frame.size.width - (2*AVATAR_WIDTH + LEADING_SPACE + TRAILING_SPACE))];
+            messageSize = [ChatCell calcMessageHeight:_unicodeMessageText forScreenWidth:(self.frame.size.width - (2*AVATAR_WIDTH + LEADING_SPACE + TRAILING_SPACE))];
             
             //if message is received
             if (!isHomeUserSender)
@@ -338,9 +333,9 @@
                 f.origin.x = headerLabelXpos;
                 labelParticipant.frame = f;
                 
-                f = _messageLabel.frame;
+                f = self.messageLabel.frame;
                 f.origin.x = headerLabelXpos;
-                _messageLabel.frame = f;
+                self.messageLabel.frame = f;
             }
             else
             {
@@ -350,14 +345,14 @@
             
             //Label message
 //            [_messageLabel setFrame:CGRectMake(bubbleXpos + 15.0, 20.0, messageSize.width + 5.0, messageSize.height)];
-            [_messageLabel setFrame:CGRectMake(bubbleXpos + 15.0, 25.0, messageSize.width + 10.0, messageSize.height)];
-            _messageLabel.dataDetectorTypes = NSTextCheckingTypeLink;
-            _messageLabel.backgroundColor = [UIColor clearColor];
-            _messageLabel.font = [UIFont systemFontOfSize:14.0];
-            _messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
-            _messageLabel.text = _unicodeMessageText;
-            _messageLabel.numberOfLines = 0;
-            [_messageLabel sizeToFit];
+            [self.messageLabel setFrame:CGRectMake(bubbleXpos + 15.0, 25.0, messageSize.width + 10.0, messageSize.height)];
+            self.messageLabel.dataDetectorTypes = NSTextCheckingTypeLink;
+            self.messageLabel.backgroundColor = [UIColor clearColor];
+            self.messageLabel.font = [UIFont systemFontOfSize:14.0];
+            self.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
+            self.messageLabel.text = _unicodeMessageText;
+            self.messageLabel.numberOfLines = 0;
+            [self.messageLabel sizeToFit];
             
             // show avatar
             if(!isHomeUserSender)
@@ -392,7 +387,7 @@
             
             self.backgroundView = cellView;
             //[self.contentView addSubview:ivAvat];
-            [self.contentView addSubview:_messageLabel];
+            [self.contentView addSubview:self.messageLabel];
             
             [self.contentView addSubview:labelParticipant];
             [self.contentView addSubview:labelSeparator];
@@ -402,12 +397,6 @@
     }
 }
 
-+ (CGSize) calcMessageHeight:(NSString *)message forScreenWidth:(float)width
-{
-    CGSize maxSize = {width, 200000.0};
-    //CGSize calcSize = [message sizeWithFont:[UIFont systemFontOfSize:14.0] constrainedToSize:maxSize];
-    CGSize calcSize = [message boundingRectWithSize: maxSize options: NSStringDrawingUsesLineFragmentOrigin attributes: @{ NSFontAttributeName: [UIFont systemFontOfSize:14.0] } context: nil].size;
-    return calcSize;
-}
+
 
 @end

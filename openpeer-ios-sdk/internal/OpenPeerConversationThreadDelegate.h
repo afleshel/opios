@@ -41,6 +41,8 @@
 using namespace openpeer;
 using namespace openpeer::core;
 
+ZS_DECLARE_CLASS_PTR(OpenPeerConversationThreadDelegate)
+
 /**
  Wrapper class for conversation thread.
  */
@@ -55,7 +57,7 @@ public:
     
     ~OpenPeerConversationThreadDelegate();
     
-    static boost::shared_ptr<OpenPeerConversationThreadDelegate> create(id<HOPConversationThreadDelegate> inConversationThreadDelegate);
+    static OpenPeerConversationThreadDelegatePtr create(id<HOPConversationThreadDelegate> inConversationThreadDelegate);
     
     virtual void onConversationThreadNew(IConversationThreadPtr conversationThread);
     

@@ -123,6 +123,7 @@ NSString * const systemMessageRequest = @"?";
 NSString * const notifictionAppReturnedFromBackground = @"notifictionAppReturnedFromBackground";
 NSString * const notificationRemoteSessionModeChanged = @"notificationRemoteSessionModeChanged";
 NSString * const notificationCrashReportSent = @"notificationCrashReportSent";
+NSString * const notificationComposingStatusChanged = @"notificationComposingStatusChanged";
 
 NSString * const notificationTypeApple = @"apns";
 NSString * const notificationTypeAndroid = @"apid";

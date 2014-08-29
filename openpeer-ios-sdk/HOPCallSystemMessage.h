@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2014, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,13 +29,27 @@
  
  */
 
-#include "HOPConversationThreadSystemMessage.h"
+#import <Foundation/Foundation.h>
+#import "HOPTypes.h"
+#import "HOPSystemMessage.h"
 
-@implementation HOPConversationThreadSystemMessage
+@class HOPContact;
 
-+ (NSString*) stringForCallState:(HOPCallState) state
-{
-    return [NSString stringWithUTF8String: ICall::toString((ICall::CallStates) state)];
-}
+
+@interface HOPCallSystemMessage : HOPSystemMessage <NSCopying>
+
+@property (nonatomic) HOPCallSystemMessageType messageType;
+@property (nonatomic,weak) HOPContact* callee;
+@property (nonatomic) unsigned short errorCode;
+@property (nonatomic, copy) NSString* jsonMessage;
+
+- (id) initWithMessageType:(HOPCallSystemMessageType) inType callee:(HOPContact*) inCallee errorCode:(unsigned short) inErrorCode;
+
++ (id) callSystemMessageFromJSON:(NSString*) jsonMessage;
+
++ (NSString*) stringForMessageType:(HOPCallSystemMessageType) messageType;
++ (HOPCallSystemMessageType) messageTypeForString: (NSString*) messageTypeString;
+
+- (BOOL) hasData;
 
 @end

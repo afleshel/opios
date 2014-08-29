@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -30,9 +30,15 @@
  */
 
 #import <UIKit/UIKit.h>
-#import "ChatCell.h"
 
-@interface ChatMessageCell : ChatCell
+@class HOPMessageRecord;
+@class TTTAttributedLabel;
 
+@interface ChatCell : UITableViewCell
 
+@property (nonatomic, weak) HOPMessageRecord *message;
+@property (nonatomic, strong) TTTAttributedLabel *messageLabel;
+
+- (void) setMessage:(HOPMessageRecord*) message;
++ (CGSize) calcMessageHeight:(NSString *)message forScreenWidth:(float)width;
 @end

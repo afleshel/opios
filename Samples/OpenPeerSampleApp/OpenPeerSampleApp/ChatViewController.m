@@ -41,8 +41,9 @@
 #import <OpenPeerSDK/HOPMessageRecord.h>
 #import <OpenPeerSDK/HOPSessionRecord.h>
 #import <OpenPeerSDK/HOPConversationThread.h>
-
-
+#import <OpenPeerSDK/HOPCallSystemMessage.h>
+#import "SystemMessageCell.h"
+#import "ChatCell.h"
 
 @interface ChatViewController()
 
@@ -58,6 +59,9 @@
 @property (nonatomic) BOOL isFirstRun;
 @property (nonatomic) CGFloat keyboardLastChange;
 @property (nonatomic,strong) UITapGestureRecognizer *tapGesture;
+
+@property (nonatomic,strong) UIView *footerView;
+@property (nonatomic,strong) UILabel *labelTitle;
 
 - (void) registerForNotifications:(BOOL)registerForNotifications;
 
@@ -137,13 +141,15 @@
 	}
     
     self.tapGesture.cancelsTouchesInView = NO;
+    
+    [self setFooterMessage:@""];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [self registerForNotifications:YES];
-    
+    self.chatTableView.tableFooterView.backgroundColor = [UIColor clearColor];
 //    if (!self.keyboardIsHidden)
 //    {
 //        [self.messageTextbox becomeFirstResponder];
@@ -151,6 +157,7 @@
     
     [self.session.unreadMessageArray removeAllObjects];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatedComposingStatus:) name:notificationComposingStatusChanged object:nil];
 //    if ([[[self fetchedResultsController] fetchedObjects] count] > 0)
 //        [self.chatTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[[[self fetchedResultsController] fetchedObjects] count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
     //[self.chatTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[[[self fetchedResultsController] fetchedObjects] count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
@@ -165,6 +172,19 @@
     
 }
 
+- (void) updatedComposingStatus:(NSNotification *)notification
+{
+    NSDictionary* object = notification.object;
+    
+    HOPConversationThread* thread = [object objectForKey:@"thread"];
+    HOPContact* contact = [object objectForKey:@"contact"];
+    
+    NSString* status = [thread getContactStatus:contact];
+    
+    if ([status length] > 0)
+        [self setFooterMessage:status];
+        //self.labelTitle.text = status;
+}
 
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -177,6 +197,7 @@
     [self.messageTextbox resignFirstResponder];
     [self registerForNotifications:NO];
     [self.chatTableView removeGestureRecognizer:self.tapGesture];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:notificationComposingStatusChanged object:nil];
 }
 
 
@@ -284,7 +305,14 @@
             [self sendIMmessage:textView.text];
         return NO;
     }
+    [self.session.conversationThread setStatusInThread:HOPComposingStateComposing];
     return YES;
+}
+
+
+- (void)textViewDidEndEditing:(UITextView *)textView
+{
+    [self.session.conversationThread setStatusInThread:HOPComposingStateActive];
 }
 
 - (void) refreshViewWithData
@@ -387,28 +415,33 @@
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //Message* message = nil;
+    ChatCell* msgCell = nil;
     HOPMessageRecord* message = nil;
     
     message = [self.fetchedResultsController objectAtIndexPath:indexPath];
 
     if (!message)
         return nil;
-    /*
-    if (self.session.messageArray && [self.session.messageArray count] > 0)
+    
+    BOOL isSystemMessage = [message.type isEqualToString:[HOPSystemMessage getMessageType]];
+    if (isSystemMessage)
     {
-        message = (Message*)[self.session.messageArray objectAtIndex:indexPath.row];
+        msgCell = [tableView dequeueReusableCellWithIdentifier:@"MessageSystemCellIdentifier"];
     }
     else
     {
-        return nil;
-    }*/
+        msgCell = [tableView dequeueReusableCellWithIdentifier:@"MessageCellIdentifier"];
+    }
     
-    ChatMessageCell* msgCell = [tableView dequeueReusableCellWithIdentifier:@"MessageCellIdentifier"];
+    //ChatMessageCell* msgCell = [tableView dequeueReusableCellWithIdentifier:@"MessageCellIdentifier"];
     
     if (msgCell == nil)
     {
-        msgCell = [[ChatMessageCell alloc] initWithFrame:CGRectZero];
+        if (isSystemMessage)
+            msgCell = [[SystemMessageCell alloc] initWithFrame:CGRectZero];
+        else
+            msgCell = [[ChatMessageCell alloc] initWithFrame:CGRectZero];
+        
         msgCell.messageLabel.delegate = self;
     }
     
@@ -424,7 +457,11 @@
     //Message *message = [self.session.messageArray objectAtIndex:indexPath.row];
     HOPMessageRecord* message = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
-    CGSize textSize = [ChatMessageCell calcMessageHeight:message.text forScreenWidth:self.chatTableView.frame.size.width - 85];
+    CGSize textSize;
+    if ([message.type isEqualToString:[HOPSystemMessage getMessageType]])
+        textSize= [ChatCell calcMessageHeight:@"system message" forScreenWidth:self.chatTableView.frame.size.width - 85];
+    else
+        textSize= [ChatCell calcMessageHeight:message.text forScreenWidth:self.chatTableView.frame.size.width - 85];
 
     textSize.height += 52;
     
@@ -433,8 +470,24 @@
     return res;
 }
 
+ - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 30.0;
+}
+
+//- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+//{
+//    return @"Veselo";
+//}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    return self.footerView;
+}
+
 - (void) sendIMmessage:(NSString *)message
 {
+    [self.session.conversationThread setStatusInThread:HOPComposingStateActive];
     if ([message length] > 0)
     {
         [[MessageManager sharedMessageManager] sendMessage:message forSession:self.session];
@@ -513,6 +566,23 @@
 {
     if (url)
         [[UIApplication sharedApplication] openURL:url];
+}
+
+- (void) setFooterMessage:(NSString*) message
+{
+    if (!self.footerView)
+    {
+        self.footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 30.0)];
+        self.footerView.backgroundColor = [UIColor clearColor];
+    }
+    
+    if (!self.labelTitle)
+    {
+        self.labelTitle = [[UILabel alloc] initWithFrame:self.footerView.bounds];
+        [self.footerView addSubview:self.labelTitle];
+    }
+    
+    self.labelTitle.text = message;
 }
 @end
 

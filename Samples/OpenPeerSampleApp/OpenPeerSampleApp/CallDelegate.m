@@ -34,6 +34,7 @@
 #import <OpenpeerSDK/HOPCall.h>
 #import <OpenpeerSDK/HOPTypes.h>
 #import <OpenpeerSDK/HOPConversationThread.h>
+#import <OpenpeerSDK/HOPContact.h>
 #import "SessionManager.h"
 #import "MessageManager.h"
 #import "SoundsManager.h"
@@ -85,6 +86,10 @@
                 [[SoundManager sharedSoundsManager] stopCallingSound];
                 [[SoundManager sharedSoundsManager] stopRingingSound];
                 [[SessionManager sharedSessionManager] onCallOpened:call];
+                
+                if ([[call getCaller] isSelf])
+                    [[MessageManager sharedMessageManager] sendCallSystemMessage:HOPCallSystemMessageTypeCallAnswered session:[[[SessionManager sharedSessionManager] sessionsDictionary] objectForKey:sessionId]];
+                
                 [sessionViewController startTimer];
                 break;
                 
@@ -106,6 +111,9 @@
                 [[SoundManager sharedSoundsManager] stopCallingSound];
                 [[SoundManager sharedSoundsManager] stopRingingSound];
                 [sessionViewController stopTimer];
+                
+                if ([[call getCaller] isSelf])
+                    [[MessageManager sharedMessageManager] sendCallSystemMessage:HOPCallSystemMessageTypeCallHungup session:[[[SessionManager sharedSessionManager] sessionsDictionary] objectForKey:sessionId]];
                 break;
                 
             case HOPCallStateClosed:                //Receives both parties

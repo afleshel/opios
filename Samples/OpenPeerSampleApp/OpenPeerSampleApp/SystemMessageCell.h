@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -32,7 +32,8 @@
 #import <UIKit/UIKit.h>
 #import "ChatCell.h"
 
-@interface ChatMessageCell : ChatCell
+
+@interface SystemMessageCell : ChatCell
 
 
 @end

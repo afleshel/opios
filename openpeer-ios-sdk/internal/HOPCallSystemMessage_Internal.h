@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,10 +29,19 @@
  
  */
 
-#import <UIKit/UIKit.h>
-#import "ChatCell.h"
+#import "HOPCallSystemMessage.h"
+#import <openpeer/core/ISystemMessage.h>
 
-@interface ChatMessageCell : ChatCell
+using namespace openpeer;
+using namespace openpeer::core;
 
+@interface HOPCallSystemMessage()
+{
+    CallSystemMessagePtr callSystemMessagePtr;
+}
+
+- (id) initWithCoreCallSystemMessage:(CallSystemMessagePtr) inCallSystemMessagePtr;
+
+- (CallSystemMessagePtr) getCallSystemMessagePtr;
 
 @end

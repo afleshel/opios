@@ -525,4 +525,13 @@ static const short _base64DecodingTable[256] = {
     }
     return ret;
 }
+
++ (NSString *)getLocalDateFromUTCdate:(NSDate *)utcDate
+{
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    df.dateFormat = @"MM/dd/yyyy hh:mm aa";
+    [df setTimeZone:[NSTimeZone systemTimeZone]];
+    
+    return [df stringFromDate:utcDate];
+}
 @end

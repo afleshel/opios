@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,10 +29,36 @@
  
  */
 
-#import <UIKit/UIKit.h>
 #import "ChatCell.h"
 
-@interface ChatMessageCell : ChatCell
+@implementation ChatCell
 
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        // Initialization code
+    }
+    return self;
+}
 
+- (void)awakeFromNib
+{
+    // Initialization code
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated
+{
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+
++ (CGSize) calcMessageHeight:(NSString *)message forScreenWidth:(float)width
+{
+    CGSize maxSize = {width, 200000.0};
+    //CGSize calcSize = [message sizeWithFont:[UIFont systemFontOfSize:14.0] constrainedToSize:maxSize];
+    CGSize calcSize = [message boundingRectWithSize: maxSize options: NSStringDrawingUsesLineFragmentOrigin attributes: @{ NSFontAttributeName: [UIFont systemFontOfSize:14.0] } context: nil].size;
+    return calcSize;
+}
 @end

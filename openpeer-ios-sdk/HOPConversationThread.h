@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2012, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -75,7 +75,7 @@
  @param state Message delivery state to convert to string
  @return A string representation of message delivery state
  */
-+ (NSString*) deliveryStateToString: (HOPConversationThreadMessageDeliveryState) state __attribute__((deprecated("use method stringForMessageDeliveryState instead")));
+//+ (NSString*) deliveryStateToString: (HOPConversationThreadMessageDeliveryState) state __attribute__((deprecated("use method stringForMessageDeliveryState instead")));
 /**
  Returns a string representation of the message delivery state.
  @param state Message delivery state to convert to string
@@ -89,7 +89,7 @@
  @param state Contact state to convert to string
  @returns A string representation of contact state
  */
-+ (NSString*) stateToString: (HOPConversationThreadContactConnectionState) state __attribute__((deprecated("use method stringForContactConnectionState instead")));
+//+ (NSString*) stateToString: (HOPConversationThreadContactConnectionState) state __attribute__((deprecated("use method stringForContactConnectionState instead")));
 /**
  Returns a  string representation of the contact state.
  @param state Contact state to convert to string
@@ -148,6 +148,13 @@
 - (HOPConversationThreadContactConnectionState) getContactConnectionState: (HOPContact*) contact;
 
 /**
+ *  Creates an empty JSON status blob ready to fill with additional structure data. Use "ComposingStatus" to insert composing status information into this JSON blob.
+ *
+ *  @return empty JSON status string
+ */
+- (NSString*) createEmptyStatus;
+
+/**
  *  Get the status of a contact in the conversation thread.
  *
  *  @param contact Contact in the conversation thread
@@ -157,18 +164,12 @@
 - (NSString*) getContactStatus:(HOPContact*) contact;
 
 
-//-----------------------------------------------------------------------
-// PURPOSE: Set the status of yourself in the conversation thread
-// NOTES:   Can use "IConversationThreadComposingStatus" to create
-//          composing related contact statuses.
-
 /**
  *  Set the status of yourself in the conversation thread.
  *
  *  @param status         Contact status
- *  @param additionalData Additiona data that will describe user status
  */
-- (void) setStatusInThread:(HOPConversationThreadContactStatus) status aditioanlData:(NSString*) additionalData;
+- (void) setStatusInThread:(HOPConversationThreadContactStatus) status;
 
 /**
  Sends message to all contacts in the conversation thread. Deprecated.
@@ -176,7 +177,7 @@
  @param messageType Message type
  @param message Message
  */
-- (void) sendMessage: (NSString*) messageID messageType:(NSString*) messageType message:(NSString*) message DEPRECATED_ATTRIBUTE;
+//- (void) sendMessage: (NSString*) messageID messageType:(NSString*) messageType message:(NSString*) message DEPRECATED_ATTRIBUTE;
 
 /**
  Sends message to all contacts in the conversation thread.
@@ -192,7 +193,7 @@
  @param outMessage NSString Received message
  @param outTime NSDate Received message timestamp
  */
-- (BOOL) getMessage: (NSString*) messageID outFrom:(HOPContact**) outFrom outMessageType:(NSString**) outMessageType outMessage:(NSString**) outMessage outTime:(NSDate**) outTime DEPRECATED_ATTRIBUTE;
+//- (BOOL) getMessage: (NSString*) messageID outFrom:(HOPContact**) outFrom outMessageType:(NSString**) outMessageType outMessage:(NSString**) outMessage outTime:(NSDate**) outTime DEPRECATED_ATTRIBUTE;
 
 /**
  Returns message for specified message ID.
@@ -209,6 +210,13 @@
  */
 - (BOOL) getMessageDeliveryState: (NSString*) messageID outDeliveryState:(HOPConversationThreadMessageDeliveryState*) outDeliveryState;
 
+/**
+ *  Mark all received messages thus far as read
+ */
+- (void) markAllMessagesRead;
+
++ (NSString*) createSystemMessage:(HOPSystemMessageType) systemMessageType messageType:(int) systemMessageType contact:(HOPContact*) contact;
++ (NSString*) getSystemMessageType;
 /**
   Destroys conversation thread core object.
  */

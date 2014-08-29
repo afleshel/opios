@@ -95,6 +95,8 @@
   //OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread <%@> contact <%@> state: %@",conversationThread, contact,[HOPConversationThread stringForContactConnectionState:contactState]);
   dispatch_async(dispatch_get_main_queue(), ^
                  {
+                     NSDictionary* dict = @{@"thread":conversationThread, @"contact":contact};
+                     [[NSNotificationCenter defaultCenter] postNotificationName:notificationComposingStatusChanged object:dict];
                  });
 }
 
