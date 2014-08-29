@@ -330,9 +330,9 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (NSString*) getContactStatus:(HOPContact*) contact
+- (HOPConversationThreadContactStatus) getContactStatus:(HOPContact*) contact
 {
-    NSString* ret = nil;
+    HOPConversationThreadContactStatus ret = HOPComposingStateInactive;
     if(conversationThreadPtr)
     {
         IContactPtr contactPtr = [contact getContactPtr];
@@ -344,9 +344,10 @@ using namespace openpeer::core;
                 ComposingStatusPtr composingStatusPtr = ComposingStatus::extract(contactStatusJSONPtr);
                 if (composingStatusPtr)
                 {
-                    String str = ComposingStatus::toString(composingStatusPtr->mComposingStatus); //IHelper::convertToString(contactStatusJSONPtr);
-                    if (str.hasData())
-                        ret = [NSString stringWithCString:str encoding:NSUTF8StringEncoding];
+                    ret = (HOPConversationThreadContactStatus) composingStatusPtr->mComposingStatus;
+//                    String str = ComposingStatus::toString(composingStatusPtr->mComposingStatus); //IHelper::convertToString(contactStatusJSONPtr);
+//                    if (str.hasData())
+//                        ret = [NSString stringWithCString:str encoding:NSUTF8StringEncoding];
                 }
             }
         }

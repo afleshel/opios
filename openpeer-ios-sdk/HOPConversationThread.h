@@ -159,9 +159,9 @@
  *
  *  @param contact Contact in the conversation thread
  *
- *  @return Contact status in JSON format
+ *  @return Contact status 
  */
-- (NSString*) getContactStatus:(HOPContact*) contact;
+- (HOPConversationThreadContactStatus) getContactStatus:(HOPContact*) contact;
 
 
 /**

@@ -42,6 +42,8 @@
 #import <OpenPeerSDK/HOPSessionRecord.h>
 #import <OpenPeerSDK/HOPConversationThread.h>
 #import <OpenPeerSDK/HOPCallSystemMessage.h>
+#import <OpenPeerSDK/HOPContact.h>
+#import <OpenPeerSDK/HOPRolodexContact.h>
 #import "SystemMessageCell.h"
 #import "ChatCell.h"
 
@@ -62,6 +64,8 @@
 
 @property (nonatomic,strong) UIView *footerView;
 @property (nonatomic,strong) UILabel *labelTitle;
+
+@property (nonatomic,weak) IBOutlet UILabel *labelComposingStatus;
 
 - (void) registerForNotifications:(BOOL)registerForNotifications;
 
@@ -172,6 +176,29 @@
     
 }
 
+- (NSString*) getMessageForStatus:(HOPConversationThreadContactStatus) status contact:(HOPContact*) contact
+{
+    NSString* ret = @"";
+    HOPRolodexContact* rolodexContact = [[[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:[contact getPeerURI]] objectAtIndex:0];
+    switch (status)
+    {
+        case HOPComposingStateComposing:
+            ret = [NSString stringWithFormat:@"%@ is typing...",rolodexContact.name];
+            break;
+            
+        case HOPComposingStatePaused:
+            ret = [NSString stringWithFormat:@"%@ is thinking...",rolodexContact.name];
+            break;
+            
+        case HOPComposingStateActive:
+            //ret = [NSString stringWithFormat:@"%@ is thinking...",rolodexContact.name];
+            break;
+        default:
+            break;
+    }
+    
+    return ret;
+}
 - (void) updatedComposingStatus:(NSNotification *)notification
 {
     NSDictionary* object = notification.object;
@@ -179,10 +206,12 @@
     HOPConversationThread* thread = [object objectForKey:@"thread"];
     HOPContact* contact = [object objectForKey:@"contact"];
     
-    NSString* status = [thread getContactStatus:contact];
+    HOPConversationThreadContactStatus status = [thread getContactStatus:contact];
     
-    if ([status length] > 0)
-        [self setFooterMessage:status];
+    NSString* message = [self getMessageForStatus:status contact:contact];
+    
+    self.labelComposingStatus.text = message;
+        //[self setFooterMessage:status];
         //self.labelTitle.text = status;
 }
 
@@ -199,7 +228,6 @@
     [self.chatTableView removeGestureRecognizer:self.tapGesture];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:notificationComposingStatusChanged object:nil];
 }
-
 
 
 - (void) hideKeyboard
@@ -470,20 +498,20 @@
     return res;
 }
 
- - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return 30.0;
-}
+// - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+//{
+//    return 30.0;
+//}
 
 //- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 //{
 //    return @"Veselo";
 //}
 
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    return self.footerView;
-}
+//- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+//{
+//    return self.footerView;
+//}
 
 - (void) sendIMmessage:(NSString *)message
 {
