@@ -644,7 +644,7 @@
         
         if ([key length] > 0)
         {
-            ret = [NSMutableDictionary dictionaryWithDictionary:[inputDictionary objectForKey:@"root"]];
+            ret = [NSMutableDictionary dictionaryWithDictionary:[inputDictionary objectForKey:key]];
             if (ret)
                 [self createUserAgentFromDictionary:ret];
         }
