@@ -62,8 +62,10 @@
 @property (nonatomic) CGFloat keyboardLastChange;
 @property (nonatomic,strong) UITapGestureRecognizer *tapGesture;
 
-@property (nonatomic,strong) UIView *footerView;
-@property (nonatomic,strong) UILabel *labelTitle;
+//@property (nonatomic,strong) UIView *footerView;
+//@property (nonatomic,strong) UILabel *labelTitle;
+
+@property (nonatomic,strong) NSTimer *pauseTimer;
 
 @property (nonatomic,weak) IBOutlet UILabel *labelComposingStatus;
 
@@ -146,7 +148,7 @@
     
     self.tapGesture.cancelsTouchesInView = NO;
     
-    [self setFooterMessage:@""];
+//    [self setFooterMessage:@""];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -324,6 +326,12 @@
 }
 
 #pragma mark - UITextViewDelegate
+
+- (void)textViewDidBeginEditing:(UITextView *)textView
+{
+    [self.session.conversationThread setStatusInThread:HOPComposingStateComposing];
+}
+
 - (BOOL) textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     //if([text isEqualToString:@"\n"] && [textView.text length] > 0)
@@ -333,7 +341,7 @@
             [self sendIMmessage:textView.text];
         return NO;
     }
-    [self.session.conversationThread setStatusInThread:HOPComposingStateComposing];
+    
     return YES;
 }
 
@@ -596,21 +604,21 @@
         [[UIApplication sharedApplication] openURL:url];
 }
 
-- (void) setFooterMessage:(NSString*) message
-{
-    if (!self.footerView)
-    {
-        self.footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 30.0)];
-        self.footerView.backgroundColor = [UIColor clearColor];
-    }
-    
-    if (!self.labelTitle)
-    {
-        self.labelTitle = [[UILabel alloc] initWithFrame:self.footerView.bounds];
-        [self.footerView addSubview:self.labelTitle];
-    }
-    
-    self.labelTitle.text = message;
-}
+//- (void) setFooterMessage:(NSString*) message
+//{
+//    if (!self.footerView)
+//    {
+//        self.footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 30.0)];
+//        self.footerView.backgroundColor = [UIColor clearColor];
+//    }
+//    
+//    if (!self.labelTitle)
+//    {
+//        self.labelTitle = [[UILabel alloc] initWithFrame:self.footerView.bounds];
+//        [self.footerView addSubview:self.labelTitle];
+//    }
+//    
+//    self.labelTitle.text = message;
+//}
 @end
 
