@@ -88,7 +88,7 @@
                 [[SessionManager sharedSessionManager] onCallOpened:call];
                 
                 if ([[call getCaller] isSelf])
-                    [[MessageManager sharedMessageManager] sendCallSystemMessage:HOPCallSystemMessageTypeCallAnswered session:[[[SessionManager sharedSessionManager] sessionsDictionary] objectForKey:sessionId]];
+                    [[MessageManager sharedMessageManager] sendCallSystemMessage:HOPCallSystemMessageTypeCallAnswered reasonCode:0 session:[[[SessionManager sharedSessionManager] sessionsDictionary] objectForKey:sessionId]];
                 
                 [sessionViewController startTimer];
                 break;
@@ -113,7 +113,19 @@
                 [sessionViewController stopTimer];
                 
                 if ([[call getCaller] isSelf])
-                    [[MessageManager sharedMessageManager] sendCallSystemMessage:HOPCallSystemMessageTypeCallHungup session:[[[SessionManager sharedSessionManager] sessionsDictionary] objectForKey:sessionId]];
+                {
+                    int reasonCode = 0;
+                    
+                    if ([call getClosedReason] == HOPCallClosedReasonNone || [call getClosedReason] == HOPCallClosedReasonRequestTerminated || [call getClosedReason] == HOPCallClosedReasonTemporarilyUnavailable)
+                    {
+                        reasonCode = 408;
+                    }
+                    else if ([call getAnswerTime] == nil)
+                    {
+                        reasonCode = 404;
+                    }
+                    [[MessageManager sharedMessageManager] sendCallSystemMessage:HOPCallSystemMessageTypeCallHungup reasonCode:reasonCode session:[[[SessionManager sharedSessionManager] sessionsDictionary] objectForKey:sessionId]];
+                }
                 break;
                 
             case HOPCallStateClosed:                //Receives both parties

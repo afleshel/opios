@@ -288,6 +288,19 @@
  @return HOPMessageRecord* message record boject
  */
 - (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date session:(NSString*) sessionRecordId rolodexContact:(HOPRolodexContact*) rolodexContact messageId:(NSString*)messageId;
+
+/**
+ Creates a HOPMessageRecord object.
+ @param messageText Message text
+ @param type Message type
+ @param date Time of creation
+ @param visible True if message should be visible in chat
+ @param sessionRecordId Session ID
+ @param rolodexContact HOPRolodexContact sender object
+ @param messageId Message ID
+ @return HOPMessageRecord* message record boject
+ */
+- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  session:(NSString*) sessionRecordId rolodexContact:(HOPRolodexContact*) rolodexContact messageId:(NSString*)messageId;
 /**
  Removes all session and message records.
  */

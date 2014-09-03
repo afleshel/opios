@@ -304,7 +304,9 @@ using namespace openpeer::core;
     
     if(callPtr)
     {
-        date = [OpenPeerUtility convertPosixTimeToDate:callPtr->getAnswerTime()];
+        Time answerTime = callPtr->getAnswerTime();
+        if (answerTime != Time())
+            date = [OpenPeerUtility convertPosixTimeToDate:answerTime];
     }
     else
     {

@@ -99,11 +99,11 @@
     return self;
 }
 
-- (HOPMessage*) createSystemMessageWithType:(HOPSystemMessageType) type messageType:(int) messageType andRecipient:(HOPRolodexContact*) contact
+- (HOPMessage*) createSystemMessageWithType:(HOPSystemMessageType) type messageType:(int) messageType reasonCode:(int)reasonCode andRecipient:(HOPRolodexContact*) contact
 {
     HOPMessage* hopMessage = nil;
     
-    HOPCallSystemMessage* callSystemMessage = [[HOPCallSystemMessage alloc] initWithMessageType:(HOPCallSystemMessageType)messageType callee:[contact getCoreContact] errorCode:0];
+    HOPCallSystemMessage* callSystemMessage = [[HOPCallSystemMessage alloc] initWithMessageType:(HOPCallSystemMessageType)messageType callee:[contact getCoreContact] errorCode:reasonCode];
     NSString* messageBody = callSystemMessage.jsonMessage;//[HOPConversationThread createSystemMessage:type messageType:messageType contact:[contact getCoreContact]];
     
     if ([messageBody length] > 0)
@@ -185,12 +185,13 @@
 //    [inSession.conversationThread sendMessage:hopMessage];
 //}
 
-- (void) sendCallSystemMessage:(HOPCallSystemMessageType) callSystemMessage session:(Session*) inSession
+- (void) sendCallSystemMessage:(HOPCallSystemMessageType) callSystemMessage reasonCode:(int) reasonCode session:(Session*) inSession
 {
     for (HOPRolodexContact* contact in inSession.participantsArray)
     {
-        HOPMessage* hopMessage = [self createSystemMessageWithType:HOPSystemMessageTypeCall messageType:callSystemMessage andRecipient:contact];
-        HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:hopMessage.text type:[HOPSystemMessage getMessageType] date:hopMessage.date session:[inSession.conversationThread getThreadId] rolodexContact:contact  messageId:hopMessage.messageID];
+        HOPMessage* hopMessage = [self createSystemMessageWithType:HOPSystemMessageTypeCall messageType:callSystemMessage reasonCode:reasonCode andRecipient:contact];
+        BOOL visible = callSystemMessage != HOPCallSystemMessageTypeCallAnswered;
+        HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:hopMessage.text type:[HOPSystemMessage getMessageType]  date:hopMessage.date visible:visible session:[inSession.conversationThread getThreadId] rolodexContact:contact  messageId:hopMessage.messageID];
         [inSession.conversationThread sendMessage:hopMessage];
     }
 }
@@ -252,17 +253,34 @@
 }
 
 
-- (void) sendMessage:(NSString*) message forSession:(Session*) inSession
+- (void) sendMessage:(NSString*) message replacesMessageID:(NSString*) replacesMessageID forSession:(Session*) inSession
 {
     
     //Currently it is not available group chat, so we can have only one message recipients
     HOPRolodexContact* contact = [[inSession participantsArray] objectAtIndex:0];
     //Create a message object
-    HOPMessage* hopMessage = [[HOPMessage alloc] initWithMessageId:[HOPUtility getGUIDstring] andReplacesMessageID:@""  andMessage:message andContact:[contact getCoreContact] andMessageType:messageTypeText andMessageDate:[NSDate date] andValidated:NO];
+    HOPMessage* hopMessage = [[HOPMessage alloc] initWithMessageId:[HOPUtility getGUIDstring] andReplacesMessageID:replacesMessageID  andMessage:message andContact:[contact getCoreContact] andMessageType:messageTypeText andMessageDate:[NSDate date] andValidated:NO];
     
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Sending message: %@ - message id: %@ - for session with id: %@",message,hopMessage.messageID,[inSession.conversationThread getThreadId]);
     
-    [[HOPModelManager sharedModelManager] addMessage:message type:messageTypeText date:hopMessage.date session:[inSession.conversationThread getThreadId] rolodexContact:nil messageId:hopMessage.messageID];
+    if ([replacesMessageID length] > 0)
+    {
+        HOPMessageRecord* messageRecord = [[HOPModelManager sharedModelManager] getMessageRecordByID:replacesMessageID];
+        if ([message length] > 0)
+        {
+            messageRecord.messageID = hopMessage.messageID;
+            messageRecord.text = message;
+        }
+        else
+        {
+            [[HOPModelManager sharedModelManager] deleteObject:messageRecord];
+        }
+        [[HOPModelManager sharedModelManager] saveContext];
+    }
+    else
+    {
+        [[HOPModelManager sharedModelManager] addMessage:message type:messageTypeText date:hopMessage.date session:[inSession.conversationThread getThreadId] rolodexContact:nil messageId:hopMessage.messageID];
+    }
     
     if ([UIDevice isNetworkReachable] && [[HOPAccount sharedAccount] isCoreAccountCreated] && ([[HOPAccount sharedAccount] getState].state == HOPAccountStateReady))
     {
@@ -328,51 +346,70 @@
     
     if (isTextMessage)
     {
-        
-        
-        //Message* messageObj = [[Message alloc] initWithMessageText:message.text senderContact:contact sentTime:message.date];
-        HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:message.text type:messageTypeText date:message.date session:[session.conversationThread getThreadId] rolodexContact:contact messageId:message.messageID];
-   
-        if (messageObj)
+        HOPMessageRecord* messageObj = nil;
+        if ([message.replacesMessageID length] > 0)
         {
-            [session.unreadMessageArray addObject:messageObj];
-            /*NSUInteger addedIndex = [session.messageArray indexOfObject:messageObj inSortedRange:NSMakeRange(0, session.messageArray.count) options:NSBinarySearchingInsertionIndex usingComparator:self.comparator];
-                [session.messageArray insertObject:messageObj atIndex:addedIndex];
-
-            //[session.messageArray addObject:messageObj];
-            [session.unreadMessageArray addObject:messageObj];*/
-
-            //If session view controller with message sender is not yet shown, show it
-            [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForSession:session forIncomingCall:NO forIncomingMessage:YES];
+            messageObj = [[HOPModelManager sharedModelManager] getMessageRecordByID:message.replacesMessageID];
+            
+            if (messageObj)
+            {
+                if ([message.text length] == 0)
+                    [[HOPModelManager sharedModelManager] deleteObject:messageObj];
+                else
+                {
+                    messageObj.text = message.text;
+                    messageObj.messageID = message.messageID;
+                }
+            }
+            [[HOPModelManager sharedModelManager] saveContext];
         }
         else
         {
-            OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"%@ message is not saved - message id %@ - session id %@",message.text,message.messageID,sessionId);
-        }
-        
-        if ([[OpenPeer sharedOpenPeer] appEnteredBackground])
-        {
-            NSMutableDictionary* dict = [[NSMutableDictionary alloc] init];
-            [dict setObject:contact.identityContact.peerFile.peerURI forKey:@"peerURI"];
-            [dict setObject:message.messageID forKey:@"messageId"];
-            [dict setObject:message.text forKey:@"message"];
-            [dict setObject:message.date forKey:@"date"];
-            if ([dict count] > 0)
+            //Message* messageObj = [[Message alloc] initWithMessageText:message.text senderContact:contact sentTime:message.date];
+            messageObj = [[HOPModelManager sharedModelManager] addMessage:message.text type:messageTypeText date:message.date session:[session.conversationThread getThreadId] rolodexContact:contact messageId:message.messageID];
+       
+            if (messageObj)
             {
-                NSDictionary* packedDict = @{localNotificationKey: dict};
-                [Utility showLocalNotification:message.text additionalData:packedDict];
-                OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Local notification for message: \" %@ \" with id %@ is shown.",message.text,message.messageID);
+                [session.unreadMessageArray addObject:messageObj];
+                /*NSUInteger addedIndex = [session.messageArray indexOfObject:messageObj inSortedRange:NSMakeRange(0, session.messageArray.count) options:NSBinarySearchingInsertionIndex usingComparator:self.comparator];
+                    [session.messageArray insertObject:messageObj atIndex:addedIndex];
+
+                //[session.messageArray addObject:messageObj];
+                [session.unreadMessageArray addObject:messageObj];*/
+
+                //If session view controller with message sender is not yet shown, show it
+                [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForSession:session forIncomingCall:NO forIncomingMessage:YES];
             }
             else
             {
-                OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Local notification for message: \" %@ \" with id %@ is NOT shown.",message.text,message.messageID);
+                OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"%@ message is not saved - message id %@ - session id %@",message.text,message.messageID,sessionId);
+            }
+            
+            if ([[OpenPeer sharedOpenPeer] appEnteredBackground])
+            {
+                NSMutableDictionary* dict = [[NSMutableDictionary alloc] init];
+                [dict setObject:contact.identityContact.peerFile.peerURI forKey:@"peerURI"];
+                [dict setObject:message.messageID forKey:@"messageId"];
+                [dict setObject:message.text forKey:@"message"];
+                [dict setObject:message.date forKey:@"date"];
+                if ([dict count] > 0)
+                {
+                    NSDictionary* packedDict = @{localNotificationKey: dict};
+                    [Utility showLocalNotification:message.text additionalData:packedDict];
+                    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Local notification for message: \" %@ \" with id %@ is shown.",message.text,message.messageID);
+                }
+                else
+                {
+                    OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Local notification for message: \" %@ \" with id %@ is NOT shown.",message.text,message.messageID);
+                }
             }
         }
     }
     else
     {
+        BOOL visible = [message.text rangeOfString:@"\"type\":\"answered\""].location == NSNotFound;
         //Save System message
-        HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:message.text type:[HOPSystemMessage getMessageType] date:message.date session:[session.conversationThread getThreadId] rolodexContact:contact messageId:message.messageID];
+        HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:message.text type:[HOPSystemMessage getMessageType] date:message.date visible:visible session:[session.conversationThread getThreadId] rolodexContact:contact messageId:message.messageID];
         [self parseSystemMessage:message forSession:session];
     }
 }

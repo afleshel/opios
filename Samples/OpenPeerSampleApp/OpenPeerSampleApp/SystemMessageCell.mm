@@ -34,9 +34,11 @@
 #import <OpenPeerSDK/HOPMessageRecord.h>
 #import "TTTAttributedLabel.h"
 #import "Utility.h"
+#import "SessionManager.h"
 
 #define SYSTEM_MESSAGE_FONT_TYPE  @"Arial"
 #define SYSTEM_MESSAGE_FONT_SIZE  11.0
+#define SPACE_BETWEEN_LABEL  5
 
 @interface SystemMessageCell()
 
@@ -62,6 +64,7 @@
     return self;
 }
 
+
 - (void) setMessage:(HOPMessageRecord*) inMessage
 {
     message = inMessage;
@@ -70,16 +73,7 @@
     {
         self.callSystemMessage = [HOPCallSystemMessage callSystemMessageFromJSON:inMessage.text];
         
-        switch (self.callSystemMessage.messageType) {
-            case HOPCallSystemMessageTypeCallPlaced:
-                self.messageText = [NSString stringWithFormat:@"Call started at: %@", [Utility getLocalDateFromUTCdate:inMessage.date]];
-                break;
-            case HOPCallSystemMessageTypeCallHungup:
-                self.messageText = [NSString stringWithFormat:@"Call ended at: %@", [Utility getLocalDateFromUTCdate:inMessage.date]];
-                break;
-            default:
-                break;
-        }
+        self.messageText = [[SessionManager sharedSessionManager] getSystemMessage:message];
     }
 }
 
@@ -120,6 +114,8 @@
           break;
     }
 
+    float textX = 0;
+    float imgX = 0;
     // add line
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetLineWidth(context, 1.0);
@@ -136,19 +132,25 @@
         NSData *imgData = [[NSData alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:imgPath ofType:@"png"]];
         UIImage *img = [[UIImage alloc] initWithData:imgData];
 
+        imgX = (self.frame.size.width - (img.size.width + sizeOfTheMessage.width + 3*SPACE_BETWEEN_LABEL))/2.0 + SPACE_BETWEEN_LABEL;
         CGContextSaveGState(context);
         CGContextTranslateCTM(context, 0, img.size.height);
         CGContextScaleCTM(context, 1.0, -1.0);
-        CGContextDrawImage(context, CGRectMake(f.origin.x - 28, -8, img.size.width, img.size.height), img.CGImage);  
+//        CGContextDrawImage(context, CGRectMake(f.origin.x - 28, -8, img.size.width, img.size.height), img.CGImage);
+        CGContextDrawImage(context, CGRectMake(imgX, -8, img.size.width, img.size.height), img.CGImage);
         CGContextRestoreGState(context);
+        
+        textX = imgX + img.size.width + SPACE_BETWEEN_LABEL;//f.origin.x - 28 + img.size.width + 5.0;
     }
 
 
     CGContextSetStrokeColorWithColor(context, [UIColor colorWithRed:89/255.0 green:125/255.0 blue:136/255.0 alpha:1.0].CGColor);
     CGContextMoveToPoint(context, 0, 18);
-    CGContextAddLineToPoint(context, f.origin.x - 33, 18);
+//    CGContextAddLineToPoint(context, f.origin.x - 33, 18);
+    CGContextAddLineToPoint(context, imgX - SPACE_BETWEEN_LABEL, 18);
     CGContextStrokePath(context);
-    CGContextMoveToPoint(context, f.origin.x + f.size.width + 10, 18);
+//    CGContextMoveToPoint(context, f.origin.x + f.size.width + 10, 18);
+    CGContextMoveToPoint(context, textX + sizeOfTheMessage.width + SPACE_BETWEEN_LABEL, 18);
     CGContextAddLineToPoint(context, self.frame.size.width, 18);
     CGContextStrokePath(context);
 
@@ -159,7 +161,7 @@
         NSAttributedString * currentText=[[NSAttributedString alloc] initWithString:self.messageText attributes: attributes];
         
         //CGSize attrSize = [currentText size];
-        [currentText drawAtPoint:CGPointMake(60.0 , 5.0)];
+        [currentText drawAtPoint:CGPointMake(textX ,10.0)];
     }
 }
 

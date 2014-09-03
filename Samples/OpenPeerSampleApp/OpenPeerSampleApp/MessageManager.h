@@ -60,10 +60,10 @@ typedef enum
 //- (void) sendSystemMessageToInitSessionBetweenPeers:(NSArray*) peers forSession:(Session*) inSession;
 //- (void) sendSystemMessageToCallAgainForSession:(Session*) inSession;
 //- (void) sendSystemMessageToCheckAvailability:(Session*) inSession;
-- (void) sendCallSystemMessage:(HOPCallSystemMessageType) callSystemMessage session:(Session*) inSession;
+- (void) sendCallSystemMessage:(HOPCallSystemMessageType) callSystemMessage reasonCode:(int) reasonCode session:(Session*) inSession;
 
 - (void) parseSystemMessage:(HOPMessage*) inMessage forSession:(Session*) inSession;
-- (void) sendMessage:(NSString*) message forSession:(Session*) inSession;
+- (void) sendMessage:(NSString*) message replacesMessageID:(NSString*) replacesMessageID forSession:(Session*) inSession;
 - (void) onMessageReceived:(HOPMessage*) message forSessionId:(NSString*) sessionId;
 
 - (SystemMessageTypes) getTypeForSystemMessage:(HOPMessage*) message;

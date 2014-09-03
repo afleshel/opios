@@ -861,6 +861,40 @@ using namespace openpeer::core;
     return messageRecord;
 }
 
+- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  session:(NSString*) sessionRecordId rolodexContact:(HOPRolodexContact*) rolodexContact messageId:(NSString*)messageId
+{
+    HOPMessageRecord* messageRecord = nil;
+    if ([messageText length] > 0 && [type length] > 0 && date != nil && [sessionRecordId length] > 0 && [messageId length] > 0)
+    {
+        if ([self getMessageRecordByID:messageId] == nil)
+        {
+            NSArray* sessionRecords = [self getSessionRecordsForThreadID:sessionRecordId];
+            if ([sessionRecords count] > 0)
+            {
+                HOPSessionRecord* sessionRecord = [sessionRecords objectAtIndex:0];//[self getSessionRecordByID:sessionRecordId];
+                messageRecord = (HOPMessageRecord*)[self createObjectForEntity:@"HOPMessageRecord"];
+                messageRecord.text = messageText;
+                messageRecord.date = date;
+                messageRecord.visible = [NSNumber numberWithBool:visible];
+                messageRecord.type = type;
+                messageRecord.fromPeer = rolodexContact.identityContact.peerFile;
+                messageRecord.session = sessionRecord;
+                messageRecord.messageID = messageId;
+                sessionRecord.lastActivity = [NSDate date];
+            }
+        }
+        
+        [self saveContext];
+    }
+    else
+    {
+        //NSString* str = [NSString stringWithFormat:@"Some message data are invalid: messageText: %@ - type: %@ - date: %@ - sessionRecordId: %@ - messageId: %@", messageText, type, date,sessionRecordId, messageId];
+        ZS_LOG_ERROR(Debug, [self log:([NSString stringWithFormat:@"Some message data are invalid: messageText: %@ - type: %@ - date: %@ - sessionRecordId: %@ - messageId: %@", messageText, type, date,sessionRecordId, messageId])]);
+    }
+    
+    return messageRecord;
+}
+
 - (void) clearSessionRecords
 {
     NSArray* results = [self getResultsForEntity:@"HOPMessageRecord" withPredicateString:nil orderDescriptors:nil];
@@ -1031,7 +1065,7 @@ using namespace openpeer::core;
     NSPredicate *predicate = [NSCompoundPredicate andPredicateWithSubpredicates:arrayOfPredicates];
     */
     
-    NSPredicate* predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(session.sessionID MATCHES '%@')",sessionID]];
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(visible == YES AND session.sessionID MATCHES '%@')",sessionID]];
     
     [fetchRequest setPredicate:predicate];
     

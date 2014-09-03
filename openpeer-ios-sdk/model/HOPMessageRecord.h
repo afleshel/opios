@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2014, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -39,9 +39,10 @@
 @property (nonatomic, retain) NSDate * date;
 @property (nonatomic, retain) NSNumber * delivered;
 @property (nonatomic, retain) NSData * image;
+@property (nonatomic, retain) NSString * messageID;
 @property (nonatomic, retain) NSString * text;
 @property (nonatomic, retain) NSString * type;
-@property (nonatomic, retain) NSString * messageID;
+@property (nonatomic, retain) NSNumber * visible;
 @property (nonatomic, retain) HOPPublicPeerFile *fromPeer;
 @property (nonatomic, retain) HOPSessionRecord *session;
 

@@ -53,6 +53,9 @@
 #import <OpenpeerSDK/HOPHomeUser+External.h>
 #import <OpenpeerSDK/HOPRolodexContact+External.h>
 #import <OpenpeerSDK/HOPSessionRecord.h>
+#import <OpenpeerSDK/HOPMessageRecord.h>
+#import <OpenpeerSDK/HOPSystemMessage.h>
+#import <OpenpeerSDK/HOPCallSystemMessage.h>
 #import "UIDevice+Networking.h"
 
 @interface SessionManager()
@@ -378,7 +381,7 @@
             OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Making a call for the session <%p>", inSession);
             
 //            [[MessageManager sharedMessageManager]sendSystemMessageToCheckAvailability:inSession];
-            [[MessageManager sharedMessageManager] sendCallSystemMessage:HOPCallSystemMessageTypeCallPlaced session:inSession];
+            [[MessageManager sharedMessageManager] sendCallSystemMessage:HOPCallSystemMessageTypeCallPlaced reasonCode:0 session:inSession];
             //Currently we are not supporting group conferences, so only one participant is possible
             HOPContact* contact = [[[inSession participantsArray] objectAtIndex:0] getCoreContact];
             
@@ -782,6 +785,41 @@
     for (Session* session in [self.sessionsDictionary allValues])
     {
         ret += [session.unreadMessageArray count];
+    }
+    return ret;
+}
+
+- (NSString* )getSystemMessage:(HOPMessageRecord *)messageRecord
+{
+    NSString* ret = nil;
+    HOPCallSystemMessage* callSystemMessage = [HOPCallSystemMessage callSystemMessageFromJSON:messageRecord.text];
+    
+    switch (callSystemMessage.messageType) {
+        case HOPCallSystemMessageTypeCallPlaced:
+            ret = [NSString stringWithFormat:@"Call started: %@", [Utility getLocalDateFromUTCdate:messageRecord.date]];
+            break;
+        case HOPCallSystemMessageTypeCallHungup:
+            ret = [NSString stringWithFormat:@"%@: %@", [Utility stringForEndingCallReason:callSystemMessage.errorCode],[Utility getLocalDateFromUTCdate:messageRecord.date]];
+            break;
+        default:
+            break;
+    }
+    
+    return ret;
+}
+
+- (NSString*) getLastTextMessageForSessionID:(NSString*) sessionID
+{
+    NSString* ret = nil;
+    HOPMessageRecord* messageRecord = [[HOPModelManager sharedModelManager] getLastMessageRecordForSessionID:sessionID];
+    if (messageRecord)
+    {
+        if (![messageRecord.type isEqualToString:[HOPSystemMessage getMessageType]])
+            ret = messageRecord.text;
+        else
+        {
+            ret = [self getSystemMessage:messageRecord];
+        }
     }
     return ret;
 }

@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2014, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -39,9 +39,10 @@
 @dynamic date;
 @dynamic delivered;
 @dynamic image;
+@dynamic messageID;
 @dynamic text;
 @dynamic type;
-@dynamic messageID;
+@dynamic visible;
 @dynamic fromPeer;
 @dynamic session;
 

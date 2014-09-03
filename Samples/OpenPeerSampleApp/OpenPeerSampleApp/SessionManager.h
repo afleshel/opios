@@ -38,6 +38,7 @@
 @class HOPContact;
 @class HOPRolodexContact;
 @class HOPSessionRecord;
+@class HOPMessageRecord;
 
 @interface SessionManager : NSObject
 
@@ -85,4 +86,6 @@
 - (void) setLatestValidConversationThread:(HOPConversationThread*) inConversationThread;
 
 - (int) totalNumberOfUnreadMessages;
+- (NSString* )getSystemMessage:(HOPMessageRecord *)messageRecord;
+- (NSString*) getLastTextMessageForSessionID:(NSString*) sessionID;
 @end

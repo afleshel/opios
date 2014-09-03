@@ -442,8 +442,8 @@ static const short _base64DecodingTable[256] = {
 
 + (BOOL) isValidURL: (NSString *) candidate
 {
-    NSString *urlRegEx =
-    @"(http|https)://((\\w)*|([0-9]*)|([-|_])*)+([\\.|/]((\\w)*|([0-9]*)|([-|_])*))+";
+    NSString *urlRegEx =@"^(http://www.|https://www.|http://|https://)[a-z0-9]+([-.]{1}[a-z0-9]+)*.[a-z]{2,5}(:[0-9]{1,5})?(/.*)?$";
+    //@"(http|https)://((\\w)*|([0-9]*)|([-|_])*)+([\\.|/]((\\w)*|([0-9]*)|([-|_])*))+";
     NSPredicate *urlTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", urlRegEx];
     return [urlTest evaluateWithObject:candidate];
 }
@@ -528,10 +528,42 @@ static const short _base64DecodingTable[256] = {
 
 + (NSString *)getLocalDateFromUTCdate:(NSDate *)utcDate
 {
-    NSDateFormatter *df = [[NSDateFormatter alloc] init];
-    df.dateFormat = @"MM/dd/yyyy hh:mm aa";
-    [df setTimeZone:[NSTimeZone systemTimeZone]];
+//    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+//    df.dateFormat = @"MM/dd/yyyy hh:mm aa";
+//    [df setTimeZone:[NSTimeZone systemTimeZone]];
+//    
+//    return [df stringFromDate:utcDate];
     
-    return [df stringFromDate:utcDate];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+    [dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
+    [dateFormatter setLocale:[NSLocale currentLocale]];
+    [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+    NSString *dateString = [dateFormatter stringFromDate:utcDate];
+    
+    return dateString;
+}
+
++ (NSString*) stringForEndingCallReason:(int) endingCallReason
+{
+    NSString* ret = nil;
+    
+    switch (endingCallReason)
+    {
+        case 0:
+            ret = @"Call ended";
+            break;
+        case 404:
+            ret = @"Call ended - no answer";
+            break;
+        case 408:
+            ret = @"Call ended - network issue";
+            break;
+        default:
+            ret = @"Call ended";
+            break;
+    }
+    
+    return ret;
 }
 @end
