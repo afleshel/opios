@@ -266,14 +266,18 @@
     if ([replacesMessageID length] > 0)
     {
         HOPMessageRecord* messageRecord = [[HOPModelManager sharedModelManager] getMessageRecordByID:replacesMessageID];
+        
+        messageRecord.messageID = hopMessage.messageID;
+        
         if ([message length] > 0)
         {
-            messageRecord.messageID = hopMessage.messageID;
+            //messageRecord.messageID = hopMessage.messageID;
             messageRecord.text = message;
         }
         else
         {
-            [[HOPModelManager sharedModelManager] deleteObject:messageRecord];
+            messageRecord.deleted = [NSNumber numberWithBool:YES];
+            //[[HOPModelManager sharedModelManager] deleteObject:messageRecord];
         }
         [[HOPModelManager sharedModelManager] saveContext];
     }
@@ -353,12 +357,15 @@
             
             if (messageObj)
             {
+                messageObj.messageID = message.messageID;
                 if ([message.text length] == 0)
-                    [[HOPModelManager sharedModelManager] deleteObject:messageObj];
+                {
+                    messageObj.deleted = [NSNumber numberWithBool:YES];
+                    //[[HOPModelManager sharedModelManager] deleteObject:messageObj];
+                }
                 else
                 {
                     messageObj.text = message.text;
-                    messageObj.messageID = message.messageID;
                 }
             }
             [[HOPModelManager sharedModelManager] saveContext];

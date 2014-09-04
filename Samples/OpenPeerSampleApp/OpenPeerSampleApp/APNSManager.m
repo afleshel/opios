@@ -391,7 +391,7 @@
 
 - (NSString*) prepareMessageForRichPush:(HOPMessage*) message peerURI:(NSString*) peerURI location:(NSString*) location
 {
-    NSString* ret = [NSString stringWithFormat:@"{\\\"peerURI\\\":\\\"%@\\\",\\\"messageId\\\":\\\"%@\\\",\\\"message\\\":\\\"%@\\\",\\\"location\\\":\\\"%@\\\",\\\"date\\\":\\\"%.0f\\\"}",peerURI,message.messageID,message.text,location,[message.date timeIntervalSince1970]];
+    NSString* ret = [NSString stringWithFormat:@"{\\\"peerURI\\\":\\\"%@\\\",\\\"messageId\\\":\\\"%@\\\",\\\"replacesMessageId\\\":\\\"%@\\\",\\\"message\\\":\\\"%@\\\",\\\"location\\\":\\\"%@\\\",\\\"date\\\":\\\"%.0f\\\"}",peerURI,message.messageID,message.replacesMessageID,message.text,location,[message.date timeIntervalSince1970]];
 
     return ret;
 }

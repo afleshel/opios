@@ -63,6 +63,7 @@
 
 @implementation ChatMessageCell
 
+@synthesize message;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -255,7 +256,10 @@
             
             [self setUnicodeChars:self.message.text];
             
-            messageSize = [ChatCell calcMessageHeight:_unicodeMessageText forScreenWidth:(self.frame.size.width - (2*AVATAR_WIDTH + LEADING_SPACE + TRAILING_SPACE))];
+            if (!self.message.deleted.boolValue)
+                messageSize = [ChatCell calcMessageHeight:_unicodeMessageText forScreenWidth:(self.frame.size.width - (2*AVATAR_WIDTH + LEADING_SPACE + TRAILING_SPACE))];
+            else
+                messageSize = [ChatCell calcMessageHeight:stringDeletedeMessageText forScreenWidth:(self.frame.size.width - (2*AVATAR_WIDTH + LEADING_SPACE + TRAILING_SPACE))];
             
             //if message is received
             if (!isHomeUserSender)
@@ -269,12 +273,19 @@
                 messageSenderName = [[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser] getFullName];
             }
             
+            UIColor* textColor;
+            
+            if (!self.message.deleted.boolValue)
+                textColor = [UIColor whiteColor];
+            else
+                textColor = [UIColor grayColor];
+            
             //Label participant
             participantNameSize = [messageSenderName sizeWithAttributes:@{NSFontAttributeName:self.chatNameFont}];//[messageSenderName sizeWithFont:self.chatNameFont];
             labelHeight = participantNameSize.height + TOP_SPACE;
             UILabel *labelParticipant = [[UILabel alloc] initWithFrame:CGRectMake(headerLabelXpos, TOP_SPACE, participantNameSize.width + SPACE_BETWEEN_LABELS, labelHeight)];
             labelParticipant.backgroundColor = [UIColor clearColor];
-            labelParticipant.textColor = [UIColor whiteColor];
+            labelParticipant.textColor = textColor;
             labelParticipant.font = self.chatNameFont;
             labelParticipant.text = messageSenderName;
             
@@ -294,7 +305,9 @@
             NSString* formatedDate = [Utility formatedMessageTimeStampForDate:self.message.date];
             dateSize = [formatedDate sizeWithAttributes:@{NSFontAttributeName:self.chatNameFont}];//[formatedDate sizeWithFont:self.chatTimestampFont];
             UILabel *lblChatMessageTimestamp = [[UILabel alloc] initWithFrame:CGRectMake(headerLabelXpos, TOP_SPACE, dateSize.width + TRAILING_SPACE, labelHeight)];
-            lblChatMessageTimestamp.textColor = [UIColor whiteColor];
+            
+            lblChatMessageTimestamp.textColor = textColor;
+            
             lblChatMessageTimestamp.backgroundColor = [UIColor clearColor];
             lblChatMessageTimestamp.font = self.chatTimestampFont;
             lblChatMessageTimestamp.text = formatedDate;
@@ -350,7 +363,18 @@
             self.messageLabel.backgroundColor = [UIColor clearColor];
             self.messageLabel.font = [UIFont systemFontOfSize:14.0];
             self.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
-            self.messageLabel.text = _unicodeMessageText;
+            
+            if (!self.message.deleted.boolValue)
+            {
+                self.messageLabel.text = _unicodeMessageText;
+                self.messageLabel.textColor = [UIColor blackColor];
+            }
+            else
+            {
+                self.messageLabel.text = stringDeletedeMessageText;
+                self.messageLabel.textColor = textColor;
+            }
+            
             self.messageLabel.numberOfLines = 0;
             [self.messageLabel sizeToFit];
             
@@ -383,7 +407,8 @@
             
             
             [msgBaloonView setImage:msgBaloonImg];
-            [cellView addSubview:msgBaloonView];
+            if (!self.message.deleted.boolValue)
+                [cellView addSubview:msgBaloonView];
             
             self.backgroundView = cellView;
             //[self.contentView addSubview:ivAvat];
@@ -397,6 +422,20 @@
     }
 }
 
-
+- (void) setMessage:(HOPMessageRecord*) inMessage
+{
+    message = inMessage;
+    
+    if (!self.message.deleted.boolValue)
+    {
+        //self.messageLabel.text = _unicodeMessageText;
+        self.messageLabel.textColor = [UIColor blackColor];
+    }
+    else
+    {
+        //self.messageLabel.text = stringDeletedeMessageText;
+        self.messageLabel.textColor = [UIColor grayColor];
+    }
+}
 
 @end

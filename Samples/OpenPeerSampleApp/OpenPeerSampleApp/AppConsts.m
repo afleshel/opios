@@ -130,7 +130,7 @@ NSString * const notificationTypeAndroid = @"apid";
 
 NSString * const defaultTelnetPort = @"59999";
 
-
+NSString * const stringDeletedeMessageText = @"This message has been removed.";
 
 NSString * const archiveRemoteSessionActivationMode = @"archiveRemoteSessionActivationMode";
 NSString * const archiveFaceDetectionMode = @"archiveFaceDetectionMode";

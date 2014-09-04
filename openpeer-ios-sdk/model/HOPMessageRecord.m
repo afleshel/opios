@@ -43,6 +43,7 @@
 @dynamic text;
 @dynamic type;
 @dynamic visible;
+@dynamic deleted;
 @dynamic fromPeer;
 @dynamic session;
 

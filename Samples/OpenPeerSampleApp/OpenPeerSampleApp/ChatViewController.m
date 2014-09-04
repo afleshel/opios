@@ -459,7 +459,8 @@
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    ChatCell* msgCell = nil;
+    //ChatCell* msgCell = nil;
+    UITableViewCell* msgCell = nil;
     HOPMessageRecord* message = nil;
     
     message = [self.fetchedResultsController objectAtIndexPath:indexPath];
@@ -474,22 +475,39 @@
     }
     else
     {
-        msgCell = [tableView dequeueReusableCellWithIdentifier:@"MessageCellIdentifier"];
+//        if (message.deleted.boolValue)
+//            msgCell = [tableView dequeueReusableCellWithIdentifier:@"DeletedMessageCellIdentifier"];
+//        else
+            msgCell = [tableView dequeueReusableCellWithIdentifier:@"MessageCellIdentifier"];
     }
     
     //ChatMessageCell* msgCell = [tableView dequeueReusableCellWithIdentifier:@"MessageCellIdentifier"];
     
     if (msgCell == nil)
     {
-        if (isSystemMessage)
-            msgCell = [[SystemMessageCell alloc] initWithFrame:CGRectZero];
-        else
-            msgCell = [[ChatMessageCell alloc] initWithFrame:CGRectZero];
-        
-        msgCell.messageLabel.delegate = self;
+//        if (!message.deleted.boolValue)
+        {
+            if (isSystemMessage)
+                msgCell = [[SystemMessageCell alloc] initWithFrame:CGRectZero];
+            else
+                msgCell = [[ChatMessageCell alloc] initWithFrame:CGRectZero];
+            
+            ((ChatCell*)msgCell).messageLabel.delegate = self;
+        }
+//        else
+//        {
+//            msgCell = [[UITableViewCell alloc] initWithFrame:CGRectZero];
+//            msgCell.backgroundColor = [UIColor clearColor];
+//            msgCell.textLabel.font = [UIFont fontWithName:@"Helvetica" size:13.0];
+//            msgCell.textLabel.textColor = [UIColor grayColor];
+//        }
     }
     
-    [msgCell setMessage:message];
+    
+    if ([[msgCell class] isSubclassOfClass:[ChatCell class]])
+        [((ChatCell*)msgCell) setMessage:message];
+//    else
+//        msgCell.textLabel.text = @"This message has been removed.";
     
     return msgCell;
 }
@@ -605,7 +623,7 @@
     NSIndexPath *swipedIndexPath = [self.chatTableView indexPathForRowAtPoint:location];
     ChatMessageCell *swipedCell  = (ChatMessageCell*)[self.chatTableView cellForRowAtIndexPath:swipedIndexPath];
     
-    if (![swipedCell.message.type isEqualToString:[HOPSystemMessage getMessageType]] && !swipedCell.message.fromPeer)
+    if (![swipedCell.message.type isEqualToString:[HOPSystemMessage getMessageType]] && !swipedCell.message.fromPeer && !swipedCell.message.deleted.boolValue)
     {
         self.messageTextbox.text = swipedCell.message.text;
         self.messageToEdit = swipedCell.message;
@@ -618,7 +636,7 @@
     NSIndexPath *swipedIndexPath = [self.chatTableView indexPathForRowAtPoint:location];
     ChatMessageCell *swipedCell  = (ChatMessageCell*)[self.chatTableView cellForRowAtIndexPath:swipedIndexPath];
     
-    if (![swipedCell.message.type isEqualToString:[HOPSystemMessage getMessageType]] && !swipedCell.message.fromPeer)
+    if (![swipedCell.message.type isEqualToString:[HOPSystemMessage getMessageType]] && !swipedCell.message.fromPeer && !swipedCell.message.deleted.boolValue)
     {
         
         self.messageToEdit = swipedCell.message;

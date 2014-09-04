@@ -43,6 +43,7 @@
 @property (nonatomic, retain) NSString * text;
 @property (nonatomic, retain) NSString * type;
 @property (nonatomic, retain) NSNumber * visible;
+@property (nonatomic, retain) NSNumber * deleted;
 @property (nonatomic, retain) HOPPublicPeerFile *fromPeer;
 @property (nonatomic, retain) HOPSessionRecord *session;
 

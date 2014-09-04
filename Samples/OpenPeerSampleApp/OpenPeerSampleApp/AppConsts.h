@@ -156,3 +156,5 @@ extern NSString * const moduleServicesTransport;
 extern NSString * const moduleZsLib;
 extern NSString * const moduleZsLibSocket;
 extern NSString * const moduleJavaScript;
+
+extern NSString * const stringDeletedeMessageText;
