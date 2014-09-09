@@ -559,6 +559,10 @@
 		87F09EE7171EBB2A0045F6A6 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F09EE5171EBB2A0045F6A6 /* Message.m */; };
 		87F24B5F166FF0C900A5389F /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F24B5E166FF0C900A5389F /* Utility.m */; };
 		87F24B62167003F400A5389F /* ContactsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F24B61167003F300A5389F /* ContactsManager.m */; };
+		87FBC7D619BE00AB000C4768 /* chat_edited_message_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 87FBC7D419BE00AB000C4768 /* chat_edited_message_icon.png */; };
+		87FBC7D719BE00AB000C4768 /* chat_edited_message_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 87FBC7D519BE00AB000C4768 /* chat_edited_message_icon@2x.png */; };
+		87FBC7D819BE030C000C4768 /* chat_edited_message_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 87FBC7D519BE00AB000C4768 /* chat_edited_message_icon@2x.png */; };
+		87FBC7D919BE030F000C4768 /* chat_edited_message_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 87FBC7D419BE00AB000C4768 /* chat_edited_message_icon.png */; };
 		87FC39F71709BB39002030D1 /* MessageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC39F51709BB36002030D1 /* MessageManager.m */; };
 		87FC3A151709BD8D002030D1 /* XMLWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC39FB1709BD8C002030D1 /* XMLWriter.m */; };
 		87FC3A161709BD8D002030D1 /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC39FF1709BD8C002030D1 /* SBJsonParser.m */; };
@@ -984,6 +988,8 @@
 		87F24B5E166FF0C900A5389F /* Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = Utility.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		87F24B60167003F300A5389F /* ContactsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactsManager.h; sourceTree = "<group>"; };
 		87F24B61167003F300A5389F /* ContactsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactsManager.m; sourceTree = "<group>"; };
+		87FBC7D419BE00AB000C4768 /* chat_edited_message_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chat_edited_message_icon.png; sourceTree = "<group>"; };
+		87FBC7D519BE00AB000C4768 /* chat_edited_message_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_edited_message_icon@2x.png"; sourceTree = "<group>"; };
 		87FC39F51709BB36002030D1 /* MessageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageManager.m; sourceTree = "<group>"; };
 		87FC39F61709BB37002030D1 /* MessageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageManager.h; sourceTree = "<group>"; };
 		87FC39FA1709BD8C002030D1 /* XMLWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMLWriter.h; sourceTree = "<group>"; };
@@ -1198,6 +1204,8 @@
 		8713363517CCBD6F008C91F7 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				87FBC7D419BE00AB000C4768 /* chat_edited_message_icon.png */,
+				87FBC7D519BE00AB000C4768 /* chat_edited_message_icon@2x.png */,
 				87E0354919AF4ABC008A195C /* message_indicator_call_ended.png */,
 				87E0354A19AF4ABC008A195C /* message_indicator_call_missed.png */,
 				87E0354B19AF4ABC008A195C /* message_indicator_call_started.png */,
@@ -1900,6 +1908,7 @@
 				8730D7D31833A63D008D1D37 /* iPhone_loader_00020.png in Resources */,
 				8730D76718339AFE008D1D37 /* iPhone_video_showMe@2x.png in Resources */,
 				8730D7D91833A63D008D1D37 /* iPhone_loader_00023.png in Resources */,
+				87FBC7D619BE00AB000C4768 /* chat_edited_message_icon.png in Resources */,
 				8712BE7517D8CC7C00665F42 /* iPhone_top_bar_background@2x.png in Resources */,
 				8730D7BE1833A63D008D1D37 /* iPhone_loader_00009@2x.png in Resources */,
 				87224760182D165A0027DA50 /* iPhone_audio_camera.png in Resources */,
@@ -1968,6 +1977,7 @@
 				8730D7BC1833A63D008D1D37 /* iPhone_loader_00008@2x.png in Resources */,
 				8730D7AE1833A63D008D1D37 /* iPhone_loader_00001@2x.png in Resources */,
 				87224764182D170B0027DA50 /* call_recording_red_button.png in Resources */,
+				87FBC7D719BE00AB000C4768 /* chat_edited_message_icon@2x.png in Resources */,
 				871C7B9A17FEDD8900BE641B /* gear_icon.png in Resources */,
 				8730D7AF1833A63D008D1D37 /* iPhone_loader_00002.png in Resources */,
 				8730D7AD1833A63D008D1D37 /* iPhone_loader_00001.png in Resources */,
@@ -2059,6 +2069,7 @@
 				87D4BD5E18675368008C2D30 /* tableViewCell_selected.png in Resources */,
 				87D4BD5F18675368008C2D30 /* iPhone_Button-end-baritem.png in Resources */,
 				87D4BD6018675368008C2D30 /* ApplicationLogo57.png in Resources */,
+				87FBC7D819BE030C000C4768 /* chat_edited_message_icon@2x.png in Resources */,
 				87D4BD6118675368008C2D30 /* calling.wav in Resources */,
 				87D4BD6218675368008C2D30 /* SplashViewController.xib in Resources */,
 				87D4BD6318675368008C2D30 /* iPhone_video_bottomBar_bkgd@2x.png in Resources */,
@@ -2117,6 +2128,7 @@
 				87D4BD9418675368008C2D30 /* ContactsViewController.xib in Resources */,
 				87D4BD9518675368008C2D30 /* iPhone_loader_00006@2x.png in Resources */,
 				87D4BD9618675368008C2D30 /* iPhone_send_button.png in Resources */,
+				87FBC7D919BE030F000C4768 /* chat_edited_message_icon.png in Resources */,
 				87D4BD9718675368008C2D30 /* iPhone_chat_textfield_bkgd.png in Resources */,
 				87D4BD9818675368008C2D30 /* SessionViewController_iPhone.xib in Resources */,
 				87D4BD9918675368008C2D30 /* iPhone_send_button@2x.png in Resources */,

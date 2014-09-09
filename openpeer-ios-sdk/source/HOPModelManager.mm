@@ -1092,6 +1092,29 @@ using namespace openpeer::core;
         return nil;
 }
 
+- (void) replaceMessageWithID:(NSString*) replacesMessageID newMessageID:(NSString*) newMessageID messageText:(NSString*) messageText
+{
+    if ([replacesMessageID length] > 0)
+    {
+        HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] getMessageRecordByID:replacesMessageID];
+        
+        if (messageObj)
+        {
+            messageObj.messageID = newMessageID;
+            if ([messageText length] == 0)
+            {
+                messageObj.deleted = [NSNumber numberWithBool:YES];
+                //[[HOPModelManager sharedModelManager] deleteObject:messageObj];
+            }
+            else
+            {
+                messageObj.text = messageText;
+            }
+            messageObj.edited = [NSNumber numberWithBool:YES];
+        }
+        [[HOPModelManager sharedModelManager] saveContext];
+    }
+}
 @end
 
 

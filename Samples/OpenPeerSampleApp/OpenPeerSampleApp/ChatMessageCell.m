@@ -260,7 +260,7 @@
                 messageSize = [ChatCell calcMessageHeight:_unicodeMessageText forScreenWidth:(self.frame.size.width - (2*AVATAR_WIDTH + LEADING_SPACE + TRAILING_SPACE))];
             else
                 messageSize = [ChatCell calcMessageHeight:stringDeletedeMessageText forScreenWidth:(self.frame.size.width - (2*AVATAR_WIDTH + LEADING_SPACE + TRAILING_SPACE))];
-            
+
             //if message is received
             if (!isHomeUserSender)
             {
@@ -279,6 +279,26 @@
                 textColor = [UIColor whiteColor];
             else
                 textColor = [UIColor grayColor];
+            
+            
+            UIImage* image = nil;
+            UIImageView* imageView = nil;
+            CGRect rectEditedIcon;
+            
+            if (message.edited.boolValue)
+            {
+                image = [UIImage imageNamed:@"chat_edited_message_icon.png"];
+                imageView = [[UIImageView alloc] initWithImage:image];
+                rectEditedIcon = imageView.frame;
+                rectEditedIcon.origin.y = 0;//TOP_SPACE;
+                
+                if(!isHomeUserSender)
+                {
+                    rectEditedIcon.origin.x = headerLabelXpos;
+                    headerLabelXpos += imageView.frame.size.width + SPACE_BETWEEN_LABELS;
+                }
+            }
+            
             
             //Label participant
             participantNameSize = [messageSenderName sizeWithAttributes:@{NSFontAttributeName:self.chatNameFont}];//[messageSenderName sizeWithFont:self.chatNameFont];
@@ -327,9 +347,19 @@
                 avatarXpos = self.frame.size.width - (AVATAR_WIDTH + TRAILING_SPACE);
                 bubbleXpos = self.frame.size.width - (messageSize.width + 2*AVATAR_WIDTH + LEADING_SPACE + TRAILING_SPACE);
                 
-                // set header labels position
-                headerLabelXpos = self.frame.size.width  - lblChatMessageTimestamp.frame.size.width;
-                
+                if (message.edited.boolValue)
+                {
+                    // set header labels position
+                    headerLabelXpos = self.frame.size.width  - rectEditedIcon.size.width - TRAILING_SPACE;//lblChatMessageTimestamp.frame.size.width;
+                    
+                    rectEditedIcon.origin.x = headerLabelXpos;//headerLabelXpos + LEADING_SPACE;
+                    
+                    headerLabelXpos = headerLabelXpos - (lblChatMessageTimestamp.frame.size.width + rectEditedIcon.size.width) + 2*LEADING_SPACE;
+                }
+                else
+                {
+                    headerLabelXpos = self.frame.size.width  - lblChatMessageTimestamp.frame.size.width;
+                }
                 CGRect f = lblChatMessageTimestamp.frame;
                 f.origin.x = headerLabelXpos;
                 lblChatMessageTimestamp.frame = f;
@@ -355,6 +385,8 @@
                 streachCapWidth = 38;//25;
                 imgName = @"chat_bubble_left.png";
             }
+            
+            imageView.frame = rectEditedIcon;
             
             //Label message
 //            [_messageLabel setFrame:CGRectMake(bubbleXpos + 15.0, 20.0, messageSize.width + 5.0, messageSize.height)];
@@ -414,6 +446,7 @@
             //[self.contentView addSubview:ivAvat];
             [self.contentView addSubview:self.messageLabel];
             
+            [self.contentView addSubview:imageView];
             [self.contentView addSubview:labelParticipant];
             [self.contentView addSubview:labelSeparator];
             [self.contentView addSubview:lblChatMessageTimestamp];

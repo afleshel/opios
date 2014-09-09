@@ -321,4 +321,6 @@
 
 - (NSFetchRequest*) getMessagesFetchRequestForSessionID:(NSString*) sessionID sortAscending:(BOOL) ascending;
 - (HOPMessageRecord *) getLastMessageRecordForSessionID:(NSString*) sessionID;
+
+- (void) replaceMessageWithID:(NSString*) replacesMessageID newMessageID:(NSString*) newMessageID messageText:(NSString*) messageText;
 @end

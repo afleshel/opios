@@ -37,13 +37,14 @@
 @implementation HOPMessageRecord
 
 @dynamic date;
+@dynamic deleted;
 @dynamic delivered;
 @dynamic image;
 @dynamic messageID;
 @dynamic text;
 @dynamic type;
 @dynamic visible;
-@dynamic deleted;
+@dynamic edited;
 @dynamic fromPeer;
 @dynamic session;
 

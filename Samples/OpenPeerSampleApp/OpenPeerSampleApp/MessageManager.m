@@ -279,6 +279,8 @@
             messageRecord.deleted = [NSNumber numberWithBool:YES];
             //[[HOPModelManager sharedModelManager] deleteObject:messageRecord];
         }
+        
+        messageRecord.edited = [NSNumber numberWithBool:YES];
         [[HOPModelManager sharedModelManager] saveContext];
     }
     else
@@ -353,22 +355,23 @@
         HOPMessageRecord* messageObj = nil;
         if ([message.replacesMessageID length] > 0)
         {
-            messageObj = [[HOPModelManager sharedModelManager] getMessageRecordByID:message.replacesMessageID];
-            
-            if (messageObj)
-            {
-                messageObj.messageID = message.messageID;
-                if ([message.text length] == 0)
-                {
-                    messageObj.deleted = [NSNumber numberWithBool:YES];
-                    //[[HOPModelManager sharedModelManager] deleteObject:messageObj];
-                }
-                else
-                {
-                    messageObj.text = message.text;
-                }
-            }
-            [[HOPModelManager sharedModelManager] saveContext];
+            [[HOPModelManager sharedModelManager] replaceMessageWithID:message.replacesMessageID newMessageID:message.messageID messageText:message.text];
+//            messageObj = [[HOPModelManager sharedModelManager] getMessageRecordByID:message.replacesMessageID];
+//            
+//            if (messageObj)
+//            {
+//                messageObj.messageID = message.messageID;
+//                if ([message.text length] == 0)
+//                {
+//                    messageObj.deleted = [NSNumber numberWithBool:YES];
+//                    //[[HOPModelManager sharedModelManager] deleteObject:messageObj];
+//                }
+//                else
+//                {
+//                    messageObj.text = message.text;
+//                }
+//            }
+//            [[HOPModelManager sharedModelManager] saveContext];
         }
         else
         {
