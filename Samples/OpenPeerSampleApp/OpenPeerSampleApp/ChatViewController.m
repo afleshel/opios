@@ -162,6 +162,7 @@
     [self registerForNotifications:YES];
     self.chatTableView.tableFooterView.backgroundColor = [UIColor clearColor];
 
+    [self.session.conversationThread markAllMessagesRead];
     [self.session.unreadMessageArray removeAllObjects];
 }
 
