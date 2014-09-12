@@ -468,4 +468,20 @@
         }
     }
 }
+
+- (void) resendMessage:(HOPMessageRecord*) message forSession:(Session*) inSession
+{
+    HOPRolodexContact* contact = [[inSession participantsArray] objectAtIndex:0];
+    HOPMessage* hopMessage = [[HOPMessage alloc] initWithMessageId:[HOPUtility getGUIDstring] andReplacesMessageID:message.messageID  andMessage:message.text andContact:[contact getCoreContact] andMessageType:messageTypeText andMessageDate:message.date andValidated:NO];
+    
+    message.messageID = hopMessage.messageID;
+    message.showStatus = [NSNumber numberWithBool:NO];
+    [[HOPModelManager sharedModelManager] saveContext];
+    if ([UIDevice isNetworkReachable] && [[HOPAccount sharedAccount] isCoreAccountCreated] && ([[HOPAccount sharedAccount] getState].state == HOPAccountStateReady))
+    {
+        //Send message
+        [inSession.conversationThread sendMessage:hopMessage];
+    }
+}
+
 @end

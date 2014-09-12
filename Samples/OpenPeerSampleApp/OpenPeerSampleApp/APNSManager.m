@@ -53,6 +53,8 @@
 #import <OpenPeerSDK/HOPBackgrounding.h>
 #import <OpenPeerSDK/HOPUtility.h>
 #import <OpenPeerSDK/HOPAPNSData.h>
+#import <OpenPeerSDK/HOPMessageRecord.h>
+#import <OpenPeerSDK/HOPTypes.h>
 
 #define  timeBetweenPushNotificationsInSeconds 1
 
@@ -73,10 +75,12 @@
 @property (nonatomic, strong) NSMutableDictionary* dictionaryOfHTTPRequests;
 @property (nonatomic, strong) NSMutableDictionary* dictionaryOfPushNotificationsToSend;
 
+@property (nonatomic, strong) NSMutableDictionary* dictionaryOfMessageIDsForSending;
+
 - (id) initSingleton;
 
 - (void) pushDataOld:(NSDictionary*) dataToPush sendingRich:(BOOL) sendingRich;
-- (void) pushData:(NSString*) filePath sendingRich:(BOOL) sendingRich;
+- (void) pushData:(NSString*) filePath sendingRich:(BOOL) sendingRich messageID:(NSString*) messageID;
 - (BOOL) canSendPushNotificationForPeerURI:(NSString*) peerURI;
 - (NSArray*) getDeviceTokensForContact:(HOPContact*) contact;
 - (NSString*) prepareMessageForRichPush:(HOPMessage*) message peerURI:(NSString*) peerURI location:(NSString*) location;
@@ -116,7 +120,7 @@
         self.dictionaryOfSentFiles = [[NSMutableDictionary alloc] init];
         self.dictionaryOfHTTPRequests = [[NSMutableDictionary alloc] init];
         self.dictionaryOfPushNotificationsToSend = [[NSMutableDictionary alloc] init];
-        
+        self.dictionaryOfMessageIDsForSending = [[NSMutableDictionary alloc] init];
 //        NSString* sessionIdentifier = [NSString stringWithFormat:@"com.hookflash.backgroundSession.%@",@""];
 //        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration backgroundSessionConfiguration:sessionIdentifier];
 //        //NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
@@ -194,7 +198,7 @@
     }
 }
 
-- (void) pushData:(NSString*) filePath sendingRich:(BOOL) sendingRich
+- (void) pushData:(NSString*) filePath sendingRich:(BOOL) sendingRich messageID:(NSString*) messageID
 {
     if ([filePath length] > 0)
     {
@@ -214,6 +218,7 @@
                 {
                     [self.sessionDataTask resume];
                     [self.dictionaryOfSentFiles setObject:filePath forKey:[NSNumber numberWithInt:self.sessionDataTask.taskIdentifier]];
+                    [self.dictionaryOfMessageIDsForSending setObject:messageID forKey:[NSNumber numberWithInt:self.sessionDataTask.taskIdentifier]];
                     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Started sending push notification");
                 }
                 else
@@ -365,7 +370,7 @@
         }
         
         if ([filePath length] > 0 && [dataToPush count] > 0)
-            [self pushData:filePath sendingRich:YES];
+            [self pushData:filePath sendingRich:YES messageID:message.messageID];
         else
         {
             OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Dictionary with push data is not valid. Push notification is not sent.");
@@ -540,6 +545,18 @@ didCompleteWithError:(NSError *)error
     
     if (!error)
     {
+        NSString* messageID = [self.dictionaryOfMessageIDsForSending objectForKey:[NSNumber numberWithInt:task.taskIdentifier]];
+        if ([messageID length] > 0)
+        {
+            HOPMessageRecord* messageRecord = [[HOPModelManager sharedModelManager] getMessageRecordByID:messageID];
+            if (messageRecord)
+            {
+                messageRecord.messageStatus = [NSNumber numberWithInt:HOPConversationThreadMessageDeliveryStateSent];
+                [[HOPModelManager sharedModelManager] updateMessageStatusVisibilityForSession:messageRecord.session lastDeliveryState:HOPConversationThreadMessageDeliveryStateSent];
+
+                [[HOPModelManager sharedModelManager] saveContext];
+            }
+        }
         NSError* fileError;
         NSString* filePath = [self.dictionaryOfSentFiles objectForKey:[NSNumber numberWithInt:task.taskIdentifier]];
         if ([filePath length] > 0)
@@ -732,6 +749,7 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask
                                 NSArray* deviceTokens = [self getDeviceTokensForContact2:msg.contact];
                                 [self sendRichPush:msg deviceTokens:deviceTokens];
                             }
+                            [self.dictionaryOfPushNotificationsToSend removeObjectForKey:peerURI];
                         }
                         
                     }

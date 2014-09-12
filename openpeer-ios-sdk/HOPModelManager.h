@@ -30,6 +30,7 @@
  */
 
 #import <Foundation/Foundation.h>
+#import "HOPTypes.h"
 
 @class NSManagedObjectContext;
 @class NSManagedObjectModel;
@@ -323,4 +324,8 @@
 - (HOPMessageRecord *) getLastMessageRecordForSessionID:(NSString*) sessionID;
 
 - (void) replaceMessageWithID:(NSString*) replacesMessageID newMessageID:(NSString*) newMessageID messageText:(NSString*) messageText;
+
+- (void) updateMessageStatusVisibilityForSession:(HOPSessionRecord*) sessionRecord lastDeliveryState:(HOPConversationThreadMessageDeliveryState) messageDeliveryState;
+
+
 @end

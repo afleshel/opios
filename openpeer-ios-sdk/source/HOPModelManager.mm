@@ -1115,6 +1115,25 @@ using namespace openpeer::core;
         [[HOPModelManager sharedModelManager] saveContext];
     }
 }
+
+- (void) updateMessageStatusVisibilityForSession:(HOPSessionRecord*) sessionRecord lastDeliveryState:(HOPConversationThreadMessageDeliveryState) messageDeliveryStat
+{
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"date" ascending:NO];
+	NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+    
+    NSArray* results = [self getResultsForEntity:@"HOPMessageRecord" withPredicateString:[NSString stringWithFormat:@"(session.sessionID MATCHES '%@' AND messageStatus = %d AND showStatus = YES)", sessionRecord.sessionID, messageDeliveryStat] orderDescriptors:sortDescriptors];
+    
+    if ([results count] > 1)
+    {
+        for (int i = 1; i < [results count]; i++)
+        {
+            HOPMessageRecord* message = [results objectAtIndex:i];
+            message.showStatus = [NSNumber numberWithBool:NO];
+        }
+        [self saveContext];
+    }
+}
+
 @end
 
 

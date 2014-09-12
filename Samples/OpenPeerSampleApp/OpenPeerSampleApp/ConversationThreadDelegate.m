@@ -116,6 +116,8 @@
 - (void) onConversationThreadMessageDeliveryStateChanged:(HOPConversationThread*) conversationThread messageID:(NSString*) messageID messageDeliveryStates:(HOPConversationThreadMessageDeliveryState) messageDeliveryStates
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Conversation thread %@ message with id %@ delivery state has changed to: %@",[conversationThread getThreadId],messageID, [HOPConversationThread stringForMessageDeliveryState:messageDeliveryStates]);
+    
+    [[HOPModelManager sharedModelManager] updateMessageStatusVisibilityForSession:[[HOPModelManager sharedModelManager] getSessionRecordForConversationThread:conversationThread] lastDeliveryState:messageDeliveryStates];
 }
 
 - (void) onConversationThreadPushMessage:(HOPConversationThread*) conversationThread messageID:(NSString*) messageID contact:(HOPContact*) coreContact

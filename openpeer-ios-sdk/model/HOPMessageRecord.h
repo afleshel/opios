@@ -38,13 +38,14 @@
 
 @property (nonatomic, retain) NSDate * date;
 @property (nonatomic, retain) NSNumber * deleted;
-@property (nonatomic, retain) NSNumber * delivered;
+@property (nonatomic, retain) NSNumber * edited;
 @property (nonatomic, retain) NSData * image;
 @property (nonatomic, retain) NSString * messageID;
+@property (nonatomic, retain) NSNumber * messageStatus;
 @property (nonatomic, retain) NSString * text;
 @property (nonatomic, retain) NSString * type;
 @property (nonatomic, retain) NSNumber * visible;
-@property (nonatomic, retain) NSNumber * edited;
+@property (nonatomic, retain) NSNumber * showStatus;
 @property (nonatomic, retain) HOPPublicPeerFile *fromPeer;
 @property (nonatomic, retain) HOPSessionRecord *session;
 

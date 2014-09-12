@@ -33,6 +33,8 @@
 #import "OpenPeerConversationThreadDelegate.h"
 #import "OpenPeerStorageManager.h"
 #import "HOPConversationThread_Internal.h"
+#import "HOPModelManager.h"
+#import "HOPMessageRecord.h"
 
 #include <zsLib/types.h>
 #import <openpeer/core/ILogger.h>
@@ -100,8 +102,16 @@ void OpenPeerConversationThreadDelegate::onConversationThreadMessageDeliveryStat
     HOPConversationThread * hopConversationThread = this->getOpenPeerConversationThread(conversationThread);
     NSString* messageId = [NSString stringWithUTF8String:messageID];
     
+    
     if (hopConversationThread && [messageId length] > 0)
+    {
+        HOPMessageRecord* messageRecord = [[HOPModelManager sharedModelManager] getMessageRecordByID:messageId];
+        messageRecord.messageStatus = [NSNumber numberWithInt:state];
+        messageRecord.showStatus = [NSNumber numberWithBool:YES];
+        [[HOPModelManager sharedModelManager] saveContext];
+        
         [conversationThreadDelegate onConversationThreadMessageDeliveryStateChanged:hopConversationThread messageID:messageId messageDeliveryStates:(HOPConversationThreadMessageDeliveryState)state];
+    }
 }
 
 void OpenPeerConversationThreadDelegate::onConversationThreadPushMessage(IConversationThreadPtr conversationThread,const char *messageID,IContactPtr contact)

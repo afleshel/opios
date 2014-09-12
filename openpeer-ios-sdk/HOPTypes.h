@@ -82,8 +82,9 @@ typedef enum
 {
     HOPConversationThreadMessageDeliveryStateDiscovering      = 0,
     HOPConversationThreadMessageDeliveryStateUserNotAvailable = 1,
-    HOPConversationThreadMessageDeliveryStateDelivered        = 2,
-    HOPConversationThreadMessageDeliveryStateRead             = 3,
+    HOPConversationThreadMessageDeliveryStateSent             = 2,
+    HOPConversationThreadMessageDeliveryStateDelivered        = 3,
+    HOPConversationThreadMessageDeliveryStateRead             = 4,
 } HOPConversationThreadMessageDeliveryState;
 
 /**

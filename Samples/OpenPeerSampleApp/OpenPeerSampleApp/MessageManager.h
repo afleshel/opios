@@ -34,6 +34,7 @@
 @class HOPMessage;
 @class Session;
 @class HOPRolodexContact;
+@class HOPMessageRecord;
 
 typedef enum
 {
@@ -69,4 +70,5 @@ typedef enum
 - (SystemMessageTypes) getTypeForSystemMessage:(HOPMessage*) message;
 
 - (void) resendMessages;
+- (void) resendMessage:(HOPMessageRecord*) message forSession:(Session*) inSession;
 @end

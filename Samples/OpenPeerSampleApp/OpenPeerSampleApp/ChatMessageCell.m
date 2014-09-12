@@ -40,6 +40,7 @@
 #import <OpenpeerSDK/HOPMessageRecord.h>
 #import <OpenpeerSDK/HOPPublicPeerFile.h>
 #import <OpenpeerSDK/HOPIdentityContact.h>
+#import <OpenpeerSDK/HOPConversationThread.h>
 #import "TTTAttributedLabel.h"
 #import "Utility.h"
 
@@ -410,6 +411,25 @@
             self.messageLabel.numberOfLines = 0;
             [self.messageLabel sizeToFit];
             
+            //Show delivery
+            UILabel *labelStatus = nil;
+             if(isHomeUserSender && self.message.showStatus.boolValue && message.messageStatus.intValue >= HOPConversationThreadMessageDeliveryStateSent)
+             {
+                NSString* statusString = [HOPConversationThread stringForMessageDeliveryState:(HOPConversationThreadMessageDeliveryState)self.message.messageStatus.intValue];
+                 
+                 if ((HOPConversationThreadMessageDeliveryState)self.message.messageStatus.intValue == HOPConversationThreadMessageDeliveryStateUserNotAvailable)
+                     statusString = @"Send failed, try again by tapping this message";
+                 
+                CGSize statusLabelSize = [statusString sizeWithAttributes:@{NSFontAttributeName:self.chatNameFont}];
+                headerLabelXpos = self.frame.size.width  - 40.0 - statusLabelSize.width;
+                float y = self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 6*TOP_SPACE;
+                labelStatus = [[UILabel alloc] initWithFrame:CGRectMake(headerLabelXpos, y, statusLabelSize.width + SPACE_BETWEEN_LABELS, labelHeight)];
+                labelStatus.backgroundColor = [UIColor clearColor];
+                labelStatus.textColor = textColor;
+                labelStatus.font = self.chatNameFont;
+                labelStatus.text = statusString;
+             }
+            
             // show avatar
             if(!isHomeUserSender)
             {
@@ -431,12 +451,12 @@
 //            float baloonViewH = messageSize.height + 8 < 28.0 ? 28.0 : messageSize.height + 8;
             float baloonViewH = messageSize.height + 34 < 52.0 ? 52.0 : messageSize.height + 34;
             
+            
             UIImage *msgBaloonImg = [[UIImage imageNamed:imgName] stretchableImageWithLeftCapWidth:streachCapWidth topCapHeight:14];
             //UIImage *msgBaloonImg = [[UIImage imageNamed:imgName] resizableImageWithCapInsets:UIEdgeInsetsMake(23, 23, 50, 4)];
             UIImageView *msgBaloonView = [[UIImageView alloc] initWithFrame:CGRectMake(bubbleXpos, 20, messageSize.width + 30, baloonViewH)];
             
             UIView *cellView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
-            
             
             [msgBaloonView setImage:msgBaloonImg];
             if (!self.message.deleted.boolValue)
@@ -450,6 +470,9 @@
             [self.contentView addSubview:labelParticipant];
             [self.contentView addSubview:labelSeparator];
             [self.contentView addSubview:lblChatMessageTimestamp];
+            
+            if (labelStatus)
+                [self.contentView addSubview:labelStatus];
             
         }
     }

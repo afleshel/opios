@@ -297,9 +297,23 @@
 }
 
 
-- (void)handleTapGesture:(UITapGestureRecognizer *)sender {
-    if (sender.state == UIGestureRecognizerStateRecognized) {
-        [self.messageTextbox resignFirstResponder];
+- (void)handleTapGesture:(UITapGestureRecognizer *)sender
+{
+    if (sender.state == UIGestureRecognizerStateRecognized)
+    {
+        CGPoint location = [sender locationInView:self.chatTableView];
+        NSIndexPath *swipedIndexPath = [self.chatTableView indexPathForRowAtPoint:location];
+        ChatMessageCell *swipedCell  = (ChatMessageCell*)[self.chatTableView cellForRowAtIndexPath:swipedIndexPath];
+        
+        if (![swipedCell.message.type isEqualToString:[HOPSystemMessage getMessageType]] && !swipedCell.message.fromPeer && !swipedCell.message.deleted.boolValue && swipedCell.message.messageStatus.intValue == HOPConversationThreadMessageDeliveryStateUserNotAvailable)
+        {
+            [[MessageManager sharedMessageManager] resendMessage:swipedCell.message forSession:self.session];
+            
+        }
+        else
+        {
+            [self.messageTextbox resignFirstResponder];
+        }
     }
 }
 
@@ -609,6 +623,12 @@
 		default:
 			break;
 	}
+    
+    //View is visible, so mark message as read
+    if (self.isViewLoaded && self.view.window)
+    {
+        [self.session.conversationThread markAllMessagesRead];
+    }
 }
 
 #pragma mark - TTTAttributedLabelDelegate

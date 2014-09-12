@@ -38,13 +38,14 @@
 
 @dynamic date;
 @dynamic deleted;
-@dynamic delivered;
+@dynamic edited;
 @dynamic image;
 @dynamic messageID;
+@dynamic messageStatus;
 @dynamic text;
 @dynamic type;
 @dynamic visible;
-@dynamic edited;
+@dynamic showStatus;
 @dynamic fromPeer;
 @dynamic session;
 
