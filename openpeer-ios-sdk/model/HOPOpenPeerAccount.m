@@ -29,12 +29,12 @@
  
  */
 
-#import "HOPHomeUser.h"
+#import "HOPOpenPeerAccount.h"
 #import "HOPAssociatedIdentity.h"
 #import "HOPSessionRecord.h"
 
 
-@implementation HOPHomeUser
+@implementation HOPOpenPeerAccount
 
 @dynamic loggedIn;
 @dynamic reloginInfo;

@@ -32,7 +32,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class HOPPublicPeerFile, HOPSessionRecord;
+@class HOPOpenPeerContact, HOPSessionRecord;
 
 @interface HOPMessageRecord : NSManagedObject
 
@@ -42,11 +42,11 @@
 @property (nonatomic, retain) NSData * image;
 @property (nonatomic, retain) NSString * messageID;
 @property (nonatomic, retain) NSNumber * messageStatus;
+@property (nonatomic, retain) NSNumber * showStatus;
 @property (nonatomic, retain) NSString * text;
 @property (nonatomic, retain) NSString * type;
 @property (nonatomic, retain) NSNumber * visible;
-@property (nonatomic, retain) NSNumber * showStatus;
-@property (nonatomic, retain) HOPPublicPeerFile *fromPeer;
 @property (nonatomic, retain) HOPSessionRecord *session;
+@property (nonatomic, retain) HOPOpenPeerContact *sender;
 
 @end

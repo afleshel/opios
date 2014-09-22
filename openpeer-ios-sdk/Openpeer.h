@@ -55,7 +55,7 @@
 //Model
 #import "HOPAPNSData.h"
 #import "HOPConversationThreadRecord.h"
-#import "HOPHomeUser+External.h"
+#import "HOPOpenPeerAccount+External.h"
 #import "HOPMessageRecord.h"
 #import "HOPAvatar+External.h"
 #import "HOPIdentityContact.h"

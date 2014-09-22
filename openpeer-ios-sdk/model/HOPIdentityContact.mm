@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,29 +29,17 @@
  
  */
 
-#import "HOPHomeUser+External.h"
-#import "HOPAssociatedIdentity.h"
+#import "HOPIdentityContact.h"
+#import "HOPPublicPeerFile.h"
 #import "HOPRolodexContact.h"
 
-@implementation HOPHomeUser (External)
+@implementation HOPIdentityContact
 
-- (NSString*) getFullName
-{
-    return ((HOPAssociatedIdentity*)[self.associatedIdentities anyObject]).homeUserProfile.name;
-}
-
-- (HOPRolodexContact*) getRolodexContactForIdentityBaseURI:(NSString*)identityBaseURI
-{
-    HOPRolodexContact* ret = nil;
-    for (HOPAssociatedIdentity* associatedIdentity in self.associatedIdentities)
-    {
-        if ([associatedIdentity.baseIdentityURI isEqualToString:identityBaseURI])
-        {
-            ret = associatedIdentity.homeUserProfile;
-            break;
-        }
-    }
-    return ret;
-}
+@dynamic expires;
+@dynamic identityProofBundle;
+@dynamic lastUpdated;
+@dynamic priority;
+@dynamic weight;
+@dynamic rolodexContact;
 
 @end

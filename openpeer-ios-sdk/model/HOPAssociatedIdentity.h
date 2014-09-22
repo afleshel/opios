@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -32,17 +32,15 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class HOPHomeUser, HOPRolodexContact;
+@class HOPIdentityProvider, HOPOpenPeerAccount, HOPRolodexContact;
 
 @interface HOPAssociatedIdentity : NSManagedObject
 
-@property (nonatomic, retain) NSString * baseIdentityURI;
-@property (nonatomic, retain) NSString * domain;
 @property (nonatomic, retain) NSString * downloadedVersion;
-@property (nonatomic, retain) NSString * name;
-@property (nonatomic, retain) HOPHomeUser *homeUser;
-@property (nonatomic, retain) HOPRolodexContact *homeUserProfile;
+@property (nonatomic, retain) HOPOpenPeerAccount *account;
+@property (nonatomic, retain) HOPRolodexContact *selfRolodexContact;
 @property (nonatomic, retain) NSSet *rolodexContacts;
+@property (nonatomic, retain) HOPIdentityProvider *identityProvider;
 @end
 
 @interface HOPAssociatedIdentity (CoreDataGeneratedAccessors)

@@ -29,15 +29,19 @@
  
  */
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+#import "HOPOpenPeerContact.h"
+#import "HOPAPNSData.h"
+#import "HOPIdentityContact.h"
+#import "HOPPublicPeerFile.h"
+#import "HOPSessionRecord.h"
 
-@class HOPOpenPeerContact;
 
-@interface HOPAPNSData : NSManagedObject
+@implementation HOPOpenPeerContact
 
-@property (nonatomic, retain) NSString * deviceToken;
-@property (nonatomic, retain) NSString * type;
-@property (nonatomic, retain) HOPOpenPeerContact *contact;
+@dynamic stableID;
+@dynamic apnsData;
+@dynamic publicPeerFile;
+@dynamic identityContacts;
+@dynamic sessionRecords;
 
 @end

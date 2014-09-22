@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2014, Hookflash Inc.
+ Copyright (c) 2013, SMB Phone Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,15 +29,30 @@
  
  */
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+#import "HOPOpenPeerAccount+External.h"
+#import "HOPAssociatedIdentity.h"
+#import "HOPRolodexContact.h"
+#import "HOPIdentityProvider.h"
 
-@class HOPOpenPeerContact;
+@implementation HOPOpenPeerAccount (External)
 
-@interface HOPAPNSData : NSManagedObject
+- (NSString*) getFullName
+{
+    return ((HOPAssociatedIdentity*)[self.associatedIdentities anyObject]).selfRolodexContact.name;
+}
 
-@property (nonatomic, retain) NSString * deviceToken;
-@property (nonatomic, retain) NSString * type;
-@property (nonatomic, retain) HOPOpenPeerContact *contact;
+- (HOPRolodexContact*) getRolodexContactForIdentityBaseURI:(NSString*)identityBaseURI
+{
+    HOPRolodexContact* ret = nil;
+    for (HOPAssociatedIdentity* associatedIdentity in self.associatedIdentities)
+    {
+        if (associatedIdentity.identityProvider && [associatedIdentity.identityProvider.baseURI isEqualToString:identityBaseURI])
+        {
+            ret = associatedIdentity.selfRolodexContact;
+            break;
+        }
+    }
+    return ret;
+}
 
 @end

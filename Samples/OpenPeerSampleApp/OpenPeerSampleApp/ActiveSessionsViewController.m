@@ -33,7 +33,7 @@
 #import <OpenPeerSDK/HOPSessionRecord+External.h>
 #import <OpenPeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPPublicPeerFile.h>
-#import <OpenPeerSDK/HOPHomeUser.h>
+#import <OpenPeerSDK/HOPOpenPeerAccount.h>
 #import <OpenPeerSDK/HOPUtility.h>
 #import "SessionManager.h"
 #import "OpenPeer.h"

@@ -42,6 +42,7 @@
 #import "HOPMessage.h"
 #import "HOPModelManager.h"
 #import "HOPIdentityContact_Internal.h"
+#import "HOPOpenPeerContact.h"
 
 #import "OpenPeerStorageManager.h"
 #import "OpenPeerUtility.h"
@@ -268,7 +269,7 @@ using namespace openpeer::core;
                 {
                     NSString* sId = [NSString stringWithUTF8String:identityContact.mStableID];
                     NSString* identityURI = [NSString stringWithUTF8String:identityContact.mIdentityURI];
-                    HOPIdentityContact* hopIdentityContact = [[HOPModelManager sharedModelManager] getIdentityContactByStableID:sId identityURI:identityURI];
+                    HOPIdentityContact* hopIdentityContact = [[HOPModelManager sharedModelManager] getIdentityContactWithIdentityURI:identityURI];
                     
                     if (!hopIdentityContact)
                     {

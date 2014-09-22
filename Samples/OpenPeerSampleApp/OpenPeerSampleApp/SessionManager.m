@@ -50,7 +50,8 @@
 #import <OpenpeerSDK/HOPMediaEngine.h>
 #import <OpenpeerSDK/HOPModelManager.h>
 #import <OpenpeerSDK/HOPContact.h>
-#import <OpenpeerSDK/HOPHomeUser+External.h>
+#import <OpenpeerSDK/HOPOpenPeerContact.h>
+#import <OpenpeerSDK/HOPOpenPeerAccount+External.h>
 #import <OpenpeerSDK/HOPRolodexContact+External.h>
 #import <OpenpeerSDK/HOPSessionRecord.h>
 #import <OpenpeerSDK/HOPMessageRecord.h>
@@ -104,7 +105,7 @@
 */
 - (Session*)createSessionForContact:(HOPRolodexContact *)contact
 {
-    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Creating session for contact peer URI: %@", contact.identityContact.peerFile.peerURI);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Creating session for contact peer URI: %@", contact.identityContact.openPeerContact.publicPeerFile.peerURI);
     Session* ret = nil;
     
     if (!contact)

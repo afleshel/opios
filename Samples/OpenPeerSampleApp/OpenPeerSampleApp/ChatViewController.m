@@ -305,7 +305,7 @@
         NSIndexPath *swipedIndexPath = [self.chatTableView indexPathForRowAtPoint:location];
         ChatMessageCell *swipedCell  = (ChatMessageCell*)[self.chatTableView cellForRowAtIndexPath:swipedIndexPath];
         
-        if (![swipedCell.message.type isEqualToString:[HOPSystemMessage getMessageType]] && !swipedCell.message.fromPeer && !swipedCell.message.deleted.boolValue && swipedCell.message.messageStatus.intValue == HOPConversationThreadMessageDeliveryStateUserNotAvailable)
+        if (![swipedCell.message.type isEqualToString:[HOPSystemMessage getMessageType]] && !swipedCell.message.sender && !swipedCell.message.deleted.boolValue && swipedCell.message.messageStatus.intValue == HOPConversationThreadMessageDeliveryStateUserNotAvailable)
         {
             [[MessageManager sharedMessageManager] resendMessage:swipedCell.message forSession:self.session];
             
@@ -644,7 +644,7 @@
     NSIndexPath *swipedIndexPath = [self.chatTableView indexPathForRowAtPoint:location];
     ChatMessageCell *swipedCell  = (ChatMessageCell*)[self.chatTableView cellForRowAtIndexPath:swipedIndexPath];
     
-    if (![swipedCell.message.type isEqualToString:[HOPSystemMessage getMessageType]] && !swipedCell.message.fromPeer && !swipedCell.message.deleted.boolValue)
+    if (![swipedCell.message.type isEqualToString:[HOPSystemMessage getMessageType]] && !swipedCell.message.sender && !swipedCell.message.deleted.boolValue)
     {
         self.messageTextbox.text = swipedCell.message.text;
         self.messageToEdit = swipedCell.message;
@@ -657,7 +657,7 @@
     NSIndexPath *swipedIndexPath = [self.chatTableView indexPathForRowAtPoint:location];
     ChatMessageCell *swipedCell  = (ChatMessageCell*)[self.chatTableView cellForRowAtIndexPath:swipedIndexPath];
     
-    if (![swipedCell.message.type isEqualToString:[HOPSystemMessage getMessageType]] && !swipedCell.message.fromPeer && !swipedCell.message.deleted.boolValue)
+    if (![swipedCell.message.type isEqualToString:[HOPSystemMessage getMessageType]] && !swipedCell.message.sender && !swipedCell.message.deleted.boolValue)
     {
         
         self.messageToEdit = swipedCell.message;

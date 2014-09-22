@@ -34,7 +34,8 @@
 #import "HOPIdentityLookup_Internal.h"
 #import "OpenPeerStorageManager.h"
 #import "HOPIdentityContact_Internal.h"
-#import "HOPModelManager.h"
+#import "HOPModelManager_Internal.h"
+#import "HOPOpenPeerContact.h"
 #import <openpeer/core/ILogger.h>
 
 ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
@@ -83,7 +84,7 @@ void OpenPeerIdentityLookupDelegate::updateContactsReceivedOnIdentityLookup(IIde
                 {
                     NSString* sId = [NSString stringWithUTF8String:identityContact.mStableID];
                     NSString* identityURI = [NSString stringWithUTF8String:identityContact.mIdentityURI];
-                    HOPIdentityContact* hopIdentityContact = [[HOPModelManager sharedModelManager] getIdentityContactByStableID:sId identityURI:identityURI];
+                    HOPIdentityContact* hopIdentityContact = [[HOPModelManager sharedModelManager] getIdentityContactWithIdentityURI:identityURI];
                     
                     if (!hopIdentityContact)
                     {
@@ -99,9 +100,15 @@ void OpenPeerIdentityLookupDelegate::updateContactsReceivedOnIdentityLookup(IIde
                         [hopIdentityContact updateWithIdentityContact:identityContact];
                         
                         [identityLookup.arrayLastUpdatedContacts addObject:hopIdentityContact];
+                        
+                        HOPOpenPeerContact* contact = [[HOPModelManager sharedModelManager]  getOpenPeerContactForIdentityContact:identityContact];
+                        if (contact)
+                            [contact addIdentityContactsObject:hopIdentityContact];
+                        else
+                            contact = [[HOPModelManager sharedModelManager] createOpenPeerContactForIdentityContact:identityContact];
                     }
+                    
                 }
-                //[[HOPModelManager sharedModelManager] saveContext];
             }
             [[HOPModelManager sharedModelManager] saveContext];
         }

@@ -32,7 +32,7 @@
 #import "IdentityDelegate.h"
 #import <OpenpeerSDK/HOPIdentity.h>
 #import <OpenpeerSDK/HOPAccount.h>
-#import <OpenpeerSDK/HOPHomeUser.h>
+#import <OpenpeerSDK/HOPOpenPeerAccount.h>
 #import <OpenpeerSDK/HOPRolodexContact.h>
 #import <OpenpeerSDK/HOPIdentityContact.h>
 #import <OpenpeerSDK/HOPModelManager.h>
@@ -249,8 +249,8 @@
     [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:NO withText:nil inView:nil];
     if (identity)
     {
-        HOPHomeUser* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
-        HOPAssociatedIdentity* associatedIdentity = [[HOPModelManager sharedModelManager] getAssociatedIdentityBaseIdentityURI:[identity getBaseIdentityURI] homeUserStableId:homeUser.stableId];
+        HOPOpenPeerAccount* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
+        HOPAssociatedIdentity* associatedIdentity = [[HOPModelManager sharedModelManager] getAssociatedIdentityForBaseIdentityURI:[identity getBaseIdentityURI] homeUserStableId:homeUser.stableId];
         
         BOOL flushAllRolodexContacts;
         NSString* downloadedVersion;

@@ -32,6 +32,7 @@
 #import "ContactTableViewCell.h"
 #import <OpenpeerSDK/HOPRolodexContact+External.h>
 #import <OpenpeerSDK/HOPAssociatedIdentity.h>
+#import <OpenpeerSDK/HOPIdentityProvider.h>
 #import <OpenpeerSDK/HOPAvatar+External.h>
 #import "AppConsts.h"
 #import "ImageManager.h"
@@ -73,7 +74,7 @@
     self.displayImage.layer.borderWidth = 1.0;
     self.displayImage.layer.borderColor = [[UIColor whiteColor] CGColor];
     
-    if ([inContact.associatedIdentity.baseIdentityURI isEqualToString:identityFacebookBaseURI])
+    if ([inContact.associatedIdentity.identityProvider.baseURI isEqualToString:identityFacebookBaseURI])
     {
         UIImageView *facebookTag = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"facebook_tag.png"]];
         [facebookTag setFrame:CGRectMake(self.displayImage.frame.size.width - 10.0, self.displayImage.frame.size.height-10.0, 10.0, 10.0)];

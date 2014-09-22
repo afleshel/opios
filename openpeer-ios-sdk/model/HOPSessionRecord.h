@@ -32,7 +32,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class HOPConversationThreadRecord, HOPHomeUser, HOPMessageRecord, HOPPublicPeerFile;
+@class HOPConversationThreadRecord, HOPMessageRecord, HOPOpenPeerAccount, HOPOpenPeerContact;
 
 @interface HOPSessionRecord : NSManagedObject
 
@@ -42,7 +42,7 @@
 @property (nonatomic, retain) NSString * sessionID;
 @property (nonatomic, retain) NSString * type;
 @property (nonatomic, retain) NSSet *conversationThreadRecords;
-@property (nonatomic, retain) HOPHomeUser *homeUser;
+@property (nonatomic, retain) HOPOpenPeerAccount *homeUser;
 @property (nonatomic, retain) NSSet *messages;
 @property (nonatomic, retain) NSSet *participants;
 @end
@@ -59,8 +59,8 @@
 - (void)addMessages:(NSSet *)values;
 - (void)removeMessages:(NSSet *)values;
 
-- (void)addParticipantsObject:(HOPPublicPeerFile *)value;
-- (void)removeParticipantsObject:(HOPPublicPeerFile *)value;
+- (void)addParticipantsObject:(HOPOpenPeerContact *)value;
+- (void)removeParticipantsObject:(HOPOpenPeerContact *)value;
 - (void)addParticipants:(NSSet *)values;
 - (void)removeParticipants:(NSSet *)values;
 

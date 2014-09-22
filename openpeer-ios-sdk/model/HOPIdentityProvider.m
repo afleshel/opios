@@ -29,15 +29,13 @@
  
  */
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+#import "HOPIdentityProvider.h"
 
-@class HOPOpenPeerContact;
 
-@interface HOPAPNSData : NSManagedObject
+@implementation HOPIdentityProvider
 
-@property (nonatomic, retain) NSString * deviceToken;
-@property (nonatomic, retain) NSString * type;
-@property (nonatomic, retain) HOPOpenPeerContact *contact;
+@dynamic name;
+@dynamic domain;
+@dynamic baseURI;
 
 @end

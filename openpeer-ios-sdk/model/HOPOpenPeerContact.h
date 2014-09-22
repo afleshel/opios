@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,13 +29,30 @@
  
  */
 
-#import "HOPHomeUser.h"
+#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
-@class HOPRolodexContact;
+@class HOPAPNSData, HOPIdentityContact, HOPPublicPeerFile, HOPSessionRecord;
 
-@interface HOPHomeUser (External)
+@interface HOPOpenPeerContact : NSManagedObject
 
-- (NSString*) getFullName;
-- (HOPRolodexContact*) getRolodexContactForIdentityBaseURI:(NSString*)identityBaseURI;
+@property (nonatomic, retain) NSString * stableID;
+@property (nonatomic, retain) HOPAPNSData *apnsData;
+@property (nonatomic, retain) HOPPublicPeerFile *publicPeerFile;
+@property (nonatomic, retain) NSSet *identityContacts;
+@property (nonatomic, retain) NSSet *sessionRecords;
+@end
+
+@interface HOPOpenPeerContact (CoreDataGeneratedAccessors)
+
+- (void)addIdentityContactsObject:(HOPIdentityContact *)value;
+- (void)removeIdentityContactsObject:(HOPIdentityContact *)value;
+- (void)addIdentityContacts:(NSSet *)values;
+- (void)removeIdentityContacts:(NSSet *)values;
+
+- (void)addSessionRecordsObject:(HOPSessionRecord *)value;
+- (void)removeSessionRecordsObject:(HOPSessionRecord *)value;
+- (void)addSessionRecords:(NSSet *)values;
+- (void)removeSessionRecords:(NSSet *)values;
 
 @end

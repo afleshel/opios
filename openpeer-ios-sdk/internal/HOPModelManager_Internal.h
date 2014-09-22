@@ -29,15 +29,17 @@
  
  */
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+#import "HOPModelManager.h"
 
-@class HOPOpenPeerContact;
 
-@interface HOPAPNSData : NSManagedObject
+using namespace openpeer;
+using namespace openpeer::core;
 
-@property (nonatomic, retain) NSString * deviceToken;
-@property (nonatomic, retain) NSString * type;
-@property (nonatomic, retain) HOPOpenPeerContact *contact;
+@interface HOPModelManager()
+
+
+- (HOPOpenPeerContact*) getOpenPeerContactForIdentityContact:(IdentityContact) inIdentityContact;
+- (HOPOpenPeerContact*) createOpenPeerContactForIdentityContact:(IdentityContact) inIdentityContact;
+- (void) updateOpenPeerContact:(HOPOpenPeerContact*) contact identityContact:(IdentityContact) inIdentityContact;
 
 @end

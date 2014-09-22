@@ -43,12 +43,14 @@
 @class HOPAssociatedIdentity;
 @class HOPIdentityContact;
 @class HOPPublicPeerFile;
-@class HOPHomeUser;
+@class HOPOpenPeerAccount;
 @class HOPAvatar;
 @class HOPSessionRecord;
 @class HOPMessageRecord;
 @class HOPConversationThreadRecord;
 @class HOPConversationThread;
+@class HOPOpenPeerContact;
+
 /**
  *  This is the singleton class and it is used for manipulation with core data.
  */
@@ -142,18 +144,10 @@
 
 /**
  Returns an identity contact for specified stable ID and identity URI.
- @param stableID Stable ID of registered contact
  @param identityURI Identity URI
- @return HOPRolodexContact object
+ @return HOPIdentityContact object
  */
-- (HOPIdentityContact*) getIdentityContactByStableID:(NSString*) stableID identityURI:(NSString*) identityURI;
-
-/**
- Returns an array of identity contacts for specified stable ID.
- @param stableID  Registered contact stable ID
- @return An array of HOPRolodexContact objects
- */
-- (NSArray*) getIdentityContactsByStableID:(NSString*) stableID;
+- (HOPIdentityContact*) getIdentityContactWithIdentityURI:(NSString*) identityURI;
 
 /**
  Returns a public peer file object for the spcified peer URI.
@@ -162,7 +156,10 @@
  */
 - (HOPPublicPeerFile*) getPublicPeerFileForPeerURI:(NSString*) peerURI;
 
-/**
+
+- (HOPAssociatedIdentity*) addAssociatedIdentityForBaseIdentityURI:(NSString*) baseIdentityURI domain:(NSString*) domain name:(NSString*) name account:(HOPOpenPeerAccount*) account selfRolodexProfileProfile:(HOPRolodexContact*) rolodexContact;
+
+ /**
  Returns an identity provider object for spcified identity provider domain, identity name and home user identity URI.
  @param identityProviderDomain Identity provider domain
  @param identityName Identity name (e.g. foo.com)
@@ -177,7 +174,7 @@
  @param homeUserStableId Home user stable ID
  @return HOPAssociatedIdentity object
  */
-- (HOPAssociatedIdentity*) getAssociatedIdentityBaseIdentityURI:(NSString*) baseIdentityURI homeUserStableId:(NSString*) homeUserStableId;
+- (HOPAssociatedIdentity*) getAssociatedIdentityForBaseIdentityURI:(NSString*) baseIdentityURI homeUserStableId:(NSString*) homeUserStableId;
 
 
 /**
@@ -189,16 +186,16 @@
 
 /**
  Returns last logged in user.
- @return HOPHomeUser object
+ @return HOPOpenPeerAccount object
  */
-- (HOPHomeUser*) getLastLoggedInHomeUser;
+- (HOPOpenPeerAccount*) getLastLoggedInHomeUser;
 
 /**
  Returns home user with specified stable ID.
  @param stableId Contact stable ID
- @return HOPHomeUser object
+ @return HOPOpenPeerAccount object
  */
-- (HOPHomeUser*) getHomeUserByStableID:(NSString*) stableID;
+- (HOPOpenPeerAccount*) getHomeUserByStableID:(NSString*) stableID;
 
 /**
  Deletes all marked rolodex contacts for home user specific identity URI.
@@ -327,5 +324,8 @@
 
 - (void) updateMessageStatusVisibilityForSession:(HOPSessionRecord*) sessionRecord lastDeliveryState:(HOPConversationThreadMessageDeliveryState) messageDeliveryState;
 
+- (HOPOpenPeerContact*) getOpenPeerContactForPeerURI:(NSString*) peerURI;
+- (HOPOpenPeerContact*) getOpenPeerContactForStableID:(NSString*) stableID;
+- (HOPOpenPeerContact*) getOpenPeerContactForIdentityURI:(NSString*) identityURI;
 
 @end

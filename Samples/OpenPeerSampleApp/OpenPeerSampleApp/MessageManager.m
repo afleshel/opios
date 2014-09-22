@@ -52,6 +52,7 @@
 #import <OpenpeerSDK/HOPMessage.h>
 #import <OpenpeerSDK/HOPConversationThread.h>
 #import <OpenpeerSDK/HOPContact.h>
+#import <OpenpeerSDK/HOPOpenPeerContact.h>
 #import <OpenpeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPMessageRecord.h>
 #import <OpenPeerSDK/HOPAccount.h>
@@ -398,7 +399,7 @@
             if ([[OpenPeer sharedOpenPeer] appEnteredBackground])
             {
                 NSMutableDictionary* dict = [[NSMutableDictionary alloc] init];
-                [dict setObject:contact.identityContact.peerFile.peerURI forKey:@"peerURI"];
+                [dict setObject:contact.identityContact.openPeerContact.publicPeerFile.peerURI forKey:@"peerURI"];
                 [dict setObject:message.messageID forKey:@"messageId"];
                 [dict setObject:message.text forKey:@"message"];
                 [dict setObject:message.date forKey:@"date"];

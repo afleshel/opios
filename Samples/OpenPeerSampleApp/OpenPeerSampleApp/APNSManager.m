@@ -48,7 +48,7 @@
 #import <OpenPeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPAccount.h>
 #import <OpenPeerSDK/HOPPublicPeerFile.h>
-#import <OpenPeerSDK/HOPHomeUser+External.h>
+#import <OpenPeerSDK/HOPOpenPeerAccount+External.h>
 #import <OpenPeerSDK/HOPMessage.h>
 #import <OpenPeerSDK/HOPBackgrounding.h>
 #import <OpenPeerSDK/HOPUtility.h>

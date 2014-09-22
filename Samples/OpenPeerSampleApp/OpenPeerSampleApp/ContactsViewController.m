@@ -39,7 +39,7 @@
 
 #import <OpenpeerSDK/HOPRolodexContact+External.h>
 #import <OpenpeerSDK/HOPModelManager.h>
-#import <OpenpeerSDK/HOPHomeUser.h>
+#import <OpenpeerSDK/HOPOpenPeerAccount.h>
 
 #define REMOTE_SESSION_ALERT_TAG 1
 #define TABLE_CELL_HEIGHT 55.0
@@ -315,7 +315,7 @@
         cacheName = @"RolodexContacts";
     }
     
-    NSPredicate *predicateAllContacts = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(associatedIdentity.homeUser.stableId MATCHES '%@')",[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser].stableId]];
+    NSPredicate *predicateAllContacts = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(associatedIdentity.account.stableId MATCHES '%@')",[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser].stableId]];
     
     [predicatesArray addObject:predicateAllContacts];
     
@@ -386,9 +386,9 @@
     }
     
     if ([searchText length] > 0)
-        predicateString = [NSString stringWithFormat:@"(associatedIdentity.homeUser.stableId MATCHES '%@' AND name CONTAINS[c] '%@') ",[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser].stableId,searchText];
+        predicateString = [NSString stringWithFormat:@"(associatedIdentity.account.stableId MATCHES '%@' AND name CONTAINS[c] '%@') ",[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser].stableId,searchText];
     else
-        predicateString = [NSString stringWithFormat:@"(associatedIdentity.homeUser.stableId MATCHES '%@') ",[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser].stableId];
+        predicateString = [NSString stringWithFormat:@"(associatedIdentity.account.stableId MATCHES '%@') ",[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser].stableId];
     
     NSPredicate *predicateAllContacts = [NSPredicate predicateWithFormat:predicateString];
     [predicatesArray addObject:predicateAllContacts];
