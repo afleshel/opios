@@ -37,6 +37,8 @@
 #import <OpenPeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPRolodexContact.h>
 #import <OpenPeerSDK/HOPAvatar.h>
+#import <OpenPeerSDK/HOPSystemMessage.h>
+#import <OpenPeerSDK/HOPCallSystemMessage.h>
 
 #import "ImageManager.h"
 #import "Session.h"
@@ -76,14 +78,9 @@
 
 - (void)setLastMessage
 {
-    HOPMessageRecord* messageRecord = [[HOPModelManager sharedModelManager] getLastMessageRecordForSessionID:self.sessionRecord.sessionID];
-    if (messageRecord)
-    {
-        self.labelLastMessage.hidden = NO;
-        self.labelLastMessage.text = messageRecord.text;
-    }
-    else
-        self.labelLastMessage.hidden = YES;
+    self.labelLastMessage.text = [[SessionManager sharedSessionManager] getLastTextMessageForSessionID:self.sessionRecord.sessionID];
+    
+    self.labelLastMessage.hidden = [self.labelLastMessage.text length] == 0;
 }
 
 - (void) setSession:(HOPSessionRecord *)inSessionRecord

@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2014, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -37,11 +37,15 @@
 @implementation HOPMessageRecord
 
 @dynamic date;
-@dynamic delivered;
+@dynamic deleted;
+@dynamic edited;
 @dynamic image;
+@dynamic messageID;
+@dynamic messageStatus;
 @dynamic text;
 @dynamic type;
-@dynamic messageID;
+@dynamic visible;
+@dynamic showStatus;
 @dynamic fromPeer;
 @dynamic session;
 

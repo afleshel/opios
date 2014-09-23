@@ -177,9 +177,11 @@
                 NSString* messageText = [richPushDictionary objectForKey:@"message"];
                 NSString* location = [richPushDictionary objectForKey:@"location"];
                 NSNumber* timeInterval = [richPushDictionary objectForKey:@"date"];
+                NSString* replacesMessageID = [richPushDictionary objectForKey:@"replacesMessageId"];
+                
                 NSDate* date = [NSDate dateWithTimeIntervalSince1970:timeInterval.doubleValue];
                 
-                if ([messageID length] > 0 && [messageText length] > 0  && date)
+                if ([messageID length] > 0 && ([messageText length] > 0 || [replacesMessageID length] > 0)  && date)
                 {
                     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push content \"%@\" for message %@ is ready.",messageText,messageID);
                     
@@ -195,19 +197,27 @@
                         OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Local notification withut location is hit");
                     }
                     
-                    HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:messageText type:messageTypeText date:date session:[session.conversationThread getThreadId] rolodexContact:contact messageId:messageID];
                     
-                    
-                    if (messageObj)
+                    if ([replacesMessageID length] > 0)
                     {
-                        [session.unreadMessageArray addObject:messageObj];
-                        
-                        //If session view controller with message sender is not yet shown, show it
-                        [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForSession:session forIncomingCall:NO forIncomingMessage:YES];
+                        [[HOPModelManager sharedModelManager] replaceMessageWithID:replacesMessageID newMessageID:messageID messageText:messageText];
                     }
                     else
                     {
-                        OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"%@ message is not saved - message id %@ - session id %@ - date %@",messageText,messageID,[session.conversationThread getThreadId],date);
+                        HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:messageText type:messageTypeText date:date session:[session.conversationThread getThreadId] rolodexContact:contact messageId:messageID];
+                        
+                        
+                        if (messageObj)
+                        {
+                            [session.unreadMessageArray addObject:messageObj];
+                            
+                            //If session view controller with message sender is not yet shown, show it
+                            [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForSession:session forIncomingCall:NO forIncomingMessage:YES];
+                        }
+                        else
+                        {
+                            OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"%@ message is not saved - message id %@ - session id %@ - date %@",messageText,messageID,[session.conversationThread getThreadId],date);
+                        }
                     }
                 }
                 else

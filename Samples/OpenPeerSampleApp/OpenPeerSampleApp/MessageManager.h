@@ -34,6 +34,7 @@
 @class HOPMessage;
 @class Session;
 @class HOPRolodexContact;
+@class HOPMessageRecord;
 
 typedef enum
 {
@@ -53,18 +54,21 @@ typedef enum
 
 + (id) sharedMessageManager;
 
-- (HOPMessage*) createSystemMessageWithType:(SystemMessageTypes) type andText:(NSString*) text andRecipient:(HOPRolodexContact*) contact;
+- (HOPMessage*) createSystemMessageWithType:(HOPSystemMessageType) type messageType:(int) messageType andRecipient:(HOPRolodexContact*) contact;
+//- (HOPMessage*) createSystemMessageWithType:(SystemMessageTypes) type andText:(NSString*) text andRecipient:(HOPRolodexContact*) contact;
 - (HOPMessage*) createMessageFromRichPush:(NSDictionary*) richPush;
 
-- (void) sendSystemMessageToInitSessionBetweenPeers:(NSArray*) peers forSession:(Session*) inSession;
-- (void) sendSystemMessageToCallAgainForSession:(Session*) inSession;
-- (void) sendSystemMessageToCheckAvailability:(Session*) inSession;
+//- (void) sendSystemMessageToInitSessionBetweenPeers:(NSArray*) peers forSession:(Session*) inSession;
+//- (void) sendSystemMessageToCallAgainForSession:(Session*) inSession;
+//- (void) sendSystemMessageToCheckAvailability:(Session*) inSession;
+- (void) sendCallSystemMessage:(HOPCallSystemMessageType) callSystemMessage reasonCode:(int) reasonCode session:(Session*) inSession;
 
 - (void) parseSystemMessage:(HOPMessage*) inMessage forSession:(Session*) inSession;
-- (void) sendMessage:(NSString*) message forSession:(Session*) inSession;
+- (void) sendMessage:(NSString*) message replacesMessageID:(NSString*) replacesMessageID forSession:(Session*) inSession;
 - (void) onMessageReceived:(HOPMessage*) message forSessionId:(NSString*) sessionId;
 
 - (SystemMessageTypes) getTypeForSystemMessage:(HOPMessage*) message;
 
 - (void) resendMessages;
+- (void) resendMessage:(HOPMessageRecord*) message forSession:(Session*) inSession;
 @end

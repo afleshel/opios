@@ -33,6 +33,8 @@
 #import "OpenPeerConversationThreadDelegate.h"
 #import "OpenPeerStorageManager.h"
 #import "HOPConversationThread_Internal.h"
+#import "HOPModelManager.h"
+#import "HOPMessageRecord.h"
 
 #include <zsLib/types.h>
 #import <openpeer/core/ILogger.h>
@@ -49,9 +51,9 @@ OpenPeerConversationThreadDelegate::~OpenPeerConversationThreadDelegate()
     ZS_LOG_DEBUG(zsLib::String("SDK - OpenPeerConversationThreadDelegate destructor is called"));
 }
 
-boost::shared_ptr<OpenPeerConversationThreadDelegate> OpenPeerConversationThreadDelegate::create(id<HOPConversationThreadDelegate> inConversationThreadDelegate)
+OpenPeerConversationThreadDelegatePtr OpenPeerConversationThreadDelegate::create(id<HOPConversationThreadDelegate> inConversationThreadDelegate)
 {
-    return boost::shared_ptr<OpenPeerConversationThreadDelegate> (new OpenPeerConversationThreadDelegate(inConversationThreadDelegate));
+    return OpenPeerConversationThreadDelegatePtr (new OpenPeerConversationThreadDelegate(inConversationThreadDelegate));
 }
 
 HOPConversationThread* OpenPeerConversationThreadDelegate::getOpenPeerConversationThread(IConversationThreadPtr conversationThread)
@@ -100,8 +102,16 @@ void OpenPeerConversationThreadDelegate::onConversationThreadMessageDeliveryStat
     HOPConversationThread * hopConversationThread = this->getOpenPeerConversationThread(conversationThread);
     NSString* messageId = [NSString stringWithUTF8String:messageID];
     
+    
     if (hopConversationThread && [messageId length] > 0)
+    {
+        HOPMessageRecord* messageRecord = [[HOPModelManager sharedModelManager] getMessageRecordByID:messageId];
+        messageRecord.messageStatus = [NSNumber numberWithInt:state];
+        messageRecord.showStatus = [NSNumber numberWithBool:YES];
+        [[HOPModelManager sharedModelManager] saveContext];
+        
         [conversationThreadDelegate onConversationThreadMessageDeliveryStateChanged:hopConversationThread messageID:messageId messageDeliveryStates:(HOPConversationThreadMessageDeliveryState)state];
+    }
 }
 
 void OpenPeerConversationThreadDelegate::onConversationThreadPushMessage(IConversationThreadPtr conversationThread,const char *messageID,IContactPtr contact)

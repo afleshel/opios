@@ -44,6 +44,7 @@ extern NSString * const settingsKeyAPNS;
 extern NSString * const settingsKeyTelnetLogger;
 extern NSString * const settingsKeyOutgoingTelnetLogger;
 extern NSString * const settingsKeyStdOutLogger;
+extern NSString * const settingsKeyEnabledLogger;
 extern NSString * const settingsKeyRemoveSettingsAppliedByQRCode;
 extern NSString * const settingsKeyOuterFrameURL;
 extern NSString * const settingsKeyGrantServiceURL;
@@ -122,6 +123,8 @@ extern NSString * const systemMessageRequest;
 //Notifications
 extern NSString * const notificationRemoteSessionModeChanged;
 extern NSString * const notifictionAppReturnedFromBackground;
+extern NSString * const notificationCrashReportSent;
+extern NSString * const notificationComposingStatusChanged;
 
 extern NSString * const notificationTypeApple;
 extern NSString * const notificationTypeAndroid;
@@ -153,3 +156,5 @@ extern NSString * const moduleServicesTransport;
 extern NSString * const moduleZsLib;
 extern NSString * const moduleZsLibSocket;
 extern NSString * const moduleJavaScript;
+
+extern NSString * const stringDeletedeMessageText;

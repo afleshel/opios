@@ -33,6 +33,8 @@
 #import <openpeer/core/IConversationThread.h>
 #import <openpeer/core/IContact.h>
 #import <openpeer/core/IHelper.h>
+#import <openpeer/core/ComposingStatus.h>
+#import <openpeer/core/ISystemMessage.h>
 
 #import "HOPConversationThread_Internal.h"
 #import "HOPContact_Internal.h"
@@ -51,37 +53,6 @@ using namespace openpeer;
 using namespace openpeer::core;
 
 @implementation HOPConversationThread
-
-+ (NSArray*) getConversationThreadsForAccount
-{
-    return [[OpenPeerStorageManager sharedStorageManager] getConversationThreads];
-}
-
-+ (HOPConversationThread*) getConversationThreadForID:(NSString*) threadID
-{
-    HOPConversationThread* ret = nil;
-    if (threadID)
-        ret =[[OpenPeerStorageManager sharedStorageManager] getConversationThreadForId:threadID];
-    return ret;
-}
-
-+ (NSString*) deliveryStateToString: (HOPConversationThreadMessageDeliveryState) state
-{
-    return [NSString stringWithUTF8String: IConversationThread::toString((IConversationThread::MessageDeliveryStates) state)];
-}
-+ (NSString*) stringForMessageDeliveryState:(HOPConversationThreadMessageDeliveryState) state
-{
-    return [NSString stringWithUTF8String: IConversationThread::toString((IConversationThread::MessageDeliveryStates) state)];
-}
-
-+ (NSString*) stateToString: (HOPConversationThreadContactConnectionState) state
-{
-    return [NSString stringWithUTF8String: IConversationThread::toString((IConversationThread::ContactConnectionStates) state)];
-}
-+ (NSString*) stringForContactConnectionState:(HOPConversationThreadContactConnectionState) state
-{
-    return [NSString stringWithUTF8String: IConversationThread::toString((IConversationThread::ContactConnectionStates) state)];
-}
 
 - (id)init
 {
@@ -122,6 +93,39 @@ using namespace openpeer::core;
     
     return ret;
 }
+
++ (NSArray*) getActiveConversationThreads
+{
+    return [[OpenPeerStorageManager sharedStorageManager] getConversationThreads];
+}
+
++ (HOPConversationThread*) getConversationThreadForID:(NSString*) threadID
+{
+    HOPConversationThread* ret = nil;
+    if (threadID)
+        ret =[[OpenPeerStorageManager sharedStorageManager] getConversationThreadForId:threadID];
+    return ret;
+}
+
+/*+ (NSString*) deliveryStateToString: (HOPConversationThreadMessageDeliveryState) state
+{
+    return [NSString stringWithUTF8String: IConversationThread::toString((IConversationThread::MessageDeliveryStates) state)];
+}*/
++ (NSString*) stringForMessageDeliveryState:(HOPConversationThreadMessageDeliveryState) state
+{
+    return [NSString stringWithUTF8String: IConversationThread::toString((IConversationThread::MessageDeliveryStates) state)];
+}
+
+/*+ (NSString*) stateToString: (HOPConversationThreadContactConnectionState) state
+{
+    return [NSString stringWithUTF8String: IConversationThread::toString((IConversationThread::ContactConnectionStates) state)];
+}*/
+
++ (NSString*) stringForContactConnectionState:(HOPConversationThreadContactConnectionState) state
+{
+    return [NSString stringWithUTF8String: IConversationThread::toString((IConversationThread::ContactConnectionStates) state)];
+}
+
 
 - (NSString*) getThreadId
 {
@@ -202,6 +206,51 @@ using namespace openpeer::core;
     return contactArray;
 }
 
+- (void) addContacts: (NSArray*) contacts
+{
+    if(conversationThreadPtr)
+    {
+        if ([contacts count] > 0)
+        {
+            ContactProfileInfoList contactList;
+            for (HOPContact* contact in contacts)
+            {
+                ContactProfileInfo contactInfo;
+                contactInfo.mContact = [contact getContactPtr];
+                
+                contactList.push_back(contactInfo);
+            }
+            
+            conversationThreadPtr->addContacts(contactList);
+        }
+    }
+    else
+    {
+        ZS_LOG_ERROR(Debug, [self log:@"Invalid conversation thread object!"]);
+        [NSException raise:NSInvalidArgumentException format:@"Invalid conversation thread object!"];
+    }
+}
+
+- (void) removeContacts: (NSArray*) contacts
+{
+    if(conversationThreadPtr)
+    {
+        if ([contacts count] > 0)
+        {
+            ContactList contactList;
+            for (HOPContact* contact in contacts)
+            {
+                contactList.push_back([contact getContactPtr]);
+            }
+            conversationThreadPtr->removeContacts(contactList);
+        }
+    }
+    else
+    {
+        ZS_LOG_ERROR(Debug, [self log:@"Invalid conversation thread object!"]);
+        [NSException raise:NSInvalidArgumentException format:@"Invalid conversation thread object!"];
+    }
+}
 
 - (NSArray*) getIdentityContactListForContact:(HOPContact*) contact
 {
@@ -262,23 +311,66 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (void) addContacts: (NSArray*) contacts
+- (NSString*) createEmptyStatus
+{
+    NSString* ret = nil;
+    
+    if(conversationThreadPtr)
+    {
+        ElementPtr emptyStatusJSONPtr = conversationThreadPtr->createEmptyStatus();
+        String str = IHelper::convertToString(emptyStatusJSONPtr);
+        ret = [NSString stringWithCString:str encoding:NSUTF8StringEncoding];
+    }
+    else
+    {
+        ZS_LOG_ERROR(Debug, [self log:@"Invalid conversation thread object!"]);
+        [NSException raise:NSInvalidArgumentException format:@"Invalid conversation thread object!"];
+    }
+    
+    return ret;
+}
+
+- (HOPConversationThreadContactStatus) getContactStatus:(HOPContact*) contact
+{
+    HOPConversationThreadContactStatus ret = HOPComposingStateInactive;
+    if(conversationThreadPtr)
+    {
+        IContactPtr contactPtr = [contact getContactPtr];
+        if (contactPtr)
+        {
+            ElementPtr contactStatusJSONPtr = conversationThreadPtr->getContactStatus(contactPtr);
+            if (contactStatusJSONPtr)
+            {
+                ComposingStatusPtr composingStatusPtr = ComposingStatus::extract(contactStatusJSONPtr);
+                if (composingStatusPtr)
+                {
+                    ret = (HOPConversationThreadContactStatus) composingStatusPtr->mComposingStatus;
+//                    String str = ComposingStatus::toString(composingStatusPtr->mComposingStatus); //IHelper::convertToString(contactStatusJSONPtr);
+//                    if (str.hasData())
+//                        ret = [NSString stringWithCString:str encoding:NSUTF8StringEncoding];
+                }
+            }
+        }
+    }
+    else
+    {
+        ZS_LOG_ERROR(Debug, [self log:@"Invalid conversation thread object!"]);
+        [NSException raise:NSInvalidArgumentException format:@"Invalid conversation thread object!"];
+    }
+    
+    return ret;
+}
+
+
+- (void) setStatusInThread:(HOPConversationThreadContactStatus) status
 {
     if(conversationThreadPtr)
     {
-        if ([contacts count] > 0)
-        {
-            ContactProfileInfoList contactList;
-            for (HOPContact* contact in contacts)
-            {
-                ContactProfileInfo contactInfo;
-                contactInfo.mContact = [contact getContactPtr];
-
-                contactList.push_back(contactInfo);
-            }
-
-            conversationThreadPtr->addContacts(contactList);
-        }
+        ElementPtr statusJSONPtr = conversationThreadPtr->createEmptyStatus();
+        
+        ComposingStatusPtr composingStatusPtr = ComposingStatusPtr(new ComposingStatus((ComposingStatus::ComposingStates) status));
+        composingStatusPtr->insert(statusJSONPtr);
+        conversationThreadPtr->setStatusInThread(statusJSONPtr);
     }
     else
     {
@@ -287,29 +379,7 @@ using namespace openpeer::core;
     }
 }
 
-- (void) removeContacts: (NSArray*) contacts
-{
-    if(conversationThreadPtr)
-    {
-        if ([contacts count] > 0)
-        {
-            ContactList contactList;
-            for (HOPContact* contact in contacts)
-            {
-                contactList.push_back([contact getContactPtr]);
-            }
-            conversationThreadPtr->removeContacts(contactList);
-        }
-    }
-    else
-    {
-        ZS_LOG_ERROR(Debug, [self log:@"Invalid conversation thread object!"]);
-        [NSException raise:NSInvalidArgumentException format:@"Invalid conversation thread object!"];
-    }
-
-}
-
-- (void) sendMessage: (NSString*) messageID replacesMessageID:(NSString*) replacesMessageID messageType:(NSString*) messageType validated:(BOOL) validated message:(NSString*) message
+/*- (void) sendMessage: (NSString*) messageID replacesMessageID:(NSString*) replacesMessageID messageType:(NSString*) messageType validated:(BOOL) validated message:(NSString*) message
 {
     if(conversationThreadPtr)
     {
@@ -320,7 +390,7 @@ using namespace openpeer::core;
         ZS_LOG_ERROR(Debug, [self log:@"Invalid conversation thread object!"]);
         [NSException raise:NSInvalidArgumentException format:@"Invalid conversation thread object!"];
     }
-}
+}*/
 
 - (void) sendMessage: (HOPMessage*) message
 {
@@ -370,7 +440,7 @@ using namespace openpeer::core;
 
     return hopMessage;
 }
-- (BOOL) getMessage: (NSString*) messageID outReplacesMessageID:(NSString**) outReplacesMessageID outFrom:(HOPContact**) outFrom outMessageType:(NSString**) outMessageType outMessage:(NSString**) outMessage outTime:(NSDate**) outTime outValidated:(BOOL*) outValidated
+/*- (BOOL) getMessage: (NSString*) messageID outReplacesMessageID:(NSString**) outReplacesMessageID outFrom:(HOPContact**) outFrom outMessageType:(NSString**) outMessageType outMessage:(NSString**) outMessage outTime:(NSDate**) outTime outValidated:(BOOL*) outValidated
 {
     BOOL ret = NO;
     if(conversationThreadPtr)
@@ -402,7 +472,7 @@ using namespace openpeer::core;
         [NSException raise:NSInvalidArgumentException format:@"Invalid conversation thread object!"];
     }
     return ret;
-}
+}*/
 
 - (BOOL) getMessageDeliveryState: (NSString*) messageID outDeliveryState:(HOPConversationThreadMessageDeliveryState*) outDeliveryState
 {
@@ -422,6 +492,56 @@ using namespace openpeer::core;
         ZS_LOG_ERROR(Debug, [self log:@"Invalid conversation thread object!"]);
         [NSException raise:NSInvalidArgumentException format:@"Invalid conversation thread object!"];
     }
+    return ret;
+}
+
+- (void) markAllMessagesRead
+{
+    if(conversationThreadPtr)
+    {
+        conversationThreadPtr->markAllMessagesRead();
+    }
+    else
+    {
+        ZS_LOG_ERROR(Debug, [self log:@"Invalid conversation thread object!"]);
+        [NSException raise:NSInvalidArgumentException format:@"Invalid conversation thread object!"];
+    }
+}
+
++ (NSString*) createSystemMessage:(HOPSystemMessageType) systemMessageType messageType:(int) systemMessageType contact:(HOPContact*) contact
+{
+    NSString* ret = nil;
+
+    if (contact)
+    {
+        ElementPtr systemMessage = ISystemMessage::createEmptySystemMessage();
+        
+        switch (systemMessageType)
+        {
+            case HOPSystemMessageTypeCall:
+            {
+                CallSystemMessagePtr callSystemPtr = CallSystemMessagePtr(new CallSystemMessage((CallSystemMessage::CallSystemMessageTypes) systemMessageType,[contact getContactPtr]));
+                callSystemPtr->insert(systemMessage);
+            }
+                break;
+                
+            default:
+                break;
+        }
+        
+        String str = IHelper::convertToString(systemMessage);
+        ret = [NSString stringWithCString:str encoding:NSUTF8StringEncoding];
+    }
+    
+    return ret;
+}
+
++ (NSString*) getSystemMessageType
+{
+    NSString* ret = nil;
+    
+    ret = [NSString stringWithUTF8String:ISystemMessage::getMessageType()];
+    
     return ret;
 }
 

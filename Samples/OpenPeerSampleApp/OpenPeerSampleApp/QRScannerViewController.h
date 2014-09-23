@@ -30,8 +30,9 @@
  */
 
 #import <UIKit/UIKit.h>
-#import "ZXingObjC/ZXingObjC.h"
 #import "Delegates.h"
-@interface QRScannerViewController : UIViewController <ZXCaptureDelegate,HTTPDownloaderDelegate>
+#import <AVFoundation/AVFoundation.h>
+
+@interface QRScannerViewController : UIViewController <AVCaptureMetadataOutputObjectsDelegate,HTTPDownloaderDelegate>
 
 @end

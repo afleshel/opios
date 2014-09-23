@@ -35,14 +35,17 @@
 #import "MessageManager.h"
 #import "Message.h"
 #import "Session.h"
-//#import "OpenPeerUser.h"
 #import "ChatMessageCell.h"
 #import <OpenPeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPMessageRecord.h>
 #import <OpenPeerSDK/HOPSessionRecord.h>
 #import <OpenPeerSDK/HOPConversationThread.h>
-
-
+#import <OpenPeerSDK/HOPCallSystemMessage.h>
+#import <OpenPeerSDK/HOPContact.h>
+#import <OpenPeerSDK/HOPRolodexContact.h>
+#import <OpenPeerSDK/HOPPublicPeerFile.h>
+#import "SystemMessageCell.h"
+#import "ChatCell.h"
 
 @interface ChatViewController()
 
@@ -50,14 +53,22 @@
 @property (nonatomic, copy) NSString* predicateString;
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 
-//@property (weak, nonatomic) IBOutlet UIView *typingMessageView;
-
 @property (weak, nonatomic) NSDictionary* userInfo;
 @property (nonatomic) BOOL keyboardIsHidden;
 @property (nonatomic) BOOL isRefreshed;
 @property (nonatomic) BOOL isFirstRun;
+@property (nonatomic) BOOL isComposing;
 @property (nonatomic) CGFloat keyboardLastChange;
 @property (nonatomic,strong) UITapGestureRecognizer *tapGesture;
+@property (nonatomic,strong) UISwipeGestureRecognizer *swipeGestureLeft;
+@property (nonatomic,strong) UISwipeGestureRecognizer *swipeGestureRight;
+
+@property (nonatomic,strong) NSTimer *pauseTimer;
+@property (nonatomic,strong) NSDate *latestUserActivity;
+
+@property (nonatomic,weak) IBOutlet UILabel *labelComposingStatus;
+
+@property (nonatomic, weak) HOPMessageRecord* messageToEdit;
 
 - (void) registerForNotifications:(BOOL)registerForNotifications;
 
@@ -86,6 +97,7 @@
     self = [self initWithNibName:@"ChatViewController" bundle:nil];
     {
         self.session = inSession;
+        self.isComposing = NO;
     }
     
     return self;
@@ -121,9 +133,6 @@
     self.tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
     self.tapGesture.numberOfTapsRequired = 1;
     
-    
-    //[self registerForNotifications:YES];
-    
     if (!self.keyboardIsHidden)
     {
         [self.messageTextbox becomeFirstResponder];
@@ -137,34 +146,61 @@
 	}
     
     self.tapGesture.cancelsTouchesInView = NO;
+    
+    self.swipeGestureLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleLeftSwipe:)];
+    self.swipeGestureLeft.direction = UISwipeGestureRecognizerDirectionLeft;
+    [self.chatTableView addGestureRecognizer:self.swipeGestureLeft];
+    
+    self.swipeGestureRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleRightSwipe:)];
+    self.swipeGestureRight.direction = UISwipeGestureRecognizerDirectionRight;
+    [self.chatTableView addGestureRecognizer:self.swipeGestureRight];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [self registerForNotifications:YES];
-    
-//    if (!self.keyboardIsHidden)
-//    {
-//        [self.messageTextbox becomeFirstResponder];
-//    }
-    
+    self.chatTableView.tableFooterView.backgroundColor = [UIColor clearColor];
+
+    [self.session.conversationThread markAllMessagesRead];
     [self.session.unreadMessageArray removeAllObjects];
-    
-//    if ([[[self fetchedResultsController] fetchedObjects] count] > 0)
-//        [self.chatTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[[[self fetchedResultsController] fetchedObjects] count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
-    //[self.chatTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[[[self fetchedResultsController] fetchedObjects] count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-    
-//    if ([[[self fetchedResultsController] fetchedObjects] count] > 0)
-//    {
-//        [self.chatTableView reloadRowsAtIndexPaths:[self.chatTableView indexPathsForVisibleRows]
-//                                  withRowAnimation:UITableViewRowAnimationNone];
-//        [self.chatTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[[[self fetchedResultsController] fetchedObjects] count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
-//    }
-    
-    
 }
 
+- (NSString*) getMessageForStatus:(HOPConversationThreadContactStatus) status contact:(HOPContact*) contact
+{
+    NSString* ret = @"";
+    HOPRolodexContact* rolodexContact = [[[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:[contact getPeerURI]] objectAtIndex:0];
+    switch (status)
+    {
+        case HOPComposingStateComposing:
+            ret = [NSString stringWithFormat:@"%@ is typing...",rolodexContact.name];
+            break;
+            
+        case HOPComposingStatePaused:
+            ret = [NSString stringWithFormat:@"%@ is thinking...",rolodexContact.name];
+            break;
+            
+        case HOPComposingStateActive:
+            break;
+        default:
+            break;
+    }
+    
+    return ret;
+}
+- (void) updatedComposingStatus:(NSNotification *)notification
+{
+    NSDictionary* object = notification.object;
+    
+    HOPConversationThread* thread = [object objectForKey:@"thread"];
+    HOPContact* contact = [object objectForKey:@"contact"];
+    
+    HOPConversationThreadContactStatus status = [thread getContactStatus:contact];
+    
+    NSString* message = [self getMessageForStatus:status contact:contact];
+    
+    self.labelComposingStatus.text = message;
+}
 
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -178,7 +214,6 @@
     [self registerForNotifications:NO];
     [self.chatTableView removeGestureRecognizer:self.tapGesture];
 }
-
 
 
 - (void) hideKeyboard
@@ -227,6 +262,7 @@
     if (userInfo)
         [UIView commitAnimations];
 }
+
 #pragma mark - Keyboard handling
 -(void)resetKeyboard:(NSNotification *)notification
 {
@@ -261,9 +297,23 @@
 }
 
 
-- (void)handleTapGesture:(UITapGestureRecognizer *)sender {
-    if (sender.state == UIGestureRecognizerStateRecognized) {
-        [self.messageTextbox resignFirstResponder];
+- (void)handleTapGesture:(UITapGestureRecognizer *)sender
+{
+    if (sender.state == UIGestureRecognizerStateRecognized)
+    {
+        CGPoint location = [sender locationInView:self.chatTableView];
+        NSIndexPath *swipedIndexPath = [self.chatTableView indexPathForRowAtPoint:location];
+        ChatMessageCell *swipedCell  = (ChatMessageCell*)[self.chatTableView cellForRowAtIndexPath:swipedIndexPath];
+        
+        if (![swipedCell.message.type isEqualToString:[HOPSystemMessage getMessageType]] && !swipedCell.message.fromPeer && !swipedCell.message.deleted.boolValue && swipedCell.message.messageStatus.intValue == HOPConversationThreadMessageDeliveryStateUserNotAvailable)
+        {
+            [[MessageManager sharedMessageManager] resendMessage:swipedCell.message forSession:self.session];
+            
+        }
+        else
+        {
+            [self.messageTextbox resignFirstResponder];
+        }
     }
 }
 
@@ -277,14 +327,72 @@
 #pragma mark - UITextViewDelegate
 - (BOOL) textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-    //if([text isEqualToString:@"\n"] && [textView.text length] > 0)
     if([text isEqualToString:@"\n"])
     {
         if ([textView.text length] > 0)
             [self sendIMmessage:textView.text];
         return NO;
     }
+    
+    if (!self.isComposing && [text length] > 0)
+    {
+        [self setStatusToComposing];
+    }
+    else if ([text length] == 0 && [textView.text length] <= 1)
+    {
+        [self setStatusToActive];
+    }
+    
+    self.latestUserActivity = [NSDate date];
     return YES;
+}
+
+- (void) setStatusToComposing
+{
+    self.isComposing = YES;
+    [self.session.conversationThread setStatusInThread:HOPComposingStateComposing];
+    [self.pauseTimer invalidate];
+    self.pauseTimer = nil;
+    self.pauseTimer = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(setStatusToPause) userInfo:nil repeats:NO];
+}
+
+- (void) setStatusToActive
+{
+    [self.session.conversationThread setStatusInThread:HOPComposingStateActive];
+    [self.pauseTimer invalidate];
+    self.pauseTimer = nil;
+    self.isComposing = NO;
+    self.pauseTimer = [NSTimer scheduledTimerWithTimeInterval:240 target:self selector:@selector(setStatusToInactive) userInfo:nil repeats:NO];
+}
+
+- (void) setStatusToPause
+{
+    [self.session.conversationThread setStatusInThread:HOPComposingStatePaused];
+    [self.pauseTimer invalidate];
+    self.pauseTimer = nil;
+    self.isComposing = NO;
+    self.pauseTimer = [NSTimer scheduledTimerWithTimeInterval:210 target:self selector:@selector(setStatusToInactive) userInfo:nil repeats:NO];
+}
+
+- (void) setStatusToInactive
+{
+    [self.session.conversationThread setStatusInThread:HOPComposingStateInactive];
+    [self.pauseTimer invalidate];
+    self.pauseTimer = nil;
+    self.pauseTimer = [NSTimer scheduledTimerWithTimeInterval:600 target:self selector:@selector(setStatusToGone) userInfo:nil repeats:NO];
+}
+
+- (void) setStatusToGone
+{
+    [self.session.conversationThread setStatusInThread:HOPComposingStateInactive];
+    [self.pauseTimer invalidate];
+    self.pauseTimer = nil;
+    //self.pauseTimer = [NSTimer scheduledTimerWithTimeInterval:600 target:self selector:@selector(setStatusToGone) userInfo:nil repeats:NO];
+}
+
+- (void)textViewDidEndEditing:(UITextView *)textView
+{
+    [self setStatusToActive];
 }
 
 - (void) refreshViewWithData
@@ -334,39 +442,18 @@
     
     [self.chatTableView reloadData];
 }
-/*- (float) getHeaderHeight:(float)tableViewHeight
-{
-    float res = tableViewHeight;
-    
-    if(self.session.messageArray && [self.session.messageArray count] > 0)
-    {
-        for(int i=0; i<[self.session.messageArray count]; i++)
-        {
-            Message *message = [self.session.messageArray objectAtIndex:i];
-            
-            CGSize cs = [ChatMessageCell calcMessageHeight:message.text forScreenWidth:self.chatTableView.frame.size.width - 85];
-            res -= (cs.height + 32);
-            
-            if(res < 0)
-            {
-                res = 1;
-                break;
-            }
-        } // end of if
-    }
-    
-    return res;
-}*/
 
 - (void) registerForNotifications:(BOOL)registerForNotifications
 {
     if (registerForNotifications)
     {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatedComposingStatus:) name:notificationComposingStatusChanged object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     }
     else
     {
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:notificationComposingStatusChanged object:nil];
         [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
         [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     }
@@ -387,32 +474,55 @@
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //Message* message = nil;
+    //ChatCell* msgCell = nil;
+    UITableViewCell* msgCell = nil;
     HOPMessageRecord* message = nil;
     
     message = [self.fetchedResultsController objectAtIndexPath:indexPath];
 
     if (!message)
         return nil;
-    /*
-    if (self.session.messageArray && [self.session.messageArray count] > 0)
+    
+    BOOL isSystemMessage = [message.type isEqualToString:[HOPSystemMessage getMessageType]];
+    if (isSystemMessage)
     {
-        message = (Message*)[self.session.messageArray objectAtIndex:indexPath.row];
+        msgCell = [tableView dequeueReusableCellWithIdentifier:@"MessageSystemCellIdentifier"];
     }
     else
     {
-        return nil;
-    }*/
+//        if (message.deleted.boolValue)
+//            msgCell = [tableView dequeueReusableCellWithIdentifier:@"DeletedMessageCellIdentifier"];
+//        else
+            msgCell = [tableView dequeueReusableCellWithIdentifier:@"MessageCellIdentifier"];
+    }
     
-    ChatMessageCell* msgCell = [tableView dequeueReusableCellWithIdentifier:@"MessageCellIdentifier"];
+    //ChatMessageCell* msgCell = [tableView dequeueReusableCellWithIdentifier:@"MessageCellIdentifier"];
     
     if (msgCell == nil)
     {
-        msgCell = [[ChatMessageCell alloc] initWithFrame:CGRectZero];
-        msgCell.messageLabel.delegate = self;
+//        if (!message.deleted.boolValue)
+        {
+            if (isSystemMessage)
+                msgCell = [[SystemMessageCell alloc] initWithFrame:CGRectZero];
+            else
+                msgCell = [[ChatMessageCell alloc] initWithFrame:CGRectZero];
+            
+            ((ChatCell*)msgCell).messageLabel.delegate = self;
+        }
+//        else
+//        {
+//            msgCell = [[UITableViewCell alloc] initWithFrame:CGRectZero];
+//            msgCell.backgroundColor = [UIColor clearColor];
+//            msgCell.textLabel.font = [UIFont fontWithName:@"Helvetica" size:13.0];
+//            msgCell.textLabel.textColor = [UIColor grayColor];
+//        }
     }
     
-    [msgCell setMessage:message];
+    
+    if ([[msgCell class] isSubclassOfClass:[ChatCell class]])
+        [((ChatCell*)msgCell) setMessage:message];
+//    else
+//        msgCell.textLabel.text = @"This message has been removed.";
     
     return msgCell;
 }
@@ -424,7 +534,11 @@
     //Message *message = [self.session.messageArray objectAtIndex:indexPath.row];
     HOPMessageRecord* message = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
-    CGSize textSize = [ChatMessageCell calcMessageHeight:message.text forScreenWidth:self.chatTableView.frame.size.width - 85];
+    CGSize textSize;
+    if ([message.type isEqualToString:[HOPSystemMessage getMessageType]])
+        textSize= [ChatCell calcMessageHeight:@"system message" forScreenWidth:self.chatTableView.frame.size.width - 85];
+    else
+        textSize= [ChatCell calcMessageHeight:message.text forScreenWidth:self.chatTableView.frame.size.width - 85];
 
     textSize.height += 52;
     
@@ -433,12 +547,19 @@
     return res;
 }
 
+
 - (void) sendIMmessage:(NSString *)message
 {
-    if ([message length] > 0)
+    [self setStatusToActive];
+    if ([message length] > 0 && ![message isEqualToString:self.messageToEdit.text])
     {
-        [[MessageManager sharedMessageManager] sendMessage:message forSession:self.session];
+        NSString* messageIDToReplace = self.messageToEdit && self.messageToEdit.text.length > 0 ? self.messageToEdit.messageID : @"";
+        [[MessageManager sharedMessageManager] sendMessage:message replacesMessageID:messageIDToReplace forSession:self.session];
+        //just to skip sending composing
+        self.isComposing = YES;
         self.messageTextbox.text = nil;
+        self.isComposing = NO;
+        self.messageToEdit = nil;
         [self refreshViewWithData];
     }
 }
@@ -451,31 +572,6 @@
         return _fetchedResultsController;
     }
     
-    /*NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPMessageRecord" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];
-    [fetchRequest setEntity:entity];
-    
-    //self.predicateString = [NSString stringWithFormat:@"(session.sessionID MATCHES '%@')",[self.session.conversationThread getThreadId]];
-    //NSPredicate *predicate = [NSPredicate predicateWithFormat:self.predicateString];
-    NSMutableArray* arrayOfPredicates = [[NSMutableArray alloc] init];
-    //for (NSString* sessionID in [self.session.sessionIdsHistory allObjects])
-    {
-        NSPredicate* predicateSessionID = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(session.sessionID MATCHES '%@')",self.session.sessionRecord.sessionID]];
-        [arrayOfPredicates addObject:predicateSessionID];
-    }
-    NSPredicate *predicate = [NSCompoundPredicate andPredicateWithSubpredicates:arrayOfPredicates];
-    
-    [fetchRequest setPredicate:predicate];
-    
-	[fetchRequest setFetchBatchSize:20];
-	
-	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"date" ascending:YES];
-	NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
-	
-	[fetchRequest setSortDescriptors:sortDescriptors];
-    
-	//_fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext] sectionNameKeyPath:nil cacheName:[NSString stringWithFormat:@"messageCache_%@",[self.session.conversationThread getThreadId]]];
-     */
     NSFetchRequest *fetchRequest = [[HOPModelManager sharedModelManager] getMessagesFetchRequestForSessionID:self.session.sessionRecord.sessionID sortAscending:YES];
     _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext] sectionNameKeyPath:nil cacheName:nil];
     
@@ -484,6 +580,21 @@
 	return _fetchedResultsController;
 }
 
+- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
+           atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
+    
+    switch(type) {
+        case NSFetchedResultsChangeInsert:
+            [self.chatTableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex]
+                          withRowAnimation:NO];
+            break;
+            
+        case NSFetchedResultsChangeDelete:
+            [self.chatTableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex]
+                          withRowAnimation:NO];
+            break;
+    }
+}
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath
 {
     self.isRefreshed = YES;
@@ -494,7 +605,13 @@
             [self.chatTableView scrollToRowAtIndexPath:newIndexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
 			break;
 		case NSFetchedResultsChangeUpdate:
-			//[[self.contactsTableView cellForRowAtIndexPath:indexPath].textLabel setText:((HOPRolodexContact*)[[[self.fetchedResultsController sections] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]).name];
+        {
+            ChatMessageCell *cellForUpdate  = (ChatMessageCell*)[self.chatTableView cellForRowAtIndexPath:indexPath];
+            HOPMessageRecord* message = [self.fetchedResultsController objectAtIndexPath:indexPath];
+            [cellForUpdate setMessage:message];
+            [self.chatTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+//			[[self.chatTableView cellForRowAtIndexPath:indexPath].textLabel setText:((HOPRolodexContact*)[[[self.fetchedResultsController sections] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]).name];
+        }
 			break;
 		case NSFetchedResultsChangeDelete:
 			[self.chatTableView  deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
@@ -506,6 +623,12 @@
 		default:
 			break;
 	}
+    
+    //View is visible, so mark message as read
+    if (self.isViewLoaded && self.view.window)
+    {
+        [self.session.conversationThread markAllMessagesRead];
+    }
 }
 
 #pragma mark - TTTAttributedLabelDelegate
@@ -513,6 +636,47 @@
 {
     if (url)
         [[UIApplication sharedApplication] openURL:url];
+}
+
+-(void)handleLeftSwipe:(UISwipeGestureRecognizer *)gesture
+{
+    CGPoint location = [gesture locationInView:self.chatTableView];
+    NSIndexPath *swipedIndexPath = [self.chatTableView indexPathForRowAtPoint:location];
+    ChatMessageCell *swipedCell  = (ChatMessageCell*)[self.chatTableView cellForRowAtIndexPath:swipedIndexPath];
+    
+    if (![swipedCell.message.type isEqualToString:[HOPSystemMessage getMessageType]] && !swipedCell.message.fromPeer && !swipedCell.message.deleted.boolValue)
+    {
+        self.messageTextbox.text = swipedCell.message.text;
+        self.messageToEdit = swipedCell.message;
+    }
+}
+
+-(void)handleRightSwipe:(UISwipeGestureRecognizer *)gesture
+{
+    CGPoint location = [gesture locationInView:self.chatTableView];
+    NSIndexPath *swipedIndexPath = [self.chatTableView indexPathForRowAtPoint:location];
+    ChatMessageCell *swipedCell  = (ChatMessageCell*)[self.chatTableView cellForRowAtIndexPath:swipedIndexPath];
+    
+    if (![swipedCell.message.type isEqualToString:[HOPSystemMessage getMessageType]] && !swipedCell.message.fromPeer && !swipedCell.message.deleted.boolValue)
+    {
+        
+        self.messageToEdit = swipedCell.message;
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Message deletion" message:@"Are you sure you want to delete the message?" delegate:self cancelButtonTitle:@"NO" otherButtonTitles:@"YES", nil];
+        [alert show];
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex != alertView.cancelButtonIndex)
+    {
+        NSString* messageIDToReplace = self.messageToEdit && self.messageToEdit.text.length > 0 ? self.messageToEdit.messageID : @"";
+        [[MessageManager sharedMessageManager] sendMessage:@"" replacesMessageID:messageIDToReplace forSession:self.session];
+        //just to skip sending composing
+        self.messageToEdit = nil;
+        //[self refreshViewWithData];
+    }
 }
 @end
 

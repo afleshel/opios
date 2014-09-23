@@ -82,8 +82,9 @@ typedef enum
 {
     HOPConversationThreadMessageDeliveryStateDiscovering      = 0,
     HOPConversationThreadMessageDeliveryStateUserNotAvailable = 1,
-    HOPConversationThreadMessageDeliveryStateDelivered        = 2,
-    HOPConversationThreadMessageDeliveryStateRead             = 3,
+    HOPConversationThreadMessageDeliveryStateSent             = 2,
+    HOPConversationThreadMessageDeliveryStateDelivered        = 3,
+    HOPConversationThreadMessageDeliveryStateRead             = 4,
 } HOPConversationThreadMessageDeliveryState;
 
 /**
@@ -97,6 +98,36 @@ typedef enum
     HOPConversationThreadContactConnectionStateDisconnected
 } HOPConversationThreadContactConnectionState;
 
+/**
+ *  Thread's contact statuses.
+ */
+typedef enum
+{
+    HOPComposingStateNone,      // contact has no composing status
+    
+    HOPComposingStateInactive,  // contact is not actively participating in conversation (assumed default if "none")
+    HOPComposingStateActive,    // contact is active in the conversation
+    HOPComposingStateGone,      // contact is effectively gone from conversation
+    HOPComposingStateComposing, // contact is composing a message
+    HOPComposingStatePaused    // contact was composing a message but is no longer composing
+} HOPConversationThreadContactStatus;
+
+typedef enum
+{
+    HOPSystemMessageTypeNA,           // not a system message
+    HOPSystemMessageTypeUnknown,      // unknown system message type
+    
+    HOPSystemMessageTypeCall,   // call system message
+} HOPSystemMessageType;
+
+typedef enum
+{
+    HOPCallSystemMessageTypeUnknown,      // unknown system message type
+    
+    HOPCallSystemMessageTypeCallPlaced,   // call was placed
+    HOPCallSystemMessageTypeCallAnswered, // call was answered
+    HOPCallSystemMessageTypeCallHungup,   // call was hung-up
+} HOPCallSystemMessageType;
 #pragma mark - Provisioning account for future use enum
 /**
  Account states.

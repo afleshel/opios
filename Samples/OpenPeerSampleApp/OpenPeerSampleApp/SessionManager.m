@@ -53,6 +53,9 @@
 #import <OpenpeerSDK/HOPHomeUser+External.h>
 #import <OpenpeerSDK/HOPRolodexContact+External.h>
 #import <OpenpeerSDK/HOPSessionRecord.h>
+#import <OpenpeerSDK/HOPMessageRecord.h>
+#import <OpenpeerSDK/HOPSystemMessage.h>
+#import <OpenpeerSDK/HOPCallSystemMessage.h>
 #import "UIDevice+Networking.h"
 
 @interface SessionManager()
@@ -281,7 +284,7 @@
         if (sessionThatWillInitiateRemoteSession)
         {
             //Send system message, where is passed the slave contacts. Session will be established between slave contacts and master contact.
-            [[MessageManager sharedMessageManager] sendSystemMessageToInitSessionBetweenPeers:[NSArray arrayWithObject:slaveContact] forSession:sessionThatWillInitiateRemoteSession];
+            //[[MessageManager sharedMessageManager] sendSystemMessageToInitSessionBetweenPeers:[NSArray arrayWithObject:slaveContact] forSession:sessionThatWillInitiateRemoteSession];
         }
     }
     return sessionThatWillInitiateRemoteSession;
@@ -377,7 +380,8 @@
         {
             OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Making a call for the session <%p>", inSession);
             
-            [[MessageManager sharedMessageManager]sendSystemMessageToCheckAvailability:inSession];
+//            [[MessageManager sharedMessageManager]sendSystemMessageToCheckAvailability:inSession];
+            [[MessageManager sharedMessageManager] sendCallSystemMessage:HOPCallSystemMessageTypeCallPlaced reasonCode:0 session:inSession];
             //Currently we are not supporting group conferences, so only one participant is possible
             HOPContact* contact = [[[inSession participantsArray] objectAtIndex:0] getCoreContact];
             
@@ -625,12 +629,13 @@
     }
     
     [self setLastEndedCallSession: session];
+    //TODO: reimplement redial when call is ended because of weak network
     //If it is callee side, check the reasons why call is ended, and if it is not ended properly, try to redial
     if (![[call getCaller] isSelf] && ((OpenPeer*)[OpenPeer sharedOpenPeer]).isRedialModeOn)
     {
         if ([call getClosedReason] == HOPCallClosedReasonNone || [call getClosedReason] == HOPCallClosedReasonRequestTerminated || [call getClosedReason] == HOPCallClosedReasonTemporarilyUnavailable)
         {
-            [[MessageManager sharedMessageManager] sendSystemMessageToCallAgainForSession:session];
+            //[[MessageManager sharedMessageManager] sendSystemMessageToCallAgainForSession:session];
             session.isRedial = YES;
         }
         else
@@ -780,6 +785,41 @@
     for (Session* session in [self.sessionsDictionary allValues])
     {
         ret += [session.unreadMessageArray count];
+    }
+    return ret;
+}
+
+- (NSString* )getSystemMessage:(HOPMessageRecord *)messageRecord
+{
+    NSString* ret = nil;
+    HOPCallSystemMessage* callSystemMessage = [HOPCallSystemMessage callSystemMessageFromJSON:messageRecord.text];
+    
+    switch (callSystemMessage.messageType) {
+        case HOPCallSystemMessageTypeCallPlaced:
+            ret = [NSString stringWithFormat:@"Call started: %@", [Utility getLocalDateFromUTCdate:messageRecord.date]];
+            break;
+        case HOPCallSystemMessageTypeCallHungup:
+            ret = [NSString stringWithFormat:@"%@: %@", [Utility stringForEndingCallReason:callSystemMessage.errorCode],[Utility getLocalDateFromUTCdate:messageRecord.date]];
+            break;
+        default:
+            break;
+    }
+    
+    return ret;
+}
+
+- (NSString*) getLastTextMessageForSessionID:(NSString*) sessionID
+{
+    NSString* ret = nil;
+    HOPMessageRecord* messageRecord = [[HOPModelManager sharedModelManager] getLastMessageRecordForSessionID:sessionID];
+    if (messageRecord)
+    {
+        if (![messageRecord.type isEqualToString:[HOPSystemMessage getMessageType]])
+            ret = messageRecord.text;
+        else
+        {
+            ret = [self getSystemMessage:messageRecord];
+        }
     }
     return ret;
 }

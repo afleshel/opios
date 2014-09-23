@@ -57,4 +57,6 @@
 + (BOOL) isAppUpdated;
 + (void) showLocalNotification:(NSString*) messageText additionalData:(NSDictionary*) additionalData;
 + (BOOL) isRuningForTheFirstTime;
++ (NSString *)getLocalDateFromUTCdate:(NSDate *)utcDate;
++ (NSString*) stringForEndingCallReason:(int) endingCallReason;
 @end

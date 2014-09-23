@@ -95,6 +95,8 @@
   //OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread <%@> contact <%@> state: %@",conversationThread, contact,[HOPConversationThread stringForContactConnectionState:contactState]);
   dispatch_async(dispatch_get_main_queue(), ^
                  {
+                     NSDictionary* dict = @{@"thread":conversationThread, @"contact":contact};
+                     [[NSNotificationCenter defaultCenter] postNotificationName:notificationComposingStatusChanged object:dict];
                  });
 }
 
@@ -114,6 +116,8 @@
 - (void) onConversationThreadMessageDeliveryStateChanged:(HOPConversationThread*) conversationThread messageID:(NSString*) messageID messageDeliveryStates:(HOPConversationThreadMessageDeliveryState) messageDeliveryStates
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Conversation thread %@ message with id %@ delivery state has changed to: %@",[conversationThread getThreadId],messageID, [HOPConversationThread stringForMessageDeliveryState:messageDeliveryStates]);
+    
+    [[HOPModelManager sharedModelManager] updateMessageStatusVisibilityForSession:[[HOPModelManager sharedModelManager] getSessionRecordForConversationThread:conversationThread] lastDeliveryState:messageDeliveryStates];
 }
 
 - (void) onConversationThreadPushMessage:(HOPConversationThread*) conversationThread messageID:(NSString*) messageID contact:(HOPContact*) coreContact

@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2012, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -61,7 +61,7 @@
  Returns list of all active conversation threads.
  @return List of HOPConversationThread objects
  */
-+ (NSArray*) getConversationThreadsForAccount;
++ (NSArray*) getActiveConversationThreads;
 
 /**
  Returns a conversation thread object for specific thread ID
@@ -75,7 +75,7 @@
  @param state Message delivery state to convert to string
  @return A string representation of message delivery state
  */
-+ (NSString*) deliveryStateToString: (HOPConversationThreadMessageDeliveryState) state __attribute__((deprecated("use method stringForMessageDeliveryState instead")));
+//+ (NSString*) deliveryStateToString: (HOPConversationThreadMessageDeliveryState) state __attribute__((deprecated("use method stringForMessageDeliveryState instead")));
 /**
  Returns a string representation of the message delivery state.
  @param state Message delivery state to convert to string
@@ -83,12 +83,13 @@
  */
 + (NSString*) stringForMessageDeliveryState:(HOPConversationThreadMessageDeliveryState) state;
 
+
 /**
  Returns a  string representation of the contact state. Deprecated.
  @param state Contact state to convert to string
  @returns A string representation of contact state
  */
-+ (NSString*) stateToString: (HOPConversationThreadContactConnectionState) state __attribute__((deprecated("use method stringForContactConnectionState instead")));
+//+ (NSString*) stateToString: (HOPConversationThreadContactConnectionState) state __attribute__((deprecated("use method stringForContactConnectionState instead")));
 /**
  Returns a  string representation of the contact state.
  @param state Contact state to convert to string
@@ -122,6 +123,18 @@
 - (NSArray*) getContacts;
 
 /**
+ Adds array of contacts to the conversation thread.
+ @param contacts  Array of HOPContact objects to be added to the conversation thread
+ */
+- (void) addContacts: (NSArray*) contacts;
+
+/**
+ Removes an array of contacts from the conversation thread.
+ @param contacts Array of HOPContact objects to be removed from the conversation thread
+ */
+- (void) removeContacts: (NSArray*) contacts;
+
+/**
  Returns list of HOPIdentity objects for associated with HOPContact object.
  @param coAn array for HOPIdentity objects
  */
@@ -135,16 +148,28 @@
 - (HOPConversationThreadContactConnectionState) getContactConnectionState: (HOPContact*) contact;
 
 /**
- Adds array of contacts to the conversation thread.
- @param contacts  Array of HOPContact objects to be added to the conversation thread
+ *  Creates an empty JSON status blob ready to fill with additional structure data. Use "ComposingStatus" to insert composing status information into this JSON blob.
+ *
+ *  @return empty JSON status string
  */
-- (void) addContacts: (NSArray*) contacts;
+- (NSString*) createEmptyStatus;
 
 /**
- Removes an array of contacts from the conversation thread.
- @param contacts Array of HOPContact objects to be removed from the conversation thread
+ *  Get the status of a contact in the conversation thread.
+ *
+ *  @param contact Contact in the conversation thread
+ *
+ *  @return Contact status 
  */
-- (void) removeContacts: (NSArray*) contacts;
+- (HOPConversationThreadContactStatus) getContactStatus:(HOPContact*) contact;
+
+
+/**
+ *  Set the status of yourself in the conversation thread.
+ *
+ *  @param status         Contact status
+ */
+- (void) setStatusInThread:(HOPConversationThreadContactStatus) status;
 
 /**
  Sends message to all contacts in the conversation thread. Deprecated.
@@ -152,7 +177,7 @@
  @param messageType Message type
  @param message Message
  */
-- (void) sendMessage: (NSString*) messageID messageType:(NSString*) messageType message:(NSString*) message DEPRECATED_ATTRIBUTE;
+//- (void) sendMessage: (NSString*) messageID messageType:(NSString*) messageType message:(NSString*) message DEPRECATED_ATTRIBUTE;
 
 /**
  Sends message to all contacts in the conversation thread.
@@ -168,7 +193,7 @@
  @param outMessage NSString Received message
  @param outTime NSDate Received message timestamp
  */
-- (BOOL) getMessage: (NSString*) messageID outFrom:(HOPContact**) outFrom outMessageType:(NSString**) outMessageType outMessage:(NSString**) outMessage outTime:(NSDate**) outTime DEPRECATED_ATTRIBUTE;
+//- (BOOL) getMessage: (NSString*) messageID outFrom:(HOPContact**) outFrom outMessageType:(NSString**) outMessageType outMessage:(NSString**) outMessage outTime:(NSDate**) outTime DEPRECATED_ATTRIBUTE;
 
 /**
  Returns message for specified message ID.
@@ -185,6 +210,13 @@
  */
 - (BOOL) getMessageDeliveryState: (NSString*) messageID outDeliveryState:(HOPConversationThreadMessageDeliveryState*) outDeliveryState;
 
+/**
+ *  Mark all received messages thus far as read
+ */
+- (void) markAllMessagesRead;
+
++ (NSString*) createSystemMessage:(HOPSystemMessageType) systemMessageType messageType:(int) systemMessageType contact:(HOPContact*) contact;
++ (NSString*) getSystemMessageType;
 /**
   Destroys conversation thread core object.
  */
