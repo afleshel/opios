@@ -31,7 +31,7 @@
 
 #import "ActiveSessionTableViewCell.h"
 #import "UIBadgeView.h"
-#import <OpenPeerSDK/HOPSessionRecord.h>
+#import <OpenPeerSDK/HOPConversationRecord.h>
 #import <OpenPeerSDK/HOPMessageRecord.h>
 #import <OpenPeerSDK/HOPPublicPeerFile.h>
 #import <OpenPeerSDK/HOPModelManager.h>
@@ -55,7 +55,7 @@
 @property (nonatomic, weak) IBOutlet UILabel *labelLastMessage;
 @property (nonatomic, weak) IBOutlet UIView *messageView;
 
-@property (nonatomic, weak) HOPSessionRecord* sessionRecord;
+@property (nonatomic, weak) HOPConversationRecord* sessionRecord;
 
 @end
 @implementation ActiveSessionTableViewCell
@@ -83,7 +83,7 @@
     self.labelLastMessage.hidden = [self.labelLastMessage.text length] == 0;
 }
 
-- (void) setSession:(HOPSessionRecord *)inSessionRecord
+- (void) setSession:(HOPConversationRecord *)inSessionRecord
 {
     self.sessionRecord = inSessionRecord;
     self.displayName.text = self.sessionRecord.name;

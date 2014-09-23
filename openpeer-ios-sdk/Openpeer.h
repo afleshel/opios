@@ -64,5 +64,5 @@
 #import "HOPImage.h"
 #import "HOPAssociatedIdentity.h"
 #import "HOPCacheData.h"
-#import "HOPSessionRecord+External.h"
+#import "HOPConversationRecord+External.h"
 

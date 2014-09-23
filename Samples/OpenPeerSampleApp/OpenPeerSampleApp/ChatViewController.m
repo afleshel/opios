@@ -38,7 +38,7 @@
 #import "ChatMessageCell.h"
 #import <OpenPeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPMessageRecord.h>
-#import <OpenPeerSDK/HOPSessionRecord.h>
+#import <OpenPeerSDK/HOPConversationRecord.h>
 #import <OpenPeerSDK/HOPConversationThread.h>
 #import <OpenPeerSDK/HOPCallSystemMessage.h>
 #import <OpenPeerSDK/HOPContact.h>
@@ -305,7 +305,7 @@
         NSIndexPath *swipedIndexPath = [self.chatTableView indexPathForRowAtPoint:location];
         ChatMessageCell *swipedCell  = (ChatMessageCell*)[self.chatTableView cellForRowAtIndexPath:swipedIndexPath];
         
-        if (![swipedCell.message.type isEqualToString:[HOPSystemMessage getMessageType]] && !swipedCell.message.sender && !swipedCell.message.deleted.boolValue && swipedCell.message.messageStatus.intValue == HOPConversationThreadMessageDeliveryStateUserNotAvailable)
+        if (![swipedCell.message.type isEqualToString:[HOPSystemMessage getMessageType]] && !swipedCell.message.sender && !swipedCell.message.deleted.boolValue && swipedCell.message.outgoingMessageStatus.intValue == HOPConversationThreadMessageDeliveryStateUserNotAvailable)
         {
             [[MessageManager sharedMessageManager] resendMessage:swipedCell.message forSession:self.session];
             

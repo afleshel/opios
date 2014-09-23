@@ -551,7 +551,7 @@ didCompleteWithError:(NSError *)error
             HOPMessageRecord* messageRecord = [[HOPModelManager sharedModelManager] getMessageRecordByID:messageID];
             if (messageRecord)
             {
-                messageRecord.messageStatus = [NSNumber numberWithInt:HOPConversationThreadMessageDeliveryStateSent];
+                messageRecord.outgoingMessageStatus = [NSNumber numberWithInt:HOPConversationThreadMessageDeliveryStateSent];
                 [[HOPModelManager sharedModelManager] updateMessageStatusVisibilityForSession:messageRecord.session lastDeliveryState:HOPConversationThreadMessageDeliveryStateSent];
 
                 [[HOPModelManager sharedModelManager] saveContext];

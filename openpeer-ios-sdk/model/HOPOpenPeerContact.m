@@ -33,7 +33,7 @@
 #import "HOPAPNSData.h"
 #import "HOPIdentityContact.h"
 #import "HOPPublicPeerFile.h"
-#import "HOPSessionRecord.h"
+#import "HOPConversationRecord.h"
 
 
 @implementation HOPOpenPeerContact

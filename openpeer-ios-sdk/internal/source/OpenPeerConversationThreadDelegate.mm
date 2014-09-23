@@ -106,7 +106,7 @@ void OpenPeerConversationThreadDelegate::onConversationThreadMessageDeliveryStat
     if (hopConversationThread && [messageId length] > 0)
     {
         HOPMessageRecord* messageRecord = [[HOPModelManager sharedModelManager] getMessageRecordByID:messageId];
-        messageRecord.messageStatus = [NSNumber numberWithInt:state];
+        messageRecord.outgoingMessageStatus = [NSNumber numberWithInt:state];
         messageRecord.showStatus = [NSNumber numberWithBool:YES];
         [[HOPModelManager sharedModelManager] saveContext];
         

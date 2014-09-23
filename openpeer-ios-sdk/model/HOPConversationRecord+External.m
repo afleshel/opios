@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2014, Hookflash Inc.
+ Copyright (c) 2014, SMB Phone Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,23 +29,37 @@
  
  */
 
-#import "HOPSessionRecord.h"
-#import "HOPConversationThreadRecord.h"
-#import "HOPMessageRecord.h"
-#import "HOPOpenPeerAccount.h"
-#import "HOPOpenPeerContact.h"
+#import "HOPConversationRecord+External.h"
+#import "HOPUtility.h"
+//
+//@interface HOPConversationRecord ()
+//
+//@property (nonatomic) NSString *primitiveSectionIdentifier;
+//
+//@end
 
+@implementation HOPConversationRecord (External)
 
-@implementation HOPSessionRecord
+- (NSString *)sectionIdentifier
+{
+    return [HOPUtility getTimeSectionForDate:self.lastActivity];
+    /*
+//    [self willAccessValueForKey:@"sectionIdentifier"];
+    NSString *ret = nil;//[self primitiveSectionIdentifier];
+//    [self didAccessValueForKey:@"sectionIdentifier"];
+    
+//    if (!ret)
+    {
 
-@dynamic creationTime;
-@dynamic lastActivity;
-@dynamic name;
-@dynamic sessionID;
-@dynamic type;
-@dynamic conversationThreadRecords;
-@dynamic homeUser;
-@dynamic messages;
-@dynamic participants;
+        NSCalendar *calendar = [NSCalendar currentCalendar];
+        
+        NSDateComponents *components = [calendar components:(NSYearCalendarUnit | NSMonthCalendarUnit) fromDate:[self lastActivity]];
+        ret = [NSString stringWithFormat:@"%d", ([components year] * 1000) + [components month]];
+        //self.primitiveSectionIdentifier = ret;
+    }
+    //return tmp;
+    return ret;*/
+}
+
 
 @end

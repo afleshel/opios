@@ -32,7 +32,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class HOPAssociatedIdentity, HOPSessionRecord;
+@class HOPAssociatedIdentity, HOPConversationRecord;
 
 @interface HOPOpenPeerAccount : NSManagedObject
 
@@ -50,8 +50,8 @@
 - (void)addAssociatedIdentities:(NSSet *)values;
 - (void)removeAssociatedIdentities:(NSSet *)values;
 
-- (void)addSessionRecordsObject:(HOPSessionRecord *)value;
-- (void)removeSessionRecordsObject:(HOPSessionRecord *)value;
+- (void)addSessionRecordsObject:(HOPConversationRecord *)value;
+- (void)removeSessionRecordsObject:(HOPConversationRecord *)value;
 - (void)addSessionRecords:(NSSet *)values;
 - (void)removeSessionRecords:(NSSet *)values;
 

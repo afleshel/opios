@@ -30,7 +30,7 @@
  */
 
 #import "HOPConversationThreadRecord.h"
-#import "HOPSessionRecord.h"
+#import "HOPConversationRecord.h"
 
 
 @implementation HOPConversationThreadRecord

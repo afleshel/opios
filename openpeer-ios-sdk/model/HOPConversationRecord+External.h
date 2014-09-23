@@ -29,37 +29,9 @@
  
  */
 
-#import "HOPSessionRecord+External.h"
-#import "HOPUtility.h"
-//
-//@interface HOPSessionRecord ()
-//
-//@property (nonatomic) NSString *primitiveSectionIdentifier;
-//
-//@end
+#import "HOPConversationRecord.h"
 
-@implementation HOPSessionRecord (External)
+@interface HOPConversationRecord (External)
 
-- (NSString *)sectionIdentifier
-{
-    return [HOPUtility getTimeSectionForDate:self.lastActivity];
-    /*
-//    [self willAccessValueForKey:@"sectionIdentifier"];
-    NSString *ret = nil;//[self primitiveSectionIdentifier];
-//    [self didAccessValueForKey:@"sectionIdentifier"];
-    
-//    if (!ret)
-    {
-
-        NSCalendar *calendar = [NSCalendar currentCalendar];
-        
-        NSDateComponents *components = [calendar components:(NSYearCalendarUnit | NSMonthCalendarUnit) fromDate:[self lastActivity]];
-        ret = [NSString stringWithFormat:@"%d", ([components year] * 1000) + [components month]];
-        //self.primitiveSectionIdentifier = ret;
-    }
-    //return tmp;
-    return ret;*/
-}
-
-
+- (NSString *)sectionIdentifier;
 @end

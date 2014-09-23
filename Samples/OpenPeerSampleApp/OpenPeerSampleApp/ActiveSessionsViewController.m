@@ -30,7 +30,7 @@
  */
 
 #import "ActiveSessionsViewController.h"
-#import <OpenPeerSDK/HOPSessionRecord+External.h>
+#import <OpenPeerSDK/HOPConversationRecord+External.h>
 #import <OpenPeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPPublicPeerFile.h>
 #import <OpenPeerSDK/HOPOpenPeerAccount.h>
@@ -148,7 +148,7 @@
     cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"tableViewCell.png"] stretchableImageWithLeftCapWidth:0.0 topCapHeight:5.0]];
     cell.selectedBackgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"tableViewCell_selected.png"] stretchableImageWithLeftCapWidth:0.0 topCapHeight:5.0]];
     
-    HOPSessionRecord* record = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    HOPConversationRecord* record = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
     if (record)
         [cell setSession:record];
@@ -210,7 +210,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    HOPSessionRecord* record = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    HOPConversationRecord* record = [self.fetchedResultsController objectAtIndexPath:indexPath];
     if (record)
     {
         Session* session = [[SessionManager sharedSessionManager] getSessionForSessionRecord:record];
@@ -277,7 +277,7 @@
     [NSFetchedResultsController deleteCacheWithName:@"SessionRecord"];
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPSessionRecord" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPConversationRecord" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];
     
     [fetchRequest setEntity:entity];
     

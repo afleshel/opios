@@ -35,13 +35,13 @@
 @class HOPCall;
 @class HOPConversationThread;
 @class HOPRolodexContact;
-@class HOPSessionRecord;
+@class HOPConversationRecord;
 
 @interface Session : NSObject
 
 @property (strong) NSMutableArray* participantsArray;
 @property (weak, nonatomic) HOPConversationThread* conversationThread;
-@property (weak, nonatomic) HOPSessionRecord* sessionRecord;
+@property (weak, nonatomic) HOPConversationRecord* sessionRecord;
 @property (strong) HOPCall* currentCall;
 @property (assign) BOOL isRedial;
 @property (strong) NSMutableArray* messageArray;

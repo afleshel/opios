@@ -37,7 +37,7 @@
 @class HOPMessage;
 @class HOPContact;
 @class HOPRolodexContact;
-@class HOPSessionRecord;
+@class HOPConversationRecord;
 @class HOPMessageRecord;
 
 @interface SessionManager : NSObject
@@ -55,7 +55,7 @@
 - (Session*) proceedWithExistingSessionForContact:(HOPContact*) contact newConversationThread:(HOPConversationThread*) inConversationThread;
 - (Session*) getSessionForContact:(HOPRolodexContact*) contact;
 - (Session*) getSessionForSessionId:(NSString*) sessionId;
-- (Session*) getSessionForSessionRecord:(HOPSessionRecord*) sessionRecord;
+- (Session*) getSessionForSessionRecord:(HOPConversationRecord*) sessionRecord;
 
 - (void)setValidSession:(Session *)inSession newSessionId:(NSString *)newSessionId oldSessionId:(NSString *)oldSessionId;
 

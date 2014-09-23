@@ -45,7 +45,7 @@
 @class HOPPublicPeerFile;
 @class HOPOpenPeerAccount;
 @class HOPAvatar;
-@class HOPSessionRecord;
+@class HOPConversationRecord;
 @class HOPMessageRecord;
 @class HOPConversationThreadRecord;
 @class HOPConversationThread;
@@ -266,14 +266,14 @@
 - (void) removeCookieForPath:(NSString*) path;
 
 /**
- Creates a HOPSessionRecord object.
+ Creates a HOPConversationRecord object.
  @param sessionID Session ID
  @param type Session type
  @param date Time of creation
  @param name Session name
- @return HOPSessionRecord*  object
+ @return HOPConversationRecord*  object
  */
-- (HOPSessionRecord*) addSession:(NSString*) sessionID type:(NSString*) type date:(NSDate*) date name:(NSString*) name participants:(NSArray*) participants;
+- (HOPConversationRecord*) addSession:(NSString*) sessionID type:(NSString*) type date:(NSDate*) date name:(NSString*) name participants:(NSArray*) participants;
 
 /**
  Creates a HOPMessageRecord object.
@@ -306,23 +306,23 @@
 
 - (NSString*) getPeerURIForHomeUser;
 
-- (HOPSessionRecord *) getSessionRecordByID:(NSString*) sessionID;
+- (HOPConversationRecord *) getSessionRecordByID:(NSString*) sessionID;
 
 - (HOPMessageRecord *) getMessageRecordByID:(NSString*) messageID;
 
-- (HOPSessionRecord*) getSessionRecordForConversationThread:(HOPConversationThread*) conversationThread;
+- (HOPConversationRecord*) getSessionRecordForConversationThread:(HOPConversationThread*) conversationThread;
 - (HOPConversationThreadRecord*) getConversationThreadRecordForThreadID:(NSString*) threadID;
 - (NSArray*) getSessionRecordsForThreadID:(NSString*) threadID;
-- (HOPConversationThreadRecord*) createRecordForConversationThread:(HOPConversationThread*) conversationThread sessionRecord:(HOPSessionRecord*) sessionRecord;
+- (HOPConversationThreadRecord*) createRecordForConversationThread:(HOPConversationThread*) conversationThread sessionRecord:(HOPConversationRecord*) sessionRecord;
 
-- (HOPSessionRecord*) createSessionRecordForConversationThread:(HOPConversationThread*) conversationThread type:(NSString*) type date:(NSDate*) date name:(NSString*) name participants:(NSArray*) participants;
+- (HOPConversationRecord*) createSessionRecordForConversationThread:(HOPConversationThread*) conversationThread type:(NSString*) type date:(NSDate*) date name:(NSString*) name participants:(NSArray*) participants;
 
 - (NSFetchRequest*) getMessagesFetchRequestForSessionID:(NSString*) sessionID sortAscending:(BOOL) ascending;
 - (HOPMessageRecord *) getLastMessageRecordForSessionID:(NSString*) sessionID;
 
 - (void) replaceMessageWithID:(NSString*) replacesMessageID newMessageID:(NSString*) newMessageID messageText:(NSString*) messageText;
 
-- (void) updateMessageStatusVisibilityForSession:(HOPSessionRecord*) sessionRecord lastDeliveryState:(HOPConversationThreadMessageDeliveryState) messageDeliveryState;
+- (void) updateMessageStatusVisibilityForSession:(HOPConversationRecord*) sessionRecord lastDeliveryState:(HOPConversationThreadMessageDeliveryState) messageDeliveryState;
 
 - (HOPOpenPeerContact*) getOpenPeerContactForPeerURI:(NSString*) peerURI;
 - (HOPOpenPeerContact*) getOpenPeerContactForStableID:(NSString*) stableID;

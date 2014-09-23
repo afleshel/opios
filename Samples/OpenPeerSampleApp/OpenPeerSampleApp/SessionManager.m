@@ -53,7 +53,7 @@
 #import <OpenpeerSDK/HOPOpenPeerContact.h>
 #import <OpenpeerSDK/HOPOpenPeerAccount+External.h>
 #import <OpenpeerSDK/HOPRolodexContact+External.h>
-#import <OpenpeerSDK/HOPSessionRecord.h>
+#import <OpenpeerSDK/HOPConversationRecord.h>
 #import <OpenpeerSDK/HOPMessageRecord.h>
 #import <OpenpeerSDK/HOPSystemMessage.h>
 #import <OpenpeerSDK/HOPCallSystemMessage.h>
@@ -329,7 +329,7 @@
         
         [[HOPModelManager sharedModelManager] createSessionRecordForConversationThread:inConversationThread type:nil date:nil name:nil participants:contactAaray];
          
-//        HOPSessionRecord* sessionRecord = [[HOPModelManager sharedModelManager] getSessionRecordByID:oldSessionId];
+//        HOPConversationRecord* sessionRecord = [[HOPModelManager sharedModelManager] getSessionRecordByID:oldSessionId];
 //        sessionRecord.sessionID = newSessionId;
         [[HOPModelManager sharedModelManager] saveContext];
         [self setValidSession:ret newSessionId:newSessionId oldSessionId:oldSessionId];
@@ -356,7 +356,7 @@
     return [self.sessionsDictionary objectForKey:sessionId];
 }
 
-- (Session*) getSessionForSessionRecord:(HOPSessionRecord*) sessionRecord
+- (Session*) getSessionForSessionRecord:(HOPConversationRecord*) sessionRecord
 {
     for (Session* session in [self.sessionsDictionary allValues])
     {

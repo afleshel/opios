@@ -29,17 +29,15 @@
  
  */
 
-#import "HOPOpenPeerAccount.h"
-#import "HOPAssociatedIdentity.h"
-#import "HOPConversationRecord.h"
+#import "HOPMessageEvent.h"
+#import "HOPMessageRecord.h"
 
 
-@implementation HOPOpenPeerAccount
+@implementation HOPMessageEvent
 
-@dynamic loggedIn;
-@dynamic reloginInfo;
-@dynamic stableId;
-@dynamic associatedIdentities;
-@dynamic sessionRecords;
+@dynamic event;
+@dynamic originalMessageText;
+@dynamic originalOutgoingStatus;
+@dynamic message;
 
 @end

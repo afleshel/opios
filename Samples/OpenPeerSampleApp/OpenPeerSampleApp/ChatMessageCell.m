@@ -414,11 +414,11 @@
             
             //Show delivery
             UILabel *labelStatus = nil;
-             if(isHomeUserSender && self.message.showStatus.boolValue && message.messageStatus.intValue >= HOPConversationThreadMessageDeliveryStateSent)
+             if(isHomeUserSender && self.message.showStatus.boolValue && message.outgoingMessageStatus.intValue >= HOPConversationThreadMessageDeliveryStateSent)
              {
-                NSString* statusString = [HOPConversationThread stringForMessageDeliveryState:(HOPConversationThreadMessageDeliveryState)self.message.messageStatus.intValue];
+                NSString* statusString = [HOPConversationThread stringForMessageDeliveryState:(HOPConversationThreadMessageDeliveryState)self.message.outgoingMessageStatus.intValue];
                  
-                 if ((HOPConversationThreadMessageDeliveryState)self.message.messageStatus.intValue == HOPConversationThreadMessageDeliveryStateUserNotAvailable)
+                 if ((HOPConversationThreadMessageDeliveryState)self.message.outgoingMessageStatus.intValue == HOPConversationThreadMessageDeliveryStateUserNotAvailable)
                      statusString = @"Send failed, try again by tapping this message";
                  
                 CGSize statusLabelSize = [statusString sizeWithAttributes:@{NSFontAttributeName:self.chatNameFont}];
