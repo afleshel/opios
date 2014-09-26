@@ -61,9 +61,9 @@
             
             if ([participants count] > 0)
             {
-                HOPContact* participant = [participants objectAtIndex:0];
+                //HOPContact* participant = [participants objectAtIndex:0];
                 
-                if (![[SessionManager sharedSessionManager] proceedWithExistingSessionForContact:participant newConversationThread:conversationThread])
+                if (![[SessionManager sharedSessionManager] proceedWithExistingSessionForContacts:participants newConversationThread:conversationThread])
                 {
                     [[SessionManager sharedSessionManager] createSessionForConversationThread: conversationThread];
                 }

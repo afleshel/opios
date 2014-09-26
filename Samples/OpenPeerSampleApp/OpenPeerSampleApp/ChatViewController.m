@@ -560,7 +560,7 @@
         self.messageTextbox.text = nil;
         self.isComposing = NO;
         self.messageToEdit = nil;
-        [self refreshViewWithData];
+        //[self refreshViewWithData];
     }
 }
 

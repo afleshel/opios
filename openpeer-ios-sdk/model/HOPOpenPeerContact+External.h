@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,18 +29,14 @@
  
  */
 
-#import <UIKit/UIKit.h>
-#import <CoreData/CoreData.h>
+#import <HOPOpenPeerContact.h>
 
-@class ContactTableViewCell;
+@class HOPContact;
+@class HOPRolodexContact;
 
-@interface ContactsViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, UISearchBarDelegate, NSFetchedResultsControllerDelegate>
+@interface HOPOpenPeerContact(External)
 
-@property (nonatomic, weak) IBOutlet ContactTableViewCell *contactsTableViewCell;
-@property (nonatomic) BOOL isInFavoritesMode;
-@property (nonatomic) BOOL isMultipleSelectionAvailable;
+- (HOPContact*) getCoreContact;
+- (HOPRolodexContact*) getDefaultRolodexContact;
 
-- (id) initInFavoritesMode:(BOOL) favoritesMode allowMultipleSelection:(BOOL) inAllowMultipleSelection;
-- (void) onContactsLoaded;
-- (NSArray*) getSelectedContacts;
 @end

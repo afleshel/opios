@@ -50,7 +50,7 @@
 		<key>0B40C9B29DF85F9B95148220FB66992E0A100260</key>
 		<string>../libs/op/libs/ortc-lib/libs/zsLib</string>
 		<key>1472412A1A40EF795F29C7EBF79DE9C343137C4D</key>
-		<string>../libs/op/libs/ortc-lib/libs/curl/</string>
+		<string>../libs/op/libs/ortc-lib/libs/curl</string>
 		<key>18AB54218AD2700398D41F4F5AB153CB20A8408E</key>
 		<string>../libs/op/libs/ortc-lib</string>
 		<key>1AEC100C3FDF695507EBDA56D8B5EEF14E9435F6</key>
@@ -62,7 +62,7 @@
 		<key>34BB9410AB3451CFDD217E17A826EDEFF7A2B703</key>
 		<string>../libs/op/libs/ortc-lib/libs/cryptopp</string>
 		<key>4DBBCC138A9C200705DA48043A17901C34549C6B</key>
-		<string>../libs/op/</string>
+		<string>../libs/op</string>
 		<key>6A3B4D2909F28DB31AD1B89DCEECA4FB6C94CC46</key>
 		<string>../libs/op/libs/ortc-lib/libs/webrtc/third_party/libyuv</string>
 		<key>8FFACF9194D48576A22F6F0C4F6B4F0BA1ABFC64</key>

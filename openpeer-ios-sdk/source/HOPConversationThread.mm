@@ -177,6 +177,9 @@ using namespace openpeer::core;
             IContactPtr contactPtr = *contact;
             if (!contactPtr->isSelf())
             {
+                HOPOpenPeerContact* openPeerContact = [[HOPModelManager sharedModelManager] getOpenPeerContactForPeerURI:[NSString stringWithUTF8String:contactPtr->getPeerURI()]];
+                
+                //TODO_S: Remove once HOPMEssage is switched to HOPOpenPeerContact
                 HOPContact* tempContact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:[NSString stringWithUTF8String:contactPtr->getPeerURI()]];
                 if (!tempContact)
                 {
@@ -193,8 +196,8 @@ using namespace openpeer::core;
                     }
                 }
                 
-                if (tempContact)
-                    [contactArray addObject:tempContact];
+                if (openPeerContact)
+                    [contactArray addObject:openPeerContact];
             }
         }
     }

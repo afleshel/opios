@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,18 +29,36 @@
  
  */
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class ContactTableViewCell;
+@class HOPConversationRecord, HOPMessageEvent, HOPOpenPeerContact;
 
-@interface ContactsViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, UISearchBarDelegate, NSFetchedResultsControllerDelegate>
+@interface HOPMessageRecord : NSManagedObject
 
-@property (nonatomic, weak) IBOutlet ContactTableViewCell *contactsTableViewCell;
-@property (nonatomic) BOOL isInFavoritesMode;
-@property (nonatomic) BOOL isMultipleSelectionAvailable;
+@property (nonatomic, retain) NSDate * date;
+@property (nonatomic, retain) NSNumber * deleted;
+@property (nonatomic, retain) NSNumber * edited;
+@property (nonatomic, retain) NSData * image;
+@property (nonatomic, retain) NSString * messageID;
+@property (nonatomic, retain) NSNumber * showStatus;
+@property (nonatomic, retain) NSString * text;
+@property (nonatomic, retain) NSString * type;
+@property (nonatomic, retain) NSNumber * visible;
+@property (nonatomic, retain) NSNumber * incomingMessageStatus;
+@property (nonatomic, retain) NSNumber * outgoingMessageStatus;
+@property (nonatomic, retain) NSNumber * read;
+@property (nonatomic, retain) HOPOpenPeerContact *sender;
+@property (nonatomic, retain) HOPConversationRecord *session;
+@property (nonatomic, retain) NSSet *messageEvent;
+@property (nonatomic, retain) NSManagedObject *conversationEvent;
+@end
 
-- (id) initInFavoritesMode:(BOOL) favoritesMode allowMultipleSelection:(BOOL) inAllowMultipleSelection;
-- (void) onContactsLoaded;
-- (NSArray*) getSelectedContacts;
+@interface HOPMessageRecord (CoreDataGeneratedAccessors)
+
+- (void)addMessageEventObject:(HOPMessageEvent *)value;
+- (void)removeMessageEventObject:(HOPMessageEvent *)value;
+- (void)addMessageEvent:(NSSet *)values;
+- (void)removeMessageEvent:(NSSet *)values;
+
 @end

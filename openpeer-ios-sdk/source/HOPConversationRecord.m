@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,18 +29,24 @@
  
  */
 
-#import <UIKit/UIKit.h>
-#import <CoreData/CoreData.h>
+#import "HOPConversationRecord.h"
+#import "HOPConversationThreadRecord.h"
+#import "HOPMessageRecord.h"
+#import "HOPOpenPeerAccount.h"
+#import "HOPOpenPeerContact.h"
 
-@class ContactTableViewCell;
 
-@interface ContactsViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, UISearchBarDelegate, NSFetchedResultsControllerDelegate>
+@implementation HOPConversationRecord
 
-@property (nonatomic, weak) IBOutlet ContactTableViewCell *contactsTableViewCell;
-@property (nonatomic) BOOL isInFavoritesMode;
-@property (nonatomic) BOOL isMultipleSelectionAvailable;
+@dynamic creationTime;
+@dynamic lastActivity;
+@dynamic name;
+@dynamic sessionID;
+@dynamic type;
+@dynamic conversationThreadRecords;
+@dynamic homeUser;
+@dynamic messages;
+@dynamic participants;
+@dynamic events;
 
-- (id) initInFavoritesMode:(BOOL) favoritesMode allowMultipleSelection:(BOOL) inAllowMultipleSelection;
-- (void) onContactsLoaded;
-- (NSArray*) getSelectedContacts;
 @end

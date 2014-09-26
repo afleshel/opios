@@ -39,7 +39,7 @@
 #import <OpenPeerSDK/HOPAvatar.h>
 #import <OpenPeerSDK/HOPSystemMessage.h>
 #import <OpenPeerSDK/HOPCallSystemMessage.h>
-
+#import <OpenPeerSDK/HOPOpenPeerContact.h>
 #import "ImageManager.h"
 #import "Session.h"
 #import "SessionManager.h"
@@ -88,9 +88,9 @@
     self.sessionRecord = inSessionRecord;
     self.displayName.text = self.sessionRecord.name;
     
-    HOPPublicPeerFile* publicPeerFile = [[self.sessionRecord.participants allObjects] objectAtIndex:0];
+    HOPOpenPeerContact* contact = [[self.sessionRecord.participants allObjects] objectAtIndex:0];
     
-    HOPRolodexContact* participant = [[[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:publicPeerFile.peerURI] objectAtIndex:0];
+    HOPRolodexContact* participant = [[[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:contact.publicPeerFile.peerURI] objectAtIndex:0];
     
     UIImage* img = [[ImageManager sharedImageManager] getAvatarImageForRolodexContact:participant];
     if (img)

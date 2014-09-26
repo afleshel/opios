@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,18 +29,36 @@
  
  */
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class ContactTableViewCell;
+@class HOPAPNSData, HOPConversationRecord, HOPIdentityContact, HOPPublicPeerFile;
 
-@interface ContactsViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, UISearchBarDelegate, NSFetchedResultsControllerDelegate>
+@interface HOPOpenPeerContact : NSManagedObject
 
-@property (nonatomic, weak) IBOutlet ContactTableViewCell *contactsTableViewCell;
-@property (nonatomic) BOOL isInFavoritesMode;
-@property (nonatomic) BOOL isMultipleSelectionAvailable;
+@property (nonatomic, retain) NSString * stableID;
+@property (nonatomic, retain) HOPAPNSData *apnsData;
+@property (nonatomic, retain) NSSet *identityContacts;
+@property (nonatomic, retain) HOPPublicPeerFile *publicPeerFile;
+@property (nonatomic, retain) NSSet *sessionRecords;
+@property (nonatomic, retain) NSSet *sessionEvents;
+@end
 
-- (id) initInFavoritesMode:(BOOL) favoritesMode allowMultipleSelection:(BOOL) inAllowMultipleSelection;
-- (void) onContactsLoaded;
-- (NSArray*) getSelectedContacts;
+@interface HOPOpenPeerContact (CoreDataGeneratedAccessors)
+
+- (void)addIdentityContactsObject:(HOPIdentityContact *)value;
+- (void)removeIdentityContactsObject:(HOPIdentityContact *)value;
+- (void)addIdentityContacts:(NSSet *)values;
+- (void)removeIdentityContacts:(NSSet *)values;
+
+- (void)addSessionRecordsObject:(HOPConversationRecord *)value;
+- (void)removeSessionRecordsObject:(HOPConversationRecord *)value;
+- (void)addSessionRecords:(NSSet *)values;
+- (void)removeSessionRecords:(NSSet *)values;
+
+- (void)addSessionEventsObject:(NSManagedObject *)value;
+- (void)removeSessionEventsObject:(NSManagedObject *)value;
+- (void)addSessionEvents:(NSSet *)values;
+- (void)removeSessionEvents:(NSSet *)values;
+
 @end

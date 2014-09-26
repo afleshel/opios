@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,18 +29,37 @@
  
  */
 
-#import <UIKit/UIKit.h>
-#import <CoreData/CoreData.h>
+#import "HOPOpenPeerContact+External.h"
+#import "HOPContact.h"
+#import "OpenPeerStorageManager.h"
+#import "HOPPublicPeerFile.h"
+#import "HOPIdentityContact.h"
+#import "HOPRolodexContact.h"
 
-@class ContactTableViewCell;
+@implementation HOPOpenPeerContact (External)
 
-@interface ContactsViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, UISearchBarDelegate, NSFetchedResultsControllerDelegate>
+- (HOPContact*) getCoreContact
+{
+    HOPContact* ret = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:self.publicPeerFile.peerURI];
+    if (!ret)
+    {
+        ret = [[HOPContact alloc] initWithPeerFile:self.publicPeerFile.peerFile];
+    }
+    return ret;
+}
 
-@property (nonatomic, weak) IBOutlet ContactTableViewCell *contactsTableViewCell;
-@property (nonatomic) BOOL isInFavoritesMode;
-@property (nonatomic) BOOL isMultipleSelectionAvailable;
-
-- (id) initInFavoritesMode:(BOOL) favoritesMode allowMultipleSelection:(BOOL) inAllowMultipleSelection;
-- (void) onContactsLoaded;
-- (NSArray*) getSelectedContacts;
+- (HOPRolodexContact*) getDefaultRolodexContact
+{
+    HOPRolodexContact* ret = nil;
+    
+    NSSortDescriptor* prioritySort = [NSSortDescriptor sortDescriptorWithKey:@"priority" ascending:YES];
+    NSSortDescriptor* weightSort = [NSSortDescriptor sortDescriptorWithKey:@"weight" ascending:YES];
+    
+    NSArray* sortedIdentities = [self.identityContacts.allObjects sortedArrayUsingDescriptors:@[prioritySort,weightSort]];
+    
+    if (sortedIdentities.count > 0)
+        ret = ((HOPIdentityContact*)sortedIdentities[0]).rolodexContact;
+    
+    return ret;
+}
 @end

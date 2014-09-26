@@ -34,7 +34,7 @@
 @class HOPContact;
 @class HOPCall;
 @class HOPConversationThread;
-@class HOPRolodexContact;
+@class HOPOpenPeerContact;
 @class HOPConversationRecord;
 
 @interface Session : NSObject
@@ -49,7 +49,8 @@
 @property (strong) NSMutableSet* sessionIdsHistory;
 @property (strong) NSMutableArray* arrayMergedConversationThreads;
 @property (strong) NSMutableSet* setOfNotSentMessages;
+@property (nonatomic, copy) NSString* title;
 
-- (id) initWithContact:(HOPRolodexContact*) inContact conversationThread:(HOPConversationThread*) inConverationThread;
+- (id) initWithContact:(HOPOpenPeerContact*) inContact conversationThread:(HOPConversationThread*) inConverationThread;
 - (id) initWithContacts:(NSArray*) inContacts conversationThread:(HOPConversationThread*) inConverationThread;
 @end

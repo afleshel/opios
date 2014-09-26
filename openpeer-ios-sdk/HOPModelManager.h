@@ -285,7 +285,7 @@
  @param messageId Message ID
  @return HOPMessageRecord* message record boject
  */
-- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date session:(NSString*) sessionRecordId rolodexContact:(HOPRolodexContact*) rolodexContact messageId:(NSString*)messageId;
+- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date session:(NSString*) sessionRecordId openPeerContact:(HOPOpenPeerContact*) openPeerContact messageId:(NSString*)messageId;
 
 /**
  Creates a HOPMessageRecord object.
@@ -298,7 +298,7 @@
  @param messageId Message ID
  @return HOPMessageRecord* message record boject
  */
-- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  session:(NSString*) sessionRecordId rolodexContact:(HOPRolodexContact*) rolodexContact messageId:(NSString*)messageId;
+- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  session:(NSString*) sessionRecordId openPeerContact:(HOPOpenPeerContact*) openPeerContact messageId:(NSString*)messageId;
 /**
  Removes all session and message records.
  */
@@ -327,5 +327,7 @@
 - (HOPOpenPeerContact*) getOpenPeerContactForPeerURI:(NSString*) peerURI;
 - (HOPOpenPeerContact*) getOpenPeerContactForStableID:(NSString*) stableID;
 - (HOPOpenPeerContact*) getOpenPeerContactForIdentityURI:(NSString*) identityURI;
+- (NSArray *) getOpenPeerContactsByPeerURIs:(NSArray*) peerURIs;
 
+- (void) addConversationEvent:(NSString*) eventType conversationRecord:(HOPConversationRecord*) conversationRecord partcipants:(NSArray*) participants;
 @end

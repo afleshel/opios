@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,18 +29,31 @@
  
  */
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class ContactTableViewCell;
+@class HOPConversationRecord, HOPMessageRecord, HOPOpenPeerContact;
 
-@interface ContactsViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, UISearchBarDelegate, NSFetchedResultsControllerDelegate>
+@interface HOPConversationEvent : NSManagedObject
 
-@property (nonatomic, weak) IBOutlet ContactTableViewCell *contactsTableViewCell;
-@property (nonatomic) BOOL isInFavoritesMode;
-@property (nonatomic) BOOL isMultipleSelectionAvailable;
+@property (nonatomic, retain) NSString * eventType;
+@property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) NSDate * time;
+@property (nonatomic, retain) NSSet *participants;
+@property (nonatomic, retain) HOPConversationRecord *session;
+@property (nonatomic, retain) NSSet *messages;
+@end
 
-- (id) initInFavoritesMode:(BOOL) favoritesMode allowMultipleSelection:(BOOL) inAllowMultipleSelection;
-- (void) onContactsLoaded;
-- (NSArray*) getSelectedContacts;
+@interface HOPConversationEvent (CoreDataGeneratedAccessors)
+
+- (void)addParticipantsObject:(HOPOpenPeerContact *)value;
+- (void)removeParticipantsObject:(HOPOpenPeerContact *)value;
+- (void)addParticipants:(NSSet *)values;
+- (void)removeParticipants:(NSSet *)values;
+
+- (void)addMessagesObject:(HOPMessageRecord *)value;
+- (void)removeMessagesObject:(HOPMessageRecord *)value;
+- (void)addMessages:(NSSet *)values;
+- (void)removeMessages:(NSSet *)values;
+
 @end

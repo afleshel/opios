@@ -48,12 +48,12 @@
 
 + (id) sharedSessionManager;
 
-- (Session*) createSessionForContact:(HOPRolodexContact*) contact;
+- (Session*) createSessionForContacts:(NSArray*) contacts;
 - (Session*) createSessionForConversationThread:(HOPConversationThread*) inConversationThread;
-- (Session*) createSessionInitiatedFromSession:(Session*) inSession forContactPeerURIs:(NSString*) peerURIs;
-- (Session*) createRemoteSessionForContacts:(NSArray*) participants;
-- (Session*) proceedWithExistingSessionForContact:(HOPContact*) contact newConversationThread:(HOPConversationThread*) inConversationThread;
-- (Session*) getSessionForContact:(HOPRolodexContact*) contact;
+//- (Session*) createSessionInitiatedFromSession:(Session*) inSession forContactPeerURIs:(NSString*) peerURIs;
+//- (Session*) createRemoteSessionForContacts:(NSArray*) participants;
+- (Session*) proceedWithExistingSessionForContacts:(NSArray*) contacts newConversationThread:(HOPConversationThread*) inConversationThread;
+- (Session*) getSessionForContacts:(NSArray*) contacts;
 - (Session*) getSessionForSessionId:(NSString*) sessionId;
 - (Session*) getSessionForSessionRecord:(HOPConversationRecord*) sessionRecord;
 
@@ -88,4 +88,6 @@
 - (int) totalNumberOfUnreadMessages;
 - (NSString* )getSystemMessage:(HOPMessageRecord *)messageRecord;
 - (NSString*) getLastTextMessageForSessionID:(NSString*) sessionID;
+
+- (void) addContacts:(NSArray*) contacts toSession:(Session*) session;
 @end

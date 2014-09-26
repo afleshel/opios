@@ -38,6 +38,7 @@
 #import "IncomingCallViewController.h"
 #import "WaitingVideoViewController.h"
 #import "Utility.h"
+#import "AddParticipantsViewController.h"
 #import <OpenPeerSDK/HOPCall.h>
 
 
@@ -57,6 +58,7 @@
 @property (nonatomic, strong) UIBarButtonItem* endCallRightbarButton;
 //@property (nonatomic) int callDuration;
 @property (nonatomic, strong) NSDate* callStartedTime;
+@property (nonatomic, strong) AddParticipantsViewController* addParticipantsViewController;
 - (void) actionCallMenu;
 - (void) updateCallDuration;
 - (void) setRightBarButtonWithEndCall:(BOOL) withEndCall forWaitingView:(BOOL)forWaitingView ;
@@ -132,9 +134,12 @@
     titleView.backgroundColor = [UIColor clearColor];
     
     self.labelTitle = [[UILabel alloc] initWithFrame:CGRectMake(15.0, 3.0, 170.0, 24.0)];
-    self.labelTitle.text = [[[self.session participantsArray]objectAtIndex:0] name];
+    self.labelTitle.text = self.session.title;//[[[self.session participantsArray]objectAtIndex:0] name];
     [self.labelTitle setFont:[UIFont fontWithName:@"Helvetica-Bold" size:20.0]];
     self.labelTitle.textColor = [UIColor whiteColor];
+    self.labelTitle.adjustsFontSizeToFitWidth = YES;
+    self.labelTitle.numberOfLines = 0;
+    self.labelTitle.minimumScaleFactor = 0.5;
     self.labelTitle.textAlignment = NSTextAlignmentCenter;
     
     self.labelDuration = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 26.0, 160.0, 16.0)];
@@ -232,6 +237,7 @@
             if ([Utility hasCamera])
                 [buttonTitles addObject:NSLocalizedString(@"Video Call", @"")];
             //[buttonTitles addObject:NSLocalizedString(@"Close session", @"")];
+            [buttonTitles addObject:NSLocalizedString(@"Add Contact", @"")];
             [buttonTitles addObject:NSLocalizedString(@"Cancel", @"")];
             
             if (action)
@@ -248,6 +254,11 @@
     
 }
 
+- (void) showContactsChooser
+{
+    self.addParticipantsViewController = [[AddParticipantsViewController alloc] initWithSession:self.session];
+    [self.navigationController pushViewController:self.addParticipantsViewController animated:YES];
+}
 
 #pragma mark - UIActionSheetDelegate
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex;
@@ -262,6 +273,7 @@
                 [[SessionManager sharedSessionManager] makeCallForSession:self.session includeVideo:YES isRedial:NO];
             break;
         case 2:
+            [self showContactsChooser];
             //[self closeSession:nil];
             break;
         default:
