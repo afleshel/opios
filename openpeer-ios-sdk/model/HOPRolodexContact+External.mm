@@ -79,11 +79,13 @@
 - (HOPAvatar*) getAvatarForWidth:(NSNumber*) width height:(NSNumber*) height
 {
     HOPAvatar* ret = nil;
-    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"width <= %f AND height <= %f", width,height];
-    NSSet* filtered = [self.avatars filteredSetUsingPredicate:predicate];
-    if (filtered)
-        ret = [filtered anyObject];
+//    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"width <= %f AND height <= %f", width,height];
+//    NSSet* filtered = [self.avatars filteredSetUsingPredicate:predicate];
+//    if (filtered)
+//        ret = [filtered anyObject];
     
+    if (self.avatars.count > 0)
+        ret = self.avatars.allObjects[0];
     return ret;
 }
 

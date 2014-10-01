@@ -44,6 +44,7 @@
 #import <OpenPeerSDK/HOPContact.h>
 #import <OpenPeerSDK/HOPRolodexContact.h>
 #import <OpenPeerSDK/HOPPublicPeerFile.h>
+#import <OpenPeerSDK/HOPConversationEvent.h>
 #import "SystemMessageCell.h"
 #import "ChatCell.h"
 
@@ -560,7 +561,6 @@
         self.messageTextbox.text = nil;
         self.isComposing = NO;
         self.messageToEdit = nil;
-        //[self refreshViewWithData];
     }
 }
 
@@ -572,7 +572,9 @@
         return _fetchedResultsController;
     }
     
-    NSFetchRequest *fetchRequest = [[HOPModelManager sharedModelManager] getMessagesFetchRequestForSessionID:self.session.sessionRecord.sessionID sortAscending:YES];
+//    NSFetchRequest *fetchRequest = [[HOPModelManager sharedModelManager] getMessagesFetchRequestForSessionID:self.session.sessionRecord.sessionID sortAscending:YES];
+    NSFetchRequest *fetchRequest = [[HOPModelManager sharedModelManager] getMessagesFetchRequestForParticipants:self.session.lastConversationEvent.participants sortAscending:YES];
+    
     _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext] sectionNameKeyPath:nil cacheName:nil];
     
     _fetchedResultsController.delegate = self;
@@ -609,7 +611,11 @@
             ChatMessageCell *cellForUpdate  = (ChatMessageCell*)[self.chatTableView cellForRowAtIndexPath:indexPath];
             HOPMessageRecord* message = [self.fetchedResultsController objectAtIndexPath:indexPath];
             [cellForUpdate setMessage:message];
-            [self.chatTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+//            [self.chatTableView beginUpdates];
+//            [self.chatTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+//            [self.chatTableView endUpdates];
+            
+//            [self.chatTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
 //			[[self.chatTableView cellForRowAtIndexPath:indexPath].textLabel setText:((HOPRolodexContact*)[[[self.fetchedResultsController sections] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]).name];
         }
 			break;
@@ -677,6 +683,20 @@
         self.messageToEdit = nil;
         //[self refreshViewWithData];
     }
+}
+
+- (void) refreshMessages
+{
+    self.fetchedResultsController = nil;
+    
+    NSError *error;
+    if (![self.fetchedResultsController performFetch:&error])
+    {
+        OPLog(HOPLoggerSeverityFatal, HOPLoggerLevelDebug, @"Fetching messages has failed with an error: %@, error description: %@", error, [error userInfo]);
+        exit(-1);  // Fail
+    }
+    
+    [self.chatTableView reloadData];
 }
 @end
 

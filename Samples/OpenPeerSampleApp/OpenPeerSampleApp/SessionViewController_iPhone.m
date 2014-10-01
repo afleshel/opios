@@ -40,6 +40,13 @@
 #import "Utility.h"
 #import "AddParticipantsViewController.h"
 #import <OpenPeerSDK/HOPCall.h>
+#import <OpenPeerSDK/HOPConversationEvent.h>
+#import <OpenPeerSDK/HOPParticipants.h>
+#define ACTION_AUDIO_CALL       1
+#define ACTION_VIDEO_CALL       2
+#define ACTION_ADD_CONTACT      3
+#define ACTION_REMOVE_CONTACT   4
+#define ACTION_CANCEL           5
 
 
 @interface SessionViewController_iPhone ()
@@ -53,6 +60,7 @@
 @property (nonatomic, strong)  UILabel* labelTitle;
 @property (nonatomic, strong)  UILabel* labelDuration;
 @property (nonatomic, strong) NSTimer* callTimer;
+@property (nonatomic, strong) NSMutableArray* availableActions;
 //@property (nonatomic, strong) UIButton *menuButton;
 @property (nonatomic, strong) UIBarButtonItem* menuRightbarButton;
 @property (nonatomic, strong) UIBarButtonItem* endCallRightbarButton;
@@ -83,7 +91,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        self.availableActions = [[NSMutableArray alloc] init];
     }
     return self;
 }
@@ -233,12 +241,22 @@
             
             //int i = 0;
             
-            [buttonTitles addObject:NSLocalizedString(@"Audio Call", @"")];
-            if ([Utility hasCamera])
-                [buttonTitles addObject:NSLocalizedString(@"Video Call", @"")];
+            [self.availableActions removeAllObjects];
+            if (self.session.lastConversationEvent.participants.participants.count == 1)
+            {
+                [buttonTitles addObject:NSLocalizedString(@"Audio Call", @"")];
+                [self.availableActions addObject:[NSNumber numberWithInt:ACTION_AUDIO_CALL]];
+                if ([Utility hasCamera])
+                {
+                    [buttonTitles addObject:NSLocalizedString(@"Video Call", @"")];
+                    [self.availableActions addObject:[NSNumber numberWithInt:ACTION_VIDEO_CALL]];
+                }
+            }
             //[buttonTitles addObject:NSLocalizedString(@"Close session", @"")];
             [buttonTitles addObject:NSLocalizedString(@"Add Contact", @"")];
+            [self.availableActions addObject:[NSNumber numberWithInt:ACTION_ADD_CONTACT]];
             [buttonTitles addObject:NSLocalizedString(@"Cancel", @"")];
+            [self.availableActions addObject:[NSNumber numberWithInt:ACTION_CANCEL]];
             
             if (action)
             {
@@ -263,16 +281,17 @@
 #pragma mark - UIActionSheetDelegate
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex;
 {
-    switch (buttonIndex)
+    int selectedAction = ((NSNumber*)self.availableActions[buttonIndex]).intValue;
+    switch (selectedAction)
     {
-        case 0:
+        case ACTION_AUDIO_CALL:
             [[SessionManager sharedSessionManager] makeCallForSession:self.session includeVideo:NO isRedial:NO];
             break;
-        case 1:
+        case ACTION_VIDEO_CALL:
             if ([Utility hasCamera])
                 [[SessionManager sharedSessionManager] makeCallForSession:self.session includeVideo:YES isRedial:NO];
             break;
-        case 2:
+        case ACTION_ADD_CONTACT:
             [self showContactsChooser];
             //[self closeSession:nil];
             break;
@@ -502,6 +521,13 @@
 - (void) popNavigation
 {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void) updateOnParticipantChange
+{
+    self.labelTitle.text = self.session.title;
+    
+    [self.chatViewController refreshMessages];
 }
 @end
 

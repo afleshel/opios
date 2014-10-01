@@ -50,7 +50,8 @@
 @class HOPConversationThreadRecord;
 @class HOPConversationThread;
 @class HOPOpenPeerContact;
-
+@class HOPConversationEvent;
+@class HOPParticipants;
 /**
  *  This is the singleton class and it is used for manipulation with core data.
  */
@@ -285,7 +286,7 @@
  @param messageId Message ID
  @return HOPMessageRecord* message record boject
  */
-- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date session:(NSString*) sessionRecordId openPeerContact:(HOPOpenPeerContact*) openPeerContact messageId:(NSString*)messageId;
+- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date session:(NSString*) sessionRecordId openPeerContact:(HOPOpenPeerContact*) openPeerContact messageId:(NSString*)messageId conversationEvent:(HOPConversationEvent*) conversationEvent;
 
 /**
  Creates a HOPMessageRecord object.
@@ -298,7 +299,7 @@
  @param messageId Message ID
  @return HOPMessageRecord* message record boject
  */
-- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  session:(NSString*) sessionRecordId openPeerContact:(HOPOpenPeerContact*) openPeerContact messageId:(NSString*)messageId;
+- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  session:(NSString*) sessionRecordId openPeerContact:(HOPOpenPeerContact*) openPeerContact messageId:(NSString*)messageId conversationEvent:(HOPConversationEvent*) conversationEvent;
 /**
  Removes all session and message records.
  */
@@ -318,7 +319,7 @@
 - (HOPConversationRecord*) createSessionRecordForConversationThread:(HOPConversationThread*) conversationThread type:(NSString*) type date:(NSDate*) date name:(NSString*) name participants:(NSArray*) participants;
 
 - (NSFetchRequest*) getMessagesFetchRequestForSessionID:(NSString*) sessionID sortAscending:(BOOL) ascending;
-- (HOPMessageRecord *) getLastMessageRecordForSessionID:(NSString*) sessionID;
+//- (HOPMessageRecord *) getLastMessageRecordForConversationEvent:(HOPConversationEvent*) event;
 
 - (void) replaceMessageWithID:(NSString*) replacesMessageID newMessageID:(NSString*) newMessageID messageText:(NSString*) messageText;
 
@@ -329,5 +330,8 @@
 - (HOPOpenPeerContact*) getOpenPeerContactForIdentityURI:(NSString*) identityURI;
 - (NSArray *) getOpenPeerContactsByPeerURIs:(NSArray*) peerURIs;
 
-- (void) addConversationEvent:(NSString*) eventType conversationRecord:(HOPConversationRecord*) conversationRecord partcipants:(NSArray*) participants;
+- (HOPConversationEvent*) addConversationEvent:(NSString*) eventType conversationRecord:(HOPConversationRecord*) conversationRecord partcipants:(NSArray*) participants title:(NSString*) title;
+
+- (HOPParticipants*) getParticiapantsForListOfContacts:(NSArray*) contacts;
+- (NSFetchRequest*) getMessagesFetchRequestForParticipants:(HOPParticipants*) participants sortAscending:(BOOL) ascending;
 @end

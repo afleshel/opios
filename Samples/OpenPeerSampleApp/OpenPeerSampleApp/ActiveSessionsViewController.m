@@ -35,6 +35,8 @@
 #import <OpenPeerSDK/HOPPublicPeerFile.h>
 #import <OpenPeerSDK/HOPOpenPeerAccount.h>
 #import <OpenPeerSDK/HOPOpenPeerContact.h>
+#import <OpenPeerSDK/HOPParticipants.h>
+#import <OpenPeerSDK/HOPConversationEvent.h>
 #import <OpenPeerSDK/HOPUtility.h>
 #import "SessionManager.h"
 #import "OpenPeer.h"
@@ -148,11 +150,11 @@
     
     cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"tableViewCell.png"] stretchableImageWithLeftCapWidth:0.0 topCapHeight:5.0]];
     cell.selectedBackgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"tableViewCell_selected.png"] stretchableImageWithLeftCapWidth:0.0 topCapHeight:5.0]];
+    HOPConversationEvent* event = [self.fetchedResultsController objectAtIndexPath:indexPath];//((HOPParticipants*) [self.fetchedResultsController objectAtIndexPath:indexPath]).lastEvent;
+    //HOPConversationRecord* record = event.session;//[self.fetchedResultsController objectAtIndexPath:indexPath];
     
-    HOPConversationRecord* record = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    
-    if (record)
-        [cell setSession:record];
+    if (event)
+        [cell setConversationEvent:event];
     
     return cell;
 }
@@ -211,26 +213,26 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    HOPConversationRecord* record = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    HOPConversationEvent* record = [self.fetchedResultsController objectAtIndexPath:indexPath];
     if (record)
     {
-        Session* session = [[SessionManager sharedSessionManager] getSessionForSessionRecord:record];
+        Session* session = [[SessionManager sharedSessionManager] getSessionForConversationEvent:record];
         if (!session)
         {
             NSMutableArray* listOfRolodexContacts = [[NSMutableArray alloc] init];
             //for (HOPPublicPeerFile* publicPeerFile in record.participants)
-            for (HOPOpenPeerContact* contact in record.participants)
-            {
-                NSArray* rolodexContactsArray = [[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:contact.publicPeerFile.peerURI];
-                HOPRolodexContact* rolodexContact = [rolodexContactsArray objectAtIndex:0];
-                
-                if (rolodexContact)
-                    [listOfRolodexContacts addObject:rolodexContact];
-            }
+//            for (HOPOpenPeerContact* contact in record.participants.participants)
+//            {
+//                NSArray* rolodexContactsArray = [[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:contact.publicPeerFile.peerURI];
+//                HOPRolodexContact* rolodexContact = [rolodexContactsArray objectAtIndex:0];
+//                
+//                if (rolodexContact)
+//                    [listOfRolodexContacts addObject:rolodexContact];
+//            }
             
-            if([listOfRolodexContacts count] > 0)
+            if([record.participants.participants count] > 0)
             {
-                session = [[SessionManager sharedSessionManager] createSessionForContacts:listOfRolodexContacts];
+                session = [[SessionManager sharedSessionManager] createSessionForContacts:record.participants.participants.allObjects];
             }
         }
         
@@ -279,6 +281,64 @@
     [NSFetchedResultsController deleteCacheWithName:@"SessionRecord"];
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPConversationEvent" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];
+    
+    [fetchRequest setEntity:entity];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(showEvent = YES AND session.homeUser.stableId MATCHES '%@')",[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser].stableId]];
+    [fetchRequest setPredicate:predicate];
+    
+    [fetchRequest setFetchBatchSize:20];
+    //
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"time" ascending:NO];
+    NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+    
+    [fetchRequest setSortDescriptors:sortDescriptors];
+    
+    _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext] sectionNameKeyPath:@"sectionIdentifier" cacheName:@"SessionRecord"];
+    _fetchedResultsController.delegate = self;
+    
+    return _fetchedResultsController;
+}
+
+/*- (NSFetchedResultsController *)fetchedResultsController
+{
+    if (_fetchedResultsController != nil)
+    {
+        return _fetchedResultsController;
+    }
+    [NSFetchedResultsController deleteCacheWithName:@"SessionRecord"];
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPParticipants" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];
+    
+    [fetchRequest setEntity:entity];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SUBQUERY(events, $t, $t.session.homeUser.stableId == %@).@count != 0", [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser].stableId];//[NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(ANY events.session.homeUser.stableId MATCHES '%@')",[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser].stableId]];
+    [fetchRequest setPredicate:predicate];
+    
+    [fetchRequest setFetchBatchSize:20];
+    //
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"getDateOfLastEvent" ascending:NO];
+    NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+    
+    [fetchRequest setSortDescriptors:sortDescriptors];
+    
+    _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext] sectionNameKeyPath:@"sectionIdentifier" cacheName:@"SessionRecord"];
+    _fetchedResultsController.delegate = self;
+    
+    return _fetchedResultsController;
+}*/
+
+/*- (NSFetchedResultsController *)fetchedResultsController
+{
+    if (_fetchedResultsController != nil)
+    {
+        return _fetchedResultsController;
+    }
+    [NSFetchedResultsController deleteCacheWithName:@"SessionRecord"];
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPConversationRecord" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];
     
     [fetchRequest setEntity:entity];
@@ -297,7 +357,7 @@
     _fetchedResultsController.delegate = self;
     
 	return _fetchedResultsController;
-}
+}*/
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
     [self.tableViewSessions beginUpdates];

@@ -29,9 +29,10 @@
     <entity name="HOPConversationEvent" representedClassName="HOPConversationEvent" syncable="YES">
         <attribute name="eventType" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="showEvent" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="time" optional="YES" attributeType="Date" syncable="YES"/>
         <relationship name="messages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HOPMessageRecord" inverseName="conversationEvent" inverseEntity="HOPMessageRecord" syncable="YES"/>
-        <relationship name="participants" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HOPOpenPeerContact" inverseName="sessionEvents" inverseEntity="HOPOpenPeerContact" syncable="YES"/>
+        <relationship name="participants" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HOPParticipants" inverseName="events" inverseEntity="HOPParticipants" syncable="YES"/>
         <relationship name="session" maxCount="1" deletionRule="Nullify" destinationEntity="HOPConversationRecord" inverseName="events" inverseEntity="HOPConversationRecord" syncable="YES"/>
     </entity>
     <entity name="HOPConversationRecord" representedClassName="HOPConversationRecord" syncable="YES">
@@ -106,9 +107,14 @@
         <attribute name="stableID" attributeType="String" syncable="YES"/>
         <relationship name="apnsData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HOPAPNSData" inverseName="contact" inverseEntity="HOPAPNSData" syncable="YES"/>
         <relationship name="identityContacts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HOPIdentityContact" inverseName="openPeerContact" inverseEntity="HOPIdentityContact" syncable="YES"/>
+        <relationship name="participants" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HOPParticipants" inverseName="participants" inverseEntity="HOPParticipants" syncable="YES"/>
         <relationship name="publicPeerFile" maxCount="1" deletionRule="Nullify" destinationEntity="HOPPublicPeerFile" inverseName="identityContacts" inverseEntity="HOPPublicPeerFile" syncable="YES"/>
-        <relationship name="sessionEvents" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HOPConversationEvent" inverseName="participants" inverseEntity="HOPConversationEvent" syncable="YES"/>
         <relationship name="sessionRecords" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HOPConversationRecord" inverseName="participants" inverseEntity="HOPConversationRecord" syncable="YES"/>
+    </entity>
+    <entity name="HOPParticipants" representedClassName="HOPParticipants" syncable="YES">
+        <attribute name="cbcID" attributeType="String" syncable="YES"/>
+        <relationship name="events" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HOPConversationEvent" inverseName="participants" inverseEntity="HOPConversationEvent" syncable="YES"/>
+        <relationship name="participants" toMany="YES" deletionRule="Nullify" destinationEntity="HOPOpenPeerContact" inverseName="participants" inverseEntity="HOPOpenPeerContact" syncable="YES"/>
     </entity>
     <entity name="HOPPublicPeerFile" representedClassName="HOPPublicPeerFile" syncable="YES">
         <attribute name="peerFile" attributeType="String" syncable="YES"/>
@@ -145,23 +151,25 @@
         <memberEntity name="HOPOpenPeerContact"/>
         <memberEntity name="HOPMessageEvent"/>
         <memberEntity name="HOPConversationEvent"/>
+        <memberEntity name="HOPParticipants"/>
     </configuration>
     <elements>
         <element name="HOPAPNSData" positionX="-306" positionY="-747" width="128" height="88"/>
         <element name="HOPAssociatedIdentity" positionX="295" positionY="-177" width="128" height="118"/>
         <element name="HOPAvatar" positionX="430" positionY="-486" width="128" height="135"/>
         <element name="HOPCacheData" positionX="565" positionY="-297" width="128" height="105"/>
+        <element name="HOPConversationEvent" positionX="61" positionY="-477" width="128" height="148"/>
+        <element name="HOPConversationRecord" positionX="-119" positionY="-369" width="128" height="193"/>
         <element name="HOPConversationThreadRecord" positionX="-126" positionY="-157" width="128" height="103"/>
         <element name="HOPIdentityContact" positionX="63" positionY="-738" width="128" height="148"/>
         <element name="HOPIdentityProvider" positionX="493" positionY="-178" width="128" height="88"/>
         <element name="HOPImage" positionX="583" positionY="-477" width="128" height="90"/>
+        <element name="HOPMessageEvent" positionX="-306" positionY="-324" width="128" height="103"/>
         <element name="HOPMessageRecord" positionX="-306" positionY="-628" width="128" height="283"/>
         <element name="HOPOpenPeerAccount" positionX="106" positionY="-270" width="128" height="118"/>
         <element name="HOPOpenPeerContact" positionX="-108" positionY="-630" width="128" height="133"/>
         <element name="HOPPublicPeerFile" positionX="-108" positionY="-747" width="128" height="88"/>
         <element name="HOPRolodexContact" positionX="268" positionY="-513" width="128" height="180"/>
-        <element name="HOPConversationRecord" positionX="-119" positionY="-369" width="128" height="193"/>
-        <element name="HOPMessageEvent" positionX="-306" positionY="-324" width="128" height="103"/>
-        <element name="HOPConversationEvent" positionX="61" positionY="-513" width="128" height="133"/>
+        <element name="HOPParticipants" positionX="61" positionY="-576" width="128" height="88"/>
     </elements>
 </model>

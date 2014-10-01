@@ -39,6 +39,7 @@
 @class HOPRolodexContact;
 @class HOPConversationRecord;
 @class HOPMessageRecord;
+@class HOPConversationEvent;
 
 @interface SessionManager : NSObject
 
@@ -55,7 +56,7 @@
 - (Session*) proceedWithExistingSessionForContacts:(NSArray*) contacts newConversationThread:(HOPConversationThread*) inConversationThread;
 - (Session*) getSessionForContacts:(NSArray*) contacts;
 - (Session*) getSessionForSessionId:(NSString*) sessionId;
-- (Session*) getSessionForSessionRecord:(HOPConversationRecord*) sessionRecord;
+- (Session*) getSessionForConversationEvent:(HOPConversationEvent*) event;
 
 - (void)setValidSession:(Session *)inSession newSessionId:(NSString *)newSessionId oldSessionId:(NSString *)oldSessionId;
 
@@ -87,7 +88,9 @@
 
 - (int) totalNumberOfUnreadMessages;
 - (NSString* )getSystemMessage:(HOPMessageRecord *)messageRecord;
-- (NSString*) getLastTextMessageForSessionID:(NSString*) sessionID;
+- (NSString*) getLastTextMessageForConversationEvent:(HOPConversationEvent*) event;
 
 - (void) addContacts:(NSArray*) contacts toSession:(Session*) session;
+
+- (void) updateParticipantsInConversationThread:(HOPConversationThread*) conversationThread;
 @end

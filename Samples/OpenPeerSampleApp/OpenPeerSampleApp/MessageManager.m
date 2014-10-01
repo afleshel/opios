@@ -153,7 +153,7 @@
     {
         HOPMessage* hopMessage = [self createSystemMessageWithType:HOPSystemMessageTypeCall messageType:callSystemMessage reasonCode:reasonCode andRecipient:contact];
         BOOL visible = callSystemMessage != HOPCallSystemMessageTypeCallAnswered;
-        HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:hopMessage.text type:[HOPSystemMessage getMessageType]  date:hopMessage.date visible:visible session:[inSession.conversationThread getThreadId] openPeerContact:contact  messageId:hopMessage.messageID];
+        HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:hopMessage.text type:[HOPSystemMessage getMessageType]  date:hopMessage.date visible:visible session:[inSession.conversationThread getThreadId] openPeerContact:contact  messageId:hopMessage.messageID conversationEvent:inSession.lastConversationEvent];
         [inSession.conversationThread sendMessage:hopMessage];
     }
 }
@@ -250,7 +250,7 @@
     }
     else
     {
-        [[HOPModelManager sharedModelManager] addMessage:message type:messageTypeText date:hopMessage.date session:[inSession.conversationThread getThreadId] openPeerContact:nil messageId:hopMessage.messageID];
+        [[HOPModelManager sharedModelManager] addMessage:message type:messageTypeText date:hopMessage.date session:[inSession.conversationThread getThreadId] openPeerContact:nil messageId:hopMessage.messageID conversationEvent:inSession.lastConversationEvent];
     }
     
     if ([UIDevice isNetworkReachable] && [[HOPAccount sharedAccount] isCoreAccountCreated] && ([[HOPAccount sharedAccount] getState].state == HOPAccountStateReady))
@@ -342,7 +342,7 @@
         else
         {
             //Message* messageObj = [[Message alloc] initWithMessageText:message.text senderContact:contact sentTime:message.date];
-            messageObj = [[HOPModelManager sharedModelManager] addMessage:message.text type:messageTypeText date:message.date session:[session.conversationThread getThreadId] openPeerContact:contact messageId:message.messageID];
+            messageObj = [[HOPModelManager sharedModelManager] addMessage:message.text type:messageTypeText date:message.date session:[session.conversationThread getThreadId] openPeerContact:contact messageId:message.messageID conversationEvent:session.lastConversationEvent];
        
             if (messageObj)
             {
@@ -385,7 +385,7 @@
     {
         BOOL visible = [message.text rangeOfString:@"\"type\":\"answered\""].location == NSNotFound;
         //Save System message
-        HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:message.text type:[HOPSystemMessage getMessageType] date:message.date visible:visible session:[session.conversationThread getThreadId] openPeerContact:contact messageId:message.messageID];
+        HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:message.text type:[HOPSystemMessage getMessageType] date:message.date visible:visible session:[session.conversationThread getThreadId] openPeerContact:contact messageId:message.messageID conversationEvent:session.lastConversationEvent];
         [self parseSystemMessage:message forSession:session];
     }
 }

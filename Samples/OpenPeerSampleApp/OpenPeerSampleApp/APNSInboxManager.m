@@ -206,7 +206,7 @@
                     }
                     else
                     {
-                        HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:messageText type:messageTypeText date:date session:[session.conversationThread getThreadId] openPeerContact:contact messageId:messageID];
+                        HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:messageText type:messageTypeText date:date session:[session.conversationThread getThreadId] openPeerContact:contact messageId:messageID conversationEvent:session.lastConversationEvent];
                         
                         
                         if (messageObj)
