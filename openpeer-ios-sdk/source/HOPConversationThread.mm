@@ -43,10 +43,14 @@
 #import "HOPModelManager.h"
 #import "HOPIdentityContact_Internal.h"
 #import "HOPOpenPeerContact.h"
-
+#import "HOPRolodexContact+External.h"
+#import "HOPAssociatedIdentity.h"
+#import "HOPIdentityProvider.h"
+#import "HOPOpenPeerContact_Internal.h"
 #import "OpenPeerStorageManager.h"
 #import "OpenPeerUtility.h"
 #import "HOPIdentity_Internal.h"
+#import "HOPPublicPeerFile.h"
 
 ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
@@ -179,22 +183,27 @@ using namespace openpeer::core;
             {
                 HOPOpenPeerContact* openPeerContact = [[HOPModelManager sharedModelManager] getOpenPeerContactForPeerURI:[NSString stringWithUTF8String:contactPtr->getPeerURI()]];
                 
-                //TODO_S: Remove once HOPMEssage is switched to HOPOpenPeerContact
-                HOPContact* tempContact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:[NSString stringWithUTF8String:contactPtr->getPeerURI()]];
-                if (!tempContact)
+                if (!openPeerContact)
                 {
-                    IPeerFilePublicPtr publicPtr =  contactPtr->getPeerFilePublic();
-                    if (publicPtr)
-                    {
-                        ElementPtr element = IHelper::convertToElement(publicPtr);
-                        if (element)
-                        {
-                            NSString* pulbicPeer = [NSString stringWithUTF8String:IHelper::convertToString(element)];
-                            if ([pulbicPeer length] > 0)
-                                tempContact = [[HOPContact alloc] initWithPeerFile:pulbicPeer];
-                        }
-                    }
+                    openPeerContact = [HOPOpenPeerContact createOpenPeerContacFromCoreContact:contactPtr conversationThread:conversationThreadPtr];
                 }
+                
+                //TODO_S: Remove once HOPMEssage is switched to HOPOpenPeerContact
+//                HOPContact* tempContact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:[NSString stringWithUTF8String:contactPtr->getPeerURI()]];
+//                if (!tempContact)
+//                {
+//                    IPeerFilePublicPtr publicPtr =  contactPtr->getPeerFilePublic();
+//                    if (publicPtr)
+//                    {
+//                        ElementPtr element = IHelper::convertToElement(publicPtr);
+//                        if (element)
+//                        {
+//                            NSString* pulbicPeer = [NSString stringWithUTF8String:IHelper::convertToString(element)];
+//                            if ([pulbicPeer length] > 0)
+//                                tempContact = [[HOPContact alloc] initWithPeerFile:pulbicPeer];
+//                        }
+//                    }
+//                }
                 
                 if (openPeerContact)
                     [contactArray addObject:openPeerContact];
@@ -220,8 +229,49 @@ using namespace openpeer::core;
             for (HOPContact* contact in contacts)
             {
                 ContactProfileInfo contactInfo;
+                IdentityContactList identityContactList;
                 contactInfo.mContact = [contact getContactPtr];
                 
+                HOPOpenPeerContact* openPeerContact = [[HOPModelManager sharedModelManager] getOpenPeerContactForPeerURI:[contact getPeerURI]];
+                if (openPeerContact)
+                {
+                    for (HOPIdentityContact* identityContact in openPeerContact.identityContacts)
+                    {
+                        IdentityContact coreIdentityContact;
+
+                        coreIdentityContact.mPeerFilePublic = IHelper::createPeerFilePublic(IHelper::createElement([openPeerContact.publicPeerFile.peerFile UTF8String]));
+                        coreIdentityContact.mIdentityProofBundleEl = IHelper::createElement([identityContact.identityProofBundle UTF8String]);
+                        coreIdentityContact.mStableID = [openPeerContact.stableID UTF8String];
+                        coreIdentityContact.mPriority = identityContact.priority.intValue;
+                        coreIdentityContact.mWeight = identityContact.weight.intValue;
+                        
+                        coreIdentityContact.mIdentityURI = [identityContact.rolodexContact.identityURI UTF8String];
+                        
+                        coreIdentityContact.mIdentityProvider = [identityContact.rolodexContact.associatedIdentity.identityProvider.domain UTF8String];
+                        coreIdentityContact.mName = [identityContact.rolodexContact.name UTF8String];
+                        coreIdentityContact.mProfileURL = [identityContact.rolodexContact.profileURL UTF8String];
+                        
+                        /*String mName;
+                        String mURL;
+                        int mWidth;
+                        int mHeight;
+                        
+                        bool operator==(const Avatar &rValue) const;
+                        bool operator!=(const Avatar &rValue) const;
+                    };
+                    typedef std::list<Avatar> AvatarList;
+
+                    
+                    Dispositions mDisposition;
+
+                    
+                    AvatarList mAvatars;*/
+
+                    
+                        identityContactList.push_back(coreIdentityContact);
+                    }
+                }
+                contactInfo.mIdentityContacts = identityContactList;
                 contactList.push_back(contactInfo);
             }
             
@@ -425,15 +475,26 @@ using namespace openpeer::core;
         
         if (fromContact && messageType && message)
         {
-            hopMessage = [[HOPMessage alloc] init];
-            
-            hopMessage.contact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:[NSString stringWithUTF8String:fromContact->getPeerURI()]];
-            hopMessage.type = [NSString stringWithUTF8String:messageType];
-            hopMessage.text = [NSString stringWithUTF8String:message];
-            hopMessage.date = [OpenPeerUtility convertPosixTimeToDate:messageTime];
-            hopMessage.messageID = messageID;
-            hopMessage.replacesMessageID = [NSString stringWithUTF8String:replacesMessageID];
-            hopMessage.validated = (validated ? YES : NO);
+            NSString* peerURI = [NSString stringWithUTF8String:fromContact->getPeerURI()];
+            if (peerURI.length > 0)
+            {
+                hopMessage = [[HOPMessage alloc] init];
+                
+                hopMessage.contact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:peerURI];
+                
+                if (!hopMessage.contact)
+                {
+                    HOPOpenPeerContact* openPeerContact = [[HOPModelManager sharedModelManager] getOpenPeerContactForPeerURI:peerURI];
+                    if (openPeerContact)
+                        hopMessage.contact = [openPeerContact getCoreContact];
+                }
+                hopMessage.type = [NSString stringWithUTF8String:messageType];
+                hopMessage.text = [NSString stringWithUTF8String:message];
+                hopMessage.date = [OpenPeerUtility convertPosixTimeToDate:messageTime];
+                hopMessage.messageID = messageID;
+                hopMessage.replacesMessageID = [NSString stringWithUTF8String:replacesMessageID];
+                hopMessage.validated = (validated ? YES : NO);
+            }
         }
     }
     else

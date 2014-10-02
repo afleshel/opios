@@ -170,7 +170,8 @@
         contactsNavigationController.navigationBar.translucent = NO;
         
         //Favorites tab
-        self.favoritesTableViewController = [[ContactsViewController alloc] initInFavoritesMode:YES allowMultipleSelection:NO];
+//        self.favoritesTableViewController = [[ContactsViewController alloc] initInFavoritesMode:YES allowMultipleSelection:NO];
+        self.favoritesTableViewController = [[ContactsViewController alloc] initInMode:CONTACTS_TABLE_MODE_FAVORITES allowMultipleSelection:NO filterContacts:nil];
         self.favoritesTableViewController.title = @"Favorites";
         self.tabBarItem.title = @"FAVORITES";
         

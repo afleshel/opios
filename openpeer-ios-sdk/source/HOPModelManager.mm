@@ -1370,7 +1370,7 @@ using namespace openpeer::core;
     
     if (peerURIs.count > 0)
     {
-        ret = [self getResultsForEntity:@"HOPOpenPeerContact" withPredicateString:[NSString stringWithFormat:@"ANY publicPeerFile.peerURI IN %@",peerURIs] orderDescriptors:nil];
+        ret = [self getResultsForEntity:@"HOPOpenPeerContact" withPredicateString:[NSString stringWithFormat:@"publicPeerFile.peerURI IN %@",peerURIs] orderDescriptors:nil];
     }
     
     

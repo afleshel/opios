@@ -40,7 +40,7 @@
 #import <OpenpeerSDK/HOPRolodexContact+External.h>
 #import <OpenpeerSDK/HOPModelManager.h>
 #import <OpenpeerSDK/HOPOpenPeerAccount.h>
-#import <OpenpeerSDK/HOPOpenPeerContact.h>
+#import <OpenpeerSDK/HOPOpenPeerContact+External.h>
 
 #define REMOTE_SESSION_ALERT_TAG 1
 #define TABLE_CELL_HEIGHT 55.0
@@ -54,6 +54,7 @@
 
 @property (nonatomic, strong) UITapGestureRecognizer *oneTapGestureRecognizer;
 @property (nonatomic,retain) NSMutableArray* listOfSelectedContacts;
+@property (nonatomic,retain) NSArray* listOfFilterContacts;
 @property (nonatomic) BOOL keyboardIsHidden;
 
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
@@ -81,6 +82,19 @@
     {
         self.isInFavoritesMode = favoritesMode;
         self.isMultipleSelectionAvailable = inAllowMultipleSelection;
+    }
+    return self;
+}
+
+- (id) initInMode:(ContactsTableModes) inMode allowMultipleSelection:(BOOL) inAllowMultipleSelection filterContacts:(NSArray*) inFilterContacts
+{
+    self = [self initWithNibName:@"ContactsViewController" bundle:nil];
+    if (self)
+    {
+        self.mode = inMode;
+        self.isMultipleSelectionAvailable = inAllowMultipleSelection;
+        if (inFilterContacts.count > 0)
+            self.listOfFilterContacts = [NSArray arrayWithArray:inFilterContacts];
     }
     return self;
 }
@@ -329,16 +343,62 @@
     [fetchRequest setEntity:entity];
     
     NSMutableArray *predicatesArray = [[NSMutableArray alloc] init];
-    NSPredicate *predicateOnlyOpenPeerContacts = nil;
-    if (self.isInFavoritesMode)
+    NSPredicate *predicateForFiltering = nil;
+    //NSPredicate *predicateWithoutContacts = nil;
+    
+//    if (self.isInFavoritesMode)
+//    {
+//        predicateOnlyOpenPeerContacts = [NSPredicate predicateWithFormat:@"identityContact != nil"];
+//        [predicatesArray addObject:predicateOnlyOpenPeerContacts];
+//        cacheName = @"FavoritesContacts";
+//    }
+//    else
+//    {
+//        cacheName = @"RolodexContacts";
+//    }
+    
+    switch (self.mode)
     {
-        predicateOnlyOpenPeerContacts = [NSPredicate predicateWithFormat:@"identityContact != nil"];
-        [predicatesArray addObject:predicateOnlyOpenPeerContacts];
-        cacheName = @"FavoritesContacts";
-    }
-    else
-    {
-        cacheName = @"RolodexContacts";
+        case CONTACTS_TABLE_MODE_REGULAR:
+            cacheName = @"RolodexContacts";
+            break;
+            
+        case CONTACTS_TABLE_MODE_FAVORITES:
+            predicateForFiltering = [NSPredicate predicateWithFormat:@"identityContact != nil"];
+            [predicatesArray addObject:predicateForFiltering];
+            cacheName = @"FavoritesContacts";
+            break;
+            
+        case CONTACTS_TABLE_MODE_ADDING:
+        {
+            NSMutableArray* identityURIs = [NSMutableArray new];
+            for (HOPOpenPeerContact* contact in self.listOfFilterContacts)
+            {
+                HOPRolodexContact* rolodex = [contact getDefaultRolodexContact];
+                if (rolodex && rolodex.identityURI.length > 0)
+                    [identityURIs addObject:rolodex.identityURI];
+            }
+            predicateForFiltering = [NSPredicate predicateWithFormat:@"identityContact != nil AND NOT (identityURI IN %@)",identityURIs];
+            [predicatesArray addObject:predicateForFiltering];
+        }
+            break;
+            
+        case CONTACTS_TABLE_MODE_REMOVING:
+        {
+            NSMutableArray* identityURIs = [NSMutableArray new];
+            for (HOPOpenPeerContact* contact in self.listOfFilterContacts)
+            {
+                HOPRolodexContact* rolodex = [contact getDefaultRolodexContact];
+                if (rolodex && rolodex.identityURI.length > 0)
+                    [identityURIs addObject:rolodex.identityURI];
+            }
+            predicateForFiltering = [NSPredicate predicateWithFormat:@"identityURI IN %@",identityURIs];
+            [predicatesArray addObject:predicateForFiltering];
+        }
+            break;
+            
+        default:
+            break;
     }
     
     NSPredicate *predicateAllContacts = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(associatedIdentity.account.stableId MATCHES '%@')",[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser].stableId]];

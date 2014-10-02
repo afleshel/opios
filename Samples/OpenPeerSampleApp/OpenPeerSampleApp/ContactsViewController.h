@@ -34,13 +34,23 @@
 
 @class ContactTableViewCell;
 
+typedef enum
+{
+    CONTACTS_TABLE_MODE_REGULAR,
+    CONTACTS_TABLE_MODE_FAVORITES,
+    CONTACTS_TABLE_MODE_ADDING,
+    CONTACTS_TABLE_MODE_REMOVING
+} ContactsTableModes
+;
 @interface ContactsViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, UISearchBarDelegate, NSFetchedResultsControllerDelegate>
 
 @property (nonatomic, weak) IBOutlet ContactTableViewCell *contactsTableViewCell;
 @property (nonatomic) BOOL isInFavoritesMode;
 @property (nonatomic) BOOL isMultipleSelectionAvailable;
+@property (nonatomic) ContactsTableModes mode;
 
 - (id) initInFavoritesMode:(BOOL) favoritesMode allowMultipleSelection:(BOOL) inAllowMultipleSelection;
+- (id) initInMode:(ContactsTableModes) inMode allowMultipleSelection:(BOOL) inAllowMultipleSelection filterContacts:(NSArray*) inFilterContacts;
 - (void) onContactsLoaded;
 - (NSArray*) getSelectedContacts;
 @end

@@ -33,6 +33,8 @@
 #import "ContactsViewController.h"
 #import "SessionManager.h"
 #import "Session.h"
+#import <OpenPeerSDK/HOPConversationEvent.h>
+#import <OpenPeerSDK/HOPParticipants.h>
 @interface AddParticipantsViewController ()
 
 @property (nonatomic, strong) ContactsViewController *contactsViewController;
@@ -72,7 +74,8 @@
 {
     [super viewWillAppear:animated];
     
-    self.contactsViewController = [[ContactsViewController alloc] initInFavoritesMode:YES allowMultipleSelection:YES];
+//    self.contactsViewController = [[ContactsViewController alloc] initInFavoritesMode:YES allowMultipleSelection:YES];
+    self.contactsViewController = [[ContactsViewController alloc] initInMode:CONTACTS_TABLE_MODE_ADDING allowMultipleSelection:YES filterContacts:self.session.lastConversationEvent.participants.participants.allObjects];
     self.contactsViewController.view.frame = self.view.bounds;
     [self.view addSubview:self.contactsViewController.view];
 }
