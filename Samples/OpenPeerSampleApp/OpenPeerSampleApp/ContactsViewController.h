@@ -40,8 +40,7 @@ typedef enum
     CONTACTS_TABLE_MODE_FAVORITES,
     CONTACTS_TABLE_MODE_ADDING,
     CONTACTS_TABLE_MODE_REMOVING
-} ContactsTableModes
-;
+} ContactsTableModes;
 @interface ContactsViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, UISearchBarDelegate, NSFetchedResultsControllerDelegate>
 
 @property (nonatomic, weak) IBOutlet ContactTableViewCell *contactsTableViewCell;

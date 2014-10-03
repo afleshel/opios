@@ -34,5 +34,5 @@
 
 @interface AddParticipantsViewController : UIViewController
 
-- (id) initWithSession:(Session*) inSession;
+- (id) initWithSession:(Session*) inSession addingContacts:(BOOL) addingContacts;
 @end

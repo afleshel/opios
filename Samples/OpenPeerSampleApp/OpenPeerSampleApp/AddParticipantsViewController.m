@@ -40,17 +40,19 @@
 @property (nonatomic, strong) ContactsViewController *contactsViewController;
 @property (nonatomic, strong) UIBarButtonItem* menuRightbarButton;
 @property (nonatomic, weak) Session* session;
+@property (nonatomic) BOOL isAdding;
 - (void) actionDoneWithSelection;
 @end
 
 @implementation AddParticipantsViewController
 
-- (id) initWithSession:(Session*) inSession
+- (id) initWithSession:(Session*) inSession addingContacts:(BOOL) addingContacts
 {
     self = [self init];
     if (self)
     {
         self.session = inSession;
+        self.isAdding = addingContacts;
     }
     return self;
 }
@@ -67,15 +69,15 @@
     self.menuRightbarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(actionDoneWithSelection)];
     self.navigationItem.rightBarButtonItem = self.menuRightbarButton;
     
-    self.navigationItem.title = @"Add participants";
+    self.navigationItem.title = self.isAdding ? @"Add participants" : @"Remove participants";
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
-//    self.contactsViewController = [[ContactsViewController alloc] initInFavoritesMode:YES allowMultipleSelection:YES];
-    self.contactsViewController = [[ContactsViewController alloc] initInMode:CONTACTS_TABLE_MODE_ADDING allowMultipleSelection:YES filterContacts:self.session.lastConversationEvent.participants.participants.allObjects];
+    ContactsTableModes mode = self.isAdding ? CONTACTS_TABLE_MODE_ADDING : CONTACTS_TABLE_MODE_REMOVING;
+    self.contactsViewController = [[ContactsViewController alloc] initInMode:mode allowMultipleSelection:YES filterContacts:self.session.lastConversationEvent.participants.participants.allObjects];
     self.contactsViewController.view.frame = self.view.bounds;
     [self.view addSubview:self.contactsViewController.view];
 }
@@ -89,7 +91,12 @@
 - (void) actionDoneWithSelection
 {
     if (self.contactsViewController.getSelectedContacts.count > 0)
-        [[SessionManager sharedSessionManager] addContacts:self.contactsViewController.getSelectedContacts toSession:self.session];
+    {
+        if ( self.isAdding)
+            [[SessionManager sharedSessionManager] addParticipants:self.contactsViewController.getSelectedContacts toSession:self.session];
+        else
+            [[SessionManager sharedSessionManager] removeParticipants:self.contactsViewController.getSelectedContacts toSession:self.session];
+    }
     
     [self.navigationController popViewControllerAnimated:YES];
 }

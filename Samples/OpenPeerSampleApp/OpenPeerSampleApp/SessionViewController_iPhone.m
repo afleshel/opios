@@ -255,6 +255,11 @@
             //[buttonTitles addObject:NSLocalizedString(@"Close session", @"")];
             [buttonTitles addObject:NSLocalizedString(@"Add Contact", @"")];
             [self.availableActions addObject:[NSNumber numberWithInt:ACTION_ADD_CONTACT]];
+            if (self.session.lastConversationEvent.participants.participants.count > 1)
+            {
+                [buttonTitles addObject:NSLocalizedString(@"Remove Contact", @"")];
+                [self.availableActions addObject:[NSNumber numberWithInt:ACTION_REMOVE_CONTACT]];
+            }
             [buttonTitles addObject:NSLocalizedString(@"Cancel", @"")];
             [self.availableActions addObject:[NSNumber numberWithInt:ACTION_CANCEL]];
             
@@ -272,9 +277,9 @@
     
 }
 
-- (void) showContactsChooser
+- (void) showContactsChooserForAddingContacts:(BOOL) addingContacts
 {
-    self.addParticipantsViewController = [[AddParticipantsViewController alloc] initWithSession:self.session];
+    self.addParticipantsViewController = [[AddParticipantsViewController alloc] initWithSession:self.session addingContacts:addingContacts];
     [self.navigationController pushViewController:self.addParticipantsViewController animated:YES];
 }
 
@@ -292,7 +297,11 @@
                 [[SessionManager sharedSessionManager] makeCallForSession:self.session includeVideo:YES isRedial:NO];
             break;
         case ACTION_ADD_CONTACT:
-            [self showContactsChooser];
+            [self showContactsChooserForAddingContacts:YES];
+            //[self closeSession:nil];
+            break;
+        case ACTION_REMOVE_CONTACT:
+            [self showContactsChooserForAddingContacts:NO];
             //[self closeSession:nil];
             break;
         default:

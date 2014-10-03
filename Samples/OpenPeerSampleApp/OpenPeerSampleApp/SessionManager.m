@@ -834,15 +834,28 @@
     return ret;
 }
 
-- (void) addContacts:(NSArray*) contacts toSession:(Session*) session
+- (void) addParticipants:(NSArray*) participants toSession:(Session*) session
 {
-    if (session && contacts.count > 0)
+    if (session && participants.count > 0)
     {
-        for (HOPRolodexContact* contact in contacts)
+        for (HOPRolodexContact* contact in participants)
         {
             HOPContact* hopContact = [contact getCoreContact];
             if (hopContact)
                 [session.conversationThread addContacts:@[hopContact]];
+        }
+    }
+}
+
+- (void) removeParticipants:(NSArray*) participants toSession:(Session*) session
+{
+    if (session && participants.count > 0)
+    {
+        for (HOPRolodexContact* contact in participants)
+        {
+            HOPContact* hopContact = [contact getCoreContact];
+            if (hopContact)
+                [session.conversationThread removeContacts:@[hopContact]];
         }
     }
 }

@@ -90,7 +90,8 @@
 - (NSString* )getSystemMessage:(HOPMessageRecord *)messageRecord;
 - (NSString*) getLastTextMessageForConversationEvent:(HOPConversationEvent*) event;
 
-- (void) addContacts:(NSArray*) contacts toSession:(Session*) session;
+- (void) addParticipants:(NSArray*) participants toSession:(Session*) session;
+- (void) removeParticipants:(NSArray*) participants toSession:(Session*) session;
 
 - (void) updateParticipantsInConversationThread:(HOPConversationThread*) conversationThread;
 @end
