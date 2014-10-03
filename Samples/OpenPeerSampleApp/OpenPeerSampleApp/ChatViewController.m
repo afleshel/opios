@@ -64,6 +64,8 @@
 @property (nonatomic,strong) UISwipeGestureRecognizer *swipeGestureLeft;
 @property (nonatomic,strong) UISwipeGestureRecognizer *swipeGestureRight;
 
+@property (nonatomic,strong) NSMutableDictionary* dictionaryComposingStatuses;
+
 @property (nonatomic,strong) NSTimer *pauseTimer;
 @property (nonatomic,strong) NSDate *latestUserActivity;
 
@@ -88,7 +90,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self)
     {
-        // Custom initialization
+        self.dictionaryComposingStatuses = [ [NSMutableDictionary alloc] init];
     }
     return self;
 }
@@ -189,6 +191,67 @@
     
     return ret;
 }
+
+- (void) updateComposingStatuses
+{
+    NSString* statusString = @"";
+    NSMutableDictionary* tempDict = [NSMutableDictionary new];
+    
+    for (NSNumber* value in [self.dictionaryComposingStatuses allValues])
+    {
+        NSMutableArray* array = [NSMutableArray new];
+        [tempDict setObject:array forKey:value];
+    }
+    
+    for (NSString* key in [self.dictionaryComposingStatuses allKeys])
+    {
+        NSNumber* value = [self.dictionaryComposingStatuses objectForKey:key];
+        [[tempDict objectForKey:value] addObject:key];
+    }
+    
+    for (NSNumber* key in [tempDict allKeys])
+    {
+        NSArray* participants = [tempDict objectForKey:key];
+        
+        for (NSString* peerURI in participants)
+        {
+            HOPRolodexContact* rolodexContact = [[[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:peerURI] objectAtIndex:0];
+            if (statusString.length == 0)
+                statusString = rolodexContact.name;
+            else
+                statusString = [statusString stringByAppendingFormat:@", %@",rolodexContact.name];
+        }
+        
+        switch (key.intValue)
+        {
+            case HOPComposingStateComposing:
+            {
+                if (participants.count == 1)
+                    statusString = [statusString stringByAppendingString:@" is typing..."];
+                else
+                    statusString = [statusString stringByAppendingString:@" are typing..."];
+                    
+            }
+                break;
+              
+            case HOPComposingStatePaused:
+            {
+                if (participants.count == 1)
+                    statusString = [statusString stringByAppendingString:@" is thinking..."];
+                else
+                    statusString = [statusString stringByAppendingString:@" are thinking..."];
+                
+            }
+                break;
+            default:
+                statusString = @"";
+                break;
+        }
+    }
+    
+    self.labelComposingStatus.text = statusString;
+}
+
 - (void) updatedComposingStatus:(NSNotification *)notification
 {
     NSDictionary* object = notification.object;
@@ -198,9 +261,14 @@
     
     HOPConversationThreadContactStatus status = [thread getContactStatus:contact];
     
-    NSString* message = [self getMessageForStatus:status contact:contact];
+    //NSString* message = [self getMessageForStatus:status contact:contact];
     
-    self.labelComposingStatus.text = message;
+    [self.dictionaryComposingStatuses setObject:@(status) forKey:[contact getPeerURI]];
+ 
+    [self updateComposingStatuses];
+    //[self.dictionaryComposingStatuses setObject:contact forKey:@(status)];
+    
+    //self.labelComposingStatus.text = message;
 }
 
 - (void)viewDidAppear:(BOOL)animated
