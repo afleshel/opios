@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2012, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,28 +29,10 @@
  
  */
 
+#import "HOPMessageRecord.h"
+#import "HOPTypes.h"
 
-#import "HOPContact.h"
-#import <openpeer/core/types.h>
+@interface HOPMessageRecord (External)
 
-using namespace openpeer;
-using namespace openpeer::core;
-
-@interface HOPContact ()
-{
-    IContactPtr coreContactPtr;
-}
-
-@property (copy) NSString* contactId;
-@property (copy) NSString* userId;
-@property (copy) NSString* peerFile;
-@property (assign) long lastProfileUpdateTimestamp;
-@property (retain) NSMutableDictionary* identitiesDictionary;
-
-- (id) initWithCoreContact:(IContactPtr) inContactPtr;
-- (IContactPtr) getContactPtr;
-
-- (String) log:(NSString*) message;
-
-+ (NSString*) getPeerFilePublicFromCoreContact:(IContactPtr) coreContact;
+@property (nonatomic, getter = getOutgoingMessageStatus, setter = setOutgoingMessageStatus:) HOPConversationThreadMessageDeliveryState outgoingMessageStatus;
 @end

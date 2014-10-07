@@ -42,7 +42,7 @@
 @property (nonatomic, retain) NSData * image;
 @property (nonatomic, retain) NSNumber * incomingMessageStatus;
 @property (nonatomic, retain) NSString * messageID;
-@property (nonatomic, retain) NSNumber * outgoingMessageStatus;
+@property (nonatomic, retain) NSString * outMessageStatus;
 @property (nonatomic, retain) NSNumber * read;
 @property (nonatomic, retain) NSNumber * showStatus;
 @property (nonatomic, retain) NSString * text;

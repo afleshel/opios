@@ -44,7 +44,7 @@
 @dynamic image;
 @dynamic incomingMessageStatus;
 @dynamic messageID;
-@dynamic outgoingMessageStatus;
+@dynamic outMessageStatus;
 @dynamic read;
 @dynamic showStatus;
 @dynamic text;

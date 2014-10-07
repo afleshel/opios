@@ -37,7 +37,7 @@
 #import <OpenpeerSDK/HOPAvatar.h>
 #import <OpenpeerSDK/HOPImage.h>
 #import <OpenpeerSDK/HOPOpenPeerAccount+External.h>
-#import <OpenpeerSDK/HOPMessageRecord.h>
+#import <OpenpeerSDK/HOPMessageRecord+External.h>
 #import <OpenpeerSDK/HOPPublicPeerFile.h>
 #import <OpenpeerSDK/HOPIdentityContact.h>
 #import <OpenpeerSDK/HOPConversationThread.h>
@@ -240,11 +240,11 @@
     float labelHeight = 0;//[messageSenderName sizeWithAttributes:@{NSFontAttributeName:self.chatNameFont}];
     float headerLabelXpos;
     
-    if(!self.message.sender && self.message.showStatus.boolValue && message.outgoingMessageStatus.intValue >= HOPConversationThreadMessageDeliveryStateSent)
+    if(self.message.showStatus.boolValue && message.outgoingMessageStatus >= HOPConversationThreadMessageDeliveryStateSent)
     {
-        NSString* statusString = [HOPConversationThread stringForMessageDeliveryState:(HOPConversationThreadMessageDeliveryState)self.message.outgoingMessageStatus.intValue];
+        NSString* statusString = [HOPConversationThread stringForMessageDeliveryState:(HOPConversationThreadMessageDeliveryState)self.message.outgoingMessageStatus];
         
-        if ((HOPConversationThreadMessageDeliveryState)self.message.outgoingMessageStatus.intValue == HOPConversationThreadMessageDeliveryStateUserNotAvailable)
+        if ((HOPConversationThreadMessageDeliveryState)self.message.outgoingMessageStatus == HOPConversationThreadMessageDeliveryStateUserNotAvailable)
             statusString = @"Send failed, try again by tapping this message";
         
         labelHeight = [statusString sizeWithAttributes:@{NSFontAttributeName:self.chatNameFont}].height;
@@ -286,7 +286,7 @@
 
 -(void)layoutSubviews
 {
-    BOOL isHomeUserSender = !self.message.sender;
+    BOOL isHomeUserSender = self.message.sender == [[HOPModelManager sharedModelManager] getOpenPeerContactForAccount];//!self.message.sender;
     
     [self.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     self.contentView.frame = self.bounds;
@@ -488,6 +488,7 @@
             [self.contentView addSubview:labelSeparator];
             [self.contentView addSubview:lblChatMessageTimestamp];
             
+            if (isHomeUserSender)
             [self setMessageStatus];
             
 //            if (self.messageStatus)
@@ -512,7 +513,8 @@
         self.messageLabel.textColor = [UIColor grayColor];
     }
     
-    [self setMessageStatus];
+    if (self.message.sender == [[HOPModelManager sharedModelManager] getOpenPeerContactForAccount])
+        [self setMessageStatus];
 }
 
 @end

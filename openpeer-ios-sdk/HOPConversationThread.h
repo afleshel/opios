@@ -82,7 +82,7 @@
  @return A string representation of message delivery state
  */
 + (NSString*) stringForMessageDeliveryState:(HOPConversationThreadMessageDeliveryState) state;
-
++ (HOPConversationThreadMessageDeliveryState) toMessageDeliveryStates:(NSString*) messageDeliveryStateString;
 
 /**
  Returns a  string representation of the contact state. Deprecated.

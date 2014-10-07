@@ -250,7 +250,7 @@
     }
     else
     {
-        [[HOPModelManager sharedModelManager] addMessage:message type:messageTypeText date:hopMessage.date session:[inSession.conversationThread getThreadId] openPeerContact:nil messageId:hopMessage.messageID conversationEvent:inSession.lastConversationEvent];
+        [[HOPModelManager sharedModelManager] addMessage:message type:messageTypeText date:hopMessage.date session:[inSession.conversationThread getThreadId] openPeerContact:[[HOPModelManager sharedModelManager] getOpenPeerContactForAccount] messageId:hopMessage.messageID conversationEvent:inSession.lastConversationEvent];
     }
     
     if ([UIDevice isNetworkReachable] && [[HOPAccount sharedAccount] isCoreAccountCreated] && ([[HOPAccount sharedAccount] getState].state == HOPAccountStateReady))

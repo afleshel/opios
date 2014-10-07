@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2012, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,28 +29,35 @@
  
  */
 
+#import "HOPMessageRecord+External.h"
+//#import <openpeer/core/types.h>
+//#import <openpeer/core/IConversationThread.h>
+#import "HOPConversationThread.h"
+#import "HOPModelManager.h"
 
-#import "HOPContact.h"
-#import <openpeer/core/types.h>
+//using namespace openpeer;
+//using namespace openpeer::core;
 
-using namespace openpeer;
-using namespace openpeer::core;
+@implementation HOPMessageRecord (External)
 
-@interface HOPContact ()
+
+- (void)setOutgoingMessageStatus:(HOPConversationThreadMessageDeliveryState)outgoingMessageStatus
 {
-    IContactPtr coreContactPtr;
+    NSString* statusToSet = [HOPConversationThread stringForMessageDeliveryState:outgoingMessageStatus];
+    if (statusToSet.length > 0)
+    {
+        self.outMessageStatus = statusToSet;
+    
+        [[HOPModelManager sharedModelManager] saveContext];
+    }
 }
 
-@property (copy) NSString* contactId;
-@property (copy) NSString* userId;
-@property (copy) NSString* peerFile;
-@property (assign) long lastProfileUpdateTimestamp;
-@property (retain) NSMutableDictionary* identitiesDictionary;
-
-- (id) initWithCoreContact:(IContactPtr) inContactPtr;
-- (IContactPtr) getContactPtr;
-
-- (String) log:(NSString*) message;
-
-+ (NSString*) getPeerFilePublicFromCoreContact:(IContactPtr) coreContact;
+- (HOPConversationThreadMessageDeliveryState)getOutgoingMessageStatus
+{
+    HOPConversationThreadMessageDeliveryState ret;
+    
+    ret = [HOPConversationThread toMessageDeliveryStates:self.outMessageStatus];//(HOPConversationThreadMessageDeliveryState) IConversationThread::toMessageDeliveryStates([self.outMessageStatus UTF8String]);
+    
+    return ret;
+}
 @end
