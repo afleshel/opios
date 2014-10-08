@@ -351,7 +351,10 @@
 {
     for (Session* session in [self.sessionsDictionary allValues])
     {
-        if ([session.participantsArray isEqualToArray:contacts])
+        NSSet *set1 = [NSSet setWithArray:session.participantsArray];
+        NSSet *set2 = [NSSet setWithArray:contacts];
+        
+        if ([set1 isEqualToSet:set2])
             return session;
     }
     return nil;
@@ -838,12 +841,18 @@
 {
     if (session && participants.count > 0)
     {
+        NSMutableArray* contacts = [NSMutableArray new];
+        
         for (HOPRolodexContact* contact in participants)
         {
             HOPContact* hopContact = [contact getCoreContact];
+            
             if (hopContact)
-                [session.conversationThread addContacts:@[hopContact]];
+                [contacts addObject:hopContact];
         }
+        
+        if (contacts.count > 0)
+            [session.conversationThread addContacts:contacts];
     }
 }
 
@@ -851,12 +860,17 @@
 {
     if (session && participants.count > 0)
     {
+        NSMutableArray* contacts = [NSMutableArray new];
+        
         for (HOPRolodexContact* contact in participants)
         {
             HOPContact* hopContact = [contact getCoreContact];
             if (hopContact)
-                [session.conversationThread removeContacts:@[hopContact]];
+                [contacts addObject:hopContact];
         }
+        
+        if (contacts.count > 0)
+            [session.conversationThread removeContacts:contacts];
     }
 }
 

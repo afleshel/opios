@@ -1421,8 +1421,12 @@ using namespace openpeer::core;
         {
             for (HOPParticipants* p in result)
             {
-                if ([p.participants.allObjects isEqualToArray:contacts])
-                    ret = p;
+                NSSet *set = [NSSet setWithArray:contacts];
+                
+                if ([set isEqualToSet:p.participants])
+                    return p;
+//                if ([p.participants.allObjects isEqualToArray:contacts])
+//                    ret = p;
             }
         }
         
