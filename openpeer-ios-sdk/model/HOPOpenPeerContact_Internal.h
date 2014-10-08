@@ -29,23 +29,14 @@
  
  */
 
-#import "HOPSessionRecord.h"
-#import "HOPConversationThreadRecord.h"
-#import "HOPHomeUser.h"
-#import "HOPMessageRecord.h"
-#import "HOPPublicPeerFile.h"
+#import <HOPOpenPeerContact+External.h>
+#import <openpeer/core/IContact.h>
+#import <openpeer/core/IConversationThread.h>
 
+using namespace openpeer;
+using namespace openpeer::core;
 
-@implementation HOPSessionRecord
+@interface HOPOpenPeerContact ()
 
-@dynamic creationTime;
-@dynamic lastActivity;
-@dynamic name;
-@dynamic sessionID;
-@dynamic type;
-@dynamic conversationThreadRecords;
-@dynamic homeUser;
-@dynamic messages;
-@dynamic participants;
-
++ (id) createOpenPeerContacFromCoreContact:(IContactPtr) contactPtr conversationThread:(IConversationThreadPtr) conversationThreadPtr;
 @end

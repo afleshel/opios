@@ -32,27 +32,42 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class HOPAssociatedIdentity, HOPSessionRecord;
+@class HOPConversationEvent, HOPConversationThreadRecord, HOPMessageRecord, HOPOpenPeerAccount, HOPOpenPeerContact;
 
-@interface HOPHomeUser : NSManagedObject
+@interface HOPConversationRecord : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * loggedIn;
-@property (nonatomic, retain) NSString * reloginInfo;
-@property (nonatomic, retain) NSString * stableId;
-@property (nonatomic, retain) NSSet *associatedIdentities;
-@property (nonatomic, retain) NSSet *sessionRecords;
+@property (nonatomic, retain) NSDate * creationTime;
+@property (nonatomic, retain) NSDate * lastActivity;
+@property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) NSString * sessionID;
+@property (nonatomic, retain) NSString * type;
+@property (nonatomic, retain) NSSet *conversationThreadRecords;
+@property (nonatomic, retain) NSSet *events;
+@property (nonatomic, retain) HOPOpenPeerAccount *homeUser;
+@property (nonatomic, retain) NSSet *messages;
+@property (nonatomic, retain) NSSet *participants;
 @end
 
-@interface HOPHomeUser (CoreDataGeneratedAccessors)
+@interface HOPConversationRecord (CoreDataGeneratedAccessors)
 
-- (void)addAssociatedIdentitiesObject:(HOPAssociatedIdentity *)value;
-- (void)removeAssociatedIdentitiesObject:(HOPAssociatedIdentity *)value;
-- (void)addAssociatedIdentities:(NSSet *)values;
-- (void)removeAssociatedIdentities:(NSSet *)values;
+- (void)addConversationThreadRecordsObject:(HOPConversationThreadRecord *)value;
+- (void)removeConversationThreadRecordsObject:(HOPConversationThreadRecord *)value;
+- (void)addConversationThreadRecords:(NSSet *)values;
+- (void)removeConversationThreadRecords:(NSSet *)values;
 
-- (void)addSessionRecordsObject:(HOPSessionRecord *)value;
-- (void)removeSessionRecordsObject:(HOPSessionRecord *)value;
-- (void)addSessionRecords:(NSSet *)values;
-- (void)removeSessionRecords:(NSSet *)values;
+- (void)addEventsObject:(HOPConversationEvent *)value;
+- (void)removeEventsObject:(HOPConversationEvent *)value;
+- (void)addEvents:(NSSet *)values;
+- (void)removeEvents:(NSSet *)values;
+
+- (void)addMessagesObject:(HOPMessageRecord *)value;
+- (void)removeMessagesObject:(HOPMessageRecord *)value;
+- (void)addMessages:(NSSet *)values;
+- (void)removeMessages:(NSSet *)values;
+
+- (void)addParticipantsObject:(HOPOpenPeerContact *)value;
+- (void)removeParticipantsObject:(HOPOpenPeerContact *)value;
+- (void)addParticipants:(NSSet *)values;
+- (void)removeParticipants:(NSSet *)values;
 
 @end

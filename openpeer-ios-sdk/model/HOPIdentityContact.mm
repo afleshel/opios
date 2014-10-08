@@ -29,17 +29,17 @@
  
  */
 
-#import "HOPHomeUser.h"
-#import "HOPAssociatedIdentity.h"
-#import "HOPSessionRecord.h"
+#import "HOPIdentityContact.h"
+#import "HOPPublicPeerFile.h"
+#import "HOPRolodexContact.h"
 
+@implementation HOPIdentityContact
 
-@implementation HOPHomeUser
-
-@dynamic loggedIn;
-@dynamic reloginInfo;
-@dynamic stableId;
-@dynamic associatedIdentities;
-@dynamic sessionRecords;
+@dynamic expires;
+@dynamic identityProofBundle;
+@dynamic lastUpdated;
+@dynamic priority;
+@dynamic weight;
+@dynamic rolodexContact;
 
 @end

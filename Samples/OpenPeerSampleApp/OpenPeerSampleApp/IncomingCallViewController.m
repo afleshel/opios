@@ -38,6 +38,9 @@
 #import <OpenPeerSDK/HOPAvatar.h>
 #import <OpenPeerSDK/HOPImage.h>
 #import "Session.h"
+#import <OpenPeerSDK/HOPConversationEvent.h>
+#import <OpenPeerSDK/HOPParticipants.h>
+#import <OpenPeerSDK/HOPOpenPeerContact+External.h>
 
 @interface IncomingCallViewController ()
 
@@ -108,7 +111,9 @@
 {
     [super viewDidLoad];
 
-    HOPRolodexContact* rolodexContact = [self.session.participantsArray objectAtIndex:0];
+    //HOPRolodexContact* rolodexContact = [self.session.participantsArray objectAtIndex:0];
+    HOPOpenPeerContact* contact = self.session.lastConversationEvent.participants.participants.allObjects[0];
+    HOPRolodexContact* rolodexContact = [contact getDefaultRolodexContact];
     
     self.labelCallType.text = [self.session.currentCall hasVideo] ? NSLocalizedString(@"Video call from", nil) : NSLocalizedString(@"Audio call from", nil);
     

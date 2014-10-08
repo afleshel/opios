@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -40,8 +40,8 @@
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSString * url;
 @property (nonatomic, retain) NSNumber * width;
-@property (nonatomic, retain) NSSet *rolodexContacts;
 @property (nonatomic, retain) HOPImage *avatarImage;
+@property (nonatomic, retain) NSSet *rolodexContacts;
 @end
 
 @interface HOPAvatar (CoreDataGeneratedAccessors)

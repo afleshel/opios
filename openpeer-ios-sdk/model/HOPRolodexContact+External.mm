@@ -39,6 +39,7 @@
 #import "HOPContact.h"
 #import "HOPUtility.h"
 #import "HOPAssociatedIdentity.h"
+#import "HOPOpenPeerContact.h"
 
 @implementation HOPRolodexContact (External)
 
@@ -49,11 +50,12 @@
     HOPAssociatedIdentity* associated = [[HOPModelManager sharedModelManager] getAssociatedIdentityByDomain:identityProviderDomain identityName:baseIdentityURI homeUserIdentityURI:homeUserIdentityURI];
     if (!associated)
     {
-        associated = [NSEntityDescription insertNewObjectForEntityForName:@"HOPAssociatedIdentity" inManagedObjectContext:[[HOPModelManager sharedModelManager]managedObjectContext]];
-        
-        associated.baseIdentityURI = baseIdentityURI;
-        associated.name = baseIdentityURI;
-        associated.domain = identityProviderDomain;
+//        associated = [NSEntityDescription insertNewObjectForEntityForName:@"HOPAssociatedIdentity" inManagedObjectContext:[[HOPModelManager sharedModelManager]managedObjectContext]];
+//        
+//        associated.baseIdentityURI = baseIdentityURI;
+//        associated.name = baseIdentityURI;
+//        associated.domain = identityProviderDomain;
+        associated = [[HOPModelManager sharedModelManager] addAssociatedIdentityForBaseIdentityURI:baseIdentityURI domain:identityProviderDomain name:baseIdentityURI account:nil selfRolodexProfileProfile:nil];
     }
     
     self.name = inName;
@@ -66,10 +68,10 @@
 
 - (HOPContact*) getCoreContact
 {
-    HOPContact* ret = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:self.identityContact.peerFile.peerURI];
+    HOPContact* ret = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:self.identityContact.openPeerContact.publicPeerFile.peerURI];
     if (!ret)
     {
-        ret = [[HOPContact alloc] initWithPeerFile:self.identityContact.peerFile.peerFile];
+        ret = [[HOPContact alloc] initWithPeerFile:self.identityContact.openPeerContact.publicPeerFile.peerFile];
     }
     return ret;
 }
@@ -77,11 +79,13 @@
 - (HOPAvatar*) getAvatarForWidth:(NSNumber*) width height:(NSNumber*) height
 {
     HOPAvatar* ret = nil;
-    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"width <= %f AND height <= %f", width,height];
-    NSSet* filtered = [self.avatars filteredSetUsingPredicate:predicate];
-    if (filtered)
-        ret = [filtered anyObject];
+//    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"width <= %f AND height <= %f", width,height];
+//    NSSet* filtered = [self.avatars filteredSetUsingPredicate:predicate];
+//    if (filtered)
+//        ret = [filtered anyObject];
     
+    if (self.avatars.count > 0)
+        ret = self.avatars.allObjects[0];
     return ret;
 }
 

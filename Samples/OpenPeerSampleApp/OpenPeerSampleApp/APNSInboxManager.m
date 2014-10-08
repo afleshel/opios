@@ -48,6 +48,7 @@
 #import <OpenpeerSDK/HOPRolodexContact+External.h>
 #import <OpenpeerSDK/HOPConversationThread.h>
 #import <OpenpeerSDK/HOPPublicPeerFile.h>
+#import <OpenpeerSDK/HOPOpenPeerContact.h>
 
 @interface APNSInboxManager ()
 
@@ -161,17 +162,18 @@
         NSString* senderPeerURI = [richPushDictionary objectForKey:@"peerURI"];
         if ([senderPeerURI length] > 0)
         {
-            NSArray* rolodexContacts = [[HOPModelManager sharedModelManager]  getRolodexContactsByPeerURI:senderPeerURI];
-            HOPRolodexContact* contact = nil;
+//            NSArray* rolodexContacts = [[HOPModelManager sharedModelManager]  getRolodexContactsByPeerURI:senderPeerURI];
+//            HOPRolodexContact* contact = nil;
+//            
+//            if ([rolodexContacts count] > 0)
+//                contact = [rolodexContacts objectAtIndex:0];
             
-            if ([rolodexContacts count] > 0)
-                contact = [rolodexContacts objectAtIndex:0];
-            
+            HOPOpenPeerContact* contact = [[HOPModelManager sharedModelManager] getOpenPeerContactForPeerURI:senderPeerURI];
             if (contact)
             {
-                Session* session = [[SessionManager sharedSessionManager] getSessionForContact:contact];
+                Session* session = [[SessionManager sharedSessionManager] getSessionForContacts:@[contact]];
                 if (!session)
-                    session = [[SessionManager sharedSessionManager]createSessionForContact:contact];
+                    session = [[SessionManager sharedSessionManager]createSessionForContacts:@[contact]];
                 
                 NSString* messageID = [richPushDictionary objectForKey:@"messageId"];
                 NSString* messageText = [richPushDictionary objectForKey:@"message"];
@@ -204,7 +206,7 @@
                     }
                     else
                     {
-                        HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:messageText type:messageTypeText date:date session:[session.conversationThread getThreadId] rolodexContact:contact messageId:messageID];
+                        HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:messageText type:messageTypeText date:date session:[session.conversationThread getThreadId] openPeerContact:contact messageId:messageID conversationEvent:session.lastConversationEvent];
                         
                         
                         if (messageObj)

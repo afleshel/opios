@@ -30,8 +30,10 @@
  */
 
 #import "HOPMessageRecord.h"
-#import "HOPPublicPeerFile.h"
-#import "HOPSessionRecord.h"
+#import "HOPConversationEvent.h"
+#import "HOPConversationRecord.h"
+#import "HOPMessageEvent.h"
+#import "HOPOpenPeerContact.h"
 
 
 @implementation HOPMessageRecord
@@ -40,13 +42,17 @@
 @dynamic deleted;
 @dynamic edited;
 @dynamic image;
+@dynamic incomingMessageStatus;
 @dynamic messageID;
-@dynamic messageStatus;
+@dynamic outMessageStatus;
+@dynamic read;
+@dynamic showStatus;
 @dynamic text;
 @dynamic type;
 @dynamic visible;
-@dynamic showStatus;
-@dynamic fromPeer;
+@dynamic conversationEvent;
+@dynamic messageEvent;
+@dynamic sender;
 @dynamic session;
 
 @end

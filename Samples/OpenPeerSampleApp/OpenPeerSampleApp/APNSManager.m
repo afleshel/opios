@@ -48,12 +48,12 @@
 #import <OpenPeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPAccount.h>
 #import <OpenPeerSDK/HOPPublicPeerFile.h>
-#import <OpenPeerSDK/HOPHomeUser+External.h>
+#import <OpenPeerSDK/HOPOpenPeerAccount+External.h>
 #import <OpenPeerSDK/HOPMessage.h>
 #import <OpenPeerSDK/HOPBackgrounding.h>
 #import <OpenPeerSDK/HOPUtility.h>
 #import <OpenPeerSDK/HOPAPNSData.h>
-#import <OpenPeerSDK/HOPMessageRecord.h>
+#import <OpenPeerSDK/HOPMessageRecord+External.h>
 #import <OpenPeerSDK/HOPTypes.h>
 
 #define  timeBetweenPushNotificationsInSeconds 1
@@ -551,7 +551,7 @@ didCompleteWithError:(NSError *)error
             HOPMessageRecord* messageRecord = [[HOPModelManager sharedModelManager] getMessageRecordByID:messageID];
             if (messageRecord)
             {
-                messageRecord.messageStatus = [NSNumber numberWithInt:HOPConversationThreadMessageDeliveryStateSent];
+                messageRecord.outgoingMessageStatus = HOPConversationThreadMessageDeliveryStateSent;//[NSNumber numberWithInt:HOPConversationThreadMessageDeliveryStateSent];
                 [[HOPModelManager sharedModelManager] updateMessageStatusVisibilityForSession:messageRecord.session lastDeliveryState:HOPConversationThreadMessageDeliveryStateSent];
 
                 [[HOPModelManager sharedModelManager] saveContext];

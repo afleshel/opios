@@ -546,6 +546,8 @@
 		87E4DA11180D5082002CA2D4 /* message-received.wav in Resources */ = {isa = PBXBuildFile; fileRef = 87E4DA0A180D5082002CA2D4 /* message-received.wav */; };
 		87E4DA12180D5082002CA2D4 /* message-send.wav in Resources */ = {isa = PBXBuildFile; fileRef = 87E4DA0B180D5082002CA2D4 /* message-send.wav */; };
 		87E4DA14180D5082002CA2D4 /* ringing.caf in Resources */ = {isa = PBXBuildFile; fileRef = 87E4DA0D180D5082002CA2D4 /* ringing.caf */; };
+		87E8CDAF19D2D9DD00BAF67E /* AddParticipantsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87E8CDAE19D2D9DD00BAF67E /* AddParticipantsViewController.m */; };
+		87E8CDB019D2D9DD00BAF67E /* AddParticipantsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87E8CDAE19D2D9DD00BAF67E /* AddParticipantsViewController.m */; };
 		87EE5FE9166E917B002C5FA3 /* libresolv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 87EE5FE8166E917B002C5FA3 /* libresolv.dylib */; };
 		87EE5FF4166E9615002C5FA3 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 874ADDB4166E138A0095FE33 /* CoreAudio.framework */; };
 		87EE5FF5166E9615002C5FA3 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 874ADDBC166E14440095FE33 /* CoreMedia.framework */; };
@@ -973,6 +975,8 @@
 		87E4DA0A180D5082002CA2D4 /* message-received.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "message-received.wav"; sourceTree = "<group>"; };
 		87E4DA0B180D5082002CA2D4 /* message-send.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "message-send.wav"; sourceTree = "<group>"; };
 		87E4DA0D180D5082002CA2D4 /* ringing.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ringing.caf; sourceTree = "<group>"; };
+		87E8CDAD19D2D9DD00BAF67E /* AddParticipantsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddParticipantsViewController.h; sourceTree = "<group>"; };
+		87E8CDAE19D2D9DD00BAF67E /* AddParticipantsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddParticipantsViewController.m; sourceTree = "<group>"; };
 		87EE5FE8166E917B002C5FA3 /* libresolv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libresolv.dylib; path = usr/lib/libresolv.dylib; sourceTree = SDKROOT; };
 		87EE5FF9166F5A7E002C5FA3 /* WebLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebLoginViewController.h; sourceTree = "<group>"; };
 		87EE5FFA166F5A7F002C5FA3 /* WebLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebLoginViewController.m; sourceTree = "<group>"; };
@@ -1664,6 +1668,8 @@
 				8723870D19465A57002643D6 /* ActiveSessionTableViewCell.xib */,
 				87E0355C19AF52B4008A195C /* ChatCell.h */,
 				87E0355D19AF52B4008A195C /* ChatCell.m */,
+				87E8CDAD19D2D9DD00BAF67E /* AddParticipantsViewController.h */,
+				87E8CDAE19D2D9DD00BAF67E /* AddParticipantsViewController.m */,
 			);
 			name = Session;
 			sourceTree = "<group>";
@@ -2210,6 +2216,7 @@
 				874FE10E17FD7FF0007A791B /* AppLog.m in Sources */,
 				8757E1CB1827E85700D7BDA1 /* TTTAttributedLabel.m in Sources */,
 				8727283D166CBF9B0089CBB6 /* AppDelegate.m in Sources */,
+				87E8CDAF19D2D9DD00BAF67E /* AddParticipantsViewController.m in Sources */,
 				87272850166CC1810089CBB6 /* MainViewController.m in Sources */,
 				87A1086A1802C116001F705D /* Logger.m in Sources */,
 				8730D6E31832601C008D1D37 /* VideoCallViewController.m in Sources */,
@@ -2308,6 +2315,7 @@
 				87D4BCF418675368008C2D30 /* WaitingVideoViewController.m in Sources */,
 				87D4BCF518675368008C2D30 /* Settings.m in Sources */,
 				87D4BCF618675368008C2D30 /* ActivityIndicatorViewController.m in Sources */,
+				87E8CDB019D2D9DD00BAF67E /* AddParticipantsViewController.m in Sources */,
 				87B5EAC318683E4300D25C3B /* APNSManager.m in Sources */,
 				87D4BCF718675368008C2D30 /* IdentityDelegate.m in Sources */,
 				87B541D11897E2440038D427 /* QRScannerViewController.m in Sources */,

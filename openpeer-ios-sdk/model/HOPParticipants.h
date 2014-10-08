@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,13 +29,32 @@
  
  */
 
-#import "HOPHomeUser.h"
+#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
-@class HOPRolodexContact;
+@class HOPConversationEvent, HOPOpenPeerContact;
 
-@interface HOPHomeUser (External)
+@interface HOPParticipants : NSManagedObject
 
-- (NSString*) getFullName;
-- (HOPRolodexContact*) getRolodexContactForIdentityBaseURI:(NSString*)identityBaseURI;
+@property (nonatomic, retain) NSString * cbcID;
+@property (nonatomic, retain) NSSet *events;
+@property (nonatomic, retain) NSSet *participants;
+@end
+
+@interface HOPParticipants (CoreDataGeneratedAccessors)
+
+- (NSString *)sectionIdentifier;
+- (HOPConversationEvent*) lastEvent;
+- (NSDate*) getDateOfLastEvent;
+
+- (void)addEventsObject:(HOPConversationEvent *)value;
+- (void)removeEventsObject:(HOPConversationEvent *)value;
+- (void)addEvents:(NSSet *)values;
+- (void)removeEvents:(NSSet *)values;
+
+- (void)addParticipantsObject:(HOPOpenPeerContact *)value;
+- (void)removeParticipantsObject:(HOPOpenPeerContact *)value;
+- (void)addParticipants:(NSSet *)values;
+- (void)removeParticipants:(NSSet *)values;
 
 @end

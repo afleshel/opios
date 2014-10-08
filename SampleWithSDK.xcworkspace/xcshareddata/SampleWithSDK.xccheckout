@@ -10,81 +10,89 @@
 	<string>SampleWithSDK</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>041540A8-F18E-4D99-A58E-DC043AE9CF9A</key>
-		<string>https://github.com/openpeer/op-core-cpp.git</string>
-		<key>0D54C942-3188-4105-8304-6D592E05FE5A</key>
-		<string>https://github.com/openpeer/webrtc.git</string>
-		<key>0F687F5E-CDDD-4775-B193-9FE225E13473</key>
-		<string>https://github.com/openpeer/ortc-lib.git</string>
-		<key>1C864DAA-0202-4C07-AF1A-6FB241C1FAA4</key>
-		<string>https://github.com/openpeer/udns.git</string>
-		<key>2B858F79-A470-4A66-A3D2-3A68A79DF988</key>
-		<string>https://github.com/openpeer/op-stack-cpp.git</string>
-		<key>378B0BA6-43D8-4AE5-814F-C91FF22EA72F</key>
-		<string>https://github.com/openpeer/op-services-cpp.git</string>
-		<key>3A172DFB-D582-4DC1-AA89-BBF041201EF7</key>
-		<string>https://github.com/openpeer/webrtc-build.git</string>
-		<key>3D842314-9294-4190-9AE9-D1EDF361D214</key>
-		<string>http://git.chromium.org/git/chromium/deps/opus.git</string>
-		<key>73046398-E100-4D93-96A5-1469E32CC569</key>
-		<string>https://github.com/openpeer/libvpx.git</string>
-		<key>853FFBD3-251A-4565-8C66-B078E5388772</key>
-		<string>https://github.com/openpeer/opios.git</string>
-		<key>8D51C60C-74E2-4EB3-A153-CB8F70725156</key>
-		<string>https://github.com/openpeer/libyuv.git</string>
-		<key>8FAEBCB0-FB2D-4374-B1F1-73C7B08620AC</key>
-		<string>https://github.com/openpeer/cryptopp.git</string>
-		<key>995A46A7-1D21-44B2-8D24-FC411AC23BC0</key>
-		<string>https://github.com/openpeer/boost.git</string>
-		<key>A657828D-19C1-4DA1-A936-BE7A3B16B9F0</key>
+		<key>0B40C9B29DF85F9B95148220FB66992E0A100260</key>
 		<string>https://github.com/openpeer/zsLib.git</string>
+		<key>1472412A1A40EF795F29C7EBF79DE9C343137C4D</key>
+		<string>https://github.com/openpeer/curl.git</string>
+		<key>18AB54218AD2700398D41F4F5AB153CB20A8408E</key>
+		<string>https://github.com/openpeer/ortc-lib.git</string>
+		<key>1AEC100C3FDF695507EBDA56D8B5EEF14E9435F6</key>
+		<string>https://github.com/openpeer/op-services-cpp.git</string>
+		<key>1C12AEC73F7832395C33E184A53877CF9AAAE89A</key>
+		<string>https://github.com/openpeer/webrtc-build.git</string>
+		<key>2C527055FD74D25C6401CFB69645DA538B2707DB</key>
+		<string>https://github.com/openpeer/libvpx.git</string>
+		<key>34BB9410AB3451CFDD217E17A826EDEFF7A2B703</key>
+		<string>https://github.com/openpeer/cryptopp.git</string>
+		<key>4DBBCC138A9C200705DA48043A17901C34549C6B</key>
+		<string>https://github.com/openpeer/op.git</string>
+		<key>6A3B4D2909F28DB31AD1B89DCEECA4FB6C94CC46</key>
+		<string>https://github.com/openpeer/libyuv.git</string>
+		<key>8FFACF9194D48576A22F6F0C4F6B4F0BA1ABFC64</key>
+		<string>https://github.com/openpeer/webrtc.git</string>
+		<key>ADA8CC136CBBB7C6796072ACF115BBDB805B12BF</key>
+		<string>https://github.com/openpeer/opios.git</string>
+		<key>CC2F1B61559E4E92CD7DE25BBDA2535ABAC42F4C</key>
+		<string>https://github.com/openpeer/op-stack-cpp.git</string>
+		<key>E07FACA937B28987C0324991C4D3477A482A466D</key>
+		<string>https://github.com/openpeer/udns.git</string>
+		<key>F19BAFFD20332E4A9E146233C991C93D9AB929B9</key>
+		<string>https://github.com/openpeer/boost.git</string>
+		<key>F34C977979F46250B44064BFD35BA9250267BA7B</key>
+		<string>http://git.chromium.org/git/chromium/deps/opus.git</string>
+		<key>FB2FC17BED7C86849E8D9166359BB4487E2C914C</key>
+		<string>https://github.com/openpeer/op-core-cpp.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>SampleWithSDK.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>041540A8-F18E-4D99-A58E-DC043AE9CF9A</key>
-		<string>../libs/op/libs/op-core-cpp</string>
-		<key>0D54C942-3188-4105-8304-6D592E05FE5A</key>
-		<string>../libs/op/libs/ortc-lib/libs/webrtc</string>
-		<key>0F687F5E-CDDD-4775-B193-9FE225E13473</key>
-		<string>../libs/op/libs/ortc-lib</string>
-		<key>1C864DAA-0202-4C07-AF1A-6FB241C1FAA4</key>
-		<string>../libs/op/libs/ortc-lib/libs/udns</string>
-		<key>2B858F79-A470-4A66-A3D2-3A68A79DF988</key>
-		<string>../libs/op/libs/op-stack-cpp</string>
-		<key>378B0BA6-43D8-4AE5-814F-C91FF22EA72F</key>
-		<string>../libs/op/libs/ortc-lib/libs/op-services-cpp</string>
-		<key>3A172DFB-D582-4DC1-AA89-BBF041201EF7</key>
-		<string>../libs/op/libs/ortc-lib/libs/webrtc/build</string>
-		<key>3D842314-9294-4190-9AE9-D1EDF361D214</key>
-		<string>../libs/op/libs/ortc-lib/libs/webrtc/third_party/opus/src</string>
-		<key>73046398-E100-4D93-96A5-1469E32CC569</key>
-		<string>../libs/op/libs/ortc-lib/libs/webrtc/third_party/libvpx</string>
-		<key>853FFBD3-251A-4565-8C66-B078E5388772</key>
-		<string>..</string>
-		<key>8D51C60C-74E2-4EB3-A153-CB8F70725156</key>
-		<string>../libs/op/libs/ortc-lib/libs/webrtc/third_party/libyuv</string>
-		<key>8FAEBCB0-FB2D-4374-B1F1-73C7B08620AC</key>
-		<string>../libs/op/libs/ortc-lib/libs/cryptopp</string>
-		<key>995A46A7-1D21-44B2-8D24-FC411AC23BC0</key>
-		<string>../libs/op/libs/ortc-lib/libs/boost</string>
-		<key>A657828D-19C1-4DA1-A936-BE7A3B16B9F0</key>
+		<key>0B40C9B29DF85F9B95148220FB66992E0A100260</key>
 		<string>../libs/op/libs/ortc-lib/libs/zsLib</string>
+		<key>1472412A1A40EF795F29C7EBF79DE9C343137C4D</key>
+		<string>../libs/op/libs/ortc-lib/libs/curl</string>
+		<key>18AB54218AD2700398D41F4F5AB153CB20A8408E</key>
+		<string>../libs/op/libs/ortc-lib</string>
+		<key>1AEC100C3FDF695507EBDA56D8B5EEF14E9435F6</key>
+		<string>../libs/op/libs/ortc-lib/libs/op-services-cpp</string>
+		<key>1C12AEC73F7832395C33E184A53877CF9AAAE89A</key>
+		<string>../libs/op/libs/ortc-lib/libs/webrtc/build</string>
+		<key>2C527055FD74D25C6401CFB69645DA538B2707DB</key>
+		<string>../libs/op/libs/ortc-lib/libs/webrtc/third_party/libvpx</string>
+		<key>34BB9410AB3451CFDD217E17A826EDEFF7A2B703</key>
+		<string>../libs/op/libs/ortc-lib/libs/cryptopp</string>
+		<key>4DBBCC138A9C200705DA48043A17901C34549C6B</key>
+		<string>../libs/op</string>
+		<key>6A3B4D2909F28DB31AD1B89DCEECA4FB6C94CC46</key>
+		<string>../libs/op/libs/ortc-lib/libs/webrtc/third_party/libyuv</string>
+		<key>8FFACF9194D48576A22F6F0C4F6B4F0BA1ABFC64</key>
+		<string>../libs/op/libs/ortc-lib/libs/webrtc</string>
+		<key>ADA8CC136CBBB7C6796072ACF115BBDB805B12BF</key>
+		<string>..</string>
+		<key>CC2F1B61559E4E92CD7DE25BBDA2535ABAC42F4C</key>
+		<string>../libs/op/libs/op-stack-cpp</string>
+		<key>E07FACA937B28987C0324991C4D3477A482A466D</key>
+		<string>../libs/op/libs/ortc-lib/libs/udns</string>
+		<key>F19BAFFD20332E4A9E146233C991C93D9AB929B9</key>
+		<string>../libs/op/libs/ortc-lib/libs/boost</string>
+		<key>F34C977979F46250B44064BFD35BA9250267BA7B</key>
+		<string>../libs/op/libs/ortc-lib/libs/webrtc/third_party/opus/src</string>
+		<key>FB2FC17BED7C86849E8D9166359BB4487E2C914C</key>
+		<string>../libs/op/libs/op-core-cpp</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/openpeer/opios.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>853FFBD3-251A-4565-8C66-B078E5388772</string>
+	<string>ADA8CC136CBBB7C6796072ACF115BBDB805B12BF</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>995A46A7-1D21-44B2-8D24-FC411AC23BC0</string>
+			<string>F19BAFFD20332E4A9E146233C991C93D9AB929B9</string>
 			<key>IDESourceControlWCCName</key>
 			<string>boost</string>
 		</dict>
@@ -92,7 +100,7 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>3A172DFB-D582-4DC1-AA89-BBF041201EF7</string>
+			<string>1C12AEC73F7832395C33E184A53877CF9AAAE89A</string>
 			<key>IDESourceControlWCCName</key>
 			<string>build</string>
 		</dict>
@@ -100,7 +108,7 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>8FAEBCB0-FB2D-4374-B1F1-73C7B08620AC</string>
+			<string>34BB9410AB3451CFDD217E17A826EDEFF7A2B703</string>
 			<key>IDESourceControlWCCName</key>
 			<string>cryptopp</string>
 		</dict>
@@ -108,7 +116,15 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>73046398-E100-4D93-96A5-1469E32CC569</string>
+			<string>1472412A1A40EF795F29C7EBF79DE9C343137C4D</string>
+			<key>IDESourceControlWCCName</key>
+			<string>curl</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>2C527055FD74D25C6401CFB69645DA538B2707DB</string>
 			<key>IDESourceControlWCCName</key>
 			<string>libvpx</string>
 		</dict>
@@ -116,7 +132,7 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>8D51C60C-74E2-4EB3-A153-CB8F70725156</string>
+			<string>6A3B4D2909F28DB31AD1B89DCEECA4FB6C94CC46</string>
 			<key>IDESourceControlWCCName</key>
 			<string>libyuv</string>
 		</dict>
@@ -124,7 +140,15 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>041540A8-F18E-4D99-A58E-DC043AE9CF9A</string>
+			<string>4DBBCC138A9C200705DA48043A17901C34549C6B</string>
+			<key>IDESourceControlWCCName</key>
+			<string>op</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>FB2FC17BED7C86849E8D9166359BB4487E2C914C</string>
 			<key>IDESourceControlWCCName</key>
 			<string>op-core-cpp</string>
 		</dict>
@@ -132,7 +156,7 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>378B0BA6-43D8-4AE5-814F-C91FF22EA72F</string>
+			<string>1AEC100C3FDF695507EBDA56D8B5EEF14E9435F6</string>
 			<key>IDESourceControlWCCName</key>
 			<string>op-services-cpp</string>
 		</dict>
@@ -140,7 +164,7 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>2B858F79-A470-4A66-A3D2-3A68A79DF988</string>
+			<string>CC2F1B61559E4E92CD7DE25BBDA2535ABAC42F4C</string>
 			<key>IDESourceControlWCCName</key>
 			<string>op-stack-cpp</string>
 		</dict>
@@ -148,7 +172,7 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>853FFBD3-251A-4565-8C66-B078E5388772</string>
+			<string>ADA8CC136CBBB7C6796072ACF115BBDB805B12BF</string>
 			<key>IDESourceControlWCCName</key>
 			<string>opios</string>
 		</dict>
@@ -156,7 +180,7 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>0F687F5E-CDDD-4775-B193-9FE225E13473</string>
+			<string>18AB54218AD2700398D41F4F5AB153CB20A8408E</string>
 			<key>IDESourceControlWCCName</key>
 			<string>ortc-lib</string>
 		</dict>
@@ -164,7 +188,7 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>3D842314-9294-4190-9AE9-D1EDF361D214</string>
+			<string>F34C977979F46250B44064BFD35BA9250267BA7B</string>
 			<key>IDESourceControlWCCName</key>
 			<string>src</string>
 		</dict>
@@ -172,7 +196,7 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>1C864DAA-0202-4C07-AF1A-6FB241C1FAA4</string>
+			<string>E07FACA937B28987C0324991C4D3477A482A466D</string>
 			<key>IDESourceControlWCCName</key>
 			<string>udns</string>
 		</dict>
@@ -180,7 +204,7 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>0D54C942-3188-4105-8304-6D592E05FE5A</string>
+			<string>8FFACF9194D48576A22F6F0C4F6B4F0BA1ABFC64</string>
 			<key>IDESourceControlWCCName</key>
 			<string>webrtc</string>
 		</dict>
@@ -188,7 +212,7 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>A657828D-19C1-4DA1-A936-BE7A3B16B9F0</string>
+			<string>0B40C9B29DF85F9B95148220FB66992E0A100260</string>
 			<key>IDESourceControlWCCName</key>
 			<string>zsLib</string>
 		</dict>

@@ -29,9 +29,9 @@
  
  */
 
-#import "HOPSessionRecord.h"
+#import "HOPConversationRecord.h"
 
-@interface HOPSessionRecord (External)
+@interface HOPConversationRecord (External)
 
 - (NSString *)sectionIdentifier;
 @end

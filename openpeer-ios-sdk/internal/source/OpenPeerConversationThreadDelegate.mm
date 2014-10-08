@@ -34,7 +34,7 @@
 #import "OpenPeerStorageManager.h"
 #import "HOPConversationThread_Internal.h"
 #import "HOPModelManager.h"
-#import "HOPMessageRecord.h"
+#import "HOPMessageRecord+External.h"
 
 #include <zsLib/types.h>
 #import <openpeer/core/ILogger.h>
@@ -106,7 +106,7 @@ void OpenPeerConversationThreadDelegate::onConversationThreadMessageDeliveryStat
     if (hopConversationThread && [messageId length] > 0)
     {
         HOPMessageRecord* messageRecord = [[HOPModelManager sharedModelManager] getMessageRecordByID:messageId];
-        messageRecord.messageStatus = [NSNumber numberWithInt:state];
+        messageRecord.outgoingMessageStatus = (HOPConversationThreadMessageDeliveryState)state;//[NSNumber numberWithInt:state];
         messageRecord.showStatus = [NSNumber numberWithBool:YES];
         [[HOPModelManager sharedModelManager] saveContext];
         

@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -32,26 +32,12 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class HOPAPNSData, HOPIdentityContact;
+@class HOPOpenPeerContact;
 
 @interface HOPPublicPeerFile : NSManagedObject
 
 @property (nonatomic, retain) NSString * peerFile;
 @property (nonatomic, retain) NSString * peerURI;
-@property (nonatomic, retain) NSSet *identityContacts;
-@property (nonatomic, retain) NSSet *apnsData;
-@end
-
-@interface HOPPublicPeerFile (CoreDataGeneratedAccessors)
-
-- (void)addIdentityContactsObject:(HOPIdentityContact *)value;
-- (void)removeIdentityContactsObject:(HOPIdentityContact *)value;
-- (void)addIdentityContacts:(NSSet *)values;
-- (void)removeIdentityContacts:(NSSet *)values;
-
-- (void)addApnsDataObject:(HOPAPNSData *)value;
-- (void)removeApnsDataObject:(HOPAPNSData *)value;
-- (void)addApnsData:(NSSet *)values;
-- (void)removeApnsData:(NSSet *)values;
+@property (nonatomic, retain) HOPOpenPeerContact *identityContacts;
 
 @end

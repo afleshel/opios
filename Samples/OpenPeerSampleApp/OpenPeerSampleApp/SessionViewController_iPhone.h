@@ -55,6 +55,8 @@
 - (void) stopTimer;
 - (void) onCallEnded;
 - (void) showWaitingView:(BOOL) show;
+
+- (void) updateOnParticipantChange;
 @end
 
 

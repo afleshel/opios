@@ -38,7 +38,7 @@
 
 #import <OpenpeerSDK/HOPConversationThread.h>
 #import <OpenpeerSDK/HOPContact.h>
-#import <OpenpeerSDK/HOPHomeUser+External.h>
+#import <OpenpeerSDK/HOPOpenPeerAccount+External.h>
 #import <OpenpeerSDK/HOPRolodexContact.h>
 #import <OpenpeerSDK/HOPMessage.h>
 #import <OpenpeerSDK/HOPModelManager.h>
@@ -61,9 +61,9 @@
             
             if ([participants count] > 0)
             {
-                HOPContact* participant = [participants objectAtIndex:0];
+                //HOPContact* participant = [participants objectAtIndex:0];
                 
-                if (![[SessionManager sharedSessionManager] proceedWithExistingSessionForContact:participant newConversationThread:conversationThread])
+                if (![[SessionManager sharedSessionManager] proceedWithExistingSessionForContacts:participants newConversationThread:conversationThread])
                 {
                     [[SessionManager sharedSessionManager] createSessionForConversationThread: conversationThread];
                 }
@@ -78,6 +78,7 @@
     //OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread %@ contact changed.",[conversationThread getThreadId]);
     dispatch_async(dispatch_get_main_queue(), ^
     {
+        [[SessionManager sharedSessionManager] updateParticipantsInConversationThread:conversationThread];
     });
 }
 

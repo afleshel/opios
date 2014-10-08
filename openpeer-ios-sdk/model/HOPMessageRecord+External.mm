@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2014, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,37 +29,35 @@
  
  */
 
-#import "HOPSessionRecord+External.h"
-#import "HOPUtility.h"
-//
-//@interface HOPSessionRecord ()
-//
-//@property (nonatomic) NSString *primitiveSectionIdentifier;
-//
-//@end
+#import "HOPMessageRecord+External.h"
+//#import <openpeer/core/types.h>
+//#import <openpeer/core/IConversationThread.h>
+#import "HOPConversationThread.h"
+#import "HOPModelManager.h"
 
-@implementation HOPSessionRecord (External)
+//using namespace openpeer;
+//using namespace openpeer::core;
 
-- (NSString *)sectionIdentifier
+@implementation HOPMessageRecord (External)
+
+
+- (void)setOutgoingMessageStatus:(HOPConversationThreadMessageDeliveryState)outgoingMessageStatus
 {
-    return [HOPUtility getTimeSectionForDate:self.lastActivity];
-    /*
-//    [self willAccessValueForKey:@"sectionIdentifier"];
-    NSString *ret = nil;//[self primitiveSectionIdentifier];
-//    [self didAccessValueForKey:@"sectionIdentifier"];
-    
-//    if (!ret)
+    NSString* statusToSet = [HOPConversationThread stringForMessageDeliveryState:outgoingMessageStatus];
+    if (statusToSet.length > 0)
     {
-
-        NSCalendar *calendar = [NSCalendar currentCalendar];
-        
-        NSDateComponents *components = [calendar components:(NSYearCalendarUnit | NSMonthCalendarUnit) fromDate:[self lastActivity]];
-        ret = [NSString stringWithFormat:@"%d", ([components year] * 1000) + [components month]];
-        //self.primitiveSectionIdentifier = ret;
+        self.outMessageStatus = statusToSet;
+    
+        [[HOPModelManager sharedModelManager] saveContext];
     }
-    //return tmp;
-    return ret;*/
 }
 
-
+- (HOPConversationThreadMessageDeliveryState)getOutgoingMessageStatus
+{
+    HOPConversationThreadMessageDeliveryState ret;
+    
+    ret = [HOPConversationThread toMessageDeliveryStates:self.outMessageStatus];//(HOPConversationThreadMessageDeliveryState) IConversationThread::toMessageDeliveryStates([self.outMessageStatus UTF8String]);
+    
+    return ret;
+}
 @end

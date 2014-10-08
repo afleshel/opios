@@ -33,8 +33,8 @@
 
 @class HOPMessage;
 @class Session;
-@class HOPRolodexContact;
 @class HOPMessageRecord;
+@class HOPOpenPeerContact;
 
 typedef enum
 {
@@ -54,8 +54,7 @@ typedef enum
 
 + (id) sharedMessageManager;
 
-- (HOPMessage*) createSystemMessageWithType:(HOPSystemMessageType) type messageType:(int) messageType andRecipient:(HOPRolodexContact*) contact;
-//- (HOPMessage*) createSystemMessageWithType:(SystemMessageTypes) type andText:(NSString*) text andRecipient:(HOPRolodexContact*) contact;
+- (HOPMessage*) createSystemMessageWithType:(HOPSystemMessageType) type messageType:(int) messageType andRecipient:(HOPOpenPeerContact*) contact;
 - (HOPMessage*) createMessageFromRichPush:(NSDictionary*) richPush;
 
 //- (void) sendSystemMessageToInitSessionBetweenPeers:(NSArray*) peers forSession:(Session*) inSession;

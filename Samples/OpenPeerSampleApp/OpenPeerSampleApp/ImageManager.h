@@ -31,8 +31,8 @@
 
 #import <Foundation/Foundation.h>
 
-#define AVATAR_WIDTH 0 //31.0
-#define AVATAR_HEIGHT 0 //31.0
+#define AVATAR_WIDTH 64.0
+#define AVATAR_HEIGHT 64.0
 
 @class HOPAvatar;
 @class HOPImage;
