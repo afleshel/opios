@@ -157,14 +157,14 @@
     
     [UAirship takeOff:config];
     
-    [UAPush shared].notificationTypes = (UIRemoteNotificationTypeBadge |UIRemoteNotificationTypeSound |UIRemoteNotificationTypeAlert);
+    [UAPush shared].userNotificationTypes = (UIUserNotificationTypeBadge |UIUserNotificationTypeSound |UIUserNotificationTypeAlert);
     
-    //[UAPush shared].notificationTypes = (UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert);
-    [[UAPush shared] registerForRemoteNotifications];
+    [[UAPush shared] updateRegistration];
     
     // Print out the application configuration for debugging (optional)
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"UrbanAirship config: %@",[config description]);
 
+    [[UAPush shared] setUserPushNotificationsEnabled:YES];
     [[UAPush shared] setAutobadgeEnabled:YES];
     
     [[APNSInboxManager sharedAPNSInboxManager]setup];
@@ -245,12 +245,12 @@
 
 - (void) registerDeviceToken:(NSData*) devToken
 {
-    [[UAPush shared] registerDeviceToken:devToken];
+    [[UAPush shared] appRegisteredForRemoteNotificationsWithDeviceToken:devToken];
 }
 
 - (void) handleRemoteNotification:(NSDictionary*) launchOptions application:(UIApplication *)application
 {
-    [[UAPush shared] handleNotification:[launchOptions valueForKey:UIApplicationLaunchOptionsRemoteNotificationKey]
+    [[UAPush shared] appReceivedRemoteNotification:[launchOptions valueForKey:UIApplicationLaunchOptionsRemoteNotificationKey]
                        applicationState:application.applicationState];
 }
 - (void) connection:(NSURLConnection *) connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *) challenge

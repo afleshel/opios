@@ -290,8 +290,8 @@
  */
 - (void)receivedForegroundNotification:(NSDictionary *)notification fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))completionHandler
 {
-    [UAInboxPushHandler handleNotification:notification];
-    completionHandler(UIBackgroundFetchResultNoData);
+//    [UAInboxPushHandler handleNotification:notification];
+//    completionHandler(UIBackgroundFetchResultNoData);
 }
 
 /**
@@ -329,7 +329,7 @@
 - (void)launchedFromNotification:(NSDictionary *)notification
 {
     
-    [UAInboxPushHandler handleNotification:notification];
+//    [UAInboxPushHandler handleNotification:notification];
 }
 
 
@@ -479,5 +479,11 @@
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Deleting rich push messages has failed");
 }
+
+- (void)handleNotification:(NSDictionary *)notification applicationState:(UIApplicationState)state
+{
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Received push notification with notification:%@", notification);
+}
+
 
 @end
