@@ -121,11 +121,6 @@
         self.dictionaryOfHTTPRequests = [[NSMutableDictionary alloc] init];
         self.dictionaryOfPushNotificationsToSend = [[NSMutableDictionary alloc] init];
         self.dictionaryOfMessageIDsForSending = [[NSMutableDictionary alloc] init];
-//        NSString* sessionIdentifier = [NSString stringWithFormat:@"com.hookflash.backgroundSession.%@",@""];
-//        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration backgroundSessionConfiguration:sessionIdentifier];
-//        //NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-//        
-//        self.urlSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:[NSOperationQueue mainQueue]];
     }
     return self;
 }
@@ -257,10 +252,8 @@
 {
     if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodHTTPBasic])
     {
-        //if ([self.developmentAppKey length] > 0 || [self.masterAppSecret length] > 0)
         if ([self.urbanAirshipAppSecret length] > 0 || [self.urbanAirshipAppKey length] > 0)
         {
-//            NSURLCredential * credential = [[NSURLCredential alloc] initWithUser:self.developmentAppKey password:self.masterAppSecret persistence:NSURLCredentialPersistenceForSession];
             NSURLCredential * credential = [[NSURLCredential alloc] initWithUser:self.urbanAirshipAppKey password:self.urbanAirshipAppSecret persistence:NSURLCredentialPersistenceForSession];
             [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
         }

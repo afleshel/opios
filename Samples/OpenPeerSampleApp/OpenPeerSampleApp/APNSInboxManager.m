@@ -162,12 +162,6 @@
         NSString* senderPeerURI = [richPushDictionary objectForKey:@"peerURI"];
         if ([senderPeerURI length] > 0)
         {
-//            NSArray* rolodexContacts = [[HOPModelManager sharedModelManager]  getRolodexContactsByPeerURI:senderPeerURI];
-//            HOPRolodexContact* contact = nil;
-//            
-//            if ([rolodexContacts count] > 0)
-//                contact = [rolodexContacts objectAtIndex:0];
-            
             HOPOpenPeerContact* contact = [[HOPModelManager sharedModelManager] getOpenPeerContactForPeerURI:senderPeerURI];
             if (contact)
             {
@@ -290,21 +284,9 @@
  */
 - (void)receivedForegroundNotification:(NSDictionary *)notification fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))completionHandler
 {
-//    [UAInboxPushHandler handleNotification:notification];
-//    completionHandler(UIBackgroundFetchResultNoData);
+
 }
 
-/**
- * Called when a push notification is received while the app is running in the background
- * for applications with the "remote-notification" background mode.
- *
- * @param notification The notification dictionary.
- * @param completionHandler Should be called with a UIBackgroundFetchResult as soon as possible, so the system can accurately estimate its power and data cost.
- */
-//- (void)receivedBackgroundNotification:(NSDictionary *)notification fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))completionHandler
-//{
-//    completionHandler(UIBackgroundFetchResultNoData);
-//}
 
 /**
  * Called when a push notification is received while the app is running in the background.
@@ -313,11 +295,7 @@
  */
 - (void)receivedBackgroundNotification:(NSDictionary *)notification
 {
-//    //Bage is restart by urban airship to show number of meessages in the mail box
-//    NSInteger badge = [[UIApplication sharedApplication] applicationIconBadgeNumber];
-//    //Append all unread message that are already received
-//    badge ++;//= [[SessionManager sharedSessionManager] totalNumberOfUnreadMessages];
-//    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:badge];
+
 }
 
 
@@ -329,21 +307,7 @@
 - (void)launchedFromNotification:(NSDictionary *)notification
 {
     
-//    [UAInboxPushHandler handleNotification:notification];
 }
-
-
-/**
- * Called when the app is started or resumed because a user opened a notification
- * for applications with the "remote-notification" background mode.
- *
- * @param notification The notification dictionary.
- * @param completionHandler Should be called with a UIBackgroundFetchResult as soon as possible, so the system can accurately estimate its power and data cost.
- */
-//- (void)launchedFromNotification:(NSDictionary *)notification fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))completionHandler
-//{
-//    completionHandler(UIBackgroundFetchResultNoData);
-//}
 
 
 #pragma mark - HTTPDownloaderDelegate
@@ -384,7 +348,6 @@
     for (UAInboxMessage* message in arrayOfMessages)
     {
         [message markAsReadWithDelegate:self];
-        //UAInboxMessage *message = [[UAInbox shared].messageList messageForID:self.lastMeesageId];
         [set addIndex:counter];
         
         if ([message unread])
