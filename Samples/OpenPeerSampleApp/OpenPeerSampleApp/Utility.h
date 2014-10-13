@@ -59,4 +59,5 @@
 + (BOOL) isRuningForTheFirstTime;
 + (NSString *)getLocalDateFromUTCdate:(NSDate *)utcDate;
 + (NSString*) stringForEndingCallReason:(int) endingCallReason;
++ (UIImage*) createImageFromImages:(NSArray*) images inFrame:(CGRect) frame;
 @end
