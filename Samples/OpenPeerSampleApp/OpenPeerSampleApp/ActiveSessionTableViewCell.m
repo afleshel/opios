@@ -110,9 +110,12 @@
                 [avatars addObject:img];
         }
         
-        self.displayImage.animationImages = [NSArray arrayWithArray:avatars];
-        self.displayImage.animationDuration = 1.5;
-        [self.displayImage startAnimating];
+        UIImage* avatarsImage = [Utility createImageFromImages:avatars inFrame:self.displayImage.frame];
+        if (avatarsImage)
+            self.displayImage.image = avatarsImage;
+//        self.displayImage.animationImages = [NSArray arrayWithArray:avatars];
+//        self.displayImage.animationDuration = 1.5;
+//        [self.displayImage startAnimating];
 
     }
     else
