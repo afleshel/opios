@@ -29,7 +29,7 @@
  
  */
 
-#import <HOPOpenPeerContact.h>
+#import "HOPOpenPeerContact.h"
 
 @class HOPContact;
 @class HOPRolodexContact;
