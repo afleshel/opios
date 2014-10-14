@@ -43,12 +43,15 @@
 @class HOPAssociatedIdentity;
 @class HOPIdentityContact;
 @class HOPPublicPeerFile;
-@class HOPHomeUser;
+@class HOPOpenPeerAccount;
 @class HOPAvatar;
-@class HOPSessionRecord;
+@class HOPConversationRecord;
 @class HOPMessageRecord;
 @class HOPConversationThreadRecord;
 @class HOPConversationThread;
+@class HOPOpenPeerContact;
+@class HOPConversationEvent;
+@class HOPParticipants;
 /**
  *  This is the singleton class and it is used for manipulation with core data.
  */
@@ -142,18 +145,10 @@
 
 /**
  Returns an identity contact for specified stable ID and identity URI.
- @param stableID Stable ID of registered contact
  @param identityURI Identity URI
- @return HOPRolodexContact object
+ @return HOPIdentityContact object
  */
-- (HOPIdentityContact*) getIdentityContactByStableID:(NSString*) stableID identityURI:(NSString*) identityURI;
-
-/**
- Returns an array of identity contacts for specified stable ID.
- @param stableID  Registered contact stable ID
- @return An array of HOPRolodexContact objects
- */
-- (NSArray*) getIdentityContactsByStableID:(NSString*) stableID;
+- (HOPIdentityContact*) getIdentityContactWithIdentityURI:(NSString*) identityURI;
 
 /**
  Returns a public peer file object for the spcified peer URI.
@@ -162,7 +157,10 @@
  */
 - (HOPPublicPeerFile*) getPublicPeerFileForPeerURI:(NSString*) peerURI;
 
-/**
+
+- (HOPAssociatedIdentity*) addAssociatedIdentityForBaseIdentityURI:(NSString*) baseIdentityURI domain:(NSString*) domain name:(NSString*) name account:(HOPOpenPeerAccount*) account selfRolodexProfileProfile:(HOPRolodexContact*) rolodexContact;
+
+ /**
  Returns an identity provider object for spcified identity provider domain, identity name and home user identity URI.
  @param identityProviderDomain Identity provider domain
  @param identityName Identity name (e.g. foo.com)
@@ -177,7 +175,7 @@
  @param homeUserStableId Home user stable ID
  @return HOPAssociatedIdentity object
  */
-- (HOPAssociatedIdentity*) getAssociatedIdentityBaseIdentityURI:(NSString*) baseIdentityURI homeUserStableId:(NSString*) homeUserStableId;
+- (HOPAssociatedIdentity*) getAssociatedIdentityForBaseIdentityURI:(NSString*) baseIdentityURI homeUserStableId:(NSString*) homeUserStableId;
 
 
 /**
@@ -189,16 +187,16 @@
 
 /**
  Returns last logged in user.
- @return HOPHomeUser object
+ @return HOPOpenPeerAccount object
  */
-- (HOPHomeUser*) getLastLoggedInHomeUser;
+- (HOPOpenPeerAccount*) getLastLoggedInHomeUser;
 
 /**
  Returns home user with specified stable ID.
  @param stableId Contact stable ID
- @return HOPHomeUser object
+ @return HOPOpenPeerAccount object
  */
-- (HOPHomeUser*) getHomeUserByStableID:(NSString*) stableID;
+- (HOPOpenPeerAccount*) getHomeUserByStableID:(NSString*) stableID;
 
 /**
  Deletes all marked rolodex contacts for home user specific identity URI.
@@ -269,14 +267,14 @@
 - (void) removeCookieForPath:(NSString*) path;
 
 /**
- Creates a HOPSessionRecord object.
+ Creates a HOPConversationRecord object.
  @param sessionID Session ID
  @param type Session type
  @param date Time of creation
  @param name Session name
- @return HOPSessionRecord*  object
+ @return HOPConversationRecord*  object
  */
-- (HOPSessionRecord*) addSession:(NSString*) sessionID type:(NSString*) type date:(NSDate*) date name:(NSString*) name participants:(NSArray*) participants;
+- (HOPConversationRecord*) addSession:(NSString*) sessionID type:(NSString*) type date:(NSDate*) date name:(NSString*) name participants:(NSArray*) participants;
 
 /**
  Creates a HOPMessageRecord object.
@@ -288,7 +286,7 @@
  @param messageId Message ID
  @return HOPMessageRecord* message record boject
  */
-- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date session:(NSString*) sessionRecordId rolodexContact:(HOPRolodexContact*) rolodexContact messageId:(NSString*)messageId;
+- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date session:(NSString*) sessionRecordId openPeerContact:(HOPOpenPeerContact*) openPeerContact messageId:(NSString*)messageId conversationEvent:(HOPConversationEvent*) conversationEvent;
 
 /**
  Creates a HOPMessageRecord object.
@@ -301,7 +299,7 @@
  @param messageId Message ID
  @return HOPMessageRecord* message record boject
  */
-- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  session:(NSString*) sessionRecordId rolodexContact:(HOPRolodexContact*) rolodexContact messageId:(NSString*)messageId;
+- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  session:(NSString*) sessionRecordId openPeerContact:(HOPOpenPeerContact*) openPeerContact messageId:(NSString*)messageId conversationEvent:(HOPConversationEvent*) conversationEvent;
 /**
  Removes all session and message records.
  */
@@ -309,23 +307,33 @@
 
 - (NSString*) getPeerURIForHomeUser;
 
-- (HOPSessionRecord *) getSessionRecordByID:(NSString*) sessionID;
+- (HOPConversationRecord *) getSessionRecordByID:(NSString*) sessionID;
 
 - (HOPMessageRecord *) getMessageRecordByID:(NSString*) messageID;
 
-- (HOPSessionRecord*) getSessionRecordForConversationThread:(HOPConversationThread*) conversationThread;
+- (HOPConversationRecord*) getSessionRecordForConversationThread:(HOPConversationThread*) conversationThread;
 - (HOPConversationThreadRecord*) getConversationThreadRecordForThreadID:(NSString*) threadID;
 - (NSArray*) getSessionRecordsForThreadID:(NSString*) threadID;
-- (HOPConversationThreadRecord*) createRecordForConversationThread:(HOPConversationThread*) conversationThread sessionRecord:(HOPSessionRecord*) sessionRecord;
+- (HOPConversationThreadRecord*) createRecordForConversationThread:(HOPConversationThread*) conversationThread sessionRecord:(HOPConversationRecord*) sessionRecord;
 
-- (HOPSessionRecord*) createSessionRecordForConversationThread:(HOPConversationThread*) conversationThread type:(NSString*) type date:(NSDate*) date name:(NSString*) name participants:(NSArray*) participants;
+- (HOPConversationRecord*) createSessionRecordForConversationThread:(HOPConversationThread*) conversationThread type:(NSString*) type date:(NSDate*) date name:(NSString*) name participants:(NSArray*) participants;
 
 - (NSFetchRequest*) getMessagesFetchRequestForSessionID:(NSString*) sessionID sortAscending:(BOOL) ascending;
-- (HOPMessageRecord *) getLastMessageRecordForSessionID:(NSString*) sessionID;
+//- (HOPMessageRecord *) getLastMessageRecordForConversationEvent:(HOPConversationEvent*) event;
 
 - (void) replaceMessageWithID:(NSString*) replacesMessageID newMessageID:(NSString*) newMessageID messageText:(NSString*) messageText;
 
-- (void) updateMessageStatusVisibilityForSession:(HOPSessionRecord*) sessionRecord lastDeliveryState:(HOPConversationThreadMessageDeliveryState) messageDeliveryState;
+- (void) updateMessageStatusVisibilityForSession:(HOPConversationRecord*) sessionRecord lastDeliveryState:(HOPConversationThreadMessageDeliveryState) messageDeliveryState;
 
+- (HOPOpenPeerContact*) getOpenPeerContactForPeerURI:(NSString*) peerURI;
+- (HOPOpenPeerContact*) getOpenPeerContactForStableID:(NSString*) stableID;
+- (HOPOpenPeerContact*) getOpenPeerContactForIdentityURI:(NSString*) identityURI;
+- (NSArray *) getOpenPeerContactsByPeerURIs:(NSArray*) peerURIs;
 
+- (HOPConversationEvent*) addConversationEvent:(NSString*) eventType conversationRecord:(HOPConversationRecord*) conversationRecord partcipants:(NSArray*) participants title:(NSString*) title;
+
+- (HOPParticipants*) getParticiapantsForListOfContacts:(NSArray*) contacts;
+- (NSFetchRequest*) getMessagesFetchRequestForParticipants:(HOPParticipants*) participants sortAscending:(BOOL) ascending;
+- (HOPOpenPeerContact*) getOpenPeerContactForAccount;
+- (HOPPublicPeerFile*) createPublicPeerFileForPeerURI:(NSString*) peerURI peerFile:(NSString*) peerFile;
 @end

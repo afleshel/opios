@@ -48,6 +48,7 @@
 #import <OpenpeerSDK/HOPRolodexContact+External.h>
 #import <OpenpeerSDK/HOPConversationThread.h>
 #import <OpenpeerSDK/HOPPublicPeerFile.h>
+#import <OpenpeerSDK/HOPOpenPeerContact.h>
 
 @interface APNSInboxManager ()
 
@@ -161,17 +162,12 @@
         NSString* senderPeerURI = [richPushDictionary objectForKey:@"peerURI"];
         if ([senderPeerURI length] > 0)
         {
-            NSArray* rolodexContacts = [[HOPModelManager sharedModelManager]  getRolodexContactsByPeerURI:senderPeerURI];
-            HOPRolodexContact* contact = nil;
-            
-            if ([rolodexContacts count] > 0)
-                contact = [rolodexContacts objectAtIndex:0];
-            
+            HOPOpenPeerContact* contact = [[HOPModelManager sharedModelManager] getOpenPeerContactForPeerURI:senderPeerURI];
             if (contact)
             {
-                Session* session = [[SessionManager sharedSessionManager] getSessionForContact:contact];
+                Session* session = [[SessionManager sharedSessionManager] getSessionForContacts:@[contact]];
                 if (!session)
-                    session = [[SessionManager sharedSessionManager]createSessionForContact:contact];
+                    session = [[SessionManager sharedSessionManager]createSessionForContacts:@[contact]];
                 
                 NSString* messageID = [richPushDictionary objectForKey:@"messageId"];
                 NSString* messageText = [richPushDictionary objectForKey:@"message"];
@@ -204,7 +200,7 @@
                     }
                     else
                     {
-                        HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:messageText type:messageTypeText date:date session:[session.conversationThread getThreadId] rolodexContact:contact messageId:messageID];
+                        HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:messageText type:messageTypeText date:date session:[session.conversationThread getThreadId] openPeerContact:contact messageId:messageID conversationEvent:session.lastConversationEvent];
                         
                         
                         if (messageObj)
@@ -288,21 +284,9 @@
  */
 - (void)receivedForegroundNotification:(NSDictionary *)notification fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))completionHandler
 {
-    [UAInboxPushHandler handleNotification:notification];
-    completionHandler(UIBackgroundFetchResultNoData);
+
 }
 
-/**
- * Called when a push notification is received while the app is running in the background
- * for applications with the "remote-notification" background mode.
- *
- * @param notification The notification dictionary.
- * @param completionHandler Should be called with a UIBackgroundFetchResult as soon as possible, so the system can accurately estimate its power and data cost.
- */
-//- (void)receivedBackgroundNotification:(NSDictionary *)notification fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))completionHandler
-//{
-//    completionHandler(UIBackgroundFetchResultNoData);
-//}
 
 /**
  * Called when a push notification is received while the app is running in the background.
@@ -311,11 +295,7 @@
  */
 - (void)receivedBackgroundNotification:(NSDictionary *)notification
 {
-//    //Bage is restart by urban airship to show number of meessages in the mail box
-//    NSInteger badge = [[UIApplication sharedApplication] applicationIconBadgeNumber];
-//    //Append all unread message that are already received
-//    badge ++;//= [[SessionManager sharedSessionManager] totalNumberOfUnreadMessages];
-//    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:badge];
+
 }
 
 
@@ -327,21 +307,7 @@
 - (void)launchedFromNotification:(NSDictionary *)notification
 {
     
-    [UAInboxPushHandler handleNotification:notification];
 }
-
-
-/**
- * Called when the app is started or resumed because a user opened a notification
- * for applications with the "remote-notification" background mode.
- *
- * @param notification The notification dictionary.
- * @param completionHandler Should be called with a UIBackgroundFetchResult as soon as possible, so the system can accurately estimate its power and data cost.
- */
-//- (void)launchedFromNotification:(NSDictionary *)notification fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))completionHandler
-//{
-//    completionHandler(UIBackgroundFetchResultNoData);
-//}
 
 
 #pragma mark - HTTPDownloaderDelegate
@@ -382,7 +348,6 @@
     for (UAInboxMessage* message in arrayOfMessages)
     {
         [message markAsReadWithDelegate:self];
-        //UAInboxMessage *message = [[UAInbox shared].messageList messageForID:self.lastMeesageId];
         [set addIndex:counter];
         
         if ([message unread])
@@ -477,5 +442,11 @@
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Deleting rich push messages has failed");
 }
+
+- (void)handleNotification:(NSDictionary *)notification applicationState:(UIApplicationState)state
+{
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Received push notification with notification:%@", notification);
+}
+
 
 @end

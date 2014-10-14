@@ -55,7 +55,7 @@
 //Model
 #import "HOPAPNSData.h"
 #import "HOPConversationThreadRecord.h"
-#import "HOPHomeUser+External.h"
+#import "HOPOpenPeerAccount+External.h"
 #import "HOPMessageRecord.h"
 #import "HOPAvatar+External.h"
 #import "HOPIdentityContact.h"
@@ -64,5 +64,5 @@
 #import "HOPImage.h"
 #import "HOPAssociatedIdentity.h"
 #import "HOPCacheData.h"
-#import "HOPSessionRecord+External.h"
+#import "HOPConversationRecord+External.h"
 

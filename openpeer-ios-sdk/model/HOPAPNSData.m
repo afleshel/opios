@@ -30,13 +30,13 @@
  */
 
 #import "HOPAPNSData.h"
-#import "HOPPublicPeerFile.h"
+#import "HOPOpenPeerContact.h"
 
 
 @implementation HOPAPNSData
 
 @dynamic deviceToken;
 @dynamic type;
-@dynamic publicPeer;
+@dynamic contact;
 
 @end

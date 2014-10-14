@@ -34,14 +34,16 @@
 @class HOPContact;
 @class HOPCall;
 @class HOPConversationThread;
-@class HOPRolodexContact;
-@class HOPSessionRecord;
+@class HOPOpenPeerContact;
+@class HOPConversationRecord;
+@class HOPConversationEvent;
 
 @interface Session : NSObject
 
 @property (strong) NSMutableArray* participantsArray;
 @property (weak, nonatomic) HOPConversationThread* conversationThread;
-@property (weak, nonatomic) HOPSessionRecord* sessionRecord;
+@property (weak, nonatomic) HOPConversationRecord* sessionRecord;
+@property (weak, nonatomic) HOPConversationEvent* lastConversationEvent;
 @property (strong) HOPCall* currentCall;
 @property (assign) BOOL isRedial;
 @property (strong) NSMutableArray* messageArray;
@@ -49,7 +51,8 @@
 @property (strong) NSMutableSet* sessionIdsHistory;
 @property (strong) NSMutableArray* arrayMergedConversationThreads;
 @property (strong) NSMutableSet* setOfNotSentMessages;
+@property (nonatomic, copy) NSString* title;
 
-- (id) initWithContact:(HOPRolodexContact*) inContact conversationThread:(HOPConversationThread*) inConverationThread;
+- (id) initWithContact:(HOPOpenPeerContact*) inContact conversationThread:(HOPConversationThread*) inConverationThread;
 - (id) initWithContacts:(NSArray*) inContacts conversationThread:(HOPConversationThread*) inConverationThread;
 @end

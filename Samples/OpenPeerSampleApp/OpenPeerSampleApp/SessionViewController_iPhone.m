@@ -38,7 +38,15 @@
 #import "IncomingCallViewController.h"
 #import "WaitingVideoViewController.h"
 #import "Utility.h"
+#import "AddParticipantsViewController.h"
 #import <OpenPeerSDK/HOPCall.h>
+#import <OpenPeerSDK/HOPConversationEvent.h>
+#import <OpenPeerSDK/HOPParticipants.h>
+#define ACTION_AUDIO_CALL       1
+#define ACTION_VIDEO_CALL       2
+#define ACTION_ADD_CONTACT      3
+#define ACTION_REMOVE_CONTACT   4
+#define ACTION_CANCEL           5
 
 
 @interface SessionViewController_iPhone ()
@@ -52,11 +60,13 @@
 @property (nonatomic, strong)  UILabel* labelTitle;
 @property (nonatomic, strong)  UILabel* labelDuration;
 @property (nonatomic, strong) NSTimer* callTimer;
+@property (nonatomic, strong) NSMutableArray* availableActions;
 //@property (nonatomic, strong) UIButton *menuButton;
 @property (nonatomic, strong) UIBarButtonItem* menuRightbarButton;
 @property (nonatomic, strong) UIBarButtonItem* endCallRightbarButton;
 //@property (nonatomic) int callDuration;
 @property (nonatomic, strong) NSDate* callStartedTime;
+@property (nonatomic, strong) AddParticipantsViewController* addParticipantsViewController;
 - (void) actionCallMenu;
 - (void) updateCallDuration;
 - (void) setRightBarButtonWithEndCall:(BOOL) withEndCall forWaitingView:(BOOL)forWaitingView ;
@@ -81,7 +91,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        self.availableActions = [[NSMutableArray alloc] init];
     }
     return self;
 }
@@ -132,9 +142,12 @@
     titleView.backgroundColor = [UIColor clearColor];
     
     self.labelTitle = [[UILabel alloc] initWithFrame:CGRectMake(15.0, 3.0, 170.0, 24.0)];
-    self.labelTitle.text = [[[self.session participantsArray]objectAtIndex:0] name];
+    self.labelTitle.text = self.session.title;//[[[self.session participantsArray]objectAtIndex:0] name];
     [self.labelTitle setFont:[UIFont fontWithName:@"Helvetica-Bold" size:20.0]];
     self.labelTitle.textColor = [UIColor whiteColor];
+    self.labelTitle.adjustsFontSizeToFitWidth = YES;
+    self.labelTitle.numberOfLines = 0;
+    self.labelTitle.minimumScaleFactor = 0.5;
     self.labelTitle.textAlignment = NSTextAlignmentCenter;
     
     self.labelDuration = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 26.0, 160.0, 16.0)];
@@ -228,11 +241,27 @@
             
             //int i = 0;
             
-            [buttonTitles addObject:NSLocalizedString(@"Audio Call", @"")];
-            if ([Utility hasCamera])
-                [buttonTitles addObject:NSLocalizedString(@"Video Call", @"")];
+            [self.availableActions removeAllObjects];
+            if (self.session.lastConversationEvent.participants.participants.count == 1)
+            {
+                [buttonTitles addObject:NSLocalizedString(@"Audio Call", @"")];
+                [self.availableActions addObject:[NSNumber numberWithInt:ACTION_AUDIO_CALL]];
+                if ([Utility hasCamera])
+                {
+                    [buttonTitles addObject:NSLocalizedString(@"Video Call", @"")];
+                    [self.availableActions addObject:[NSNumber numberWithInt:ACTION_VIDEO_CALL]];
+                }
+            }
             //[buttonTitles addObject:NSLocalizedString(@"Close session", @"")];
+            [buttonTitles addObject:NSLocalizedString(@"Add Contact", @"")];
+            [self.availableActions addObject:[NSNumber numberWithInt:ACTION_ADD_CONTACT]];
+            if (self.session.lastConversationEvent.participants.participants.count > 1)
+            {
+                [buttonTitles addObject:NSLocalizedString(@"Remove Contact", @"")];
+                [self.availableActions addObject:[NSNumber numberWithInt:ACTION_REMOVE_CONTACT]];
+            }
             [buttonTitles addObject:NSLocalizedString(@"Cancel", @"")];
+            [self.availableActions addObject:[NSNumber numberWithInt:ACTION_CANCEL]];
             
             if (action)
             {
@@ -248,20 +277,31 @@
     
 }
 
+- (void) showContactsChooserForAddingContacts:(BOOL) addingContacts
+{
+    self.addParticipantsViewController = [[AddParticipantsViewController alloc] initWithSession:self.session addingContacts:addingContacts];
+    [self.navigationController pushViewController:self.addParticipantsViewController animated:YES];
+}
 
 #pragma mark - UIActionSheetDelegate
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex;
 {
-    switch (buttonIndex)
+    int selectedAction = ((NSNumber*)self.availableActions[buttonIndex]).intValue;
+    switch (selectedAction)
     {
-        case 0:
+        case ACTION_AUDIO_CALL:
             [[SessionManager sharedSessionManager] makeCallForSession:self.session includeVideo:NO isRedial:NO];
             break;
-        case 1:
+        case ACTION_VIDEO_CALL:
             if ([Utility hasCamera])
                 [[SessionManager sharedSessionManager] makeCallForSession:self.session includeVideo:YES isRedial:NO];
             break;
-        case 2:
+        case ACTION_ADD_CONTACT:
+            [self showContactsChooserForAddingContacts:YES];
+            //[self closeSession:nil];
+            break;
+        case ACTION_REMOVE_CONTACT:
+            [self showContactsChooserForAddingContacts:NO];
             //[self closeSession:nil];
             break;
         default:
@@ -490,6 +530,13 @@
 - (void) popNavigation
 {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void) updateOnParticipantChange
+{
+    self.labelTitle.text = self.session.title;
+    
+    [self.chatViewController refreshMessages];
 }
 @end
 

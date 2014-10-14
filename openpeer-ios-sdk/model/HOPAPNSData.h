@@ -32,12 +32,12 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class HOPPublicPeerFile;
+@class HOPOpenPeerContact;
 
 @interface HOPAPNSData : NSManagedObject
 
 @property (nonatomic, retain) NSString * deviceToken;
 @property (nonatomic, retain) NSString * type;
-@property (nonatomic, retain) HOPPublicPeerFile *publicPeer;
+@property (nonatomic, retain) HOPOpenPeerContact *contact;
 
 @end

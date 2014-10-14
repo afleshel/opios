@@ -36,13 +36,14 @@
 
 #import "HOPAccount_Internal.h"
 #import "OpenPeerStorageManager.h"
-#import "HOPModelManager.h"
+#import "HOPModelManager_Internal.h"
 #import "OpenPeerIdentityDelegate.h"
 #import "OpenPeerUtility.h"
 #import "HOPUtility.h"
 #import "HOPRolodexContact_Internal.h"
 #import "HOPIdentityContact_Internal.h"
 #import "OpenPeerConstants.h"
+#import "HOPOpenPeerContact.h"
 
 ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
@@ -274,7 +275,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
         NSString* sId = [[HOPAccount sharedAccount] getStableID];//
         NSString* stID = [NSString stringWithUTF8String:identityContact.mStableID];
         NSString* identityURI = [NSString stringWithUTF8String:identityContact.mIdentityURI];
-        ret = [[HOPModelManager sharedModelManager] getIdentityContactByStableID:sId identityURI:identityURI];
+        ret = [[HOPModelManager sharedModelManager] getIdentityContactWithIdentityURI:identityURI];
         if (!ret)
         {
             NSManagedObject* managedObject = [[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPIdentityContact"];
@@ -282,8 +283,13 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
             {
                 ret = (HOPIdentityContact*) managedObject;
                 [ret updateWithIdentityContact:identityContact];
+                HOPOpenPeerContact* contact = [[HOPModelManager sharedModelManager]  getOpenPeerContactForIdentityContact:identityContact];
+                if (contact)
+                    [contact addIdentityContactsObject:ret];
+                else
+                    contact = [[HOPModelManager sharedModelManager] createOpenPeerContactForIdentityContact:identityContact];
                 //HACK: Because identityContact.mStableID is not filled correctly in the core
-                ret.stableID = sId;
+                //ret.stableID = sId;
             }
         }
     }

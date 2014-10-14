@@ -51,4 +51,6 @@ using namespace openpeer::core;
 - (IContactPtr) getContactPtr;
 
 - (String) log:(NSString*) message;
+
++ (NSString*) getPeerFilePublicFromCoreContact:(IContactPtr) coreContact;
 @end

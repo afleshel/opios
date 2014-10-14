@@ -31,11 +31,13 @@
 
 #import "InfoViewController.h"
 #import <OpenpeerSDK/HOPModelManager.h>
-#import <OpenpeerSDK/HOPHomeUser.h>
+#import <OpenpeerSDK/HOPOpenPeerAccount.h>
 #import <OpenpeerSDK/HOPRolodexContact.h>
 #import <OpenpeerSDK/HOPIdentityContact.h>
 #import <OpenpeerSDK/HOPPublicPeerFile.h>
 #import <OpenpeerSDK/HOPAssociatedIdentity.h>
+#import <OpenpeerSDK/HOPIdentityProvider.h>
+#import <OpenpeerSDK/HOPOpenPeerContact.h>
 
 const CGFloat cellDefaultHeight = 50.0;
 const CGFloat headerDefaultHeight = 40.0;
@@ -51,7 +53,7 @@ typedef enum
 
 @interface InfoViewController ()
 
-@property (nonatomic, strong) HOPHomeUser* homeUser;
+@property (nonatomic, strong) HOPOpenPeerAccount* homeUser;
 
 @end
 
@@ -138,7 +140,7 @@ typedef enum
             
         case USER_INFO_PEER_URI:cell.textLabel.lineBreakMode = NSLineBreakByCharWrapping;
             cell.textLabel.numberOfLines = 0;
-            cell.textLabel.text = ((HOPAssociatedIdentity*)self.homeUser.associatedIdentities.anyObject).homeUserProfile.identityContact.peerFile.peerURI;
+            cell.textLabel.text = ((HOPAssociatedIdentity*)self.homeUser.associatedIdentities.anyObject).selfRolodexContact.identityContact.openPeerContact.publicPeerFile.peerURI;
             break;
             
         case USER_INFO_IDENTITIES:
@@ -146,10 +148,10 @@ typedef enum
             HOPAssociatedIdentity* identityInfo = [[self.homeUser.associatedIdentities allObjects] objectAtIndex:indexPath.row];
             cell.textLabel.lineBreakMode = NSLineBreakByCharWrapping;
             cell.textLabel.numberOfLines = 0;
-            cell.textLabel.text = identityInfo.name;
+            cell.textLabel.text = identityInfo.identityProvider.name;
             cell.detailTextLabel.lineBreakMode = NSLineBreakByCharWrapping;
             cell.detailTextLabel.numberOfLines = 0;
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"Identity URI: %@",identityInfo.homeUserProfile.identityURI];
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"Identity URI: %@",identityInfo.selfRolodexContact.identityURI];
         }
             break;
             
@@ -179,7 +181,7 @@ typedef enum
         {
             UIFont* cellFont = [UIFont boldSystemFontOfSize:17.0];
             //NSString* str = ((HOPRolodexContact*)((HOPAssociatedIdentity*)self.homeUser.associatedIdentities.anyObject).rolodexContacts.anyObject).identityContact.peerFile.peerURI;
-            NSString* str = ((HOPRolodexContact*)((HOPAssociatedIdentity*)self.homeUser.associatedIdentities.anyObject).homeUserProfile).identityContact.peerFile.peerURI;
+            NSString* str = ((HOPRolodexContact*)((HOPAssociatedIdentity*)self.homeUser.associatedIdentities.anyObject).selfRolodexContact).identityContact.openPeerContact.publicPeerFile.peerURI;
             CGSize labelSize = [str boundingRectWithSize: constraintSize options: NSStringDrawingUsesLineFragmentOrigin attributes: @{ NSFontAttributeName: cellFont } context: nil].size;//[str sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:NSLineBreakByCharWrapping];
             ret = labelSize.height > cellDefaultHeight ? labelSize.height : cellDefaultHeight;
         }
@@ -191,9 +193,9 @@ typedef enum
             UIFont* cellDetailFont = [UIFont boldSystemFontOfSize:14.0];
             HOPAssociatedIdentity* identityInfo = [[self.homeUser.associatedIdentities allObjects] objectAtIndex:indexPath.row];
             
-            CGSize labelSize = [identityInfo.name boundingRectWithSize: constraintSize options: NSStringDrawingUsesLineFragmentOrigin attributes: @{ NSFontAttributeName: cellFont } context: nil].size;//[identityInfo.name sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:NSLineBreakByCharWrapping];
+            CGSize labelSize = [identityInfo.identityProvider.name boundingRectWithSize: constraintSize options: NSStringDrawingUsesLineFragmentOrigin attributes: @{ NSFontAttributeName: cellFont } context: nil].size;//[identityInfo.name sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:NSLineBreakByCharWrapping];
             
-            NSString* str = [NSString stringWithFormat:@"Identity URI: %@",identityInfo.homeUserProfile.identityURI];
+            NSString* str = [NSString stringWithFormat:@"Identity URI: %@",identityInfo.selfRolodexContact.identityURI];
             CGSize labelDetailSize = [str boundingRectWithSize: constraintSize options: NSStringDrawingUsesLineFragmentOrigin attributes: @{ NSFontAttributeName: cellDetailFont } context: nil].size;//[str sizeWithFont:cellDetailFont constrainedToSize:constraintSize lineBreakMode:NSLineBreakByCharWrapping];
             
             CGFloat totalCellHeight = labelSize.height + labelDetailSize.height;

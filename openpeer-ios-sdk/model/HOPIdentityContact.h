@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -32,7 +32,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class HOPPublicPeerFile, HOPRolodexContact;
+@class HOPOpenPeerContact, HOPRolodexContact;
 
 @interface HOPIdentityContact : NSManagedObject
 
@@ -40,9 +40,8 @@
 @property (nonatomic, retain) NSString * identityProofBundle;
 @property (nonatomic, retain) NSDate * lastUpdated;
 @property (nonatomic, retain) NSNumber * priority;
-@property (nonatomic, retain) NSString * stableID;
 @property (nonatomic, retain) NSNumber * weight;
-@property (nonatomic, retain) HOPPublicPeerFile *peerFile;
+@property (nonatomic, retain) HOPOpenPeerContact *openPeerContact;
 @property (nonatomic, retain) HOPRolodexContact *rolodexContact;
 
 @end

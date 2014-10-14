@@ -37,7 +37,7 @@
 @class HOPMessage;
 @class HOPAccount;
 @class HOPIdentity;
-
+@class HOPOpenPeerContact;
 //HOP_NOTICE: Don't expose this till group conversations are not enabled
 @interface ContactInfo
 {
@@ -82,7 +82,7 @@
  @return A string representation of message delivery state
  */
 + (NSString*) stringForMessageDeliveryState:(HOPConversationThreadMessageDeliveryState) state;
-
++ (HOPConversationThreadMessageDeliveryState) toMessageDeliveryStates:(NSString*) messageDeliveryStateString;
 
 /**
  Returns a  string representation of the contact state. Deprecated.
