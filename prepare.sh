@@ -1,6 +1,6 @@
 #!/bin/bash
 
-: ${CURL_SCRIPT_PATH:=./libs/op/libs/ortc-lib/libs/curl-ios-build-scripts}
+: ${CURL_SCRIPT_PATH:=./libs/op/libs/ortc-lib/libs/curl-build-scripts}
 : ${BOOST_SCRIPT_PATH:=./libs/op/libs/ortc-lib/libs/boost}
 : ${TEMPLATES_PATH:=./templates}
 : ${DESTINATION_PATH:=./Samples/OpenPeerSampleApp/OpenPeerSampleApp}
