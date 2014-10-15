@@ -353,7 +353,7 @@
 /* Begin PBXFileReference section */
 		00243939178F52D300B79368 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		004A55BC1839DA9E00AEF378 /* ortclib_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ortclib_ios.xcodeproj; path = "libs/op/libs/ortc-lib/projects/xcode/ortclib_ios/ortclib_ios.xcodeproj"; sourceTree = SOURCE_ROOT; };
-		009A268519EDC50E00F277DB /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = "libs/op/libs/ortc-lib/libs/curl-ios-build-scripts/curl/ios-appstore/lib/libcurl.a"; sourceTree = "<group>"; };
+		009A268519EDC50E00F277DB /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = "libs/op/libs/ortc-lib/libs/curl-build-scripts/curl/ios-appstore/lib/libcurl.a"; sourceTree = "<group>"; };
 		00C82C3F18320855005B87E0 /* boost.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = boost.framework; path = "libs/op/libs/ortc-lib/libs/boost/ios/framework/boost.framework"; sourceTree = "<group>"; };
 		8702E53C17997568003287D5 /* OpenPeerModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = OpenPeerModel.xcdatamodel; sourceTree = "<group>"; };
 		871BC9A4179EEB3F00AEA4A6 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -1477,7 +1477,7 @@
 					"libs/op/libs/ortc-lib/libs",
 					"libs/op/libs/ortc-lib/libs/op-services-cpp",
 					"libs/op/libs/ortc-lib/libs/boost/ios/framework/boost.framework/Headers",
-					"libs/op/libs/ortc-lib/libs/curl-ios-build-scripts/curl",
+					"libs/op/libs/ortc-lib/libs/curl-build-scripts/curl",
 					"libs/op/libs/ortc-lib/libs/zsLib",
 					"libs/op/libs/ortc-lib/libs/webRTC/webrtc",
 					"libs/op/libs/ortc-lib/libs/webRTC/webrtc/common_video/interface/",
@@ -1526,7 +1526,7 @@
 					"libs/op/libs/ortc-lib/libs",
 					"libs/op/libs/ortc-lib/libs/op-services-cpp",
 					"libs/op/libs/ortc-lib/libs/boost/ios/framework/boost.framework/Headers",
-					"libs/op/libs/ortc-lib/libs/curl-ios-build-scripts/curl",
+					"libs/op/libs/ortc-lib/libs/curl-build-scripts/curl",
 					"libs/op/libs/ortc-lib/libs/zsLib",
 					"libs/op/libs/ortc-lib/libs/webRTC/webrtc",
 					"libs/op/libs/ortc-lib/libs/webRTC/webrtc/common_video/interface/",
@@ -1567,7 +1567,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/libs/op/libs/ortc-lib/libs/curl-ios-build-scripts/curl/ios-appstore/lib",
+					"$(PROJECT_DIR)/libs/op/libs/ortc-lib/libs/curl-build-scripts/curl/ios-appstore/lib",
 				);
 				MACH_O_TYPE = staticlib;
 				ONLY_ACTIVE_ARCH = NO;
@@ -1606,7 +1606,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/libs/op/libs/ortc-lib/libs/curl-ios-build-scripts/curl/ios-appstore/lib",
+					"$(PROJECT_DIR)/libs/op/libs/ortc-lib/libs/curl-build-scripts/curl/ios-appstore/lib",
 				);
 				MACH_O_TYPE = staticlib;
 				OTHER_CPLUSPLUSFLAGS = (
