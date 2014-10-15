@@ -25,6 +25,7 @@
 /* Begin PBXBuildFile section */
 		0024393A178F52D300B79368 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00243939178F52D300B79368 /* Security.framework */; };
 		004A55C41839DAF200AEF378 /* libortclib_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 004A55C11839DA9E00AEF378 /* libortclib_ios.a */; };
+		009A268619EDC50E00F277DB /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 009A268519EDC50E00F277DB /* libcurl.a */; };
 		00C82C4018320855005B87E0 /* boost.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C82C3F18320855005B87E0 /* boost.framework */; };
 		00EB8DC3177D15BD00FFD40F /* libcryptopp_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0012C535177D10C80017FF5E /* libcryptopp_ios.a */; };
 		00EB8DC4177D15BD00FFD40F /* libhfservices_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0012C530177D10A80017FF5E /* libhfservices_ios.a */; };
@@ -57,7 +58,6 @@
 		8783859117A84FAB003C6EEA /* HOPRolodexContact+External.h in Headers */ = {isa = PBXBuildFile; fileRef = 8783858F17A84FAA003C6EEA /* HOPRolodexContact+External.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8783859217A84FAB003C6EEA /* HOPRolodexContact+External.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8783859017A84FAA003C6EEA /* HOPRolodexContact+External.mm */; };
 		8792E86C16519CFF00DEAC58 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8792E86B16519CFF00DEAC58 /* Foundation.framework */; };
-		8792E9C81651A8DA00DEAC58 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8792E9C41651A8DA00DEAC58 /* libcurl.a */; };
 		87A5B1A016EDE5EB007E825A /* HOPAccount.mm in Sources */ = {isa = PBXBuildFile; fileRef = 87A5B18C16EDE5EB007E825A /* HOPAccount.mm */; };
 		87A5B1A216EDE5EB007E825A /* HOPCall.mm in Sources */ = {isa = PBXBuildFile; fileRef = 87A5B18E16EDE5EB007E825A /* HOPCall.mm */; };
 		87A5B1A316EDE5EB007E825A /* HOPContact.mm in Sources */ = {isa = PBXBuildFile; fileRef = 87A5B18F16EDE5EB007E825A /* HOPContact.mm */; };
@@ -353,6 +353,7 @@
 /* Begin PBXFileReference section */
 		00243939178F52D300B79368 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		004A55BC1839DA9E00AEF378 /* ortclib_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ortclib_ios.xcodeproj; path = "libs/op/libs/ortc-lib/projects/xcode/ortclib_ios/ortclib_ios.xcodeproj"; sourceTree = SOURCE_ROOT; };
+		009A268519EDC50E00F277DB /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = "libs/op/libs/ortc-lib/libs/curl-ios-build-scripts/curl/ios-appstore/lib/libcurl.a"; sourceTree = "<group>"; };
 		00C82C3F18320855005B87E0 /* boost.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = boost.framework; path = "libs/op/libs/ortc-lib/libs/boost/ios/framework/boost.framework"; sourceTree = "<group>"; };
 		8702E53C17997568003287D5 /* OpenPeerModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = OpenPeerModel.xcdatamodel; sourceTree = "<group>"; };
 		871BC9A4179EEB3F00AEA4A6 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -397,7 +398,6 @@
 		8792E9211651A0D000DEAC58 /* hfservices_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = hfservices_ios.xcodeproj; path = "libs/op/libs/ortc-lib/libs/op-services-cpp/projects/xcode/hfservices_ios/hfservices_ios.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		8792E9AA1651A12B00DEAC58 /* cryptopp_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cryptopp_ios.xcodeproj; path = "libs/op/libs/ortc-lib/libs/cryptopp/projects/xcode/cryptopp_ios/cryptopp_ios.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		8792E9BE1651A43E00DEAC58 /* HOPStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HOPStack.h; sourceTree = "<group>"; };
-		8792E9C41651A8DA00DEAC58 /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = "libs/op/libs/ortc-lib/libs/curl/staging/libcurl.a"; sourceTree = SOURCE_ROOT; };
 		8792E9CC1651B21F00DEAC58 /* HOPContact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HOPContact.h; sourceTree = "<group>"; };
 		87A5B18C16EDE5EB007E825A /* HOPAccount.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HOPAccount.mm; sourceTree = "<group>"; };
 		87A5B18E16EDE5EB007E825A /* HOPCall.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = HOPCall.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -594,6 +594,7 @@
 				E23390F41934EAAF004A62FD /* libvideo_coding_utility.a in Frameworks */,
 				E23390F51934EAAF004A62FD /* libvideo_engine_core.a in Frameworks */,
 				E23390F61934EAAF004A62FD /* libvideo_processing.a in Frameworks */,
+				009A268619EDC50E00F277DB /* libcurl.a in Frameworks */,
 				E23390F71934EAAF004A62FD /* libvideo_render_module.a in Frameworks */,
 				E23390F81934EAAF004A62FD /* libvoice_engine.a in Frameworks */,
 				E23390F91934EAAF004A62FD /* libvpx.a in Frameworks */,
@@ -614,7 +615,6 @@
 				00EB8DC4177D15BD00FFD40F /* libhfservices_ios.a in Frameworks */,
 				00EB8DC6177D15BD00FFD40F /* libudns_ios.a in Frameworks */,
 				00EB8DC7177D15BD00FFD40F /* libzsLib_ios.a in Frameworks */,
-				8792E9C81651A8DA00DEAC58 /* libcurl.a in Frameworks */,
 				00C82C4018320855005B87E0 /* boost.framework in Frameworks */,
 				871BC9A5179EEB4000AEA4A6 /* CoreData.framework in Frameworks */,
 				8792E86C16519CFF00DEAC58 /* Foundation.framework in Frameworks */,
@@ -637,7 +637,7 @@
 		0012C521177D10110017FF5E /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				8792E9C41651A8DA00DEAC58 /* libcurl.a */,
+				009A268519EDC50E00F277DB /* libcurl.a */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1275,7 +1275,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\n\n: ${BOOST_LIB_PATH:=./libs/op/libs/ortc-lib/libs/boost/ios/library/boost.a}\n: ${CURL_LIB_PATH:=./libs/op/libs/ortc-lib/libs/curl/staging/libcurl.a}\n\nFMK_VERSION=C\n\n# Delete old framework folder\nrm -rf \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework\"\n\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Headers\"\n#mkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Frameworks\"\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Libraries\"\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Resources\"\n\n# Link the \"Current\" version to \"C\"\n/bin/ln -sfh ${FMK_VERSION} \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/Current\"\n/bin/ln -sfh Versions/Current/Headers \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Headers\"\n#/bin/ln -sfh Versions/Current/Frameworks \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Frameworks\"\n/bin/ln -sfh Versions/Current/Libraries \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Libraries\"\n/bin/ln -sfh Versions/Current/Resources \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Resources\"\n/bin/ln -sfh \"Versions/Current/${PRODUCT_NAME}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/${PRODUCT_NAME}\"\n\n# The -a ensures that the headers maintain the source modification date so that we don't constantly\n# cause propagating rebuilds of files that import these headers.\n/bin/cp -a \"${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Headers\"\n\n/bin/cp -a \"${BOOST_LIB_PATH}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Libraries\"\n\n/bin/cp -a \"${CURL_LIB_PATH}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Libraries\"\n\n/bin/cp -R  \"${TARGET_BUILD_DIR}/${PUBLIC_RESOURCES_FOLDER_PATH}/OpenpeerDataModel.bundle\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Resources\"\n\n/bin/cp -a \"${BUILT_PRODUCTS_DIR}/lib${PRODUCT_NAME}.a\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/${PRODUCT_NAME}\"\n";
+			shellScript = "set -e\n\n: ${BOOST_LIB_PATH:=./libs/op/libs/ortc-lib/libs/boost/ios/library/boost.a}\n: ${CURL_LIB_PATH:=./libs/op/libs/ortc-lib/libs/curl-ios-build-scripts/curl/lib/libcurl.a}\n\nFMK_VERSION=C\n\n# Delete old framework folder\nrm -rf \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework\"\n\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Headers\"\n#mkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Frameworks\"\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Libraries\"\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Resources\"\n\n# Link the \"Current\" version to \"C\"\n/bin/ln -sfh ${FMK_VERSION} \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/Current\"\n/bin/ln -sfh Versions/Current/Headers \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Headers\"\n#/bin/ln -sfh Versions/Current/Frameworks \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Frameworks\"\n/bin/ln -sfh Versions/Current/Libraries \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Libraries\"\n/bin/ln -sfh Versions/Current/Resources \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Resources\"\n/bin/ln -sfh \"Versions/Current/${PRODUCT_NAME}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/${PRODUCT_NAME}\"\n\n# The -a ensures that the headers maintain the source modification date so that we don't constantly\n# cause propagating rebuilds of files that import these headers.\n/bin/cp -a \"${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Headers\"\n\n/bin/cp -a \"${BOOST_LIB_PATH}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Libraries\"\n\n/bin/cp -a \"${CURL_LIB_PATH}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Libraries\"\n\n/bin/cp -R  \"${TARGET_BUILD_DIR}/${PUBLIC_RESOURCES_FOLDER_PATH}/OpenpeerDataModel.bundle\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Resources\"\n\n/bin/cp -a \"${BUILT_PRODUCTS_DIR}/lib${PRODUCT_NAME}.a\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/${PRODUCT_NAME}\"\n";
 		};
 		87D7EF93197926CA003B1746 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1477,7 +1477,7 @@
 					"libs/op/libs/ortc-lib/libs",
 					"libs/op/libs/ortc-lib/libs/op-services-cpp",
 					"libs/op/libs/ortc-lib/libs/boost/ios/framework/boost.framework/Headers",
-					"libs/op/libs/ortc-lib/libs/curl/include",
+					"libs/op/libs/ortc-lib/libs/curl-ios-build-scripts/curl",
 					"libs/op/libs/ortc-lib/libs/zsLib",
 					"libs/op/libs/ortc-lib/libs/webRTC/webrtc",
 					"libs/op/libs/ortc-lib/libs/webRTC/webrtc/common_video/interface/",
@@ -1492,7 +1492,7 @@
 					"libs/op/libs/ortc-lib/libs/webRTC/webrtc/voice_engine/main/interface",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = "libs/op/libs/ortc-lib/libs/curl/staging";
+				LIBRARY_SEARCH_PATHS = "libs/op/libs/ortc-lib/libs/curl-ios-build-scripts/curl/lib";
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -1526,7 +1526,7 @@
 					"libs/op/libs/ortc-lib/libs",
 					"libs/op/libs/ortc-lib/libs/op-services-cpp",
 					"libs/op/libs/ortc-lib/libs/boost/ios/framework/boost.framework/Headers",
-					"libs/op/libs/ortc-lib/libs/curl/include",
+					"libs/op/libs/ortc-lib/libs/curl-ios-build-scripts/curl",
 					"libs/op/libs/ortc-lib/libs/zsLib",
 					"libs/op/libs/ortc-lib/libs/webRTC/webrtc",
 					"libs/op/libs/ortc-lib/libs/webRTC/webrtc/common_video/interface/",
@@ -1541,7 +1541,7 @@
 					"libs/op/libs/ortc-lib/libs/webRTC/webrtc/voice_engine/main/interface",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = "libs/op/libs/ortc-lib/libs/curl/staging";
+				LIBRARY_SEARCH_PATHS = "libs/op/libs/ortc-lib/libs/curl-ios-build-scripts/curl/lib";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				VALIDATE_PRODUCT = YES;
@@ -1565,7 +1565,10 @@
 					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts\"",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/libs/op/libs/ortc-lib/libs/curl-ios-build-scripts/curl/ios-appstore/lib",
+				);
 				MACH_O_TYPE = staticlib;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CPLUSPLUSFLAGS = (
@@ -1601,7 +1604,10 @@
 					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts\"",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/libs/op/libs/ortc-lib/libs/curl-ios-build-scripts/curl/ios-appstore/lib",
+				);
 				MACH_O_TYPE = staticlib;
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",

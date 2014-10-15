@@ -1,6 +1,6 @@
 #!/bin/bash
 
-: ${CURL_SCRIPT_PATH:=./libs/op/libs/ortc-lib/libs/curl}
+: ${CURL_SCRIPT_PATH:=./libs/op/libs/ortc-lib/libs/curl-ios-build-scripts}
 : ${BOOST_SCRIPT_PATH:=./libs/op/libs/ortc-lib/libs/boost}
 : ${TEMPLATES_PATH:=./templates}
 : ${DESTINATION_PATH:=./Samples/OpenPeerSampleApp/OpenPeerSampleApp}
@@ -12,17 +12,21 @@
 : ${CUSTOMER_SPECIFIC_RELEASE:=CustomerSpecific_Release.plist}
 
 #Runs curl build script
-if [ -f "$CURL_SCRIPT_PATH/build_ios.sh" ]; then
+if [ -f "$CURL_SCRIPT_PATH/build_curl" ]; then
 	pushd $CURL_SCRIPT_PATH
 		echo Building curl ...
-		chmod a+x build_ios.sh
-		sh build_ios.sh
+		chmod a+x build_curl
+		./build_curl --sdk-version 8.0 --libcurl-version 7.38.0
 		status=$?
 		if [ $status != 0 ]; then
 			echo $status
 			echo "Curl build failed!"
 			exit 1
 		else
+			if [ ! -f "curl/curl" ]; then
+				ln -s ios-appstore/include curl/curl
+				ln -s ios-appstore/lib curl/lib
+			fi
 			echo "Curl build succeeded!"
 		fi
 	popd
