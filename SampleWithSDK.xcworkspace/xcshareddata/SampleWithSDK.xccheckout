@@ -28,6 +28,8 @@
 		<string>https://github.com/openpeer/op.git</string>
 		<key>6A3B4D2909F28DB31AD1B89DCEECA4FB6C94CC46</key>
 		<string>https://github.com/openpeer/libyuv.git</string>
+		<key>709832B2CF3DC49D320A71ACB0733FF567087323</key>
+		<string>https://github.com/openpeer/curl-ios-build-scripts.git</string>
 		<key>8FFACF9194D48576A22F6F0C4F6B4F0BA1ABFC64</key>
 		<string>https://github.com/openpeer/webrtc.git</string>
 		<key>ADA8CC136CBBB7C6796072ACF115BBDB805B12BF</key>
@@ -65,6 +67,8 @@
 		<string>../libs/op</string>
 		<key>6A3B4D2909F28DB31AD1B89DCEECA4FB6C94CC46</key>
 		<string>../libs/op/libs/ortc-lib/libs/webrtc/third_party/libyuv</string>
+		<key>709832B2CF3DC49D320A71ACB0733FF567087323</key>
+		<string>../libs/op/libs/ortc-lib/libs/curl-ios-build-scripts/</string>
 		<key>8FFACF9194D48576A22F6F0C4F6B4F0BA1ABFC64</key>
 		<string>../libs/op/libs/ortc-lib/libs/webrtc</string>
 		<key>ADA8CC136CBBB7C6796072ACF115BBDB805B12BF</key>
@@ -119,6 +123,14 @@
 			<string>1472412A1A40EF795F29C7EBF79DE9C343137C4D</string>
 			<key>IDESourceControlWCCName</key>
 			<string>curl</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>709832B2CF3DC49D320A71ACB0733FF567087323</string>
+			<key>IDESourceControlWCCName</key>
+			<string>curl-ios-build-scripts</string>
 		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>

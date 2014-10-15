@@ -230,34 +230,14 @@
 		8774AC4B1897E2F2006B91FA /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8774AC4A1897E2F2006B91FA /* ImageIO.framework */; };
 		8774AC4E1897E305006B91FA /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8774AC4A1897E2F2006B91FA /* ImageIO.framework */; };
 		8774AC6518981094006B91FA /* QRScannerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 872D7E9D1897E19A005D8335 /* QRScannerViewController.xib */; };
-		8780DB6D19E7F25C00AB196C /* NSString+UALocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = 8780DB1219E7F25B00AB196C /* NSString+UALocalization.m */; };
-		8780DB6E19E7F25C00AB196C /* NSString+UASizeWithFontCompatibility.m in Sources */ = {isa = PBXBuildFile; fileRef = 8780DB1419E7F25B00AB196C /* NSString+UASizeWithFontCompatibility.m */; };
 		8780DB6F19E7F25C00AB196C /* UAInteractiveNotifications.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8780DB1619E7F25B00AB196C /* UAInteractiveNotifications.strings */; };
 		8780DB7019E7F25C00AB196C /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8780DB1E19E7F25B00AB196C /* Settings.bundle */; };
-		8780DB7119E7F25C00AB196C /* UADateUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 8780DB2519E7F25B00AB196C /* UADateUtils.m */; };
-		8780DB7219E7F25C00AB196C /* UAInboxAlertHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 8780DB2719E7F25B00AB196C /* UAInboxAlertHandler.m */; };
-		8780DB7319E7F25C00AB196C /* UAInboxMessageListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8780DB2A19E7F25B00AB196C /* UAInboxMessageListCell.m */; };
-		8780DB7419E7F25C00AB196C /* UAInboxMessageListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8780DB2C19E7F25B00AB196C /* UAInboxMessageListController.m */; };
-		8780DB7519E7F25C00AB196C /* UAInboxMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8780DB2E19E7F25B00AB196C /* UAInboxMessageViewController.m */; };
 		8780DB7619E7F25C00AB196C /* UAInboxUI.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8780DB3019E7F25B00AB196C /* UAInboxUI.strings */; };
 		8780DB7719E7F25C00AB196C /* list-image-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 8780DB3319E7F25B00AB196C /* list-image-placeholder.png */; };
 		8780DB7819E7F25C00AB196C /* list-image-placeholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8780DB3419E7F25B00AB196C /* list-image-placeholder@2x.png */; };
 		8780DB7919E7F25C00AB196C /* UAInboxMessageListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8780DB3519E7F25B00AB196C /* UAInboxMessageListCell.xib */; };
 		8780DB7A19E7F25C00AB196C /* UAInboxMessageListController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8780DB3619E7F25B00AB196C /* UAInboxMessageListController.xib */; };
 		8780DB7B19E7F25C00AB196C /* UAInboxMessageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8780DB3719E7F25B00AB196C /* UAInboxMessageViewController.xib */; };
-		8780DB7C19E7F25C00AB196C /* UALocationDemoAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8780DB3C19E7F25C00AB196C /* UALocationDemoAnnotation.m */; };
-		8780DB7D19E7F25C00AB196C /* UALocationSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8780DB3E19E7F25C00AB196C /* UALocationSettingsViewController.m */; };
-		8780DB7E19E7F25C00AB196C /* UAMapPresentationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8780DB4019E7F25C00AB196C /* UAMapPresentationController.m */; };
-		8780DB7F19E7F25C00AB196C /* UAPushMoreSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8780DB4319E7F25C00AB196C /* UAPushMoreSettingsViewController.m */; };
-		8780DB8019E7F25C00AB196C /* UAPushNotificationHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 8780DB4519E7F25C00AB196C /* UAPushNotificationHandler.m */; };
-		8780DB8119E7F25C00AB196C /* UAPushSettingsAddTagViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8780DB4719E7F25C00AB196C /* UAPushSettingsAddTagViewController.m */; };
-		8780DB8219E7F25C00AB196C /* UAPushSettingsAliasViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8780DB4919E7F25C00AB196C /* UAPushSettingsAliasViewController.m */; };
-		8780DB8319E7F25C00AB196C /* UAPushSettingsChannelInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8780DB4B19E7F25C00AB196C /* UAPushSettingsChannelInfoViewController.m */; };
-		8780DB8419E7F25C00AB196C /* UAPushSettingsSoundsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8780DB4D19E7F25C00AB196C /* UAPushSettingsSoundsViewController.m */; };
-		8780DB8519E7F25C00AB196C /* UAPushSettingsTagsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8780DB4F19E7F25C00AB196C /* UAPushSettingsTagsViewController.m */; };
-		8780DB8619E7F25C00AB196C /* UAPushSettingsTokenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8780DB5119E7F25C00AB196C /* UAPushSettingsTokenViewController.m */; };
-		8780DB8719E7F25C00AB196C /* UAPushSettingsUserInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8780DB5319E7F25C00AB196C /* UAPushSettingsUserInfoViewController.m */; };
-		8780DB8819E7F25C00AB196C /* UAPushSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8780DB5519E7F25C00AB196C /* UAPushSettingsViewController.m */; };
 		8780DB8919E7F25C00AB196C /* UAPushUI.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8780DB5719E7F25C00AB196C /* UAPushUI.strings */; };
 		8780DB8A19E7F25C00AB196C /* bottom-detail.png in Resources */ = {isa = PBXBuildFile; fileRef = 8780DB5A19E7F25C00AB196C /* bottom-detail.png */; };
 		8780DB8B19E7F25C00AB196C /* bottom-detail@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8780DB5B19E7F25C00AB196C /* bottom-detail@2x.png */; };
@@ -2648,7 +2628,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				87272839166CBF9B0089CBB6 /* main.m in Sources */,
-				8780DB7D19E7F25C00AB196C /* UALocationSettingsViewController.m in Sources */,
 				874FE10E17FD7FF0007A791B /* AppLog.m in Sources */,
 				8757E1CB1827E85700D7BDA1 /* TTTAttributedLabel.m in Sources */,
 				8727283D166CBF9B0089CBB6 /* AppDelegate.m in Sources */,
@@ -2658,7 +2637,6 @@
 				8730D6E31832601C008D1D37 /* VideoCallViewController.m in Sources */,
 				87272859166CC45B0089CBB6 /* LoginManager.m in Sources */,
 				879DC66218CA0F1C00DA60C0 /* HTTPDownloader.m in Sources */,
-				8780DB7519E7F25C00AB196C /* UAInboxMessageViewController.m in Sources */,
 				874AD9D1166CE6540095FE33 /* AccountDelegate.m in Sources */,
 				87CCF64418C0FFDB000DF636 /* BackgroundingDelegate.m in Sources */,
 				874AD9D5166CEAFB0095FE33 /* StackDelegate.m in Sources */,
@@ -2668,9 +2646,6 @@
 				874AD9DB166CEB530095FE33 /* ConversationThreadDelegate.m in Sources */,
 				874AD9DE166CEB780095FE33 /* CallDelegate.m in Sources */,
 				87091144184762F300E65465 /* ImageManager.m in Sources */,
-				8780DB8319E7F25C00AB196C /* UAPushSettingsChannelInfoViewController.m in Sources */,
-				8780DB6D19E7F25C00AB196C /* NSString+UALocalization.m in Sources */,
-				8780DB7219E7F25C00AB196C /* UAInboxAlertHandler.m in Sources */,
 				871C7B8D17FEBED200BE641B /* SplashViewController.m in Sources */,
 				8757E1A21827BD2200D7BDA1 /* ContactsViewController.m in Sources */,
 				874AD9E5166D4C900095FE33 /* OpenPeer.m in Sources */,
@@ -2681,23 +2656,17 @@
 				871AA7F31941DA28003B4400 /* ActiveSessionsViewController.m in Sources */,
 				875CD7E2167A14810037396B /* SessionManager.m in Sources */,
 				8723870E19465A57002643D6 /* ActiveSessionTableViewCell.m in Sources */,
-				8780DB8019E7F25C00AB196C /* UAPushNotificationHandler.m in Sources */,
 				875CD7E5167A14960037396B /* Session.m in Sources */,
 				8730D76F1833A62A008D1D37 /* WaitingVideoViewController.m in Sources */,
 				8723F8E917FC99EE003C8802 /* Settings.m in Sources */,
 				870F337F168376450090A97F /* ActivityIndicatorViewController.m in Sources */,
-				8780DB8819E7F25C00AB196C /* UAPushSettingsViewController.m in Sources */,
 				876CBCBB16F20A88004D542B /* IdentityDelegate.m in Sources */,
 				87FC39F71709BB39002030D1 /* MessageManager.m in Sources */,
 				87FC3A151709BD8D002030D1 /* XMLWriter.m in Sources */,
-				8780DB8719E7F25C00AB196C /* UAPushSettingsUserInfoViewController.m in Sources */,
-				8780DB8519E7F25C00AB196C /* UAPushSettingsTagsViewController.m in Sources */,
 				8757E17F1827A0BF00D7BDA1 /* SessionViewController_iPhone.m in Sources */,
 				87FC3A161709BD8D002030D1 /* SBJsonParser.m in Sources */,
-				8780DB8619E7F25C00AB196C /* UAPushSettingsTokenViewController.m in Sources */,
 				87FC3A171709BD8D002030D1 /* SBJsonStreamParser.m in Sources */,
 				87FC3A181709BD8D002030D1 /* SBJsonStreamParserAccumulator.m in Sources */,
-				8780DB7419E7F25C00AB196C /* UAInboxMessageListController.m in Sources */,
 				87224734182D02F30027DA50 /* CallViewController.m in Sources */,
 				874408CB182FE873004AD8FC /* IncomingCallViewController.m in Sources */,
 				87FC3A191709BD8D002030D1 /* SBJsonStreamParserAdapter.m in Sources */,
@@ -2708,31 +2677,22 @@
 				87FC3A1A1709BD8D002030D1 /* SBJsonStreamParserState.m in Sources */,
 				87FC3A1B1709BD8D002030D1 /* SBJsonStreamTokeniser.m in Sources */,
 				87E0355A19AF4B89008A195C /* SystemMessageCell.mm in Sources */,
-				8780DB8119E7F25C00AB196C /* UAPushSettingsAddTagViewController.m in Sources */,
 				87FC3A1C1709BD8D002030D1 /* SBJsonStreamWriter.m in Sources */,
 				8799239E1917C85500FBD21E /* UIDevice+Networking.m in Sources */,
 				87FC3A1D1709BD8D002030D1 /* SBJsonStreamWriterAccumulator.m in Sources */,
 				87FC3A1E1709BD8D002030D1 /* SBJsonStreamWriterState.m in Sources */,
-				8780DB7319E7F25C00AB196C /* UAInboxMessageListCell.m in Sources */,
 				87FC3A1F1709BD8D002030D1 /* SBJsonWriter.m in Sources */,
 				87FC3A201709BD8D002030D1 /* RXMLElement.m in Sources */,
 				87F09EE3171EBB1B0045F6A6 /* ChatViewController.m in Sources */,
 				87F09EE4171EBB1B0045F6A6 /* ChatMessageCell.m in Sources */,
-				8780DB7119E7F25C00AB196C /* UADateUtils.m in Sources */,
 				87F09EE7171EBB2A0045F6A6 /* Message.m in Sources */,
 				87E3CCE7172A814F00084D2F /* IdentityLookupDelegate.m in Sources */,
 				87224733182D02F30027DA50 /* AudioCallViewController.m in Sources */,
-				8780DB8219E7F25C00AB196C /* UAPushSettingsAliasViewController.m in Sources */,
-				8780DB7E19E7F25C00AB196C /* UAMapPresentationController.m in Sources */,
-				8780DB6E19E7F25C00AB196C /* NSString+UASizeWithFontCompatibility.m in Sources */,
 				87D91B2A17687EFD00E46B66 /* CacheDelegate.m in Sources */,
 				8722A67417CF7FAE002A3BB6 /* ContactTableViewCell.m in Sources */,
-				8780DB7F19E7F25C00AB196C /* UAPushMoreSettingsViewController.m in Sources */,
 				8712BE8A17D8CCAD00665F42 /* SettingsViewController.m in Sources */,
 				879D7B9717FB1224008C78E2 /* LoggerSettingsViewController.m in Sources */,
-				8780DB7C19E7F25C00AB196C /* UALocationDemoAnnotation.m in Sources */,
 				8712BE8B17D8CCAD00665F42 /* InfoViewController.m in Sources */,
-				8780DB8419E7F25C00AB196C /* UAPushSettingsSoundsViewController.m in Sources */,
 				87E0355E19AF52B4008A195C /* ChatCell.m in Sources */,
 				87D72EC217DDEEB000DEB37E /* IconDownloader.m in Sources */,
 			);
