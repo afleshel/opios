@@ -525,6 +525,38 @@
     [self enable:YES logger:LOGGER_OUTGOING_TELNET];
 }
 
+- (void) setDefaultLoggerLevel:(HOPLoggerLevel) level
+{
+    [self setLoggerLevel:level forAppModule:MODULE_APPLICATION];
+    [self setLoggerLevel:level forAppModule:MODULE_SERVICES];
+    [self setLoggerLevel:level forAppModule:MODULE_SERVICES_WIRE];
+    [self setLoggerLevel:level forAppModule:MODULE_SERVICES_ICE];
+    [self setLoggerLevel:level forAppModule:MODULE_SERVICES_TURN];
+    [self setLoggerLevel:level forAppModule:MODULE_SERVICES_RUDP];
+    [self setLoggerLevel:level forAppModule:MODULE_SERVICES_HTTP];
+    [self setLoggerLevel:level forAppModule:MODULE_SERVICES_MLS];
+    [self setLoggerLevel:level forAppModule:MODULE_SERVICES_TCP];
+    [self setLoggerLevel:level forAppModule:MODULE_SERVICES_TRANSPORT];
+    [self setLoggerLevel:level forAppModule:MODULE_CORE];
+    [self setLoggerLevel:level forAppModule:MODULE_STACK_MESSAGE];
+    [self setLoggerLevel:level forAppModule:MODULE_STACK];
+    [self setLoggerLevel:level forAppModule:MODULE_ZSLIB];
+    [self setLoggerLevel:level forAppModule:MODULE_ZSLIB_SOCKET];
+    [self setLoggerLevel:level forAppModule:MODEULE_SDK];
+    [self setLoggerLevel:level forAppModule:MODULE_WEBRTC];
+    [self setLoggerLevel:level forAppModule:MODULE_MEDIA];
+    [self setLoggerLevel:level forAppModule:MODULE_JAVASCRIPT];
+    
+    [self setColorizedOutput:YES logger:LOGGER_STD_OUT];
+    [self setColorizedOutput:YES logger:LOGGER_TELNET];
+    [self setColorizedOutput:YES logger:LOGGER_OUTGOING_TELNET];
+    
+    [self enable:YES logger:LOGGER_ENABLED];
+    [self enable:YES logger:LOGGER_STD_OUT];
+    [self enable:YES logger:LOGGER_TELNET];
+    [self enable:YES logger:LOGGER_OUTGOING_TELNET];
+}
+
 - (BOOL) isQRSettingsResetEnabled
 {
     return [[NSUserDefaults standardUserDefaults] boolForKey:settingsKeyRemoveSettingsAppliedByQRCode];
@@ -1033,5 +1065,14 @@
         [alertView show];
     }
     
+}
+
++ (NSString*) getRedirectURLAfterLoginComplete
+{
+    NSString* redirectAfterLoginCompleteURL = [[NSUserDefaults standardUserDefaults] objectForKey:settingsKeyRedirectAfterLoginCompleteURL];
+    if (!redirectAfterLoginCompleteURL)
+        redirectAfterLoginCompleteURL = [NSString stringWithFormat:@"%@?reload=true",[[Settings sharedSettings] getOuterFrameURL]];
+    
+    return redirectAfterLoginCompleteURL;
 }
 @end

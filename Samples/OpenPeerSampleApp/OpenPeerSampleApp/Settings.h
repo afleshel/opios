@@ -128,6 +128,7 @@ typedef enum
 - (NSString*) getStringForLogLevel:(HOPLoggerLevel) level;
 
 - (void) saveDefaultsLoggerSettings;
+- (void) setDefaultLoggerLevel:(HOPLoggerLevel) level;
 
 - (BOOL) isQRSettingsResetEnabled;
 - (void) enableQRSettingsReset:(BOOL) enable;
@@ -155,4 +156,6 @@ typedef enum
 
 - (BOOL) updateAppSettings;
 - (BOOL) checkIfReloginInfoIsValid;
+
++ (NSString*) getRedirectURLAfterLoginComplete;
 @end

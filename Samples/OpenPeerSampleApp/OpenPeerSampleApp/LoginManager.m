@@ -231,7 +231,7 @@
         OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Identity login started for uri: %@",identityURI);
         [[[OpenPeer sharedOpenPeer] mainViewController] onStartLoginWithidentityURI];
         
-        NSString* redirectAfterLoginCompleteURL = [NSString stringWithFormat:@"%@?reload=true",[[Settings sharedSettings] getOuterFrameURL]];
+        NSString* redirectAfterLoginCompleteURL = [Settings getRedirectURLAfterLoginComplete];
 
         if (![[HOPAccount sharedAccount] isCoreAccountCreated] || [[HOPAccount sharedAccount] getState].state == HOPAccountStateShutdown)
             [self startAccount];
@@ -368,7 +368,7 @@
             {
                 if (![identity isDelegateAttached])
                 {
-                    NSString* redirectAfterLoginCompleteURL = [NSString stringWithFormat:@"%@?reload=true",[[Settings sharedSettings] getOuterFrameURL]];
+                    NSString* redirectAfterLoginCompleteURL = [Settings getRedirectURLAfterLoginComplete];
                     
                     [identity attachDelegate:(id<HOPIdentityDelegate>)[[OpenPeer sharedOpenPeer] identityDelegate]  redirectionURL:redirectAfterLoginCompleteURL];
                 }

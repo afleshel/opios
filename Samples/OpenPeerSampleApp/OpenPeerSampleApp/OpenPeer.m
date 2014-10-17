@@ -93,7 +93,7 @@
     {
         NSDate* expiry = [[NSDate date] dateByAddingTimeInterval:(30 * 24 * 60 * 60)];
         
-        _authorizedApplicationId = [HOPStack createAuthorizedApplicationID:[[NSUserDefaults standardUserDefaults] stringForKey: @"applicationId"] applicationIDSharedSecret:[[NSUserDefaults standardUserDefaults] stringForKey: settingsKeyAppIdSharedSecret] expires:expiry];
+        _authorizedApplicationId = [HOPStack createAuthorizedApplicationID:[[NSUserDefaults standardUserDefaults] stringForKey: settingsKeyAppId] applicationIDSharedSecret:[[NSUserDefaults standardUserDefaults] stringForKey: settingsKeyAppIdSharedSecret] expires:expiry];
     }
     return _authorizedApplicationId;
 }

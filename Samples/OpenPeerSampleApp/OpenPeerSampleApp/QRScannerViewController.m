@@ -37,6 +37,7 @@
 #import <OpenPeerSDK/HOPSettings.h>
 #import "Logger.h"
 #import "HTTPDownloader.h"
+#import "AppConsts.h"
 
 @interface QRScannerViewController ()
 
@@ -289,6 +290,12 @@ didOutputMetadataObjects:(NSArray *)metadataObjects
                                                   cancelButtonTitle:nil
                                                   otherButtonTitles:@"Ok",nil];
         [alertView show];
+    }
+    
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:settingsKeyEnabledLogger])
+    {
+        NSString* str = [[NSUserDefaults standardUserDefaults] objectForKey:settingsKeyDefaultLogLevel];
+        [Logger startTelnetLoggerWithLogLevel:str];
     }
     [self actionProceedWithlogin:nil];
 }
