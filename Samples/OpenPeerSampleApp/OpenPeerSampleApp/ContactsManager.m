@@ -197,8 +197,8 @@
                                 if ([managedObject isKindOfClass:[HOPRolodexContact class]])
                                 {
                                     rolodexContact = (HOPRolodexContact*)managedObject;
-                                    HOPOpenPeerAccount* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
-                                    HOPAssociatedIdentity* associatedIdentity = [[HOPModelManager sharedModelManager] getAssociatedIdentityForBaseIdentityURI:[[Settings sharedSettings] getIdentityFederateBaseURI] homeUserStableId:homeUser.stableId];
+                                    //HOPOpenPeerAccount* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
+                                    HOPAssociatedIdentity* associatedIdentity = [[HOPModelManager sharedModelManager] getAssociatedIdentityForBaseIdentityURI:[[Settings sharedSettings] getIdentityFederateBaseURI] homeUserStableId:[[HOPAccount sharedAccount] getStableID]];
                                     rolodexContact.associatedIdentity = associatedIdentity;
                                     rolodexContact.identityURI = identityURI;
                                     rolodexContact.name = fullNameTemp;
@@ -242,8 +242,8 @@
             if (![identity isDelegateAttached])
                 [[LoginManager sharedLoginManager] attachDelegateForIdentity:identity forceAttach:NO];
             
-            HOPOpenPeerAccount* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
-            HOPAssociatedIdentity* associatedIdentity = [[HOPModelManager sharedModelManager] getAssociatedIdentityForBaseIdentityURI:[identity getBaseIdentityURI] homeUserStableId:homeUser.stableId];
+            //HOPOpenPeerAccount* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
+            HOPAssociatedIdentity* associatedIdentity = [[HOPModelManager sharedModelManager] getAssociatedIdentityForBaseIdentityURI:[identity getBaseIdentityURI] homeUserStableId:[[HOPAccount sharedAccount] getStableID]];
         
             if ([[LoginManager sharedLoginManager] isLogin] || [[LoginManager sharedLoginManager] isAssociation])
             {
@@ -366,7 +366,6 @@
     if (homeUser)
     {
         HOPOpenPeerContact* openPeerContact = [[HOPModelManager sharedModelManager] getOpenPeerContactForStableID:homeUser.stableId];
-        //NSArray* homeUserIdentityContacts = [[HOPModelManager sharedModelManager] getIdentityContactsByStableID:homeUser.stableId];
         
         if (openPeerContact && openPeerContact.identityContacts.count > 0)
         {

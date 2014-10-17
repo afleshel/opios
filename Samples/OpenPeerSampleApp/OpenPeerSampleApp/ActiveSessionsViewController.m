@@ -33,7 +33,7 @@
 #import <OpenPeerSDK/HOPConversationRecord+External.h>
 #import <OpenPeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPPublicPeerFile.h>
-#import <OpenPeerSDK/HOPOpenPeerAccount.h>
+#import <OpenPeerSDK/HOPAccount.h>
 #import <OpenPeerSDK/HOPOpenPeerContact.h>
 #import <OpenPeerSDK/HOPParticipants.h>
 #import <OpenPeerSDK/HOPConversationEvent.h>
@@ -285,7 +285,7 @@
     
     [fetchRequest setEntity:entity];
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(showEvent = YES AND session.homeUser.stableId MATCHES '%@')",[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser].stableId]];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(showEvent = YES AND session.homeUser.stableId MATCHES '%@')",[[HOPAccount sharedAccount] getStableID]]];
     [fetchRequest setPredicate:predicate];
     
     [fetchRequest setFetchBatchSize:20];
@@ -301,63 +301,6 @@
     return _fetchedResultsController;
 }
 
-/*- (NSFetchedResultsController *)fetchedResultsController
-{
-    if (_fetchedResultsController != nil)
-    {
-        return _fetchedResultsController;
-    }
-    [NSFetchedResultsController deleteCacheWithName:@"SessionRecord"];
-    
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPParticipants" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];
-    
-    [fetchRequest setEntity:entity];
-    
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SUBQUERY(events, $t, $t.session.homeUser.stableId == %@).@count != 0", [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser].stableId];//[NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(ANY events.session.homeUser.stableId MATCHES '%@')",[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser].stableId]];
-    [fetchRequest setPredicate:predicate];
-    
-    [fetchRequest setFetchBatchSize:20];
-    //
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"getDateOfLastEvent" ascending:NO];
-    NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
-    
-    [fetchRequest setSortDescriptors:sortDescriptors];
-    
-    _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext] sectionNameKeyPath:@"sectionIdentifier" cacheName:@"SessionRecord"];
-    _fetchedResultsController.delegate = self;
-    
-    return _fetchedResultsController;
-}*/
-
-/*- (NSFetchedResultsController *)fetchedResultsController
-{
-    if (_fetchedResultsController != nil)
-    {
-        return _fetchedResultsController;
-    }
-    [NSFetchedResultsController deleteCacheWithName:@"SessionRecord"];
-    
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPConversationRecord" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];
-    
-    [fetchRequest setEntity:entity];
-    
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(homeUser.stableId MATCHES '%@')",[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser].stableId]];
-    [fetchRequest setPredicate:predicate];
-    
-	[fetchRequest setFetchBatchSize:20];
-//	
-	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"lastActivity" ascending:NO];
-	NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
-	
-	[fetchRequest setSortDescriptors:sortDescriptors];
-    
-	_fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext] sectionNameKeyPath:@"sectionIdentifier" cacheName:@"SessionRecord"];
-    _fetchedResultsController.delegate = self;
-    
-	return _fetchedResultsController;
-}*/
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
     [self.tableViewSessions beginUpdates];

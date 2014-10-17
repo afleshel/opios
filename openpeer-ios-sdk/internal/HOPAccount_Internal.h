@@ -32,6 +32,7 @@
 
 #import <openpeer/core/types.h>
 #import "HOPAccount.h"
+#import "HOPOpenPeerAccount.h"
 
 #import "OpenPeerAccountDelegate.h"
 #import "OpenPeerConversationThreadDelegate.h"
@@ -52,6 +53,7 @@ using namespace openpeer::core;
 }
 
 @property (nonatomic, strong) NSMutableDictionary* dictionaryOfIdentities;
+@property (nonatomic, strong, getter=getOpenPeerUser) HOPOpenPeerAccount* openPeerAccount;
 
 - (id) initSingleton;
 - (void) setLocalDelegates:(id<HOPAccountDelegate>) inAccountDelegate conversationThread:(id<HOPConversationThreadDelegate>) inConversationThread callDelegate:(id<HOPCallDelegate>) inCallDelegate;

@@ -108,7 +108,6 @@
 */
 - (Session*)createSessionForContacts:(NSArray*) contacts
 {
-    //HOPRolodexContact* contact = contacts[0];
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Creating session for contacts: %@", contacts);
     Session* ret = nil;
     
@@ -187,34 +186,6 @@
     Session* ret = nil;
     
     NSArray* contactAaray = [inConversationThread getContacts];
-    //HOPRolodexContact* rolodexContact = nil;
-    
-    /*NSArray* contacts = [inConversationThread getContacts];
-    
-    NSArray* contactAaray = [[HOPModelManager sharedModelManager] getOpenPeerContactsByPeerURIs:[[contacts objectAtIndex:0] getPeerURI]];
-    NSMutableArray* rolodexContacts  = contactAaray == nil ? [[NSMutableArray alloc] init] : [NSMutableArray  arrayWithArray: contactAaray];
-    
-    //NSMutableArray* test = [inConversationThread getRolodexContactListForContact:[contacts objectAtIndex:0]];
-    if ([rolodexContacts count] == 0)
-    {
-        HOPContact* coreContact = [contacts objectAtIndex:0];
-//        NSString* profileBundle = [inConversationThread getProfileBundle:coreContact];
-//        rolodexContact = [[ContactsManager sharedContactsManager] getRolodexContactByProfileBundle:profileBundle coreContact:coreContact];
-//        [rolodexContacts addObject:rolodexContact];
-        
-        
-        NSArray* identityContacts = [inConversationThread getIdentityContactListForContact:coreContact];
-        for (HOPIdentityContact* identityContact in identityContacts)
-        {
-            [rolodexContacts addObject:identityContact.rolodexContact];
-        }
-        rolodexContact = [rolodexContacts objectAtIndex:0];
-        [[ContactsManager sharedContactsManager] refreshRolodexContacts];
-    }
-    else
-    {
-        rolodexContact = [rolodexContacts objectAtIndex:0];
-    }*/
     
     if (contactAaray.count > 0)
     {

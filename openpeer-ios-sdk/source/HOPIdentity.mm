@@ -279,6 +279,9 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
                     [contact addIdentityContactsObject:ret];
                 else
                     contact = [[HOPModelManager sharedModelManager] createOpenPeerContactForIdentityContact:identityContact];
+                
+                contact.account = [HOPAccount sharedAccount].openPeerAccount;
+                [[HOPModelManager sharedModelManager]saveContext];
                 //HACK: Because identityContact.mStableID is not filled correctly in the core
                 //ret.stableID = sId;
             }

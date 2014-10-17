@@ -218,4 +218,11 @@ Singleton class that represents the logged in OpenPeer user.
  *  @return A string that represents the contents of the receiving class.
  */
 - (NSString *)description;
+
+
+- (BOOL) isLoggedIn;
+- (void) resetLoggedInAccount;
+- (void) updateLoggedInAccount;
+- (void) addIdentity:(HOPIdentity*) identity;
+- (NSString*) getPeerURI;
 @end

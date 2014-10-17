@@ -31,12 +31,10 @@
 
 #import "HOPModelManager.h"
 
-
 using namespace openpeer;
 using namespace openpeer::core;
 
 @interface HOPModelManager()
-
 
 - (HOPOpenPeerContact*) getOpenPeerContactForIdentityContact:(IdentityContact) inIdentityContact;
 - (HOPOpenPeerContact*) createOpenPeerContactForIdentityContact:(IdentityContact) inIdentityContact;

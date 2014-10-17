@@ -10,5 +10,7 @@
 	<string>openpeer/common/application-url</string>
 	<key>userAgent</key>
 	<string>openpeer/calculated/user-agent</string>
+	<key>identityProviderDomain</key>
+	<string>identityProviderDomain</string>
 </dict>
 </plist>

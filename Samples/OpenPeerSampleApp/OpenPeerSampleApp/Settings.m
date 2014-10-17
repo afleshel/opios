@@ -38,7 +38,7 @@
 #import <OpenPeerSDK/HOPSettings.h>
 #import <OpenPeerSDK/HOPUtility.h>
 #import <OpenPeerSDK/HOPCache.h>
-#import <OpenPeerSDK/HOPOpenPeerAccount.h>
+#import <OpenPeerSDK/HOPAccount.h>
 #import <OpenPeerSDK/HOPModelManager.h>
 #import "HTTPDownloader.h"
 
@@ -956,10 +956,10 @@
 {
     BOOL ret = NO;
     
-    HOPOpenPeerAccount* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
+    //HOPOpenPeerAccount* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
     NSString* domain = [[NSUserDefaults standardUserDefaults] objectForKey:settingsKeyIdentityProviderDomain];
     
-    ret = [homeUser.reloginInfo rangeOfString:domain].location != NSNotFound;
+    ret = [[[HOPAccount sharedAccount] getReloginInformation] rangeOfString:domain].location != NSNotFound;
     
     return ret;
 }

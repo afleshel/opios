@@ -38,6 +38,7 @@
 #import <OpenpeerSDK/HOPAssociatedIdentity.h>
 #import <OpenpeerSDK/HOPIdentityProvider.h>
 #import <OpenpeerSDK/HOPOpenPeerContact.h>
+#import <OpenPeerSDK/HOPAccount.h>
 
 const CGFloat cellDefaultHeight = 50.0;
 const CGFloat headerDefaultHeight = 40.0;
@@ -107,7 +108,7 @@ typedef enum
             break;
             
         case USER_INFO_IDENTITIES:
-            ret = [self.homeUser.associatedIdentities count];
+            ret = [[HOPAccount sharedAccount] getAssociatedIdentities].count;
             break;
             
         default:
@@ -135,12 +136,12 @@ typedef enum
         case USER_INFO_STABLE_ID:
             cell.textLabel.lineBreakMode = NSLineBreakByCharWrapping;
             cell.textLabel.numberOfLines = 0;
-            cell.textLabel.text = self.homeUser.stableId;
+            cell.textLabel.text = [[HOPAccount sharedAccount] getStableID];
             break;
             
         case USER_INFO_PEER_URI:cell.textLabel.lineBreakMode = NSLineBreakByCharWrapping;
             cell.textLabel.numberOfLines = 0;
-            cell.textLabel.text = ((HOPAssociatedIdentity*)self.homeUser.associatedIdentities.anyObject).selfRolodexContact.identityContact.openPeerContact.publicPeerFile.peerURI;
+            cell.textLabel.text = [[HOPAccount sharedAccount] getPeerURI];
             break;
             
         case USER_INFO_IDENTITIES:
@@ -172,7 +173,7 @@ typedef enum
         case USER_INFO_STABLE_ID:
         {
             UIFont* cellFont = [UIFont boldSystemFontOfSize:17.0];
-            CGSize labelSize = [self.homeUser.stableId boundingRectWithSize: constraintSize options: NSStringDrawingUsesLineFragmentOrigin attributes: @{ NSFontAttributeName: cellFont } context: nil].size;//[self.homeUser.stableId sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:NSLineBreakByCharWrapping];
+            CGSize labelSize = [[[HOPAccount sharedAccount] getStableID] boundingRectWithSize: constraintSize options: NSStringDrawingUsesLineFragmentOrigin attributes: @{ NSFontAttributeName: cellFont } context: nil].size;//[self.homeUser.stableId sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:NSLineBreakByCharWrapping];
             ret = (labelSize.height) > cellDefaultHeight ? labelSize.height : cellDefaultHeight;
         }
         break;
@@ -181,7 +182,7 @@ typedef enum
         {
             UIFont* cellFont = [UIFont boldSystemFontOfSize:17.0];
             //NSString* str = ((HOPRolodexContact*)((HOPAssociatedIdentity*)self.homeUser.associatedIdentities.anyObject).rolodexContacts.anyObject).identityContact.peerFile.peerURI;
-            NSString* str = ((HOPRolodexContact*)((HOPAssociatedIdentity*)self.homeUser.associatedIdentities.anyObject).selfRolodexContact).identityContact.openPeerContact.publicPeerFile.peerURI;
+            NSString* str = [[HOPAccount sharedAccount] getPeerURI];
             CGSize labelSize = [str boundingRectWithSize: constraintSize options: NSStringDrawingUsesLineFragmentOrigin attributes: @{ NSFontAttributeName: cellFont } context: nil].size;//[str sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:NSLineBreakByCharWrapping];
             ret = labelSize.height > cellDefaultHeight ? labelSize.height : cellDefaultHeight;
         }

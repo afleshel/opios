@@ -57,6 +57,15 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "8792E86716519CFF00DEAC58"
+            BuildableName = "libOpenPeerSDK.a"
+            BlueprintName = "OpenPeerSDK"
+            ReferencedContainer = "container:openpeer-ios-sdk.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>

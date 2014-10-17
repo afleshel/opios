@@ -34,6 +34,12 @@
 
 #import "OpenPeerStorageManager.h"
 #import "OpenPeerUUIDManager.h"
+#import "HOPModelManager.h"
+#import "HOPAssociatedIdentity.h"
+#import "HOPIdentityContact.h"
+#import "HOPRolodexContact.h"
+#import "HOPOpenPeerContact_Internal.h"
+#import "HOPPublicPeerFile.h"
 
 #import <openpeer/core/IAccount.h>
 #import <openpeer/core/IContact.h>
@@ -126,28 +132,33 @@ using namespace openpeer::core;
 {
     BOOL passedWithoutErrors = NO;
     
-    //Check if valid arguments are passed
-    if (!inAccountDelegate || !inConversationThreadDelegate || !inCallDelegate || [lockboxOuterFrameURLUponReload length] == 0 || [reloginInformation length] == 0)
-    {
-        ZS_LOG_ERROR(Debug, [self log:@"Passed invalid arguments."]);
-        return passedWithoutErrors;
-    }
+    self.openPeerAccount = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
     
-    //Set account, conversation thread and call delegates
-    [self setLocalDelegates:inAccountDelegate conversationThread:inConversationThreadDelegate callDelegate:inCallDelegate];
-    
-    //Start relogin. This static method will create an account core object
-    accountPtr = IAccount::relogin(openpeerAccountDelegatePtr, openpeerConversationDelegatePtr, openpeerCallDelegatePtr, [lockboxOuterFrameURLUponReload UTF8String],IHelper::createElement([reloginInformation UTF8String]));
-    
-    //If core account object is created return that relogin process is started successfully
-    if (accountPtr)
+    if (self.openPeerAccount && self.openPeerAccount.reloginInfo.length > 0)
     {
-        ZS_LOG_DEBUG([self log:@"Account object created successfully."]);
-        passedWithoutErrors = YES;
-    }
-    else
-    {
-        ZS_LOG_DEBUG([self log:@"Account object is NOT created successfully."]);
+        //Check if valid arguments are passed
+            if (!inAccountDelegate || !inConversationThreadDelegate || !inCallDelegate || [lockboxOuterFrameURLUponReload length] == 0)// || [reloginInformation length] == 0)
+        {
+            ZS_LOG_ERROR(Debug, [self log:@"Passed invalid arguments."]);
+            return passedWithoutErrors;
+        }
+        
+        //Set account, conversation thread and call delegates
+        [self setLocalDelegates:inAccountDelegate conversationThread:inConversationThreadDelegate callDelegate:inCallDelegate];
+        
+        //Start relogin. This static method will create an account core object
+        accountPtr = IAccount::relogin(openpeerAccountDelegatePtr, openpeerConversationDelegatePtr, openpeerCallDelegatePtr, [lockboxOuterFrameURLUponReload UTF8String],IHelper::createElement([reloginInformation UTF8String]));
+        
+        //If core account object is created return that relogin process is started successfully
+        if (accountPtr)
+        {
+            ZS_LOG_DEBUG([self log:@"Account object created successfully."]);
+            passedWithoutErrors = YES;
+        }
+        else
+        {
+            ZS_LOG_DEBUG([self log:@"Account object is NOT created successfully."]);
+        }
     }
     
     return passedWithoutErrors;
@@ -217,11 +228,11 @@ using namespace openpeer::core;
             ZS_LOG_WARNING(Debug, [self log:@"Account object relogin information are not available!"]);
         }
     }
-    else
-    {
-        ZS_LOG_ERROR(Debug, [self log:@"Invalid account object!"]);
-        [NSException raise:NSInvalidArgumentException format:@"Invalid account object!"];
-    }
+//    else
+//    {
+//        ZS_LOG_ERROR(Debug, [self log:@"Invalid account object!"]);
+//        [NSException raise:NSInvalidArgumentException format:@"Invalid account object!"];
+//    }
     return ret;
 }
 
@@ -247,6 +258,9 @@ using namespace openpeer::core;
     if(accountPtr)
     {
         accountPtr->shutdown();
+        
+        self.openPeerAccount.loggedIn = [NSNumber numberWithBool:NO];
+        [[HOPModelManager sharedModelManager] saveContext];
     }
     else
     {
@@ -477,5 +491,74 @@ using namespace openpeer::core;
         return String("HOPAccount [") + string(accountPtr->getID()) + "] " + [message UTF8String];
     else
         return String("HOPAccount: ") + [message UTF8String];
+}
+
+- (HOPOpenPeerAccount*) getOpenPeerUser
+{
+    if (!_openPeerAccount)
+    {
+        _openPeerAccount = [[HOPModelManager sharedModelManager] getHomeUserByStableID:[[HOPAccount sharedAccount] getStableID]];
+        
+        if (!_openPeerAccount && [[HOPAccount sharedAccount] getStableID].length > 0)
+        {
+            _openPeerAccount = (HOPOpenPeerAccount*)[[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPOpenPeerAccount"];
+            _openPeerAccount.stableId = [[HOPAccount sharedAccount] getStableID];
+            _openPeerAccount.reloginInfo = [[HOPAccount sharedAccount] getReloginInformation];
+            _openPeerAccount.loggedIn = [NSNumber numberWithBool: YES];
+        }
+    }
+    return _openPeerAccount;
+}
+#pragma mark - SDK methods
+- (BOOL) isLoggedIn
+{
+    return self.openPeerAccount.reloginInfo.length > 0;
+}
+- (void) updateLoggedInAccount
+{
+    HOPOpenPeerAccount* previousLoggedInHomeUser = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
+    self.openPeerAccount = [[HOPModelManager sharedModelManager] getHomeUserByStableID:[[HOPAccount sharedAccount] getStableID]];
+    
+    if (self.openPeerAccount)
+    {
+        //If is previous logged in user is different update loggedIn flag
+        if (![self.openPeerAccount.loggedIn boolValue])
+        {
+            if (previousLoggedInHomeUser)
+                previousLoggedInHomeUser.loggedIn = [NSNumber numberWithBool: NO];
+            
+            self.openPeerAccount.loggedIn = [NSNumber numberWithBool: YES];
+            [[HOPModelManager sharedModelManager] saveContext];
+        }
+    }
+}
+- (void) resetLoggedInAccount
+{
+    HOPOpenPeerAccount* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
+    homeUser.loggedIn = [NSNumber numberWithBool:NO];
+    [[HOPModelManager sharedModelManager] saveContext];
+}
+- (void) addIdentity:(HOPIdentity*) identity
+{
+    HOPIdentityContact* homeIdentityContact = [identity getSelfIdentityContact];
+    
+    HOPAssociatedIdentity*  associatedIdentity = [[HOPModelManager sharedModelManager] getAssociatedIdentityForBaseIdentityURI:[identity getBaseIdentityURI] homeUserStableId:[[HOPAccount sharedAccount] getStableID]];
+    
+    if (!associatedIdentity)
+    {
+        //associatedIdentity = (HOPAssociatedIdentity*)[[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPAssociatedIdentity"];
+        associatedIdentity = [[HOPModelManager sharedModelManager] addAssociatedIdentityForBaseIdentityURI:[identity getBaseIdentityURI] domain:[identity getIdentityProviderDomain] name:[identity getBaseIdentityURI] account:self.openPeerAccount selfRolodexProfileProfile:homeIdentityContact.rolodexContact];
+    }
+    else
+    {
+        associatedIdentity.selfRolodexContact = homeIdentityContact.rolodexContact;
+        associatedIdentity.account = self.openPeerAccount;
+        homeIdentityContact.rolodexContact.associatedIdentityForHomeUser = associatedIdentity;
+    }
+    [[HOPModelManager sharedModelManager] saveContext];
+}
+- (NSString*) getPeerURI
+{
+    return self.openPeerAccount.contact.publicPeerFile.peerURI;
 }
 @end
