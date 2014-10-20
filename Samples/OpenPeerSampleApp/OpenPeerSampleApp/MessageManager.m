@@ -175,7 +175,7 @@
         
         if (callSystemMessage)
         {
-            OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Call system messsage:%@ %@\n",callSystemMessage.jsonMessage);
+            OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Call system messsage:%@\n",callSystemMessage.jsonMessage);
         }
 //        if ([eventElement.tag isEqualToString:TagEvent])
 //        {

@@ -616,7 +616,7 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask
         NSMutableDictionary* dictData  = [[NSMutableDictionary alloc] init];
         
         [dictData setObject:[[Settings sharedSettings] getIdentityProviderDomain]  forKey:@"$domain"];
-        [dictData setObject:[[NSUserDefaults standardUserDefaults] stringForKey: @"applicationId"]  forKey:@"$appid"];
+        [dictData setObject:[[NSUserDefaults standardUserDefaults] stringForKey: settingsKeyAppId]  forKey:@"$appid"];
         [dictData setObject:[HOPUtility getGUIDstring]  forKey:@"$id"];
         [dictData setObject:@"push-hack" forKey:@"$handler"];
         [dictData setObject:@"device-associate-get" forKey:@"$method"];
