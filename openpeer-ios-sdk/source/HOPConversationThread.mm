@@ -460,11 +460,13 @@ using namespace openpeer::core;
 {
     if(conversationThreadPtr)
     {
-        ElementPtr statusJSONPtr = conversationThreadPtr->createEmptyStatus();
-        
-        ComposingStatusPtr composingStatusPtr = ComposingStatusPtr(new ComposingStatus((ComposingStatus::ComposingStates) status));
-        composingStatusPtr->insert(statusJSONPtr);
-        conversationThreadPtr->setStatusInThread(statusJSONPtr);
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            ElementPtr statusJSONPtr = conversationThreadPtr->createEmptyStatus();
+            
+            ComposingStatusPtr composingStatusPtr = ComposingStatusPtr(new ComposingStatus((ComposingStatus::ComposingStates) status));
+            composingStatusPtr->insert(statusJSONPtr);
+            conversationThreadPtr->setStatusInThread(statusJSONPtr);
+        });
     }
     else
     {
@@ -490,7 +492,10 @@ using namespace openpeer::core;
 {
     if(conversationThreadPtr)
     {
-        conversationThreadPtr->sendMessage([message.messageID UTF8String], [message.replacesMessageID UTF8String], [message.type UTF8String], [message.text UTF8String], message.validated ? true : false);
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            conversationThreadPtr->sendMessage([message.messageID UTF8String], [message.replacesMessageID UTF8String], [message.type UTF8String], [message.text UTF8String], message.validated ? true : false);
+        });
+        
     }
     else
     {
