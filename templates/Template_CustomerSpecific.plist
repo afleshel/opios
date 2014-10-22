@@ -2,9 +2,9 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>applicationId</key>
+	<key>applicationID</key>
 	<string>&lt;-- insert application id --&gt;</string>
-	<key>applicationIdSharedSecret</key>
+	<key>applicationSharedSecret</key>
 	<string>&lt;-- insert application id secret obtained from the server --&gt;</string>
 	<key>applicationName</key>
 	<string>&lt;-- insert the branded name of your application here --&gt;</string>
