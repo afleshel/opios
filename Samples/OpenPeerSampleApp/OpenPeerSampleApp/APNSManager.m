@@ -53,7 +53,7 @@
 #import <OpenPeerSDK/HOPBackgrounding.h>
 #import <OpenPeerSDK/HOPUtility.h>
 #import <OpenPeerSDK/HOPAPNSData.h>
-#import <OpenPeerSDK/HOPMessageRecord.h>
+#import <OpenPeerSDK/HOPMessageRecord+External.h>
 #import <OpenPeerSDK/HOPTypes.h>
 
 #define  timeBetweenPushNotificationsInSeconds 1
@@ -121,11 +121,6 @@
         self.dictionaryOfHTTPRequests = [[NSMutableDictionary alloc] init];
         self.dictionaryOfPushNotificationsToSend = [[NSMutableDictionary alloc] init];
         self.dictionaryOfMessageIDsForSending = [[NSMutableDictionary alloc] init];
-//        NSString* sessionIdentifier = [NSString stringWithFormat:@"com.hookflash.backgroundSession.%@",@""];
-//        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration backgroundSessionConfiguration:sessionIdentifier];
-//        //NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-//        
-//        self.urlSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:[NSOperationQueue mainQueue]];
     }
     return self;
 }
@@ -157,14 +152,14 @@
     
     [UAirship takeOff:config];
     
-    [UAPush shared].notificationTypes = (UIRemoteNotificationTypeBadge |UIRemoteNotificationTypeSound |UIRemoteNotificationTypeAlert);
+    [UAPush shared].userNotificationTypes = (UIUserNotificationTypeBadge |UIUserNotificationTypeSound |UIUserNotificationTypeAlert);
     
-    //[UAPush shared].notificationTypes = (UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert);
-    [[UAPush shared] registerForRemoteNotifications];
+    [[UAPush shared] updateRegistration];
     
     // Print out the application configuration for debugging (optional)
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"UrbanAirship config: %@",[config description]);
 
+    [[UAPush shared] setUserPushNotificationsEnabled:YES];
     [[UAPush shared] setAutobadgeEnabled:YES];
     
     [[APNSInboxManager sharedAPNSInboxManager]setup];
@@ -245,22 +240,20 @@
 
 - (void) registerDeviceToken:(NSData*) devToken
 {
-    [[UAPush shared] registerDeviceToken:devToken];
+    [[UAPush shared] appRegisteredForRemoteNotificationsWithDeviceToken:devToken];
 }
 
 - (void) handleRemoteNotification:(NSDictionary*) launchOptions application:(UIApplication *)application
 {
-    [[UAPush shared] handleNotification:[launchOptions valueForKey:UIApplicationLaunchOptionsRemoteNotificationKey]
+    [[UAPush shared] appReceivedRemoteNotification:[launchOptions valueForKey:UIApplicationLaunchOptionsRemoteNotificationKey]
                        applicationState:application.applicationState];
 }
 - (void) connection:(NSURLConnection *) connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *) challenge
 {
     if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodHTTPBasic])
     {
-        //if ([self.developmentAppKey length] > 0 || [self.masterAppSecret length] > 0)
         if ([self.urbanAirshipAppSecret length] > 0 || [self.urbanAirshipAppKey length] > 0)
         {
-//            NSURLCredential * credential = [[NSURLCredential alloc] initWithUser:self.developmentAppKey password:self.masterAppSecret persistence:NSURLCredentialPersistenceForSession];
             NSURLCredential * credential = [[NSURLCredential alloc] initWithUser:self.urbanAirshipAppKey password:self.urbanAirshipAppSecret persistence:NSURLCredentialPersistenceForSession];
             [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
         }
@@ -551,7 +544,7 @@ didCompleteWithError:(NSError *)error
             HOPMessageRecord* messageRecord = [[HOPModelManager sharedModelManager] getMessageRecordByID:messageID];
             if (messageRecord)
             {
-                messageRecord.outgoingMessageStatus = [NSNumber numberWithInt:HOPConversationThreadMessageDeliveryStateSent];
+                messageRecord.outgoingMessageStatus = HOPConversationThreadMessageDeliveryStateSent;//[NSNumber numberWithInt:HOPConversationThreadMessageDeliveryStateSent];
                 [[HOPModelManager sharedModelManager] updateMessageStatusVisibilityForSession:messageRecord.session lastDeliveryState:HOPConversationThreadMessageDeliveryStateSent];
 
                 [[HOPModelManager sharedModelManager] saveContext];

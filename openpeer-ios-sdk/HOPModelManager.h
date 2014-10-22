@@ -334,4 +334,6 @@
 
 - (HOPParticipants*) getParticiapantsForListOfContacts:(NSArray*) contacts;
 - (NSFetchRequest*) getMessagesFetchRequestForParticipants:(HOPParticipants*) participants sortAscending:(BOOL) ascending;
+- (HOPOpenPeerContact*) getOpenPeerContactForAccount;
+- (HOPPublicPeerFile*) createPublicPeerFileForPeerURI:(NSString*) peerURI peerFile:(NSString*) peerFile;
 @end

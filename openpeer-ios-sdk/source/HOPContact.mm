@@ -139,23 +139,42 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     return ret;
 }
 
++ (NSString*) getPeerFilePublicFromCoreContact:(IContactPtr) coreContact
+{
+    NSString* ret = nil;
+    
+    IPeerFilePublicPtr peerFilePublicPtr = coreContact->getPeerFilePublic();
+    if (peerFilePublicPtr)
+    {
+        ElementPtr peerFilePublicElementPtr = IHelper::convertToElement(peerFilePublicPtr);
+        if (peerFilePublicElementPtr)
+        {
+            String peerFilePublic = IHelper::convertToString(peerFilePublicElementPtr);
+            if (peerFilePublic)
+                ret = [NSString stringWithCString:peerFilePublic encoding:NSUTF8StringEncoding];
+        }
+    }
+    
+    return ret;
+}
 - (NSString*) getPeerFilePublic
 {
     NSString* ret = nil;
     
     if (coreContactPtr)
     {
-        IPeerFilePublicPtr peerFilePublicPtr = coreContactPtr->getPeerFilePublic();
-        if (peerFilePublicPtr)
-        {
-            ElementPtr peerFilePublicElementPtr = IHelper::convertToElement(peerFilePublicPtr);
-            if (peerFilePublicElementPtr)
-            {
-                String peerFilePublic = IHelper::convertToString(peerFilePublicElementPtr);
-                if (peerFilePublic)
-                    ret = [NSString stringWithCString:peerFilePublic encoding:NSUTF8StringEncoding];
-            }
-        }
+        ret = [HOPContact getPeerFilePublicFromCoreContact:coreContactPtr];
+//        IPeerFilePublicPtr peerFilePublicPtr = coreContactPtr->getPeerFilePublic();
+//        if (peerFilePublicPtr)
+//        {
+//            ElementPtr peerFilePublicElementPtr = IHelper::convertToElement(peerFilePublicPtr);
+//            if (peerFilePublicElementPtr)
+//            {
+//                String peerFilePublic = IHelper::convertToString(peerFilePublicElementPtr);
+//                if (peerFilePublic)
+//                    ret = [NSString stringWithCString:peerFilePublic encoding:NSUTF8StringEncoding];
+//            }
+//        }
     }
     else
     {

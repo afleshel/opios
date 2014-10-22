@@ -40,6 +40,7 @@ using namespace openpeer::core;
 
 - (HOPOpenPeerContact*) getOpenPeerContactForIdentityContact:(IdentityContact) inIdentityContact;
 - (HOPOpenPeerContact*) createOpenPeerContactForIdentityContact:(IdentityContact) inIdentityContact;
+- (HOPOpenPeerContact*) createOrUpdateOpenPeerContactForItentities:(NSArray*) identities coreContact:(IContactPtr) coreContact;
 - (void) updateOpenPeerContact:(HOPOpenPeerContact*) contact identityContact:(IdentityContact) inIdentityContact;
 
 @end

@@ -566,4 +566,40 @@ static const short _base64DecodingTable[256] = {
     
     return ret;
 }
++ (UIImage*) createImageFromImages:(NSArray*) images inFrame:(CGRect) frame
+{
+    UIImage* ret = nil;
+    
+    int root = sqrt(images.count) <= 2.0 ? 2 :  sqrt(images.count) + 1;
+    
+    float width = frame.size.width/(float)root;
+    float height = frame.size.height/(float)root;
+    
+    UIGraphicsBeginImageContextWithOptions(frame.size, NO, 0.0);
+    
+    int rowCounter = 0;
+    int columnCounter = 0;
+    float x = 0;
+    float y = 0;
+    for (UIImage* image in images)
+    {
+        if (columnCounter >= root)
+        {
+            columnCounter = 0;
+            rowCounter++;
+            x = 0;
+            y += height;
+        }
+        
+        [image drawInRect:CGRectMake(x, y, width, height)];
+        
+        x += width;
+        columnCounter++;
+    }
+    
+    ret = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return ret;
+}
 @end

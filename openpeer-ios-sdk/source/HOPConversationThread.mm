@@ -40,7 +40,7 @@
 #import "HOPContact_Internal.h"
 #import "HOPAccount_Internal.h"
 #import "HOPMessage.h"
-#import "HOPModelManager.h"
+#import "HOPModelManager_Internal.h"
 #import "HOPIdentityContact_Internal.h"
 #import "HOPOpenPeerContact.h"
 #import "HOPRolodexContact+External.h"
@@ -121,6 +121,19 @@ using namespace openpeer::core;
     return [NSString stringWithUTF8String: IConversationThread::toString((IConversationThread::MessageDeliveryStates) state)];
 }
 
++ (HOPConversationThreadMessageDeliveryState) toMessageDeliveryStates:(NSString*) messageDeliveryStateString
+{
+    if ([messageDeliveryStateString isEqualToString:(@"Discovering")])
+        return HOPConversationThreadMessageDeliveryStateDiscovering;
+    else if ([messageDeliveryStateString isEqualToString:(@"User not available")])
+        return HOPConversationThreadMessageDeliveryStateUserNotAvailable;
+    else if ([messageDeliveryStateString isEqualToString:(@"Sent")])
+        return HOPConversationThreadMessageDeliveryStateSent;
+    else if ([messageDeliveryStateString isEqualToString:(@"Delivered")])
+        return HOPConversationThreadMessageDeliveryStateDelivered;
+    else
+        return HOPConversationThreadMessageDeliveryStateRead;
+}
 /*+ (NSString*) stateToString: (HOPConversationThreadContactConnectionState) state
 {
     return [NSString stringWithUTF8String: IConversationThread::toString((IConversationThread::ContactConnectionStates) state)];
@@ -239,35 +252,24 @@ using namespace openpeer::core;
                     {
                         IdentityContact coreIdentityContact;
 
-                        coreIdentityContact.mPeerFilePublic = IHelper::createPeerFilePublic(IHelper::createElement([openPeerContact.publicPeerFile.peerFile UTF8String]));
+                        //coreIdentityContact.mPeerFilePublic = IHelper::createPeerFilePublic(IHelper::createElement([openPeerContact.publicPeerFile.peerFile UTF8String]));
                         coreIdentityContact.mIdentityProofBundleEl = IHelper::createElement([identityContact.identityProofBundle UTF8String]);
                         coreIdentityContact.mStableID = [openPeerContact.stableID UTF8String];
                         coreIdentityContact.mPriority = identityContact.priority.intValue;
                         coreIdentityContact.mWeight = identityContact.weight.intValue;
                         
-                        coreIdentityContact.mIdentityURI = [identityContact.rolodexContact.identityURI UTF8String];
-                        
-                        coreIdentityContact.mIdentityProvider = [identityContact.rolodexContact.associatedIdentity.identityProvider.domain UTF8String];
-                        coreIdentityContact.mName = [identityContact.rolodexContact.name UTF8String];
-                        coreIdentityContact.mProfileURL = [identityContact.rolodexContact.profileURL UTF8String];
-                        
-                        /*String mName;
-                        String mURL;
-                        int mWidth;
-                        int mHeight;
-                        
-                        bool operator==(const Avatar &rValue) const;
-                        bool operator!=(const Avatar &rValue) const;
-                    };
-                    typedef std::list<Avatar> AvatarList;
+                        if (identityContact.rolodexContact)
+                        {
+                            if (identityContact.rolodexContact.identityURI.length > 0)
+                                coreIdentityContact.mIdentityURI = [identityContact.rolodexContact.identityURI UTF8String];
+                            if (identityContact.rolodexContact.name.length > 0)
+                                coreIdentityContact.mName = [identityContact.rolodexContact.name UTF8String];
+                            if (identityContact.rolodexContact.profileURL.length > 0)
+                                coreIdentityContact.mProfileURL = [identityContact.rolodexContact.profileURL UTF8String];
+                        }
+                        if (identityContact.rolodexContact.associatedIdentity && identityContact.rolodexContact.associatedIdentity.identityProvider)
+                            coreIdentityContact.mIdentityProvider = [identityContact.rolodexContact.associatedIdentity.identityProvider.domain UTF8String];
 
-                    
-                    Dispositions mDisposition;
-
-                    
-                    AvatarList mAvatars;*/
-
-                    
                         identityContactList.push_back(coreIdentityContact);
                     }
                 }
@@ -306,43 +308,81 @@ using namespace openpeer::core;
     }
 }
 
+- (NSArray*) getIdentityContactListForCoreContact:(IContactPtr) contact
+{
+    NSMutableArray* ret = nil;
+    IdentityContactListPtr identityContactListPtr = conversationThreadPtr->getIdentityContactList(contact);
+    if (identityContactListPtr)
+    {
+        ret = [[NSMutableArray alloc] init];
+        for (IdentityContactList::iterator identityContactInfo = identityContactListPtr->begin(); identityContactInfo != identityContactListPtr->end(); ++identityContactInfo)
+        {
+            IdentityContact identityContact = *identityContactInfo;
+            if (identityContact.hasData())
+            {
+                NSString* sId = [NSString stringWithUTF8String:identityContact.mStableID];
+                NSString* identityURI = [NSString stringWithUTF8String:identityContact.mIdentityURI];
+                HOPIdentityContact* hopIdentityContact = [[HOPModelManager sharedModelManager] getIdentityContactWithIdentityURI:identityURI];
+                
+                if (!hopIdentityContact)
+                {
+                    NSManagedObject* managedObject = [[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPIdentityContact"];
+                    if (managedObject && [managedObject isKindOfClass:[HOPIdentityContact class]])
+                    {
+                        hopIdentityContact = (HOPIdentityContact*) managedObject;
+                    }
+                }
+                
+                if (hopIdentityContact)
+                {
+                    [hopIdentityContact updateWithIdentityContact:identityContact];
+                    
+                    [ret addObject:hopIdentityContact];
+                }
+            }
+        }
+        [[HOPModelManager sharedModelManager] saveContext];
+    }
+    return ret;
+}
 - (NSArray*) getIdentityContactListForContact:(HOPContact*) contact
 {
     NSMutableArray* ret = nil;
     if(conversationThreadPtr)
     {
-        IdentityContactListPtr identityContactListPtr = conversationThreadPtr->getIdentityContactList([contact getContactPtr]);
-        if (identityContactListPtr)
-        {
-            ret = [[NSMutableArray alloc] init];
-            for (IdentityContactList::iterator identityContactInfo = identityContactListPtr->begin(); identityContactInfo != identityContactListPtr->end(); ++identityContactInfo)
-            {
-                IdentityContact identityContact = *identityContactInfo;
-                if (identityContact.hasData())
-                {
-                    NSString* sId = [NSString stringWithUTF8String:identityContact.mStableID];
-                    NSString* identityURI = [NSString stringWithUTF8String:identityContact.mIdentityURI];
-                    HOPIdentityContact* hopIdentityContact = [[HOPModelManager sharedModelManager] getIdentityContactWithIdentityURI:identityURI];
-                    
-                    if (!hopIdentityContact)
-                    {
-                        NSManagedObject* managedObject = [[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPIdentityContact"];
-                        if (managedObject && [managedObject isKindOfClass:[HOPIdentityContact class]])
-                        {
-                            hopIdentityContact = (HOPIdentityContact*) managedObject;
-                        }
-                    }
-                    
-                    if (hopIdentityContact)
-                    {
-                        [hopIdentityContact updateWithIdentityContact:identityContact];
-                        
-                        [ret addObject:hopIdentityContact];
-                    }
-                }
-            }
-            [[HOPModelManager sharedModelManager] saveContext];
-        }
+        ret = [ self getIdentityContactListForCoreContact:[contact getContactPtr]];
+//        IdentityContactListPtr identityContactListPtr = conversationThreadPtr->getIdentityContactList([contact getContactPtr]);
+//        if (identityContactListPtr)
+//        {
+//            ret = [[NSMutableArray alloc] init];
+//            for (IdentityContactList::iterator identityContactInfo = identityContactListPtr->begin(); identityContactInfo != identityContactListPtr->end(); ++identityContactInfo)
+//            {
+//                IdentityContact identityContact = *identityContactInfo;
+//                if (identityContact.hasData())
+//                {
+//                    NSString* sId = [NSString stringWithUTF8String:identityContact.mStableID];
+//                    NSString* identityURI = [NSString stringWithUTF8String:identityContact.mIdentityURI];
+//                    HOPIdentityContact* hopIdentityContact = [[HOPModelManager sharedModelManager] getIdentityContactWithIdentityURI:identityURI];
+//                    
+//                    if (!hopIdentityContact)
+//                    {
+//                        NSManagedObject* managedObject = [[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPIdentityContact"];
+//                        if (managedObject && [managedObject isKindOfClass:[HOPIdentityContact class]])
+//                        {
+//                            hopIdentityContact = (HOPIdentityContact*) managedObject;
+//                        }
+//                    }
+//                    
+//                    if (hopIdentityContact)
+//                    {
+//                        [hopIdentityContact updateWithIdentityContact:identityContact];
+//                        
+//                        [ret addObject:hopIdentityContact];
+//                    }
+//                }
+//            }
+//            [[HOPModelManager sharedModelManager] saveContext];
+//        }
 
     }
     
@@ -485,8 +525,16 @@ using namespace openpeer::core;
                 if (!hopMessage.contact)
                 {
                     HOPOpenPeerContact* openPeerContact = [[HOPModelManager sharedModelManager] getOpenPeerContactForPeerURI:peerURI];
-                    if (openPeerContact)
+                    if (!openPeerContact)
+                    {
+                        openPeerContact = [[HOPModelManager sharedModelManager] createOrUpdateOpenPeerContactForItentities:[self getIdentityContactListForCoreContact:fromContact] coreContact:fromContact];
+                        if (openPeerContact)
+                            hopMessage.contact = [openPeerContact getCoreContact];
+                    }
+                    else
+                    {
                         hopMessage.contact = [openPeerContact getCoreContact];
+                    }
                 }
                 hopMessage.type = [NSString stringWithUTF8String:messageType];
                 hopMessage.text = [NSString stringWithUTF8String:message];
