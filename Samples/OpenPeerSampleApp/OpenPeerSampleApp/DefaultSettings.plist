@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>outerFrameURL</key>
-	<string></string>
+	<string>http://identity.hcs.io:5005/outer-new.html</string>
 	<key>identityProviderDomain</key>
-	<string></string>
+	<string>sampleapp-hookflash-com.app.hcs.io</string>
 	<key>identityFederateBaseURI</key>
-	<string></string>
+	<string>identity://facebook.com/</string>
 	<key>namespaceGrantServiceURL</key>
-	<string></string>
+	<string>http://jsouter-v1-rel-lespaulinst2-i.hcs.io/grant.html</string>
 	<key>lockBoxServiceDomain</key>
-	<string></string>
+	<string>hcs.io</string>
 	<key>defaultOutgoingTelnetServer</key>
-	<string></string>
+	<string>log.hcs.io:8115</string>
 	<key>localTelnetLoggerPort</key>
 	<string>59999</string>
 	<key>applicationSettingsBackgroundingPhaseRichPush</key>
