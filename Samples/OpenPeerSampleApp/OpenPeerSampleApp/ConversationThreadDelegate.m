@@ -74,8 +74,7 @@
 
 - (void) onConversationThreadContactsChanged:(HOPConversationThread*) conversationThread
 {
-    //OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread <%@> contact changed.",conversationThread);
-    //OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread %@ contact changed.",[conversationThread getThreadId]);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread id %@  - number of contacts: %d.",[conversationThread getThreadId], [conversationThread getContacts].count);
     dispatch_async(dispatch_get_main_queue(), ^
     {
         [[SessionManager sharedSessionManager] updateParticipantsInConversationThread:conversationThread];
@@ -84,8 +83,8 @@
 
 - (void) onConversationThreadContactConnectionStateChanged:(HOPConversationThread*) conversationThread contact:(HOPContact*) contact contactConnectionState:(HOPConversationThreadContactConnectionState) contactConnectionState
 {
-    //OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread <%@> contact <%@> state: %@",conversationThread, contact,[HOPConversationThread stringForContactConnectionState:contactState]);
-    //OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread %@ contact <%@> state: %@",[conversationThread getThreadId], contact,[HOPConversationThread stringForContactConnectionState:contactConnectionState]);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread id: <%@> contact peer URI:<%@> state: %@",[conversationThread getThreadId], [contact getPeerURI],[HOPConversationThread stringForContactConnectionState:contactConnectionState]);
+    
     dispatch_async(dispatch_get_main_queue(), ^
     {
     });
@@ -93,12 +92,13 @@
 
 - (void) onConversationThreadContactStatusChanged:(HOPConversationThread*) conversationThread contact:(HOPContact*) contact
 {
-  //OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread <%@> contact <%@> state: %@",conversationThread, contact,[HOPConversationThread stringForContactConnectionState:contactState]);
-  dispatch_async(dispatch_get_main_queue(), ^
-                 {
-                     NSDictionary* dict = @{@"thread":conversationThread, @"contact":contact};
-                     [[NSNotificationCenter defaultCenter] postNotificationName:notificationComposingStatusChanged object:dict];
-                 });
+    HOPConversationThreadContactStatus contactState = [conversationThread getContactStatus:contact];
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread id: <%@> - contact peer URI: <%@> state: %d",[conversationThread getThreadId], [contact getPeerURI],contactState);
+    dispatch_async(dispatch_get_main_queue(), ^
+    {
+         NSDictionary* dict = @{@"thread":conversationThread, @"contact":contact};
+         [[NSNotificationCenter defaultCenter] postNotificationName:notificationComposingStatusChanged object:dict];
+    });
 }
 
 - (void) onConversationThreadMessage:(HOPConversationThread*) conversationThread messageID:(NSString*) messageID

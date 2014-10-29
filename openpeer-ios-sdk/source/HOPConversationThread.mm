@@ -112,10 +112,7 @@ using namespace openpeer::core;
     return ret;
 }
 
-/*+ (NSString*) deliveryStateToString: (HOPConversationThreadMessageDeliveryState) state
-{
-    return [NSString stringWithUTF8String: IConversationThread::toString((IConversationThread::MessageDeliveryStates) state)];
-}*/
+
 + (NSString*) stringForMessageDeliveryState:(HOPConversationThreadMessageDeliveryState) state
 {
     return [NSString stringWithUTF8String: IConversationThread::toString((IConversationThread::MessageDeliveryStates) state)];
@@ -134,10 +131,7 @@ using namespace openpeer::core;
     else
         return HOPConversationThreadMessageDeliveryStateRead;
 }
-/*+ (NSString*) stateToString: (HOPConversationThreadContactConnectionState) state
-{
-    return [NSString stringWithUTF8String: IConversationThread::toString((IConversationThread::ContactConnectionStates) state)];
-}*/
+
 
 + (NSString*) stringForContactConnectionState:(HOPConversationThreadContactConnectionState) state
 {
@@ -558,39 +552,7 @@ using namespace openpeer::core;
 
     return hopMessage;
 }
-/*- (BOOL) getMessage: (NSString*) messageID outReplacesMessageID:(NSString**) outReplacesMessageID outFrom:(HOPContact**) outFrom outMessageType:(NSString**) outMessageType outMessage:(NSString**) outMessage outTime:(NSDate**) outTime outValidated:(BOOL*) outValidated
-{
-    BOOL ret = NO;
-    if(conversationThreadPtr)
-    {
-        zsLib::String replacesMessageID;
-        IContactPtr fromContact;
-        zsLib::String messageType;
-        zsLib::String message;
-        zsLib::Time messageTime;
-        bool validated = false;
-    
-        conversationThreadPtr->getMessage([messageID UTF8String], replacesMessageID, fromContact, messageType, message, messageTime, validated);
-        
-        if (fromContact && messageType && message)
-        {
-            *outReplacesMessageID = [NSString stringWithUTF8String:replacesMessageID];
-            *outFrom = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:[NSString stringWithUTF8String:fromContact->getPeerURI()]];
-            *outMessageType = [NSString stringWithUTF8String:messageType];
-            *outMessage = [NSString stringWithUTF8String:message];
-            *outTime = [OpenPeerUtility convertPosixTimeToDate:messageTime];
-            *outValidated = (validated ? YES : NO);
-            ret = YES;
-        }
-        
-    }
-    else
-    {
-        ZS_LOG_ERROR(Debug, [self log:@"Invalid conversation thread object!"]);
-        [NSException raise:NSInvalidArgumentException format:@"Invalid conversation thread object!"];
-    }
-    return ret;
-}*/
+
 
 - (BOOL) getMessageDeliveryState: (NSString*) messageID outDeliveryState:(HOPConversationThreadMessageDeliveryState*) outDeliveryState
 {

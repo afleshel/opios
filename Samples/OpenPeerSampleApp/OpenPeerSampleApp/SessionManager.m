@@ -41,25 +41,7 @@
 #import "OpenPeer.h"
 #import "AppConsts.h"
 
-#import <OpenpeerSDK/HOPAccount.h>
-#import <OpenpeerSDK/HOPConversationThread.h>
-#import <OpenpeerSDK/HOPIdentityContact.h>
-#import <OpenpeerSDK/HOPPublicPeerFile.h>
-#import <OpenpeerSDK/HOPMessage.h>
-#import <OpenpeerSDK/HOPCall.h>
-#import <OpenpeerSDK/HOPMediaEngine.h>
-#import <OpenpeerSDK/HOPModelManager.h>
-#import <OpenpeerSDK/HOPContact.h>
-#import <OpenpeerSDK/HOPOpenPeerContact.h>
-#import <OpenpeerSDK/HOPOpenPeerAccount+External.h>
-#import <OpenpeerSDK/HOPRolodexContact+External.h>
-#import <OpenpeerSDK/HOPOpenPeerContact+External.h>
-#import <OpenpeerSDK/HOPConversationRecord.h>
-#import <OpenpeerSDK/HOPConversationEvent.h>
-#import <OpenpeerSDK/HOPMessageRecord.h>
-#import <OpenpeerSDK/HOPSystemMessage.h>
-#import <OpenpeerSDK/HOPCallSystemMessage.h>
-#import <OpenpeerSDK/HOPParticipants.h>
+#import <OpenpeerSDK/Openpeer.h>
 #import "UIDevice+Networking.h"
 
 @interface SessionManager()
@@ -187,39 +169,9 @@
     Session* ret = nil;
     
     NSArray* contactAaray = [inConversationThread getContacts];
-    //HOPRolodexContact* rolodexContact = nil;
-    
-    /*NSArray* contacts = [inConversationThread getContacts];
-    
-    NSArray* contactAaray = [[HOPModelManager sharedModelManager] getOpenPeerContactsByPeerURIs:[[contacts objectAtIndex:0] getPeerURI]];
-    NSMutableArray* rolodexContacts  = contactAaray == nil ? [[NSMutableArray alloc] init] : [NSMutableArray  arrayWithArray: contactAaray];
-    
-    //NSMutableArray* test = [inConversationThread getRolodexContactListForContact:[contacts objectAtIndex:0]];
-    if ([rolodexContacts count] == 0)
-    {
-        HOPContact* coreContact = [contacts objectAtIndex:0];
-//        NSString* profileBundle = [inConversationThread getProfileBundle:coreContact];
-//        rolodexContact = [[ContactsManager sharedContactsManager] getRolodexContactByProfileBundle:profileBundle coreContact:coreContact];
-//        [rolodexContacts addObject:rolodexContact];
-        
-        
-        NSArray* identityContacts = [inConversationThread getIdentityContactListForContact:coreContact];
-        for (HOPIdentityContact* identityContact in identityContacts)
-        {
-            [rolodexContacts addObject:identityContact.rolodexContact];
-        }
-        rolodexContact = [rolodexContacts objectAtIndex:0];
-        [[ContactsManager sharedContactsManager] refreshRolodexContacts];
-    }
-    else
-    {
-        rolodexContact = [rolodexContacts objectAtIndex:0];
-    }*/
     
     if (contactAaray.count > 0)
     {
-        //OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"%@ initiating a session with %@", [[rolodexContacts objectAtIndex:0] name], [[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser] getFullName]);
-        
         ret = [[Session alloc] initWithContacts:contactAaray conversationThread:inConversationThread];
         
         if (ret)
@@ -227,7 +179,6 @@
             NSString* title = [self getTitleForConversationThread:inConversationThread];
             [self.sessionsDictionary setObject:ret forKey:[inConversationThread getThreadId]];
             OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Creating session record from conversation thread id: %@", [inConversationThread getThreadId]);
-            //[[HOPModelManager sharedModelManager] addSession:[inConversationThread getThreadId] type:nil date:[NSDate date] name:[rolodexContact name] participants:contactAaray];
             ret.sessionRecord = [[HOPModelManager sharedModelManager] createSessionRecordForConversationThread:inConversationThread type:nil date:[NSDate date] name:title participants:contactAaray];
             
             ret.title = title;
@@ -237,69 +188,9 @@
     return ret;
 }
 
-/**
- Creates a new session initiate from other session (Remote session initialization).
- @param inSession Session session that initiates creation
- @param userIds NSString list of userIds separated by comma which will take a part in new session. Currently group sessions are not supported, so userIds contains just one user id.
- */
-//- (Session*) createSessionInitiatedFromSession:(Session*) inSession forContactPeerURIs:(NSString*) peerURIs
-//{
-//    Session* session = nil;
-//    NSArray *strings = [peerURIs componentsSeparatedByString:@","];
-//    if ([strings count] > 0)
-//    {
-//        //If userId is valid string, find a contact with that user id
-//        NSString* peerURI = [strings objectAtIndex:0];
-//        if ([peerURI length] > 0)
-//        {
-//            HOPRolodexContact* contact = [[[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:peerURI] objectAtIndex:0];
-//            if (contact)
-//            {
-//                //Create a session for contact
-//                session = [self createSessionForContacts:@[contact]];
-//                if (session)
-//                {
-//                    //If session is created sucessfully, start a video call
-//                    [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForSession:session forIncomingCall:NO  forIncomingMessage:NO];
-//                    
-//                    [self makeCallForSession:session includeVideo:YES isRedial:NO];
-//                }
-//            }
-//        }
-//    }
-//    
-//    return session;
-//}
-
-/**
- Creates a session that will initiate creation of other session between contacts passed in the list .
- @param participants NSArray* List of remote session participants.
- @return session with participant
- */
-//- (Session*) createRemoteSessionForContacts:(NSArray*) participants
-//{
-//    Session* sessionThatWillInitiateRemoteSession = nil;
-//    //Check if list has at least 2 contacts
-//    if ([participants count] > 1)
-//    {
-//        //First contact is master and he will be remote session host
-//        HOPRolodexContact* masterContact = [participants objectAtIndex:0];
-//        HOPRolodexContact* slaveContact = [participants objectAtIndex:1];
-//        
-//        //Create a session with the master contact, that will be used to send system message for creating a remote session
-//        sessionThatWillInitiateRemoteSession = [self createSessionForContacts:@[masterContact]];
-//        if (sessionThatWillInitiateRemoteSession)
-//        {
-//            //Send system message, where is passed the slave contacts. Session will be established between slave contacts and master contact.
-//            //[[MessageManager sharedMessageManager] sendSystemMessageToInitSessionBetweenPeers:[NSArray arrayWithObject:slaveContact] forSession:sessionThatWillInitiateRemoteSession];
-//        }
-//    }
-//    return sessionThatWillInitiateRemoteSession;
-//}
 
 - (void)setValidSession:(Session *)inSession newSessionId:(NSString *)newSessionId oldSessionId:(NSString *)oldSessionId
 {
-    //[self.sessionsDictionary removeObjectForKey:oldSessionId];
     [self.sessionsDictionary setObject:inSession forKey:newSessionId];
     
     [[[OpenPeer sharedOpenPeer] mainViewController] updateSessionViewControllerId:oldSessionId newSesionId:newSessionId];
@@ -315,8 +206,6 @@
     //OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Get existing session for contact peer URI: %@", [contact getPeerURI]);
     
     Session* ret = nil;
-    //NSArray* rolodexContacts = [[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:[contact getPeerURI]];
-    //HOPOpenPeerContact* openPeerContact = [[HOPModelManager sharedModelManager] getOpenPeerContactForPeerURI:[contact getPeerURI]];
     if (contacts)
         ret = [self getSessionForContacts:contacts];
     
@@ -329,14 +218,10 @@
         [ret.sessionIdsHistory addObject:[inConversationThread getThreadId]];
         
         NSArray* contacts = [inConversationThread getContacts];
-        //NSArray* contactAaray = [[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:[[contacts objectAtIndex:0] getPeerURI]];
         OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Creating session record from conversation thread id: %@", [inConversationThread getThreadId]);
-        //[[HOPModelManager sharedModelManager] addSession:[inConversationThread getThreadId] type:nil date:nil name:nil participants:contactAaray];
         
         [[HOPModelManager sharedModelManager] createSessionRecordForConversationThread:inConversationThread type:nil date:nil name:nil participants:contacts];
-         
-//        HOPConversationRecord* sessionRecord = [[HOPModelManager sharedModelManager] getSessionRecordByID:oldSessionId];
-//        sessionRecord.sessionID = newSessionId;
+
         [[HOPModelManager sharedModelManager] saveContext];
         [self setValidSession:ret newSessionId:newSessionId oldSessionId:oldSessionId];
     }
@@ -390,7 +275,6 @@
         {
             OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Making a call for the session <%p>", inSession);
             
-//            [[MessageManager sharedMessageManager]sendSystemMessageToCheckAvailability:inSession];
             [[MessageManager sharedMessageManager] sendCallSystemMessage:HOPCallSystemMessageTypeCallPlaced reasonCode:0 session:inSession];
             //Currently we are not supporting group conferences, so only one participant is possible
             HOPContact* contact = [[[inSession participantsArray] objectAtIndex:0] getCoreContact];
@@ -447,7 +331,6 @@
     
     if (!session)
     {
-//        HOPRolodexContact* contact  = [[[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:[[call getCaller] getPeerURI]] objectAtIndex:0];
         HOPOpenPeerContact* contact = [[HOPModelManager sharedModelManager] getOpenPeerContactForPeerURI:[[call getCaller] getPeerURI]];
         session = [[SessionManager sharedSessionManager] getSessionForContacts:@[contact]];
         if (session)
@@ -461,12 +344,6 @@
     {
         SessionViewController_iPhone* sessionViewController = [[[[OpenPeer sharedOpenPeer] mainViewController] sessionViewControllersDictionary] objectForKey:[session.conversationThread getThreadId]];
         
-        //If it is an incomming call, get show session view controller
-        /*if (![[call getCaller] isSelf])
-        {
-            [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForSession:session forIncomingCall:YES forIncomingMessage:NO];
-        }
-        else*/
         if ([[call getCaller] isSelf])
         {
             if ([call hasVideo])

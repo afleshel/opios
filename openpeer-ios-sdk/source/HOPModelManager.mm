@@ -1351,6 +1351,7 @@ using namespace openpeer::core;
         event.time = [NSDate date];
         event.eventType = eventType;
         event.session = conversationRecord;
+        conversationRecord.name = title;
         event.participants = temp;
         event.name = title;
         for (HOPConversationEvent* oldEvent in temp.events)

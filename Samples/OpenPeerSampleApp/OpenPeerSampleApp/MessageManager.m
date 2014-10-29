@@ -46,19 +46,7 @@
 #import "XMLWriter.h"
 #import "RXMLElement.h"
 
-#import <OpenpeerSDK/HOPRolodexContact+External.h>
-#import <OpenpeerSDK/HOPIdentityContact.h>
-#import <OpenpeerSDK/HOPPublicPeerFile.h>
-#import <OpenpeerSDK/HOPMessage.h>
-#import <OpenpeerSDK/HOPConversationThread.h>
-#import <OpenpeerSDK/HOPContact.h>
-#import <OpenpeerSDK/HOPOpenPeerContact.h>
-#import <OpenpeerSDK/HOPModelManager.h>
-#import <OpenPeerSDK/HOPMessageRecord.h>
-#import <OpenPeerSDK/HOPAccount.h>
-#import <OpenPeerSDK/HOPUtility.h>
-#import <OpenPeerSDK/HOPCallSystemMessage.h>
-#import <OpenPeerSDK/HOPOpenPeerContact+External.h>
+#import <OpenpeerSDK/Openpeer.h>
 
 #import "UIDevice+Networking.h"
 
@@ -122,31 +110,6 @@
     return hopMessage;
 }
 
-
-/*- (void) sendSystemMessageToInitSessionBetweenPeers:(NSArray*) peers forSession:(Session*) inSession
-{
-    NSString *messageText = @"";
-    int counter = 0;
-    for (HOPRolodexContact* contact in peers)
-    {
-        if (counter == 0 || counter == ([peers count] - 1) )
-            messageText = [messageText stringByAppendingString:contact.identityContact.peerFile.peerURI];
-        else
-            messageText = [messageText stringByAppendingFormat:@"%@,",contact.identityContact.peerFile.peerURI];
-        
-    }
-    
-    HOPMessage* hopMessage = [self createSystemMessageWithType:SystemMessage_EstablishSessionBetweenTwoPeers andText:messageText andRecipient:[[inSession participantsArray] objectAtIndex:0]];
-    [inSession.conversationThread sendMessage:hopMessage];
-}*/
-
-//- (void) sendSystemMessageToCallAgainForSession:(Session*) inSession
-//{
-//    //HOPMessage* hopMessage = [self createSystemMessageWithType:SystemMessage_CallAgain andText:systemMessageRequest andRecipient:[[inSession participantsArray] objectAtIndex:0]];
-//    HOPMessage* hopMessage = [self createSystemMessageWithType:HOPSystemMessageTypeCall messageType:HOPCallSystemMessageTypeCallPlaced andRecipient:[[inSession participantsArray] objectAtIndex:0]];
-//    [inSession.conversationThread sendMessage:hopMessage];
-//}
-
 - (void) sendCallSystemMessage:(HOPCallSystemMessageType) callSystemMessage reasonCode:(int) reasonCode session:(Session*) inSession
 {
     for (HOPOpenPeerContact* contact in inSession.participantsArray)
@@ -158,15 +121,17 @@
     }
 }
 
+
 - (void) sendSystemMessageToCheckAvailability:(Session*) inSession
 {
-    //HOPMessage* hopMessage = [self createSystemMessageWithType:SystemMessage_CheckAvailability andText:systemMessageRequest andRecipient:[[inSession participantsArray] objectAtIndex:0]];
     for (HOPOpenPeerContact* contact in inSession.participantsArray)
     {
-        HOPMessage* hopMessage = [self createSystemMessageWithType:HOPSystemMessageTypeCall messageType:HOPCallSystemMessageTypeCallPlaced andRecipient:contact];
+        HOPMessage* hopMessage = [self createSystemMessageWithType:HOPSystemMessageTypeCall messageType:HOPCallSystemMessageTypeCallPlaced reasonCode:0 andRecipient:contact];
         [inSession.conversationThread sendMessage:hopMessage];
     }
 }
+
+
 - (void) parseSystemMessage:(HOPMessage*) inMessage forSession:(Session*) inSession
 {
     if ([inMessage.type isEqualToString:[HOPConversationThread getSystemMessageType]])
@@ -177,43 +142,6 @@
         {
             OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Call system messsage:%@\n",callSystemMessage.jsonMessage);
         }
-//        if ([eventElement.tag isEqualToString:TagEvent])
-//        {
-//            SystemMessageTypes type = (SystemMessageTypes) [[eventElement child:TagId].text intValue];
-//            OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Parsing system message with type %d",type);
-//            
-//            NSString* messageText =  [eventElement child:TagText].text;
-//            switch (type)
-//            {
-//                case SystemMessage_EstablishSessionBetweenTwoPeers:
-//                {
-//                    if ([messageText length] > 0)
-//                    [[SessionManager sharedSessionManager] createSessionInitiatedFromSession:inSession forContactPeerURIs:messageText];
-//                }
-//                break;
-//                    
-//                case SystemMessage_IsContactAvailable:
-//                {
-//                    
-//                }
-//                break;
-//                    
-//                case SystemMessage_IsContactAvailable_Response:
-//                {
-//                    
-//                }
-//                break;
-//                    
-//                case SystemMessage_CallAgain:
-//                {
-//                    [[SessionManager sharedSessionManager] redialCallForSession:inSession];
-//                }
-//                break;
-//
-//                default:
-//                    break;
-//            }
-//        }
     }
 }
 
@@ -236,13 +164,11 @@
         
         if ([message length] > 0)
         {
-            //messageRecord.messageID = hopMessage.messageID;
-            messageRecord.text = message;
+             messageRecord.text = message;
         }
         else
         {
             messageRecord.deleted = [NSNumber numberWithBool:YES];
-            //[[HOPModelManager sharedModelManager] deleteObject:messageRecord];
         }
         
         messageRecord.edited = [NSNumber numberWithBool:YES];
@@ -322,22 +248,6 @@
         if ([message.replacesMessageID length] > 0)
         {
             [[HOPModelManager sharedModelManager] replaceMessageWithID:message.replacesMessageID newMessageID:message.messageID messageText:message.text];
-//            messageObj = [[HOPModelManager sharedModelManager] getMessageRecordByID:message.replacesMessageID];
-//            
-//            if (messageObj)
-//            {
-//                messageObj.messageID = message.messageID;
-//                if ([message.text length] == 0)
-//                {
-//                    messageObj.deleted = [NSNumber numberWithBool:YES];
-//                    //[[HOPModelManager sharedModelManager] deleteObject:messageObj];
-//                }
-//                else
-//                {
-//                    messageObj.text = message.text;
-//                }
-//            }
-//            [[HOPModelManager sharedModelManager] saveContext];
         }
         else
         {
@@ -347,11 +257,6 @@
             if (messageObj)
             {
                 [session.unreadMessageArray addObject:messageObj];
-                /*NSUInteger addedIndex = [session.messageArray indexOfObject:messageObj inSortedRange:NSMakeRange(0, session.messageArray.count) options:NSBinarySearchingInsertionIndex usingComparator:self.comparator];
-                    [session.messageArray insertObject:messageObj atIndex:addedIndex];
-
-                //[session.messageArray addObject:messageObj];
-                [session.unreadMessageArray addObject:messageObj];*/
 
                 //If session view controller with message sender is not yet shown, show it
                 [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForSession:session forIncomingCall:NO forIncomingMessage:YES];
@@ -404,17 +309,6 @@
     return ret;
 }
 
-- (HOPMessage*) createMessageFromRichPush:(NSDictionary*) richPush
-{
-    //HOPMessage* hopMessage = [[HOPMessage alloc] initWithMessageId:[HOPUtility getGUIDstring] andReplacesMessageID:@"" andMessage:message andContact:[contact getCoreContact] andMessageType:messageTypeText andMessageDate:[NSDate date] andValidated:NO];
-    
-//    NSString* senderPeerURI = [richPush objectForKey:@"peerURI"];
-//    NSString* messageId = [richPush objectForKey:@"messageId"];
-//    NSString* messageText = [richPush objectForKey:@"message"];
-//    NSString* location = [richPush objectForKey:@"location"];
-    
-    return nil;
-}
 
 - (void) resendMessages
 {
