@@ -122,7 +122,7 @@
 {
     [super viewDidLoad];
     
-    self.keyboardIsHidden = NO;
+    self.keyboardIsHidden = YES;
     self.isFirstRun = YES;
     //[self.chatTableView setTranslatesAutoresizingMaskIntoConstraints:NO];
     //[self.typingMessageView setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -136,10 +136,7 @@
     self.tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
     self.tapGesture.numberOfTapsRequired = 1;
     
-    if (!self.keyboardIsHidden)
-    {
-        [self.messageTextbox becomeFirstResponder];
-    }
+    [self.messageTextbox becomeFirstResponder];
     
     NSError *error;
     if (![self.fetchedResultsController performFetch:&error])
@@ -341,12 +338,15 @@
 -(void)keyboardWillShow:(NSNotification *)notification
 {
     [self.chatTableView addGestureRecognizer:self.tapGesture];
-    self.keyboardIsHidden = NO;
-    [self.delegate prepareForKeyboard:[notification userInfo] showKeyboard:YES];
-    [self setFramesSizesForUserInfo:[notification userInfo]];
-    
-    if ([[[self fetchedResultsController] fetchedObjects] count] > 0)
-        [self.chatTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[[[self fetchedResultsController] fetchedObjects] count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    if (self.keyboardIsHidden)
+    {
+        self.keyboardIsHidden = NO;
+        [self.delegate prepareForKeyboard:[notification userInfo] showKeyboard:YES];
+        [self setFramesSizesForUserInfo:[notification userInfo]];
+        
+        if ([[[self fetchedResultsController] fetchedObjects] count] > 0)
+            [self.chatTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[[[self fetchedResultsController] fetchedObjects] count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    }
 }
 
 -(void)keyboardWillHide:(NSNotification *)notification
@@ -764,6 +764,7 @@
         exit(-1);  // Fail
     }
     
+    [self.view bringSubviewToFront:self.chatTableView];
     [self.chatTableView reloadData];
 }
 @end
