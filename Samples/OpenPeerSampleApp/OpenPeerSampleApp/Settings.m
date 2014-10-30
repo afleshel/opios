@@ -988,7 +988,7 @@
 {
     BOOL ret = NO;
     
-    HOPOpenPeerAccount* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
+    HOPOpenPeerAccount* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInUser];
     NSString* domain = [[NSUserDefaults standardUserDefaults] objectForKey:settingsKeyIdentityProviderDomain];
     
     ret = [homeUser.reloginInfo rangeOfString:domain].location != NSNotFound;

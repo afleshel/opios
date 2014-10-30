@@ -344,40 +344,7 @@ using namespace openpeer::core;
     NSMutableArray* ret = nil;
     if(conversationThreadPtr)
     {
-        ret = [ self getIdentityContactListForCoreContact:[contact getContactPtr]];
-//        IdentityContactListPtr identityContactListPtr = conversationThreadPtr->getIdentityContactList([contact getContactPtr]);
-//        if (identityContactListPtr)
-//        {
-//            ret = [[NSMutableArray alloc] init];
-//            for (IdentityContactList::iterator identityContactInfo = identityContactListPtr->begin(); identityContactInfo != identityContactListPtr->end(); ++identityContactInfo)
-//            {
-//                IdentityContact identityContact = *identityContactInfo;
-//                if (identityContact.hasData())
-//                {
-//                    NSString* sId = [NSString stringWithUTF8String:identityContact.mStableID];
-//                    NSString* identityURI = [NSString stringWithUTF8String:identityContact.mIdentityURI];
-//                    HOPIdentityContact* hopIdentityContact = [[HOPModelManager sharedModelManager] getIdentityContactWithIdentityURI:identityURI];
-//                    
-//                    if (!hopIdentityContact)
-//                    {
-//                        NSManagedObject* managedObject = [[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPIdentityContact"];
-//                        if (managedObject && [managedObject isKindOfClass:[HOPIdentityContact class]])
-//                        {
-//                            hopIdentityContact = (HOPIdentityContact*) managedObject;
-//                        }
-//                    }
-//                    
-//                    if (hopIdentityContact)
-//                    {
-//                        [hopIdentityContact updateWithIdentityContact:identityContact];
-//                        
-//                        [ret addObject:hopIdentityContact];
-//                    }
-//                }
-//            }
-//            [[HOPModelManager sharedModelManager] saveContext];
-//        }
-
+        ret = [self getIdentityContactListForCoreContact:[contact getContactPtr]];
     }
     
     return ret;

@@ -52,6 +52,7 @@
  *  @param inContact             Message recipient
  *  @param inMessageType         Message mime type. It is on user to create mime types.
  *  @param inMessageDate         Message date
+ *  @param inValidated           Flag if message is validated
  *
  *  @return HOPMessage object
  */

@@ -125,7 +125,6 @@
         NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
         NSString *dataPathDirectory = [libraryPath stringByAppendingPathComponent:@"db"];
         [[HOPModelManager sharedModelManager] setDataPath:dataPathDirectory backupData:NO];
-        //[[HOPModelManager sharedModelManager] clearSessionRecords];
      
         //Set settigns delegate
         [[HOPSettings sharedSettings] setup];
@@ -134,7 +133,7 @@
         
         BOOL startDownloadingSettings = [[Settings sharedSettings] updateAppSettings];
         
-        if (![[HOPModelManager sharedModelManager] getLastLoggedInHomeUser])
+        if (![[HOPModelManager sharedModelManager] getLastLoggedInUser])
         {
             //Start settings download. If download is not started finish presetup
             if (!startDownloadingSettings)
@@ -154,7 +153,7 @@
 - (void) finishPreSetup
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Pre setup finished");
-    if (![[HOPModelManager sharedModelManager] getLastLoggedInHomeUser])
+    if (![[HOPModelManager sharedModelManager] getLastLoggedInUser])
     {
         OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"There is no logged in user");
         if ([[NSUserDefaults standardUserDefaults] boolForKey: settingsKeyQRScannerShownAtStart])

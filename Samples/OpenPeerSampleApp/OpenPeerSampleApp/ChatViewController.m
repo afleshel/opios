@@ -640,7 +640,7 @@
         return _fetchedResultsController;
     }
     
-//    NSFetchRequest *fetchRequest = [[HOPModelManager sharedModelManager] getMessagesFetchRequestForSessionID:self.session.sessionRecord.sessionID sortAscending:YES];
+//    NSFetchRequest *fetchRequest = [[HOPModelManager sharedModelManager] getMessagesFetchRequestForConversationID:self.session.sessionRecord.sessionID sortAscending:YES];
     NSFetchRequest *fetchRequest = [[HOPModelManager sharedModelManager] getMessagesFetchRequestForParticipants:self.session.lastConversationEvent.participants sortAscending:YES];
     
     _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext] sectionNameKeyPath:nil cacheName:nil];

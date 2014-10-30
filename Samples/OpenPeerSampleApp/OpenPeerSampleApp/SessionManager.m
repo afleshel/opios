@@ -135,7 +135,7 @@
                 
                 OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Creating session record from conversation thread id: %@", [conversationThread getThreadId]);
                 
-                ret.sessionRecord = [[HOPModelManager sharedModelManager] createSessionRecordForConversationThread:conversationThread type:nil date:[NSDate date] name:title participants:contacts];
+                ret.sessionRecord = [[HOPModelManager sharedModelManager] createConversationRecordForConversationThread:conversationThread type:nil date:[NSDate date] name:title participants:contacts];
                 
                 ret.title = title;
             }
@@ -179,7 +179,7 @@
             NSString* title = [self getTitleForConversationThread:inConversationThread];
             [self.sessionsDictionary setObject:ret forKey:[inConversationThread getThreadId]];
             OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Creating session record from conversation thread id: %@", [inConversationThread getThreadId]);
-            ret.sessionRecord = [[HOPModelManager sharedModelManager] createSessionRecordForConversationThread:inConversationThread type:nil date:[NSDate date] name:title participants:contactAaray];
+            ret.sessionRecord = [[HOPModelManager sharedModelManager] createConversationRecordForConversationThread:inConversationThread type:nil date:[NSDate date] name:title participants:contactAaray];
             
             ret.title = title;
             ret.lastConversationEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"create" conversationRecord:ret.sessionRecord partcipants:contactAaray title:title];
@@ -220,7 +220,7 @@
         NSArray* contacts = [inConversationThread getContacts];
         OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Creating session record from conversation thread id: %@", [inConversationThread getThreadId]);
         
-        [[HOPModelManager sharedModelManager] createSessionRecordForConversationThread:inConversationThread type:nil date:nil name:nil participants:contacts];
+        [[HOPModelManager sharedModelManager] createConversationRecordForConversationThread:inConversationThread type:nil date:nil name:nil participants:contacts];
 
         [[HOPModelManager sharedModelManager] saveContext];
         [self setValidSession:ret newSessionId:newSessionId oldSessionId:oldSessionId];
@@ -630,8 +630,7 @@
                 NSArray* contactsArray = [[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:[[participants objectAtIndex:0] getPeerURI]];
                 if (contactsArray)
                 {
-                    //[[HOPModelManager sharedModelManager] addSession:[conversationThread getThreadId] type:nil date:nil name:nil participants:contactsArray];
-                    [[HOPModelManager sharedModelManager] createSessionRecordForConversationThread:conversationThread type:nil date:nil name:nil participants:contactsArray];
+                    [[HOPModelManager sharedModelManager] createConversationRecordForConversationThread:conversationThread type:nil date:nil name:nil participants:contactsArray];
                 
                     [self setValidSession:session newSessionId:newSessionId oldSessionId:oldSessionId];
                 }

@@ -118,7 +118,7 @@
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Conversation thread %@ message with id %@ delivery state has changed to: %@",[conversationThread getThreadId],messageID, [HOPConversationThread stringForMessageDeliveryState:messageDeliveryStates]);
     
-    [[HOPModelManager sharedModelManager] updateMessageStatusVisibilityForSession:[[HOPModelManager sharedModelManager] getSessionRecordForConversationThread:conversationThread] lastDeliveryState:messageDeliveryStates];
+    [[HOPModelManager sharedModelManager] updateMessageStateForConversation:[[HOPModelManager sharedModelManager] getConversationRecordForConversationThread:conversationThread] lastDeliveryState:messageDeliveryStates];
 }
 
 - (void) onConversationThreadPushMessage:(HOPConversationThread*) conversationThread messageID:(NSString*) messageID contact:(HOPContact*) coreContact
@@ -140,7 +140,7 @@
 
                 if ([[MessageManager sharedMessageManager] getTypeForSystemMessage:message] == SystemMessage_CheckAvailability)
                 {
-                    messageText  = [NSString stringWithFormat:@"%@  %@",[[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser] getFullName],@"Missed call"];
+                    messageText  = [NSString stringWithFormat:@"%@  %@",[[[HOPModelManager sharedModelManager] getLastLoggedInUser] getFullName],@"Missed call"];
                     missedCall = YES;
                     [[APNSManager sharedAPNSManager] sendPushNotificationForContact:coreContact message:messageText missedCall:missedCall];
                 }

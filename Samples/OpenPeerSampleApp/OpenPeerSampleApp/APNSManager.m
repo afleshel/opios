@@ -331,7 +331,7 @@
 {
     NSString* msg = [message.text length] > 22 ? [NSString stringWithFormat:@"%@...",[message.text substringToIndex:22]] : message.text;
     
-    NSString* messageText  = [NSString stringWithFormat:@"%@  %@",[[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser] getFullName],msg];
+    NSString* messageText  = [NSString stringWithFormat:@"%@  %@",[[[HOPModelManager sharedModelManager] getLastLoggedInUser] getFullName],msg];
     
     NSString* location = [[HOPAccount sharedAccount] isCoreAccountCreated] && ([[HOPAccount sharedAccount] getState].state == HOPAccountStateReady) ? [[HOPAccount sharedAccount] getLocationID] : @"";
     NSString* content = [self prepareMessageForRichPush:message peerURI:[[HOPModelManager sharedModelManager]getPeerURIForHomeUser] location:location];
@@ -545,7 +545,7 @@ didCompleteWithError:(NSError *)error
             if (messageRecord)
             {
                 messageRecord.outgoingMessageStatus = HOPConversationThreadMessageDeliveryStateSent;//[NSNumber numberWithInt:HOPConversationThreadMessageDeliveryStateSent];
-                [[HOPModelManager sharedModelManager] updateMessageStatusVisibilityForSession:messageRecord.session lastDeliveryState:HOPConversationThreadMessageDeliveryStateSent];
+                [[HOPModelManager sharedModelManager] updateMessageStateForConversation:messageRecord.session lastDeliveryState:HOPConversationThreadMessageDeliveryStateSent];
 
                 [[HOPModelManager sharedModelManager] saveContext];
             }

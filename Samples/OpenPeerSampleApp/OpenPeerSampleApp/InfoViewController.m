@@ -74,7 +74,7 @@ typedef enum
 
     //self.tableView.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"iPhone_background_navigation_mode.png"]];
     
-    self.homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
+    self.homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInUser];
     
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [backButton setImage:[UIImage imageNamed:@"iPhone_back_button.png"] forState:UIControlStateNormal];
