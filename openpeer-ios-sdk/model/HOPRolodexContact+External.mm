@@ -58,7 +58,8 @@
         associated = [[HOPModelManager sharedModelManager] addAssociatedIdentityForBaseIdentityURI:baseIdentityURI domain:identityProviderDomain name:baseIdentityURI account:nil selfRolodexProfileProfile:nil];
     }
     
-    self.name = inName;
+    if (inName.length > 0)
+        self.name = inName;
 }
 
 - (BOOL) isSelf

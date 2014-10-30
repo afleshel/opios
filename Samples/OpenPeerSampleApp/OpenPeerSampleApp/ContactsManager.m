@@ -201,7 +201,8 @@
                                     HOPAssociatedIdentity* associatedIdentity = [[HOPModelManager sharedModelManager] getAssociatedIdentityForBaseIdentityURI:[[Settings sharedSettings] getIdentityFederateBaseURI] homeUserStableId:homeUser.stableId];
                                     rolodexContact.associatedIdentity = associatedIdentity;
                                     rolodexContact.identityURI = identityURI;
-                                    rolodexContact.name = fullNameTemp;
+                                    if (fullNameTemp.length > 0)
+                                        rolodexContact.name = fullNameTemp;
                                     [[HOPModelManager sharedModelManager] saveContext];
                                 }
                             }
