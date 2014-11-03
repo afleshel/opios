@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13E28" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6244" systemVersion="13F34" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="HOPAPNSData" representedClassName="HOPAPNSData" syncable="YES">
         <attribute name="deviceToken" attributeType="String" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" defaultValueString="apns" syncable="YES"/>
@@ -10,7 +10,7 @@
         <attribute name="domain" attributeType="String" syncable="YES"/>
         <attribute name="downloadedVersion" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" attributeType="String" syncable="YES"/>
-        <relationship name="homeUser" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="HOPHomeUser" inverseName="associatedIdentities" inverseEntity="HOPHomeUser" syncable="YES"/>
+        <relationship name="homeUser" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="HOPOpenPeerAccount" inverseName="associatedIdentities" inverseEntity="HOPOpenPeerAccount" syncable="YES"/>
         <relationship name="homeUserProfile" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="HOPRolodexContact" inverseName="associatedIdentityForHomeUser" inverseEntity="HOPRolodexContact" syncable="YES"/>
         <relationship name="rolodexContacts" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="HOPRolodexContact" inverseName="associatedIdentity" inverseEntity="HOPRolodexContact" syncable="YES"/>
     </entity>
@@ -28,18 +28,22 @@
         <attribute name="path" attributeType="String" syncable="YES"/>
         <attribute name="removeOnNextRun" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
     </entity>
+    <entity name="HOPConversationRecord" representedClassName="HOPSessionRecord" syncable="YES">
+        <attribute name="creationTime" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="lastActivity" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sessionID" attributeType="String" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="conversationThreadRecords" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HOPConversationThreadRecord" inverseName="sessionReords" inverseEntity="HOPConversationThreadRecord" syncable="YES"/>
+        <relationship name="homeUser" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HOPOpenPeerAccount" inverseName="sessionRecords" inverseEntity="HOPOpenPeerAccount" syncable="YES"/>
+        <relationship name="messages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HOPMessageRecord" inverseName="session" inverseEntity="HOPMessageRecord" syncable="YES"/>
+        <relationship name="participants" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HOPPublicPeerFile" inverseName="sessions" inverseEntity="HOPPublicPeerFile" syncable="YES"/>
+    </entity>
     <entity name="HOPConversationThreadRecord" representedClassName="HOPConversationThreadRecord" syncable="YES">
         <attribute name="creationTime" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="lastUpdate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="threadID" attributeType="String" syncable="YES"/>
-        <relationship name="sessionReords" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HOPSessionRecord" inverseName="conversationThreadRecords" inverseEntity="HOPSessionRecord" syncable="YES"/>
-    </entity>
-    <entity name="HOPHomeUser" representedClassName="HOPHomeUser" syncable="YES">
-        <attribute name="loggedIn" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
-        <attribute name="reloginInfo" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="stableId" attributeType="String" indexed="YES" syncable="YES"/>
-        <relationship name="associatedIdentities" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="HOPAssociatedIdentity" inverseName="homeUser" inverseEntity="HOPAssociatedIdentity" syncable="YES"/>
-        <relationship name="sessionRecords" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HOPSessionRecord" inverseName="homeUser" inverseEntity="HOPSessionRecord" syncable="YES"/>
+        <relationship name="sessionReords" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HOPConversationRecord" inverseName="conversationThreadRecords" inverseEntity="HOPConversationRecord" syncable="YES"/>
     </entity>
     <entity name="HOPIdentityContact" representedClassName="HOPIdentityContact" syncable="YES">
         <attribute name="expires" optional="YES" attributeType="Date" syncable="YES"/>
@@ -58,20 +62,31 @@
     </entity>
     <entity name="HOPMessageRecord" representedClassName="HOPMessageRecord" syncable="YES">
         <attribute name="date" attributeType="Date" syncable="YES"/>
-        <attribute name="delivered" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="deleted" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="edited" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="image" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="messageID" attributeType="String" syncable="YES"/>
+        <attribute name="messageStatus" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="showStatus" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="text" attributeType="String" syncable="YES"/>
         <attribute name="type" attributeType="String" syncable="YES"/>
+        <attribute name="visible" optional="YES" attributeType="Boolean" defaultValueString="YES" syncable="YES"/>
         <relationship name="fromPeer" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HOPPublicPeerFile" syncable="YES"/>
-        <relationship name="session" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HOPSessionRecord" inverseName="messages" inverseEntity="HOPSessionRecord" syncable="YES"/>
+        <relationship name="session" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HOPConversationRecord" inverseName="messages" inverseEntity="HOPConversationRecord" syncable="YES"/>
+    </entity>
+    <entity name="HOPOpenPeerAccount" representedClassName="HOPHomeUser" syncable="YES">
+        <attribute name="loggedIn" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="reloginInfo" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="stableId" attributeType="String" indexed="YES" syncable="YES"/>
+        <relationship name="associatedIdentities" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="HOPAssociatedIdentity" inverseName="homeUser" inverseEntity="HOPAssociatedIdentity" syncable="YES"/>
+        <relationship name="sessionRecords" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HOPConversationRecord" inverseName="homeUser" inverseEntity="HOPConversationRecord" syncable="YES"/>
     </entity>
     <entity name="HOPPublicPeerFile" representedClassName="HOPPublicPeerFile" syncable="YES">
         <attribute name="peerFile" attributeType="String" syncable="YES"/>
         <attribute name="peerURI" attributeType="String" indexed="YES" syncable="YES"/>
         <relationship name="apnsData" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HOPAPNSData" inverseName="publicPeer" inverseEntity="HOPAPNSData" syncable="YES"/>
         <relationship name="identityContacts" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="HOPIdentityContact" inverseName="peerFile" inverseEntity="HOPIdentityContact" syncable="YES"/>
-        <relationship name="sessions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HOPSessionRecord" inverseName="participants" inverseEntity="HOPSessionRecord" syncable="YES"/>
+        <relationship name="sessions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HOPConversationRecord" inverseName="participants" inverseEntity="HOPConversationRecord" syncable="YES"/>
     </entity>
     <entity name="HOPRolodexContact" representedClassName="HOPRolodexContact" syncable="YES">
         <attribute name="identityURI" attributeType="String" indexed="YES" syncable="YES"/>
@@ -84,17 +99,6 @@
         <relationship name="avatars" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HOPAvatar" inverseName="rolodexContacts" inverseEntity="HOPAvatar" syncable="YES"/>
         <relationship name="identityContact" optional="YES" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="HOPIdentityContact" inverseName="rolodexContact" inverseEntity="HOPIdentityContact" syncable="YES"/>
     </entity>
-    <entity name="HOPSessionRecord" representedClassName="HOPSessionRecord" syncable="YES">
-        <attribute name="creationTime" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="lastActivity" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="sessionID" attributeType="String" syncable="YES"/>
-        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="conversationThreadRecords" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HOPConversationThreadRecord" inverseName="sessionReords" inverseEntity="HOPConversationThreadRecord" syncable="YES"/>
-        <relationship name="homeUser" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HOPHomeUser" inverseName="sessionRecords" inverseEntity="HOPHomeUser" syncable="YES"/>
-        <relationship name="messages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HOPMessageRecord" inverseName="session" inverseEntity="HOPMessageRecord" syncable="YES"/>
-        <relationship name="participants" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HOPPublicPeerFile" inverseName="sessions" inverseEntity="HOPPublicPeerFile" syncable="YES"/>
-    </entity>
     <configuration name="Cache">
         <memberEntity name="HOPCacheData"/>
     </configuration>
@@ -102,27 +106,27 @@
         <memberEntity name="HOPAPNSData"/>
         <memberEntity name="HOPAssociatedIdentity"/>
         <memberEntity name="HOPAvatar"/>
-        <memberEntity name="HOPHomeUser"/>
+        <memberEntity name="HOPOpenPeerAccount"/>
         <memberEntity name="HOPIdentityContact"/>
         <memberEntity name="HOPImage"/>
         <memberEntity name="HOPMessageRecord"/>
         <memberEntity name="HOPPublicPeerFile"/>
         <memberEntity name="HOPRolodexContact"/>
-        <memberEntity name="HOPSessionRecord"/>
+        <memberEntity name="HOPConversationRecord"/>
         <memberEntity name="HOPConversationThreadRecord"/>
     </configuration>
     <elements>
-        <element name="HOPAPNSData" positionX="-101" positionY="-675" width="128" height="88"/>
-        <element name="HOPAssociatedIdentity" positionX="286" positionY="-177" width="128" height="150"/>
-        <element name="HOPAvatar" positionX="430" positionY="-486" width="128" height="135"/>
-        <element name="HOPCacheData" positionX="448" positionY="-297" width="128" height="105"/>
-        <element name="HOPConversationThreadRecord" positionX="-90" positionY="-133" width="128" height="103"/>
-        <element name="HOPHomeUser" positionX="106" positionY="-270" width="128" height="118"/>
-        <element name="HOPIdentityContact" positionX="70" positionY="-513" width="128" height="165"/>
-        <element name="HOPImage" positionX="583" positionY="-477" width="128" height="90"/>
-        <element name="HOPMessageRecord" positionX="-315" positionY="-462" width="128" height="165"/>
-        <element name="HOPPublicPeerFile" positionX="-92" positionY="-513" width="128" height="120"/>
-        <element name="HOPRolodexContact" positionX="268" positionY="-513" width="128" height="180"/>
-        <element name="HOPSessionRecord" positionX="-99" positionY="-333" width="128" height="178"/>
+        <element name="HOPAPNSData" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="HOPAssociatedIdentity" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="HOPAvatar" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="HOPCacheData" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="HOPConversationThreadRecord" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="HOPIdentityContact" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="HOPImage" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="HOPMessageRecord" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="HOPOpenPeerAccount" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="HOPPublicPeerFile" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="HOPRolodexContact" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="HOPConversationRecord" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>

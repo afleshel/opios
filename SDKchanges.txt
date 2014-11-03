@@ -1,0 +1,167 @@
+Changes in OpenPeedSDK 1.1
+
+New framework brings a group chat feature, but also it introduces changes in API, and the way how it is used in the application. Changes are made so Android and iOS frameworks get more similar one to another. 
+
+
+First here is the list of newly added entities:
+
+HOPConversationEvent - represents any action on conversation thread, like adding or removing participants
+
+HOPOpenPeerContact - represents contacts registered in the Open Peer system. If one contact has more identities associated, it will be represented like one HOPOpenPeerContact record with link to all associated identities.
+
+HOPParticipant - represents group of participants in one conversation
+
+HOPIdentityProvider - holds information of identity provider
+
+HOPMEssageEvent - keeps onformation about edited, deleted messages
+
+
+
+Here is the list of the renamed entities:
+
+HOPSessionRecord to HOPConversationRecord
+HOPHomeUser to HOPOpenPeerAccount
+
+
+Beside entities some SDK types are renamed as well:
+
+HOPConversationThreadContactState to HOPConversationThreadContactConnectionState
+
+
+Here is the list of newly added types:
+
+HOPConversationThreadContactStatus - represent composing status
+HOPSystemMessageType - system message type
+HOPCallSystemMessageType - system messages related to call
+
+
+
+Changes in HOPConversationThread class
+
+(NSArray*) getConversationThreadsForAccount 
+renamed to 
++ (NSArray*) getActiveConversationThreads
+
+(NSString*) deliveryStateToString: (HOPConversationThreadMessageDeliveryState) state is removed
+
++ (HOPConversationThreadMessageDeliveryState) toMessageDeliveryStates:(NSString*) messageDeliveryStateString is added
+
+(NSString*) stateToString: (HOPConversationThreadContactState) state is removed
+
+(NSString*) stringForContactState:(HOPConversationThreadContactState) state 
+is renamed to 
++ (NSString*) stringForContactConnectionState:(HOPConversationThreadContactConnectionState) state
+
+(HOPConversationThreadContactState) getContactState: (HOPContact*) contact 
+is changed to 
+- (HOPConversationThreadContactConnectionState) getContactConnectionState: (HOPContact*) contact
+
+- (HOPConversationThreadContactStatus) getContactStatus:(HOPContact*) contactis added 
+
+- (void) setStatusInThread:(HOPConversationThreadContactStatus) status is added
+
+- (void) markAllMessagesRead is added 
+
++ (NSString*) createSystemMessage:(HOPSystemMessageType) systemMessageType messageType:(int) systemMessageType contact:(HOPContact*) contact is added 
+
++ (NSString*) getSystemMessageType is added
+
+
+
+Changes in HOPMessage class
+
+(id) initWithMessageId:(NSString*) inMessageId andMessage:(NSString*) messageText andContact:(HOPContact*) inContact andMessageType:(NSString*) inMessageType andMessageDate:(NSDate*) inMessageDate 
+is replaced with 
+- (id) initWithMessageId:(NSString*) inMessageId andReplacesMessageID:(NSString*) inReplacesMessageID andMessage:(NSString*) messageText andContact:(HOPContact*) inContact andMessageType:(NSString*) inMessageType andMessageDate:(NSDate*) inMessageDate  andValidated:(BOOL) inValidated
+
+
+Changes in HOPModelManager class
+
+- (HOPIdentityContact*) getIdentityContactByStableID:(NSString*) stableID identityURI:(NSString*) identityURI
+ is replaced with 
+- (HOPIdentityContact*) getIdentityContactWithIdentityURI:(NSString*) identityURI
+
+(NSArray*) getIdentityContactsByStableID:(NSString*) stableID is removed
+
+
+- (HOPAssociatedIdentity*) getAssociatedIdentityBaseIdentityURI:(NSString*) baseIdentityURI homeUserStableId:(NSString*) homeUserStableId
+ is replaced with 
+- (HOPAssociatedIdentity*) getAssociatedIdentityForBaseIdentityURI:(NSString*) baseIdentityURI homeUserStableId:(NSString*) homeUserStableId
+
+(HOPHomeUser*) getLastLoggedInHomeUser is replaced with  
+- (HOPOpenPeerAccount*) getLastLoggedInUser
+
+(HOPHomeUser*) getHomeUserByStableID:(NSString*) stableID is replaced with 
+- (HOPOpenPeerAccount*) getAccountForStableID:(NSString*) stableID
+
+- (HOPSessionRecord*) addSession:(NSString*) sessionID type:(NSString*) type date:(NSDate*) date name:(NSString*) name participants:(NSArray*) participants
+ is removed 
+
+- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date session:(NSString*) sessionRecordId rolodexContact:(HOPRolodexContact*) rolodexContact messageId:(NSString*)messageId
+is replaced with 
+- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date conversationThreadID:(NSString*) conversationThreadID openPeerContact:(HOPOpenPeerContact*) openPeerContact messageId:(NSString*)messageId conversationEvent:(HOPConversationEvent*) conversationEvent
+
+
+(HOPSessionRecord *) getSessionRecordByID:(NSString*) sessionID is replaced with 
+- (HOPConversationRecord *) getConversationRecordByID:(NSString*) conversationID
+
+- (HOPSessionRecord*) getSessionRecordForConversationThread:(HOPConversationThread*) conversationThread
+ is replaced with 
+- (HOPConversationRecord*) getConversationRecordForConversationThread:(HOPConversationThread*) conversationThread
+
+- (HOPConversationThreadRecord*) createRecordForConversationThread:(HOPConversationThread*) conversationThread sessionRecord:(HOPSessionRecord*) sessionRecord
+ is replaced with 
+- (HOPConversationThreadRecord*) createRecordForConversationThread:(HOPConversationThread*) conversationThread conversationRecord:(HOPConversationRecord*) conversationRecord
+
+- (HOPSessionRecord*) createSessionRecordForConversationThread:(HOPConversationThread*) conversationThread type:(NSString*) type date:(NSDate*) date name:(NSString*) name participants:(NSArray*) participants
+ is replaced with 
+- (HOPConversationRecord*) createConversationRecordForConversationThread:(HOPConversationThread*) conversationThread type:(NSString*) type date:(NSDate*) date name:(NSString*) name participants:(NSArray*) participants
+
+(HOPMessageRecord *) getLastMessageRecordForSessionID:(NSString*) sessionID is removed
+
+(void) clearSessionRecords is removed 
+
+
+Following methods are added
+
+- (HOPAssociatedIdentity*) addAssociatedIdentityForBaseIdentityURI:(NSString*) baseIdentityURI domain:(NSString*) domain name:(NSString*) name account:(HOPOpenPeerAccount*) account selfRolodexProfileProfile:(HOPRolodexContact*) rolodexContact
+
+- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  conversationThreadID:(NSString*) conversationThreadID openPeerContact:(HOPOpenPeerContact*) openPeerContact messageId:(NSString*)messageId conversationEvent:(HOPConversationEvent*) conversationEvent
+
+- (void) replaceMessageWithID:(NSString*) replacesMessageID newMessageID:(NSString*) newMessageID messageText:(NSString*) messageText
+
+- (void) updateMessageStateForConversation:(HOPConversationRecord*) conversationRecord lastDeliveryState:(HOPConversationThreadMessageDeliveryState) messageDeliveryState
+
+- (HOPOpenPeerContact*) getOpenPeerContactForPeerURI:(NSString*) peerURI
+
+- (HOPOpenPeerContact*) getOpenPeerContactForStableID:(NSString*) stableID
+
+- (HOPOpenPeerContact*) getOpenPeerContactForIdentityURI:(NSString*) identityURI
+
+- (NSArray *) getOpenPeerContactsByPeerURIs:(NSArray*) peerURIs
+
+- (HOPConversationEvent*) addConversationEvent:(NSString*) eventType conversationRecord:(HOPConversationRecord*) conversationRecord partcipants:(NSArray*) participants title:(NSString*) title
+
+- (HOPParticipants*) getParticiapantsForListOfContacts:(NSArray*) contacts
+
+- (NSFetchRequest*) getMessagesFetchRequestForParticipants:(HOPParticipants*) participants sortAscending:(BOOL) ascending
+
+- (HOPOpenPeerContact*) getOpenPeerContactForAccount
+
+- (HOPPublicPeerFile*) createPublicPeerFileForPeerURI:(NSString*) peerURI peerFile:(NSString*) peerFile
+
+
+
+Changes in HOPConversationThreadDelegate delegate
+
+- (void) onConversationThreadContactStateChanged:(HOPConversationThread*) conversationThread contact:(HOPContact*) contact contactState:(HOPConversationThreadContactState) contactState
+ is replaced with 
+- (void) onConversationThreadContactConnectionStateChanged:(HOPConversationThread*) conversationThread contact:(HOPContact*) contact contactConnectionState:(HOPConversationThreadContactConnectionState) contactConnectionState
+
+- (void) onConversationThreadContactStatusChanged:(HOPConversationThread*) conversationThread contact:(HOPContact*) contact
+is added
+
+Changes in client application.
+
+List of recent sessions is created from list of HOPConversationEvent objects.
+

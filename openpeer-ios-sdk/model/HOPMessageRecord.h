@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2014, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -32,17 +32,33 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class HOPPublicPeerFile, HOPSessionRecord;
+@class HOPConversationEvent, HOPConversationRecord, HOPMessageEvent, HOPOpenPeerContact;
 
 @interface HOPMessageRecord : NSManagedObject
 
 @property (nonatomic, retain) NSDate * date;
-@property (nonatomic, retain) NSNumber * delivered;
+@property (nonatomic, retain) NSNumber * deleted;
+@property (nonatomic, retain) NSNumber * edited;
 @property (nonatomic, retain) NSData * image;
+@property (nonatomic, retain) NSNumber * incomingMessageStatus;
+@property (nonatomic, retain) NSString * messageID;
+@property (nonatomic, retain) NSString * outMessageStatus;
+@property (nonatomic, retain) NSNumber * read;
+@property (nonatomic, retain) NSNumber * showStatus;
 @property (nonatomic, retain) NSString * text;
 @property (nonatomic, retain) NSString * type;
-@property (nonatomic, retain) NSString * messageID;
-@property (nonatomic, retain) HOPPublicPeerFile *fromPeer;
-@property (nonatomic, retain) HOPSessionRecord *session;
+@property (nonatomic, retain) NSNumber * visible;
+@property (nonatomic, retain) HOPConversationEvent *conversationEvent;
+@property (nonatomic, retain) NSSet *messageEvent;
+@property (nonatomic, retain) HOPOpenPeerContact *sender;
+@property (nonatomic, retain) HOPConversationRecord *session;
+@end
+
+@interface HOPMessageRecord (CoreDataGeneratedAccessors)
+
+- (void)addMessageEventObject:(HOPMessageEvent *)value;
+- (void)removeMessageEventObject:(HOPMessageEvent *)value;
+- (void)addMessageEvent:(NSSet *)values;
+- (void)removeMessageEvent:(NSSet *)values;
 
 @end

@@ -146,49 +146,6 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
 - (NSArray*) getUpdatedIdentities
 {
-    /*NSMutableArray* ret = nil;
-    if(identityLookupPtr)
-    {
-        IdentityContactListPtr identityContactListPtr = identityLookupPtr->getUpdatedIdentities();
-        if (identityContactListPtr)
-        {
-            ret = [[NSMutableArray alloc] init];
-            for (IdentityContactList::iterator identityContactInfo = identityContactListPtr->begin(); identityContactInfo != identityContactListPtr->end(); ++identityContactInfo)
-            {
-                IdentityContact identityContact = *identityContactInfo;
-                if (identityContact.hasData())
-                {
-                    NSString* sId = [NSString stringWithUTF8String:identityContact.mStableID];
-                    NSString* identityURI = [NSString stringWithUTF8String:identityContact.mIdentityURI];
-                    HOPIdentityContact* hopIdentityContact = [[HOPModelManager sharedModelManager] getIdentityContactByStableID:sId identityURI:identityURI];
-                    
-                    if (!hopIdentityContact)
-                    {
-                        NSManagedObject* managedObject = [[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPIdentityContact"];
-                        if (managedObject && [managedObject isKindOfClass:[HOPIdentityContact class]])
-                        {
-                            hopIdentityContact = (HOPIdentityContact*) managedObject;
-                        }
-                    }
-                    
-                    if (hopIdentityContact)
-                    {
-                        [hopIdentityContact updateWithIdentityContact:identityContact];
-                    
-                        [ret addObject:hopIdentityContact];
-                    }
-                }
-            }
-            [[HOPModelManager sharedModelManager] saveContext];
-        }
-    }
-    else
-    {
-        ZS_LOG_ERROR(Debug, [self log:@"Invalid identity lookup object!"]);
-        [NSException raise:NSInvalidArgumentException format:@"Invalid identity lookup object!"];
-    }
-    return ret;*/
-    
     return self.arrayLastUpdatedContacts;
 }
 

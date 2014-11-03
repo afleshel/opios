@@ -48,11 +48,13 @@
 #import <OpenPeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPAccount.h>
 #import <OpenPeerSDK/HOPPublicPeerFile.h>
-#import <OpenPeerSDK/HOPHomeUser+External.h>
+#import <OpenPeerSDK/HOPOpenPeerAccount+External.h>
 #import <OpenPeerSDK/HOPMessage.h>
 #import <OpenPeerSDK/HOPBackgrounding.h>
 #import <OpenPeerSDK/HOPUtility.h>
 #import <OpenPeerSDK/HOPAPNSData.h>
+#import <OpenPeerSDK/HOPMessageRecord+External.h>
+#import <OpenPeerSDK/HOPTypes.h>
 
 #define  timeBetweenPushNotificationsInSeconds 1
 
@@ -73,10 +75,12 @@
 @property (nonatomic, strong) NSMutableDictionary* dictionaryOfHTTPRequests;
 @property (nonatomic, strong) NSMutableDictionary* dictionaryOfPushNotificationsToSend;
 
+@property (nonatomic, strong) NSMutableDictionary* dictionaryOfMessageIDsForSending;
+
 - (id) initSingleton;
 
 - (void) pushDataOld:(NSDictionary*) dataToPush sendingRich:(BOOL) sendingRich;
-- (void) pushData:(NSString*) filePath sendingRich:(BOOL) sendingRich;
+- (void) pushData:(NSString*) filePath sendingRich:(BOOL) sendingRich messageID:(NSString*) messageID;
 - (BOOL) canSendPushNotificationForPeerURI:(NSString*) peerURI;
 - (NSArray*) getDeviceTokensForContact:(HOPContact*) contact;
 - (NSString*) prepareMessageForRichPush:(HOPMessage*) message peerURI:(NSString*) peerURI location:(NSString*) location;
@@ -116,12 +120,7 @@
         self.dictionaryOfSentFiles = [[NSMutableDictionary alloc] init];
         self.dictionaryOfHTTPRequests = [[NSMutableDictionary alloc] init];
         self.dictionaryOfPushNotificationsToSend = [[NSMutableDictionary alloc] init];
-        
-//        NSString* sessionIdentifier = [NSString stringWithFormat:@"com.hookflash.backgroundSession.%@",@""];
-//        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration backgroundSessionConfiguration:sessionIdentifier];
-//        //NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-//        
-//        self.urlSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:[NSOperationQueue mainQueue]];
+        self.dictionaryOfMessageIDsForSending = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
@@ -153,14 +152,14 @@
     
     [UAirship takeOff:config];
     
-    [UAPush shared].notificationTypes = (UIRemoteNotificationTypeBadge |UIRemoteNotificationTypeSound |UIRemoteNotificationTypeAlert);
+    [UAPush shared].userNotificationTypes = (UIUserNotificationTypeBadge |UIUserNotificationTypeSound |UIUserNotificationTypeAlert);
     
-    //[UAPush shared].notificationTypes = (UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert);
-    [[UAPush shared] registerForRemoteNotifications];
+    [[UAPush shared] updateRegistration];
     
     // Print out the application configuration for debugging (optional)
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"UrbanAirship config: %@",[config description]);
 
+    [[UAPush shared] setUserPushNotificationsEnabled:YES];
     [[UAPush shared] setAutobadgeEnabled:YES];
     
     [[APNSInboxManager sharedAPNSInboxManager]setup];
@@ -194,7 +193,7 @@
     }
 }
 
-- (void) pushData:(NSString*) filePath sendingRich:(BOOL) sendingRich
+- (void) pushData:(NSString*) filePath sendingRich:(BOOL) sendingRich messageID:(NSString*) messageID
 {
     if ([filePath length] > 0)
     {
@@ -214,6 +213,7 @@
                 {
                     [self.sessionDataTask resume];
                     [self.dictionaryOfSentFiles setObject:filePath forKey:[NSNumber numberWithInt:self.sessionDataTask.taskIdentifier]];
+                    [self.dictionaryOfMessageIDsForSending setObject:messageID forKey:[NSNumber numberWithInt:self.sessionDataTask.taskIdentifier]];
                     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Started sending push notification");
                 }
                 else
@@ -240,22 +240,20 @@
 
 - (void) registerDeviceToken:(NSData*) devToken
 {
-    [[UAPush shared] registerDeviceToken:devToken];
+    [[UAPush shared] appRegisteredForRemoteNotificationsWithDeviceToken:devToken];
 }
 
 - (void) handleRemoteNotification:(NSDictionary*) launchOptions application:(UIApplication *)application
 {
-    [[UAPush shared] handleNotification:[launchOptions valueForKey:UIApplicationLaunchOptionsRemoteNotificationKey]
+    [[UAPush shared] appReceivedRemoteNotification:[launchOptions valueForKey:UIApplicationLaunchOptionsRemoteNotificationKey]
                        applicationState:application.applicationState];
 }
 - (void) connection:(NSURLConnection *) connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *) challenge
 {
     if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodHTTPBasic])
     {
-        //if ([self.developmentAppKey length] > 0 || [self.masterAppSecret length] > 0)
         if ([self.urbanAirshipAppSecret length] > 0 || [self.urbanAirshipAppKey length] > 0)
         {
-//            NSURLCredential * credential = [[NSURLCredential alloc] initWithUser:self.developmentAppKey password:self.masterAppSecret persistence:NSURLCredentialPersistenceForSession];
             NSURLCredential * credential = [[NSURLCredential alloc] initWithUser:self.urbanAirshipAppKey password:self.urbanAirshipAppSecret persistence:NSURLCredentialPersistenceForSession];
             [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
         }
@@ -333,7 +331,7 @@
 {
     NSString* msg = [message.text length] > 22 ? [NSString stringWithFormat:@"%@...",[message.text substringToIndex:22]] : message.text;
     
-    NSString* messageText  = [NSString stringWithFormat:@"%@  %@",[[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser] getFullName],msg];
+    NSString* messageText  = [NSString stringWithFormat:@"%@  %@",[[[HOPModelManager sharedModelManager] getLastLoggedInUser] getFullName],msg];
     
     NSString* location = [[HOPAccount sharedAccount] isCoreAccountCreated] && ([[HOPAccount sharedAccount] getState].state == HOPAccountStateReady) ? [[HOPAccount sharedAccount] getLocationID] : @"";
     NSString* content = [self prepareMessageForRichPush:message peerURI:[[HOPModelManager sharedModelManager]getPeerURIForHomeUser] location:location];
@@ -365,7 +363,7 @@
         }
         
         if ([filePath length] > 0 && [dataToPush count] > 0)
-            [self pushData:filePath sendingRich:YES];
+            [self pushData:filePath sendingRich:YES messageID:message.messageID];
         else
         {
             OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Dictionary with push data is not valid. Push notification is not sent.");
@@ -391,7 +389,7 @@
 
 - (NSString*) prepareMessageForRichPush:(HOPMessage*) message peerURI:(NSString*) peerURI location:(NSString*) location
 {
-    NSString* ret = [NSString stringWithFormat:@"{\\\"peerURI\\\":\\\"%@\\\",\\\"messageId\\\":\\\"%@\\\",\\\"message\\\":\\\"%@\\\",\\\"location\\\":\\\"%@\\\",\\\"date\\\":\\\"%.0f\\\"}",peerURI,message.messageID,message.text,location,[message.date timeIntervalSince1970]];
+    NSString* ret = [NSString stringWithFormat:@"{\\\"peerURI\\\":\\\"%@\\\",\\\"messageId\\\":\\\"%@\\\",\\\"replacesMessageId\\\":\\\"%@\\\",\\\"message\\\":\\\"%@\\\",\\\"location\\\":\\\"%@\\\",\\\"date\\\":\\\"%.0f\\\"}",peerURI,message.messageID,message.replacesMessageID,message.text,location,[message.date timeIntervalSince1970]];
 
     return ret;
 }
@@ -540,6 +538,18 @@ didCompleteWithError:(NSError *)error
     
     if (!error)
     {
+        NSString* messageID = [self.dictionaryOfMessageIDsForSending objectForKey:[NSNumber numberWithInt:task.taskIdentifier]];
+        if ([messageID length] > 0)
+        {
+            HOPMessageRecord* messageRecord = [[HOPModelManager sharedModelManager] getMessageRecordByID:messageID];
+            if (messageRecord)
+            {
+                messageRecord.outgoingMessageStatus = HOPConversationThreadMessageDeliveryStateSent;//[NSNumber numberWithInt:HOPConversationThreadMessageDeliveryStateSent];
+                [[HOPModelManager sharedModelManager] updateMessageStateForConversation:messageRecord.session lastDeliveryState:HOPConversationThreadMessageDeliveryStateSent];
+
+                [[HOPModelManager sharedModelManager] saveContext];
+            }
+        }
         NSError* fileError;
         NSString* filePath = [self.dictionaryOfSentFiles objectForKey:[NSNumber numberWithInt:task.taskIdentifier]];
         if ([filePath length] > 0)
@@ -606,7 +616,7 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask
         NSMutableDictionary* dictData  = [[NSMutableDictionary alloc] init];
         
         [dictData setObject:[[Settings sharedSettings] getIdentityProviderDomain]  forKey:@"$domain"];
-        [dictData setObject:[[NSUserDefaults standardUserDefaults] stringForKey: @"applicationId"]  forKey:@"$appid"];
+        [dictData setObject:[[NSUserDefaults standardUserDefaults] stringForKey: settingsKeyAppId]  forKey:@"$appid"];
         [dictData setObject:[HOPUtility getGUIDstring]  forKey:@"$id"];
         [dictData setObject:@"push-hack" forKey:@"$handler"];
         [dictData setObject:@"device-associate-get" forKey:@"$method"];
@@ -652,7 +662,7 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask
         NSMutableDictionary* dictData  = [[NSMutableDictionary alloc] init];
         
         [dictData setObject:[[Settings sharedSettings] getIdentityProviderDomain]  forKey:@"$domain"];
-        [dictData setObject:[[NSUserDefaults standardUserDefaults] stringForKey: @"applicationId"]  forKey:@"$appid"];
+        [dictData setObject:[[NSUserDefaults standardUserDefaults] stringForKey: settingsKeyAppId]  forKey:@"$appid"];
         [dictData setObject:[HOPUtility getGUIDstring]  forKey:@"$id"];
         [dictData setObject:@"push-hack" forKey:@"$handler"];
         [dictData setObject:@"device-associate-set" forKey:@"$method"];
@@ -732,6 +742,7 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask
                                 NSArray* deviceTokens = [self getDeviceTokensForContact2:msg.contact];
                                 [self sendRichPush:msg deviceTokens:deviceTokens];
                             }
+                            [self.dictionaryOfPushNotificationsToSend removeObjectForKey:peerURI];
                         }
                         
                     }

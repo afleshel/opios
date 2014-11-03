@@ -38,7 +38,7 @@
 
 #import <OpenpeerSDK/HOPConversationThread.h>
 #import <OpenpeerSDK/HOPContact.h>
-#import <OpenpeerSDK/HOPHomeUser+External.h>
+#import <OpenpeerSDK/HOPOpenPeerAccount+External.h>
 #import <OpenpeerSDK/HOPRolodexContact.h>
 #import <OpenpeerSDK/HOPMessage.h>
 #import <OpenpeerSDK/HOPModelManager.h>
@@ -61,9 +61,9 @@
             
             if ([participants count] > 0)
             {
-                HOPContact* participant = [participants objectAtIndex:0];
+                //HOPContact* participant = [participants objectAtIndex:0];
                 
-                if (![[SessionManager sharedSessionManager] proceedWithExistingSessionForContact:participant newConversationThread:conversationThread])
+                if (![[SessionManager sharedSessionManager] proceedWithExistingSessionForContacts:participants newConversationThread:conversationThread])
                 {
                     [[SessionManager sharedSessionManager] createSessionForConversationThread: conversationThread];
                 }
@@ -74,19 +74,30 @@
 
 - (void) onConversationThreadContactsChanged:(HOPConversationThread*) conversationThread
 {
-    //OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread <%@> contact changed.",conversationThread);
-    //OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread %@ contact changed.",[conversationThread getThreadId]);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread id %@  - number of contacts: %d.",[conversationThread getThreadId], [conversationThread getContacts].count);
+    dispatch_async(dispatch_get_main_queue(), ^
+    {
+        [[SessionManager sharedSessionManager] updateParticipantsInConversationThread:conversationThread];
+    });
+}
+
+- (void) onConversationThreadContactConnectionStateChanged:(HOPConversationThread*) conversationThread contact:(HOPContact*) contact contactConnectionState:(HOPConversationThreadContactConnectionState) contactConnectionState
+{
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread id: <%@> contact peer URI:<%@> state: %@",[conversationThread getThreadId], [contact getPeerURI],[HOPConversationThread stringForContactConnectionState:contactConnectionState]);
+    
     dispatch_async(dispatch_get_main_queue(), ^
     {
     });
 }
 
-- (void) onConversationThreadContactStateChanged:(HOPConversationThread*) conversationThread contact:(HOPContact*) contact contactState:(HOPConversationThreadContactState) contactState
+- (void) onConversationThreadContactStatusChanged:(HOPConversationThread*) conversationThread contact:(HOPContact*) contact
 {
-    //OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread <%@> contact <%@> state: %@",conversationThread, contact,[HOPConversationThread stringForContactState:contactState]);
-    //OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread %@ contact <%@> state: %@",[conversationThread getThreadId], contact,[HOPConversationThread stringForContactState:contactState]);
+    HOPConversationThreadContactStatus contactState = [conversationThread getContactStatus:contact];
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread id: <%@> - contact peer URI: <%@> state: %d",[conversationThread getThreadId], [contact getPeerURI],contactState);
     dispatch_async(dispatch_get_main_queue(), ^
     {
+         NSDictionary* dict = @{@"thread":conversationThread, @"contact":contact};
+         [[NSNotificationCenter defaultCenter] postNotificationName:notificationComposingStatusChanged object:dict];
     });
 }
 
@@ -106,6 +117,8 @@
 - (void) onConversationThreadMessageDeliveryStateChanged:(HOPConversationThread*) conversationThread messageID:(NSString*) messageID messageDeliveryStates:(HOPConversationThreadMessageDeliveryState) messageDeliveryStates
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Conversation thread %@ message with id %@ delivery state has changed to: %@",[conversationThread getThreadId],messageID, [HOPConversationThread stringForMessageDeliveryState:messageDeliveryStates]);
+    
+    [[HOPModelManager sharedModelManager] updateMessageStateForConversation:[[HOPModelManager sharedModelManager] getConversationRecordForConversationThread:conversationThread] lastDeliveryState:messageDeliveryStates];
 }
 
 - (void) onConversationThreadPushMessage:(HOPConversationThread*) conversationThread messageID:(NSString*) messageID contact:(HOPContact*) coreContact
@@ -127,7 +140,7 @@
 
                 if ([[MessageManager sharedMessageManager] getTypeForSystemMessage:message] == SystemMessage_CheckAvailability)
                 {
-                    messageText  = [NSString stringWithFormat:@"%@  %@",[[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser] getFullName],@"Missed call"];
+                    messageText  = [NSString stringWithFormat:@"%@  %@",[[[HOPModelManager sharedModelManager] getLastLoggedInUser] getFullName],@"Missed call"];
                     missedCall = YES;
                     [[APNSManager sharedAPNSManager] sendPushNotificationForContact:coreContact message:messageText missedCall:missedCall];
                 }

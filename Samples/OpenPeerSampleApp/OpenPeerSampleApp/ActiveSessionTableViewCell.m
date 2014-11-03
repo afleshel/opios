@@ -31,13 +31,16 @@
 
 #import "ActiveSessionTableViewCell.h"
 #import "UIBadgeView.h"
-#import <OpenPeerSDK/HOPSessionRecord.h>
+#import <OpenPeerSDK/HOPConversationEvent.h>
 #import <OpenPeerSDK/HOPMessageRecord.h>
 #import <OpenPeerSDK/HOPPublicPeerFile.h>
 #import <OpenPeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPRolodexContact.h>
 #import <OpenPeerSDK/HOPAvatar.h>
-
+#import <OpenPeerSDK/HOPSystemMessage.h>
+#import <OpenPeerSDK/HOPCallSystemMessage.h>
+#import <OpenPeerSDK/HOPOpenPeerContact+External.h>
+#import <OpenPeerSDK/HOPParticipants.h>
 #import "ImageManager.h"
 #import "Session.h"
 #import "SessionManager.h"
@@ -53,7 +56,7 @@
 @property (nonatomic, weak) IBOutlet UILabel *labelLastMessage;
 @property (nonatomic, weak) IBOutlet UIView *messageView;
 
-@property (nonatomic, weak) HOPSessionRecord* sessionRecord;
+@property (nonatomic, weak) HOPConversationEvent* event;
 
 @end
 @implementation ActiveSessionTableViewCell
@@ -76,34 +79,57 @@
 
 - (void)setLastMessage
 {
-    HOPMessageRecord* messageRecord = [[HOPModelManager sharedModelManager] getLastMessageRecordForSessionID:self.sessionRecord.sessionID];
-    if (messageRecord)
-    {
-        self.labelLastMessage.hidden = NO;
-        self.labelLastMessage.text = messageRecord.text;
-    }
-    else
-        self.labelLastMessage.hidden = YES;
+    self.labelLastMessage.text = [[SessionManager sharedSessionManager] getLastTextMessageForConversationEvent:self.event];
+    
+    self.labelLastMessage.hidden = [self.labelLastMessage.text length] == 0;
 }
 
-- (void) setSession:(HOPSessionRecord *)inSessionRecord
+- (void) setConversationEvent:(HOPConversationEvent *)event
 {
-    self.sessionRecord = inSessionRecord;
-    self.displayName.text = self.sessionRecord.name;
+    if (self.displayImage)
+        [self.displayImage stopAnimating];
     
-    HOPPublicPeerFile* publicPeerFile = [[self.sessionRecord.participants allObjects] objectAtIndex:0];
+    self.event = event;
+    self.displayName.text = self.event.name;
     
-    HOPRolodexContact* participant = [[[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:publicPeerFile.peerURI] objectAtIndex:0];
+//    HOPOpenPeerContact* contact = [[self.sessionRecord.participants allObjects] objectAtIndex:0];
+//    
+//    HOPRolodexContact* participant = [[[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:contact.publicPeerFile.peerURI] objectAtIndex:0];
+//    
+//    UIImage* img = [[ImageManager sharedImageManager] getAvatarImageForRolodexContact:participant];
+//    if (img)
+//        self.displayImage.image = img;
     
-    UIImage* img = [[ImageManager sharedImageManager] getAvatarImageForRolodexContact:participant];
-    if (img)
-        self.displayImage.image = img;
-    
+    if (event.participants.participants.count > 1)
+    {
+        NSMutableArray* avatars = [[NSMutableArray alloc] init];
+        for (HOPOpenPeerContact* contact in event.participants.participants)
+        {
+            UIImage* img = [[ImageManager sharedImageManager] getAvatarImageForRolodexContact:[contact getDefaultRolodexContact]];
+            if (img)
+                [avatars addObject:img];
+        }
+        
+        UIImage* avatarsImage = [Utility createImageFromImages:avatars inFrame:self.displayImage.frame];
+        if (avatarsImage)
+            self.displayImage.image = avatarsImage;
+//        self.displayImage.animationImages = [NSArray arrayWithArray:avatars];
+//        self.displayImage.animationDuration = 1.5;
+//        [self.displayImage startAnimating];
+
+    }
+    else
+    {
+        HOPOpenPeerContact* contact = [[event.participants.participants allObjects] objectAtIndex:0];
+        UIImage* img = [[ImageManager sharedImageManager] getAvatarImageForRolodexContact:[contact getDefaultRolodexContact]];
+        if (img)
+            self.displayImage.image = img;
+    }
     self.displayImage.layer.cornerRadius = 5.0;
     self.displayImage.layer.borderWidth = 1.0;
     self.displayImage.layer.borderColor = [[UIColor whiteColor] CGColor];
     
-    Session* session = [[SessionManager sharedSessionManager] getSessionForSessionRecord:self.sessionRecord];
+    Session* session = [[SessionManager sharedSessionManager] getSessionForConversationEvent:self.event];
     if ([session.unreadMessageArray count] > 0)
     {
         NSString* numberToDisplay = [NSString stringWithFormat:@"%d",[session.unreadMessageArray count]];
@@ -115,7 +141,7 @@
         self.badgeView.hidden = YES;
     }
     
-    self.labelCreationDate.text = [Utility stringFromDate:inSessionRecord.lastActivity];
+    self.labelCreationDate.text = [Utility stringFromDate:self.event.time];
     [self setLastMessage];
     //[self drawInnerShadowOnView:self.messageView];
     //[self drawBackground];
@@ -168,7 +194,7 @@
 
 - (void) updateActivity
 {
-    self.labelCreationDate.text = [Utility stringFromDate:self.sessionRecord.lastActivity];
+    self.labelCreationDate.text = [Utility stringFromDate:self.event.time];
     [self setLastMessage];
 }
 @end

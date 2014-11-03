@@ -36,10 +36,12 @@
 #import <OpenpeerSDK/HOPModelManager.h>
 #import <OpenpeerSDK/HOPAvatar.h>
 #import <OpenpeerSDK/HOPImage.h>
-#import <OpenpeerSDK/HOPHomeUser+External.h>
-#import <OpenpeerSDK/HOPMessageRecord.h>
+#import <OpenpeerSDK/HOPOpenPeerAccount+External.h>
+#import <OpenpeerSDK/HOPMessageRecord+External.h>
 #import <OpenpeerSDK/HOPPublicPeerFile.h>
 #import <OpenpeerSDK/HOPIdentityContact.h>
+#import <OpenpeerSDK/HOPConversationThread.h>
+#import <OpenpeerSDK/HOPOpenPeerContact.h>
 #import "TTTAttributedLabel.h"
 #import "Utility.h"
 
@@ -55,7 +57,7 @@
 @property (nonatomic, strong) UIFont *chatNameFont;
 @property (nonatomic, strong) UIFont *chatTimestampFont;
 @property (nonatomic, strong) NSString *unicodeMessageText;
-@property (nonatomic, weak) HOPMessageRecord *message;
+@property (nonatomic, strong) UILabel *messageStatus;
 
 - (void) setUnicodeChars:(NSString *)str;
 
@@ -63,6 +65,7 @@
 
 @implementation ChatMessageCell
 
+@synthesize message;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -75,6 +78,7 @@
         self.chatNameFont =  [UIFont fontWithName:@"Helvetica-Bold" size:9.0];
         self.chatTimestampFont = [UIFont fontWithName:@"Helvetica" size:9.0];
         self.messageLabel = [[TTTAttributedLabel alloc] init];
+        self.messageStatus = [[UILabel alloc] init];
     }
     return self;
 }
@@ -229,15 +233,60 @@
     }
 }
 
-//- (void) setMessage:(Message*) message
-- (void)setMessage:(HOPMessageRecord *)message
+
+- (void)setMessageStatus
 {
-    _message = message;
+    //Show delivery
+    float labelHeight = 0;//[messageSenderName sizeWithAttributes:@{NSFontAttributeName:self.chatNameFont}];
+    float headerLabelXpos;
+    
+    if(self.message.showStatus.boolValue && message.outgoingMessageStatus >= HOPConversationThreadMessageDeliveryStateSent)
+    {
+        NSString* statusString = [HOPConversationThread stringForMessageDeliveryState:(HOPConversationThreadMessageDeliveryState)self.message.outgoingMessageStatus];
+        
+        if ((HOPConversationThreadMessageDeliveryState)self.message.outgoingMessageStatus == HOPConversationThreadMessageDeliveryStateUserNotAvailable)
+            statusString = @"Send failed, try again by tapping this message";
+        
+        labelHeight = [statusString sizeWithAttributes:@{NSFontAttributeName:self.chatNameFont}].height;
+        
+        CGSize statusLabelSize = [statusString sizeWithAttributes:@{NSFontAttributeName:self.chatNameFont}];
+        headerLabelXpos = self.frame.size.width  - 40.0 - statusLabelSize.width;
+        float y = self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 6*TOP_SPACE;
+        //labelStatus = [[UILabel alloc] initWithFrame:CGRectMake(headerLabelXpos, y, statusLabelSize.width + SPACE_BETWEEN_LABELS, labelHeight)];
+        self.messageStatus.frame = CGRectMake(headerLabelXpos, y, statusLabelSize.width + SPACE_BETWEEN_LABELS, labelHeight);
+        self.messageStatus.backgroundColor = [UIColor clearColor];
+        self.messageStatus.textColor = !self.message.deleted.boolValue ? [UIColor whiteColor] : [UIColor grayColor];
+
+        self.messageStatus.font = self.chatNameFont;
+        self.messageStatus.text = statusString;
+        
+        if (self.messageStatus)
+            [self.contentView addSubview:self.messageStatus];
+    }
+    else
+        [self.messageStatus removeFromSuperview];
+}
+
+- (void)setAvatar
+{
+    UIImage *avat;
+    // show avatar
+    if(!self.message.sender)
+    {
+        HOPRolodexContact* contact = ((HOPIdentityContact*)[self.message.sender.identityContacts anyObject]).rolodexContact;
+        HOPAvatar* avatar = [contact getAvatarForWidth:@(40.0) height:@(40.0)];
+        //HOPAvatar* avatar = [self.message.contact getAvatarForWidth:@(40.0) height:@(40.0)];
+        if (avatar && avatar.avatarImage && avatar.avatarImage.image)
+            avat = [UIImage imageWithData: avatar.avatarImage.image];
+    }
+    
+    if (!avat)
+        avat = [UIImage imageNamed:@"avatar.png"];
 }
 
 -(void)layoutSubviews
 {
-    BOOL isHomeUserSender = !self.message.fromPeer;
+    BOOL isHomeUserSender = self.message.sender == [[HOPModelManager sharedModelManager] getOpenPeerContactForAccount];//!self.message.sender;
     
     [self.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     self.contentView.frame = self.bounds;
@@ -246,40 +295,66 @@
     {
         if ([self.message.text length] > 0)
         {
-            CGSize messageSize;
+            
             CGSize participantNameSize;
             CGSize dateSize;
             
             float labelHeight;
             float headerLabelXpos = TRAILING_SPACE;
-            float bubbleXpos = TRAILING_SPACE;//45.0;
-            float avatarXpos = TRAILING_SPACE;
+            //45.0;
+                                              //float avatarXpos = TRAILING_SPACE;
             
             NSString *messageSenderName;
             
             
             [self setUnicodeChars:self.message.text];
             
-            messageSize = [ChatMessageCell calcMessageHeight:_unicodeMessageText forScreenWidth:(self.frame.size.width - (2*AVATAR_WIDTH + LEADING_SPACE + TRAILING_SPACE))];
-            
+
             //if message is received
             if (!isHomeUserSender)
             {
-                HOPRolodexContact* contact = ((HOPIdentityContact*)[self.message.fromPeer.identityContacts anyObject]).rolodexContact;
+                HOPRolodexContact* contact = ((HOPIdentityContact*)[self.message.sender.identityContacts anyObject]).rolodexContact;
                 messageSenderName = [contact name];
 //                messageSenderName = [self.message.contact name];
             }
             else
             {
-                messageSenderName = [[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser] getFullName];
+                messageSenderName = [[[HOPModelManager sharedModelManager] getLastLoggedInUser] getFullName];
             }
+            
+            UIColor* textColor;
+            
+            if (!self.message.deleted.boolValue)
+                textColor = [UIColor whiteColor];
+            else
+                textColor = [UIColor grayColor];
+            
+            
+            UIImage* image = nil;
+            UIImageView* imageView = nil;
+            CGRect rectEditedIcon;
+            
+            if (message.edited.boolValue)
+            {
+                image = [UIImage imageNamed:@"chat_edited_message_icon.png"];
+                imageView = [[UIImageView alloc] initWithImage:image];
+                rectEditedIcon = imageView.frame;
+                rectEditedIcon.origin.y = 0;//TOP_SPACE;
+                
+                if(!isHomeUserSender)
+                {
+                    rectEditedIcon.origin.x = headerLabelXpos;
+                    headerLabelXpos += imageView.frame.size.width + SPACE_BETWEEN_LABELS;
+                }
+            }
+            
             
             //Label participant
             participantNameSize = [messageSenderName sizeWithAttributes:@{NSFontAttributeName:self.chatNameFont}];//[messageSenderName sizeWithFont:self.chatNameFont];
             labelHeight = participantNameSize.height + TOP_SPACE;
             UILabel *labelParticipant = [[UILabel alloc] initWithFrame:CGRectMake(headerLabelXpos, TOP_SPACE, participantNameSize.width + SPACE_BETWEEN_LABELS, labelHeight)];
             labelParticipant.backgroundColor = [UIColor clearColor];
-            labelParticipant.textColor = [UIColor whiteColor];
+            labelParticipant.textColor = textColor;
             labelParticipant.font = self.chatNameFont;
             labelParticipant.text = messageSenderName;
             
@@ -299,29 +374,46 @@
             NSString* formatedDate = [Utility formatedMessageTimeStampForDate:self.message.date];
             dateSize = [formatedDate sizeWithAttributes:@{NSFontAttributeName:self.chatNameFont}];//[formatedDate sizeWithFont:self.chatTimestampFont];
             UILabel *lblChatMessageTimestamp = [[UILabel alloc] initWithFrame:CGRectMake(headerLabelXpos, TOP_SPACE, dateSize.width + TRAILING_SPACE, labelHeight)];
-            lblChatMessageTimestamp.textColor = [UIColor whiteColor];
+            
+            lblChatMessageTimestamp.textColor = textColor;
+            
             lblChatMessageTimestamp.backgroundColor = [UIColor clearColor];
             lblChatMessageTimestamp.font = self.chatTimestampFont;
             lblChatMessageTimestamp.text = formatedDate;
             
-            NSInteger streachCapWidth = 0;
-            NSString* imgName = nil;
-            UIImage *avat;
             
-            static BOOL b = YES;
-            b = !b;
+            CGSize messageSize;
+            if (!self.message.deleted.boolValue)
+                messageSize = [ChatCell calcMessageHeight:_unicodeMessageText forScreenWidth:(self.frame.size.width - (2*AVATAR_WIDTH + LEADING_SPACE + TRAILING_SPACE))];
+            else
+                messageSize = [ChatCell calcMessageHeight:stringDeletedeMessageText forScreenWidth:(self.frame.size.width - (2*AVATAR_WIDTH + LEADING_SPACE + TRAILING_SPACE))];
+            
+            NSString* imgName = nil;
+            NSInteger streachCapWidth = 0;
+            float bubbleXpos = TRAILING_SPACE;
+            
             if(isHomeUserSender)
             {
                 streachCapWidth = 13;//15;
                 // my messages, show them from the right side
                 imgName = @"chat_bubble_right.png";
                 
-                avatarXpos = self.frame.size.width - (AVATAR_WIDTH + TRAILING_SPACE);
+                //avatarXpos = self.frame.size.width - (AVATAR_WIDTH + TRAILING_SPACE);
                 bubbleXpos = self.frame.size.width - (messageSize.width + 2*AVATAR_WIDTH + LEADING_SPACE + TRAILING_SPACE);
                 
-                // set header labels position
-                headerLabelXpos = self.frame.size.width  - lblChatMessageTimestamp.frame.size.width;
-                
+                if (message.edited.boolValue)
+                {
+                    // set header labels position
+                    headerLabelXpos = self.frame.size.width  - rectEditedIcon.size.width - TRAILING_SPACE;//lblChatMessageTimestamp.frame.size.width;
+                    
+                    rectEditedIcon.origin.x = headerLabelXpos;//headerLabelXpos + LEADING_SPACE;
+                    
+                    headerLabelXpos = headerLabelXpos - (lblChatMessageTimestamp.frame.size.width + rectEditedIcon.size.width) + 2*LEADING_SPACE;
+                }
+                else
+                {
+                    headerLabelXpos = self.frame.size.width  - lblChatMessageTimestamp.frame.size.width;
+                }
                 CGRect f = lblChatMessageTimestamp.frame;
                 f.origin.x = headerLabelXpos;
                 lblChatMessageTimestamp.frame = f;
@@ -338,9 +430,9 @@
                 f.origin.x = headerLabelXpos;
                 labelParticipant.frame = f;
                 
-                f = _messageLabel.frame;
+                f = self.messageLabel.frame;
                 f.origin.x = headerLabelXpos;
-                _messageLabel.frame = f;
+                self.messageLabel.frame = f;
             }
             else
             {
@@ -348,37 +440,32 @@
                 imgName = @"chat_bubble_left.png";
             }
             
+            imageView.frame = rectEditedIcon;
+            
             //Label message
 //            [_messageLabel setFrame:CGRectMake(bubbleXpos + 15.0, 20.0, messageSize.width + 5.0, messageSize.height)];
-            [_messageLabel setFrame:CGRectMake(bubbleXpos + 15.0, 25.0, messageSize.width + 10.0, messageSize.height)];
-            _messageLabel.dataDetectorTypes = NSTextCheckingTypeLink;
-            _messageLabel.backgroundColor = [UIColor clearColor];
-            _messageLabel.font = [UIFont systemFontOfSize:14.0];
-            _messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
-            _messageLabel.text = _unicodeMessageText;
-            _messageLabel.numberOfLines = 0;
-            [_messageLabel sizeToFit];
+            [self.messageLabel setFrame:CGRectMake(bubbleXpos + 15.0, 25.0, messageSize.width + 10.0, messageSize.height)];
+            self.messageLabel.dataDetectorTypes = NSTextCheckingTypeLink;
+            self.messageLabel.backgroundColor = [UIColor clearColor];
+            self.messageLabel.font = [UIFont systemFontOfSize:14.0];
+            self.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
             
-            // show avatar
-            if(!isHomeUserSender)
+            if (!self.message.deleted.boolValue)
             {
-                HOPRolodexContact* contact = ((HOPIdentityContact*)[self.message.fromPeer.identityContacts anyObject]).rolodexContact;
-                HOPAvatar* avatar = [contact getAvatarForWidth:@(40.0) height:@(40.0)];
-                //HOPAvatar* avatar = [self.message.contact getAvatarForWidth:@(40.0) height:@(40.0)];
-                if (avatar && avatar.avatarImage && avatar.avatarImage.image)
-                    avat = [UIImage imageWithData: avatar.avatarImage.image];
+                self.messageLabel.text = _unicodeMessageText;
+                self.messageLabel.textColor = [UIColor blackColor];
             }
-    
-            if (!avat)
-                avat = [UIImage imageNamed:@"avatar.png"];
+            else
+            {
+                self.messageLabel.text = stringDeletedeMessageText;
+                self.messageLabel.textColor = textColor;
+            }
             
-//            UIImageView *ivAvat = [[UIImageView alloc] initWithFrame:CGRectMake(avatarXpos, 18, AVATAR_WIDTH, AVATAR_HEIGHT)];
-//            ivAvat.clipsToBounds = YES;
-//            ivAvat.layer.cornerRadius = 5.0;
-//            [ivAvat setImage:avat];
-            // set bubble image
-//            float baloonViewH = messageSize.height + 8 < 28.0 ? 28.0 : messageSize.height + 8;
+            self.messageLabel.numberOfLines = 0;
+            [self.messageLabel sizeToFit];
+            
             float baloonViewH = messageSize.height + 34 < 52.0 ? 52.0 : messageSize.height + 34;
+            
             
             UIImage *msgBaloonImg = [[UIImage imageNamed:imgName] stretchableImageWithLeftCapWidth:streachCapWidth topCapHeight:14];
             //UIImage *msgBaloonImg = [[UIImage imageNamed:imgName] resizableImageWithCapInsets:UIEdgeInsetsMake(23, 23, 50, 4)];
@@ -386,28 +473,48 @@
             
             UIView *cellView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
             
-            
             [msgBaloonView setImage:msgBaloonImg];
-            [cellView addSubview:msgBaloonView];
+            if (!self.message.deleted.boolValue)
+                [cellView addSubview:msgBaloonView];
+            
+//            [self setAvatar];
             
             self.backgroundView = cellView;
             //[self.contentView addSubview:ivAvat];
-            [self.contentView addSubview:_messageLabel];
+            [self.contentView addSubview:self.messageLabel];
             
+            [self.contentView addSubview:imageView];
             [self.contentView addSubview:labelParticipant];
             [self.contentView addSubview:labelSeparator];
             [self.contentView addSubview:lblChatMessageTimestamp];
+            
+            if (isHomeUserSender)
+            [self setMessageStatus];
+            
+//            if (self.messageStatus)
+//                [self.contentView addSubview:self.messageStatus];
             
         }
     }
 }
 
-+ (CGSize) calcMessageHeight:(NSString *)message forScreenWidth:(float)width
+- (void) setMessage:(HOPMessageRecord*) inMessage
 {
-    CGSize maxSize = {width, 200000.0};
-    //CGSize calcSize = [message sizeWithFont:[UIFont systemFontOfSize:14.0] constrainedToSize:maxSize];
-    CGSize calcSize = [message boundingRectWithSize: maxSize options: NSStringDrawingUsesLineFragmentOrigin attributes: @{ NSFontAttributeName: [UIFont systemFontOfSize:14.0] } context: nil].size;
-    return calcSize;
+    message = inMessage;
+    
+    if (!self.message.deleted.boolValue)
+    {
+        //self.messageLabel.text = _unicodeMessageText;
+        self.messageLabel.textColor = [UIColor blackColor];
+    }
+    else
+    {
+        //self.messageLabel.text = stringDeletedeMessageText;
+        self.messageLabel.textColor = [UIColor grayColor];
+    }
+    
+    if (self.message.sender == [[HOPModelManager sharedModelManager] getOpenPeerContactForAccount])
+        [self setMessageStatus];
 }
 
 @end

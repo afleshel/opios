@@ -58,6 +58,8 @@ extern NSString * const settingsKeyQRScannerShownAtStart;
 extern NSString * const settingsKeySplashScreenAllowsQRScannerGesture;
 extern NSString * const settingsKeySettingsVersion;
 extern NSString * const settingsKeyBackgroundingPhaseRichPush;
+extern NSString * const settingsKeyDefaultLogLevel;
+extern NSString * const settingsKeyRedirectAfterLoginCompleteURL;
 
 extern NSString * const archiveEnabled;
 extern NSString * const archiveServer;
@@ -124,6 +126,7 @@ extern NSString * const systemMessageRequest;
 extern NSString * const notificationRemoteSessionModeChanged;
 extern NSString * const notifictionAppReturnedFromBackground;
 extern NSString * const notificationCrashReportSent;
+extern NSString * const notificationComposingStatusChanged;
 
 extern NSString * const notificationTypeApple;
 extern NSString * const notificationTypeAndroid;
@@ -155,3 +158,5 @@ extern NSString * const moduleServicesTransport;
 extern NSString * const moduleZsLib;
 extern NSString * const moduleZsLibSocket;
 extern NSString * const moduleJavaScript;
+
+extern NSString * const stringDeletedeMessageText;

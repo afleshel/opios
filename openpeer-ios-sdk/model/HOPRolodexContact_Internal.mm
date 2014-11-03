@@ -54,21 +54,25 @@
 
 - (void) updateWithCoreRolodexContact:(RolodexContact) inRolodexContact identityProviderDomain:(NSString*)identityProviderDomain homeUserIdentityURI:(NSString*)homeUserIdentityURI
 {
-    NSString* baseIdentityURI = [HOPUtility getBaseIdentityURIFromURI:homeUserIdentityURI];//[NSString stringWithCString:inRolodexContact.mIdentityProvider encoding:NSUTF8StringEncoding];
+    NSString* baseIdentityURI = [HOPUtility getBaseIdentityURIFromURI:homeUserIdentityURI];
     HOPAssociatedIdentity* associated = [[HOPModelManager sharedModelManager] getAssociatedIdentityByDomain:identityProviderDomain identityName:baseIdentityURI homeUserIdentityURI:homeUserIdentityURI];
     if (!associated)
     {
-        associated = [NSEntityDescription insertNewObjectForEntityForName:@"HOPAssociatedIdentity" inManagedObjectContext:[[HOPModelManager sharedModelManager]managedObjectContext]];
+//        associated = [NSEntityDescription insertNewObjectForEntityForName:@"HOPAssociatedIdentity" inManagedObjectContext:[[HOPModelManager sharedModelManager]managedObjectContext]];
+//        
+//        associated.baseIdentityURI = baseIdentityURI;
+//        associated.name = baseIdentityURI;
+//        associated.domain = identityProviderDomain;
+//        associated.homeUserProfile = self; //This is set here because this method is called for the first time when is creating home user rolodex contact
         
-        associated.baseIdentityURI = baseIdentityURI;
-        associated.name = baseIdentityURI;
-        associated.domain = identityProviderDomain;
-        associated.homeUserProfile = self; //This is set here because this method is called for the first time when is creating home user rolodex contact
+        associated = [[HOPModelManager sharedModelManager] addAssociatedIdentityForBaseIdentityURI:baseIdentityURI domain:identityProviderDomain name:baseIdentityURI account:nil selfRolodexProfileProfile:self];
     }
     
     self.associatedIdentity = associated;
     self.identityURI = [NSString stringWithCString:inRolodexContact.mIdentityURI encoding:NSUTF8StringEncoding];
-    self.name = [NSString stringWithCString:inRolodexContact.mName encoding:NSUTF8StringEncoding];
+    NSString* tempName = [NSString stringWithCString:inRolodexContact.mName encoding:NSUTF8StringEncoding];
+    if (tempName.length > 0)
+        self.name = [NSString stringWithCString:inRolodexContact.mName encoding:NSUTF8StringEncoding];
     self.profileURL = [NSString stringWithCString:inRolodexContact.mProfileURL encoding:NSUTF8StringEncoding];
     self.vProfileURL = [NSString stringWithCString:inRolodexContact.mVProfileURL encoding:NSUTF8StringEncoding];
     

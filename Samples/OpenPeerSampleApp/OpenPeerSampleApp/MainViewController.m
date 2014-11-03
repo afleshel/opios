@@ -170,7 +170,8 @@
         contactsNavigationController.navigationBar.translucent = NO;
         
         //Favorites tab
-        self.favoritesTableViewController = [[ContactsViewController alloc] initInFavoritesMode:YES];
+//        self.favoritesTableViewController = [[ContactsViewController alloc] initInFavoritesMode:YES allowMultipleSelection:NO];
+        self.favoritesTableViewController = [[ContactsViewController alloc] initInMode:CONTACTS_TABLE_MODE_FAVORITES allowMultipleSelection:NO filterContacts:nil];
         self.favoritesTableViewController.title = @"Favorites";
         self.tabBarItem.title = @"FAVORITES";
         
@@ -282,7 +283,7 @@
     
     SessionTransitionStates transition = [self determineViewControllerTransitionStateForSession:sessionId forIncomingCall:incomingCall forIncomingMessage:incomingMessage];
     
-    NSString* title = [[[session participantsArray] objectAtIndex:0] name];
+    NSString* title = session.title;
     
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Transition %d for session with id:%@ and for participant:%@",transition,[session.conversationThread getThreadId],title);
     UINavigationController* navigationController = nil;

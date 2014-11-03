@@ -30,18 +30,9 @@
  */
 
 #import <UIKit/UIKit.h>
+#import "ChatCell.h"
 
+@interface ChatMessageCell : ChatCell
 
-//@class Message;
-@class HOPMessageRecord;
-@class TTTAttributedLabel;
-
-@interface ChatMessageCell : UITableViewCell
-
-@property (nonatomic, strong) TTTAttributedLabel *messageLabel;
-
-//- (void) setMessage:(Message*) message;
-- (void) setMessage:(HOPMessageRecord*) message;
-+ (CGSize) calcMessageHeight:(NSString *)message forScreenWidth:(float)width;
 
 @end

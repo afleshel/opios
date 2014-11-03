@@ -37,7 +37,9 @@
 @class HOPMessage;
 @class HOPContact;
 @class HOPRolodexContact;
-@class HOPSessionRecord;
+@class HOPConversationRecord;
+@class HOPMessageRecord;
+@class HOPConversationEvent;
 
 @interface SessionManager : NSObject
 
@@ -47,14 +49,14 @@
 
 + (id) sharedSessionManager;
 
-- (Session*) createSessionForContact:(HOPRolodexContact*) contact;
+- (Session*) createSessionForContacts:(NSArray*) contacts;
 - (Session*) createSessionForConversationThread:(HOPConversationThread*) inConversationThread;
-- (Session*) createSessionInitiatedFromSession:(Session*) inSession forContactPeerURIs:(NSString*) peerURIs;
-- (Session*) createRemoteSessionForContacts:(NSArray*) participants;
-- (Session*) proceedWithExistingSessionForContact:(HOPContact*) contact newConversationThread:(HOPConversationThread*) inConversationThread;
-- (Session*) getSessionForContact:(HOPRolodexContact*) contact;
+//- (Session*) createSessionInitiatedFromSession:(Session*) inSession forContactPeerURIs:(NSString*) peerURIs;
+//- (Session*) createRemoteSessionForContacts:(NSArray*) participants;
+- (Session*) proceedWithExistingSessionForContacts:(NSArray*) contacts newConversationThread:(HOPConversationThread*) inConversationThread;
+- (Session*) getSessionForContacts:(NSArray*) contacts;
 - (Session*) getSessionForSessionId:(NSString*) sessionId;
-- (Session*) getSessionForSessionRecord:(HOPSessionRecord*) sessionRecord;
+- (Session*) getSessionForConversationEvent:(HOPConversationEvent*) event;
 
 - (void)setValidSession:(Session *)inSession newSessionId:(NSString *)newSessionId oldSessionId:(NSString *)oldSessionId;
 
@@ -85,4 +87,11 @@
 - (void) setLatestValidConversationThread:(HOPConversationThread*) inConversationThread;
 
 - (int) totalNumberOfUnreadMessages;
+- (NSString* )getSystemMessage:(HOPMessageRecord *)messageRecord;
+- (NSString*) getLastTextMessageForConversationEvent:(HOPConversationEvent*) event;
+
+- (void) addParticipants:(NSArray*) participants toSession:(Session*) session;
+- (void) removeParticipants:(NSArray*) participants toSession:(Session*) session;
+
+- (void) updateParticipantsInConversationThread:(HOPConversationThread*) conversationThread;
 @end

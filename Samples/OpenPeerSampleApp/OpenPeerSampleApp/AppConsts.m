@@ -53,8 +53,8 @@ NSString * const userAgentVariableVersionOS = @"versionOs";
 NSString * const userAgentVariableDeviceModel = @"deviceModel";
 NSString * const userAgentVariableDeveloperID = @"developerID";
 
-NSString * const settingsKeyAppId = @"applicationId";
-NSString * const settingsKeyAppIdSharedSecret = @"applicationIdSharedSecret";
+NSString * const settingsKeyAppId = @"applicationID";
+NSString * const settingsKeyAppIdSharedSecret = @"applicationSharedSecret";
 NSString * const settingsKeyAppName = @"applicationName";
 NSString * const settingsKeyAppImageURL = @"applicationImageURL";
 NSString * const settingsKeyAppURL = @"applicationURL";
@@ -62,7 +62,7 @@ NSString * const settingsKeyAPNS = @"APNS-UrbanAirShip";
 NSString * const settingsKeyTelnetLogger = @"localTelnetLoggerPort";
 NSString * const settingsKeyOutgoingTelnetLogger = @"defaultOutgoingTelnetServer";
 NSString * const settingsKeyStdOutLogger = @"archiveStdOutLogger";
-NSString * const settingsKeyEnabledLogger = @"archiveEnableLogger";
+NSString * const settingsKeyEnabledLogger = @"isLoggerEnabled";
 NSString * const settingsKeyRemoveSettingsAppliedByQRCode = @"applicationRemoveSettingsAppliedByQRCode";
 NSString * const settingsKeyOuterFrameURL = @"outerFrameURL";
 NSString * const settingsKeyGrantServiceURL = @"namespaceGrantServiceURL";
@@ -76,6 +76,8 @@ NSString * const settingsKeyQRScannerShownAtStart = @"applicationQRScannerShownA
 NSString * const settingsKeySplashScreenAllowsQRScannerGesture = @"applicationSplashScreenAllowsQRScannerGesture";
 NSString * const settingsKeySettingsVersion = @"applicationSettingsVersion";
 NSString * const settingsKeyBackgroundingPhaseRichPush = @"applicationSettingsBackgroundingPhaseRichPush";
+NSString * const settingsKeyDefaultLogLevel = @"logLevelForServicesHttp";
+NSString * const settingsKeyRedirectAfterLoginCompleteURL = @"redirectAfterLoginCompleteURL";
 
 NSString * const archiveEnabled = @"enabled";
 NSString * const archiveServer = @"Server";
@@ -123,13 +125,14 @@ NSString * const systemMessageRequest = @"?";
 NSString * const notifictionAppReturnedFromBackground = @"notifictionAppReturnedFromBackground";
 NSString * const notificationRemoteSessionModeChanged = @"notificationRemoteSessionModeChanged";
 NSString * const notificationCrashReportSent = @"notificationCrashReportSent";
+NSString * const notificationComposingStatusChanged = @"notificationComposingStatusChanged";
 
 NSString * const notificationTypeApple = @"apns";
 NSString * const notificationTypeAndroid = @"apid";
 
 NSString * const defaultTelnetPort = @"59999";
 
-
+NSString * const stringDeletedeMessageText = @"This message has been removed.";
 
 NSString * const archiveRemoteSessionActivationMode = @"archiveRemoteSessionActivationMode";
 NSString * const archiveFaceDetectionMode = @"archiveFaceDetectionMode";

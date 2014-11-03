@@ -3,15 +3,15 @@
 <plist version="1.0">
 <dict>
 	<key>outerFrameURL</key>
-	<string>http://jsouter-v1-rel-lespaul-i.hcs.io/identity.html?view=choose&amp;amp;federated=false</string>
+	<string>http://identity.opp.me:5005/outer-new.html</string>
 	<key>identityProviderDomain</key>
-	<string>identity-v1-rel-lespaul-i.hcs.io</string>
+	<string>com-hookflash-sergejfb.app.opp.me</string>
 	<key>identityFederateBaseURI</key>
-	<string>identity://identity-v1-rel-lespaul-i.hcs.io/</string>
+	<string>identity://facebook.com/</string>
 	<key>namespaceGrantServiceURL</key>
-	<string>http://jsouter-v1-rel-lespaul-i.hcs.io/grant.html</string>
+	<string>http://jsouter-v1-rel-lespaulinst2-i.hcs.io/grant.html</string>
 	<key>lockBoxServiceDomain</key>
-	<string>lockbox-v1-rel-lespaul-i.hcs.io</string>
+	<string>opp.me</string>
 	<key>defaultOutgoingTelnetServer</key>
 	<string>log.opp.me:8115</string>
 	<key>localTelnetLoggerPort</key>
@@ -29,6 +29,10 @@
 	<key>openpeer/core/authorized-application-id-split-char</key>
 	<string>-</string>
 	<key>openpeer/core/auto-find-peers-added-to-conversation-in-seconds</key>
+	<integer>600</integer>
+	<key>openpeer/core/move-message-to-cache-time-in-seconds</key>
+	<integer>120</integer>
+	<key>openpeer/core/conversation-thread-host-inactive-close-time-in-seconds</key>
 	<integer>600</integer>
 	<key>openpeer/stack/stack-thread-priority</key>
 	<string>normal</string>

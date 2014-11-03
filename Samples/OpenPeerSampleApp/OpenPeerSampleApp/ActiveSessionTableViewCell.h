@@ -31,11 +31,11 @@
 
 #import <UIKit/UIKit.h>
 
-@class HOPSessionRecord;
+@class HOPConversationEvent;
 
 @interface ActiveSessionTableViewCell : UITableViewCell
 
-- (void) setSession:(HOPSessionRecord *)inSessionRecord;
+- (void) setConversationEvent:(HOPConversationEvent *)event;
 - (void) updateActivity;
 - (void) setBackground;
 

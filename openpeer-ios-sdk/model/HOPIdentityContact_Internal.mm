@@ -32,6 +32,7 @@
 #import "HOPModelManager.h"
 #import "HOPPublicPeerFile.h"
 #import "HOPRolodexContact.h"
+#import "HOPOpenPeerContact.h"
 #import "HOPIdentityContact_Internal.h"
 #import "OpenPeerUtility.h"
 #import <openpeer/core/IHelper.h>
@@ -42,16 +43,15 @@
 @dynamic identityProofBundle;
 @dynamic lastUpdated;
 @dynamic priority;
-@dynamic stableID;
 @dynamic weight;
-@dynamic peerFile;
+@dynamic openPeerContact;
 @dynamic rolodexContact;
 
 - (void) updateWithIdentityContact:(IdentityContact) inIdentityContact
 {
     NSString* sId = [NSString stringWithUTF8String:inIdentityContact.mStableID];
     
-    self.stableID = sId;
+    //self.stableID = sId;
     self.expires = [OpenPeerUtility convertPosixTimeToDate:inIdentityContact.mExpires];
     self.lastUpdated = [OpenPeerUtility convertPosixTimeToDate:inIdentityContact.mLastUpdated];
     self.identityProofBundle = [NSString stringWithCString:core::IHelper::convertToString(inIdentityContact.mIdentityProofBundleEl) encoding:NSUTF8StringEncoding];
@@ -64,14 +64,53 @@
     {
         hopRolodexContact = (HOPRolodexContact*)[[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPRolodexContact"];
         hopRolodexContact.identityURI = [NSString stringWithCString:inIdentityContact.mIdentityURI encoding:NSUTF8StringEncoding];
-        hopRolodexContact.name = [NSString stringWithCString:inIdentityContact.mName encoding:NSUTF8StringEncoding];//[OpenPeerUtility getContactIdFromURI:hopRolodexContact.identityURI];//[
+        NSString* name = [NSString stringWithCString:inIdentityContact.mName encoding:NSUTF8StringEncoding];
+        if (name.length > 0)
+        hopRolodexContact.name = name;//[NSString stringWithCString:inIdentityContact.mName encoding:NSUTF8StringEncoding];//[OpenPeerUtility getContactIdFromURI:hopRolodexContact.identityURI];//[
     }
     
     self.rolodexContact = hopRolodexContact;
     
+    HOPOpenPeerContact* openPeerContact = [[HOPModelManager sharedModelManager] getOpenPeerContactForStableID:sId];
+    
     NSString* peerURI = [NSString stringWithCString: IHelper::getPeerURI(inIdentityContact.mPeerFilePublic) encoding:NSUTF8StringEncoding];
     
-    HOPPublicPeerFile* publicPeerFile = [[HOPModelManager sharedModelManager] getPublicPeerFileForPeerURI:peerURI];
+    if (!openPeerContact && [peerURI length] > 0)
+    {
+        openPeerContact = [[HOPModelManager sharedModelManager] getOpenPeerContactForPeerURI:peerURI];
+        if (openPeerContact)
+            openPeerContact.stableID = sId;
+    }
+    
+    if (!openPeerContact && [hopRolodexContact.identityURI length] > 0)
+    {
+        openPeerContact = [[HOPModelManager sharedModelManager] getOpenPeerContactForIdentityURI:hopRolodexContact.identityURI];
+        if (openPeerContact)
+        {
+            openPeerContact.stableID = sId;
+            [openPeerContact addIdentityContactsObject:self];
+            
+            HOPPublicPeerFile* publicPeerFile = [[HOPModelManager sharedModelManager] getPublicPeerFileForPeerURI:peerURI];
+            
+            if (!publicPeerFile)
+            {
+                NSManagedObject* managedObject = [[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPPublicPeerFile"];
+                if (managedObject && [managedObject isKindOfClass:[HOPPublicPeerFile class]])
+                {
+                    publicPeerFile = (HOPPublicPeerFile*) managedObject;
+                    
+                }
+            }
+            
+            if (publicPeerFile)
+            {
+                publicPeerFile.peerFile = [NSString stringWithCString: IHelper::convertToString(IHelper::convertToElement(inIdentityContact.mPeerFilePublic)) encoding:NSUTF8StringEncoding];
+                publicPeerFile.peerURI = peerURI;
+                openPeerContact.publicPeerFile = publicPeerFile;
+            }
+        }
+    }
+    /*HOPPublicPeerFile* publicPeerFile = [[HOPModelManager sharedModelManager] getPublicPeerFileForPeerURI:peerURI];
     
     if (!publicPeerFile)
     {
@@ -85,7 +124,7 @@
     }
     publicPeerFile.peerFile = [NSString stringWithCString: IHelper::convertToString(IHelper::convertToElement(inIdentityContact.mPeerFilePublic)) encoding:NSUTF8StringEncoding];
     publicPeerFile.peerURI = peerURI;
-    self.peerFile = publicPeerFile;
+    self.peerFile = publicPeerFile;*/
 }
 
 @end

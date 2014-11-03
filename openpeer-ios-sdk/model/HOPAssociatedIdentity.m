@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -30,18 +30,17 @@
  */
 
 #import "HOPAssociatedIdentity.h"
-#import "HOPHomeUser.h"
+#import "HOPIdentityProvider.h"
+#import "HOPOpenPeerAccount.h"
 #import "HOPRolodexContact.h"
 
 
 @implementation HOPAssociatedIdentity
 
-@dynamic baseIdentityURI;
-@dynamic domain;
 @dynamic downloadedVersion;
-@dynamic name;
-@dynamic homeUser;
-@dynamic homeUserProfile;
+@dynamic account;
+@dynamic selfRolodexContact;
 @dynamic rolodexContacts;
+@dynamic identityProvider;
 
 @end

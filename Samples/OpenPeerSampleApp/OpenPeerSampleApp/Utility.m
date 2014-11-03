@@ -339,6 +339,9 @@ static const short _base64DecodingTable[256] = {
         case HOPConversationThreadMessageDeliveryStateDelivered:
             res = NSLocalizedString(@"delivered", @"");
             break;
+      case HOPConversationThreadMessageDeliveryStateRead:
+            res = NSLocalizedString(@"read", @"");
+            break;
     }
     return res;
 }
@@ -439,8 +442,8 @@ static const short _base64DecodingTable[256] = {
 
 + (BOOL) isValidURL: (NSString *) candidate
 {
-    NSString *urlRegEx =
-    @"(http|https)://((\\w)*|([0-9]*)|([-|_])*)+([\\.|/]((\\w)*|([0-9]*)|([-|_])*))+";
+    NSString *urlRegEx =@"^(http://www.|https://www.|http://|https://)[a-z0-9]+([-.]{1}[a-z0-9]+)*.[a-z]{2,5}(:[0-9]{1,5})?(/.*)?$";
+    //@"(http|https)://((\\w)*|([0-9]*)|([-|_])*)+([\\.|/]((\\w)*|([0-9]*)|([-|_])*))+";
     NSPredicate *urlTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", urlRegEx];
     return [urlTest evaluateWithObject:candidate];
 }
@@ -520,6 +523,83 @@ static const short _base64DecodingTable[256] = {
         [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:NO] forKey:@"isRuningForTheFirstTime"];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
+    return ret;
+}
+
++ (NSString *)getLocalDateFromUTCdate:(NSDate *)utcDate
+{
+//    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+//    df.dateFormat = @"MM/dd/yyyy hh:mm aa";
+//    [df setTimeZone:[NSTimeZone systemTimeZone]];
+//    
+//    return [df stringFromDate:utcDate];
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+    [dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
+    [dateFormatter setLocale:[NSLocale currentLocale]];
+    [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+    NSString *dateString = [dateFormatter stringFromDate:utcDate];
+    
+    return dateString;
+}
+
++ (NSString*) stringForEndingCallReason:(int) endingCallReason
+{
+    NSString* ret = nil;
+    
+    switch (endingCallReason)
+    {
+        case 0:
+            ret = @"Call ended";
+            break;
+        case 404:
+            ret = @"Call ended - no answer";
+            break;
+        case 408:
+            ret = @"Call ended - network issue";
+            break;
+        default:
+            ret = @"Call ended";
+            break;
+    }
+    
+    return ret;
+}
++ (UIImage*) createImageFromImages:(NSArray*) images inFrame:(CGRect) frame
+{
+    UIImage* ret = nil;
+    
+    int root = sqrt(images.count) <= 2.0 ? 2 :  sqrt(images.count) + 1;
+    
+    float width = frame.size.width/(float)root;
+    float height = frame.size.height/(float)root;
+    
+    UIGraphicsBeginImageContextWithOptions(frame.size, NO, 0.0);
+    
+    int rowCounter = 0;
+    int columnCounter = 0;
+    float x = 0;
+    float y = 0;
+    for (UIImage* image in images)
+    {
+        if (columnCounter >= root)
+        {
+            columnCounter = 0;
+            rowCounter++;
+            x = 0;
+            y += height;
+        }
+        
+        [image drawInRect:CGRectMake(x, y, width, height)];
+        
+        x += width;
+        columnCounter++;
+    }
+    
+    ret = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
     return ret;
 }
 @end

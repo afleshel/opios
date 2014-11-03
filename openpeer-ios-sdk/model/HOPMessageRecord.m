@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2014, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -30,19 +30,29 @@
  */
 
 #import "HOPMessageRecord.h"
-#import "HOPPublicPeerFile.h"
-#import "HOPSessionRecord.h"
+#import "HOPConversationEvent.h"
+#import "HOPConversationRecord.h"
+#import "HOPMessageEvent.h"
+#import "HOPOpenPeerContact.h"
 
 
 @implementation HOPMessageRecord
 
 @dynamic date;
-@dynamic delivered;
+@dynamic deleted;
+@dynamic edited;
 @dynamic image;
+@dynamic incomingMessageStatus;
+@dynamic messageID;
+@dynamic outMessageStatus;
+@dynamic read;
+@dynamic showStatus;
 @dynamic text;
 @dynamic type;
-@dynamic messageID;
-@dynamic fromPeer;
+@dynamic visible;
+@dynamic conversationEvent;
+@dynamic messageEvent;
+@dynamic sender;
 @dynamic session;
 
 @end

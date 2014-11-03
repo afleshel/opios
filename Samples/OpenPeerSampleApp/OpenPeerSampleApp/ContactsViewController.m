@@ -39,7 +39,8 @@
 
 #import <OpenpeerSDK/HOPRolodexContact+External.h>
 #import <OpenpeerSDK/HOPModelManager.h>
-#import <OpenpeerSDK/HOPHomeUser.h>
+#import <OpenpeerSDK/HOPOpenPeerAccount.h>
+#import <OpenpeerSDK/HOPOpenPeerContact+External.h>
 
 #define REMOTE_SESSION_ALERT_TAG 1
 #define TABLE_CELL_HEIGHT 55.0
@@ -53,6 +54,7 @@
 
 @property (nonatomic, strong) UITapGestureRecognizer *oneTapGestureRecognizer;
 @property (nonatomic,retain) NSMutableArray* listOfSelectedContacts;
+@property (nonatomic,retain) NSArray* listOfFilterContacts;
 @property (nonatomic) BOOL keyboardIsHidden;
 
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
@@ -73,12 +75,27 @@
     return _listOfSelectedContacts;
 }
 
-- (id) initInFavoritesMode:(BOOL) favoritesMode
+- (id) initInFavoritesMode:(BOOL) favoritesMode allowMultipleSelection:(BOOL) inAllowMultipleSelection
 {
     self = [self initWithNibName:@"ContactsViewController" bundle:nil];
     if (self)
     {
-        self.isInFavoritesMode = YES;
+        self.isInFavoritesMode = favoritesMode;
+        self.isMultipleSelectionAvailable = inAllowMultipleSelection;
+    }
+    return self;
+}
+
+- (id) initInMode:(ContactsTableModes) inMode allowMultipleSelection:(BOOL) inAllowMultipleSelection filterContacts:(NSArray*) inFilterContacts
+{
+    self = [self initWithNibName:@"ContactsViewController" bundle:nil];
+    if (self)
+    {
+        self.mode = inMode;
+        self.isInFavoritesMode = inMode == CONTACTS_TABLE_MODE_FAVORITES;   
+        self.isMultipleSelectionAvailable = inAllowMultipleSelection;
+        if (inFilterContacts.count > 0)
+            self.listOfFilterContacts = [NSArray arrayWithArray:inFilterContacts];
     }
     return self;
 }
@@ -90,6 +107,7 @@
     {
         self.keyboardIsHidden = YES;
         self.isInFavoritesMode = NO;
+        self.isMultipleSelectionAvailable = NO;
     }
     return self;
 }
@@ -126,6 +144,8 @@
     //Hack to position text properly
     [self.refreshControl beginRefreshing];
     [self.refreshControl endRefreshing];
+    
+    self.contactsTableView.allowsMultipleSelection = self.isMultipleSelectionAvailable;
 
 }
 
@@ -195,6 +215,9 @@
     
     [cell setContact:contact inTable:self.contactsTableView atIndexPath:indexPath];
     
+    if (self.isMultipleSelectionAvailable)
+        cell.accessoryType = UITableViewCellAccessoryNone;
+    
     return cell;
 }
 
@@ -211,13 +234,31 @@
         //Check if app is in remote session mode
         if (![[OpenPeer sharedOpenPeer] isRemoteSessionActivationModeOn])
         {
-            [tableView deselectRowAtIndexPath:indexPath animated:NO];
-            self.contactsTableView.allowsMultipleSelection = NO;
-            //If not, create a session for selecte contact
-            Session* session = [[SessionManager sharedSessionManager] createSessionForContact:contact];
+            //[tableView deselectRowAtIndexPath:indexPath animated:NO];
             
-            if (session)
-                [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForSession:session forIncomingCall:NO forIncomingMessage:NO];
+            if (!self.isMultipleSelectionAvailable)
+            {
+                HOPOpenPeerContact* openPeerContact = [[HOPModelManager sharedModelManager] getOpenPeerContactForIdentityURI:contact.identityURI];
+                //If not, create a session for selecte contact
+                if (openPeerContact)
+                {
+                    Session* session = [[SessionManager sharedSessionManager] createSessionForContacts:@[openPeerContact]];
+                
+                    if (session)
+                        [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForSession:session forIncomingCall:NO forIncomingMessage:NO];
+                }
+            }
+            else
+            {
+                if ([self.listOfSelectedContacts containsObject:contact])
+                {
+                    [self.listOfSelectedContacts removeObject:contact];
+                }
+                else
+                {
+                    [self.listOfSelectedContacts addObject:contact];
+                }
+            }
         }
         else
         {
@@ -276,17 +317,17 @@
         }
     }
 }
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (alertView.tag == REMOTE_SESSION_ALERT_TAG)
-    {
-        if (buttonIndex == 1)
-        {
-            //If user wants to create a remote session between selected contacts, create a session for fist selected and send him a system message to create a session with other selected contact
-            [[SessionManager sharedSessionManager] createRemoteSessionForContacts:self.listOfSelectedContacts];
-        }
-    }
-}
+//- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+//{
+//    if (alertView.tag == REMOTE_SESSION_ALERT_TAG)
+//    {
+//        if (buttonIndex == 1)
+//        {
+//            //If user wants to create a remote session between selected contacts, create a session for fist selected and send him a system message to create a session with other selected contact
+//            [[SessionManager sharedSessionManager] createRemoteSessionForContacts:self.listOfSelectedContacts];
+//        }
+//    }
+//}
 
 #pragma mark - NSFetchedResultsController
 - (NSFetchedResultsController *)fetchedResultsController
@@ -303,19 +344,65 @@
     [fetchRequest setEntity:entity];
     
     NSMutableArray *predicatesArray = [[NSMutableArray alloc] init];
-    NSPredicate *predicateOnlyOpenPeerContacts = nil;
-    if (self.isInFavoritesMode)
+    NSPredicate *predicateForFiltering = nil;
+    //NSPredicate *predicateWithoutContacts = nil;
+    
+//    if (self.isInFavoritesMode)
+//    {
+//        predicateOnlyOpenPeerContacts = [NSPredicate predicateWithFormat:@"identityContact != nil"];
+//        [predicatesArray addObject:predicateOnlyOpenPeerContacts];
+//        cacheName = @"FavoritesContacts";
+//    }
+//    else
+//    {
+//        cacheName = @"RolodexContacts";
+//    }
+    
+    switch (self.mode)
     {
-        predicateOnlyOpenPeerContacts = [NSPredicate predicateWithFormat:@"identityContact != nil"];
-        [predicatesArray addObject:predicateOnlyOpenPeerContacts];
-        cacheName = @"FavoritesContacts";
-    }
-    else
-    {
-        cacheName = @"RolodexContacts";
+        case CONTACTS_TABLE_MODE_REGULAR:
+            cacheName = @"RolodexContacts";
+            break;
+            
+        case CONTACTS_TABLE_MODE_FAVORITES:
+            predicateForFiltering = [NSPredicate predicateWithFormat:@"identityContact != nil"];
+            [predicatesArray addObject:predicateForFiltering];
+            cacheName = @"FavoritesContacts";
+            break;
+            
+        case CONTACTS_TABLE_MODE_ADDING:
+        {
+            NSMutableArray* identityURIs = [NSMutableArray new];
+            for (HOPOpenPeerContact* contact in self.listOfFilterContacts)
+            {
+                HOPRolodexContact* rolodex = [contact getDefaultRolodexContact];
+                if (rolodex && rolodex.identityURI.length > 0)
+                    [identityURIs addObject:rolodex.identityURI];
+            }
+            predicateForFiltering = [NSPredicate predicateWithFormat:@"identityContact != nil AND NOT (identityURI IN %@)",identityURIs];
+            [predicatesArray addObject:predicateForFiltering];
+        }
+            break;
+            
+        case CONTACTS_TABLE_MODE_REMOVING:
+        {
+            NSMutableArray* identityURIs = [NSMutableArray new];
+            for (HOPOpenPeerContact* contact in self.listOfFilterContacts)
+            {
+                HOPRolodexContact* rolodex = [contact getDefaultRolodexContact];
+                if (rolodex && rolodex.identityURI.length > 0)
+                    [identityURIs addObject:rolodex.identityURI];
+            }
+            predicateForFiltering = [NSPredicate predicateWithFormat:@"identityURI IN %@",identityURIs];
+            [predicatesArray addObject:predicateForFiltering];
+        }
+            break;
+            
+        default:
+            break;
     }
     
-    NSPredicate *predicateAllContacts = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(associatedIdentity.homeUser.stableId MATCHES '%@')",[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser].stableId]];
+    NSPredicate *predicateAllContacts = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(associatedIdentity.account.stableId MATCHES '%@')",[[HOPModelManager sharedModelManager] getLastLoggedInUser].stableId]];
     
     [predicatesArray addObject:predicateAllContacts];
     
@@ -386,9 +473,9 @@
     }
     
     if ([searchText length] > 0)
-        predicateString = [NSString stringWithFormat:@"(associatedIdentity.homeUser.stableId MATCHES '%@' AND name CONTAINS[c] '%@') ",[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser].stableId,searchText];
+        predicateString = [NSString stringWithFormat:@"(associatedIdentity.account.stableId MATCHES '%@' AND name CONTAINS[c] '%@') ",[[HOPModelManager sharedModelManager] getLastLoggedInUser].stableId,searchText];
     else
-        predicateString = [NSString stringWithFormat:@"(associatedIdentity.homeUser.stableId MATCHES '%@') ",[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser].stableId];
+        predicateString = [NSString stringWithFormat:@"(associatedIdentity.account.stableId MATCHES '%@') ",[[HOPModelManager sharedModelManager] getLastLoggedInUser].stableId];
     
     NSPredicate *predicateAllContacts = [NSPredicate predicateWithFormat:predicateString];
     [predicatesArray addObject:predicateAllContacts];
@@ -531,5 +618,10 @@
                                        userInfo:nil
                                         repeats:NO];
     }
+}
+
+- (NSArray*) getSelectedContacts
+{
+    return self.listOfSelectedContacts;
 }
 @end

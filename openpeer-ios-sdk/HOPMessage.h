@@ -36,21 +36,25 @@
 @interface HOPMessage : NSObject
 
 @property (nonatomic, copy) NSString* messageID;
+@property (nonatomic, copy) NSString* replacesMessageID;
 @property (nonatomic, retain) HOPContact* contact;
 @property (nonatomic, copy) NSString* type;
 @property (nonatomic, copy) NSString* text;
 @property (nonatomic, retain) NSDate* date;
+@property (nonatomic) BOOL validated;
 
 /**
  *  HOPMessage initializer.
  *
- *  @param inMessageId   Message ID
- *  @param messageText   Message text
- *  @param inContact     Message recipient
- *  @param inMessageType  Message mime type. It is on user to create mime types.
- *  @param inMessageDate Message date
+ *  @param inMessageId           Message ID
+ *  @param inReplacesMessageId   Replaces Message ID
+ *  @param messageText           Message text
+ *  @param inContact             Message recipient
+ *  @param inMessageType         Message mime type. It is on user to create mime types.
+ *  @param inMessageDate         Message date
+ *  @param inValidated           Flag if message is validated
  *
  *  @return HOPMessage object
  */
-- (id) initWithMessageId:(NSString*) inMessageId andMessage:(NSString*) messageText andContact:(HOPContact*) inContact andMessageType:(NSString*) inMessageType andMessageDate:(NSDate*) inMessageDate;
+- (id) initWithMessageId:(NSString*) inMessageId andReplacesMessageID:(NSString*) inReplacesMessageID andMessage:(NSString*) messageText andContact:(HOPContact*) inContact andMessageType:(NSString*) inMessageType andMessageDate:(NSDate*) inMessageDate andValidated:(BOOL) inValidated;
 @end

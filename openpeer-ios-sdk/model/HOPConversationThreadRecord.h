@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2014, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -32,7 +32,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class HOPSessionRecord;
+@class HOPConversationRecord;
 
 @interface HOPConversationThreadRecord : NSManagedObject
 
@@ -44,8 +44,8 @@
 
 @interface HOPConversationThreadRecord (CoreDataGeneratedAccessors)
 
-- (void)addSessionReordsObject:(HOPSessionRecord *)value;
-- (void)removeSessionReordsObject:(HOPSessionRecord *)value;
+- (void)addSessionReordsObject:(HOPConversationRecord *)value;
+- (void)removeSessionReordsObject:(HOPConversationRecord *)value;
 - (void)addSessionReords:(NSSet *)values;
 - (void)removeSessionReords:(NSSet *)values;
 

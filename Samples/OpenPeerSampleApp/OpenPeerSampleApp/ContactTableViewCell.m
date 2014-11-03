@@ -32,7 +32,10 @@
 #import "ContactTableViewCell.h"
 #import <OpenpeerSDK/HOPRolodexContact+External.h>
 #import <OpenpeerSDK/HOPAssociatedIdentity.h>
+#import <OpenpeerSDK/HOPIdentityProvider.h>
 #import <OpenpeerSDK/HOPAvatar+External.h>
+#import <OpenpeerSDK/HOPOpenPeerContact.h>
+#import <OpenpeerSDK/HOPModelManager.h>
 #import "AppConsts.h"
 #import "ImageManager.h"
 #import "SessionManager.h"
@@ -73,7 +76,7 @@
     self.displayImage.layer.borderWidth = 1.0;
     self.displayImage.layer.borderColor = [[UIColor whiteColor] CGColor];
     
-    if ([inContact.associatedIdentity.baseIdentityURI isEqualToString:identityFacebookBaseURI])
+    if ([inContact.associatedIdentity.identityProvider.baseURI isEqualToString:identityFacebookBaseURI])
     {
         UIImageView *facebookTag = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"facebook_tag.png"]];
         [facebookTag setFrame:CGRectMake(self.displayImage.frame.size.width - 10.0, self.displayImage.frame.size.height-10.0, 10.0, 10.0)];
@@ -106,12 +109,17 @@
      [_displayVideoImage setAlpha:0.4];
      }*/
     
-    Session* session = [[SessionManager sharedSessionManager] getSessionForContact:inContact];
-    if ([session.unreadMessageArray count] > 0)
+    HOPOpenPeerContact* openPeerContact = [[HOPModelManager sharedModelManager] getOpenPeerContactForIdentityURI:inContact.identityURI];
+    
+    if (openPeerContact)
     {
-        NSString* numberToDisplay = [NSString stringWithFormat:@"%d",[session.unreadMessageArray count]];
-        self.badgeView.hidden = NO;
-        self.badgeView.badgeText = numberToDisplay;
+        Session* session = [[SessionManager sharedSessionManager] getSessionForContacts:@[openPeerContact]];
+        if ([session.unreadMessageArray count] > 0)
+        {
+            NSString* numberToDisplay = [NSString stringWithFormat:@"%d",[session.unreadMessageArray count]];
+            self.badgeView.hidden = NO;
+            self.badgeView.badgeText = numberToDisplay;
+        }
     }
 }
 @end
