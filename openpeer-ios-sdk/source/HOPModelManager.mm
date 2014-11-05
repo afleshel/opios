@@ -49,7 +49,7 @@
 #import "HOPConversationEvent.h"
 #import "HOPParticipants.h"
 #import "HOPContact_Internal.h"
-
+#import "HOPAccount.h"
 #import "OpenPeerConstants.h"
 #import <CoreData/CoreData.h>
 #import <openpeer/core/IHelper.h>
@@ -1198,6 +1198,11 @@ using namespace openpeer::core;
         NSString* stableID = [NSString stringWithUTF8String:inIdentityContact.mStableID];
         if ([stableID length] > 0)
             ret.stableID = stableID;
+        else
+            ret.stableID = [[HOPAccount sharedAccount] getStableID];
+        
+        if(stableID.length == 0)
+            return ret;
         
         NSString* identityURI = [NSString stringWithUTF8String:inIdentityContact.mIdentityURI];
         if ([identityURI length] > 0)
