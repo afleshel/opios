@@ -511,6 +511,7 @@
     [self stopRefreshController];
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Handling loaded contacts.");
     NSError *error;
+    self.fetchedResultsController = nil;
 	if (![self.fetchedResultsController performFetch:&error])
     {
 		OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Fetching contacts has failed with an error: %@, error description: %@", error, [error userInfo]);
