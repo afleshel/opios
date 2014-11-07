@@ -139,6 +139,8 @@ typedef enum
 - (NSString*) getIdentityFederateBaseURI;
 - (NSString*) getLockBoxServiceDomain;
 - (NSString*) getDefaultOutgoingTelnetServer;
+- (NSString*) getDeviceTokenDownloadURL;
+- (NSString*) getDeviceTokenUploadURL;
 
 - (BOOL) isAppDataSet;
 - (BOOL) isLoginSettingsSet;

@@ -38,5 +38,5 @@
 
 - (HOPContact*) getCoreContact;
 - (HOPRolodexContact*) getDefaultRolodexContact;
-
+- (NSString*) getFullName;
 @end

@@ -240,6 +240,7 @@
 
 - (void) registerDeviceToken:(NSData*) devToken
 {
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Registering device token, %@, with Urban Airship",devToken);
     [[UAPush shared] appRegisteredForRemoteNotificationsWithDeviceToken:devToken];
 }
 
@@ -638,7 +639,8 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask
             json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
         }
         
-        HTTPDownloader* request = [[HTTPDownloader alloc] initDownloadFromURL:@"http://push-hack.hcs-stack-v2-i7957106-7.hcs.io/device-associate-get" data:json post:YES];
+        //HTTPDownloader* request = [[HTTPDownloader alloc] initDownloadFromURL:@"http://push-hack.hcs-stack-v2-i7957106-7.hcs.io/device-associate-get" data:json post:YES];
+        HTTPDownloader* request = [[HTTPDownloader alloc] initDownloadFromURL:[[Settings sharedSettings] getDeviceTokenDownloadURL] data:json post:YES];
         
         request.delegate = self;
         [self.dictionaryOfHTTPRequests setObject:request forKey:peerURI];
@@ -658,6 +660,8 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask
     
     if ([self.deviceToken length] > 0 && [peerURI length] > 0 && ![[self.dictionaryOfHTTPRequests allKeys] containsObject:peerURI])
     {
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Registering device token, %@, with Open Peer system",self.deviceToken);
+        
         NSMutableDictionary* dictRoot = [[NSMutableDictionary alloc] init];
         NSMutableDictionary* dictData  = [[NSMutableDictionary alloc] init];
         
@@ -686,7 +690,8 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask
             json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
         }
         
-        HTTPDownloader* request = [[HTTPDownloader alloc] initDownloadFromURL:@"http://push-hack.hcs-stack-v2-i7957106-7.hcs.io/device-associate-set" data:json post:YES];
+        //HTTPDownloader* request = [[HTTPDownloader alloc] initDownloadFromURL:@"http://push-hack.hcs-stack-v2-i7957106-7.hcs.io/device-associate-set" data:json post:YES];
+        HTTPDownloader* request = [[HTTPDownloader alloc] initDownloadFromURL:[[Settings sharedSettings] getDeviceTokenUploadURL] data:json post:YES];
         
         request.delegate = self;
         [self.dictionaryOfHTTPRequests setObject:request forKey:peerURI];
@@ -694,7 +699,11 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask
         if (![request startDownload])
         {
             [self.dictionaryOfHTTPRequests removeObjectForKey:peerURI];
-            OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Device token registration request is not sent.");
+            OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Device token, %@, registration request is not sent via %@.",self.deviceToken,@"http://push-hack.hcs-stack-v2-i7957106-7.hcs.io/device-associate-set");
+        }
+        else
+        {
+            OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Registering device token, %@, JSON: /n is sent via %@.",self.deviceToken,json,@"http://push-hack.hcs-stack-v2-i7957106-7.hcs.io/device-associate-set");
         }
     }
 }
@@ -735,6 +744,7 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask
                         NSString* deviceToken = [result objectForKey:@"deviceToken"];
                         if ([deviceToken length] > 0)
                         {
+                            OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Received deviceToken, %@, for peer URI %@.",deviceToken,peerURI);
                             [[HOPModelManager sharedModelManager] setAPNSData:deviceToken type:type PeerURI:peerURI];
                             HOPMessage* msg = [self.dictionaryOfPushNotificationsToSend objectForKey:peerURI];
                             if (msg)
