@@ -2,6 +2,7 @@
 
 : ${CURL_SCRIPT_PATH:=./libs/op/libs/ortc-lib/libs/curl-build-scripts}
 : ${BOOST_SCRIPT_PATH:=./libs/op/libs/ortc-lib/libs/boost}
+: ${SQLITE_SCRIPT_PATH:=./libs/op/libs/sqlite}
 : ${TEMPLATES_PATH:=./templates}
 : ${DESTINATION_PATH:=./Samples/OpenPeerSampleApp/OpenPeerSampleApp}
 
@@ -137,6 +138,24 @@ buildboost() {
 	fi
 }
 
+buildsqlite() {
+	if [ -f "$SQLITE_SCRIPT_PATH/sqlite.sh" ]; then
+		pushd $SQLITE_SCRIPT_PATH
+			echo Building sqlite ...
+			chmod a+x sqlite.sh
+			sh sqlite.sh
+			status=$?
+			if [ $status != 0 ]; then
+				echo $status
+				echo "Sqlite build failed!"
+				exit 1
+			else
+				echo "Sqlite build succeeded!"
+			fi
+		popd
+	fi
+}
+
 customertemplates() {
 	#Checks if common settings file already exists in the destination folder. If doesn't exist, copies the template cource in the destiantion folder, renames it and update name of the imported header.
 	if [ ! -f "$DESTINATION_PATH/$CUSTOMER_SPECIFIC" ]; then
@@ -174,4 +193,5 @@ customertemplates() {
 sdkpath iPhoneOS
 buildcurl
 buildboost
+buildsqlite
 customertemplates
