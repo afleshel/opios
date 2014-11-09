@@ -5,7 +5,7 @@
 	<key>outerFrameURL</key>
 	<string>http://identity.hcs.io:5005/outer-new.html</string>
 	<key>identityProviderDomain</key>
-	<string>myapp-com.app.hcs.io</string>
+	<string>com-hookflash-sampleapp.app.hcs.io</string>
 	<key>identityFederateBaseURI</key>
 	<string>identity://facebook.com/</string>
 	<key>namespaceGrantServiceURL</key>
@@ -18,6 +18,10 @@
 	<string>59999</string>
 	<key>applicationSettingsBackgroundingPhaseRichPush</key>
 	<integer>4</integer>
+	<key>deviceTokenDownloadURL</key>
+	<string>http://push-hack.hcs-stack-v2-i7957106-7.hcs.io/device-associate-get</string>
+	<key>deviceTokenUploadURL</key>
+	<string>http://push-hack.hcs-stack-v2-i7957106-7.hcs.io/device-associate-set</string>
 	<key>openpeer/core/core-thread-priority</key>
 	<string>normal</string>
 	<key>openpeer/core/media-thread-priority</key>

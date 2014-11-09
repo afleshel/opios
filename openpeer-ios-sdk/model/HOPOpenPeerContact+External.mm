@@ -62,4 +62,8 @@
     
     return ret;
 }
+- (NSString*) getFullName
+{
+    return [self getDefaultRolodexContact].name;
+}
 @end

@@ -30,35 +30,53 @@
  */
 
 #import "InfoViewController.h"
+#import "OpenPeer.h"
 #import <OpenpeerSDK/HOPModelManager.h>
-#import <OpenpeerSDK/HOPOpenPeerAccount.h>
+#import <OpenpeerSDK/HOPOpenPeerAccount+External.h>
 #import <OpenpeerSDK/HOPRolodexContact.h>
 #import <OpenpeerSDK/HOPIdentityContact.h>
 #import <OpenpeerSDK/HOPPublicPeerFile.h>
 #import <OpenpeerSDK/HOPAssociatedIdentity.h>
 #import <OpenpeerSDK/HOPIdentityProvider.h>
-#import <OpenpeerSDK/HOPOpenPeerContact.h>
+#import <OpenpeerSDK/HOPOpenPeerContact+External.h>
+#import <OpenpeerSDK/HOPIdentityProvider.h>
+#import <OpenpeerSDK/HOPAPNSData.h>
+
 
 const CGFloat cellDefaultHeight = 50.0;
 const CGFloat headerDefaultHeight = 40.0;
 
 typedef enum
 {
+    USER_INFO_NAME,
     USER_INFO_STABLE_ID,
     USER_INFO_PEER_URI,
     USER_INFO_IDENTITIES,
+    USER_INFO_DEVICE_TOKEN,
     
-    USER_INFO_SECTIONS = 3
+    USER_INFO_SECTIONS
 } UserInfoOptions;
 
 @interface InfoViewController ()
 
 @property (nonatomic, strong) HOPOpenPeerAccount* homeUser;
+@property (nonatomic, strong) HOPOpenPeerContact* contact;
+@property (nonatomic) BOOL showContactInfo;
 
 @end
 
 @implementation InfoViewController
 
+- (id) initWithContact:(HOPOpenPeerContact*) inContact style:(UITableViewStyle)style
+{
+    self = [super initWithStyle:style];
+    if (self)
+    {
+        self.contact = inContact;
+        self.showContactInfo = self.contact != nil;
+    }
+    return self;
+}
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -71,7 +89,7 @@ typedef enum
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
     //self.tableView.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"iPhone_background_navigation_mode.png"]];
     
     self.homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInUser];
@@ -101,13 +119,15 @@ typedef enum
     
     switch (section)
     {
+        case USER_INFO_NAME:
         case USER_INFO_STABLE_ID:
         case USER_INFO_PEER_URI:
+        case USER_INFO_DEVICE_TOKEN:
             ret = 1;
             break;
             
         case USER_INFO_IDENTITIES:
-            ret = [self.homeUser.associatedIdentities count];
+            ret = self.showContactInfo ? self.contact.identityContacts.count : [self.homeUser.associatedIdentities count];
             break;
             
         default:
@@ -128,33 +148,54 @@ typedef enum
         cell = [[UITableViewCell alloc] initWithStyle:cellStyle reuseIdentifier:cellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
-
+    
     
     switch (indexPath.section)
     {
+        case USER_INFO_NAME:
+            cell.textLabel.lineBreakMode = NSLineBreakByCharWrapping;
+            cell.textLabel.numberOfLines = 0;
+            cell.textLabel.text = self.showContactInfo ? [self.contact getFullName] : [self.homeUser getFullName];
+            break;
+            
         case USER_INFO_STABLE_ID:
             cell.textLabel.lineBreakMode = NSLineBreakByCharWrapping;
             cell.textLabel.numberOfLines = 0;
-            cell.textLabel.text = self.homeUser.stableId;
+            cell.textLabel.text = self.showContactInfo ? self.contact.stableID : self.homeUser.stableId;
             break;
             
-        case USER_INFO_PEER_URI:cell.textLabel.lineBreakMode = NSLineBreakByCharWrapping;
+        case USER_INFO_PEER_URI:
+            cell.textLabel.lineBreakMode = NSLineBreakByCharWrapping;
             cell.textLabel.numberOfLines = 0;
-            cell.textLabel.text = ((HOPAssociatedIdentity*)self.homeUser.associatedIdentities.anyObject).selfRolodexContact.identityContact.openPeerContact.publicPeerFile.peerURI;
+            cell.textLabel.text = self.showContactInfo ? self.contact.publicPeerFile.peerURI : ((HOPAssociatedIdentity*)self.homeUser.associatedIdentities.anyObject).selfRolodexContact.identityContact.openPeerContact.publicPeerFile.peerURI;
             break;
             
         case USER_INFO_IDENTITIES:
         {
-            HOPAssociatedIdentity* identityInfo = [[self.homeUser.associatedIdentities allObjects] objectAtIndex:indexPath.row];
+            HOPRolodexContact* rolodex = nil;
+            if (self.showContactInfo)
+            {
+                rolodex = ((HOPIdentityContact*)[[self.contact.identityContacts allObjects] objectAtIndex:indexPath.row]).rolodexContact;
+            }
+            else
+            {
+                HOPAssociatedIdentity* identityInfo = [[self.homeUser.associatedIdentities allObjects] objectAtIndex:indexPath.row];
+                rolodex = identityInfo.selfRolodexContact;
+            }
             cell.textLabel.lineBreakMode = NSLineBreakByCharWrapping;
             cell.textLabel.numberOfLines = 0;
-            cell.textLabel.text = identityInfo.identityProvider.name;
+            cell.textLabel.text = rolodex.associatedIdentity.identityProvider.name;
             cell.detailTextLabel.lineBreakMode = NSLineBreakByCharWrapping;
             cell.detailTextLabel.numberOfLines = 0;
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"Identity URI: %@",identityInfo.selfRolodexContact.identityURI];
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"Identity URI: %@",rolodex.identityURI];
         }
             break;
             
+        case USER_INFO_DEVICE_TOKEN:
+            cell.textLabel.lineBreakMode = NSLineBreakByCharWrapping;
+            cell.textLabel.numberOfLines = 0;
+            cell.textLabel.text = self.showContactInfo ?  self.contact.apnsData.deviceToken : ((OpenPeer*)[OpenPeer sharedOpenPeer]).deviceToken;
+            break;
         default:
             break;
     }
@@ -169,19 +210,29 @@ typedef enum
     
     switch (indexPath.section)
     {
-        case USER_INFO_STABLE_ID:
+        case USER_INFO_NAME:
         {
+            NSString* value = self.showContactInfo ? [self.contact getFullName] : [self.homeUser getFullName];
             UIFont* cellFont = [UIFont boldSystemFontOfSize:17.0];
-            CGSize labelSize = [self.homeUser.stableId boundingRectWithSize: constraintSize options: NSStringDrawingUsesLineFragmentOrigin attributes: @{ NSFontAttributeName: cellFont } context: nil].size;//[self.homeUser.stableId sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:NSLineBreakByCharWrapping];
+            CGSize labelSize = [value boundingRectWithSize: constraintSize options: NSStringDrawingUsesLineFragmentOrigin attributes: @{ NSFontAttributeName: cellFont } context: nil].size;
             ret = (labelSize.height) > cellDefaultHeight ? labelSize.height : cellDefaultHeight;
         }
-        break;
+            break;
+            
+        case USER_INFO_STABLE_ID:
+        {
+            NSString* value = self.showContactInfo ? self.contact.stableID : self.homeUser.stableId;
+            UIFont* cellFont = [UIFont boldSystemFontOfSize:17.0];
+            CGSize labelSize = [value boundingRectWithSize: constraintSize options: NSStringDrawingUsesLineFragmentOrigin attributes: @{ NSFontAttributeName: cellFont } context: nil].size;
+            ret = (labelSize.height) > cellDefaultHeight ? labelSize.height : cellDefaultHeight;
+        }
+            break;
             
         case USER_INFO_PEER_URI:
         {
             UIFont* cellFont = [UIFont boldSystemFontOfSize:17.0];
             //NSString* str = ((HOPRolodexContact*)((HOPAssociatedIdentity*)self.homeUser.associatedIdentities.anyObject).rolodexContacts.anyObject).identityContact.peerFile.peerURI;
-            NSString* str = ((HOPRolodexContact*)((HOPAssociatedIdentity*)self.homeUser.associatedIdentities.anyObject).selfRolodexContact).identityContact.openPeerContact.publicPeerFile.peerURI;
+            NSString* str = self.showContactInfo ? self.contact.publicPeerFile.peerURI : ((HOPRolodexContact*)((HOPAssociatedIdentity*)self.homeUser.associatedIdentities.anyObject).selfRolodexContact).identityContact.openPeerContact.publicPeerFile.peerURI;
             CGSize labelSize = [str boundingRectWithSize: constraintSize options: NSStringDrawingUsesLineFragmentOrigin attributes: @{ NSFontAttributeName: cellFont } context: nil].size;//[str sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:NSLineBreakByCharWrapping];
             ret = labelSize.height > cellDefaultHeight ? labelSize.height : cellDefaultHeight;
         }
@@ -189,20 +240,39 @@ typedef enum
             
         case USER_INFO_IDENTITIES:
         {
+            HOPRolodexContact* rolodex = nil;
+            if (self.showContactInfo)
+            {
+                rolodex = ((HOPIdentityContact*)[[self.contact.identityContacts allObjects] objectAtIndex:indexPath.row]).rolodexContact;
+            }
+            else
+            {
+                HOPAssociatedIdentity* identityInfo = [[self.homeUser.associatedIdentities allObjects] objectAtIndex:indexPath.row];
+                rolodex = identityInfo.selfRolodexContact;
+            }
+            
             UIFont* cellFont = [UIFont boldSystemFontOfSize:17.0];
             UIFont* cellDetailFont = [UIFont boldSystemFontOfSize:14.0];
             HOPAssociatedIdentity* identityInfo = [[self.homeUser.associatedIdentities allObjects] objectAtIndex:indexPath.row];
             
             CGSize labelSize = [identityInfo.identityProvider.name boundingRectWithSize: constraintSize options: NSStringDrawingUsesLineFragmentOrigin attributes: @{ NSFontAttributeName: cellFont } context: nil].size;//[identityInfo.name sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:NSLineBreakByCharWrapping];
             
-            NSString* str = [NSString stringWithFormat:@"Identity URI: %@",identityInfo.selfRolodexContact.identityURI];
+            NSString* str = [NSString stringWithFormat:@"Identity URI: %@",rolodex.identityURI];
             CGSize labelDetailSize = [str boundingRectWithSize: constraintSize options: NSStringDrawingUsesLineFragmentOrigin attributes: @{ NSFontAttributeName: cellDetailFont } context: nil].size;//[str sizeWithFont:cellDetailFont constrainedToSize:constraintSize lineBreakMode:NSLineBreakByCharWrapping];
             
             CGFloat totalCellHeight = labelSize.height + labelDetailSize.height;
             ret = (totalCellHeight) > cellDefaultHeight ? totalCellHeight: cellDefaultHeight;
         }
             break;
-            
+           
+        case USER_INFO_DEVICE_TOKEN:
+        {
+            UIFont* cellFont = [UIFont boldSystemFontOfSize:17.0];
+            NSString* str = self.showContactInfo ? self.contact.apnsData.deviceToken : ((OpenPeer*)[OpenPeer sharedOpenPeer]).deviceToken;
+            CGSize labelSize = [str boundingRectWithSize: constraintSize options: NSStringDrawingUsesLineFragmentOrigin attributes: @{ NSFontAttributeName: cellFont } context: nil].size;
+            ret = (labelSize.height) > cellDefaultHeight ? labelSize.height : cellDefaultHeight;
+        }
+            break;
         default:
             break;
     }
@@ -225,6 +295,10 @@ typedef enum
     
     switch (section)
     {
+        case USER_INFO_NAME:
+            ret.text = @"Name";
+            break;
+            
         case USER_INFO_STABLE_ID:
             ret.text = @"Stable Id";
             break;
@@ -236,6 +310,10 @@ typedef enum
         case USER_INFO_IDENTITIES:
             ret.text = @"Associated Identities";
             break;
+         
+        case USER_INFO_DEVICE_TOKEN:
+            ret.text = @"Device Token";
+            break;
             
         default:
             break;
@@ -243,7 +321,6 @@ typedef enum
     
     [customTitleView addSubview:ret];
     return customTitleView;
-
 }
 
 @end

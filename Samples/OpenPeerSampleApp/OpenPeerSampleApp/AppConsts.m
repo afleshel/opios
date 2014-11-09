@@ -78,6 +78,8 @@ NSString * const settingsKeySettingsVersion = @"applicationSettingsVersion";
 NSString * const settingsKeyBackgroundingPhaseRichPush = @"applicationSettingsBackgroundingPhaseRichPush";
 NSString * const settingsKeyDefaultLogLevel = @"logLevelForServicesHttp";
 NSString * const settingsKeyRedirectAfterLoginCompleteURL = @"redirectAfterLoginCompleteURL";
+NSString * const settingsDeviceTokenDownloadURL = @"deviceTokenDownloadURL";
+NSString * const settingsDeviceTokenUploadURL = @"deviceTokenUploadURL";
 
 NSString * const archiveEnabled = @"enabled";
 NSString * const archiveServer = @"Server";

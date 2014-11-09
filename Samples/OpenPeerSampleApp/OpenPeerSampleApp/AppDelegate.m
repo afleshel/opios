@@ -156,7 +156,7 @@
         
         if ([hexString length] > 0)
         {
-            OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Push notification deviceToken:%@",hexString);
+            OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Registered push notification deviceToken:%@",hexString);
 
             [[APNSManager sharedAPNSManager] setDeviceToken:hexString];
             [[APNSManager sharedAPNSManager] registerDeviceToken:deviceToken];

@@ -596,6 +596,17 @@
 {
     return [[NSUserDefaults standardUserDefaults] stringForKey:settingsKeyOutgoingTelnetLogger];
 }
+
+- (NSString*) getDeviceTokenDownloadURL
+{
+    return [[NSUserDefaults standardUserDefaults] stringForKey:settingsDeviceTokenDownloadURL];
+}
+
+- (NSString*) getDeviceTokenUploadURL
+{
+    return [[NSUserDefaults standardUserDefaults] stringForKey:settingsDeviceTokenUploadURL];
+}
+
 - (BOOL) isAppDataSet
 {
     BOOL ret = YES;
