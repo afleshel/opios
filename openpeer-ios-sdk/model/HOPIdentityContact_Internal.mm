@@ -35,6 +35,8 @@
 #import "HOPOpenPeerContact.h"
 #import "HOPIdentityContact_Internal.h"
 #import "OpenPeerUtility.h"
+#import "HOPAccount.h"
+
 #import <openpeer/core/IHelper.h>
 
 @implementation HOPIdentityContact
@@ -51,6 +53,9 @@
 {
     NSString* sId = [NSString stringWithUTF8String:inIdentityContact.mStableID];
     
+    if (sId.length == 0)
+        sId = [[HOPAccount sharedAccount] getStableID];
+    
     //self.stableID = sId;
     self.expires = [OpenPeerUtility convertPosixTimeToDate:inIdentityContact.mExpires];
     self.lastUpdated = [OpenPeerUtility convertPosixTimeToDate:inIdentityContact.mLastUpdated];
@@ -64,7 +69,9 @@
     {
         hopRolodexContact = (HOPRolodexContact*)[[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPRolodexContact"];
         hopRolodexContact.identityURI = [NSString stringWithCString:inIdentityContact.mIdentityURI encoding:NSUTF8StringEncoding];
-        hopRolodexContact.name = [NSString stringWithCString:inIdentityContact.mName encoding:NSUTF8StringEncoding];//[OpenPeerUtility getContactIdFromURI:hopRolodexContact.identityURI];//[
+        NSString* name = [NSString stringWithCString:inIdentityContact.mName encoding:NSUTF8StringEncoding];
+        //if (name.length > 0)
+        hopRolodexContact.name = name;//[NSString stringWithCString:inIdentityContact.mName encoding:NSUTF8StringEncoding];//[OpenPeerUtility getContactIdFromURI:hopRolodexContact.identityURI];//[
     }
     
     self.rolodexContact = hopRolodexContact;
@@ -80,7 +87,7 @@
             openPeerContact.stableID = sId;
     }
     
-    if (!openPeerContact && [hopRolodexContact.identityURI length] > 0)
+    if (!openPeerContact && [hopRolodexContact.identityURI length] > 0 && sId.length > 0 && [peerURI length] > 0)
     {
         openPeerContact = [[HOPModelManager sharedModelManager] getOpenPeerContactForIdentityURI:hopRolodexContact.identityURI];
         if (openPeerContact)

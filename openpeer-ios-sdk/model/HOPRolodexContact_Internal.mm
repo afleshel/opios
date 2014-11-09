@@ -70,7 +70,9 @@
     
     self.associatedIdentity = associated;
     self.identityURI = [NSString stringWithCString:inRolodexContact.mIdentityURI encoding:NSUTF8StringEncoding];
-    self.name = [NSString stringWithCString:inRolodexContact.mName encoding:NSUTF8StringEncoding];
+    NSString* tempName = [NSString stringWithCString:inRolodexContact.mName encoding:NSUTF8StringEncoding];
+    if (tempName.length > 0)
+        self.name = [NSString stringWithCString:inRolodexContact.mName encoding:NSUTF8StringEncoding];
     self.profileURL = [NSString stringWithCString:inRolodexContact.mProfileURL encoding:NSUTF8StringEncoding];
     self.vProfileURL = [NSString stringWithCString:inRolodexContact.mVProfileURL encoding:NSUTF8StringEncoding];
     

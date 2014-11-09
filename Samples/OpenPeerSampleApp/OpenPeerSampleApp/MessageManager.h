@@ -54,12 +54,8 @@ typedef enum
 
 + (id) sharedMessageManager;
 
-- (HOPMessage*) createSystemMessageWithType:(HOPSystemMessageType) type messageType:(int) messageType andRecipient:(HOPOpenPeerContact*) contact;
-- (HOPMessage*) createMessageFromRichPush:(NSDictionary*) richPush;
+- (HOPMessage*) createSystemMessageWithType:(HOPSystemMessageType) type messageType:(int) messageType reasonCode:(int)reasonCode andRecipient:(HOPOpenPeerContact*) contact;
 
-//- (void) sendSystemMessageToInitSessionBetweenPeers:(NSArray*) peers forSession:(Session*) inSession;
-//- (void) sendSystemMessageToCallAgainForSession:(Session*) inSession;
-//- (void) sendSystemMessageToCheckAvailability:(Session*) inSession;
 - (void) sendCallSystemMessage:(HOPCallSystemMessageType) callSystemMessage reasonCode:(int) reasonCode session:(Session*) inSession;
 
 - (void) parseSystemMessage:(HOPMessage*) inMessage forSession:(Session*) inSession;

@@ -285,7 +285,7 @@
     
     [fetchRequest setEntity:entity];
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(showEvent = YES AND session.homeUser.stableId MATCHES '%@')",[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser].stableId]];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(showEvent = YES AND session.homeUser.stableId MATCHES '%@')",[[HOPModelManager sharedModelManager] getLastLoggedInUser].stableId]];
     [fetchRequest setPredicate:predicate];
     
     [fetchRequest setFetchBatchSize:20];
@@ -314,7 +314,7 @@
     
     [fetchRequest setEntity:entity];
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SUBQUERY(events, $t, $t.session.homeUser.stableId == %@).@count != 0", [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser].stableId];//[NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(ANY events.session.homeUser.stableId MATCHES '%@')",[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser].stableId]];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SUBQUERY(events, $t, $t.session.homeUser.stableId == %@).@count != 0", [[HOPModelManager sharedModelManager] getLastLoggedInUser].stableId];//[NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(ANY events.session.homeUser.stableId MATCHES '%@')",[[HOPModelManager sharedModelManager] getLastLoggedInUser].stableId]];
     [fetchRequest setPredicate:predicate];
     
     [fetchRequest setFetchBatchSize:20];
@@ -343,7 +343,7 @@
     
     [fetchRequest setEntity:entity];
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(homeUser.stableId MATCHES '%@')",[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser].stableId]];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(homeUser.stableId MATCHES '%@')",[[HOPModelManager sharedModelManager] getLastLoggedInUser].stableId]];
     [fetchRequest setPredicate:predicate];
     
 	[fetchRequest setFetchBatchSize:20];

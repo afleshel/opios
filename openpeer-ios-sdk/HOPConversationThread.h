@@ -57,6 +57,7 @@
 *  @return HOPConversationThread object
 */
 + (id) conversationThreadWithIdentities:(NSArray*) identities;
+
 /**
  Returns list of all active conversation threads.
  @return List of HOPConversationThread objects
@@ -71,28 +72,23 @@
 + (HOPConversationThread*) getConversationThreadForID:(NSString*) threadID;
 
 /**
- Returns a string representation of the message delivery state. Deprecated.
- @param state Message delivery state to convert to string
- @return A string representation of message delivery state
- */
-//+ (NSString*) deliveryStateToString: (HOPConversationThreadMessageDeliveryState) state __attribute__((deprecated("use method stringForMessageDeliveryState instead")));
-/**
  Returns a string representation of the message delivery state.
  @param state Message delivery state to convert to string
  @return A string representation of message delivery state
  */
 + (NSString*) stringForMessageDeliveryState:(HOPConversationThreadMessageDeliveryState) state;
-+ (HOPConversationThreadMessageDeliveryState) toMessageDeliveryStates:(NSString*) messageDeliveryStateString;
 
 /**
- Returns a  string representation of the contact state. Deprecated.
- @param state Contact state to convert to string
- @returns A string representation of contact state
+ Returns a enum representation of the message delivery state.
+ @param messageDeliveryStateString Message delivery state string
+ @return A enum representation of message delivery state
  */
-//+ (NSString*) stateToString: (HOPConversationThreadContactConnectionState) state __attribute__((deprecated("use method stringForContactConnectionState instead")));
++ (HOPConversationThreadMessageDeliveryState) toMessageDeliveryStates:(NSString*) messageDeliveryStateString;
+
+
 /**
- Returns a  string representation of the contact state.
- @param state Contact state to convert to string
+ Returns a  string representation of the contact connection state.
+ @param state Contact connection state to convert to string
  @return A string representation of contact state
  */
 + (NSString*) stringForContactConnectionState:(HOPConversationThreadContactConnectionState) state;
@@ -143,7 +139,7 @@
 /**
  Returns a state of the provided contact.
  @param contact HOPContact object
- @returns Contact state enum
+ @returns Contact connection state enum
  */
 - (HOPConversationThreadContactConnectionState) getContactConnectionState: (HOPContact*) contact;
 
@@ -155,19 +151,19 @@
 - (NSString*) createEmptyStatus;
 
 /**
- *  Get the status of a contact in the conversation thread.
+ *  Get the composing status of a contact in the conversation thread.
  *
  *  @param contact Contact in the conversation thread
  *
- *  @return Contact status 
+ *  @return Contact composing status 
  */
 - (HOPConversationThreadContactStatus) getContactStatus:(HOPContact*) contact;
 
 
 /**
- *  Set the status of yourself in the conversation thread.
+ *  Set the composing status of yourself in the conversation thread.
  *
- *  @param status         Contact status
+ *  @param status  Contact composing status
  */
 - (void) setStatusInThread:(HOPConversationThreadContactStatus) status;
 
@@ -185,15 +181,6 @@
  */
 - (void) sendMessage: (HOPMessage*) message;
 
-/**
- Returns message for specified message ID. Deprecated.
- @param messageID NSString Received message ID
- @param outFrom HOPContact Message owner contact object
- @param outMessageType NSString Received message type
- @param outMessage NSString Received message
- @param outTime NSDate Received message timestamp
- */
-//- (BOOL) getMessage: (NSString*) messageID outFrom:(HOPContact**) outFrom outMessageType:(NSString**) outMessageType outMessage:(NSString**) outMessage outTime:(NSDate**) outTime DEPRECATED_ATTRIBUTE;
 
 /**
  Returns message for specified message ID.
@@ -215,8 +202,20 @@
  */
 - (void) markAllMessagesRead;
 
+/**
+ Creates a sysmtem message of specific type.
+ @param systemMessageType  System message type
+ @param messageType SubType of system message
+ @param contact Message recepient
+ @return NSString formated system message
+ */
 + (NSString*) createSystemMessage:(HOPSystemMessageType) systemMessageType messageType:(int) systemMessageType contact:(HOPContact*) contact;
+
+/**
+ *  Returns system message type string.
+ */
 + (NSString*) getSystemMessageType;
+
 /**
   Destroys conversation thread core object.
  */

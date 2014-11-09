@@ -39,14 +39,18 @@
 #import "WaitingVideoViewController.h"
 #import "Utility.h"
 #import "AddParticipantsViewController.h"
+#import "InfoViewController.h"
 #import <OpenPeerSDK/HOPCall.h>
 #import <OpenPeerSDK/HOPConversationEvent.h>
 #import <OpenPeerSDK/HOPParticipants.h>
-#define ACTION_AUDIO_CALL       1
-#define ACTION_VIDEO_CALL       2
-#define ACTION_ADD_CONTACT      3
-#define ACTION_REMOVE_CONTACT   4
-#define ACTION_CANCEL           5
+
+
+#define ACTION_AUDIO_CALL           1
+#define ACTION_VIDEO_CALL           2
+#define ACTION_ADD_CONTACT          3
+#define ACTION_REMOVE_CONTACT       4
+#define ACTION_SHOW_CONTACT_INFO    5
+#define ACTION_CANCEL               6
 
 
 @interface SessionViewController_iPhone ()
@@ -260,6 +264,13 @@
                 [buttonTitles addObject:NSLocalizedString(@"Remove Contact", @"")];
                 [self.availableActions addObject:[NSNumber numberWithInt:ACTION_REMOVE_CONTACT]];
             }
+            
+            if (self.session.lastConversationEvent.participants.participants.count == 1)
+            {
+                [buttonTitles addObject:NSLocalizedString(@"Show contact info", @"")];
+                [self.availableActions addObject:[NSNumber numberWithInt:ACTION_SHOW_CONTACT_INFO]];
+            }
+            
             [buttonTitles addObject:NSLocalizedString(@"Cancel", @"")];
             [self.availableActions addObject:[NSNumber numberWithInt:ACTION_CANCEL]];
             
@@ -283,6 +294,13 @@
     [self.navigationController pushViewController:self.addParticipantsViewController animated:YES];
 }
 
+- (void) showContactInfo
+{
+    InfoViewController* infoViewController = [[InfoViewController alloc] initWithContact:[self.session.lastConversationEvent.participants.participants.allObjects objectAtIndex:0] style:UITableViewStyleGrouped];
+    infoViewController.title = @"User Info";
+    [self.navigationController pushViewController:infoViewController animated:YES];
+}
+
 #pragma mark - UIActionSheetDelegate
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex;
 {
@@ -303,6 +321,9 @@
         case ACTION_REMOVE_CONTACT:
             [self showContactsChooserForAddingContacts:NO];
             //[self closeSession:nil];
+            break;
+        case ACTION_SHOW_CONTACT_INFO:
+            [self showContactInfo];
             break;
         default:
             break;

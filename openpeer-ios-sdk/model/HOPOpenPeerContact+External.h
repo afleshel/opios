@@ -29,7 +29,7 @@
  
  */
 
-#import <HOPOpenPeerContact.h>
+#import "HOPOpenPeerContact.h"
 
 @class HOPContact;
 @class HOPRolodexContact;
@@ -38,5 +38,5 @@
 
 - (HOPContact*) getCoreContact;
 - (HOPRolodexContact*) getDefaultRolodexContact;
-
+- (NSString*) getFullName;
 @end

@@ -77,6 +77,7 @@ using namespace openpeer::core;
         if (callSystemMessagePtr)
         {
             ret = [[self alloc] initWithCoreCallSystemMsssage:callSystemMessagePtr];
+            ret.jsonMessage = jsonMessage;
         }
     }
     

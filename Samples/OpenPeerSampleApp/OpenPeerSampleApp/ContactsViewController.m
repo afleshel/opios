@@ -92,6 +92,7 @@
     if (self)
     {
         self.mode = inMode;
+        self.isInFavoritesMode = inMode == CONTACTS_TABLE_MODE_FAVORITES;   
         self.isMultipleSelectionAvailable = inAllowMultipleSelection;
         if (inFilterContacts.count > 0)
             self.listOfFilterContacts = [NSArray arrayWithArray:inFilterContacts];
@@ -401,7 +402,7 @@
             break;
     }
     
-    NSPredicate *predicateAllContacts = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(associatedIdentity.account.stableId MATCHES '%@')",[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser].stableId]];
+    NSPredicate *predicateAllContacts = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(associatedIdentity.account.stableId MATCHES '%@')",[[HOPModelManager sharedModelManager] getLastLoggedInUser].stableId]];
     
     [predicatesArray addObject:predicateAllContacts];
     
@@ -472,9 +473,9 @@
     }
     
     if ([searchText length] > 0)
-        predicateString = [NSString stringWithFormat:@"(associatedIdentity.account.stableId MATCHES '%@' AND name CONTAINS[c] '%@') ",[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser].stableId,searchText];
+        predicateString = [NSString stringWithFormat:@"(associatedIdentity.account.stableId MATCHES '%@' AND name CONTAINS[c] '%@') ",[[HOPModelManager sharedModelManager] getLastLoggedInUser].stableId,searchText];
     else
-        predicateString = [NSString stringWithFormat:@"(associatedIdentity.account.stableId MATCHES '%@') ",[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser].stableId];
+        predicateString = [NSString stringWithFormat:@"(associatedIdentity.account.stableId MATCHES '%@') ",[[HOPModelManager sharedModelManager] getLastLoggedInUser].stableId];
     
     NSPredicate *predicateAllContacts = [NSPredicate predicateWithFormat:predicateString];
     [predicatesArray addObject:predicateAllContacts];
@@ -510,6 +511,7 @@
     [self stopRefreshController];
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Handling loaded contacts.");
     NSError *error;
+    self.fetchedResultsController = nil;
 	if (![self.fetchedResultsController performFetch:&error])
     {
 		OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Fetching contacts has failed with an error: %@, error description: %@", error, [error userInfo]);

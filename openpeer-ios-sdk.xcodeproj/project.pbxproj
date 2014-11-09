@@ -57,7 +57,6 @@
 		8783859117A84FAB003C6EEA /* HOPRolodexContact+External.h in Headers */ = {isa = PBXBuildFile; fileRef = 8783858F17A84FAA003C6EEA /* HOPRolodexContact+External.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8783859217A84FAB003C6EEA /* HOPRolodexContact+External.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8783859017A84FAA003C6EEA /* HOPRolodexContact+External.mm */; };
 		8792E86C16519CFF00DEAC58 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8792E86B16519CFF00DEAC58 /* Foundation.framework */; };
-		8792E9C81651A8DA00DEAC58 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8792E9C41651A8DA00DEAC58 /* libcurl.a */; };
 		87A5B1A016EDE5EB007E825A /* HOPAccount.mm in Sources */ = {isa = PBXBuildFile; fileRef = 87A5B18C16EDE5EB007E825A /* HOPAccount.mm */; };
 		87A5B1A216EDE5EB007E825A /* HOPCall.mm in Sources */ = {isa = PBXBuildFile; fileRef = 87A5B18E16EDE5EB007E825A /* HOPCall.mm */; };
 		87A5B1A316EDE5EB007E825A /* HOPContact.mm in Sources */ = {isa = PBXBuildFile; fileRef = 87A5B18F16EDE5EB007E825A /* HOPContact.mm */; };
@@ -170,6 +169,7 @@
 		87ED987719D9F85100902839 /* HOPConversationEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 87ED987519D9F85100902839 /* HOPConversationEvent.m */; };
 		87EE11091966D242002340AA /* HOPConversationRecord+External.h in Headers */ = {isa = PBXBuildFile; fileRef = 87EE11071966D242002340AA /* HOPConversationRecord+External.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		87EE110A1966D242002340AA /* HOPConversationRecord+External.m in Sources */ = {isa = PBXBuildFile; fileRef = 87EE11081966D242002340AA /* HOPConversationRecord+External.m */; };
+		87F9A03D1A010FB2005351B1 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 009A268519EDC50E00F277DB /* libcurl.a */; };
 		E23390DA1934EAAF004A62FD /* libaudio_coding_module.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E23390B41934EAA8004A62FD /* libaudio_coding_module.a */; };
 		E23390DB1934EAAF004A62FD /* libaudio_conference_mixer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E23390B51934EAA8004A62FD /* libaudio_conference_mixer.a */; };
 		E23390DC1934EAAF004A62FD /* libaudio_device.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E23390B61934EAA8004A62FD /* libaudio_device.a */; };
@@ -353,6 +353,7 @@
 /* Begin PBXFileReference section */
 		00243939178F52D300B79368 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		004A55BC1839DA9E00AEF378 /* ortclib_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ortclib_ios.xcodeproj; path = "libs/op/libs/ortc-lib/projects/xcode/ortclib_ios/ortclib_ios.xcodeproj"; sourceTree = SOURCE_ROOT; };
+		009A268519EDC50E00F277DB /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = "libs/op/libs/ortc-lib/libs/curl-build-scripts/curl/ios-appstore/lib/libcurl.a"; sourceTree = "<group>"; };
 		00C82C3F18320855005B87E0 /* boost.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = boost.framework; path = "libs/op/libs/ortc-lib/libs/boost/ios/framework/boost.framework"; sourceTree = "<group>"; };
 		8702E53C17997568003287D5 /* OpenPeerModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = OpenPeerModel.xcdatamodel; sourceTree = "<group>"; };
 		871BC9A4179EEB3F00AEA4A6 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -397,7 +398,6 @@
 		8792E9211651A0D000DEAC58 /* hfservices_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = hfservices_ios.xcodeproj; path = "libs/op/libs/ortc-lib/libs/op-services-cpp/projects/xcode/hfservices_ios/hfservices_ios.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		8792E9AA1651A12B00DEAC58 /* cryptopp_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cryptopp_ios.xcodeproj; path = "libs/op/libs/ortc-lib/libs/cryptopp/projects/xcode/cryptopp_ios/cryptopp_ios.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		8792E9BE1651A43E00DEAC58 /* HOPStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HOPStack.h; sourceTree = "<group>"; };
-		8792E9C41651A8DA00DEAC58 /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = "libs/op/libs/ortc-lib/libs/curl/staging/libcurl.a"; sourceTree = SOURCE_ROOT; };
 		8792E9CC1651B21F00DEAC58 /* HOPContact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HOPContact.h; sourceTree = "<group>"; };
 		87A5B18C16EDE5EB007E825A /* HOPAccount.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HOPAccount.mm; sourceTree = "<group>"; };
 		87A5B18E16EDE5EB007E825A /* HOPCall.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = HOPCall.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -565,6 +565,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				87F9A03D1A010FB2005351B1 /* libcurl.a in Frameworks */,
 				E23390DA1934EAAF004A62FD /* libaudio_coding_module.a in Frameworks */,
 				E23390DB1934EAAF004A62FD /* libaudio_conference_mixer.a in Frameworks */,
 				E23390DC1934EAAF004A62FD /* libaudio_device.a in Frameworks */,
@@ -614,7 +615,6 @@
 				00EB8DC4177D15BD00FFD40F /* libhfservices_ios.a in Frameworks */,
 				00EB8DC6177D15BD00FFD40F /* libudns_ios.a in Frameworks */,
 				00EB8DC7177D15BD00FFD40F /* libzsLib_ios.a in Frameworks */,
-				8792E9C81651A8DA00DEAC58 /* libcurl.a in Frameworks */,
 				00C82C4018320855005B87E0 /* boost.framework in Frameworks */,
 				871BC9A5179EEB4000AEA4A6 /* CoreData.framework in Frameworks */,
 				8792E86C16519CFF00DEAC58 /* Foundation.framework in Frameworks */,
@@ -637,7 +637,7 @@
 		0012C521177D10110017FF5E /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				8792E9C41651A8DA00DEAC58 /* libcurl.a */,
+				009A268519EDC50E00F277DB /* libcurl.a */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -701,62 +701,62 @@
 		8702E53A17997568003287D5 /* model */ = {
 			isa = PBXGroup;
 			children = (
-				87DAEDB319DED005005F7F01 /* HOPMessageRecord.h */,
-				87DAEDB419DED005005F7F01 /* HOPMessageRecord.m */,
+				87E6C03419CC542F001D6110 /* HOPAPNSData.h */,
+				87E6C03519CC542F001D6110 /* HOPAPNSData.m */,
+				87C0930F19CB087000508B09 /* HOPAssociatedIdentity.h */,
+				87C0931019CB087000508B09 /* HOPAssociatedIdentity.m */,
+				87CEF2EF179DC7E0003770EE /* HOPAvatar_Internal.h */,
+				87CEF2EE179DC7E0003770EE /* HOPAvatar_Internal.mm */,
+				87C092F719CB047C00508B09 /* HOPAvatar.h */,
+				87C092F819CB047C00508B09 /* HOPAvatar.m */,
+				87D72EC817DDEEDB00DEB37E /* HOPAvatar+External.h */,
+				87D72EC717DDEEDB00DEB37E /* HOPAvatar+External.mm */,
+				87C0930319CB047C00508B09 /* HOPCacheData.h */,
+				87C0930419CB047C00508B09 /* HOPCacheData.m */,
 				87ED987419D9F85100902839 /* HOPConversationEvent.h */,
 				87ED987519D9F85100902839 /* HOPConversationEvent.m */,
 				87ED986C19D977C500902839 /* HOPConversationRecord.h */,
 				87ED986D19D977C500902839 /* HOPConversationRecord.m */,
-				87ED986419D96A3D00902839 /* HOPParticipants.h */,
-				87ED986519D96A3D00902839 /* HOPParticipants.m */,
-				87ED986019D967D600902839 /* HOPOpenPeerContact.h */,
-				87ED986119D967D600902839 /* HOPOpenPeerContact.m */,
-				87E6C03419CC542F001D6110 /* HOPAPNSData.h */,
-				87E6C03519CC542F001D6110 /* HOPAPNSData.m */,
-				87E6C03019CC542F001D6110 /* HOPPublicPeerFile.h */,
-				87E6C03119CC542F001D6110 /* HOPPublicPeerFile.m */,
-				87E6C02019CC542E001D6110 /* HOPIdentityContact.h */,
-				87E6C02119CC542E001D6110 /* HOPIdentityContact.m */,
-				87C0931719CB087100508B09 /* HOPOpenPeerAccount.h */,
-				87C0931819CB087100508B09 /* HOPOpenPeerAccount.m */,
-				87C0931319CB087100508B09 /* HOPIdentityProvider.h */,
-				87C0931419CB087100508B09 /* HOPIdentityProvider.m */,
-				87C0930F19CB087000508B09 /* HOPAssociatedIdentity.h */,
-				87C0931019CB087000508B09 /* HOPAssociatedIdentity.m */,
-				87D72EC817DDEEDB00DEB37E /* HOPAvatar+External.h */,
-				87D72EC717DDEEDB00DEB37E /* HOPAvatar+External.mm */,
-				87CEF2EF179DC7E0003770EE /* HOPAvatar_Internal.h */,
-				87CEF2EE179DC7E0003770EE /* HOPAvatar_Internal.mm */,
-				871BC9C317A1233500AEA4A6 /* HOPIdentityContact_Internal.h */,
-				871BC9C417A1233600AEA4A6 /* HOPIdentityContact_Internal.mm */,
-				8783858F17A84FAA003C6EEA /* HOPRolodexContact+External.h */,
-				8783859017A84FAA003C6EEA /* HOPRolodexContact+External.mm */,
-				87CEF2C2179D4E4B003770EE /* HOPRolodexContact_Internal.h */,
-				87CEF2EC179D5CD0003770EE /* HOPRolodexContact_Internal.mm */,
-				875FD1341806AF74001A5BEA /* HOPOpenPeerAccount+External.h */,
-				875FD1351806AF74001A5BEA /* HOPOpenPeerAccount+External.m */,
-				8702E53B17997568003287D5 /* OpenPeerModel.xcdatamodeld */,
-				87E8CD9119D1822100BAF67E /* HOPMessageEvent.h */,
-				87E8CD9219D1822100BAF67E /* HOPMessageEvent.m */,
-				87C092E019CB047B00508B09 /* HOPIdentityContact.mm */,
-				87C092E319CB047B00508B09 /* HOPImage.h */,
-				87C092E419CB047B00508B09 /* HOPImage.m */,
-				87C092F319CB047B00508B09 /* HOPConversationThreadRecord.h */,
-				87C092F419CB047B00508B09 /* HOPConversationThreadRecord.m */,
-				87C092F719CB047C00508B09 /* HOPAvatar.h */,
-				87C092F819CB047C00508B09 /* HOPAvatar.m */,
-				87C0930719CB047C00508B09 /* HOPRolodexContact.h */,
-				87C0930819CB047C00508B09 /* HOPRolodexContact.m */,
-				87C0930319CB047C00508B09 /* HOPCacheData.h */,
-				87C0930419CB047C00508B09 /* HOPCacheData.m */,
 				87EE11071966D242002340AA /* HOPConversationRecord+External.h */,
 				87EE11081966D242002340AA /* HOPConversationRecord+External.m */,
-				87DA95C219D41D5800AB2EAA /* HOPOpenPeerContact+External.h */,
-				87DA95C319D41D5800AB2EAA /* HOPOpenPeerContact+External.mm */,
-				87DAECB719DD6858005F7F01 /* HOPOpenPeerContact_Internal.h */,
-				87DAECBB19DD69C0005F7F01 /* HOPOpenPeerContact_Internal.mm */,
+				87C092F319CB047B00508B09 /* HOPConversationThreadRecord.h */,
+				87C092F419CB047B00508B09 /* HOPConversationThreadRecord.m */,
+				871BC9C317A1233500AEA4A6 /* HOPIdentityContact_Internal.h */,
+				871BC9C417A1233600AEA4A6 /* HOPIdentityContact_Internal.mm */,
+				87E6C02019CC542E001D6110 /* HOPIdentityContact.h */,
+				87E6C02119CC542E001D6110 /* HOPIdentityContact.m */,
+				87C092E019CB047B00508B09 /* HOPIdentityContact.mm */,
+				87C0931319CB087100508B09 /* HOPIdentityProvider.h */,
+				87C0931419CB087100508B09 /* HOPIdentityProvider.m */,
+				87C092E319CB047B00508B09 /* HOPImage.h */,
+				87C092E419CB047B00508B09 /* HOPImage.m */,
+				87E8CD9119D1822100BAF67E /* HOPMessageEvent.h */,
+				87E8CD9219D1822100BAF67E /* HOPMessageEvent.m */,
+				87DAEDB319DED005005F7F01 /* HOPMessageRecord.h */,
+				87DAEDB419DED005005F7F01 /* HOPMessageRecord.m */,
 				87DAEDAF19DEC573005F7F01 /* HOPMessageRecord+External.h */,
 				87DAEDB119DEC8DA005F7F01 /* HOPMessageRecord+External.mm */,
+				87C0931719CB087100508B09 /* HOPOpenPeerAccount.h */,
+				87C0931819CB087100508B09 /* HOPOpenPeerAccount.m */,
+				875FD1341806AF74001A5BEA /* HOPOpenPeerAccount+External.h */,
+				875FD1351806AF74001A5BEA /* HOPOpenPeerAccount+External.m */,
+				87DAECB719DD6858005F7F01 /* HOPOpenPeerContact_Internal.h */,
+				87DAECBB19DD69C0005F7F01 /* HOPOpenPeerContact_Internal.mm */,
+				87ED986019D967D600902839 /* HOPOpenPeerContact.h */,
+				87ED986119D967D600902839 /* HOPOpenPeerContact.m */,
+				87DA95C219D41D5800AB2EAA /* HOPOpenPeerContact+External.h */,
+				87DA95C319D41D5800AB2EAA /* HOPOpenPeerContact+External.mm */,
+				87ED986419D96A3D00902839 /* HOPParticipants.h */,
+				87ED986519D96A3D00902839 /* HOPParticipants.m */,
+				87E6C03019CC542F001D6110 /* HOPPublicPeerFile.h */,
+				87E6C03119CC542F001D6110 /* HOPPublicPeerFile.m */,
+				87CEF2C2179D4E4B003770EE /* HOPRolodexContact_Internal.h */,
+				87CEF2EC179D5CD0003770EE /* HOPRolodexContact_Internal.mm */,
+				87C0930719CB047C00508B09 /* HOPRolodexContact.h */,
+				87C0930819CB047C00508B09 /* HOPRolodexContact.m */,
+				8783858F17A84FAA003C6EEA /* HOPRolodexContact+External.h */,
+				8783859017A84FAA003C6EEA /* HOPRolodexContact+External.mm */,
+				8702E53B17997568003287D5 /* OpenPeerModel.xcdatamodeld */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -1094,7 +1094,7 @@
 				8792E86416519CFF00DEAC58 /* Sources */,
 				8792E86516519CFF00DEAC58 /* Frameworks */,
 				87B013B716611FAA00E8938B /* Headers */,
-				87226B78197FC26900E7A660 /* ShellScript */,
+				87D59AF719FEA93900FC6CFB /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1264,7 +1264,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		87226B78197FC26900E7A660 /* ShellScript */ = {
+		87D59AF719FEA93900FC6CFB /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1275,7 +1275,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\n\n: ${BOOST_LIB_PATH:=./libs/op/libs/ortc-lib/libs/boost/ios/library/boost.a}\n: ${CURL_LIB_PATH:=./libs/op/libs/ortc-lib/libs/curl/staging/libcurl.a}\n\nFMK_VERSION=C\n\n# Delete old framework folder\nrm -rf \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework\"\n\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Headers\"\n#mkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Frameworks\"\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Libraries\"\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Resources\"\n\n# Link the \"Current\" version to \"C\"\n/bin/ln -sfh ${FMK_VERSION} \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/Current\"\n/bin/ln -sfh Versions/Current/Headers \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Headers\"\n#/bin/ln -sfh Versions/Current/Frameworks \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Frameworks\"\n/bin/ln -sfh Versions/Current/Libraries \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Libraries\"\n/bin/ln -sfh Versions/Current/Resources \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Resources\"\n/bin/ln -sfh \"Versions/Current/${PRODUCT_NAME}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/${PRODUCT_NAME}\"\n\n# The -a ensures that the headers maintain the source modification date so that we don't constantly\n# cause propagating rebuilds of files that import these headers.\n/bin/cp -a \"${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Headers\"\n\n/bin/cp -a \"${BOOST_LIB_PATH}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Libraries\"\n\n/bin/cp -a \"${CURL_LIB_PATH}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Libraries\"\n\n/bin/cp -R  \"${TARGET_BUILD_DIR}/${PUBLIC_RESOURCES_FOLDER_PATH}/OpenpeerDataModel.bundle\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Resources\"\n\n/bin/cp -a \"${BUILT_PRODUCTS_DIR}/lib${PRODUCT_NAME}.a\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/${PRODUCT_NAME}\"\n";
+			shellScript = "set -e\n\n: ${BOOST_LIB_PATH:=./libs/op/libs/ortc-lib/libs/boost/ios/library/boost.a}\n: ${CURL_LIB_PATH:=./libs/op/libs/ortc-lib/libs/curl-build-scripts/curl/ios-appstore/lib/libcurl.a}\n\nFMK_VERSION=D\n\n# Delete old framework folder\nrm -rf \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework\"\n\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Headers\"\n#mkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Frameworks\"\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Libraries\"\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Resources\"\n\n# Link the \"Current\" version to \"C\"\n/bin/ln -sfh ${FMK_VERSION} \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/Current\"\n/bin/ln -sfh Versions/Current/Headers \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Headers\"\n#/bin/ln -sfh Versions/Current/Frameworks \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Frameworks\"\n/bin/ln -sfh Versions/Current/Libraries \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Libraries\"\n/bin/ln -sfh Versions/Current/Resources \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Resources\"\n/bin/ln -sfh \"Versions/Current/${PRODUCT_NAME}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/${PRODUCT_NAME}\"\n\n# The -a ensures that the headers maintain the source modification date so that we don't constantly\n# cause propagating rebuilds of files that import these headers.\n/bin/cp -a \"${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Headers\"\n\n/bin/cp -a \"${BOOST_LIB_PATH}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Libraries\"\n\n/bin/cp -a \"${CURL_LIB_PATH}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Libraries\"\n\n/bin/cp -R  \"${TARGET_BUILD_DIR}/${PUBLIC_RESOURCES_FOLDER_PATH}/OpenpeerDataModel.bundle\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Resources\"\n\n/bin/cp -a \"${BUILT_PRODUCTS_DIR}/lib${PRODUCT_NAME}.a\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/${PRODUCT_NAME}\"\n";
 		};
 		87D7EF93197926CA003B1746 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1477,7 +1477,7 @@
 					"libs/op/libs/ortc-lib/libs",
 					"libs/op/libs/ortc-lib/libs/op-services-cpp",
 					"libs/op/libs/ortc-lib/libs/boost/ios/framework/boost.framework/Headers",
-					"libs/op/libs/ortc-lib/libs/curl/include",
+					"libs/op/libs/ortc-lib/libs/curl-build-scripts/curl",
 					"libs/op/libs/ortc-lib/libs/zsLib",
 					"libs/op/libs/ortc-lib/libs/webRTC/webrtc",
 					"libs/op/libs/ortc-lib/libs/webRTC/webrtc/common_video/interface/",
@@ -1492,7 +1492,7 @@
 					"libs/op/libs/ortc-lib/libs/webRTC/webrtc/voice_engine/main/interface",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = "libs/op/libs/ortc-lib/libs/curl/staging";
+				LIBRARY_SEARCH_PATHS = "libs/op/libs/ortc-lib/libs/curl-build-scripts/curl/lib";
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -1526,7 +1526,7 @@
 					"libs/op/libs/ortc-lib/libs",
 					"libs/op/libs/ortc-lib/libs/op-services-cpp",
 					"libs/op/libs/ortc-lib/libs/boost/ios/framework/boost.framework/Headers",
-					"libs/op/libs/ortc-lib/libs/curl/include",
+					"libs/op/libs/ortc-lib/libs/curl-build-scripts/curl",
 					"libs/op/libs/ortc-lib/libs/zsLib",
 					"libs/op/libs/ortc-lib/libs/webRTC/webrtc",
 					"libs/op/libs/ortc-lib/libs/webRTC/webrtc/common_video/interface/",
@@ -1541,7 +1541,7 @@
 					"libs/op/libs/ortc-lib/libs/webRTC/webrtc/voice_engine/main/interface",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = "libs/op/libs/ortc-lib/libs/curl/staging";
+				LIBRARY_SEARCH_PATHS = "libs/op/libs/ortc-lib/libs/curl-build-scripts/curl/lib";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				VALIDATE_PRODUCT = YES;
@@ -1555,8 +1555,9 @@
 				CURRENT_PROJECT_VERSION = 0.82;
 				DEAD_CODE_STRIPPING = NO;
 				DSTROOT = /tmp/openpeer_ios_sdk.dst;
-				DYLIB_CURRENT_VERSION = 1.0;
+				DYLIB_CURRENT_VERSION = 1.1;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_VERSION = D;
 				GCC_ENABLE_CPP_RTTI = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "openpeer-ios-sdk/openpeer-ios-sdk-Prefix.pch";
@@ -1565,7 +1566,10 @@
 					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts\"",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/libs/op/libs/ortc-lib/libs/curl-build-scripts/curl/ios-appstore/lib",
+				);
 				MACH_O_TYPE = staticlib;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CPLUSPLUSFLAGS = (
@@ -1591,8 +1595,9 @@
 				CURRENT_PROJECT_VERSION = 0.82;
 				DEAD_CODE_STRIPPING = NO;
 				DSTROOT = /tmp/openpeer_ios_sdk.dst;
-				DYLIB_CURRENT_VERSION = 1.0;
+				DYLIB_CURRENT_VERSION = 1.1;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_VERSION = D;
 				GCC_ENABLE_CPP_RTTI = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "openpeer-ios-sdk/openpeer-ios-sdk-Prefix.pch";
@@ -1601,7 +1606,10 @@
 					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts\"",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/libs/op/libs/ortc-lib/libs/curl-build-scripts/curl/ios-appstore/lib",
+				);
 				MACH_O_TYPE = staticlib;
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",

@@ -31,6 +31,7 @@
 
 #import "AppInfoViewController.h"
 #import "AppConsts.h"
+#import "Settings.h"
 
 const CGFloat cellDefaultHeight = 50.0;
 const CGFloat headerDefaultHeight = 40.0;
@@ -40,10 +41,17 @@ typedef enum
     
     APP_VERSION,
     APP_BUILD_VERSION,
-    APP_SETTINGS_DOWNLOAD_URL,
     APP_SETTINGS_VERSION,
+    APP_SETTINGS_DOWNLOAD_URL,
+    APP_SETTINGS_OUTER_FRAME_URL,
+    APP_SETTINGS_IDENTITY_PROVIDER_DOMAIN,
+    APP_SETTINGS_IDENTITY_FEDERATE_BASE_URI,
+    APP_SETTINGS_NAMESPACE_GRANT_SERVICE_URL,
+    APP_SETTINGS_LOCKBOX_SERVICE_DOMAIN,
+    APP_SETTINGS_DEVICE_TOKEN_DOWNLOAD_URL,
+    APP_SETTINGS_DEVICE_TOKEN_UPLOAD_URL,
     
-    APP_INFO_SECTIONS = 4
+    APP_INFO_SECTIONS
 } AppInfoOptions;
 
 @interface AppInfoViewController ()
@@ -111,14 +119,44 @@ typedef enum
             cell.textLabel.text =  [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
             break;
             
+        case APP_SETTINGS_VERSION:
+            cell.textLabel.text = [[NSUserDefaults standardUserDefaults] stringForKey:settingsKeySettingsVersion];
+            break;
+            
         case APP_SETTINGS_DOWNLOAD_URL:
             cell.textLabel.text =  [[[NSUserDefaults standardUserDefaults] stringForKey:settingsKeySettingsDownloadURL] length] > 0 ? [[NSUserDefaults standardUserDefaults] stringForKey:settingsKeySettingsDownloadURL] : @"None";
             break;
             
-        case APP_SETTINGS_VERSION:
-            cell.textLabel.text = [[NSUserDefaults standardUserDefaults] stringForKey:settingsKeySettingsVersion];
+        
+        case APP_SETTINGS_OUTER_FRAME_URL:
+            cell.textLabel.text =  [[[Settings sharedSettings] getOuterFrameURL] length] > 0 ? [[Settings sharedSettings] getOuterFrameURL]: @"None";
             break;
-
+            
+        case APP_SETTINGS_IDENTITY_PROVIDER_DOMAIN:
+            cell.textLabel.text =  [[[Settings sharedSettings] getIdentityProviderDomain] length] > 0 ? [[Settings sharedSettings] getIdentityProviderDomain]: @"None";
+            break;
+            
+        case APP_SETTINGS_IDENTITY_FEDERATE_BASE_URI:
+            cell.textLabel.text =  [[[Settings sharedSettings] getIdentityFederateBaseURI] length] > 0 ? [[Settings sharedSettings] getIdentityFederateBaseURI]: @"None";
+            break;
+            
+        case APP_SETTINGS_NAMESPACE_GRANT_SERVICE_URL:
+            cell.textLabel.text =  [[[Settings sharedSettings] getNamespaceGrantServiceURL] length] > 0 ? [[Settings sharedSettings] getNamespaceGrantServiceURL]: @"None";
+            break;
+            
+        case APP_SETTINGS_LOCKBOX_SERVICE_DOMAIN:
+            cell.textLabel.text =  [[[Settings sharedSettings] getLockBoxServiceDomain] length] > 0 ? [[Settings sharedSettings] getLockBoxServiceDomain]: @"None";
+            break;
+            
+        case APP_SETTINGS_DEVICE_TOKEN_DOWNLOAD_URL:
+            cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
+            cell.textLabel.text =  [[[Settings sharedSettings] getDeviceTokenDownloadURL] length] > 0 ? [[Settings sharedSettings] getDeviceTokenDownloadURL]: @"None";
+            break;
+            
+        case APP_SETTINGS_DEVICE_TOKEN_UPLOAD_URL:
+            cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
+            cell.textLabel.text =  [[[Settings sharedSettings] getDeviceTokenUploadURL] length] > 0 ? [[Settings sharedSettings] getDeviceTokenUploadURL]: @"None";
+            break;
             
         default:
             break;
@@ -140,15 +178,42 @@ typedef enum
         case APP_BUILD_VERSION:
             ret = @"Application Build Version";
             break;
+           
+        case APP_SETTINGS_VERSION:
+            ret = @"Settings Version";
+            break;
             
         case APP_SETTINGS_DOWNLOAD_URL:
             ret = @"Settings Download URL";
             break;
             
-        case APP_SETTINGS_VERSION:
-            ret = @"Settings Version";
+        case APP_SETTINGS_OUTER_FRAME_URL:
+            ret = @"Outer Frame URL";
             break;
             
+        case APP_SETTINGS_IDENTITY_PROVIDER_DOMAIN:
+            ret = @"Settings Identity Provider Domain";
+            break;
+            
+        case APP_SETTINGS_IDENTITY_FEDERATE_BASE_URI:
+            ret = @"Identity Federate Base URI";
+            break;
+            
+        case APP_SETTINGS_NAMESPACE_GRANT_SERVICE_URL:
+            ret = @"Namespace Grant Service URL";
+            break;
+            
+        case APP_SETTINGS_LOCKBOX_SERVICE_DOMAIN:
+            ret = @"Settings Lockbox Service Domain";
+            break;
+            
+        case APP_SETTINGS_DEVICE_TOKEN_DOWNLOAD_URL:
+            ret = @"Device Token Download URL";
+            break;
+          
+        case APP_SETTINGS_DEVICE_TOKEN_UPLOAD_URL:
+            ret = @"Device Token Upload URL";
+            break;
             
         default:
             break;
@@ -156,4 +221,36 @@ typedef enum
     
     return ret;
 }
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    CGFloat ret = 0;
+    CGSize constraintSize = CGSizeMake(280.0f, MAXFLOAT);
+    
+    switch (indexPath.section)
+    {
+        case APP_SETTINGS_DEVICE_TOKEN_DOWNLOAD_URL:
+        {
+            UIFont* cellFont = [UIFont boldSystemFontOfSize:17.0];
+            CGSize labelSize = [[[Settings sharedSettings] getDeviceTokenDownloadURL] boundingRectWithSize: constraintSize options: NSStringDrawingUsesLineFragmentOrigin attributes: @{ NSFontAttributeName: cellFont } context: nil].size;
+            ret = (labelSize.height) > cellDefaultHeight ? labelSize.height + 20.0: cellDefaultHeight;
+        }
+            break;
+            
+        case APP_SETTINGS_DEVICE_TOKEN_UPLOAD_URL:
+        {
+            UIFont* cellFont = [UIFont boldSystemFontOfSize:17.0];
+            CGSize labelSize = [[[Settings sharedSettings] getDeviceTokenUploadURL] boundingRectWithSize: constraintSize options: NSStringDrawingUsesLineFragmentOrigin attributes: @{ NSFontAttributeName: cellFont } context: nil].size;
+            ret = (labelSize.height) > cellDefaultHeight ? labelSize.height + 20.0: cellDefaultHeight;
+        }
+            break;
+            
+        default:
+            ret = cellDefaultHeight;
+            break;
+    }
+    
+    return ret;
+}
+
 @end
