@@ -250,6 +250,13 @@
 			remoteGlobalIDString = E2260E721821628E0084E4A4;
 			remoteInfo = ortclib_ios;
 		};
+		004B22361A10798A00239AAC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 004B22311A10798A00239AAC /* easysqlite_ios.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 004B220C1A10793F00239AAC;
+			remoteInfo = easysqlite;
+		};
 		00EB8DB0177D14DA00FFD40F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8792E8F41651A04800DEAC58 /* zsLib_ios.xcodeproj */;
@@ -353,6 +360,7 @@
 /* Begin PBXFileReference section */
 		00243939178F52D300B79368 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		004A55BC1839DA9E00AEF378 /* ortclib_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ortclib_ios.xcodeproj; path = "libs/op/libs/ortc-lib/projects/xcode/ortclib_ios/ortclib_ios.xcodeproj"; sourceTree = SOURCE_ROOT; };
+		004B22311A10798A00239AAC /* easysqlite_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = easysqlite_ios.xcodeproj; path = libs/op/libs/easysqlite/projects/xcode/easysqlite_ios.xcodeproj; sourceTree = SOURCE_ROOT; };
 		009A268519EDC50E00F277DB /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = "libs/op/libs/ortc-lib/libs/curl-build-scripts/curl/ios-appstore/lib/libcurl.a"; sourceTree = "<group>"; };
 		00C82C3F18320855005B87E0 /* boost.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = boost.framework; path = "libs/op/libs/ortc-lib/libs/boost/ios/framework/boost.framework"; sourceTree = "<group>"; };
 		8702E53C17997568003287D5 /* OpenPeerModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = OpenPeerModel.xcdatamodel; sourceTree = "<group>"; };
@@ -674,6 +682,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		004B22321A10798A00239AAC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				004B22371A10798A00239AAC /* libeasysqlite_ios.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		00EB8DA8177D14DA00FFD40F /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -885,6 +901,7 @@
 			children = (
 				8792E9151651A0BB00DEAC58 /* hfcore_ios.xcodeproj */,
 				8792E9091651A0A600DEAC58 /* hfstack_ios.xcodeproj */,
+				004B22311A10798A00239AAC /* easysqlite_ios.xcodeproj */,
 				004A55BC1839DA9E00AEF378 /* ortclib_ios.xcodeproj */,
 				8792E9211651A0D000DEAC58 /* hfservices_ios.xcodeproj */,
 				8792E9AA1651A12B00DEAC58 /* cryptopp_ios.xcodeproj */,
@@ -1156,6 +1173,10 @@
 					ProjectRef = 8792E9AA1651A12B00DEAC58 /* cryptopp_ios.xcodeproj */;
 				},
 				{
+					ProductGroup = 004B22321A10798A00239AAC /* Products */;
+					ProjectRef = 004B22311A10798A00239AAC /* easysqlite_ios.xcodeproj */;
+				},
+				{
 					ProductGroup = 00EB8DCA177D1BE600FFD40F /* Products */;
 					ProjectRef = 8792E9151651A0BB00DEAC58 /* hfcore_ios.xcodeproj */;
 				},
@@ -1220,6 +1241,13 @@
 			fileType = archive.ar;
 			path = libortclib_ios.a;
 			remoteRef = 004A55C01839DA9E00AEF378 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		004B22371A10798A00239AAC /* libeasysqlite_ios.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libeasysqlite_ios.a;
+			remoteRef = 004B22361A10798A00239AAC /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		00EB8DB1177D14DA00FFD40F /* libzsLib_ios.a */ = {
@@ -1448,8 +1476,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libstdc++";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
@@ -1503,8 +1531,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libstdc++";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;

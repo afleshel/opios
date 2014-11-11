@@ -3,6 +3,7 @@
 : ${CURL_SCRIPT_PATH:=./libs/op/libs/ortc-lib/libs/curl-build-scripts}
 : ${BOOST_SCRIPT_PATH:=./libs/op/libs/ortc-lib/libs/boost}
 : ${SQLITE_SCRIPT_PATH:=./libs/op/libs/sqlite}
+: ${EASYSQLITE_SCRIPT_PATH:=./libs/op/libs/easysqlite}
 : ${TEMPLATES_PATH:=./templates}
 : ${DESTINATION_PATH:=./Samples/OpenPeerSampleApp/OpenPeerSampleApp}
 
@@ -153,6 +154,15 @@ buildsqlite() {
 				echo "Sqlite build succeeded!"
 			fi
 		popd
+	fi
+	if [ -f "$SQLITE_SCRIPT_PATH/build/sqlite3.c" ]; then
+		if [ ! -f "$EASYSQLITE_SCRIPT_PATH/build/sqlite3.c" ]; then
+			if [ ! -d "$EASYSQLITE_SCRIPT_PATH/sqlite" ]; then
+				mkdir "$EASYSQLITE_SCRIPT_PATH/sqlite"
+			fi
+			cp "$SQLITE_SCRIPT_PATH/build/sqlite3.c" "$EASYSQLITE_SCRIPT_PATH/sqlite/sqlite3.c"
+			cp "$SQLITE_SCRIPT_PATH/build/sqlite3.h" "$EASYSQLITE_SCRIPT_PATH/sqlite/sqlite3.h"
+		fi
 	fi
 }
 
