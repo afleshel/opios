@@ -40,7 +40,7 @@ using namespace openpeer::core;
 @interface HOPIdentity ()
 {
     IIdentityPtr identityPtr;
-    boost::shared_ptr<OpenPeerIdentityDelegate> openPeerIdentityDelegatePtr;
+    OpenPeerIdentityDelegatePtr openPeerIdentityDelegatePtr;
     NSNumber* objectId;
 }
 
@@ -51,7 +51,7 @@ using namespace openpeer::core;
 @property (nonatomic) BOOL rolodexContactsObtained;
 
 - (id) initWithIdentityPtr:(IIdentityPtr) inIdentityPtr;
-- (id) initWithIdentityPtr:(IIdentityPtr) inIdentityPtr openPeerIdentityDelegate:(boost::shared_ptr<OpenPeerIdentityDelegate>) inOpenPeerIdentityDelegate;
+- (id) initWithIdentityPtr:(IIdentityPtr) inIdentityPtr openPeerIdentityDelegate:(OpenPeerIdentityDelegatePtr) inOpenPeerIdentityDelegate;
 - (void) setLocalDelegate:(id<HOPIdentityDelegate>) inIdentityDelegate;
 - (IIdentityPtr) getIdentityPtr;
 

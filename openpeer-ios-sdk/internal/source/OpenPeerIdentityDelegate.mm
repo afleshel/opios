@@ -50,9 +50,9 @@ OpenPeerIdentityDelegate::~OpenPeerIdentityDelegate()
     ZS_LOG_DEBUG(zsLib::String("SDK - OpenPeerIdentityDelegate destructor is called"));
 }
 
-boost::shared_ptr<OpenPeerIdentityDelegate>  OpenPeerIdentityDelegate::create(id<HOPIdentityDelegate> inIdentityDelegate)
+OpenPeerIdentityDelegatePtr OpenPeerIdentityDelegate::create(id<HOPIdentityDelegate> inIdentityDelegate)
 {
-    return boost::shared_ptr<OpenPeerIdentityDelegate>  (new OpenPeerIdentityDelegate(inIdentityDelegate));
+    return OpenPeerIdentityDelegatePtr(new OpenPeerIdentityDelegate(inIdentityDelegate));
 }
 
 void OpenPeerIdentityDelegate::onIdentityStateChanged(IIdentityPtr identity,IdentityStates state)

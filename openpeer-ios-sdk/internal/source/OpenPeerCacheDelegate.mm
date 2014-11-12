@@ -38,9 +38,9 @@ OpenPeerCacheDelegate::OpenPeerCacheDelegate(id<HOPCacheDelegate> inCacheDelegat
     cacheDelegate = inCacheDelegate;
 }
 
-boost::shared_ptr<OpenPeerCacheDelegate>  OpenPeerCacheDelegate::create(id<HOPCacheDelegate> inCacheDelegate)
+OpenPeerCacheDelegatePtr OpenPeerCacheDelegate::create(id<HOPCacheDelegate> inCacheDelegate)
 {
-    return boost::shared_ptr<OpenPeerCacheDelegate> (new OpenPeerCacheDelegate(inCacheDelegate));
+    return OpenPeerCacheDelegatePtr(new OpenPeerCacheDelegate(inCacheDelegate));
 }
 
 String OpenPeerCacheDelegate::fetch(const char *cookieNamePath)

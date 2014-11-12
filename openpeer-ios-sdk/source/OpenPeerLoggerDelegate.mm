@@ -37,9 +37,9 @@ OpenPeerLoggerDelegate::OpenPeerLoggerDelegate(id<HOPLoggerDelegate> inLoggerDel
     loggerDelegate = inLoggerDelegate;
 }
 
-boost::shared_ptr<OpenPeerLoggerDelegate>  OpenPeerLoggerDelegate::create(id<HOPLoggerDelegate> inLoggerDelegate)
+OpenPeerLoggerDelegatePtr OpenPeerLoggerDelegate::create(id<HOPLoggerDelegate> inLoggerDelegate)
 {
-    return boost::shared_ptr<OpenPeerLoggerDelegate>  (new OpenPeerLoggerDelegate(inLoggerDelegate));
+    return OpenPeerLoggerDelegatePtr(new OpenPeerLoggerDelegate(inLoggerDelegate));
 }
 
 void OpenPeerLoggerDelegate::onNewSubsystem(zsLib::PTRNUMBER subsystemID, const char *subsystemName)

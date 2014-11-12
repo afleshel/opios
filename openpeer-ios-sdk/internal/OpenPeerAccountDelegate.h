@@ -40,6 +40,8 @@
 using namespace openpeer;
 using namespace openpeer::core;
 
+ZS_DECLARE_CLASS_PTR(OpenPeerAccountDelegate)
+
 /**
  Wrapper Class that creates delegate object used in core.
  */
@@ -58,7 +60,7 @@ public:
      Create OpenPeerAccountDelegate object packed in boost shared pointer.
      @returns OpenPeerAccountDelegate object boost shared object
      */
-    static boost::shared_ptr<OpenPeerAccountDelegate>  create(id<HOPAccountDelegate> inAccountDelegate);
+    static OpenPeerAccountDelegatePtr create(id<HOPAccountDelegate> inAccountDelegate);
     
     virtual void onAccountStateChanged(IAccountPtr account,AccountStates state);
     

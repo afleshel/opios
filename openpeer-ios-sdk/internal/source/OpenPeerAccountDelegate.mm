@@ -46,9 +46,9 @@ OpenPeerAccountDelegate::~OpenPeerAccountDelegate()
     ZS_LOG_DEBUG(zsLib::String("SDK - OpenPeerAccountDelegate destructor is called"));
 }
 
-boost::shared_ptr<OpenPeerAccountDelegate>  OpenPeerAccountDelegate::create(id<HOPAccountDelegate> inAccountDelegate)
+OpenPeerAccountDelegatePtr OpenPeerAccountDelegate::create(id<HOPAccountDelegate> inAccountDelegate)
 {
-    return boost::shared_ptr<OpenPeerAccountDelegate>  (new OpenPeerAccountDelegate(inAccountDelegate));
+    return OpenPeerAccountDelegatePtr(new OpenPeerAccountDelegate(inAccountDelegate));
 }
 
 void OpenPeerAccountDelegate::onAccountStateChanged(IAccountPtr account,AccountStates state)

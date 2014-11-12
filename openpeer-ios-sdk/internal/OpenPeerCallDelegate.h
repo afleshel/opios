@@ -38,6 +38,8 @@
 using namespace openpeer;
 using namespace openpeer::core;
 
+ZS_DECLARE_CLASS_PTR(OpenPeerCallDelegate)
+
 class OpenPeerCallDelegate : public ICallDelegate
 {
 protected:
@@ -49,6 +51,6 @@ public:
     
     ~OpenPeerCallDelegate();
     
-    static boost::shared_ptr<OpenPeerCallDelegate> create(id<HOPCallDelegate> inCallDelegate);
+    static OpenPeerCallDelegatePtr create(id<HOPCallDelegate> inCallDelegate);
     virtual void onCallStateChanged(ICallPtr call,CallStates state);
 };

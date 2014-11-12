@@ -44,11 +44,11 @@ OpenPeerSettingsDelegate::OpenPeerSettingsDelegate()
     authorizedApplicationIdCoreKey = [NSString stringWithUTF8String:OPENPEER_COMMON_SETTING_APPLICATION_AUTHORIZATION_ID];
 }
 
-//boost::shared_ptr<OpenPeerSettingsDelegate> OpenPeerSettingsDelegate::create(id<HOPSettingsDelegate> inSettingsDelegate)
-boost::shared_ptr<OpenPeerSettingsDelegate> OpenPeerSettingsDelegate::create()
+//OpenPeerSettingsDelegatePtr OpenPeerSettingsDelegate::create(id<HOPSettingsDelegate> inSettingsDelegate)
+OpenPeerSettingsDelegatePtr OpenPeerSettingsDelegate::create()
 {
-//    return boost::shared_ptr<OpenPeerSettingsDelegate> (new OpenPeerSettingsDelegate(inSettingsDelegate));
-    return boost::shared_ptr<OpenPeerSettingsDelegate> (new OpenPeerSettingsDelegate());
+//    return OpenPeerSettingsDelegatePtr(new OpenPeerSettingsDelegate(inSettingsDelegate));
+    return OpenPeerSettingsDelegatePtr(new OpenPeerSettingsDelegate());
 }
 
 OpenPeerSettingsDelegate::~OpenPeerSettingsDelegate()

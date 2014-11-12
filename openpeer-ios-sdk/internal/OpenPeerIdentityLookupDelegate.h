@@ -38,6 +38,8 @@
 using namespace openpeer;
 using namespace openpeer::core;
 
+ZS_DECLARE_CLASS_PTR(OpenPeerIdentityLookupDelegate)
+
 class OpenPeerIdentityLookupDelegate : public IIdentityLookupDelegate
 {
 protected:
@@ -47,7 +49,7 @@ public:
     
     ~OpenPeerIdentityLookupDelegate();
     
-    static boost::shared_ptr<OpenPeerIdentityLookupDelegate> create(id<HOPIdentityLookupDelegate> inIdentityLookupDelegate);
+    static OpenPeerIdentityLookupDelegatePtr create(id<HOPIdentityLookupDelegate> inIdentityLookupDelegate);
     
     virtual void onIdentityLookupCompleted(IIdentityLookupPtr lookup);
     

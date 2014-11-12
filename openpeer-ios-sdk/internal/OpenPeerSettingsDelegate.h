@@ -38,6 +38,8 @@
 using namespace openpeer;
 using namespace openpeer::core;
 
+ZS_DECLARE_CLASS_PTR(OpenPeerSettingsDelegate)
+
 /**
  Wrapper Class that creates settings object used in core.
  */
@@ -61,8 +63,8 @@ public:
      Create SettingsDelegateWrapper object packed in boost shared pointer.
      @returns SettingsDelegateWrapper object boost shared object
      */
-//    static boost::shared_ptr<OpenPeerSettingsDelegate>  create(id<HOPSettingsDelegate> inSettingsDelegate);
-    static boost::shared_ptr<OpenPeerSettingsDelegate>  create();
+//    static OpenPeerSettingsDelegatePtr create(id<HOPSettingsDelegate> inSettingsDelegate);
+    static OpenPeerSettingsDelegatePtr create();
     
     String getString(const char *key) const;
     LONG getInt(const char *key) const;

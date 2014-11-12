@@ -38,6 +38,7 @@
 using namespace openpeer;
 using namespace openpeer::core;
 
+ZS_DECLARE_CLASS_PTR(OpenPeerBackgroundingCompletionDelegate)
 
 class OpenPeerBackgroundingCompletionDelegate : public IBackgroundingCompletionDelegate
 {
@@ -54,11 +55,13 @@ public:
      Create OpenPeerBackgroundingCompletionDelegate object packed in boost shared pointer.
      @returns OpenPeerBackgroundingCompletionDelegate object boost shared object
      */
-    static boost::shared_ptr<OpenPeerBackgroundingCompletionDelegate>  create(id<HOPBackgroundingCompletionDelegate> inBackgroundingCompletionDelegate);
+    static OpenPeerBackgroundingCompletionDelegatePtr create(id<HOPBackgroundingCompletionDelegate> inBackgroundingCompletionDelegate);
     
     virtual void onBackgroundingReady(IBackgroundingQueryPtr query);
 };
 
+
+ZS_DECLARE_CLASS_PTR(OpenPeerBackgroundingDelegate)
 
 class OpenPeerBackgroundingDelegate : public IBackgroundingDelegate
 {
@@ -75,7 +78,7 @@ public:
      Create OpenPeerBackgroundingCompletionDelegate object packed in boost shared pointer.
      @returns OpenPeerBackgroundingCompletionDelegate object boost shared object
      */
-    static boost::shared_ptr<OpenPeerBackgroundingDelegate>  create(id<HOPBackgroundingDelegate> inBackgroundingDelegate);
+    static OpenPeerBackgroundingDelegatePtr create(id<HOPBackgroundingDelegate> inBackgroundingDelegate);
     
     virtual void onBackgroundingGoingToBackground(IBackgroundingSubscriptionPtr subscription,IBackgroundingNotifierPtr notifier);
     virtual void onBackgroundingGoingToBackgroundNow(IBackgroundingSubscriptionPtr subscription);

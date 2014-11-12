@@ -38,6 +38,8 @@
 using namespace openpeer;
 using namespace openpeer::core;
 
+ZS_DECLARE_CLASS_PTR(OpenPeerMediaEngineDelegate)
+
 class OpenPeerMediaEngineDelegate : public IMediaEngineDelegate
 {
 protected:
@@ -49,7 +51,7 @@ public:
     
     ~OpenPeerMediaEngineDelegate();
     
-  static boost::shared_ptr<OpenPeerMediaEngineDelegate> create(id<HOPMediaEngineDelegate> inMediaEngineDelegate);
+  static OpenPeerMediaEngineDelegatePtr create(id<HOPMediaEngineDelegate> inMediaEngineDelegate);
   
   virtual void onMediaEngineAudioRouteChanged(IMediaEngine::OutputAudioRoutes audioRoute);
   virtual void onMediaEngineAudioSessionInterruptionBegan();

@@ -45,9 +45,9 @@ OpenPeerMediaEngineDelegate::~OpenPeerMediaEngineDelegate()
     ZS_LOG_DEBUG(zsLib::String("SDK - OpenPeerMediaEngineDelegate destructor is called"));
 }
 
-boost::shared_ptr<OpenPeerMediaEngineDelegate> OpenPeerMediaEngineDelegate::create(id<HOPMediaEngineDelegate> inMediaEngineDelegate)
+OpenPeerMediaEngineDelegatePtr OpenPeerMediaEngineDelegate::create(id<HOPMediaEngineDelegate> inMediaEngineDelegate)
 {
-  return boost::shared_ptr<OpenPeerMediaEngineDelegate> (new OpenPeerMediaEngineDelegate(inMediaEngineDelegate));
+  return OpenPeerMediaEngineDelegatePtr (new OpenPeerMediaEngineDelegate(inMediaEngineDelegate));
 }
 
 void OpenPeerMediaEngineDelegate::onMediaEngineAudioRouteChanged(IMediaEngine::OutputAudioRoutes audioRoute)

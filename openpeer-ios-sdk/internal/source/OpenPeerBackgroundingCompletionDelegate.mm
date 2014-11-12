@@ -41,9 +41,9 @@ OpenPeerBackgroundingCompletionDelegate::OpenPeerBackgroundingCompletionDelegate
     backgroundingCompletionDelegate = inBackgroundingCompletionDelegate;
 }
 
-boost::shared_ptr<OpenPeerBackgroundingCompletionDelegate> OpenPeerBackgroundingCompletionDelegate::create(id<HOPBackgroundingCompletionDelegate> inBackgroundingCompletionDelegate)
+OpenPeerBackgroundingCompletionDelegatePtr OpenPeerBackgroundingCompletionDelegate::create(id<HOPBackgroundingCompletionDelegate> inBackgroundingCompletionDelegate)
 {
-    return boost::shared_ptr<OpenPeerBackgroundingCompletionDelegate> (new OpenPeerBackgroundingCompletionDelegate(inBackgroundingCompletionDelegate));
+    return OpenPeerBackgroundingCompletionDelegatePtr(new OpenPeerBackgroundingCompletionDelegate(inBackgroundingCompletionDelegate));
 }
 
 OpenPeerBackgroundingCompletionDelegate::~OpenPeerBackgroundingCompletionDelegate()
@@ -70,9 +70,9 @@ OpenPeerBackgroundingDelegate::OpenPeerBackgroundingDelegate(id<HOPBackgrounding
     backgroundingDelegate = inBackgroundingDelegate;
 }
 
-boost::shared_ptr<OpenPeerBackgroundingDelegate> OpenPeerBackgroundingDelegate::create(id<HOPBackgroundingDelegate> inBackgroundingDelegate)
+OpenPeerBackgroundingDelegatePtr OpenPeerBackgroundingDelegate::create(id<HOPBackgroundingDelegate> inBackgroundingDelegate)
 {
-    return boost::shared_ptr<OpenPeerBackgroundingDelegate> (new OpenPeerBackgroundingDelegate(inBackgroundingDelegate));
+    return OpenPeerBackgroundingDelegatePtr(new OpenPeerBackgroundingDelegate(inBackgroundingDelegate));
 }
 
 OpenPeerBackgroundingDelegate::~OpenPeerBackgroundingDelegate()

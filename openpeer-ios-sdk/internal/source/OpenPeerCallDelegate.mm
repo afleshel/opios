@@ -42,9 +42,9 @@ OpenPeerCallDelegate::OpenPeerCallDelegate(id<HOPCallDelegate> inCallDelegate)
     callDelegate = inCallDelegate;
 }
 
-boost::shared_ptr<OpenPeerCallDelegate> OpenPeerCallDelegate::create(id<HOPCallDelegate> inCallDelegate)
+OpenPeerCallDelegatePtr OpenPeerCallDelegate::create(id<HOPCallDelegate> inCallDelegate)
 {
-    return boost::shared_ptr<OpenPeerCallDelegate> (new OpenPeerCallDelegate(inCallDelegate));
+    return OpenPeerCallDelegatePtr(new OpenPeerCallDelegate(inCallDelegate));
 }
 
 OpenPeerCallDelegate::~OpenPeerCallDelegate()

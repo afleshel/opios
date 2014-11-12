@@ -44,9 +44,9 @@ using namespace openpeer::core;
 
 @interface HOPAccount ()
 {
-    boost::shared_ptr<OpenPeerAccountDelegate> openpeerAccountDelegatePtr;
-    boost::shared_ptr<OpenPeerConversationThreadDelegate> openpeerConversationDelegatePtr;
-    boost::shared_ptr<OpenPeerCallDelegate> openpeerCallDelegatePtr;
+    OpenPeerAccountDelegatePtr openpeerAccountDelegatePtr;
+    OpenPeerConversationThreadDelegatePtr openpeerConversationDelegatePtr;
+    OpenPeerCallDelegatePtr openpeerCallDelegatePtr;
     
     IAccountPtr accountPtr;
 }

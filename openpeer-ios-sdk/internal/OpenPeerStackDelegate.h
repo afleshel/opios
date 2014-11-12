@@ -39,6 +39,8 @@
 using namespace openpeer;
 using namespace openpeer::core;
 
+ZS_DECLARE_CLASS_PTR(OpenPeerStackDelegate)
+
 /**
  Wrapper Class that creates stack object used in core.
  */
@@ -57,7 +59,7 @@ public:
      Create StackDelegateWrapper object packed in boost shared pointer.
      @returns StackDelegateWrapper object boost shared object
      */
-    static boost::shared_ptr<OpenPeerStackDelegate>  create(id<HOPStackDelegate> inStackDelegate); 
+    static OpenPeerStackDelegatePtr create(id<HOPStackDelegate> inStackDelegate);
     
     virtual void onStackShutdown(IStackAutoCleanupPtr ignoreThisArgument);
 };

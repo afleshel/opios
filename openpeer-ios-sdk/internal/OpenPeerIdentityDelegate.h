@@ -42,6 +42,8 @@ using namespace openpeer::core;
 
 @class HOPIdentity;
 
+ZS_DECLARE_CLASS_PTR(OpenPeerIdentityDelegate)
+
 /**
  Wrapper Class that creates delegate object used in core.
  */
@@ -58,7 +60,7 @@ public:
      Create OpenPeerIdentityDelegate object packed in boost shared pointer.
      @returns OpenPeerIdentityDelegate object boost shared object
      */
-    static boost::shared_ptr<OpenPeerIdentityDelegate>  create(id<HOPIdentityDelegate> inIdentityDelegate);
+    static OpenPeerIdentityDelegatePtr create(id<HOPIdentityDelegate> inIdentityDelegate);
     
     virtual void onIdentityStateChanged(IIdentityPtr identity,IdentityStates state);
     virtual void onIdentityPendingMessageForInnerBrowserWindowFrame(IIdentityPtr identity);

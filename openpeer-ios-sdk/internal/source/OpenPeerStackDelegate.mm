@@ -45,9 +45,9 @@ OpenPeerStackDelegate::~OpenPeerStackDelegate()
     ZS_LOG_DEBUG(zsLib::String("SDK - OpenPeerStackDelegate destructor is called"));
 }
 
-boost::shared_ptr<OpenPeerStackDelegate>  OpenPeerStackDelegate::create(id<HOPStackDelegate> inStackDelegate)
+OpenPeerStackDelegatePtr  OpenPeerStackDelegate::create(id<HOPStackDelegate> inStackDelegate)
 {
-    return boost::shared_ptr<OpenPeerStackDelegate>  (new OpenPeerStackDelegate(inStackDelegate));
+    return OpenPeerStackDelegatePtr(new OpenPeerStackDelegate(inStackDelegate));
 }
 
 void OpenPeerStackDelegate::onStackShutdown(IStackAutoCleanupPtr ignoreThisArgument)

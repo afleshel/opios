@@ -41,7 +41,7 @@ using namespace openpeer::core;
 @interface HOPIdentityLookup ()
 {
     IIdentityLookupPtr identityLookupPtr;
-    boost::shared_ptr<OpenPeerIdentityLookupDelegate> openPeerIdentityLookupDelegatePtr;
+    OpenPeerIdentityLookupDelegatePtr openPeerIdentityLookupDelegatePtr;
 }
 
 @property (nonatomic, strong) NSMutableArray* arrayLastUpdatedContacts;

@@ -74,7 +74,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
         return ret;
     }
     
-    boost::shared_ptr<OpenPeerIdentityDelegate> identityDelegatePtr = OpenPeerIdentityDelegate::create(inIdentityDelegate);
+    OpenPeerIdentityDelegatePtr identityDelegatePtr = OpenPeerIdentityDelegate::create(inIdentityDelegate);
     
     IIdentityPtr identity = IIdentity::login([[HOPAccount sharedAccount]getAccountPtr],identityDelegatePtr, [identityProviderDomain UTF8String], [identityURIOridentityBaseURI UTF8String], [outerFrameURLUponReload UTF8String]);
     
@@ -101,7 +101,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
         return ret;
     }
     
-    boost::shared_ptr<OpenPeerIdentityDelegate> identityDelegatePtr = OpenPeerIdentityDelegate::create(inIdentityDelegate);
+    OpenPeerIdentityDelegatePtr identityDelegatePtr = OpenPeerIdentityDelegate::create(inIdentityDelegate);
 
     IIdentity::Token identityToken;
     identityToken.mID = [identityAccessToken UTF8String];
@@ -174,7 +174,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 {
     if(identityPtr)
     {
-        boost::shared_ptr<OpenPeerIdentityDelegate> identityDelegatePtr = OpenPeerIdentityDelegate::create(inIdentityDelegate);
+        OpenPeerIdentityDelegatePtr identityDelegatePtr = OpenPeerIdentityDelegate::create(inIdentityDelegate);
         openPeerIdentityDelegatePtr = identityDelegatePtr;
         identityPtr->attachDelegate(identityDelegatePtr,[redirectionURL UTF8String]);
     }
@@ -196,7 +196,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
             token.mID = [identityAccessToken UTF8String];
             token.mSecret = [identityAccessSecret UTF8String];
             token.mExpires = boost::posix_time::from_time_t([identityAccessSecretExpires timeIntervalSince1970]);
-            boost::shared_ptr<OpenPeerIdentityDelegate> identityDelegatePtr = OpenPeerIdentityDelegate::create(inIdentityDelegate);
+            OpenPeerIdentityDelegatePtr identityDelegatePtr = OpenPeerIdentityDelegate::create(inIdentityDelegate);
             identityPtr->attachDelegateAndPreauthorizedLogin(identityDelegatePtr, token);
         }
         else
@@ -559,7 +559,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     return self;
 }
 
-- (id) initWithIdentityPtr:(IIdentityPtr) inIdentityPtr openPeerIdentityDelegate:(boost::shared_ptr<OpenPeerIdentityDelegate>) inOpenPeerIdentityDelegate
+- (id) initWithIdentityPtr:(IIdentityPtr) inIdentityPtr openPeerIdentityDelegate:(OpenPeerIdentityDelegatePtr) inOpenPeerIdentityDelegate
 {
     self = [super init];
     if (self)

@@ -40,6 +40,8 @@
 using namespace openpeer;
 using namespace openpeer::core;
 
+ZS_DECLARE_CLASS_PTR(OpenPeerLoggerDelegate)
+
 /**
  Wrapper Class that creates delegate object used in core.
  */
@@ -54,7 +56,7 @@ public:
      Create OpenPeerLoggerDelegate object packed in boost shared pointer.
      @returns OpenPeerLoggerDelegate object boost shared object
      */
-    static boost::shared_ptr<OpenPeerLoggerDelegate>  create(id<HOPLoggerDelegate> inLoggerDelegate);
+    static OpenPeerLoggerDelegatePtr create(id<HOPLoggerDelegate> inLoggerDelegate);
     
     virtual void onNewSubsystem(zsLib::PTRNUMBER subsystemID,const char *subsystemName);
     

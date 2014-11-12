@@ -37,7 +37,7 @@ using namespace openpeer::core;
 
 @interface HOPSettings ()
 {
-    boost::shared_ptr<ISettingsDelegate> openPeerSettingsDelegatePtr;
+    ISettingsDelegatePtr openPeerSettingsDelegatePtr;
 }
 
 - (void) deleteLocalDelegate;

@@ -40,8 +40,8 @@ using namespace openpeer::core;
 
 @interface HOPBackgrounding ()
 {
-    boost::shared_ptr<OpenPeerBackgroundingCompletionDelegate> openPeerBackgroundingCompletionDelegatePtr;
-    boost::shared_ptr<OpenPeerBackgroundingDelegate> openPeerBackgroundingDelegatePtr;
+    OpenPeerBackgroundingCompletionDelegatePtr openPeerBackgroundingCompletionDelegatePtr;
+    OpenPeerBackgroundingDelegatePtr openPeerBackgroundingDelegatePtr;
     
     IBackgroundingQueryPtr activeQuery;
     IBackgroundingSubscriptionPtr backgroundingSubscriptionPtr;

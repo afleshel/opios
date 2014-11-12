@@ -329,7 +329,7 @@ using namespace openpeer::core;
                 
                 if (!identity)
                 {
-                    identity = [[HOPIdentity alloc] initWithIdentityPtr:*it openPeerIdentityDelegate:boost::shared_ptr<OpenPeerIdentityDelegate>()];
+                    identity = [[HOPIdentity alloc] initWithIdentityPtr:*it openPeerIdentityDelegate:OpenPeerIdentityDelegatePtr()];
                     [[OpenPeerStorageManager sharedStorageManager] setIdentity:identity forPUID:it->get()->getID()];
                 }
                 if (identity)

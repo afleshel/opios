@@ -41,6 +41,8 @@ using namespace openpeer::core;
 
 @class HOPCache;
 
+ZS_DECLARE_CLASS_PTR(OpenPeerCacheDelegate)
+
 /**
  Wrapper Class that creates delegate object used in core.
  */
@@ -55,7 +57,7 @@ public:
      Create OpenPeerCacheDelegate object packed in boost shared pointer.
      @returns OpenPeerCacheDelegate object boost shared object
      */
-    static boost::shared_ptr<OpenPeerCacheDelegate>  create(id<HOPCacheDelegate> inCacheDelegate);
+    static OpenPeerCacheDelegatePtr create(id<HOPCacheDelegate> inCacheDelegate);
     
     virtual String fetch(const char *cookieNamePath);
     virtual void store(const char *cookieNamePath,Time expires,const char *str);

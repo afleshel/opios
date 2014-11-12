@@ -50,9 +50,9 @@ OpenPeerIdentityLookupDelegate::~OpenPeerIdentityLookupDelegate()
     ZS_LOG_DEBUG(zsLib::String("SDK - OpenPeerIdentityLookupDelegate destructor is called"));
 }
 
-boost::shared_ptr<OpenPeerIdentityLookupDelegate> OpenPeerIdentityLookupDelegate::create(id<HOPIdentityLookupDelegate> inIdentityLookupDelegate)
+OpenPeerIdentityLookupDelegatePtr OpenPeerIdentityLookupDelegate::create(id<HOPIdentityLookupDelegate> inIdentityLookupDelegate)
 {
-    return boost::shared_ptr<OpenPeerIdentityLookupDelegate> (new OpenPeerIdentityLookupDelegate(inIdentityLookupDelegate));
+    return OpenPeerIdentityLookupDelegatePtr(new OpenPeerIdentityLookupDelegate(inIdentityLookupDelegate));
 }
 
 void OpenPeerIdentityLookupDelegate::onIdentityLookupCompleted(IIdentityLookupPtr lookup)
