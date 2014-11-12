@@ -121,16 +121,15 @@
     if (![[Settings sharedSettings] checkIfReloginInfoIsValid])
     {
         OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Relogin info is not valid");
-//        HOPOpenPeerAccount* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
-//        homeUser.loggedIn = [NSNumber numberWithBool:NO];
-//        [[HOPModelManager sharedModelManager] saveContext];
+
         [[HOPAccount sharedAccount] resetLoggedInAccount];
+
     }
     
     if ([UIDevice isNetworkReachable])
     {
         //If peer file doesn't exists, show login view, otherwise start relogin
-        if ([[HOPModelManager sharedModelManager] getLastLoggedInHomeUser])
+        if ([[HOPModelManager sharedModelManager] getLastLoggedInUser])
         {
             [self startRelogin];
         }
@@ -186,9 +185,11 @@
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane,@"Handle logout on UI level");
     [[[OpenPeer sharedOpenPeer] mainViewController] onLogout];
     
+
 //    HOPOpenPeerAccount* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
 //    homeUser.loggedIn = [NSNumber numberWithBool:NO];
 //    [[HOPModelManager sharedModelManager] saveContext];
+
     
     self.isLogin = YES;
 
@@ -227,7 +228,7 @@
         OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Identity login started for uri: %@",identityURI);
         [[[OpenPeer sharedOpenPeer] mainViewController] onStartLoginWithidentityURI];
         
-        NSString* redirectAfterLoginCompleteURL = [NSString stringWithFormat:@"%@?reload=true",[[Settings sharedSettings] getOuterFrameURL]];
+        NSString* redirectAfterLoginCompleteURL = [Settings getRedirectURLAfterLoginComplete];
 
         if (![[HOPAccount sharedAccount] isCoreAccountCreated] || [[HOPAccount sharedAccount] getState].state == HOPAccountStateShutdown)
             [self startAccount];
@@ -256,9 +257,7 @@
     
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Relogin started");
     [[[OpenPeer sharedOpenPeer] mainViewController] onRelogin];
-    
-    //HOPOpenPeerAccount* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
-    
+
     //if (homeUser && [homeUser.reloginInfo length] > 0)
     {
         //To start relogin procedure it is required to pass account, conversation thread and call delegates. Also, private peer file and secret, received on previous login procedure, are required.
@@ -291,6 +290,7 @@
     
     if ([[HOPAccount sharedAccount] isLoggedIn])//([relogininfo length] > 0)
     {
+
   /*      OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Identity association finished - identityURI: %@  - accountStableId: %@", [identity getIdentityURI], [[HOPAccount sharedAccount] getStableID]);
         //HOPOpenPeerAccount* homeUser = [[HOPModelManager sharedModelManager] getHomeUserByStableID:[[HOPAccount sharedAccount] getStableID]];
 //        
@@ -301,6 +301,18 @@
 //            homeUser.reloginInfo = [[HOPAccount sharedAccount] getReloginInformation];
 //            homeUser.loggedIn = [NSNumber numberWithBool: YES];
 //        }
+=======
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Identity association finished - identityURI: %@  - accountStableId: %@", [identity getIdentityURI], [[HOPAccount sharedAccount] getStableID]);
+        HOPOpenPeerAccount* homeUser = [[HOPModelManager sharedModelManager] getAccountForStableID:[[HOPAccount sharedAccount] getStableID]];
+        
+        if (!homeUser)
+        {
+            homeUser = (HOPOpenPeerAccount*)[[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPOpenPeerAccount"];
+            homeUser.stableId = [[HOPAccount sharedAccount] getStableID];
+            homeUser.reloginInfo = [[HOPAccount sharedAccount] getReloginInformation];
+            homeUser.loggedIn = [NSNumber numberWithBool: YES];
+        }
+>>>>>>> 1e87e41b94d6b99a91684e679de5b458e551602a
         
         HOPIdentityContact* homeIdentityContact = [identity getSelfIdentityContact];
         
@@ -361,7 +373,7 @@
             {
                 if (![identity isDelegateAttached])
                 {
-                    NSString* redirectAfterLoginCompleteURL = [NSString stringWithFormat:@"%@?reload=true",[[Settings sharedSettings] getOuterFrameURL]];
+                    NSString* redirectAfterLoginCompleteURL = [Settings getRedirectURLAfterLoginComplete];
                     
                     [identity attachDelegate:(id<HOPIdentityDelegate>)[[OpenPeer sharedOpenPeer] identityDelegate]  redirectionURL:redirectAfterLoginCompleteURL];
                 }
@@ -369,10 +381,9 @@
         
             //Check if it is logged in a new user
             [[HOPAccount sharedAccount] updateLoggedInAccount];
-            /*HOPOpenPeerAccount* previousLoggedInHomeUser = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
-            HOPOpenPeerAccount* homeUser = [[HOPModelManager sharedModelManager] getHomeUserByStableID:[[HOPAccount sharedAccount] getStableID]];
-        
-            if (homeUser)
+
+            
+            /*if (homeUser)
             {
                 //If is previous logged in user is different update loggedIn flag
                 if (![homeUser.loggedIn boolValue])
@@ -508,7 +519,7 @@
         {
             self.isRecovering = YES;
             //If peer file doesn't exists, show login view, otherwise start relogin
-            if ([[HOPModelManager sharedModelManager] getLastLoggedInHomeUser])
+            if ([[HOPModelManager sharedModelManager] getLastLoggedInUser])
             {
                 [self startRelogin];
             }

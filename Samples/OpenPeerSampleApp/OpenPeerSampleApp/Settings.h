@@ -128,6 +128,7 @@ typedef enum
 - (NSString*) getStringForLogLevel:(HOPLoggerLevel) level;
 
 - (void) saveDefaultsLoggerSettings;
+- (void) setDefaultLoggerLevel:(HOPLoggerLevel) level;
 
 - (BOOL) isQRSettingsResetEnabled;
 - (void) enableQRSettingsReset:(BOOL) enable;
@@ -138,6 +139,8 @@ typedef enum
 - (NSString*) getIdentityFederateBaseURI;
 - (NSString*) getLockBoxServiceDomain;
 - (NSString*) getDefaultOutgoingTelnetServer;
+- (NSString*) getDeviceTokenDownloadURL;
+- (NSString*) getDeviceTokenUploadURL;
 
 - (BOOL) isAppDataSet;
 - (BOOL) isLoginSettingsSet;
@@ -155,4 +158,6 @@ typedef enum
 
 - (BOOL) updateAppSettings;
 - (BOOL) checkIfReloginInfoIsValid;
+
++ (NSString*) getRedirectURLAfterLoginComplete;
 @end

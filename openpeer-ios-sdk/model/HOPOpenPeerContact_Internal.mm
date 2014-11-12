@@ -56,7 +56,6 @@
         IdentityContact identityContact = *identityContactInfo;
         if (identityContact.hasData())
         {
-            //NSString* sId = [NSString stringWithUTF8String:identityContact.mStableID];
             NSString* identityURI = [NSString stringWithUTF8String:identityContact.mIdentityURI];
             HOPIdentityContact* hopIdentityContact = [[HOPModelManager sharedModelManager] getIdentityContactWithIdentityURI:identityURI];
             

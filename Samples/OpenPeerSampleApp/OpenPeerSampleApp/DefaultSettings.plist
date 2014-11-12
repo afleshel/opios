@@ -3,21 +3,25 @@
 <plist version="1.0">
 <dict>
 	<key>outerFrameURL</key>
-	<string>http://jsouter-v1-rel-lespaul-i.hcs.io/identity.html?view=choose&amp;amp;federated=false</string>
+	<string>http://identity.hcs.io:5005/outer-new.html</string>
 	<key>identityProviderDomain</key>
-	<string>identity-v1-rel-lespaul-i.hcs.io</string>
+	<string>com-hookflash-sampleapp.app.hcs.io</string>
 	<key>identityFederateBaseURI</key>
-	<string>identity://identity-v1-rel-lespaul-i.hcs.io/</string>
+	<string>identity://facebook.com/</string>
 	<key>namespaceGrantServiceURL</key>
-	<string>http://jsouter-v1-rel-lespaul-i.hcs.io/grant.html</string>
+	<string>http://identity.hcs.io:5005/outernamespacegrant.html</string>
 	<key>lockBoxServiceDomain</key>
-	<string>lockbox-v1-rel-lespaul-i.hcs.io</string>
+	<string>hcs.io</string>
 	<key>defaultOutgoingTelnetServer</key>
-	<string>log.opp.me:8115</string>
+	<string>log.hcs.io:8115</string>
 	<key>localTelnetLoggerPort</key>
 	<string>59999</string>
 	<key>applicationSettingsBackgroundingPhaseRichPush</key>
 	<integer>4</integer>
+	<key>deviceTokenDownloadURL</key>
+	<string>http://push-hack.hcs-stack-v2-i7957106-7.hcs.io/device-associate-get</string>
+	<key>deviceTokenUploadURL</key>
+	<string>http://push-hack.hcs-stack-v2-i7957106-7.hcs.io/device-associate-set</string>
 	<key>openpeer/core/core-thread-priority</key>
 	<string>normal</string>
 	<key>openpeer/core/media-thread-priority</key>

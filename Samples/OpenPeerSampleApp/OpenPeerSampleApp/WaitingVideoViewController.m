@@ -100,7 +100,7 @@ const int CONNECTING_ANIMATION_DURATION = 2;
     HOPOpenPeerContact* contact = self.session.lastConversationEvent.participants.participants.allObjects[0];
     HOPRolodexContact* rolodexContact = [contact getDefaultRolodexContact];
     self.participantName.text = rolodexContact.name;
-    self.callerName.text = [[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser] getFullName];
+    self.callerName.text = [[[HOPModelManager sharedModelManager] getLastLoggedInUser] getFullName];
     
     HOPAvatar* avatar = [rolodexContact getAvatarForWidth:[NSNumber numberWithFloat:self.calleeImage.frame.size.width] height:[NSNumber numberWithFloat:self.calleeImage.frame.size.height]];
     

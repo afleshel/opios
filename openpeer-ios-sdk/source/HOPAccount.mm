@@ -132,7 +132,7 @@ using namespace openpeer::core;
 {
     BOOL passedWithoutErrors = NO;
     
-    self.openPeerAccount = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
+    self.openPeerAccount = [[HOPModelManager sharedModelManager] getLastLoggedInUser];
     
     if (self.openPeerAccount && self.openPeerAccount.reloginInfo.length > 0)
     {
@@ -497,7 +497,7 @@ using namespace openpeer::core;
 {
     if (!_openPeerAccount)
     {
-        _openPeerAccount = [[HOPModelManager sharedModelManager] getHomeUserByStableID:[[HOPAccount sharedAccount] getStableID]];
+        _openPeerAccount = [[HOPModelManager sharedModelManager] getAccountForStableID:[[HOPAccount sharedAccount] getStableID]];
         
         if (!_openPeerAccount && [[HOPAccount sharedAccount] getStableID].length > 0)
         {
@@ -516,8 +516,8 @@ using namespace openpeer::core;
 }
 - (void) updateLoggedInAccount
 {
-    HOPOpenPeerAccount* previousLoggedInHomeUser = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
-    self.openPeerAccount = [[HOPModelManager sharedModelManager] getHomeUserByStableID:[[HOPAccount sharedAccount] getStableID]];
+    HOPOpenPeerAccount* previousLoggedInHomeUser = [[HOPModelManager sharedModelManager] getLastLoggedInUser];
+    self.openPeerAccount = [[HOPModelManager sharedModelManager] getAccountForStableID:[[HOPAccount sharedAccount] getStableID]];
     
     if (self.openPeerAccount)
     {
@@ -534,7 +534,7 @@ using namespace openpeer::core;
 }
 - (void) resetLoggedInAccount
 {
-    HOPOpenPeerAccount* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
+    HOPOpenPeerAccount* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInUser];
     homeUser.loggedIn = [NSNumber numberWithBool:NO];
     [[HOPModelManager sharedModelManager] saveContext];
 }

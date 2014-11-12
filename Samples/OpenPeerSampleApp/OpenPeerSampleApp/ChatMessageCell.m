@@ -319,7 +319,7 @@
             }
             else
             {
-                messageSenderName = [[[HOPModelManager sharedModelManager] getLastLoggedInHomeUser] getFullName];
+                messageSenderName = [[[HOPModelManager sharedModelManager] getLastLoggedInUser] getFullName];
             }
             
             UIColor* textColor;

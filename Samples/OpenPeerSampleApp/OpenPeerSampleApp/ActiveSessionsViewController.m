@@ -284,7 +284,7 @@
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPConversationEvent" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];
     
     [fetchRequest setEntity:entity];
-    
+
     NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(showEvent = YES AND session.homeUser.stableId MATCHES '%@')",[[HOPAccount sharedAccount] getStableID]]];
     [fetchRequest setPredicate:predicate];
     
@@ -300,6 +300,7 @@
     
     return _fetchedResultsController;
 }
+
 
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {

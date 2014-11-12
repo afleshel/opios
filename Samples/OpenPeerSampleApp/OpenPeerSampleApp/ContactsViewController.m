@@ -92,6 +92,7 @@
     if (self)
     {
         self.mode = inMode;
+        self.isInFavoritesMode = inMode == CONTACTS_TABLE_MODE_FAVORITES;   
         self.isMultipleSelectionAvailable = inAllowMultipleSelection;
         if (inFilterContacts.count > 0)
             self.listOfFilterContacts = [NSArray arrayWithArray:inFilterContacts];
@@ -510,6 +511,7 @@
     [self stopRefreshController];
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Handling loaded contacts.");
     NSError *error;
+    self.fetchedResultsController = nil;
 	if (![self.fetchedResultsController performFetch:&error])
     {
 		OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Fetching contacts has failed with an error: %@, error description: %@", error, [error userInfo]);

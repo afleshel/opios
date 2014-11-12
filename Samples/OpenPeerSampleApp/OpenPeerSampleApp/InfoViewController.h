@@ -32,6 +32,10 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 
+@class HOPOpenPeerContact;
+
 @interface InfoViewController : UITableViewController<NSFetchedResultsControllerDelegate>
+
+- (id) initWithContact:(HOPOpenPeerContact*) inContact style:(UITableViewStyle)style;
 
 @end

@@ -41,5 +41,6 @@
 + (void) startAllSelectedLoggers;
 + (void) start:(BOOL) start logger:(LoggerTypes) type;
 + (void) startTelnetLoggerOnStartUp;
++ (void) startTelnetLoggerWithLogLevel:(NSString*) logLevel;
 
 @end

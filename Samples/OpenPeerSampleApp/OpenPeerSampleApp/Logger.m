@@ -202,4 +202,35 @@
     [alert show];
 }
 
++ (HOPLoggerLevel) logLevelFromString:(NSString*) logLevelString
+{
+    HOPLoggerLevel ret = HOPLoggerLevelNone;
+    
+    if (logLevelString.length > 0)
+    {
+        if ([logLevelString compare:@"basic" options:NSCaseInsensitiveSearch] == NSOrderedSame)
+            ret = HOPLoggerLevelBasic;
+        else if ([logLevelString compare:@"detail" options:NSCaseInsensitiveSearch] == NSOrderedSame)
+            ret = HOPLoggerLevelDetail;
+        else if ([logLevelString compare:@"debug" options:NSCaseInsensitiveSearch] == NSOrderedSame)
+            ret = HOPLoggerLevelDebug;
+        else if ([logLevelString compare:@"trace" options:NSCaseInsensitiveSearch] == NSOrderedSame)
+            ret = HOPLoggerLevelTrace;
+        else if ([logLevelString compare:@"insane" options:NSCaseInsensitiveSearch] == NSOrderedSame)
+            ret = HOPLoggerLevelInsane;
+    }
+    
+    return ret;
+}
+
++ (void) startTelnetLoggerWithLogLevel:(NSString*) logLevel
+{
+    HOPLoggerLevel level = [Logger logLevelFromString:logLevel];
+    
+    if (level != HOPLoggerLevelNone)
+    {
+        [[Settings sharedSettings] setDefaultLoggerLevel:level];
+        [Logger startAllSelectedLoggers];
+    }
+}
 @end
