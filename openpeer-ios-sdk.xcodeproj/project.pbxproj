@@ -26,6 +26,8 @@
 		0024393A178F52D300B79368 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00243939178F52D300B79368 /* Security.framework */; };
 		004A55C41839DAF200AEF378 /* libortclib_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 004A55C11839DA9E00AEF378 /* libortclib_ios.a */; };
 		00C82C4018320855005B87E0 /* boost.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C82C3F18320855005B87E0 /* boost.framework */; };
+		00CF4C5E1A15C79E00573A34 /* libidnkit_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00CF4C5B1A15C78900573A34 /* libidnkit_ios.a */; };
+		00CF4DE21A15D36300573A34 /* libeasysqlite_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 004B22371A10798A00239AAC /* libeasysqlite_ios.a */; };
 		00EB8DC3177D15BD00FFD40F /* libcryptopp_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0012C535177D10C80017FF5E /* libcryptopp_ios.a */; };
 		00EB8DC4177D15BD00FFD40F /* libhfservices_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0012C530177D10A80017FF5E /* libhfservices_ios.a */; };
 		00EB8DC6177D15BD00FFD40F /* libudns_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0012C53A177D10F70017FF5E /* libudns_ios.a */; };
@@ -257,6 +259,27 @@
 			remoteGlobalIDString = 004B220C1A10793F00239AAC;
 			remoteInfo = easysqlite;
 		};
+		00CF4C5A1A15C78900573A34 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 00CF4C551A15C78800573A34 /* idnkit_ios.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 00AA6DB11A15220000815878;
+			remoteInfo = idnkit_ios;
+		};
+		00CF4C5F1A15C7C600573A34 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 004B22311A10798A00239AAC /* easysqlite_ios.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 004B220B1A10793F00239AAC;
+			remoteInfo = easysqlite_ios;
+		};
+		00CF4C611A15C7C600573A34 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 00CF4C551A15C78800573A34 /* idnkit_ios.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 00AA6DB01A15220000815878;
+			remoteInfo = idnkit_ios;
+		};
 		00EB8DB0177D14DA00FFD40F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8792E8F41651A04800DEAC58 /* zsLib_ios.xcodeproj */;
@@ -361,8 +384,9 @@
 		00243939178F52D300B79368 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		004A55BC1839DA9E00AEF378 /* ortclib_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ortclib_ios.xcodeproj; path = "libs/op/libs/ortc-lib/projects/xcode/ortclib_ios/ortclib_ios.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		004B22311A10798A00239AAC /* easysqlite_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = easysqlite_ios.xcodeproj; path = libs/op/libs/easysqlite/projects/xcode/easysqlite_ios.xcodeproj; sourceTree = SOURCE_ROOT; };
-		009A268519EDC50E00F277DB /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = "libs/op/libs/ortc-lib/libs/curl-build-scripts/curl/ios-appstore/lib/libcurl.a"; sourceTree = "<group>"; };
+		009A268519EDC50E00F277DB /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = "libs/op/libs/ortc-lib/libs/curl-build-scripts/curl/lib/libcurl.a"; sourceTree = "<group>"; };
 		00C82C3F18320855005B87E0 /* boost.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = boost.framework; path = "libs/op/libs/ortc-lib/libs/boost/ios/framework/boost.framework"; sourceTree = "<group>"; };
+		00CF4C551A15C78800573A34 /* idnkit_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = idnkit_ios.xcodeproj; path = "libs/op/libs/ortc-lib/libs/idnkit/projects/xcode/idnkit_ios.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		8702E53C17997568003287D5 /* OpenPeerModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = OpenPeerModel.xcdatamodel; sourceTree = "<group>"; };
 		871BC9A4179EEB3F00AEA4A6 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		871BC9C317A1233500AEA4A6 /* HOPIdentityContact_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HOPIdentityContact_Internal.h; sourceTree = "<group>"; };
@@ -618,9 +642,11 @@
 				E236EC42193012DF009FC1E6 /* libwebrtc.a in Frameworks */,
 				00EB8DCF177D1C1600FFD40F /* libhfcore_ios.a in Frameworks */,
 				00EB8DD0177D1C1600FFD40F /* libhfstack_ios.a in Frameworks */,
+				00CF4DE21A15D36300573A34 /* libeasysqlite_ios.a in Frameworks */,
 				004A55C41839DAF200AEF378 /* libortclib_ios.a in Frameworks */,
-				00EB8DC3177D15BD00FFD40F /* libcryptopp_ios.a in Frameworks */,
 				00EB8DC4177D15BD00FFD40F /* libhfservices_ios.a in Frameworks */,
+				00EB8DC3177D15BD00FFD40F /* libcryptopp_ios.a in Frameworks */,
+				00CF4C5E1A15C79E00573A34 /* libidnkit_ios.a in Frameworks */,
 				00EB8DC6177D15BD00FFD40F /* libudns_ios.a in Frameworks */,
 				00EB8DC7177D15BD00FFD40F /* libzsLib_ios.a in Frameworks */,
 				00C82C4018320855005B87E0 /* boost.framework in Frameworks */,
@@ -686,6 +712,14 @@
 			isa = PBXGroup;
 			children = (
 				004B22371A10798A00239AAC /* libeasysqlite_ios.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		00CF4C561A15C78800573A34 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				00CF4C5B1A15C78900573A34 /* libidnkit_ios.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -905,6 +939,7 @@
 				004A55BC1839DA9E00AEF378 /* ortclib_ios.xcodeproj */,
 				8792E9211651A0D000DEAC58 /* hfservices_ios.xcodeproj */,
 				8792E9AA1651A12B00DEAC58 /* cryptopp_ios.xcodeproj */,
+				00CF4C551A15C78800573A34 /* idnkit_ios.xcodeproj */,
 				8792E8FD1651A08F00DEAC58 /* udns_ios.xcodeproj */,
 				8792E8F41651A04800DEAC58 /* zsLib_ios.xcodeproj */,
 				E236EC291930100B009FC1E6 /* webrtc_ios.xcodeproj */,
@@ -1118,10 +1153,12 @@
 			dependencies = (
 				00EB8DD2177D1C2400FFD40F /* PBXTargetDependency */,
 				00EB8DD4177D1C2400FFD40F /* PBXTargetDependency */,
+				00CF4C601A15C7C600573A34 /* PBXTargetDependency */,
 				004A55C31839DACA00AEF378 /* PBXTargetDependency */,
 				00EB8DB8177D158100FFD40F /* PBXTargetDependency */,
-				00EB8DBE177D158100FFD40F /* PBXTargetDependency */,
 				00EB8DC0177D158100FFD40F /* PBXTargetDependency */,
+				00CF4C621A15C7C600573A34 /* PBXTargetDependency */,
+				00EB8DBE177D158100FFD40F /* PBXTargetDependency */,
 				00EB8DC2177D158100FFD40F /* PBXTargetDependency */,
 				87C16C3F1979A9B00054A29C /* PBXTargetDependency */,
 				E236EC411930106F009FC1E6 /* PBXTargetDependency */,
@@ -1189,6 +1226,10 @@
 					ProjectRef = 8792E9091651A0A600DEAC58 /* hfstack_ios.xcodeproj */;
 				},
 				{
+					ProductGroup = 00CF4C561A15C78800573A34 /* Products */;
+					ProjectRef = 00CF4C551A15C78800573A34 /* idnkit_ios.xcodeproj */;
+				},
+				{
 					ProductGroup = 004A55BD1839DA9E00AEF378 /* Products */;
 					ProjectRef = 004A55BC1839DA9E00AEF378 /* ortclib_ios.xcodeproj */;
 				},
@@ -1248,6 +1289,13 @@
 			fileType = archive.ar;
 			path = libeasysqlite_ios.a;
 			remoteRef = 004B22361A10798A00239AAC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		00CF4C5B1A15C78900573A34 /* libidnkit_ios.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libidnkit_ios.a;
+			remoteRef = 00CF4C5A1A15C78900573A34 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		00EB8DB1177D14DA00FFD40F /* libzsLib_ios.a */ = {
@@ -1407,6 +1455,16 @@
 			isa = PBXTargetDependency;
 			name = ortclib_ios;
 			targetProxy = 004A55C21839DACA00AEF378 /* PBXContainerItemProxy */;
+		};
+		00CF4C601A15C7C600573A34 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = easysqlite_ios;
+			targetProxy = 00CF4C5F1A15C7C600573A34 /* PBXContainerItemProxy */;
+		};
+		00CF4C621A15C7C600573A34 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = idnkit_ios;
+			targetProxy = 00CF4C611A15C7C600573A34 /* PBXContainerItemProxy */;
 		};
 		00EB8DB8177D158100FFD40F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
