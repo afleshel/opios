@@ -48,7 +48,7 @@
 #import <OpenPeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPAccount.h>
 #import <OpenPeerSDK/HOPPublicPeerFile.h>
-#import <OpenPeerSDK/HOPOpenPeerAccount+External.h>
+//#import <OpenPeerSDK/HOPOpenPeerAccount+External.h>
 #import <OpenPeerSDK/HOPMessage.h>
 #import <OpenPeerSDK/HOPBackgrounding.h>
 #import <OpenPeerSDK/HOPUtility.h>
@@ -332,7 +332,7 @@
 {
     NSString* msg = [message.text length] > 22 ? [NSString stringWithFormat:@"%@...",[message.text substringToIndex:22]] : message.text;
     
-    NSString* messageText  = [NSString stringWithFormat:@"%@  %@",[[[HOPModelManager sharedModelManager] getLastLoggedInUser] getFullName],msg];
+    NSString* messageText  = [NSString stringWithFormat:@"%@  %@",[[HOPAccount sharedAccount] getFullName],msg];
     
     NSString* location = [[HOPAccount sharedAccount] isCoreAccountCreated] && ([[HOPAccount sharedAccount] getState].state == HOPAccountStateReady) ? [[HOPAccount sharedAccount] getLocationID] : @"";
     NSString* content = [self prepareMessageForRichPush:message peerURI:[[HOPModelManager sharedModelManager]getPeerURIForHomeUser] location:location];

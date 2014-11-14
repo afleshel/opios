@@ -69,7 +69,6 @@
 #import "HOPImage.h"
 #import "HOPMessageEvent.h"
 #import "HOPMessageRecord+External.h"
-#import "HOPOpenPeerAccount+External.h"
 #import "HOPParticipants.h"
 #import "HOPPublicPeerFile.h"
 #import "HOPRolodexContact+External.h"

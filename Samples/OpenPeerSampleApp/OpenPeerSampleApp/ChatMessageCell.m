@@ -36,12 +36,13 @@
 #import <OpenpeerSDK/HOPModelManager.h>
 #import <OpenpeerSDK/HOPAvatar.h>
 #import <OpenpeerSDK/HOPImage.h>
-#import <OpenpeerSDK/HOPOpenPeerAccount+External.h>
+//#import <OpenpeerSDK/HOPOpenPeerAccount+External.h>
 #import <OpenpeerSDK/HOPMessageRecord+External.h>
 #import <OpenpeerSDK/HOPPublicPeerFile.h>
 #import <OpenpeerSDK/HOPIdentityContact.h>
 #import <OpenpeerSDK/HOPConversationThread.h>
 #import <OpenpeerSDK/HOPOpenPeerContact.h>
+#import <OpenPeerSDK/HOPAccount.h>
 #import "TTTAttributedLabel.h"
 #import "Utility.h"
 
@@ -319,7 +320,7 @@
             }
             else
             {
-                messageSenderName = [[[HOPModelManager sharedModelManager] getLastLoggedInUser] getFullName];
+                messageSenderName = [[HOPAccount sharedAccount] getFullName];
             }
             
             UIColor* textColor;

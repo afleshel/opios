@@ -102,7 +102,7 @@ Singleton class that represents the logged in OpenPeer user.
  *
  *  @return YES, if relogin procedure started succesfully, otherwise NO
  */
-- (BOOL) reloginWithAccountDelegate:(id<HOPAccountDelegate>) inAccountDelegate conversationThreadDelegate:(id<HOPConversationThreadDelegate>) inConversationThreadDelegate callDelegate:(id<HOPCallDelegate>) inCallDelegate lockboxOuterFrameURLUponReload:(NSString *)lockboxOuterFrameURLUponReload reloginInformation:(NSString *)reloginInformation;
+- (BOOL) reloginWithAccountDelegate:(id<HOPAccountDelegate>) inAccountDelegate conversationThreadDelegate:(id<HOPConversationThreadDelegate>) inConversationThreadDelegate callDelegate:(id<HOPCallDelegate>) inCallDelegate lockboxOuterFrameURLUponReload:(NSString *)lockboxOuterFrameURLUponReload;
 
 /**
  *  Returns the account state.
@@ -225,4 +225,5 @@ Singleton class that represents the logged in OpenPeer user.
 - (void) updateLoggedInAccount;
 - (void) addIdentity:(HOPIdentity*) identity;
 - (NSString*) getPeerURI;
+- (NSString*) getFullName;
 @end

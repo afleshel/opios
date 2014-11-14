@@ -65,7 +65,7 @@
 //        associated.domain = identityProviderDomain;
 //        associated.homeUserProfile = self; //This is set here because this method is called for the first time when is creating home user rolodex contact
         
-        associated = [[HOPModelManager sharedModelManager] addAssociatedIdentityForBaseIdentityURI:baseIdentityURI domain:identityProviderDomain name:baseIdentityURI account:nil selfRolodexProfileProfile:self];
+        associated = [[HOPModelManager sharedModelManager] addAssociatedIdentityForBaseIdentityURI:baseIdentityURI domain:identityProviderDomain name:baseIdentityURI /*account:nil*/ selfRolodexProfileProfile:self];
     }
     
     self.associatedIdentity = associated;

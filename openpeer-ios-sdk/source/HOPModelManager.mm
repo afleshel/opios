@@ -49,7 +49,7 @@
 #import "HOPConversationEvent.h"
 #import "HOPParticipants.h"
 #import "HOPContact_Internal.h"
-#import "HOPAccount.h"
+#import "HOPAccount_Internal.h"
 #import "OpenPeerConstants.h"
 #import <CoreData/CoreData.h>
 #import <openpeer/core/IHelper.h>
@@ -501,7 +501,7 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (HOPAssociatedIdentity*) addAssociatedIdentityForBaseIdentityURI:(NSString*) baseIdentityURI domain:(NSString*) domain name:(NSString*) name account:(HOPOpenPeerAccount*) account selfRolodexProfileProfile:(HOPRolodexContact*) rolodexContact
+- (HOPAssociatedIdentity*) addAssociatedIdentityForBaseIdentityURI:(NSString*) baseIdentityURI domain:(NSString*) domain name:(NSString*) name selfRolodexProfileProfile:(HOPRolodexContact*) rolodexContact
 {
     HOPAssociatedIdentity* ret = nil;
     
@@ -516,8 +516,8 @@ using namespace openpeer::core;
     if (rolodexContact)
         ret.selfRolodexContact = rolodexContact;
     
-    if (account)
-        ret.account = account;
+    if ([[HOPAccount sharedAccount] getOpenPeerUser])
+        ret.account = [[HOPAccount sharedAccount] getOpenPeerUser];
     
     [self saveContext];
     

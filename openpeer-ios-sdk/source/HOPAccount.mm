@@ -128,7 +128,7 @@ using namespace openpeer::core;
 }
 
 
-- (BOOL)reloginWithAccountDelegate:(id<HOPAccountDelegate>)inAccountDelegate conversationThreadDelegate:(id<HOPConversationThreadDelegate>)inConversationThreadDelegate callDelegate:(id<HOPCallDelegate>)inCallDelegate lockboxOuterFrameURLUponReload:(NSString *)lockboxOuterFrameURLUponReload reloginInformation:(NSString *)reloginInformation
+- (BOOL)reloginWithAccountDelegate:(id<HOPAccountDelegate>)inAccountDelegate conversationThreadDelegate:(id<HOPConversationThreadDelegate>)inConversationThreadDelegate callDelegate:(id<HOPCallDelegate>)inCallDelegate lockboxOuterFrameURLUponReload:(NSString *)lockboxOuterFrameURLUponReload
 {
     BOOL passedWithoutErrors = NO;
     
@@ -147,7 +147,7 @@ using namespace openpeer::core;
         [self setLocalDelegates:inAccountDelegate conversationThread:inConversationThreadDelegate callDelegate:inCallDelegate];
         
         //Start relogin. This static method will create an account core object
-        accountPtr = IAccount::relogin(openpeerAccountDelegatePtr, openpeerConversationDelegatePtr, openpeerCallDelegatePtr, [lockboxOuterFrameURLUponReload UTF8String],IHelper::createElement([reloginInformation UTF8String]));
+        accountPtr = IAccount::relogin(openpeerAccountDelegatePtr, openpeerConversationDelegatePtr, openpeerCallDelegatePtr, [lockboxOuterFrameURLUponReload UTF8String],IHelper::createElement([self.openPeerAccount.reloginInfo UTF8String]));
         
         //If core account object is created return that relogin process is started successfully
         if (accountPtr)
@@ -547,7 +547,7 @@ using namespace openpeer::core;
     if (!associatedIdentity)
     {
         //associatedIdentity = (HOPAssociatedIdentity*)[[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPAssociatedIdentity"];
-        associatedIdentity = [[HOPModelManager sharedModelManager] addAssociatedIdentityForBaseIdentityURI:[identity getBaseIdentityURI] domain:[identity getIdentityProviderDomain] name:[identity getBaseIdentityURI] account:self.openPeerAccount selfRolodexProfileProfile:homeIdentityContact.rolodexContact];
+        associatedIdentity = [[HOPModelManager sharedModelManager] addAssociatedIdentityForBaseIdentityURI:[identity getBaseIdentityURI] domain:[identity getIdentityProviderDomain] name:[identity getBaseIdentityURI]  selfRolodexProfileProfile:homeIdentityContact.rolodexContact];
     }
     else
     {
@@ -560,5 +560,9 @@ using namespace openpeer::core;
 - (NSString*) getPeerURI
 {
     return self.openPeerAccount.contact.publicPeerFile.peerURI;
+}
+- (NSString*) getFullName
+{
+    return [[[HOPModelManager sharedModelManager] getLastLoggedInUser] getFullName];
 }
 @end

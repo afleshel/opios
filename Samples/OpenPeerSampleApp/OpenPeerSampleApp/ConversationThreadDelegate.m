@@ -38,10 +38,11 @@
 
 #import <OpenpeerSDK/HOPConversationThread.h>
 #import <OpenpeerSDK/HOPContact.h>
-#import <OpenpeerSDK/HOPOpenPeerAccount+External.h>
+//#import <OpenpeerSDK/HOPOpenPeerAccount+External.h>
 #import <OpenpeerSDK/HOPRolodexContact.h>
 #import <OpenpeerSDK/HOPMessage.h>
 #import <OpenpeerSDK/HOPModelManager.h>
+#import <OpenPeerSDK/HOPAccount.h>
 
 #ifdef APNS_ENABLED
 #import "APNSManager.h"
@@ -140,7 +141,7 @@
 
                 if ([[MessageManager sharedMessageManager] getTypeForSystemMessage:message] == SystemMessage_CheckAvailability)
                 {
-                    messageText  = [NSString stringWithFormat:@"%@  %@",[[[HOPModelManager sharedModelManager] getLastLoggedInUser] getFullName],@"Missed call"];
+                    messageText  = [NSString stringWithFormat:@"%@  %@",[[HOPAccount sharedAccount] getFullName],@"Missed call"];
                     missedCall = YES;
                     [[APNSManager sharedAPNSManager] sendPushNotificationForContact:coreContact message:messageText missedCall:missedCall];
                 }

@@ -47,7 +47,7 @@
 #import <OpenpeerSDK/HOPAccount.h>
 #import <OpenpeerSDK/HOPModelManager.h>
 #import <OpenpeerSDK/HOPRolodexContact+External.h>
-#import <OpenpeerSDK/HOPOpenPeerAccount+External.h>
+//#import <OpenpeerSDK/HOPOpenPeerAccount+External.h>
 #import <OpenpeerSDK/HOPContact.h>
 #import <OpenpeerSDK/HOPIdentityContact.h>
 #import <OpenpeerSDK/HOPAssociatedIdentity.h>
@@ -360,13 +360,13 @@
 
 - (NSString*) createProfileBundleForCommunicationWithContact:(HOPRolodexContact*) targetContact
 {
-    HOPOpenPeerAccount* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInUser];
+    //HOPOpenPeerAccount* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInUser];
     
     NSString* ret = nil;
     NSDictionary* dictionaryProfile = nil;
-    if (homeUser)
+    //if (homeUser)
     {
-        HOPOpenPeerContact* openPeerContact = [[HOPModelManager sharedModelManager] getOpenPeerContactForStableID:homeUser.stableId];
+        HOPOpenPeerContact* openPeerContact = [[HOPModelManager sharedModelManager] getOpenPeerContactForStableID:[[HOPAccount sharedAccount] getStableID]];
         
         if (openPeerContact && openPeerContact.identityContacts.count > 0)
         {
@@ -435,12 +435,12 @@
             {
                 NSString* baseIdentityURI = [HOPUtility getBaseIdentityURIFromURI:identityURI];
                 
-                HOPOpenPeerAccount* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInUser];
-                HOPAssociatedIdentity* associatedIdentity = [[HOPModelManager sharedModelManager] getAssociatedIdentityForBaseIdentityURI:baseIdentityURI homeUserStableId:homeUser.stableId];
+                //HOPOpenPeerAccount* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInUser];
+                HOPAssociatedIdentity* associatedIdentity = [[HOPModelManager sharedModelManager] getAssociatedIdentityForBaseIdentityURI:baseIdentityURI homeUserStableId:[[HOPAccount sharedAccount] getStableID]];
                 
                 if (!associatedIdentity)
                 {
-                    associatedIdentity = [[HOPModelManager sharedModelManager] addAssociatedIdentityForBaseIdentityURI:baseIdentityURI domain:[[Settings sharedSettings] getIdentityProviderDomain] name:baseIdentityURI account:homeUser selfRolodexProfileProfile:nil];
+                    associatedIdentity = [[HOPModelManager sharedModelManager] addAssociatedIdentityForBaseIdentityURI:baseIdentityURI domain:[[Settings sharedSettings] getIdentityProviderDomain] name:baseIdentityURI /*account:homeUser */selfRolodexProfileProfile:nil];
                 }
                 
                 NSManagedObject* managedObject = [[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPRolodexContact"];
@@ -450,7 +450,7 @@
                     contact.name = name;
                     contact.identityURI = identityURI;
                     contact.associatedIdentity = associatedIdentity;
-                    HOPRolodexContact* homeUserRolodexContact = [[[HOPModelManager sharedModelManager] getLastLoggedInUser] getRolodexContactForIdentityBaseURI:[HOPUtility getBaseIdentityURIFromURI:identityURI]];
+                    HOPRolodexContact* homeUserRolodexContact = [[HOPModelManager sharedModelManager] getRolodexContactByIdentityURI:identityURI];//[[[HOPModelManager sharedModelManager] getLastLoggedInUser] getRolodexContactForIdentityBaseURI:[HOPUtility getBaseIdentityURIFromURI:identityURI]];
                     NSString* homeUserIdentityURI = homeUserRolodexContact ? homeUserRolodexContact.identityURI : nil;
                     [contact updateWithName:name identityURI:identityURI identityProviderDomain:[[Settings sharedSettings] getIdentityProviderDomain] homeUserIdentityURI:homeUserIdentityURI];
                     

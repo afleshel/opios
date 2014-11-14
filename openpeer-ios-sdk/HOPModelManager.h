@@ -166,7 +166,7 @@
  @param rolodexContact Rolodex contact of associated identity
  @return HOPAssociatedIdentity object
  */
-- (HOPAssociatedIdentity*) addAssociatedIdentityForBaseIdentityURI:(NSString*) baseIdentityURI domain:(NSString*) domain name:(NSString*) name account:(HOPOpenPeerAccount*) account selfRolodexProfileProfile:(HOPRolodexContact*) rolodexContact;
+- (HOPAssociatedIdentity*) addAssociatedIdentityForBaseIdentityURI:(NSString*) baseIdentityURI domain:(NSString*) domain name:(NSString*) name selfRolodexProfileProfile:(HOPRolodexContact*) rolodexContact;
 
  /**
  Returns an identity provider object for spcified identity provider domain, identity name and home user identity URI.

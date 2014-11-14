@@ -36,10 +36,11 @@
 #import <OpenPeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPAvatar.h>
 #import <OpenPeerSDK/HOPImage.h>
-#import <OpenPeerSDK/HOPOpenPeerAccount+External.h>
+//#import <OpenPeerSDK/HOPOpenPeerAccount+External.h>
 #import <OpenPeerSDK/HOPConversationEvent.h>
 #import <OpenPeerSDK/HOPParticipants.h>
 #import <OpenPeerSDK/HOPOpenPeerContact+External.h>
+#import <OpenPeerSDK/HOPAccount.h>
 @interface WaitingVideoViewController()
 
 @property (weak, nonatomic) IBOutlet UIImageView *callerImage;
@@ -100,7 +101,7 @@ const int CONNECTING_ANIMATION_DURATION = 2;
     HOPOpenPeerContact* contact = self.session.lastConversationEvent.participants.participants.allObjects[0];
     HOPRolodexContact* rolodexContact = [contact getDefaultRolodexContact];
     self.participantName.text = rolodexContact.name;
-    self.callerName.text = [[[HOPModelManager sharedModelManager] getLastLoggedInUser] getFullName];
+    self.callerName.text = [[HOPAccount sharedAccount] getFullName];
     
     HOPAvatar* avatar = [rolodexContact getAvatarForWidth:[NSNumber numberWithFloat:self.calleeImage.frame.size.width] height:[NSNumber numberWithFloat:self.calleeImage.frame.size.height]];
     

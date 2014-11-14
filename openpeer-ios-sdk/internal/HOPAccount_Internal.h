@@ -32,7 +32,7 @@
 
 #import <openpeer/core/types.h>
 #import "HOPAccount.h"
-#import "HOPOpenPeerAccount.h"
+#import "HOPOpenPeerAccount+External.h"
 
 #import "OpenPeerAccountDelegate.h"
 #import "OpenPeerConversationThreadDelegate.h"

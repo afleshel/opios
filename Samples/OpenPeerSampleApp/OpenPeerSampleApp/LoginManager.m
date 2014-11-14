@@ -261,7 +261,7 @@
     //if (homeUser && [homeUser.reloginInfo length] > 0)
     {
         //To start relogin procedure it is required to pass account, conversation thread and call delegates. Also, private peer file and secret, received on previous login procedure, are required.
-        reloginStarted = [[HOPAccount sharedAccount] reloginWithAccountDelegate:(id<HOPAccountDelegate>) [[OpenPeer sharedOpenPeer] accountDelegate] conversationThreadDelegate:(id<HOPConversationThreadDelegate>)[[OpenPeer sharedOpenPeer] conversationThreadDelegate]  callDelegate:(id<HOPCallDelegate>)[[OpenPeer sharedOpenPeer] callDelegate] lockboxOuterFrameURLUponReload:[[Settings sharedSettings] getOuterFrameURL] reloginInformation:nil/*homeUser.reloginInfo*/];
+        reloginStarted = [[HOPAccount sharedAccount] reloginWithAccountDelegate:(id<HOPAccountDelegate>) [[OpenPeer sharedOpenPeer] accountDelegate] conversationThreadDelegate:(id<HOPConversationThreadDelegate>)[[OpenPeer sharedOpenPeer] conversationThreadDelegate]  callDelegate:(id<HOPCallDelegate>)[[OpenPeer sharedOpenPeer] callDelegate] lockboxOuterFrameURLUponReload:[[Settings sharedSettings] getOuterFrameURL]];
     }
     
     if (!reloginStarted)
@@ -286,52 +286,8 @@
  */
 - (void) onIdentityAssociationFinished:(HOPIdentity*) identity
 {
-    //NSString* relogininfo = [[HOPAccount sharedAccount] getReloginInformation];
-    
-    if ([[HOPAccount sharedAccount] isLoggedIn])//([relogininfo length] > 0)
+    if ([[HOPAccount sharedAccount] isLoggedIn])
     {
-
-  /*      OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Identity association finished - identityURI: %@  - accountStableId: %@", [identity getIdentityURI], [[HOPAccount sharedAccount] getStableID]);
-        //HOPOpenPeerAccount* homeUser = [[HOPModelManager sharedModelManager] getHomeUserByStableID:[[HOPAccount sharedAccount] getStableID]];
-//        
-//        if (!homeUser)
-//        {
-//            homeUser = (HOPOpenPeerAccount*)[[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPOpenPeerAccount"];
-//            homeUser.stableId = [[HOPAccount sharedAccount] getStableID];
-//            homeUser.reloginInfo = [[HOPAccount sharedAccount] getReloginInformation];
-//            homeUser.loggedIn = [NSNumber numberWithBool: YES];
-//        }
-=======
-        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Identity association finished - identityURI: %@  - accountStableId: %@", [identity getIdentityURI], [[HOPAccount sharedAccount] getStableID]);
-        HOPOpenPeerAccount* homeUser = [[HOPModelManager sharedModelManager] getAccountForStableID:[[HOPAccount sharedAccount] getStableID]];
-        
-        if (!homeUser)
-        {
-            homeUser = (HOPOpenPeerAccount*)[[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPOpenPeerAccount"];
-            homeUser.stableId = [[HOPAccount sharedAccount] getStableID];
-            homeUser.reloginInfo = [[HOPAccount sharedAccount] getReloginInformation];
-            homeUser.loggedIn = [NSNumber numberWithBool: YES];
-        }
->>>>>>> 1e87e41b94d6b99a91684e679de5b458e551602a
-        
-        HOPIdentityContact* homeIdentityContact = [identity getSelfIdentityContact];
-        
-        HOPAssociatedIdentity*  associatedIdentity = [[HOPModelManager sharedModelManager] getAssociatedIdentityForBaseIdentityURI:[identity getBaseIdentityURI] homeUserStableId:[[HOPAccount sharedAccount] getStableID]];
-        
-        if (!associatedIdentity)
-        {
-            //associatedIdentity = (HOPAssociatedIdentity*)[[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPAssociatedIdentity"];
-            associatedIdentity = [[HOPModelManager sharedModelManager] addAssociatedIdentityForBaseIdentityURI:[identity getBaseIdentityURI] domain:[[Settings sharedSettings] getIdentityProviderDomain] name:[identity getBaseIdentityURI] account:homeUser selfRolodexProfileProfile:homeIdentityContact.rolodexContact];
-        }
-        else
-        {
-            associatedIdentity.selfRolodexContact = homeIdentityContact.rolodexContact;
-            associatedIdentity.account = homeUser;
-            homeIdentityContact.rolodexContact.associatedIdentityForHomeUser = associatedIdentity;
-        }
-        [[HOPModelManager sharedModelManager] saveContext];
-        */
-        
         [[HOPAccount sharedAccount] addIdentity:identity];
         [self.associatingIdentitiesDictionary removeAllObjects];
     }
@@ -478,15 +434,11 @@
 - (BOOL) isAssociatedIdentity:(NSString*) inBaseIdentityURI
 {
     BOOL ret = NO;
+
+    HOPAssociatedIdentity* associatedIdentity = [[HOPModelManager sharedModelManager] getAssociatedIdentityForBaseIdentityURI:inBaseIdentityURI homeUserStableId:[[HOPAccount sharedAccount] getStableID]];
     
-    //HOPOpenPeerAccount* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
-    //if (homeUser)
-    {
-        HOPAssociatedIdentity* associatedIdentity = [[HOPModelManager sharedModelManager] getAssociatedIdentityForBaseIdentityURI:inBaseIdentityURI homeUserStableId:[[HOPAccount sharedAccount] getStableID]];
-        
-        if (associatedIdentity)
-            ret = YES;
-    }
+    if (associatedIdentity)
+        ret = YES;
     
     return ret;
 }

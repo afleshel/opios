@@ -55,7 +55,7 @@
 //        associated.baseIdentityURI = baseIdentityURI;
 //        associated.name = baseIdentityURI;
 //        associated.domain = identityProviderDomain;
-        associated = [[HOPModelManager sharedModelManager] addAssociatedIdentityForBaseIdentityURI:baseIdentityURI domain:identityProviderDomain name:baseIdentityURI account:nil selfRolodexProfileProfile:nil];
+        associated = [[HOPModelManager sharedModelManager] addAssociatedIdentityForBaseIdentityURI:baseIdentityURI domain:identityProviderDomain name:baseIdentityURI /*account:nil*/ selfRolodexProfileProfile:nil];
     }
     
     if (inName.length > 0)
