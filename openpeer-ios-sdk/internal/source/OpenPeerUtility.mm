@@ -73,11 +73,11 @@ void OpenPeerLog(HOPLoggerLevel logLevel, NSString* format,...)
 
 @implementation OpenPeerUtility
 
-+ (NSDate*) convertPosixTimeToDate:(boost::posix_time::ptime) time
++ (NSDate*) convertPosixTimeToDate:(zsLib::Time) time
 {
-    boost::posix_time::ptime epoch(boost::gregorian::date(1970,1,1) );
-    const boost::posix_time::time_duration::sec_type x((time - epoch).total_seconds() );
-    return[NSDate dateWithTimeIntervalSince1970:x];
+    zsLib::Seconds seconds = std::chrono::duration_cast<zsLib::Seconds>(zsLib::timeSinceEpoch(time));
+
+    return[NSDate dateWithTimeIntervalSince1970:seconds.count()];
 }
 
 

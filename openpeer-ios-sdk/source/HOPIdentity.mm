@@ -106,7 +106,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     IIdentity::Token identityToken;
     identityToken.mID = [identityAccessToken UTF8String];
     identityToken.mSecret = [identityAccessSecret UTF8String];
-    identityToken.mExpires = boost::posix_time::from_time_t([identityAccessSecretExpires timeIntervalSince1970]);
+    identityToken.mExpires = zsLib::timeSinceEpoch(zsLib::Seconds(static_cast<zsLib::Seconds::rep>([identityAccessSecretExpires timeIntervalSince1970])));
 
     IIdentityPtr identity = IIdentity::loginWithIdentityPreauthorized([[HOPAccount sharedAccount]getAccountPtr], identityDelegatePtr, [identityProviderDomain UTF8String], [identityURI UTF8String], identityToken);
     
@@ -195,7 +195,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
             IIdentity::Token token;
             token.mID = [identityAccessToken UTF8String];
             token.mSecret = [identityAccessSecret UTF8String];
-            token.mExpires = boost::posix_time::from_time_t([identityAccessSecretExpires timeIntervalSince1970]);
+            token.mExpires = zsLib::timeSinceEpoch(zsLib::Seconds(static_cast<zsLib::Seconds::rep>([identityAccessSecretExpires timeIntervalSince1970])));
             OpenPeerIdentityDelegatePtr identityDelegatePtr = OpenPeerIdentityDelegate::create(inIdentityDelegate);
             identityPtr->attachDelegateAndPreauthorizedLogin(identityDelegatePtr, token);
         }

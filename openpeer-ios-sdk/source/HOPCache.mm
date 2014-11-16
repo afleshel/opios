@@ -87,9 +87,9 @@ using namespace openpeer::core;
     if ([stringToStore length] > 0 && [cookieNamePath length] > 0)
     {
         if (expireDate)
-            ICache::store([cookieNamePath UTF8String], boost::posix_time::from_time_t([expireDate timeIntervalSince1970]), [stringToStore UTF8String]);
+            ICache::store([cookieNamePath UTF8String], zsLib::timeSinceEpoch(zsLib::Seconds(static_cast<zsLib::Seconds::rep>([expireDate timeIntervalSince1970]))), [stringToStore UTF8String]);
         else
-            ICache::store([cookieNamePath UTF8String], boost::posix_time::ptime(), [stringToStore UTF8String]);
+            ICache::store([cookieNamePath UTF8String], zsLib::Time(), [stringToStore UTF8String]);
     }
 }
 

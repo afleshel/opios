@@ -25,7 +25,6 @@
 /* Begin PBXBuildFile section */
 		0024393A178F52D300B79368 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00243939178F52D300B79368 /* Security.framework */; };
 		004A55C41839DAF200AEF378 /* libortclib_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 004A55C11839DA9E00AEF378 /* libortclib_ios.a */; };
-		00C82C4018320855005B87E0 /* boost.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C82C3F18320855005B87E0 /* boost.framework */; };
 		00CF4C5E1A15C79E00573A34 /* libidnkit_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00CF4C5B1A15C78900573A34 /* libidnkit_ios.a */; };
 		00CF4DE21A15D36300573A34 /* libeasysqlite_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 004B22371A10798A00239AAC /* libeasysqlite_ios.a */; };
 		00EB8DC3177D15BD00FFD40F /* libcryptopp_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0012C535177D10C80017FF5E /* libcryptopp_ios.a */; };
@@ -385,7 +384,6 @@
 		004A55BC1839DA9E00AEF378 /* ortclib_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ortclib_ios.xcodeproj; path = "libs/op/libs/ortc-lib/projects/xcode/ortclib_ios/ortclib_ios.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		004B22311A10798A00239AAC /* easysqlite_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = easysqlite_ios.xcodeproj; path = libs/op/libs/easysqlite/projects/xcode/easysqlite_ios.xcodeproj; sourceTree = SOURCE_ROOT; };
 		009A268519EDC50E00F277DB /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = "libs/op/libs/ortc-lib/libs/curl-build-scripts/curl/lib/libcurl.a"; sourceTree = "<group>"; };
-		00C82C3F18320855005B87E0 /* boost.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = boost.framework; path = "libs/op/libs/ortc-lib/libs/boost/ios/framework/boost.framework"; sourceTree = "<group>"; };
 		00CF4C551A15C78800573A34 /* idnkit_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = idnkit_ios.xcodeproj; path = "libs/op/libs/ortc-lib/libs/idnkit/projects/xcode/idnkit_ios.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		8702E53C17997568003287D5 /* OpenPeerModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = OpenPeerModel.xcdatamodel; sourceTree = "<group>"; };
 		871BC9A4179EEB3F00AEA4A6 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -649,7 +647,6 @@
 				00CF4C5E1A15C79E00573A34 /* libidnkit_ios.a in Frameworks */,
 				00EB8DC6177D15BD00FFD40F /* libudns_ios.a in Frameworks */,
 				00EB8DC7177D15BD00FFD40F /* libzsLib_ios.a in Frameworks */,
-				00C82C4018320855005B87E0 /* boost.framework in Frameworks */,
 				871BC9A5179EEB4000AEA4A6 /* CoreData.framework in Frameworks */,
 				8792E86C16519CFF00DEAC58 /* Foundation.framework in Frameworks */,
 				0024393A178F52D300B79368 /* Security.framework in Frameworks */,
@@ -878,7 +875,6 @@
 				E236EC46193012DF009FC1E6 /* libyuv_neon.a */,
 				874ADC38166DF0F30095FE33 /* libresolv.dylib */,
 				874ADC36166DF0E20095FE33 /* libz.dylib */,
-				00C82C3F18320855005B87E0 /* boost.framework */,
 				871BC9A4179EEB3F00AEA4A6 /* CoreData.framework */,
 				87B864CA1796BBB20027F8B1 /* CoreFoundation.framework */,
 				8792E86B16519CFF00DEAC58 /* Foundation.framework */,
@@ -1351,7 +1347,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\n\n: ${BOOST_LIB_PATH:=./libs/op/libs/ortc-lib/libs/boost/ios/library/boost.a}\n: ${CURL_LIB_PATH:=./libs/op/libs/ortc-lib/libs/curl-build-scripts/curl/ios-appstore/lib/libcurl.a}\n\nFMK_VERSION=D\n\n# Delete old framework folder\nrm -rf \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework\"\n\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Headers\"\n#mkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Frameworks\"\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Libraries\"\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Resources\"\n\n# Link the \"Current\" version to \"C\"\n/bin/ln -sfh ${FMK_VERSION} \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/Current\"\n/bin/ln -sfh Versions/Current/Headers \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Headers\"\n#/bin/ln -sfh Versions/Current/Frameworks \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Frameworks\"\n/bin/ln -sfh Versions/Current/Libraries \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Libraries\"\n/bin/ln -sfh Versions/Current/Resources \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Resources\"\n/bin/ln -sfh \"Versions/Current/${PRODUCT_NAME}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/${PRODUCT_NAME}\"\n\n# The -a ensures that the headers maintain the source modification date so that we don't constantly\n# cause propagating rebuilds of files that import these headers.\n/bin/cp -a \"${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Headers\"\n\n/bin/cp -a \"${BOOST_LIB_PATH}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Libraries\"\n\n/bin/cp -a \"${CURL_LIB_PATH}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Libraries\"\n\n/bin/cp -R  \"${TARGET_BUILD_DIR}/${PUBLIC_RESOURCES_FOLDER_PATH}/OpenpeerDataModel.bundle\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Resources\"\n\n/bin/cp -a \"${BUILT_PRODUCTS_DIR}/lib${PRODUCT_NAME}.a\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/${PRODUCT_NAME}\"\n";
+			shellScript = "set -e\n\n: ${CURL_LIB_PATH:=./libs/op/libs/ortc-lib/libs/curl-build-scripts/curl/ios-appstore/lib/libcurl.a}\n\nFMK_VERSION=D\n\n# Delete old framework folder\nrm -rf \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework\"\n\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Headers\"\n#mkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Frameworks\"\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Libraries\"\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Resources\"\n\n# Link the \"Current\" version to \"C\"\n/bin/ln -sfh ${FMK_VERSION} \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/Current\"\n/bin/ln -sfh Versions/Current/Headers \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Headers\"\n#/bin/ln -sfh Versions/Current/Frameworks \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Frameworks\"\n/bin/ln -sfh Versions/Current/Libraries \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Libraries\"\n/bin/ln -sfh Versions/Current/Resources \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Resources\"\n/bin/ln -sfh \"Versions/Current/${PRODUCT_NAME}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/${PRODUCT_NAME}\"\n\n# The -a ensures that the headers maintain the source modification date so that we don't constantly\n# cause propagating rebuilds of files that import these headers.\n/bin/cp -a \"${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Headers\"\n\n/bin/cp -a \"${CURL_LIB_PATH}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Libraries\"\n\n/bin/cp -R  \"${TARGET_BUILD_DIR}/${PUBLIC_RESOURCES_FOLDER_PATH}/OpenpeerDataModel.bundle\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/Resources\"\n\n/bin/cp -a \"${BUILT_PRODUCTS_DIR}/lib${PRODUCT_NAME}.a\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FMK_VERSION}/${PRODUCT_NAME}\"\n";
 		};
 		87D7EF93197926CA003B1746 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1540,17 +1536,15 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 0.8;
-				FRAMEWORK_SEARCH_PATHS = "libs/op/libs/ortc-lib/libs/boost/ios/framework";
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				FRAMEWORK_VERSION = C;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -1562,7 +1556,6 @@
 					"libs/op/libs/ortc-lib",
 					"libs/op/libs/ortc-lib/libs",
 					"libs/op/libs/ortc-lib/libs/op-services-cpp",
-					"libs/op/libs/ortc-lib/libs/boost/ios/framework/boost.framework/Headers",
 					"libs/op/libs/ortc-lib/libs/curl-build-scripts/curl",
 					"libs/op/libs/ortc-lib/libs/zsLib",
 					"libs/op/libs/ortc-lib/libs/webRTC/webrtc",
@@ -1595,11 +1588,9 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
 				CURRENT_PROJECT_VERSION = 0.8;
-				FRAMEWORK_SEARCH_PATHS = "libs/op/libs/ortc-lib/libs/boost/ios/framework";
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				FRAMEWORK_VERSION = C;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
-				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -1611,7 +1602,6 @@
 					"libs/op/libs/ortc-lib",
 					"libs/op/libs/ortc-lib/libs",
 					"libs/op/libs/ortc-lib/libs/op-services-cpp",
-					"libs/op/libs/ortc-lib/libs/boost/ios/framework/boost.framework/Headers",
 					"libs/op/libs/ortc-lib/libs/curl-build-scripts/curl",
 					"libs/op/libs/ortc-lib/libs/zsLib",
 					"libs/op/libs/ortc-lib/libs/webRTC/webrtc",
@@ -1642,7 +1632,6 @@
 				DEAD_CODE_STRIPPING = NO;
 				DSTROOT = /tmp/openpeer_ios_sdk.dst;
 				DYLIB_CURRENT_VERSION = 1.1;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				FRAMEWORK_VERSION = D;
 				GCC_ENABLE_CPP_RTTI = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -1682,7 +1671,6 @@
 				DEAD_CODE_STRIPPING = NO;
 				DSTROOT = /tmp/openpeer_ios_sdk.dst;
 				DYLIB_CURRENT_VERSION = 1.1;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				FRAMEWORK_VERSION = D;
 				GCC_ENABLE_CPP_RTTI = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;

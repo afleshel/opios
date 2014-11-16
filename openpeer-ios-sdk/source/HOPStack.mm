@@ -89,7 +89,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     
     if ([inApplicationID length] > 0 && [applicationIDSharedSecret length] > 0)
     {
-        String authorizedApplicationID = IStack::createAuthorizedApplicationID([inApplicationID UTF8String], [applicationIDSharedSecret UTF8String], boost::posix_time::from_time_t([expires timeIntervalSince1970]));
+        String authorizedApplicationID = IStack::createAuthorizedApplicationID([inApplicationID UTF8String], [applicationIDSharedSecret UTF8String], zsLib::timeSinceEpoch(zsLib::Seconds(static_cast<zsLib::Seconds::rep>([expires timeIntervalSince1970]))));
         if (authorizedApplicationID)
         {
             ret = [NSString stringWithUTF8String:authorizedApplicationID];
@@ -106,7 +106,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     {
         zsLib::Duration duration;
         zsLib::Time time = IStack::getAuthorizedApplicationIDExpiry([inAuthorizedApplicationID UTF8String],&duration);
-        ret = duration.total_seconds();
+        ret = std::chrono::duration_cast<zsLib::Seconds>(duration).count();
     }
     return ret;
 }
@@ -117,7 +117,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     
     if ([inAuthorizedApplicationID length] > 0)
     {
-        ret = IStack::isAuthorizedApplicationIDExpiryWindowStillValid([inAuthorizedApplicationID UTF8String], boost::posix_time::time_duration(0,0,minimumValidityWindowRequired,0));
+        ret = IStack::isAuthorizedApplicationIDExpiryWindowStillValid([inAuthorizedApplicationID UTF8String], zsLib::Seconds(minimumValidityWindowRequired));
     }
     
     return ret;

@@ -38,7 +38,7 @@ void OpenPeerLog(HOPLoggerLevel logLevel, NSString* format,...);
 
 @interface OpenPeerUtility : NSObject
 
-+ (NSDate*) convertPosixTimeToDate:(boost::posix_time::ptime) time;
++ (NSDate*) convertPosixTimeToDate:(zsLib::Time) time;
 
 
 @end
