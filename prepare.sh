@@ -1,7 +1,6 @@
 #!/bin/bash
 
 : ${CURL_SCRIPT_PATH:=./libs/op/libs/ortc-lib/libs/curl-build-scripts}
-: ${BOOST_SCRIPT_PATH:=./libs/op/libs/ortc-lib/libs/boost}
 : ${SQLITE_SCRIPT_PATH:=./libs/op/libs/sqlite}
 : ${EASYSQLITE_SCRIPT_PATH:=./libs/op/libs/easysqlite}
 : ${TEMPLATES_PATH:=./templates}
@@ -118,27 +117,6 @@ buildcurl() {
 
 }
 
-buildboost() {
-	#Runs boost build script
-	if [ -f "$BOOST_SCRIPT_PATH/boost.sh" ]; then
-		pushd $BOOST_SCRIPT_PATH
-			echo Building boost ...
-			chmod a+x boost.sh
-			sh boost.sh
-			status=$?
-			if [ $status != 0 ]; then
-				echo $status
-				echo "Boost build failed!"
-				exit 1
-			else
-				echo "Boost build succeeded!"
-			fi
-		popd
-	else
-		echo ERROR. Boost build failed. No such a file or directory.
-	fi
-}
-
 buildsqlite() {
 	if [ -f "$SQLITE_SCRIPT_PATH/sqlite.sh" ]; then
 		pushd $SQLITE_SCRIPT_PATH
@@ -202,6 +180,5 @@ customertemplates() {
 
 sdkpath iPhoneOS
 buildcurl
-buildboost
 buildsqlite
 customertemplates
