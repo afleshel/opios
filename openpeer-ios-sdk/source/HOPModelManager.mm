@@ -570,8 +570,7 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (HOPOpenPeerAccount*) getLastLoggedInUser
-{
+ 4{
     HOPOpenPeerAccount* ret = nil;
     
     NSArray* results = [self getResultsForEntity:@"HOPOpenPeerAccount" withPredicateString:@"(loggedIn == YES)" orderDescriptors:nil];
