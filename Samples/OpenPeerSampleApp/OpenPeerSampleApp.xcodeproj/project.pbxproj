@@ -540,7 +540,6 @@
 		87D7EF5F19785CE0003B1746 /* iPhone_tabBar_favorites_inactive.png in Resources */ = {isa = PBXBuildFile; fileRef = 8758C5EF1978454800CB8099 /* iPhone_tabBar_favorites_inactive.png */; };
 		87D7EF6019785CE4003B1746 /* iPhone_tabBar_favorites_inactive@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8758C5F01978454800CB8099 /* iPhone_tabBar_favorites_inactive@2x.png */; };
 		87D91B2A17687EFD00E46B66 /* CacheDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D91B2917687EFD00E46B66 /* CacheDelegate.m */; };
-		87DBAFD81910433000BD6F76 /* OpenPeerSampleApp-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 87272834166CBF9B0089CBB6 /* OpenPeerSampleApp-Info.plist */; };
 		87E0354E19AF4ABC008A195C /* message_indicator_call_ended.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E0354919AF4ABC008A195C /* message_indicator_call_ended.png */; };
 		87E0354F19AF4ABC008A195C /* message_indicator_call_ended.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E0354919AF4ABC008A195C /* message_indicator_call_ended.png */; };
 		87E0355019AF4ABC008A195C /* message_indicator_call_missed.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E0354A19AF4ABC008A195C /* message_indicator_call_missed.png */; };
@@ -2232,7 +2231,6 @@
 				870F3380168376450090A97F /* ActivityIndicatorViewController.xib in Resources */,
 				87F09EE2171EBB1B0045F6A6 /* ChatViewController.xib in Resources */,
 				8730D7BB1833A63D008D1D37 /* iPhone_loader_00008.png in Resources */,
-				87DBAFD81910433000BD6F76 /* OpenPeerSampleApp-Info.plist in Resources */,
 				87355FE517CCA7E3006151E7 /* Default.png in Resources */,
 				8730D7CF1833A63D008D1D37 /* iPhone_loader_00018.png in Resources */,
 				8780DB7719E7F25C00AB196C /* list-image-placeholder.png in Resources */,

@@ -75,7 +75,7 @@ void OpenPeerLog(HOPLoggerLevel logLevel, NSString* format,...)
 
 + (NSDate*) convertPosixTimeToDate:(zsLib::Time) time
 {
-    zsLib::Seconds seconds = std::chrono::duration_cast<zsLib::Seconds>(zsLib::timeSinceEpoch(time));
+  zsLib::Seconds seconds = zsLib::timeSinceEpoch<zsLib::Seconds>(time);
 
     return[NSDate dateWithTimeIntervalSince1970:seconds.count()];
 }

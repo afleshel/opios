@@ -104,9 +104,9 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     long ret = 0;
     if ([inAuthorizedApplicationID length] > 0)
     {
-        zsLib::Duration duration;
+        zsLib::Seconds duration;
         zsLib::Time time = IStack::getAuthorizedApplicationIDExpiry([inAuthorizedApplicationID UTF8String],&duration);
-        ret = std::chrono::duration_cast<zsLib::Seconds>(duration).count();
+        ret = duration.count();
     }
     return ret;
 }
