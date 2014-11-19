@@ -35,6 +35,7 @@
 #import "HOPPublicPeerFile.h"
 #import "HOPIdentityContact.h"
 #import "HOPRolodexContact.h"
+#import "HOPAPNSData.h"
 
 @implementation HOPOpenPeerContact (External)
 
@@ -65,5 +66,30 @@
 - (NSString*) getFullName
 {
     return [self getDefaultRolodexContact].name;
+}
+
+- (NSString*) getPeerURI
+{
+    return self.publicPeerFile.peerURI;
+}
+
+- (NSString*) getPushNotificationDeviceToken
+{
+    return self.apnsData.deviceToken;
+}
+
+- (NSString*) getPushNotificationType
+{
+    return self.apnsData.type;
+}
+
+- (NSArray*) getIdentityURIs
+{
+    NSMutableArray* array = [NSMutableArray new];
+    for (HOPIdentityContact* identityContact in self.identityContacts)
+    {
+        [array addObject:identityContact.rolodexContact.identityURI];
+    }
+    return array;
 }
 @end

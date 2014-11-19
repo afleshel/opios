@@ -64,13 +64,13 @@
 #import "HOPConversationThreadRecord.h"
 #import "HOPOpenPeerAccount+External.h"
 #import "HOPOpenPeerContact+External.h"
-#import "HOPIdentityContact.h"
+//#import "HOPIdentityContact.h"
 #import "HOPIdentityProvider.h"
 #import "HOPImage.h"
 #import "HOPMessageEvent.h"
 #import "HOPMessageRecord+External.h"
 #import "HOPParticipants.h"
-#import "HOPPublicPeerFile.h"
+//#import "HOPPublicPeerFile.h"
 #import "HOPRolodexContact+External.h"
 
 

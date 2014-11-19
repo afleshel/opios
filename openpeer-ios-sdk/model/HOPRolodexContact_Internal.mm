@@ -50,7 +50,7 @@
 @dynamic associatedIdentity;
 @dynamic readyForDeletion;
 @dynamic associatedIdentityForHomeUser;
-
+@dynamic openPeerContact;
 
 - (void) updateWithCoreRolodexContact:(RolodexContact) inRolodexContact identityProviderDomain:(NSString*)identityProviderDomain homeUserIdentityURI:(NSString*)homeUserIdentityURI
 {

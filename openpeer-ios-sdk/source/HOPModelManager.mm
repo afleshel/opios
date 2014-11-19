@@ -398,6 +398,20 @@ using namespace openpeer::core;
     return ret;
 }
 
+- (HOPRolodexContact *) getRolodexContactByPeerURI:(NSString*) peerURI
+{
+    HOPRolodexContact* ret = nil;
+    
+    if ([peerURI length] > 0)
+    {
+        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"identityContact.priority" ascending:NO];
+        NSArray* array = [self getResultsForEntity:@"HOPRolodexContact" withPredicateString:[NSString stringWithFormat:@"identityContact.openPeerContact.publicPeerFile.peerURI MATCHES '%@'",peerURI] orderDescriptors:@[sortDescriptor]];
+        if (array.count > 0)
+            ret = array[0];
+    }
+    return ret;
+}
+
 - (NSArray *) getRolodexContactsByPeerURI:(NSString*) peerURI
 {
 	NSArray* ret = nil;
@@ -570,7 +584,8 @@ using namespace openpeer::core;
     return ret;
 }
 
- 4{
+- (HOPOpenPeerAccount*) getLastLoggedInUser
+{
     HOPOpenPeerAccount* ret = nil;
     
     NSArray* results = [self getResultsForEntity:@"HOPOpenPeerAccount" withPredicateString:@"(loggedIn == YES)" orderDescriptors:nil];

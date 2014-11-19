@@ -39,4 +39,8 @@
 - (HOPContact*) getCoreContact;
 - (HOPRolodexContact*) getDefaultRolodexContact;
 - (NSString*) getFullName;
+- (NSString*) getPeerURI;
+- (NSString*) getPushNotificationDeviceToken;
+- (NSString*) getPushNotificationType;
+- (NSArray*) getIdentityURIs;
 @end

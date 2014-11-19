@@ -41,4 +41,5 @@
 - (HOPContact*) getCoreContact;
 - (HOPAvatar*) getAvatarForWidth:(NSNumber*) width height:(NSNumber*) height;
 - (NSString*) firstLetter;
+- (NSString*) getPeerURI;
 @end

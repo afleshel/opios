@@ -39,7 +39,6 @@
 #import "AppConsts.h"
 #import "Session.h"
 #import "Utility.h"
-#import "Message.h"
 #import "OpenPeer.h"
 #import "MainViewController.h"
 
@@ -53,8 +52,6 @@
 
 
 @interface MessageManager ()
-
-@property (nonatomic, strong) NSComparator comparator;
 
 - (id) initSingleton;
 
@@ -81,10 +78,7 @@
     self = [super init];
     if (self)
     {
-        _comparator = ^NSComparisonResult(Message* message1, Message* message2)
-        {
-            return [message1.date compare:message2.date];
-        };
+
     }
     return self;
 }
@@ -269,7 +263,7 @@
             if ([[OpenPeer sharedOpenPeer] appEnteredBackground])
             {
                 NSMutableDictionary* dict = [[NSMutableDictionary alloc] init];
-                [dict setObject:contact.publicPeerFile.peerURI forKey:@"peerURI"];
+                [dict setObject:[contact getPeerURI] forKey:@"peerURI"];
                 [dict setObject:message.messageID forKey:@"messageId"];
                 [dict setObject:message.text forKey:@"message"];
                 [dict setObject:message.date forKey:@"date"];

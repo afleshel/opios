@@ -118,7 +118,8 @@ void OpenPeerConversationThreadDelegate::onConversationThreadPushMessage(IConver
 {
     HOPConversationThread * hopConversationThread = this->getOpenPeerConversationThread(conversationThread);
     NSString* messageId = [NSString stringWithUTF8String:messageID];
-    HOPContact* hopContact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:[NSString stringWithUTF8String:contact->getPeerURI()]];
+    //HOPContact* hopContact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:[NSString stringWithUTF8String:contact->getPeerURI()]];
+    HOPRolodexContact* hopContact = [[HOPModelManager sharedModelManager] getRolodexContactByPeerURI:[NSString stringWithUTF8String:contact->getPeerURI()]];
     
     if (hopConversationThread && hopContact && [messageId length] > 0)
         [conversationThreadDelegate onConversationThreadPushMessage:hopConversationThread messageID:messageId contact:hopContact];
@@ -127,7 +128,8 @@ void OpenPeerConversationThreadDelegate::onConversationThreadPushMessage(IConver
 void OpenPeerConversationThreadDelegate::onConversationThreadContactConnectionStateChanged(IConversationThreadPtr conversationThread,IContactPtr contact,ContactConnectionStates state)
 {
     HOPConversationThread * hopConversationThread = this->getOpenPeerConversationThread(conversationThread);
-    HOPContact* hopContact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:[NSString stringWithUTF8String:contact->getPeerURI()]];
+    //HOPContact* hopContact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:[NSString stringWithUTF8String:contact->getPeerURI()]];
+    HOPRolodexContact* hopContact = [[HOPModelManager sharedModelManager] getRolodexContactByPeerURI:[NSString stringWithUTF8String:contact->getPeerURI()]];
     
     if (hopConversationThread && hopContact)
         [conversationThreadDelegate onConversationThreadContactConnectionStateChanged:hopConversationThread contact:hopContact contactConnectionState:(HOPConversationThreadContactConnectionState)state];
@@ -136,8 +138,9 @@ void OpenPeerConversationThreadDelegate::onConversationThreadContactConnectionSt
 void OpenPeerConversationThreadDelegate::onConversationThreadContactStatusChanged(IConversationThreadPtr conversationThread,IContactPtr contact)
 {
   HOPConversationThread * hopConversationThread = this->getOpenPeerConversationThread(conversationThread);
-  HOPContact* hopContact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:[NSString stringWithUTF8String:contact->getPeerURI()]];
-
+    //HOPContact* hopContact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:[NSString stringWithUTF8String:contact->getPeerURI()]];
+    HOPRolodexContact* hopContact = [[HOPModelManager sharedModelManager] getRolodexContactByPeerURI:[NSString stringWithUTF8String:contact->getPeerURI()]];
+    
   if (hopConversationThread && hopContact)
     [conversationThreadDelegate onConversationThreadContactStatusChanged:hopConversationThread contact:hopContact];
 }

@@ -32,8 +32,8 @@
 #import "IdentityDelegate.h"
 #import <OpenpeerSDK/HOPIdentity.h>
 #import <OpenpeerSDK/HOPAccount.h>
-#import <OpenpeerSDK/HOPRolodexContact.h>
-#import <OpenpeerSDK/HOPIdentityContact.h>
+//#import <OpenpeerSDK/HOPRolodexContact.h>
+//#import <OpenpeerSDK/HOPIdentityContact.h>
 #import <OpenpeerSDK/HOPModelManager.h>
 #import <OpenpeerSDK/HOPIdentityLookup.h>
 #import <OpenpeerSDK/HOPAssociatedIdentity.h>

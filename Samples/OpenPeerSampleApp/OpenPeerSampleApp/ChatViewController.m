@@ -33,7 +33,6 @@
 #import <UIKit/UIKit.h>
 
 #import "MessageManager.h"
-#import "Message.h"
 #import "Session.h"
 #import "ChatMessageCell.h"
 #import <OpenPeerSDK/HOPModelManager.h>
@@ -41,9 +40,8 @@
 #import <OpenPeerSDK/HOPConversationRecord.h>
 #import <OpenPeerSDK/HOPConversationThread.h>
 #import <OpenPeerSDK/HOPCallSystemMessage.h>
-#import <OpenPeerSDK/HOPContact.h>
-#import <OpenPeerSDK/HOPRolodexContact.h>
-#import <OpenPeerSDK/HOPPublicPeerFile.h>
+//#import <OpenPeerSDK/HOPContact.h>
+#import <OpenPeerSDK/HOPRolodexContact+External.h>
 #import <OpenPeerSDK/HOPConversationEvent.h>
 #import "SystemMessageCell.h"
 #import "ChatCell.h"
@@ -166,10 +164,10 @@
     [self.session.unreadMessageArray removeAllObjects];
 }
 
-- (NSString*) getMessageForStatus:(HOPConversationThreadContactStatus) status contact:(HOPContact*) contact
+/*- (NSString*) getMessageForStatus:(HOPConversationThreadContactStatus) status contact:(HOPContact*) contact
 {
     NSString* ret = @"";
-    HOPRolodexContact* rolodexContact = [[[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:[contact getPeerURI]] objectAtIndex:0];
+    HOPRolodexContact* rolodexContact = [[[HOPModelManager sharedModelManager] getRolodexContactByPeerURI:[contact getPeerURI]] objectAtIndex:0];
     switch (status)
     {
         case HOPComposingStateComposing:
@@ -187,7 +185,7 @@
     }
     
     return ret;
-}
+}*/
 
 - (void) updateComposingStatuses
 {
@@ -254,18 +252,15 @@
     NSDictionary* object = notification.object;
     
     HOPConversationThread* thread = [object objectForKey:@"thread"];
-    HOPContact* contact = [object objectForKey:@"contact"];
-    
-    HOPConversationThreadContactStatus status = [thread getContactStatus:contact];
-    
-    //NSString* message = [self getMessageForStatus:status contact:contact];
-    
-    [self.dictionaryComposingStatuses setObject:@(status) forKey:[contact getPeerURI]];
- 
-    [self updateComposingStatuses];
-    //[self.dictionaryComposingStatuses setObject:contact forKey:@(status)];
-    
-    //self.labelComposingStatus.text = message;
+    if (self.session.conversationThread == thread)
+    {
+        HOPRolodexContact* contact = [object objectForKey:@"contact"];
+        NSNumber* status = [object objectForKey:@"status"];
+
+        [self.dictionaryComposingStatuses setObject:status forKey:[contact getPeerURI]];
+     
+        [self updateComposingStatuses];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated

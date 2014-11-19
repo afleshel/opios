@@ -58,11 +58,14 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
             IIdentityLookup::IdentityLookupInfoList identityLookupInfoList;
             for (HOPRolodexContact* contact in identityLookupInfos)
             {
-                IIdentityLookup::IdentityLookupInfo lookupInfo;
-                lookupInfo.mIdentityURI = [contact.identityURI UTF8String];
-                lookupInfo.mLastUpdated = [contact isKindOfClass:[HOPIdentityContact class]] ? boost::posix_time::from_time_t([[(HOPIdentityContact*)contact lastUpdated] timeIntervalSince1970]) : Time();
-                
-                identityLookupInfoList.push_back(lookupInfo);
+                if (contact.identityURI.length > 0)
+                {
+                    IIdentityLookup::IdentityLookupInfo lookupInfo;
+                    lookupInfo.mIdentityURI = [contact.identityURI UTF8String];
+                    lookupInfo.mLastUpdated = [contact isKindOfClass:[HOPIdentityContact class]] ? boost::posix_time::from_time_t([[(HOPIdentityContact*)contact lastUpdated] timeIntervalSince1970]) : Time();
+                    
+                    identityLookupInfoList.push_back(lookupInfo);
+                }
             }
             [self setLocalDelegates:inDelegate];
             

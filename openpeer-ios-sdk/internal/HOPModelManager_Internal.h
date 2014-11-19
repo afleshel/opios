@@ -30,6 +30,7 @@
  */
 
 #import "HOPModelManager.h"
+#import <openpeer/core/types.h>
 
 using namespace openpeer;
 using namespace openpeer::core;

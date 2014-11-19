@@ -37,6 +37,10 @@
 #import <openpeer/core/IHelper.h>
 #import "HOPContact_Internal.h"
 #import "OpenPeerStorageManager.h"
+#import "HOPPublicPeerFile.h"
+#import "HOPModelManager.h"
+#import "HOPIdentityContact.h"
+#import "HOPOpenPeerContact.h"
 
 ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
@@ -92,7 +96,34 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
     return self;
 }
-
+- (id) initWithPeerURI:(NSString*) peerURI
+{
+    self = [super init];
+    
+    if (self)
+    {
+        HOPPublicPeerFile* publicPeerFile = [[HOPModelManager sharedModelManager] getPublicPeerFileForPeerURI:peerURI];
+        if (publicPeerFile && [publicPeerFile.peerFile length] > 0)
+        {
+            ElementPtr publicPeerXml = IHelper::createElement([publicPeerFile.peerFile UTF8String]);
+            IPeerFilePublicPtr publicPeer = IHelper::createPeerFilePublic(publicPeerXml);
+            
+            IContactPtr tempCoreContactPtr = IContact::createFromPeerFilePublic([[HOPAccount sharedAccount] getAccountPtr], publicPeer);
+            
+            if (tempCoreContactPtr)
+            {
+                coreContactPtr = tempCoreContactPtr;
+                [[OpenPeerStorageManager sharedStorageManager] setContact:self forPeerURI:[self getPeerURI]];
+            }
+        }
+        else
+        {
+            self = nil;
+        }
+    }
+    
+    return self;
+}
 
 + (HOPContact*) getForSelf
 {
@@ -217,6 +248,25 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 {
     if(coreContactPtr)
         coreContactPtr.reset();
+}
+
+- (HOPIdentityContact*) createIdentityContactForCoreContact
+{
+    NSManagedObject* managedObject = [[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPIdentityContact"];
+    if ([managedObject isKindOfClass:[HOPIdentityContact class]])
+    {
+        HOPIdentityContact* hopIdentityContact = (HOPIdentityContact*)managedObject;
+        
+        NSManagedObject* managedObject = [[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPPublicPeerFile"];
+        if ([managedObject isKindOfClass:[HOPPublicPeerFile class]])
+        {
+            HOPPublicPeerFile* hopPublicPeerFile = (HOPPublicPeerFile*)managedObject;
+            hopPublicPeerFile.peerURI = [self getPeerURI];
+            hopPublicPeerFile.peerFile = [self getPeerFilePublic];
+            hopIdentityContact.openPeerContact.publicPeerFile = hopPublicPeerFile;
+        }
+        [[HOPModelManager sharedModelManager] saveContext];
+    }
 }
 
 #pragma mark - Internal methods

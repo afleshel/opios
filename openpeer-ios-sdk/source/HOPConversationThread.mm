@@ -385,11 +385,12 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (HOPConversationThreadContactStatus) getContactStatus:(HOPContact*) contact
+- (HOPConversationThreadContactStatus) getContactStatus:(HOPRolodexContact*) rolodexCoontact
 {
     HOPConversationThreadContactStatus ret = HOPComposingStateInactive;
     if(conversationThreadPtr)
     {
+        HOPContact* contact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:[rolodexCoontact getPeerURI]];
         IContactPtr contactPtr = [contact getContactPtr];
         if (contactPtr)
         {

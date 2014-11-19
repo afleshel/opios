@@ -34,6 +34,7 @@
 #import "HOPTypes.h"
 
 @class HOPAccount;
+@class HOPIdentityContact;
 
 @interface HOPContact : NSObject
 
@@ -45,6 +46,7 @@
  @return Ponter to the created HOPContact object
  */
 - (id) initWithPeerFile:(NSString*) publicPeerFile;
+- (id) initWithPeerURI:(NSString*) peerURI;
 
 /**
  Returns HOPContact object for logged in user.
@@ -87,4 +89,6 @@
  Destroys contact core object.
  */
 - (void) destroyCoreObject;
+
+- (HOPIdentityContact*) createIdentityContactForCoreContact;
 @end

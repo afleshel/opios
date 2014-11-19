@@ -50,10 +50,6 @@
 - (void) refreshRolodexContacts;
 - (void) identityLookupForContacts:(NSArray *)contacts identityServiceDomain:(NSString*) identityServiceDomain;
 - (void) updateContactsWithDataFromLookup:(HOPIdentityLookup*) identityLookup;
-- (BOOL) checkIsContactValid:(HOPContact*) contact;
-- (NSArray*) getBaseURIsForStableId:(NSString*) stableID;
-- (NSString*) createProfileBundleForCommunicationWithContact:(HOPRolodexContact*) targetContact;
-- (HOPRolodexContact*) getRolodexContactByProfileBundle:(NSString*) profileBundle coreContact:(HOPContact*) coreContact;
-//- (NSArray*) getIdentityContactsForHomeUser;
+
 - (void) removeAllContacts;
 @end

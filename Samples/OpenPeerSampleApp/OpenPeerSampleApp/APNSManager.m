@@ -43,12 +43,10 @@
 #import "BackgroundingDelegate.h"
 #import "HTTPDownloader.h"
 
-#import <OpenPeerSDK/HOPRolodexContact.h>
-#import <OpenPeerSDK/HOPContact.h>
+//#import <OpenPeerSDK/HOPRolodexContact.h>
+//#import <OpenPeerSDK/HOPContact.h>
 #import <OpenPeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPAccount.h>
-#import <OpenPeerSDK/HOPPublicPeerFile.h>
-//#import <OpenPeerSDK/HOPOpenPeerAccount+External.h>
 #import <OpenPeerSDK/HOPMessage.h>
 #import <OpenPeerSDK/HOPBackgrounding.h>
 #import <OpenPeerSDK/HOPUtility.h>
@@ -82,7 +80,6 @@
 - (void) pushDataOld:(NSDictionary*) dataToPush sendingRich:(BOOL) sendingRich;
 - (void) pushData:(NSString*) filePath sendingRich:(BOOL) sendingRich messageID:(NSString*) messageID;
 - (BOOL) canSendPushNotificationForPeerURI:(NSString*) peerURI;
-- (NSArray*) getDeviceTokensForContact:(HOPContact*) contact;
 - (NSString*) prepareMessageForRichPush:(HOPMessage*) message peerURI:(NSString*) peerURI location:(NSString*) location;
 @end
 
@@ -395,20 +392,6 @@
     return ret;
 }
 
-- (NSArray*) getDeviceTokensForContact:(HOPContact*) contact
-{
-    NSArray* ret = nil;
-    
-    NSString* peerURI = [contact getPeerURI];
-    if ([peerURI length] > 0)
-    {
-        if ([self canSendPushNotificationForPeerURI:peerURI])
-        {
-            ret = [[HOPModelManager sharedModelManager] getAPNSDataForPeerURI:peerURI];
-        }
-    }
-    return ret;
-}
 
 - (NSArray*) getDeviceTokensForContact2:(HOPContact*) contact
 {

@@ -36,6 +36,8 @@
 #import "HOPIdentityContact_Internal.h"
 #import "HOPModelManager_Internal.h"
 #import "HOPOpenPeerContact.h"
+#import "HOPRolodexContact.h"
+
 #import <openpeer/core/ILogger.h>
 
 ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
@@ -100,12 +102,6 @@ void OpenPeerIdentityLookupDelegate::updateContactsReceivedOnIdentityLookup(IIde
                         [hopIdentityContact updateWithIdentityContact:identityContact];
                         
                         [identityLookup.arrayLastUpdatedContacts addObject:hopIdentityContact];
-                        
-                        HOPOpenPeerContact* contact = [[HOPModelManager sharedModelManager]  getOpenPeerContactForIdentityContact:identityContact];
-                        if (contact)
-                            [contact addIdentityContactsObject:hopIdentityContact];
-                        else
-                            contact = [[HOPModelManager sharedModelManager] createOpenPeerContactForIdentityContact:identityContact];
                     }
                     
                 }

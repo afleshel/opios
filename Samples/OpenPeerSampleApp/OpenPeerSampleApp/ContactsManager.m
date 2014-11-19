@@ -47,13 +47,9 @@
 #import <OpenpeerSDK/HOPAccount.h>
 #import <OpenpeerSDK/HOPModelManager.h>
 #import <OpenpeerSDK/HOPRolodexContact+External.h>
-//#import <OpenpeerSDK/HOPOpenPeerAccount+External.h>
-#import <OpenpeerSDK/HOPContact.h>
-#import <OpenpeerSDK/HOPIdentityContact.h>
 #import <OpenpeerSDK/HOPAssociatedIdentity.h>
-#import <OpenpeerSDK/HOPPublicPeerFile.h>
 #import <OpenpeerSDK/HOPUtility.h>
-#import <OpenpeerSDK/HOPOpenPeerContact.h>
+#import <OpenpeerSDK/HOPOpenPeerContact+External.h>
 #import <AddressBook/AddressBook.h>
 
 @interface ContactsManager ()
@@ -99,7 +95,7 @@
     return self;
 }
 
-- (void) loadAddressBookContacts
+/*- (void) loadAddressBookContacts
 {
     NSMutableArray* contactsForIdentityLookup = [[NSMutableArray alloc] init];
     ABAddressBookRef addressBook = NULL;
@@ -224,13 +220,12 @@
     
     if (identityLookup)
         [self.identityLookupsArray addObject:identityLookup];
-}
+}*/
 /**
  Initiates contacts loading procedure.
  */
 - (void) loadContacts
 {
-    //BOOL downloadedEnded = NO;
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Init loading contacts");
     
     //For the first login and association it should be performed contacts download on just associated identity
@@ -327,183 +322,6 @@
     
     [self.identityLookupsArray removeObject:identityLookup];
 }
-
-- (BOOL) checkIsContactValid:(HOPContact*) contact
-{
-    BOOL ret = NO;
-    NSArray* rolodexContacts = [[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:[contact getPeerURI]];
-    ret = [rolodexContacts count] > 0;
-    return ret;
-}
-
-- (NSArray*) getBaseURIsForStableId:(NSString*) stableID
-{
-    NSMutableArray* ret = nil;
-    
-    HOPOpenPeerContact* openPeerContact = [[HOPModelManager sharedModelManager] getOpenPeerContactForStableID:stableID];
-    
-    if (openPeerContact && openPeerContact.identityContacts.count > 0)
-    {
-        ret = [[NSMutableArray alloc] init];
-    
-        for (HOPIdentityContact* identityContact in openPeerContact.identityContacts)
-        {
-            NSString* identityURI = identityContact.rolodexContact.identityURI;
-            NSString* baseURI = [HOPUtility getBaseIdentityURIFromURI:identityURI];
-            [ret addObject:baseURI];
-        }
-    }
-    
-    return ret;
-    
-}
-
-- (NSString*) createProfileBundleForCommunicationWithContact:(HOPRolodexContact*) targetContact
-{
-    //HOPOpenPeerAccount* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInUser];
-    
-    NSString* ret = nil;
-    NSDictionary* dictionaryProfile = nil;
-    //if (homeUser)
-    {
-        HOPOpenPeerContact* openPeerContact = [[HOPModelManager sharedModelManager] getOpenPeerContactForStableID:[[HOPAccount sharedAccount] getStableID]];
-        
-        if (openPeerContact && openPeerContact.identityContacts.count > 0)
-        {
-            HOPIdentityContact* identityContactWithHighestPriority = [openPeerContact.identityContacts.allObjects objectAtIndex:0];
-            
-            NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-            
-            [dict setObject:identityContactWithHighestPriority.rolodexContact.name forKey:profileXmlTagName];
-            
-            NSMutableArray* arrayIdentities = [[NSMutableArray alloc] init];
-            for (HOPIdentityContact* identityContact in openPeerContact.identityContacts)
-            {
-                NSMutableDictionary *dictIdentitity = [[NSMutableDictionary alloc] init];
-                [dictIdentitity setObject:identityContact.rolodexContact.identityURI forKey:profileXmlTagIdentity];
-                [arrayIdentities addObject:dictIdentitity];
-            }
-            
-            [dict setObject:arrayIdentities forKey:profileXmlTagIdentities];
-            
-            dictionaryProfile = [NSDictionary dictionaryWithObject:dict forKey:profileXmlTagProfile];}
-    }
-    
-    NSError *error;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionaryProfile
-                                                       options:NSJSONWritingPrettyPrinted // Pass 0 if you don't care about the readability of the generated string
-                                                         error:&error];
-    
-    if (! jsonData)
-    {
-        OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"JSON data serialization has failed with an error: %@", error);
-    } else
-    {
-        ret = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    }
-
-    return ret;
-}
-
-- (HOPRolodexContact*) getRolodexContactByProfileBundle:(NSString*) profileBundle coreContact:(HOPContact*) coreContact
-{
-    HOPRolodexContact* ret = nil;
-    NSString* name = nil;
-    
-    SBJsonParser* parser = [[SBJsonParser alloc] init];
-    NSDictionary* bundleDictionary = [parser objectWithString: profileBundle];
-    NSDictionary* profileBundleDictionary = [bundleDictionary objectForKey:profileXmlTagProfile];
-    
-    if (profileBundleDictionary)
-    {
-        name = [profileBundleDictionary objectForKey:profileXmlTagName];
-        
-        //Hack because JSON doesn't pass array of one element
-        NSArray* arrayIdentities = nil;
-        id identities = [profileBundleDictionary objectForKey:profileXmlTagIdentities];
-        if ([identities isKindOfClass:[NSArray class]])
-            arrayIdentities = identities;
-        else
-            arrayIdentities = [NSArray arrayWithObject:identities];
-        
-        for (NSDictionary* dictionaryIdentity in arrayIdentities)
-        {
-            NSString* identityURI = [dictionaryIdentity objectForKey:profileXmlTagIdentity];
-            
-            HOPRolodexContact* contact = [[HOPModelManager sharedModelManager] getRolodexContactByIdentityURI:identityURI];
-            if (!contact)
-            {
-                NSString* baseIdentityURI = [HOPUtility getBaseIdentityURIFromURI:identityURI];
-                
-                //HOPOpenPeerAccount* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInUser];
-                HOPAssociatedIdentity* associatedIdentity = [[HOPModelManager sharedModelManager] getAssociatedIdentityForBaseIdentityURI:baseIdentityURI homeUserStableId:[[HOPAccount sharedAccount] getStableID]];
-                
-                if (!associatedIdentity)
-                {
-                    associatedIdentity = [[HOPModelManager sharedModelManager] addAssociatedIdentityForBaseIdentityURI:baseIdentityURI domain:[[Settings sharedSettings] getIdentityProviderDomain] name:baseIdentityURI /*account:homeUser */selfRolodexProfileProfile:nil];
-                }
-                
-                NSManagedObject* managedObject = [[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPRolodexContact"];
-                if ([managedObject isKindOfClass:[HOPRolodexContact class]])
-                {
-                    contact = (HOPRolodexContact*)managedObject;
-                    contact.name = name;
-                    contact.identityURI = identityURI;
-                    contact.associatedIdentity = associatedIdentity;
-                    HOPRolodexContact* homeUserRolodexContact = [[HOPModelManager sharedModelManager] getRolodexContactByIdentityURI:identityURI];//[[[HOPModelManager sharedModelManager] getLastLoggedInUser] getRolodexContactForIdentityBaseURI:[HOPUtility getBaseIdentityURIFromURI:identityURI]];
-                    NSString* homeUserIdentityURI = homeUserRolodexContact ? homeUserRolodexContact.identityURI : nil;
-                    [contact updateWithName:name identityURI:identityURI identityProviderDomain:[[Settings sharedSettings] getIdentityProviderDomain] homeUserIdentityURI:homeUserIdentityURI];
-                    
-                    [[HOPModelManager sharedModelManager] saveContext];
-                }
-            }
-            
-            if (!contact.identityContact)
-            {
-                NSManagedObject* managedObject = [[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPIdentityContact"];
-                if ([managedObject isKindOfClass:[HOPIdentityContact class]])
-                {
-                    HOPIdentityContact* hopIdentityContact = (HOPIdentityContact*)managedObject;
-                    
-                    NSManagedObject* managedObject = [[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPPublicPeerFile"];
-                    if ([managedObject isKindOfClass:[HOPPublicPeerFile class]])
-                    {
-                        HOPPublicPeerFile* hopPublicPeerFile = (HOPPublicPeerFile*)managedObject;
-                        hopPublicPeerFile.peerURI = [coreContact getPeerURI];
-                        hopPublicPeerFile.peerFile = [coreContact getPeerFilePublic];
-                        hopIdentityContact.openPeerContact.publicPeerFile = hopPublicPeerFile;
-                    }
-                    contact.identityContact = hopIdentityContact;
-                    [[HOPModelManager sharedModelManager] saveContext];
-                }
-            }
-            
-            //Return first rolodex contact with highest priority
-            if (!ret)
-                ret = contact;
-        }
-
-    }
-    return ret;
-}
-
-//- (NSArray*) getIdentityContactsForHomeUser
-//{
-//    NSMutableArray* ret = nil;
-//    NSArray* identities = [[HOPAccount sharedAccount] getAssociatedIdentities];
-//    
-//    if ([identities count] > 0)
-//        ret = [[NSMutableArray alloc] init];
-//    
-//    for (HOPIdentity* identity in identities)
-//    {
-//        HOPIdentityContact* identityContact = [identity getSelfIdentityContact];
-//        if (identityContact)
-//            [ret addObject:identityContact];
-//    }
-//    
-//    return ret;
-//}
 
 - (void) removeAllContacts
 {

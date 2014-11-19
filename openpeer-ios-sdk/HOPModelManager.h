@@ -122,6 +122,13 @@
 - (HOPRolodexContact*) getRolodexContactByIdentityURI:(NSString*) identityURI;
 
 /**
+ Returns a rolodex contact with highest priority for a specified peer URI.
+ @param peerURI Peer URI
+ @return HOPRolodexContact HOPRolodexContact object
+ */
+- (HOPRolodexContact *) getRolodexContactByPeerURI:(NSString*) peerURI;
+
+/**
  Returns an array of rolodex contacts for a specified peer URI.
  @param peerURI Contact peer URI
  @return An array of HOPRolodexContact objects

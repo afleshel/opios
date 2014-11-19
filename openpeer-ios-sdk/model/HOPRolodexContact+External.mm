@@ -36,7 +36,6 @@
 #import "HOPIdentityContact.h"
 #import "HOPPublicPeerFile.h"
 #import "HOPModelManager.h"
-#import "HOPContact.h"
 #import "HOPUtility.h"
 #import "HOPAssociatedIdentity.h"
 #import "HOPOpenPeerContact.h"
@@ -96,5 +95,14 @@
     NSString *stringToReturn = [[self.name uppercaseString] substringToIndex:1];
     //[self didAccessValueForKey:@"uppercaseFirstLetterOfName"];
     return stringToReturn;
+}
+- (NSString*) getPeerURI
+{
+    NSString* ret = nil;
+    
+    if (self.openPeerContact)
+        ret = self.openPeerContact.publicPeerFile.peerURI;
+    
+    return ret;
 }
 @end

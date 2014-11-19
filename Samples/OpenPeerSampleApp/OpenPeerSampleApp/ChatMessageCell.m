@@ -30,18 +30,15 @@
  */
 
 #import "ChatMessageCell.h"
-#import "Message.h"
 //#import "OpenPeerUser.h"
 #import <OpenpeerSDK/HOPRolodexContact+External.h>
 #import <OpenpeerSDK/HOPModelManager.h>
 #import <OpenpeerSDK/HOPAvatar.h>
 #import <OpenpeerSDK/HOPImage.h>
-//#import <OpenpeerSDK/HOPOpenPeerAccount+External.h>
 #import <OpenpeerSDK/HOPMessageRecord+External.h>
-#import <OpenpeerSDK/HOPPublicPeerFile.h>
-#import <OpenpeerSDK/HOPIdentityContact.h>
+//#import <OpenpeerSDK/HOPIdentityContact.h>
 #import <OpenpeerSDK/HOPConversationThread.h>
-#import <OpenpeerSDK/HOPOpenPeerContact.h>
+#import <OpenpeerSDK/HOPOpenPeerContact+External.h>
 #import <OpenPeerSDK/HOPAccount.h>
 #import "TTTAttributedLabel.h"
 #import "Utility.h"
@@ -274,7 +271,7 @@
     // show avatar
     if(!self.message.sender)
     {
-        HOPRolodexContact* contact = ((HOPIdentityContact*)[self.message.sender.identityContacts anyObject]).rolodexContact;
+        HOPRolodexContact* contact = [self.message.sender getDefaultRolodexContact]; //((HOPIdentityContact*)[self.message.sender.identityContacts anyObject]).rolodexContact;
         HOPAvatar* avatar = [contact getAvatarForWidth:@(40.0) height:@(40.0)];
         //HOPAvatar* avatar = [self.message.contact getAvatarForWidth:@(40.0) height:@(40.0)];
         if (avatar && avatar.avatarImage && avatar.avatarImage.image)
@@ -314,7 +311,7 @@
             //if message is received
             if (!isHomeUserSender)
             {
-                HOPRolodexContact* contact = ((HOPIdentityContact*)[self.message.sender.identityContacts anyObject]).rolodexContact;
+                HOPRolodexContact* contact = [self.message.sender getDefaultRolodexContact]; //((HOPIdentityContact*)[self.message.sender.identityContacts anyObject]).rolodexContact;
                 messageSenderName = [contact name];
 //                messageSenderName = [self.message.contact name];
             }

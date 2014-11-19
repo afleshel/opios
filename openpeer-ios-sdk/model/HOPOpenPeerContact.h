@@ -1,25 +1,26 @@
 //
 //  HOPOpenPeerContact.h
-//  openpeer-ios-sdk
+//  hfstack_ios
 //
-//  Created by Sergej on 10/15/14.
-//  Copyright (c) 2014 Hookflash. All rights reserved.
+//  Created by Sergej on 11/18/14.
+//  Copyright (c) 2014 SMB Phone Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class HOPAPNSData, HOPConversationRecord, HOPIdentityContact, HOPOpenPeerAccount, HOPParticipants, HOPPublicPeerFile;
+@class HOPAPNSData, HOPConversationRecord, HOPIdentityContact, HOPOpenPeerAccount, HOPParticipants, HOPPublicPeerFile, HOPRolodexContact;
 
 @interface HOPOpenPeerContact : NSManagedObject
 
 @property (nonatomic, retain) NSString * stableID;
+@property (nonatomic, retain) HOPOpenPeerAccount *account;
 @property (nonatomic, retain) HOPAPNSData *apnsData;
 @property (nonatomic, retain) NSSet *identityContacts;
 @property (nonatomic, retain) NSSet *participants;
 @property (nonatomic, retain) HOPPublicPeerFile *publicPeerFile;
 @property (nonatomic, retain) NSSet *sessionRecords;
-@property (nonatomic, retain) HOPOpenPeerAccount *account;
+@property (nonatomic, retain) NSSet *rolodexContacts;
 @end
 
 @interface HOPOpenPeerContact (CoreDataGeneratedAccessors)
@@ -38,5 +39,10 @@
 - (void)removeSessionRecordsObject:(HOPConversationRecord *)value;
 - (void)addSessionRecords:(NSSet *)values;
 - (void)removeSessionRecords:(NSSet *)values;
+
+- (void)addRolodexContactsObject:(HOPRolodexContact *)value;
+- (void)removeRolodexContactsObject:(HOPRolodexContact *)value;
+- (void)addRolodexContacts:(NSSet *)values;
+- (void)removeRolodexContacts:(NSSet *)values;
 
 @end

@@ -33,9 +33,8 @@
 #import "UIBadgeView.h"
 #import <OpenPeerSDK/HOPConversationEvent.h>
 #import <OpenPeerSDK/HOPMessageRecord.h>
-#import <OpenPeerSDK/HOPPublicPeerFile.h>
 #import <OpenPeerSDK/HOPModelManager.h>
-#import <OpenPeerSDK/HOPRolodexContact.h>
+//#import <OpenPeerSDK/HOPRolodexContact.h>
 #import <OpenPeerSDK/HOPAvatar.h>
 #import <OpenPeerSDK/HOPSystemMessage.h>
 #import <OpenPeerSDK/HOPCallSystemMessage.h>
@@ -63,11 +62,7 @@
 
 - (void)awakeFromNib
 {
-//    self.messageView.layer.cornerRadius = 5.0;
-//    self.messageView.layer.borderColor = [[UIColor whiteColor] CGColor];
-//    self.messageView.layer.borderWidth = 1.0;
-//    self.messageView.layer.shadowColor = [[UIColor blackColor] CGColor];
-//    self.messageView.layer.shadowOffset = CGSizeMake(1.0, 1.0);
+
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

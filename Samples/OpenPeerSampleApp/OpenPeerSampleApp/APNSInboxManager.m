@@ -44,10 +44,9 @@
 #import "Utility.h"
 #import <OpenpeerSDK/HOPAccount.h>
 #import <OpenpeerSDK/HOPModelManager.h>
-#import <OpenpeerSDK/HOPContact.h>
+//#import <OpenpeerSDK/HOPContact.h>
 #import <OpenpeerSDK/HOPRolodexContact+External.h>
 #import <OpenpeerSDK/HOPConversationThread.h>
-#import <OpenpeerSDK/HOPPublicPeerFile.h>
 #import <OpenpeerSDK/HOPOpenPeerContact.h>
 
 @interface APNSInboxManager ()
@@ -147,8 +146,8 @@
     NSString *peerURI = [apnsInfo objectForKey:@"peerURI"];
     NSString *locationID = [apnsInfo objectForKey:@"location"];
     
-    HOPPublicPeerFile* publicPerFile = [[HOPModelManager sharedModelManager] getPublicPeerFileForPeerURI:peerURI];
-    HOPContact* contact = [[HOPContact alloc] initWithPeerFile:publicPerFile.peerFile];
+    //HOPPublicPeerFile* publicPerFile = [[HOPModelManager sharedModelManager] getPublicPeerFileForPeerURI:peerURI];
+    HOPContact* contact = [[HOPContact alloc] initWithPeerURI:peerURI];
     
     if ([locationID length] > 0)
         [contact hintAboutLocation:locationID];
@@ -181,8 +180,8 @@
                 {
                     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push content \"%@\" for message %@ is ready.",messageText,messageID);
                     
-                    HOPPublicPeerFile* publicPerFile = [[HOPModelManager sharedModelManager] getPublicPeerFileForPeerURI:senderPeerURI];
-                    HOPContact* coreContact = [[HOPContact alloc] initWithPeerFile:publicPerFile.peerFile];
+                    //HOPPublicPeerFile* publicPerFile = [[HOPModelManager sharedModelManager] getPublicPeerFileForPeerURI:senderPeerURI];
+                    HOPContact* coreContact = [[HOPContact alloc] initWithPeerURI:senderPeerURI];
                     if ([location length] > 0)
                     {
                         [coreContact hintAboutLocation:location];

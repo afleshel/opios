@@ -29,7 +29,7 @@
  
  */
 
-#import "HOPModelManager.h"
+#import "HOPModelManager_Internal.h"
 #import "HOPPublicPeerFile.h"
 #import "HOPRolodexContact.h"
 #import "HOPOpenPeerContact.h"
@@ -83,53 +83,46 @@
     if (!openPeerContact && [peerURI length] > 0)
     {
         openPeerContact = [[HOPModelManager sharedModelManager] getOpenPeerContactForPeerURI:peerURI];
-        if (openPeerContact)
-            openPeerContact.stableID = sId;
+    }
+    
+    if (!openPeerContact && [hopRolodexContact.identityURI length] > 0)
+    {
+        openPeerContact = [[HOPModelManager sharedModelManager] getOpenPeerContactForIdentityURI:hopRolodexContact.identityURI];
     }
     
     if (!openPeerContact && [hopRolodexContact.identityURI length] > 0 && sId.length > 0 && [peerURI length] > 0)
     {
-        openPeerContact = [[HOPModelManager sharedModelManager] getOpenPeerContactForIdentityURI:hopRolodexContact.identityURI];
-        if (openPeerContact)
-        {
-            openPeerContact.stableID = sId;
-            [openPeerContact addIdentityContactsObject:self];
-            
-            HOPPublicPeerFile* publicPeerFile = [[HOPModelManager sharedModelManager] getPublicPeerFileForPeerURI:peerURI];
-            
-            if (!publicPeerFile)
-            {
-                NSManagedObject* managedObject = [[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPPublicPeerFile"];
-                if (managedObject && [managedObject isKindOfClass:[HOPPublicPeerFile class]])
-                {
-                    publicPeerFile = (HOPPublicPeerFile*) managedObject;
-                    
-                }
-            }
-            
-            if (publicPeerFile)
-            {
-                publicPeerFile.peerFile = [NSString stringWithCString: IHelper::convertToString(IHelper::convertToElement(inIdentityContact.mPeerFilePublic)) encoding:NSUTF8StringEncoding];
-                publicPeerFile.peerURI = peerURI;
-                openPeerContact.publicPeerFile = publicPeerFile;
-            }
-        }
+        openPeerContact = [[HOPModelManager sharedModelManager] createOpenPeerContactForIdentityContact:inIdentityContact];
     }
-    /*HOPPublicPeerFile* publicPeerFile = [[HOPModelManager sharedModelManager] getPublicPeerFileForPeerURI:peerURI];
     
-    if (!publicPeerFile)
+    if (openPeerContact)
     {
-        NSManagedObject* managedObject = [[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPPublicPeerFile"];
-        if (managedObject && [managedObject isKindOfClass:[HOPPublicPeerFile class]])
+        openPeerContact.stableID = sId;
+        [openPeerContact addIdentityContactsObject:self];
+        
+        HOPPublicPeerFile* publicPeerFile = [[HOPModelManager sharedModelManager] getPublicPeerFileForPeerURI:peerURI];
+        
+        if (!publicPeerFile)
         {
-            publicPeerFile = (HOPPublicPeerFile*) managedObject;
+            NSManagedObject* managedObject = [[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPPublicPeerFile"];
+            if (managedObject && [managedObject isKindOfClass:[HOPPublicPeerFile class]])
+            {
+                publicPeerFile = (HOPPublicPeerFile*) managedObject;
+                
+            }
         }
-        else
-            return;
+        
+        if (publicPeerFile)
+        {
+            publicPeerFile.peerFile = [NSString stringWithCString: IHelper::convertToString(IHelper::convertToElement(inIdentityContact.mPeerFilePublic)) encoding:NSUTF8StringEncoding];
+            publicPeerFile.peerURI = peerURI;
+            openPeerContact.publicPeerFile = publicPeerFile;
+        }
     }
-    publicPeerFile.peerFile = [NSString stringWithCString: IHelper::convertToString(IHelper::convertToElement(inIdentityContact.mPeerFilePublic)) encoding:NSUTF8StringEncoding];
-    publicPeerFile.peerURI = peerURI;
-    self.peerFile = publicPeerFile;*/
+    
+    self.rolodexContact.openPeerContact = openPeerContact;
+    
+    [[HOPModelManager sharedModelManager] saveContext];
 }
 
 @end

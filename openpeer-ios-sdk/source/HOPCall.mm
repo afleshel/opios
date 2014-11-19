@@ -149,18 +149,20 @@ using namespace openpeer::core;
     return hopConversationThread;
 }
 
-- (HOPContact*) getCaller
+- (HOPRolodexContact*) getCaller
 {
-    HOPContact* ret = nil;
+    HOPRolodexContact* ret = nil;
     if(callPtr)
     {
         IContactPtr contactPtr = callPtr->getCaller();
         if (contactPtr)
         {
             NSString* peerURI = [NSString stringWithUTF8String:contactPtr->getPeerURI()];
-            ret = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:peerURI];
-            if (!ret)
-                ret = [[HOPContact alloc] initWithCoreContact:contactPtr];
+            //It needs to be checked if core contact is created, because it is mandatory to have
+            HOPContact* coreContact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:peerURI];
+            if (!coreContact)
+                coreContact = [[HOPContact alloc] initWithCoreContact:contactPtr];
+            ret = [[HOPModelManager sharedModelManager] getRolodexContactByPeerURI:peerURI];
         }
         else
         {
@@ -175,18 +177,21 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (HOPContact*) getCallee
+- (HOPRolodexContact*) getCallee
 {
-    HOPContact* ret = nil;
+    HOPRolodexContact* ret = nil;
     if(callPtr)
     {
         IContactPtr contactPtr = callPtr->getCallee();
         if (contactPtr)
         {
             NSString* peerURI = [NSString stringWithUTF8String:contactPtr->getPeerURI()];
-            ret = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:peerURI];
-            if (!ret)
-                ret = [[HOPContact alloc] initWithCoreContact:contactPtr];
+            //It needs to be checked if core contact is created, because it is mandatory to have
+            HOPContact* coreContact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:peerURI];
+            if (!coreContact)
+                coreContact = [[HOPContact alloc] initWithCoreContact:contactPtr];
+            
+            ret = [[HOPModelManager sharedModelManager] getRolodexContactByPeerURI:peerURI];
         }
         else
         {

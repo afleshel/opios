@@ -342,7 +342,6 @@
 		87D4BD0918675368008C2D30 /* RXMLElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC3A141709BD8D002030D1 /* RXMLElement.m */; };
 		87D4BD0A18675368008C2D30 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F09EDE171EBB1A0045F6A6 /* ChatViewController.m */; };
 		87D4BD0B18675368008C2D30 /* ChatMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F09EE0171EBB1B0045F6A6 /* ChatMessageCell.m */; };
-		87D4BD0C18675368008C2D30 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F09EE5171EBB2A0045F6A6 /* Message.m */; };
 		87D4BD0D18675368008C2D30 /* IdentityLookupDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 87E3CCE6172A814F00084D2F /* IdentityLookupDelegate.m */; };
 		87D4BD0E18675368008C2D30 /* AudioCallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8722472E182D02F30027DA50 /* AudioCallViewController.m */; };
 		87D4BD0F18675368008C2D30 /* CacheDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D91B2917687EFD00E46B66 /* CacheDelegate.m */; };
@@ -584,7 +583,6 @@
 		87F09EE2171EBB1B0045F6A6 /* ChatViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 87F09EDD171EBB1A0045F6A6 /* ChatViewController.xib */; };
 		87F09EE3171EBB1B0045F6A6 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F09EDE171EBB1A0045F6A6 /* ChatViewController.m */; };
 		87F09EE4171EBB1B0045F6A6 /* ChatMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F09EE0171EBB1B0045F6A6 /* ChatMessageCell.m */; };
-		87F09EE7171EBB2A0045F6A6 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F09EE5171EBB2A0045F6A6 /* Message.m */; };
 		87F24B5F166FF0C900A5389F /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F24B5E166FF0C900A5389F /* Utility.m */; };
 		87F24B62167003F400A5389F /* ContactsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F24B61167003F300A5389F /* ContactsManager.m */; };
 		87FBC7D619BE00AB000C4768 /* chat_edited_message_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 87FBC7D419BE00AB000C4768 /* chat_edited_message_icon.png */; };
@@ -1130,8 +1128,6 @@
 		87F09EDF171EBB1A0045F6A6 /* ChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
 		87F09EE0171EBB1B0045F6A6 /* ChatMessageCell.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.objc; fileEncoding = 4; path = ChatMessageCell.m; sourceTree = "<group>"; };
 		87F09EE1171EBB1B0045F6A6 /* ChatMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatMessageCell.h; sourceTree = "<group>"; };
-		87F09EE5171EBB2A0045F6A6 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
-		87F09EE6171EBB2A0045F6A6 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
 		87F24B5D166FF0C900A5389F /* Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = Utility.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		87F24B5E166FF0C900A5389F /* Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = Utility.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		87F24B60167003F300A5389F /* ContactsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactsManager.h; sourceTree = "<group>"; };
@@ -1616,8 +1612,6 @@
 		87368AE0167600A900166F35 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				87F09EE5171EBB2A0045F6A6 /* Message.m */,
-				87F09EE6171EBB2A0045F6A6 /* Message.h */,
 				875CD7E3167A14960037396B /* Session.h */,
 				875CD7E4167A14960037396B /* Session.m */,
 			);
@@ -2685,7 +2679,6 @@
 				87FC3A201709BD8D002030D1 /* RXMLElement.m in Sources */,
 				87F09EE3171EBB1B0045F6A6 /* ChatViewController.m in Sources */,
 				87F09EE4171EBB1B0045F6A6 /* ChatMessageCell.m in Sources */,
-				87F09EE7171EBB2A0045F6A6 /* Message.m in Sources */,
 				87E3CCE7172A814F00084D2F /* IdentityLookupDelegate.m in Sources */,
 				87224733182D02F30027DA50 /* AudioCallViewController.m in Sources */,
 				87D91B2A17687EFD00E46B66 /* CacheDelegate.m in Sources */,
@@ -2759,7 +2752,6 @@
 				87D4BD0A18675368008C2D30 /* ChatViewController.m in Sources */,
 				873D174318CD31E100FD88C3 /* HTTPDownloader.m in Sources */,
 				87D4BD0B18675368008C2D30 /* ChatMessageCell.m in Sources */,
-				87D4BD0C18675368008C2D30 /* Message.m in Sources */,
 				87D4BD0D18675368008C2D30 /* IdentityLookupDelegate.m in Sources */,
 				87D4BD0E18675368008C2D30 /* AudioCallViewController.m in Sources */,
 				87D4BD0F18675368008C2D30 /* CacheDelegate.m in Sources */,

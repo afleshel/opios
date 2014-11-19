@@ -33,7 +33,7 @@
 #import "HOPTypes.h"
 
 @class HOPConversationThread;
-@class HOPContact;
+//@class HOPContact;
 @class HOPRolodexContact;
 
 
@@ -100,13 +100,13 @@
  Returns caller contact.
  @return Pointer to the caller HOPContact object
  */
-- (HOPContact*) getCaller;
+- (HOPRolodexContact*) getCaller;
 
 /**
  Returns callee contact.
  @return Pointer to the callee HOPContact object
  */
-- (HOPContact*) getCallee;
+- (HOPRolodexContact*) getCallee;
 
 /**
  Checks if call has audio stream.
