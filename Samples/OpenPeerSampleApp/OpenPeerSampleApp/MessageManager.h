@@ -34,7 +34,6 @@
 @class HOPMessage;
 @class Session;
 @class HOPMessageRecord;
-@class HOPOpenPeerContact;
 
 typedef enum
 {
@@ -54,7 +53,7 @@ typedef enum
 
 + (id) sharedMessageManager;
 
-- (HOPMessage*) createSystemMessageWithType:(HOPSystemMessageType) type messageType:(int) messageType reasonCode:(int)reasonCode andRecipient:(HOPOpenPeerContact*) contact;
+- (HOPMessage*) createSystemMessageWithType:(HOPSystemMessageType) type messageType:(int) messageType reasonCode:(int)reasonCode andRecipient:(HOPRolodexContact*) contact;
 
 - (void) sendCallSystemMessage:(HOPCallSystemMessageType) callSystemMessage reasonCode:(int) reasonCode session:(Session*) inSession;
 

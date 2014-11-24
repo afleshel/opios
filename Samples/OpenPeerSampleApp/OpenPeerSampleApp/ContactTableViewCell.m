@@ -34,7 +34,7 @@
 #import <OpenpeerSDK/HOPAssociatedIdentity.h>
 #import <OpenpeerSDK/HOPIdentityProvider.h>
 #import <OpenpeerSDK/HOPAvatar+External.h>
-#import <OpenpeerSDK/HOPOpenPeerContact.h>
+//#import <OpenpeerSDK/HOPOpenPeerContact.h>
 #import <OpenpeerSDK/HOPModelManager.h>
 #import "AppConsts.h"
 #import "ImageManager.h"

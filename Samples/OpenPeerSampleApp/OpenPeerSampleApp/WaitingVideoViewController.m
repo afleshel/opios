@@ -37,9 +37,9 @@
 #import <OpenPeerSDK/HOPAvatar.h>
 #import <OpenPeerSDK/HOPImage.h>
 //#import <OpenPeerSDK/HOPOpenPeerAccount+External.h>
-#import <OpenPeerSDK/HOPConversationEvent.h>
+#import <OpenPeerSDK/HOPConversationEvent+External.h>
 #import <OpenPeerSDK/HOPParticipants.h>
-#import <OpenPeerSDK/HOPOpenPeerContact+External.h>
+//#import <OpenPeerSDK/HOPOpenPeerContact+External.h>
 #import <OpenPeerSDK/HOPAccount.h>
 @interface WaitingVideoViewController()
 
@@ -98,12 +98,12 @@ const int CONNECTING_ANIMATION_DURATION = 2;
     self.statusLabel.text = self.statusText;
     
     //HOPRolodexContact* rolodexContact = [[self.session participantsArray] objectAtIndex:0];
-    HOPOpenPeerContact* contact = self.session.lastConversationEvent.participants.participants.allObjects[0];
-    HOPRolodexContact* rolodexContact = [contact getDefaultRolodexContact];
-    self.participantName.text = rolodexContact.name;
+    HOPRolodexContact* contact = [self.session.lastConversationEvent getContacts][0];
+//    HOPRolodexContact* rolodexContact = [contact getDefaultRolodexContact];
+    self.participantName.text = contact.name;
     self.callerName.text = [[HOPAccount sharedAccount] getFullName];
     
-    HOPAvatar* avatar = [rolodexContact getAvatarForWidth:[NSNumber numberWithFloat:self.calleeImage.frame.size.width] height:[NSNumber numberWithFloat:self.calleeImage.frame.size.height]];
+    HOPAvatar* avatar = [contact getAvatarForWidth:[NSNumber numberWithFloat:self.calleeImage.frame.size.width] height:[NSNumber numberWithFloat:self.calleeImage.frame.size.height]];
     
     if (avatar && avatar.avatarImage.image)
     {

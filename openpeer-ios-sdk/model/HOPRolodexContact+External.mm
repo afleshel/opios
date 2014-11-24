@@ -39,6 +39,7 @@
 #import "HOPUtility.h"
 #import "HOPAssociatedIdentity.h"
 #import "HOPOpenPeerContact.h"
+#import "HOPAPNSData.h"
 
 @implementation HOPRolodexContact (External)
 
@@ -66,6 +67,10 @@
     return [[self getCoreContact] isSelf];
 }
 
+- (BOOL) isOpenPeer
+{
+    return self.openPeerContact != nil;
+}
 - (HOPContact*) getCoreContact
 {
     HOPContact* ret = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:self.identityContact.openPeerContact.publicPeerFile.peerURI];
@@ -102,6 +107,58 @@
     
     if (self.openPeerContact)
         ret = self.openPeerContact.publicPeerFile.peerURI;
+    
+    return ret;
+}
+
+- (NSString*) getStableID
+{
+    NSString* ret = nil;
+    
+    if (self.openPeerContact)
+        ret = self.openPeerContact.stableID;
+    
+    return ret;
+}
+- (NSUInteger) getNumberOfAssociatedIdentities
+{
+    NSUInteger ret = 0;
+    
+    if (self.openPeerContact)
+        ret = self.openPeerContact.identityContacts.count;
+    
+    return ret;
+}
+
+- (NSArray*) getAssociatedIdentities
+{
+    NSMutableArray* ret = [NSMutableArray new];
+    
+    for (HOPAssociatedIdentity* associatedIdentity in self.associatedIdentity.account.associatedIdentities)
+    {
+        NSString* name = associatedIdentity.identityProvider.name;
+        if (name.length > 0)
+            [ret addObject:name]
+    }
+    return ret;
+}
+
+- (NSString*) getPushNotificationDeviceToken
+{
+    NSString* ret = nil;
+    
+    if (self.openPeerContact)
+        ret = self.openPeerContact.apnsData.deviceToken;
+    
+    return ret;
+}
+
+- (NSString*) getPushNotificationType
+{
+    NSString* ret = nil;
+    
+    if (self.openPeerContact)
+        ret = self.openPeerContact.apnsData.type;
     
     return ret;
 }

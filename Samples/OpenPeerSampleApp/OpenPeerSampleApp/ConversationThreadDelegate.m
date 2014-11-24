@@ -37,8 +37,6 @@
 #import "Utility.h"
 
 #import <OpenpeerSDK/HOPConversationThread.h>
-//#import <OpenpeerSDK/HOPContact.h>
-//#import <OpenpeerSDK/HOPOpenPeerAccount+External.h>
 #import <OpenpeerSDK/HOPRolodexContact+External.h>
 #import <OpenpeerSDK/HOPMessage.h>
 #import <OpenpeerSDK/HOPModelManager.h>

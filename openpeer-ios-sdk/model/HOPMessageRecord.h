@@ -50,7 +50,7 @@
 @property (nonatomic, retain) NSNumber * visible;
 @property (nonatomic, retain) HOPConversationEvent *conversationEvent;
 @property (nonatomic, retain) NSSet *messageEvent;
-@property (nonatomic, retain) HOPOpenPeerContact *sender;
+@property (nonatomic, retain) HOPOpenPeerContact *senderOpenPeer;///TODO: change in model
 @property (nonatomic, retain) HOPConversationRecord *session;
 @end
 

@@ -34,6 +34,8 @@
 //#import <openpeer/core/IConversationThread.h>
 #import "HOPConversationThread.h"
 #import "HOPModelManager.h"
+#import "HOPRolodexContact+External.h"
+#import "HOPOpenPeerContact+External.h"
 
 //using namespace openpeer;
 //using namespace openpeer::core;
@@ -59,5 +61,23 @@
     ret = [HOPConversationThread toMessageDeliveryStates:self.outMessageStatus];//(HOPConversationThreadMessageDeliveryState) IConversationThread::toMessageDeliveryStates([self.outMessageStatus UTF8String]);
     
     return ret;
+}
+
+- (HOPRolodexContact*) sender
+{
+    HOPRolodexContact* ret = nil;
+    
+    if (self.senderOpenPeer)
+    {
+        ret = [self.senderOpenPeer getDefaultRolodexContact];
+    }
+    
+    return ret;
+}
+
+- (void) setSender:(HOPRolodexContact *)sender
+{
+    if (sender && sender.openPeerContact)
+        self.senderOpenPeer = sender.openPeerContact;
 }
 @end

@@ -31,14 +31,14 @@
 
 #import "ActiveSessionTableViewCell.h"
 #import "UIBadgeView.h"
-#import <OpenPeerSDK/HOPConversationEvent.h>
+#import <OpenPeerSDK/HOPConversationEvent+External.h>
 #import <OpenPeerSDK/HOPMessageRecord.h>
 #import <OpenPeerSDK/HOPModelManager.h>
 //#import <OpenPeerSDK/HOPRolodexContact.h>
 #import <OpenPeerSDK/HOPAvatar.h>
 #import <OpenPeerSDK/HOPSystemMessage.h>
 #import <OpenPeerSDK/HOPCallSystemMessage.h>
-#import <OpenPeerSDK/HOPOpenPeerContact+External.h>
+//#import <OpenPeerSDK/HOPOpenPeerContact+External.h>
 #import <OpenPeerSDK/HOPParticipants.h>
 #import "ImageManager.h"
 #import "Session.h"
@@ -98,9 +98,9 @@
     if (event.participants.participants.count > 1)
     {
         NSMutableArray* avatars = [[NSMutableArray alloc] init];
-        for (HOPOpenPeerContact* contact in event.participants.participants)
+        for (HOPRolodexContact* contact in [event getContacts])
         {
-            UIImage* img = [[ImageManager sharedImageManager] getAvatarImageForRolodexContact:[contact getDefaultRolodexContact]];
+            UIImage* img = [[ImageManager sharedImageManager] getAvatarImageForRolodexContact:contact];
             if (img)
                 [avatars addObject:img];
         }
@@ -115,8 +115,8 @@
     }
     else
     {
-        HOPOpenPeerContact* contact = [[event.participants.participants allObjects] objectAtIndex:0];
-        UIImage* img = [[ImageManager sharedImageManager] getAvatarImageForRolodexContact:[contact getDefaultRolodexContact]];
+        HOPRolodexContact* contact = [[event getContacts] objectAtIndex:0];
+        UIImage* img = [[ImageManager sharedImageManager] getAvatarImageForRolodexContact:contact];
         if (img)
             self.displayImage.image = img;
     }

@@ -31,13 +31,13 @@
 
 #import <Foundation/Foundation.h>
 
-@class HOPContact;
+@class HOPRolodexContact;
 
 @interface HOPMessage : NSObject
 
 @property (nonatomic, copy) NSString* messageID;
 @property (nonatomic, copy) NSString* replacesMessageID;
-@property (nonatomic, retain) HOPContact* contact;
+@property (nonatomic, retain) HOPRolodexContact* contact;
 @property (nonatomic, copy) NSString* type;
 @property (nonatomic, copy) NSString* text;
 @property (nonatomic, retain) NSDate* date;
@@ -56,5 +56,5 @@
  *
  *  @return HOPMessage object
  */
-- (id) initWithMessageId:(NSString*) inMessageId andReplacesMessageID:(NSString*) inReplacesMessageID andMessage:(NSString*) messageText andContact:(HOPContact*) inContact andMessageType:(NSString*) inMessageType andMessageDate:(NSDate*) inMessageDate andValidated:(BOOL) inValidated;
+- (id) initWithMessageId:(NSString*) inMessageId andReplacesMessageID:(NSString*) inReplacesMessageID andMessage:(NSString*) messageText andContact:(HOPRolodexContact*) inContact andMessageType:(NSString*) inMessageType andMessageDate:(NSDate*) inMessageDate andValidated:(BOOL) inValidated;
 @end

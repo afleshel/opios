@@ -36,24 +36,26 @@
 #import "HOPContact_Internal.h"
 #import "HOPAccount_Internal.h"
 #import "OpenPeerStorageManager.h"
+#import "HOPRolodexContact+External.h"
 
 using namespace openpeer;
 using namespace openpeer::core;
 
 @implementation HOPCallSystemMessage
 
-- (id) initWithMessageType:(HOPCallSystemMessageType) inType callee:(HOPContact*) inCallee errorCode:(unsigned short) inErrorCode
+- (id) initWithMessageType:(HOPCallSystemMessageType) inType callee:(HOPRolodexContact*) inCallee errorCode:(unsigned short) inErrorCode
 {
     self = [super init];
     if (self)
     {
-        callSystemMessagePtr = CallSystemMessagePtr(new CallSystemMessage((CallSystemMessage::CallSystemMessageTypes)inType, [inCallee getContactPtr], inErrorCode));
+        HOPContact* coreContact = [inCallee getCoreContact];
+        callSystemMessagePtr = CallSystemMessagePtr(new CallSystemMessage((CallSystemMessage::CallSystemMessageTypes)inType, [coreContact getContactPtr], inErrorCode));
         self.type = HOPSystemMessageTypeCall;
         self.messageType = inType;
-        self.callee = inCallee;
+        self.callee = coreContact;
         self.errorCode = inErrorCode;
         
-        callSystemMessagePtr->mCallee = [inCallee getContactPtr];
+        callSystemMessagePtr->mCallee = [coreContact getContactPtr];
         callSystemMessagePtr->mType = (CallSystemMessage::CallSystemMessageTypes)inType;
         
         ElementPtr elementPtr = ISystemMessage::createEmptySystemMessage();

@@ -38,9 +38,9 @@
 #import <OpenPeerSDK/HOPAvatar.h>
 #import <OpenPeerSDK/HOPImage.h>
 #import "Session.h"
-#import <OpenPeerSDK/HOPConversationEvent.h>
+#import <OpenPeerSDK/HOPConversationEvent+External.h>
 #import <OpenPeerSDK/HOPParticipants.h>
-#import <OpenPeerSDK/HOPOpenPeerContact+External.h>
+//#import <OpenPeerSDK/HOPOpenPeerContact+External.h>
 
 @interface IncomingCallViewController ()
 
@@ -112,22 +112,22 @@
     [super viewDidLoad];
 
     //HOPRolodexContact* rolodexContact = [self.session.participantsArray objectAtIndex:0];
-    HOPOpenPeerContact* contact = self.session.lastConversationEvent.participants.participants.allObjects[0];
-    HOPRolodexContact* rolodexContact = [contact getDefaultRolodexContact];
+    HOPRolodexContact* contact = [self.session.lastConversationEvent getContacts] [0];
+    //HOPRolodexContact* rolodexContact = [contact getDefaultRolodexContact];
     
     self.labelCallType.text = [self.session.currentCall hasVideo] ? NSLocalizedString(@"Video call from", nil) : NSLocalizedString(@"Audio call from", nil);
     
     self.buttonAccept.imageView.image = [self.session.currentCall hasVideo] ? [UIImage imageNamed:@"video_indicator_white_big.png"] : [UIImage imageNamed:@"handset_accept_icon.png"];
     
-    self.labelCaller.text = rolodexContact.name;
+    self.labelCaller.text = contact.name;
     
-    if ([rolodexContact.profileURL length] > 0)
+    if ([contact.profileURL length] > 0)
     {
-        NSURL* url = [NSURL URLWithString:rolodexContact.profileURL];
+        NSURL* url = [NSURL URLWithString:contact.profileURL];
         [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:url]];
     }
     
-    HOPAvatar* avatar = [rolodexContact getAvatarForWidth:[NSNumber numberWithFloat:self.imageViewCallerAvatar.frame.size.width] height:[NSNumber numberWithFloat:self.imageViewCallerAvatar.frame.size.height]];
+    HOPAvatar* avatar = [contact getAvatarForWidth:[NSNumber numberWithFloat:self.imageViewCallerAvatar.frame.size.width] height:[NSNumber numberWithFloat:self.imageViewCallerAvatar.frame.size.height]];
 
     if (avatar && avatar.avatarImage.image)
     {

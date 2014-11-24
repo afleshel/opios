@@ -33,7 +33,7 @@
 #import <OpenPeerSDK/HOPConversationRecord+External.h>
 #import <OpenPeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPAccount.h>
-#import <OpenPeerSDK/HOPOpenPeerContact.h>
+//#import <OpenPeerSDK/HOPOpenPeerContact.h>
 #import <OpenPeerSDK/HOPParticipants.h>
 #import <OpenPeerSDK/HOPConversationEvent.h>
 #import <OpenPeerSDK/HOPUtility.h>
@@ -310,8 +310,8 @@
     [self.tableViewSessions endUpdates];
 }
 
-- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
-	
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath
+{	
 	switch (type)
     {
 		case NSFetchedResultsChangeInsert:

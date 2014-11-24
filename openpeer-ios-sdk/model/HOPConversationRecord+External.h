@@ -34,4 +34,5 @@
 @interface HOPConversationRecord (External)
 
 - (NSString *)sectionIdentifier;
+- (void) setParticipantsWithArray:(NSArray *)values;
 @end

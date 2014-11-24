@@ -30,7 +30,7 @@
  */
 
 #import "HOPMessage.h"
-#import "HOPContact.h"
+#import "HOPRolodexContact.h"
 
 @implementation HOPMessage
 
@@ -43,7 +43,7 @@
 @synthesize validated = _validated;
 
 
-- (id) initWithMessageId:(NSString*) inMessageId andReplacesMessageID:(NSString*) inReplacesMessageID andMessage:(NSString*) messageText andContact:(HOPContact*) inContact andMessageType:(NSString*) inMessageType andMessageDate:(NSDate*) inMessageDate  andValidated:(BOOL) inValidated
+- (id) initWithMessageId:(NSString*) inMessageId andReplacesMessageID:(NSString*) inReplacesMessageID andMessage:(NSString*) messageText andContact:(HOPRolodexContact*) inContact andMessageType:(NSString*) inMessageType andMessageDate:(NSDate*) inMessageDate  andValidated:(BOOL) inValidated
 {
     self = [super init];
     if (self)

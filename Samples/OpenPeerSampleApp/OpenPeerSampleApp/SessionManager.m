@@ -35,7 +35,6 @@
 #import "MessageManager.h"
 #import "SessionViewController_iPhone.h"
 #import "SoundsManager.h"
-
 #import "Utility.h"
 #import "Session.h"
 #import "OpenPeer.h"
@@ -112,6 +111,7 @@
         NSString* title = nil;
         if (conversationThread)
         {
+            NSMutableArray* participants = nil;
             //Create a session with new conversation thread
             ret = [[Session alloc] initWithContacts:contacts conversationThread:conversationThread];
             
@@ -120,12 +120,12 @@
             {
                 if (contacts.count > 0)
                 {
-                    NSMutableArray* participants = [[NSMutableArray alloc] init];//[NSArray arrayWithObject:[contact getCoreContact]];
-                    for (HOPOpenPeerContact* contact in contacts)
+                    participants = [[NSMutableArray alloc] init];//[NSArray arrayWithObject:[contact getCoreContact]];
+                    for (HOPRolodexContact* contact in contacts)
                     {
-                        HOPContact* coreContact = [contact getCoreContact];
-                        if (coreContact)
-                            [participants addObject:coreContact];
+                        //HOPContact* coreContact = [contact getCoreContact];
+                        if ([contact isOpenPeer])
+                            [participants addObject:contact];
                     }
                     [conversationThread addContacts:participants];
                 }
@@ -137,16 +137,12 @@
                 ret.sessionRecord = [[HOPModelManager sharedModelManager] createConversationRecordForConversationThread:conversationThread type:nil date:[NSDate date] name:title participants:contacts];
                 
                 ret.title = title;
-            }
-            
-            if (ret)
-            {
                 
                 //Store session object in dictionary
                 [self.sessionsDictionary setObject:ret forKey:[conversationThread getThreadId]];
+                
+                ret.lastConversationEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"create" conversationRecord:ret.sessionRecord partcipants:participants title:title];
             }
-        
-            ret.lastConversationEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"create" conversationRecord:ret.sessionRecord partcipants:ret.sessionRecord.participants.allObjects title:title];
         }
         else
         {
@@ -716,18 +712,7 @@
 {
     if (session && participants.count > 0)
     {
-        NSMutableArray* contacts = [NSMutableArray new];
-        
-        for (HOPRolodexContact* contact in participants)
-        {
-            HOPContact* hopContact = [contact getCoreContact];
-            
-            if (hopContact)
-                [contacts addObject:hopContact];
-        }
-        
-        if (contacts.count > 0)
-            [session.conversationThread addContacts:contacts];
+        [session.conversationThread addContacts:participants];
     }
 }
 
@@ -754,9 +739,9 @@
     NSString* ret = @"";
     
     NSArray* participants = [conversationThread getContacts];
-    for (HOPOpenPeerContact* contact in participants)
+    for (HOPRolodexContact* rolodexContact in participants)
     {
-        HOPRolodexContact* rolodexContact = [contact getDefaultRolodexContact];
+        //HOPRolodexContact* rolodexContact = [contact getDefaultRolodexContact];
         
         if (rolodexContact)
         {
@@ -815,7 +800,8 @@
                 session.title = title;
                 [session.participantsArray removeAllObjects];
                 [session.participantsArray addObjectsFromArray:openPeerContacts];
-                [session.sessionRecord setParticipants:[NSSet setWithArray:openPeerContacts]];
+        
+                [session.sessionRecord setParticipantsWithArray:openPeerContacts];
                 
                 SessionViewController_iPhone* sessionViewController = [[[[OpenPeer sharedOpenPeer] mainViewController] sessionViewControllersDictionary] objectForKey:sessionId];
                 

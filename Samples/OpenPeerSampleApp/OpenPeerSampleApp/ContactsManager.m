@@ -49,7 +49,7 @@
 #import <OpenpeerSDK/HOPRolodexContact+External.h>
 #import <OpenpeerSDK/HOPAssociatedIdentity.h>
 #import <OpenpeerSDK/HOPUtility.h>
-#import <OpenpeerSDK/HOPOpenPeerContact+External.h>
+//#import <OpenpeerSDK/HOPOpenPeerContact+External.h>
 #import <AddressBook/AddressBook.h>
 
 @interface ContactsManager ()

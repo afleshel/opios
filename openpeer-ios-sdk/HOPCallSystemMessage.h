@@ -34,7 +34,7 @@
 #import "HOPSystemMessage.h"
 
 @class HOPContact;
-
+@class HOPRolodexContact;
 
 @interface HOPCallSystemMessage : HOPSystemMessage <NSCopying>
 
@@ -43,7 +43,7 @@
 @property (nonatomic) unsigned short errorCode;
 @property (nonatomic, copy) NSString* jsonMessage;
 
-- (id) initWithMessageType:(HOPCallSystemMessageType) inType callee:(HOPContact*) inCallee errorCode:(unsigned short) inErrorCode;
+- (id) initWithMessageType:(HOPCallSystemMessageType) inType callee:(HOPRolodexContact*) inCallee errorCode:(unsigned short) inErrorCode;
 
 + (id) callSystemMessageFromJSON:(NSString*) jsonMessage;
 

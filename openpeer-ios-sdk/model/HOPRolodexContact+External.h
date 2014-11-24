@@ -38,8 +38,17 @@
 - (void) updateWithName:(NSString*) inName identityURI:(NSString*) inIdentityURI identityProviderDomain:(NSString*)identityProviderDomain  homeUserIdentityURI:(NSString*)homeUserIdentityURI;
 
 - (BOOL) isSelf;
+- (BOOL) isOpenPeer;
 - (HOPContact*) getCoreContact;
 - (HOPAvatar*) getAvatarForWidth:(NSNumber*) width height:(NSNumber*) height;
 - (NSString*) firstLetter;
+
 - (NSString*) getPeerURI;
+- (NSString*) getStableID;
+- (NSUInteger) getNumberOfAssociatedIdentities;
+- (NSArray*) getAssociatedIdentities;
+- (NSString*) getPushNotificationDeviceToken;
+- (NSString*) getPushNotificationType;
+
+
 @end

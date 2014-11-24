@@ -36,9 +36,8 @@
 #import <OpenpeerSDK/HOPAvatar.h>
 #import <OpenpeerSDK/HOPImage.h>
 #import <OpenpeerSDK/HOPMessageRecord+External.h>
-//#import <OpenpeerSDK/HOPIdentityContact.h>
 #import <OpenpeerSDK/HOPConversationThread.h>
-#import <OpenpeerSDK/HOPOpenPeerContact+External.h>
+//#import <OpenpeerSDK/HOPOpenPeerContact+External.h>
 #import <OpenPeerSDK/HOPAccount.h>
 #import "TTTAttributedLabel.h"
 #import "Utility.h"
@@ -271,9 +270,8 @@
     // show avatar
     if(!self.message.sender)
     {
-        HOPRolodexContact* contact = [self.message.sender getDefaultRolodexContact]; //((HOPIdentityContact*)[self.message.sender.identityContacts anyObject]).rolodexContact;
-        HOPAvatar* avatar = [contact getAvatarForWidth:@(40.0) height:@(40.0)];
-        //HOPAvatar* avatar = [self.message.contact getAvatarForWidth:@(40.0) height:@(40.0)];
+        HOPAvatar* avatar = [self.message.sender getAvatarForWidth:@(40.0) height:@(40.0)];
+       
         if (avatar && avatar.avatarImage && avatar.avatarImage.image)
             avat = [UIImage imageWithData: avatar.avatarImage.image];
     }
@@ -284,7 +282,7 @@
 
 -(void)layoutSubviews
 {
-    BOOL isHomeUserSender = self.message.sender == [[HOPModelManager sharedModelManager] getOpenPeerContactForAccount];//!self.message.sender;
+    BOOL isHomeUserSender = [self.message.sender isSelf];
     
     [self.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     self.contentView.frame = self.bounds;
@@ -311,9 +309,7 @@
             //if message is received
             if (!isHomeUserSender)
             {
-                HOPRolodexContact* contact = [self.message.sender getDefaultRolodexContact]; //((HOPIdentityContact*)[self.message.sender.identityContacts anyObject]).rolodexContact;
-                messageSenderName = [contact name];
-//                messageSenderName = [self.message.contact name];
+                messageSenderName = self.message.sender.name;
             }
             else
             {
@@ -511,7 +507,7 @@
         self.messageLabel.textColor = [UIColor grayColor];
     }
     
-    if (self.message.sender == [[HOPModelManager sharedModelManager] getOpenPeerContactForAccount])
+    if ([self.message.sender isSelf])
         [self setMessageStatus];
 }
 

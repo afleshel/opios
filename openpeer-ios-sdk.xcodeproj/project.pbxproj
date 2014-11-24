@@ -36,9 +36,8 @@
 		87098FCA17C20739007C9093 /* OpenPeerModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8702E53B17997568003287D5 /* OpenPeerModel.xcdatamodeld */; };
 		871BC2FD1A1B73CD00ECF06C /* HOPOpenPeerContact.h in Sources */ = {isa = PBXBuildFile; fileRef = 871BC2F91A1B73CD00ECF06C /* HOPOpenPeerContact.h */; };
 		871BC2FE1A1B73CD00ECF06C /* HOPOpenPeerContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 871BC2FA1A1B73CD00ECF06C /* HOPOpenPeerContact.m */; };
-		871BC2FF1A1B73CD00ECF06C /* HOPRolodexContact.h in Sources */ = {isa = PBXBuildFile; fileRef = 871BC2FB1A1B73CD00ECF06C /* HOPRolodexContact.h */; };
 		871BC3001A1B73CD00ECF06C /* HOPRolodexContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 871BC2FC1A1B73CD00ECF06C /* HOPRolodexContact.m */; };
-		871BC3011A1B912A00ECF06C /* HOPOpenPeerContact.h in Headers */ = {isa = PBXBuildFile; fileRef = 871BC2F91A1B73CD00ECF06C /* HOPOpenPeerContact.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		871BC3011A1B912A00ECF06C /* HOPOpenPeerContact.h in Headers */ = {isa = PBXBuildFile; fileRef = 871BC2F91A1B73CD00ECF06C /* HOPOpenPeerContact.h */; };
 		871BC3021A1B913100ECF06C /* HOPRolodexContact.h in Headers */ = {isa = PBXBuildFile; fileRef = 871BC2FB1A1B73CD00ECF06C /* HOPRolodexContact.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		871BC3051A1CAEC300ECF06C /* HOPRolodexContact_Internal.mm in Sources */ = {isa = PBXBuildFile; fileRef = 871BC3031A1CAEC300ECF06C /* HOPRolodexContact_Internal.mm */; };
 		871BC3061A1CAEC300ECF06C /* HOPRolodexContact_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 871BC3041A1CAEC300ECF06C /* HOPRolodexContact_Internal.h */; };
@@ -58,6 +57,8 @@
 		874BB0A11924DE99002472D1 /* OpenPeerUUIDManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 874BB0A01924DE99002472D1 /* OpenPeerUUIDManager.mm */; };
 		8758405A17B17CB0006B9A21 /* HOPModelManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 8758405917B17CB0006B9A21 /* HOPModelManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8758405C17B17CD0006B9A21 /* HOPModelManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8758405B17B17CD0006B9A21 /* HOPModelManager.mm */; };
+		875A67F81A1E91240041F650 /* HOPConversationEvent+External.h in Headers */ = {isa = PBXBuildFile; fileRef = 875A67F61A1E91240041F650 /* HOPConversationEvent+External.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		875A67F91A1E91240041F650 /* HOPConversationEvent+External.m in Sources */ = {isa = PBXBuildFile; fileRef = 875A67F71A1E91240041F650 /* HOPConversationEvent+External.m */; };
 		875FD1361806AF74001A5BEA /* HOPOpenPeerAccount+External.h in Headers */ = {isa = PBXBuildFile; fileRef = 875FD1341806AF74001A5BEA /* HOPOpenPeerAccount+External.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		875FD1371806AF74001A5BEA /* HOPOpenPeerAccount+External.m in Sources */ = {isa = PBXBuildFile; fileRef = 875FD1351806AF74001A5BEA /* HOPOpenPeerAccount+External.m */; };
 		876D1F761823BD000024D30C /* HOPUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 876D1F751823BD000024D30C /* HOPUtility.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -105,7 +106,7 @@
 		87A5B20716EDE648007E825A /* HOPIdentityLookup.mm in Sources */ = {isa = PBXBuildFile; fileRef = 87A5B20616EDE648007E825A /* HOPIdentityLookup.mm */; };
 		87A6E03519991F8D003292AA /* Openpeer.h in Headers */ = {isa = PBXBuildFile; fileRef = 87A6E03419991C4A003292AA /* Openpeer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		87B013F01661557C00E8938B /* HOPStack.h in Headers */ = {isa = PBXBuildFile; fileRef = 8792E9BE1651A43E00DEAC58 /* HOPStack.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		87B013F21661557C00E8938B /* HOPContact.h in Headers */ = {isa = PBXBuildFile; fileRef = 8792E9CC1651B21F00DEAC58 /* HOPContact.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		87B013F21661557C00E8938B /* HOPContact.h in Headers */ = {isa = PBXBuildFile; fileRef = 8792E9CC1651B21F00DEAC58 /* HOPContact.h */; };
 		87B013F31661557C00E8938B /* HOPCall.h in Headers */ = {isa = PBXBuildFile; fileRef = 874F65731652628500E580F0 /* HOPCall.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		87B013F51661557C00E8938B /* HOPConversationThread.h in Headers */ = {isa = PBXBuildFile; fileRef = 874F6579165264BF00E580F0 /* HOPConversationThread.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		87B013F61661557C00E8938B /* HOPMediaEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = 874F657C1652652A00E580F0 /* HOPMediaEngine.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -140,7 +141,7 @@
 		87D72ECB17DDEEDB00DEB37E /* HOPAvatar+External.mm in Sources */ = {isa = PBXBuildFile; fileRef = 87D72EC717DDEEDB00DEB37E /* HOPAvatar+External.mm */; };
 		87D72ECC17DDEEDB00DEB37E /* HOPAvatar+External.h in Headers */ = {isa = PBXBuildFile; fileRef = 87D72EC817DDEEDB00DEB37E /* HOPAvatar+External.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		87D91AA71767509700E46B66 /* OpenPeerCacheDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 87D91AA51767509700E46B66 /* OpenPeerCacheDelegate.mm */; };
-		87DA95C419D41D5800AB2EAA /* HOPOpenPeerContact+External.h in Headers */ = {isa = PBXBuildFile; fileRef = 87DA95C219D41D5800AB2EAA /* HOPOpenPeerContact+External.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		87DA95C419D41D5800AB2EAA /* HOPOpenPeerContact+External.h in Headers */ = {isa = PBXBuildFile; fileRef = 87DA95C219D41D5800AB2EAA /* HOPOpenPeerContact+External.h */; };
 		87DA95C519D41D5800AB2EAA /* HOPOpenPeerContact+External.mm in Sources */ = {isa = PBXBuildFile; fileRef = 87DA95C319D41D5800AB2EAA /* HOPOpenPeerContact+External.mm */; };
 		87DAECB819DD6858005F7F01 /* HOPOpenPeerContact_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 87DAECB719DD6858005F7F01 /* HOPOpenPeerContact_Internal.h */; };
 		87DAECBC19DD69C0005F7F01 /* HOPOpenPeerContact_Internal.mm in Sources */ = {isa = PBXBuildFile; fileRef = 87DAECBB19DD69C0005F7F01 /* HOPOpenPeerContact_Internal.mm */; };
@@ -392,6 +393,8 @@
 		874F65A716528FCF00E580F0 /* HOPProtocols.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = HOPProtocols.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		8758405917B17CB0006B9A21 /* HOPModelManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HOPModelManager.h; sourceTree = "<group>"; };
 		8758405B17B17CD0006B9A21 /* HOPModelManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = HOPModelManager.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		875A67F61A1E91240041F650 /* HOPConversationEvent+External.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HOPConversationEvent+External.h"; sourceTree = "<group>"; };
+		875A67F71A1E91240041F650 /* HOPConversationEvent+External.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "HOPConversationEvent+External.m"; sourceTree = "<group>"; };
 		875FD1341806AF74001A5BEA /* HOPOpenPeerAccount+External.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HOPOpenPeerAccount+External.h"; sourceTree = "<group>"; };
 		875FD1351806AF74001A5BEA /* HOPOpenPeerAccount+External.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "HOPOpenPeerAccount+External.m"; sourceTree = "<group>"; };
 		876D1F751823BD000024D30C /* HOPUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HOPUtility.h; sourceTree = "<group>"; };
@@ -761,6 +764,8 @@
 				8783858F17A84FAA003C6EEA /* HOPRolodexContact+External.h */,
 				8783859017A84FAA003C6EEA /* HOPRolodexContact+External.mm */,
 				8702E53B17997568003287D5 /* OpenPeerModel.xcdatamodeld */,
+				875A67F61A1E91240041F650 /* HOPConversationEvent+External.h */,
+				875A67F71A1E91240041F650 /* HOPConversationEvent+External.m */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -1019,11 +1024,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				87DAEDB019DEC573005F7F01 /* HOPMessageRecord+External.h in Headers */,
-				871BC3011A1B912A00ECF06C /* HOPOpenPeerContact.h in Headers */,
 				871BC3021A1B913100ECF06C /* HOPRolodexContact.h in Headers */,
 				87DAEDB519DED005005F7F01 /* HOPMessageRecord.h in Headers */,
 				87B013F01661557C00E8938B /* HOPStack.h in Headers */,
-				87B013F21661557C00E8938B /* HOPContact.h in Headers */,
 				87B013F31661557C00E8938B /* HOPCall.h in Headers */,
 				87325EF316F07D550099C0D3 /* HOPAccount.h in Headers */,
 				87325EF416F07D550099C0D3 /* HOPIdentityLookup.h in Headers */,
@@ -1031,6 +1034,7 @@
 				87B013F61661557C00E8938B /* HOPMediaEngine.h in Headers */,
 				87B013F81661557C00E8938B /* HOPProtocols.h in Headers */,
 				87B013F91661557C00E8938B /* HOPTypes.h in Headers */,
+				875A67F81A1E91240041F650 /* HOPConversationEvent+External.h in Headers */,
 				87B013FF1661557C00E8938B /* HOPMediaEngineRtpRtcpStatistics.h in Headers */,
 				87D66B6016EFC3660017EF98 /* HOPLogger.h in Headers */,
 				872725C3166636F50089CBB6 /* HOPMessage.h in Headers */,
@@ -1061,10 +1065,12 @@
 				87ED986619D96A3D00902839 /* HOPParticipants.h in Headers */,
 				87ED986E19D977C500902839 /* HOPConversationRecord.h in Headers */,
 				87ED987619D9F85100902839 /* HOPConversationEvent.h in Headers */,
+				87B013F21661557C00E8938B /* HOPContact.h in Headers */,
+				871BC3011A1B912A00ECF06C /* HOPOpenPeerContact.h in Headers */,
+				87DA95C419D41D5800AB2EAA /* HOPOpenPeerContact+External.h in Headers */,
 				870059F81850BC6400B6B826 /* HOPCache.h in Headers */,
 				87E6C02219CC542E001D6110 /* HOPIdentityContact.h in Headers */,
 				87E6C03219CC542F001D6110 /* HOPPublicPeerFile.h in Headers */,
-				87DA95C419D41D5800AB2EAA /* HOPOpenPeerContact+External.h in Headers */,
 				87E3CD24172A89E300084D2F /* HOPIdentityLookupInfo_Internal.h in Headers */,
 				87A5B1DE16EDE5F9007E825A /* HOPAccount_Internal.h in Headers */,
 				87A5B1E016EDE5F9007E825A /* HOPCall_Internal.h in Headers */,
@@ -1304,7 +1310,6 @@
 			files = (
 				87A5B1A016EDE5EB007E825A /* HOPAccount.mm in Sources */,
 				87A5B1A216EDE5EB007E825A /* HOPCall.mm in Sources */,
-				871BC2FF1A1B73CD00ECF06C /* HOPRolodexContact.h in Sources */,
 				871BC2FE1A1B73CD00ECF06C /* HOPOpenPeerContact.m in Sources */,
 				87A5B1A316EDE5EB007E825A /* HOPContact.mm in Sources */,
 				871BC2FD1A1B73CD00ECF06C /* HOPOpenPeerContact.h in Sources */,
@@ -1337,6 +1342,7 @@
 				87A5B20016EDE5F9007E825A /* OpenPeerMediaEngineDelegate.mm in Sources */,
 				87E0350519ADF9C1008A195C /* HOPCallSystemMessage.mm in Sources */,
 				87CCF64018C0F253000DF636 /* OpenPeerBackgroundingCompletionDelegate.mm in Sources */,
+				875A67F91A1E91240041F650 /* HOPConversationEvent+External.m in Sources */,
 				871BC3001A1B73CD00ECF06C /* HOPRolodexContact.m in Sources */,
 				871BC9C617A1233800AEA4A6 /* HOPIdentityContact_Internal.mm in Sources */,
 				87E6C02319CC542E001D6110 /* HOPIdentityContact.m in Sources */,

@@ -31,6 +31,8 @@
 
 #import "HOPConversationRecord+External.h"
 #import "HOPUtility.h"
+#import "HOPRolodexContact.h"
+
 //
 //@interface HOPConversationRecord ()
 //
@@ -61,5 +63,12 @@
     return ret;*/
 }
 
-
+- (void) setParticipantsWithArray:(NSArray *)values
+{
+    for (HOPRolodexContact* contact in values)
+    {
+        if (contact.openPeerContact)
+            [self addParticipantsObject:contact.openPeerContact];
+    }
+}
 @end

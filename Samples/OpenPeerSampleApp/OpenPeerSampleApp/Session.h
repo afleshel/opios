@@ -31,10 +31,8 @@
 
 #import <Foundation/Foundation.h>
 
-@class HOPContact;
 @class HOPCall;
 @class HOPConversationThread;
-@class HOPOpenPeerContact;
 @class HOPConversationRecord;
 @class HOPConversationEvent;
 
@@ -53,6 +51,6 @@
 @property (strong) NSMutableSet* setOfNotSentMessages;
 @property (nonatomic, copy) NSString* title;
 
-- (id) initWithContact:(HOPOpenPeerContact*) inContact conversationThread:(HOPConversationThread*) inConverationThread;
+- (id) initWithContact:(HOPRolodexContact*) inContact conversationThread:(HOPConversationThread*) inConverationThread;
 - (id) initWithContacts:(NSArray*) inContacts conversationThread:(HOPConversationThread*) inConverationThread;
 @end

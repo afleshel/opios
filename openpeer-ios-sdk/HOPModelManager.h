@@ -293,7 +293,7 @@
  @param conversationEvent Conversation event during which message has been received or sent
  @return HOPMessageRecord* message record object
  */
-- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date conversationThreadID:(NSString*) conversationThreadID openPeerContact:(HOPOpenPeerContact*) openPeerContact messageId:(NSString*)messageId conversationEvent:(HOPConversationEvent*) conversationEvent;
+- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date conversationThreadID:(NSString*) conversationThreadID contact:(HOPRolodexContact*) contact messageId:(NSString*)messageId conversationEvent:(HOPConversationEvent*) conversationEvent;
 
 /**
  Creates a HOPMessageRecord object.
@@ -307,7 +307,7 @@
  @param conversationEvent Conversation event during which message has been received or sent
  @return HOPMessageRecord* message record object
  */
-- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  conversationThreadID:(NSString*) conversationThreadID openPeerContact:(HOPOpenPeerContact*) openPeerContact messageId:(NSString*)messageId conversationEvent:(HOPConversationEvent*) conversationEvent;
+- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  conversationThreadID:(NSString*) conversationThreadID contact:(HOPRolodexContact*) contact messageId:(NSString*)messageId conversationEvent:(HOPConversationEvent*) conversationEvent;
 
 /**
  Returns peer URI for logged in user.
@@ -451,6 +451,7 @@
  */
 - (HOPOpenPeerContact*) getOpenPeerContactForAccount;
 
+- (HOPRolodexContact*) getRolodexContactContactForAccount;
 /**
  Creates a peer file object for the given peer URI and peer file
  @param peerURI Peer URI

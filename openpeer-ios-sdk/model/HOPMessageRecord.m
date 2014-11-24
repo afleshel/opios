@@ -52,7 +52,7 @@
 @dynamic visible;
 @dynamic conversationEvent;
 @dynamic messageEvent;
-@dynamic sender;
+@dynamic senderOpenPeer;
 @dynamic session;
 
 @end

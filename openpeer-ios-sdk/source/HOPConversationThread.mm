@@ -213,7 +213,7 @@ using namespace openpeer::core;
 //                }
                 
                 if (openPeerContact)
-                    [contactArray addObject:openPeerContact];
+                    [contactArray addObject:[openPeerContact getDefaultRolodexContact]];
             }
         }
     }
@@ -233,42 +233,46 @@ using namespace openpeer::core;
         if ([contacts count] > 0)
         {
             ContactProfileInfoList contactList;
-            for (HOPContact* contact in contacts)
+            for (HOPRolodexContact* rolodexContact in contacts)
             {
-                ContactProfileInfo contactInfo;
-                IdentityContactList identityContactList;
-                contactInfo.mContact = [contact getContactPtr];
-                
-                HOPOpenPeerContact* openPeerContact = [[HOPModelManager sharedModelManager] getOpenPeerContactForPeerURI:[contact getPeerURI]];
-                if (openPeerContact)
+                HOPContact* contact = [rolodexContact getCoreContact];
+                if (contact)
                 {
-                    for (HOPIdentityContact* identityContact in openPeerContact.identityContacts)
+                    ContactProfileInfo contactInfo;
+                    IdentityContactList identityContactList;
+                    contactInfo.mContact = [contact getContactPtr];
+                    
+                    HOPOpenPeerContact* openPeerContact = [[HOPModelManager sharedModelManager] getOpenPeerContactForPeerURI:[contact getPeerURI]];
+                    if (openPeerContact)
                     {
-                        IdentityContact coreIdentityContact;
-
-                        //coreIdentityContact.mPeerFilePublic = IHelper::createPeerFilePublic(IHelper::createElement([openPeerContact.publicPeerFile.peerFile UTF8String]));
-                        coreIdentityContact.mIdentityProofBundleEl = IHelper::createElement([identityContact.identityProofBundle UTF8String]);
-                        coreIdentityContact.mStableID = [openPeerContact.stableID UTF8String];
-                        coreIdentityContact.mPriority = identityContact.priority.intValue;
-                        coreIdentityContact.mWeight = identityContact.weight.intValue;
-                        
-                        if (identityContact.rolodexContact)
+                        for (HOPIdentityContact* identityContact in openPeerContact.identityContacts)
                         {
-                            if (identityContact.rolodexContact.identityURI.length > 0)
-                                coreIdentityContact.mIdentityURI = [identityContact.rolodexContact.identityURI UTF8String];
-                            if (identityContact.rolodexContact.name.length > 0)
-                                coreIdentityContact.mName = [identityContact.rolodexContact.name UTF8String];
-                            if (identityContact.rolodexContact.profileURL.length > 0)
-                                coreIdentityContact.mProfileURL = [identityContact.rolodexContact.profileURL UTF8String];
-                        }
-                        if (identityContact.rolodexContact.associatedIdentity && identityContact.rolodexContact.associatedIdentity.identityProvider)
-                            coreIdentityContact.mIdentityProvider = [identityContact.rolodexContact.associatedIdentity.identityProvider.domain UTF8String];
+                            IdentityContact coreIdentityContact;
 
-                        identityContactList.push_back(coreIdentityContact);
+                            //coreIdentityContact.mPeerFilePublic = IHelper::createPeerFilePublic(IHelper::createElement([openPeerContact.publicPeerFile.peerFile UTF8String]));
+                            coreIdentityContact.mIdentityProofBundleEl = IHelper::createElement([identityContact.identityProofBundle UTF8String]);
+                            coreIdentityContact.mStableID = [openPeerContact.stableID UTF8String];
+                            coreIdentityContact.mPriority = identityContact.priority.intValue;
+                            coreIdentityContact.mWeight = identityContact.weight.intValue;
+                            
+                            if (identityContact.rolodexContact)
+                            {
+                                if (identityContact.rolodexContact.identityURI.length > 0)
+                                    coreIdentityContact.mIdentityURI = [identityContact.rolodexContact.identityURI UTF8String];
+                                if (identityContact.rolodexContact.name.length > 0)
+                                    coreIdentityContact.mName = [identityContact.rolodexContact.name UTF8String];
+                                if (identityContact.rolodexContact.profileURL.length > 0)
+                                    coreIdentityContact.mProfileURL = [identityContact.rolodexContact.profileURL UTF8String];
+                            }
+                            if (identityContact.rolodexContact.associatedIdentity && identityContact.rolodexContact.associatedIdentity.identityProvider)
+                                coreIdentityContact.mIdentityProvider = [identityContact.rolodexContact.associatedIdentity.identityProvider.domain UTF8String];
+
+                            identityContactList.push_back(coreIdentityContact);
+                        }
                     }
+                    contactInfo.mIdentityContacts = identityContactList;
+                    contactList.push_back(contactInfo);
                 }
-                contactInfo.mIdentityContacts = identityContactList;
-                contactList.push_back(contactInfo);
             }
             
             conversationThreadPtr->addContacts(contactList);
@@ -487,9 +491,10 @@ using namespace openpeer::core;
             {
                 hopMessage = [[HOPMessage alloc] init];
                 
-                hopMessage.contact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:peerURI];
+                hopMessage.contact = [[HOPModelManager sharedModelManager] getRolodexContactByPeerURI:peerURI];
                 
-                if (!hopMessage.contact)
+                
+                /*if (!hopMessage.contact)
                 {
                     HOPOpenPeerContact* openPeerContact = [[HOPModelManager sharedModelManager] getOpenPeerContactForPeerURI:peerURI];
                     if (!openPeerContact)
@@ -502,7 +507,7 @@ using namespace openpeer::core;
                     {
                         hopMessage.contact = [openPeerContact getCoreContact];
                     }
-                }
+                }*/
                 hopMessage.type = [NSString stringWithUTF8String:messageType];
                 hopMessage.text = [NSString stringWithUTF8String:message];
                 hopMessage.date = [OpenPeerUtility convertPosixTimeToDate:messageTime];

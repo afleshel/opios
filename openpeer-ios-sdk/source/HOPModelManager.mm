@@ -30,7 +30,7 @@
  */
 
 #import "HOPModelManager.h"
-#import "HOPRolodexContact.h"
+#import "HOPRolodexContact+External.h"
 #import "HOPIdentityContact.h"
 #import "HOPAssociatedIdentity.h"
 #import "HOPPublicPeerFile.h"
@@ -45,7 +45,7 @@
 #import "HOPConversationThread.h"
 #import "HOPUtility.h"
 #import "HOPIdentityProvider.h"
-#import "HOPOpenPeerContact.h"
+#import "HOPOpenPeerContact+External.h"
 #import "HOPConversationEvent.h"
 #import "HOPParticipants.h"
 #import "HOPContact_Internal.h"
@@ -870,7 +870,7 @@ using namespace openpeer::core;
 }
 
 
-- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date conversationThreadID:(NSString*) conversationThreadID openPeerContact:(HOPOpenPeerContact*) openPeerContact messageId:(NSString*)messageId conversationEvent:(HOPConversationEvent*) conversationEvent
+- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date conversationThreadID:(NSString*) conversationThreadID contact:(HOPRolodexContact*) contact messageId:(NSString*)messageId conversationEvent:(HOPConversationEvent*) conversationEvent
 {
     HOPMessageRecord* messageRecord = nil;
     if ([messageText length] > 0 && [type length] > 0 && date != nil && [conversationThreadID length] > 0 && [messageId length] > 0)
@@ -885,7 +885,7 @@ using namespace openpeer::core;
                 messageRecord.text = messageText;
                 messageRecord.date = date;
                 messageRecord.type = type;
-                messageRecord.sender = openPeerContact;
+                messageRecord.senderOpenPeer = contact.openPeerContact;
                 messageRecord.session = sessionRecord;
                 messageRecord.conversationEvent = conversationEvent;
                 messageRecord.messageID = messageId;
@@ -904,7 +904,7 @@ using namespace openpeer::core;
     return messageRecord;
 }
 
-- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  conversationThreadID:(NSString*) conversationThreadID openPeerContact:(HOPOpenPeerContact*) openPeerContact messageId:(NSString*)messageId conversationEvent:(HOPConversationEvent*) conversationEvent
+- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  conversationThreadID:(NSString*) conversationThreadID contact:(HOPRolodexContact*) contact messageId:(NSString*)messageId conversationEvent:(HOPConversationEvent*) conversationEvent
 {
     HOPMessageRecord* messageRecord = nil;
     if ([messageText length] > 0 && [type length] > 0 && date != nil && [conversationThreadID length] > 0 && [messageId length] > 0)
@@ -920,7 +920,7 @@ using namespace openpeer::core;
                 messageRecord.date = date;
                 messageRecord.visible = [NSNumber numberWithBool:visible];
                 messageRecord.type = type;
-                messageRecord.sender = openPeerContact;
+                messageRecord.senderOpenPeer = contact.openPeerContact;
                 messageRecord.session = sessionRecord;
                 messageRecord.conversationEvent = conversationEvent;
                 messageRecord.messageID = messageId;
@@ -1052,10 +1052,11 @@ using namespace openpeer::core;
             ret.lastActivity = date;
             [ret addConversationThreadRecordsObject:conversationThreadRecord];
             
-            for (HOPOpenPeerContact* participant in participants)
+            for (HOPRolodexContact* rolodexContact in participants)
             {
-//                HOPOpenPeerContact* openPeerContact = participant.identityContact.openPeerContact;
-                [ret addParticipantsObject:participant];
+                HOPOpenPeerContact* participant = rolodexContact.openPeerContact;
+                if (participant)
+                    [ret addParticipantsObject:participant];
             }
             
             [self saveContext];
@@ -1297,6 +1298,9 @@ using namespace openpeer::core;
         conversationRecord.name = title;
         event.participants = temp;
         event.name = title;
+        
+        //[temp addEventsObject:event];
+        
         for (HOPConversationEvent* oldEvent in temp.events)
         {
             oldEvent.showEvent = [NSNumber numberWithBool:NO];
@@ -1361,21 +1365,25 @@ using namespace openpeer::core;
 //        
 //        NSArray* result  = [self.managedObjectContext executeFetchRequest:fetchRequest error:nil];
         
+        NSMutableSet *set = [NSMutableSet new];
+        
+        for (HOPRolodexContact* rolodexContact in contacts)
+        {
+            if (rolodexContact.openPeerContact)
+                [set addObject:rolodexContact.openPeerContact];
+        }
+        
         if (result.count > 0)
         {
             for (HOPParticipants* p in result)
             {
-                NSSet *set = [NSSet setWithArray:contacts];
-                
                 if ([set isEqualToSet:p.participants])
-                    return p;
-//                if ([p.participants.allObjects isEqualToArray:contacts])
-//                    ret = p;
+                    ret = p;
             }
         }
         
         if (!ret)
-            ret = [self addParticiapantsForListOfContacts:contacts];
+            ret = [self addParticiapantsForListOfContacts:set.allObjects];
     }
     
     
@@ -1411,6 +1419,14 @@ using namespace openpeer::core;
     return ret;
 }
 
+- (HOPRolodexContact*) getRolodexContactContactForAccount
+{
+    HOPRolodexContact* ret = nil;
+    HOPOpenPeerAccount* account = [self getLastLoggedInUser];
+    if (account && account.stableId.length > 0)
+        ret = [[self getOpenPeerContactForStableID:account.stableId] getDefaultRolodexContact];
+    return ret;
+}
 
 - (HOPOpenPeerContact*) createOrUpdateOpenPeerContactForItentities:(NSArray*) identities coreContact:(IContactPtr) coreContact
 {

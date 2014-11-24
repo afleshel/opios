@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6252" systemVersion="14A389" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6252" systemVersion="14B25" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="HOPAPNSData" representedClassName="HOPAPNSData" syncable="YES">
         <attribute name="deviceToken" attributeType="String" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" defaultValueString="apns" syncable="YES"/>
@@ -93,7 +93,7 @@
         <attribute name="visible" optional="YES" attributeType="Boolean" defaultValueString="YES" syncable="YES"/>
         <relationship name="conversationEvent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HOPConversationEvent" inverseName="messages" inverseEntity="HOPConversationEvent" syncable="YES"/>
         <relationship name="messageEvent" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HOPMessageEvent" inverseName="message" inverseEntity="HOPMessageEvent" syncable="YES"/>
-        <relationship name="sender" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HOPOpenPeerContact" syncable="YES"/>
+        <relationship name="senderOpenPeer" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HOPOpenPeerContact" syncable="YES"/>
         <relationship name="session" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HOPConversationRecord" inverseName="messages" inverseEntity="HOPConversationRecord" syncable="YES"/>
     </entity>
     <entity name="HOPOpenPeerAccount" representedClassName="HOPOpenPeerAccount" syncable="YES">

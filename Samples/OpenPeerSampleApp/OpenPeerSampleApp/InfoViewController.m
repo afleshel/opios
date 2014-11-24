@@ -33,12 +33,12 @@
 #import "OpenPeer.h"
 #import <OpenpeerSDK/HOPModelManager.h>
 
-#import <OpenpeerSDK/HOPRolodexContact.h>
+#import <OpenpeerSDK/HOPRolodexContact+External.h>
 //#import <OpenpeerSDK/HOPIdentityContact.h>
 #import <OpenpeerSDK/HOPAssociatedIdentity.h>
 #import <OpenpeerSDK/HOPIdentityProvider.h>
 #import <OpenPeerSDK/HOPAccount.h>
-#import <OpenpeerSDK/HOPOpenPeerContact+External.h>
+//#import <OpenpeerSDK/HOPOpenPeerContact+External.h>
 #import <OpenpeerSDK/HOPIdentityProvider.h>
 //#import <OpenpeerSDK/HOPAPNSData.h>
 #import <OpenpeerSDK/HOPIdentity.h>
@@ -60,14 +60,14 @@ typedef enum
 @interface InfoViewController ()
 
 @property (nonatomic, strong) HOPOpenPeerAccount* homeUser;
-@property (nonatomic, strong) HOPOpenPeerContact* contact;
+@property (nonatomic, strong) HOPRolodexContact* contact;
 @property (nonatomic) BOOL showContactInfo;
 
 @end
 
 @implementation InfoViewController
 
-- (id) initWithContact:(HOPOpenPeerContact*) inContact style:(UITableViewStyle)style
+- (id) initWithContact:(HOPRolodexContact*) inContact style:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
     if (self)
@@ -127,7 +127,7 @@ typedef enum
             break;
             
         case USER_INFO_IDENTITIES:
-            ret = self.showContactInfo ? self.contact.identityContacts.count : [[[HOPAccount sharedAccount] getAssociatedIdentities] count];
+            ret = self.showContactInfo ? [self.contact getNumberOfAssociatedIdentities] : [[[HOPAccount sharedAccount] getAssociatedIdentities] count];
             break;
             
         default:
@@ -155,13 +155,13 @@ typedef enum
         case USER_INFO_NAME:
             cell.textLabel.lineBreakMode = NSLineBreakByCharWrapping;
             cell.textLabel.numberOfLines = 0;
-            cell.textLabel.text = self.showContactInfo ? [self.contact getFullName] : [[HOPAccount sharedAccount] getFullName];
+            cell.textLabel.text = self.showContactInfo ? self.contact.name : [[HOPAccount sharedAccount] getFullName];
             break;
             
         case USER_INFO_STABLE_ID:
             cell.textLabel.lineBreakMode = NSLineBreakByCharWrapping;
             cell.textLabel.numberOfLines = 0;
-            cell.textLabel.text = self.showContactInfo ? self.contact.stableID : [[HOPAccount sharedAccount] getStableID];
+            cell.textLabel.text = self.showContactInfo ? [self.contact getStableID]  : [[HOPAccount sharedAccount] getStableID];
             break;
             
         case USER_INFO_PEER_URI:
@@ -175,7 +175,7 @@ typedef enum
             HOPRolodexContact* rolodex = nil;
             if (self.showContactInfo)
             {
-                rolodex = [self.contact getDefaultRolodexContact];//((HOPIdentityContact*)[[self.contact.identityContacts allObjects] objectAtIndex:indexPath.row]).rolodexContact;
+                rolodex = self.contact;//((HOPIdentityContact*)[[self.contact.identityContacts allObjects] objectAtIndex:indexPath.row]).rolodexContact;
             }
             else
             {
@@ -213,7 +213,7 @@ typedef enum
     {
         case USER_INFO_NAME:
         {
-            NSString* value = self.showContactInfo ? [self.contact getFullName] : [[HOPAccount sharedAccount] getFullName];
+            NSString* value = self.showContactInfo ? self.contact.name : [[HOPAccount sharedAccount] getFullName];
             UIFont* cellFont = [UIFont boldSystemFontOfSize:17.0];
             CGSize labelSize = [value boundingRectWithSize: constraintSize options: NSStringDrawingUsesLineFragmentOrigin attributes: @{ NSFontAttributeName: cellFont } context: nil].size;
             ret = (labelSize.height) > cellDefaultHeight ? labelSize.height : cellDefaultHeight;
@@ -222,7 +222,7 @@ typedef enum
             
         case USER_INFO_STABLE_ID:
         {
-            NSString* value = self.showContactInfo ? self.contact.stableID : [[HOPAccount sharedAccount] getStableID];
+            NSString* value = self.showContactInfo ? [self.contact getStableID] : [[HOPAccount sharedAccount] getStableID];
             UIFont* cellFont = [UIFont boldSystemFontOfSize:17.0];
 
             CGSize labelSize = [value boundingRectWithSize: constraintSize options: NSStringDrawingUsesLineFragmentOrigin attributes: @{ NSFontAttributeName: cellFont } context: nil].size;
@@ -250,7 +250,7 @@ typedef enum
             HOPRolodexContact* rolodex = nil;
             if (self.showContactInfo)
             {
-                rolodex = [self.contact getDefaultRolodexContact];//((HOPIdentityContact*)[[self.contact.identityContacts allObjects] objectAtIndex:indexPath.row]).rolodexContact;
+                rolodex = self.contact;//((HOPIdentityContact*)[[self.contact.identityContacts allObjects] objectAtIndex:indexPath.row]).rolodexContact;
             }
             else
             {

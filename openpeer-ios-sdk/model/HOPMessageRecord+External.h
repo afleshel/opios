@@ -32,7 +32,10 @@
 #import "HOPMessageRecord.h"
 #import "HOPTypes.h"
 
+@class HOPRolodexContact;
+
 @interface HOPMessageRecord (External)
 
+@property (nonatomic) HOPRolodexContact *sender;
 @property (nonatomic, getter = getOutgoingMessageStatus, setter = setOutgoingMessageStatus:) HOPConversationThreadMessageDeliveryState outgoingMessageStatus;
 @end

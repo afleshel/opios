@@ -40,7 +40,6 @@
 #import <OpenPeerSDK/HOPConversationRecord.h>
 #import <OpenPeerSDK/HOPConversationThread.h>
 #import <OpenPeerSDK/HOPCallSystemMessage.h>
-//#import <OpenPeerSDK/HOPContact.h>
 #import <OpenPeerSDK/HOPRolodexContact+External.h>
 #import <OpenPeerSDK/HOPConversationEvent.h>
 #import "SystemMessageCell.h"

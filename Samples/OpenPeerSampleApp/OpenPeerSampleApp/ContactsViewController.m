@@ -40,7 +40,7 @@
 #import <OpenpeerSDK/HOPRolodexContact+External.h>
 #import <OpenpeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPAccount.h>
-#import <OpenpeerSDK/HOPOpenPeerContact+External.h>
+//#import <OpenpeerSDK/HOPOpenPeerContact+External.h>
 
 #define REMOTE_SESSION_ALERT_TAG 1
 #define TABLE_CELL_HEIGHT 55.0
@@ -238,11 +238,11 @@
             
             if (!self.isMultipleSelectionAvailable)
             {
-                HOPOpenPeerContact* openPeerContact = [[HOPModelManager sharedModelManager] getOpenPeerContactForIdentityURI:contact.identityURI];
+                //HOPOpenPeerContact* openPeerContact = [[HOPModelManager sharedModelManager] getOpenPeerContactForIdentityURI:contact.identityURI];
                 //If not, create a session for selecte contact
-                if (openPeerContact)
+                if ([contact isOpenPeer])
                 {
-                    Session* session = [[SessionManager sharedSessionManager] createSessionForContacts:@[openPeerContact]];
+                    Session* session = [[SessionManager sharedSessionManager] createSessionForContacts:@[contact]];
                 
                     if (session)
                         [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForSession:session forIncomingCall:NO forIncomingMessage:NO];
@@ -373,11 +373,10 @@
         case CONTACTS_TABLE_MODE_ADDING:
         {
             NSMutableArray* identityURIs = [NSMutableArray new];
-            for (HOPOpenPeerContact* contact in self.listOfFilterContacts)
+            for (HOPRolodexContact* contact in self.listOfFilterContacts)
             {
-                HOPRolodexContact* rolodex = [contact getDefaultRolodexContact];
-                if (rolodex && rolodex.identityURI.length > 0)
-                    [identityURIs addObject:rolodex.identityURI];
+                if (contact.identityURI.length > 0)
+                    [identityURIs addObject:contact.identityURI];
             }
             predicateForFiltering = [NSPredicate predicateWithFormat:@"identityContact != nil AND NOT (identityURI IN %@)",identityURIs];
             [predicatesArray addObject:predicateForFiltering];
@@ -387,11 +386,10 @@
         case CONTACTS_TABLE_MODE_REMOVING:
         {
             NSMutableArray* identityURIs = [NSMutableArray new];
-            for (HOPOpenPeerContact* contact in self.listOfFilterContacts)
+            for (HOPRolodexContact* contact in self.listOfFilterContacts)
             {
-                HOPRolodexContact* rolodex = [contact getDefaultRolodexContact];
-                if (rolodex && rolodex.identityURI.length > 0)
-                    [identityURIs addObject:rolodex.identityURI];
+                if (contact.identityURI.length > 0)
+                    [identityURIs addObject:contact.identityURI];
             }
             predicateForFiltering = [NSPredicate predicateWithFormat:@"identityURI IN %@",identityURIs];
             [predicatesArray addObject:predicateForFiltering];
