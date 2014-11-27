@@ -47,7 +47,6 @@
 //#import <OpenpeerSDK/HOPContact.h>
 #import <OpenpeerSDK/HOPRolodexContact+External.h>
 #import <OpenpeerSDK/HOPConversationThread.h>
-#import <OpenpeerSDK/HOPOpenPeerContact.h>
 
 @interface APNSInboxManager ()
 
