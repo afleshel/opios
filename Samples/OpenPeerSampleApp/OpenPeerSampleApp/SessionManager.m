@@ -120,10 +120,9 @@
             {
                 if (contacts.count > 0)
                 {
-                    participants = [[NSMutableArray alloc] init];//[NSArray arrayWithObject:[contact getCoreContact]];
+                    participants = [[NSMutableArray alloc] init];
                     for (HOPRolodexContact* contact in contacts)
                     {
-                        //HOPContact* coreContact = [contact getCoreContact];
                         if ([contact isOpenPeer])
                             [participants addObject:contact];
                     }
@@ -271,8 +270,6 @@
             OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Making a call for the session <%p>", inSession);
             
             [[MessageManager sharedMessageManager] sendCallSystemMessage:HOPCallSystemMessageTypeCallPlaced reasonCode:0 session:inSession];
-            //Currently we are not supporting group conferences, so only one participant is possible
-            HOPContact* contact = [[[inSession participantsArray] objectAtIndex:0] getCoreContact];
             
             //Place a audio or video call for chosen contact
             inSession.isRedial = isRedial;
@@ -619,7 +616,7 @@
                 NSMutableArray* participants = [[NSMutableArray alloc] init];
                 for (HOPRolodexContact* rolodexContact in session.participantsArray)
                 {
-                    [participants addObject:[rolodexContact getCoreContact]];
+                    [participants addObject:rolodexContact];
                 }
                 [conversationThread addContacts:participants];
                 NSArray* contactsArray = [[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:[[participants objectAtIndex:0] getPeerURI]];
@@ -720,17 +717,17 @@
 {
     if (session && participants.count > 0)
     {
-        NSMutableArray* contacts = [NSMutableArray new];
+        //NSMutableArray* contacts = [NSMutableArray new];
         
-        for (HOPRolodexContact* contact in participants)
+        /*for (HOPRolodexContact* contact in participants)
         {
             HOPContact* hopContact = [contact getCoreContact];
             if (hopContact)
                 [contacts addObject:hopContact];
-        }
+        }*/
         
-        if (contacts.count > 0)
-            [session.conversationThread removeContacts:contacts];
+        //if (contacts.count > 0)
+        [session.conversationThread removeContacts:participants];
     }
 }
 

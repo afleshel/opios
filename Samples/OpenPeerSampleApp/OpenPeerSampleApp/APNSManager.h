@@ -47,9 +47,9 @@
 //- (void) sendPushNotificationForDeviceToken:(NSString*) deviceToken message:(NSString*) message;
 - (void) registerDeviceToken:(NSData*) devToken;
 
-- (void) sendPushNotificationForContact:(HOPContact*) contact message:(NSString*) message missedCall:(BOOL) missedCall;
+- (void) sendPushNotificationForContact:(HOPRolodexContact*) contact message:(NSString*) message missedCall:(BOOL) missedCall;
 //- (void) sendRichPushNotificationForContact:(HOPContact*) contact message:(HOPMessage*) message missedCall:(BOOL) missedCall;
-- (void) sendRichPushNotificationForMessage:(HOPMessage*) message missedCall:(BOOL) missedCall;
+- (void) sendRichPushNotificationForMessage:(HOPMessage*) message missedCall:(BOOL) missedCall participantsPeerURIs:(NSArray*) participantsPeerURIs;
 - (BOOL) areTherePushesForSending;
 
 - (void) requestDeviceTokenForPeerURI:(NSString*) peerURI;

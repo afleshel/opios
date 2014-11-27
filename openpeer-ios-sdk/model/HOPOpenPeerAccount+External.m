@@ -33,6 +33,8 @@
 #import "HOPAssociatedIdentity.h"
 #import "HOPRolodexContact.h"
 #import "HOPIdentityProvider.h"
+#import "HOPAccount.h"
+#import "HOPModelManager.h"
 
 @implementation HOPOpenPeerAccount (External)
 
@@ -51,6 +53,19 @@
             ret = associatedIdentity.selfRolodexContact;
             break;
         }
+    }
+    return ret;
+}
+
+- (BOOL) updateReloginInfo
+{
+    BOOL ret = NO;
+    
+    if (![self.reloginInfo isEqualToString:[[HOPAccount sharedAccount] getReloginInformation]])
+    {
+        self.reloginInfo = [[HOPAccount sharedAccount] getReloginInformation];
+        
+        [[HOPModelManager sharedModelManager] saveContext];
     }
     return ret;
 }

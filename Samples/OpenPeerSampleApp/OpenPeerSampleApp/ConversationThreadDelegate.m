@@ -145,7 +145,8 @@
                 }
                 else if (![message.type isEqualToString:messageTypeSystem])
                 {
-                    [[APNSManager sharedAPNSManager]sendRichPushNotificationForMessage:message missedCall:NO];
+                    NSArray *peerURIs = [[conversationThread getContacts] valueForKeyPath:@"openPeerContact.publicPeerFile.peerURI"];
+                    [[APNSManager sharedAPNSManager]sendRichPushNotificationForMessage:message missedCall:NO  participantsPeerURIs:peerURIs];
                 }
             }
         }

@@ -34,7 +34,6 @@
 		00EB8DD0177D1C1600FFD40F /* libhfstack_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00EB8DB6177D14DB00FFD40F /* libhfstack_ios.a */; };
 		870059F81850BC6400B6B826 /* HOPCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 872DA9E7175CECB1000CCA76 /* HOPCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		87098FCA17C20739007C9093 /* OpenPeerModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8702E53B17997568003287D5 /* OpenPeerModel.xcdatamodeld */; };
-		871BC2FD1A1B73CD00ECF06C /* HOPOpenPeerContact.h in Sources */ = {isa = PBXBuildFile; fileRef = 871BC2F91A1B73CD00ECF06C /* HOPOpenPeerContact.h */; };
 		871BC2FE1A1B73CD00ECF06C /* HOPOpenPeerContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 871BC2FA1A1B73CD00ECF06C /* HOPOpenPeerContact.m */; };
 		871BC3001A1B73CD00ECF06C /* HOPRolodexContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 871BC2FC1A1B73CD00ECF06C /* HOPRolodexContact.m */; };
 		871BC3011A1B912A00ECF06C /* HOPOpenPeerContact.h in Headers */ = {isa = PBXBuildFile; fileRef = 871BC2F91A1B73CD00ECF06C /* HOPOpenPeerContact.h */; };
@@ -1312,7 +1311,6 @@
 				87A5B1A216EDE5EB007E825A /* HOPCall.mm in Sources */,
 				871BC2FE1A1B73CD00ECF06C /* HOPOpenPeerContact.m in Sources */,
 				87A5B1A316EDE5EB007E825A /* HOPContact.mm in Sources */,
-				871BC2FD1A1B73CD00ECF06C /* HOPOpenPeerContact.h in Sources */,
 				87A5B1A416EDE5EB007E825A /* HOPConversationThread.mm in Sources */,
 				87E6C03719CC542F001D6110 /* HOPAPNSData.m in Sources */,
 				87A5B1A516EDE5EB007E825A /* HOPIdentity.mm in Sources */,

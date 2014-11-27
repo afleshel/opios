@@ -316,7 +316,8 @@
             sessionViewContorller.hidesBottomBarWhenPushed = YES;
             [self.sessionViewControllersDictionary setObject:sessionViewContorller forKey:sessionId];
             [navigationController pushViewController:sessionViewContorller animated:YES];
-            [navigationController.navigationBar.topItem setTitle:title];
+            //[navigationController.navigationBar.topItem setTitle:title];
+            sessionViewContorller.chatViewController.title = title;
         }
             break;
             
@@ -325,8 +326,9 @@
             sessionViewContorller.hidesBottomBarWhenPushed = YES;
             [self.sessionViewControllersDictionary setObject:sessionViewContorller forKey:sessionId];
             [navigationController pushViewController:sessionViewContorller animated:YES];
-            [navigationController.navigationBar.topItem setTitle:title];
+            //[navigationController.navigationBar.topItem setTitle:title];
             //[navigationController pushViewController:sessionViewContorller.chatViewController animated:YES];
+            sessionViewContorller.chatViewController.title = title;
             break;
             
         case NEW_SESSION_REFRESH_CHAT:
@@ -346,7 +348,8 @@
             [sessionViewContorller.chatViewController.chatTableView reloadData];
             [navigationController popToRootViewControllerAnimated:NO];
             [navigationController pushViewController:sessionViewContorller animated:YES];
-            [navigationController.navigationBar.topItem setTitle:title];
+            //[navigationController.navigationBar.topItem setTitle:title];
+            sessionViewContorller.chatViewController.title = title;
             break;
             
         case EXISTING_SESSION_REFRESH_NOT_VISIBLE_CHAT:

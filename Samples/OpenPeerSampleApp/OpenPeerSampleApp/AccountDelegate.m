@@ -134,6 +134,9 @@
                 {
                     [[[OpenPeer sharedOpenPeer] mainViewController]  onAccountLoginError:accountState.errorReason];
                     [[HOPCache sharedCache] removeCookieWithNamePath:settingsKeySettingsDownloadURL];
+                    
+                    [[LoginManager sharedLoginManager] logout];
+                    [[LoginManager sharedLoginManager] onUserLogOut];
                 }
                 else
                 {

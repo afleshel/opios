@@ -182,6 +182,8 @@
     //Call to the SDK in order to shutdown Open Peer engine.
     [[HOPAccount sharedAccount] shutdown];
     
+    [[HOPAccount sharedAccount] resetLoggedInAccount];
+    
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane,@"Handle logout on UI level");
     [[[OpenPeer sharedOpenPeer] mainViewController] onLogout];
     
@@ -337,7 +339,7 @@
         
             //Check if it is logged in a new user
             [[HOPAccount sharedAccount] updateLoggedInAccount];
-
+            
             
             /*if (homeUser)
             {

@@ -40,6 +40,8 @@
 #import "HOPAssociatedIdentity.h"
 #import "HOPOpenPeerContact.h"
 #import "HOPAPNSData.h"
+#import "HOPOpenPeerAccount.h"
+#import "HOPIdentityProvider.h"
 
 @implementation HOPRolodexContact (External)
 
@@ -65,6 +67,28 @@
 - (BOOL) isSelf
 {
     return [[self getCoreContact] isSelf];
+}
+
++ (HOPRolodexContact*) getSelf
+{
+    HOPRolodexContact* ret = [[HOPModelManager sharedModelManager] getRolodexContactContactForAccount];
+    return ret;
+}
+
++ (void) hintAboutLocation:(NSString*) locationID peerURI:(NSString*) peerURI
+{
+    if (peerURI.length > 0 && locationID.length > 0)
+    {
+        HOPContact* contact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:peerURI];
+        
+        if (!contact)
+        {
+            contact = [[HOPContact alloc] initWithPeerURI:peerURI];
+        }
+        
+        if (contact)
+            [contact hintAboutLocation:locationID];
+    }
 }
 
 - (BOOL) isOpenPeer
@@ -138,7 +162,7 @@
     {
         NSString* name = associatedIdentity.identityProvider.name;
         if (name.length > 0)
-            [ret addObject:name]
+            [ret addObject:name];
     }
     return ret;
 }

@@ -145,12 +145,13 @@
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Received Push Alert: %@", alert);
     NSString *peerURI = [apnsInfo objectForKey:@"peerURI"];
     NSString *locationID = [apnsInfo objectForKey:@"location"];
-    
+    NSString *peerURIs = [apnsInfo objectForKey:@"peerURIs"];
+    [HOPRolodexContact hintAboutLocation:locationID peerURI:peerURI];
     //HOPPublicPeerFile* publicPerFile = [[HOPModelManager sharedModelManager] getPublicPeerFileForPeerURI:peerURI];
-    HOPContact* contact = [[HOPContact alloc] initWithPeerURI:peerURI];
-    
-    if ([locationID length] > 0)
-        [contact hintAboutLocation:locationID];
+//    HOPContact* contact = [[HOPContact alloc] initWithPeerURI:peerURI];
+//    
+//    if ([locationID length] > 0)
+//        [contact hintAboutLocation:locationID];
 }
 
 
@@ -159,14 +160,23 @@
     if ([richPushDictionary count] > 0)
     {
         NSString* senderPeerURI = [richPushDictionary objectForKey:@"peerURI"];
+        NSString *peerURIs = [richPushDictionary objectForKey:@"peerURIs"];
+        NSArray *items = [peerURIs componentsSeparatedByString:@","];
         if ([senderPeerURI length] > 0)
         {
-            HOPOpenPeerContact* contact = [[HOPModelManager sharedModelManager] getOpenPeerContactForPeerURI:senderPeerURI];
+            NSMutableArray* contacts = [NSMutableArray new];
+            for (NSString* peerURI in items)
+            {
+                HOPRolodexContact* tempContact = [[HOPModelManager sharedModelManager] getRolodexContactByPeerURI:peerURI];
+                if (tempContact)
+                    [contacts addObject:tempContact];
+            }
+            HOPRolodexContact* contact = [[HOPModelManager sharedModelManager] getRolodexContactByPeerURI:senderPeerURI];
             if (contact)
             {
-                Session* session = [[SessionManager sharedSessionManager] getSessionForContacts:@[contact]];
+                Session* session = [[SessionManager sharedSessionManager] getSessionForContacts:contacts];
                 if (!session)
-                    session = [[SessionManager sharedSessionManager]createSessionForContacts:@[contact]];
+                    session = [[SessionManager sharedSessionManager]createSessionForContacts:contacts];
                 
                 NSString* messageID = [richPushDictionary objectForKey:@"messageId"];
                 NSString* messageText = [richPushDictionary objectForKey:@"message"];
@@ -181,17 +191,18 @@
                     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push content \"%@\" for message %@ is ready.",messageText,messageID);
                     
                     //HOPPublicPeerFile* publicPerFile = [[HOPModelManager sharedModelManager] getPublicPeerFileForPeerURI:senderPeerURI];
-                    HOPContact* coreContact = [[HOPContact alloc] initWithPeerURI:senderPeerURI];
-                    if ([location length] > 0)
-                    {
-                        [coreContact hintAboutLocation:location];
-                        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push hit location");
-                    }
-                    else
-                    {
-                        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Local notification withut location is hit");
-                    }
+//                    HOPContact* coreContact = [[HOPContact alloc] initWithPeerURI:senderPeerURI];
+//                    if ([location length] > 0)
+//                    {
+//                        [coreContact hintAboutLocation:location];
+//                        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push hit location");
+//                    }
+//                    else
+//                    {
+//                        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Local notification withut location is hit");
+//                    }
                     
+                    [HOPRolodexContact hintAboutLocation:location peerURI:senderPeerURI];
                     
                     if ([replacesMessageID length] > 0)
                     {
@@ -199,7 +210,7 @@
                     }
                     else
                     {
-                        HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:messageText type:messageTypeText date:date conversationThreadID:[session.conversationThread getThreadId] openPeerContact:contact messageId:messageID conversationEvent:session.lastConversationEvent];
+                        HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:messageText type:messageTypeText date:date conversationThreadID:[session.conversationThread getThreadId] contact:contact messageId:messageID conversationEvent:session.lastConversationEvent];
                         
                         
                         if (messageObj)

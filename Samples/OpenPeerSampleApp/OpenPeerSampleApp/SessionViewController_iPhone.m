@@ -41,7 +41,7 @@
 #import "AddParticipantsViewController.h"
 #import "InfoViewController.h"
 #import <OpenPeerSDK/HOPCall.h>
-#import <OpenPeerSDK/HOPConversationEvent.h>
+#import <OpenPeerSDK/HOPConversationEvent+External.h>
 #import <OpenPeerSDK/HOPParticipants.h>
 
 
@@ -296,9 +296,13 @@
 
 - (void) showContactInfo
 {
-    InfoViewController* infoViewController = [[InfoViewController alloc] initWithContact:[self.session.lastConversationEvent.participants.participants.allObjects objectAtIndex:0] style:UITableViewStyleGrouped];
-    infoViewController.title = @"User Info";
-    [self.navigationController pushViewController:infoViewController animated:YES];
+    NSArray* contacts = [self.session.lastConversationEvent getContacts];
+    if (contacts.count == 1)
+    {
+        InfoViewController* infoViewController = [[InfoViewController alloc] initWithContact:contacts[0] style:UITableViewStyleGrouped];
+        infoViewController.title = @"User Info";
+        [self.navigationController pushViewController:infoViewController animated:YES];
+    }
 }
 
 #pragma mark - UIActionSheetDelegate

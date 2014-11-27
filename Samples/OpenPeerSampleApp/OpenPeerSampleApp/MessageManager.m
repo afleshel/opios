@@ -88,8 +88,7 @@
     HOPMessage* hopMessage = nil;
     
     HOPCallSystemMessage* callSystemMessage = [[HOPCallSystemMessage alloc] initWithMessageType:(HOPCallSystemMessageType)messageType callee:contact errorCode:reasonCode];
-    NSString* messageBody = callSystemMessage.jsonMessage;//[HOPConversationThread createSystemMessage:type messageType:messageType contact:[contact getCoreContact]];
-    
+    NSString* messageBody = callSystemMessage.jsonMessage;
     if ([messageBody length] > 0)
     {
         hopMessage = [[HOPMessage alloc] initWithMessageId:[HOPUtility getGUIDstring] andReplacesMessageID:@"" andMessage:messageBody andContact:contact andMessageType:[HOPSystemMessage getMessageType] andMessageDate:[NSDate date] andValidated:NO];
@@ -188,7 +187,7 @@
         {
             OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Message %@ cannot be sent because account is not in the ready state.",hopMessage.messageID);
         #ifdef APNS_ENABLED
-            [[APNSManager sharedAPNSManager]sendRichPushNotificationForMessage:hopMessage missedCall:NO];
+            [[APNSManager sharedAPNSManager]sendRichPushNotificationForMessage:hopMessage missedCall:NO participantsPeerURIs:@[]];
         #endif
         }
         //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resendMessages) name:kReachabilityChangedNotification object:nil];
@@ -325,7 +324,7 @@
 - (void) resendMessage:(HOPMessageRecord*) message forSession:(Session*) inSession
 {
     HOPRolodexContact* contact = [[inSession participantsArray] objectAtIndex:0];
-    HOPMessage* hopMessage = [[HOPMessage alloc] initWithMessageId:[HOPUtility getGUIDstring] andReplacesMessageID:message.messageID  andMessage:message.text andContact:[contact getCoreContact] andMessageType:messageTypeText andMessageDate:message.date andValidated:NO];
+    HOPMessage* hopMessage = [[HOPMessage alloc] initWithMessageId:[HOPUtility getGUIDstring] andReplacesMessageID:message.messageID  andMessage:message.text andContact:contact andMessageType:messageTypeText andMessageDate:message.date andValidated:NO];
     
     message.messageID = hopMessage.messageID;
     message.showStatus = [NSNumber numberWithBool:NO];

@@ -259,7 +259,6 @@ using namespace openpeer::core;
     {
         accountPtr->shutdown();
         
-        self.openPeerAccount.loggedIn = [NSNumber numberWithBool:NO];
         [[HOPModelManager sharedModelManager] saveContext];
     }
     else
@@ -530,6 +529,7 @@ using namespace openpeer::core;
             self.openPeerAccount.loggedIn = [NSNumber numberWithBool: YES];
             [[HOPModelManager sharedModelManager] saveContext];
         }
+        [self.openPeerAccount updateReloginInfo];
     }
 }
 - (void) resetLoggedInAccount

@@ -292,9 +292,10 @@ using namespace openpeer::core;
         if ([contacts count] > 0)
         {
             ContactList contactList;
-            for (HOPContact* contact in contacts)
+            for (HOPRolodexContact* contact in contacts)
             {
-                contactList.push_back([contact getContactPtr]);
+                HOPContact* coreContact = [contact getCoreContact];
+                contactList.push_back([coreContact getContactPtr]);
             }
             conversationThreadPtr->removeContacts(contactList);
         }

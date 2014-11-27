@@ -35,7 +35,7 @@
 #import <OpenPeerSDK/HOPAccount.h>
 //#import <OpenPeerSDK/HOPOpenPeerContact.h>
 #import <OpenPeerSDK/HOPParticipants.h>
-#import <OpenPeerSDK/HOPConversationEvent.h>
+#import <OpenPeerSDK/HOPConversationEvent+External.h>
 #import <OpenPeerSDK/HOPUtility.h>
 #import "SessionManager.h"
 #import "OpenPeer.h"
@@ -219,19 +219,10 @@
         if (!session)
         {
             NSMutableArray* listOfRolodexContacts = [[NSMutableArray alloc] init];
-            //for (HOPPublicPeerFile* publicPeerFile in record.participants)
-//            for (HOPOpenPeerContact* contact in record.participants.participants)
-//            {
-//                NSArray* rolodexContactsArray = [[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:contact.publicPeerFile.peerURI];
-//                HOPRolodexContact* rolodexContact = [rolodexContactsArray objectAtIndex:0];
-//                
-//                if (rolodexContact)
-//                    [listOfRolodexContacts addObject:rolodexContact];
-//            }
-            
+
             if([record.participants.participants count] > 0)
             {
-                session = [[SessionManager sharedSessionManager] createSessionForContacts:record.participants.participants.allObjects];
+                session = [[SessionManager sharedSessionManager] createSessionForContacts:[record getContacts]];
             }
         }
         

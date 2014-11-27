@@ -37,5 +37,6 @@
 
 - (NSString*) getFullName;
 - (HOPRolodexContact*) getRolodexContactForIdentityBaseURI:(NSString*)identityBaseURI;
+- (BOOL) updateReloginInfo;
 
 @end

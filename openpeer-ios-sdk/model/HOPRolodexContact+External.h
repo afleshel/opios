@@ -38,6 +38,8 @@
 - (void) updateWithName:(NSString*) inName identityURI:(NSString*) inIdentityURI identityProviderDomain:(NSString*)identityProviderDomain  homeUserIdentityURI:(NSString*)homeUserIdentityURI;
 
 - (BOOL) isSelf;
++ (HOPRolodexContact*) getSelf;
++ (void) hintAboutLocation:(NSString*) locationID peerURI:(NSString*) peerURI;
 - (BOOL) isOpenPeer;
 - (HOPContact*) getCoreContact;
 - (HOPAvatar*) getAvatarForWidth:(NSNumber*) width height:(NSNumber*) height;
