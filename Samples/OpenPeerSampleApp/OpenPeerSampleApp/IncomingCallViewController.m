@@ -32,15 +32,13 @@
 #import "IncomingCallViewController.h"
 #import "SessionManager.h"
 #import "SoundsManager.h"
+#import "Session.h"
 
 #import <OpenPeerSDK/HOPCall.h>
 #import <OpenPeerSDK/HOPRolodexContact+External.h>
 #import <OpenPeerSDK/HOPAvatar.h>
 #import <OpenPeerSDK/HOPImage.h>
-#import "Session.h"
 #import <OpenPeerSDK/HOPConversationEvent+External.h>
-#import <OpenPeerSDK/HOPParticipants.h>
-//#import <OpenPeerSDK/HOPOpenPeerContact+External.h>
 
 @interface IncomingCallViewController ()
 

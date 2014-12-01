@@ -57,7 +57,7 @@
 + (CGSize) calcMessageHeight:(NSString *)message forScreenWidth:(float)width
 {
     CGSize maxSize = {width, 200000.0};
-    //CGSize calcSize = [message sizeWithFont:[UIFont systemFontOfSize:14.0] constrainedToSize:maxSize];
+    
     CGSize calcSize = [message boundingRectWithSize: maxSize options: NSStringDrawingUsesLineFragmentOrigin attributes: @{ NSFontAttributeName: [UIFont systemFontOfSize:14.0] } context: nil].size;
     return calcSize;
 }

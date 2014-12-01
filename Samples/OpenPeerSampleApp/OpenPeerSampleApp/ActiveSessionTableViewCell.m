@@ -32,14 +32,8 @@
 #import "ActiveSessionTableViewCell.h"
 #import "UIBadgeView.h"
 #import <OpenPeerSDK/HOPConversationEvent+External.h>
-#import <OpenPeerSDK/HOPMessageRecord.h>
-#import <OpenPeerSDK/HOPModelManager.h>
-//#import <OpenPeerSDK/HOPRolodexContact.h>
 #import <OpenPeerSDK/HOPAvatar.h>
-#import <OpenPeerSDK/HOPSystemMessage.h>
-#import <OpenPeerSDK/HOPCallSystemMessage.h>
-//#import <OpenPeerSDK/HOPOpenPeerContact+External.h>
-#import <OpenPeerSDK/HOPParticipants.h>
+
 #import "ImageManager.h"
 #import "Session.h"
 #import "SessionManager.h"
@@ -87,15 +81,7 @@
     self.event = event;
     self.displayName.text = self.event.name;
     
-//    HOPOpenPeerContact* contact = [[self.sessionRecord.participants allObjects] objectAtIndex:0];
-//    
-//    HOPRolodexContact* participant = [[[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:contact.publicPeerFile.peerURI] objectAtIndex:0];
-//    
-//    UIImage* img = [[ImageManager sharedImageManager] getAvatarImageForRolodexContact:participant];
-//    if (img)
-//        self.displayImage.image = img;
-    
-    if (event.participants.participants.count > 1)
+    if ([event getContacts].count > 1)
     {
         NSMutableArray* avatars = [[NSMutableArray alloc] init];
         for (HOPRolodexContact* contact in [event getContacts])
@@ -108,10 +94,6 @@
         UIImage* avatarsImage = [Utility createImageFromImages:avatars inFrame:self.displayImage.frame];
         if (avatarsImage)
             self.displayImage.image = avatarsImage;
-//        self.displayImage.animationImages = [NSArray arrayWithArray:avatars];
-//        self.displayImage.animationDuration = 1.5;
-//        [self.displayImage startAnimating];
-
     }
     else
     {
@@ -138,8 +120,6 @@
     
     self.labelCreationDate.text = [Utility stringFromDate:self.event.time];
     [self setLastMessage];
-    //[self drawInnerShadowOnView:self.messageView];
-    //[self drawBackground];
 }
 
 -(void)drawInnerShadowOnView:(UIView *)view
@@ -176,13 +156,6 @@
     
     [self setBackgroundView:[[UIView alloc] init]];
     [self.backgroundView.layer insertSublayer:grad atIndex:0];
-    
-    /*CAGradientLayer *selectedGrad = [CAGradientLayer layer];
-    selectedGrad.frame = self.bounds;
-    selectedGrad.colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithRed:237.0/255.0 green:237.0/255.0 blue:237.0/255.0 alpha:1] CGColor], (id)[[UIColor whiteColor] CGColor], nil];
-    
-    [self setSelectedBackgroundView:[[UIView alloc] init]];
-    [self.selectedBackgroundView.layer insertSublayer:selectedGrad atIndex:0];*/
     
     self.selectedBackgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"tableViewCell_selected.png"] stretchableImageWithLeftCapWidth:0.0 topCapHeight:5.0]];
 }

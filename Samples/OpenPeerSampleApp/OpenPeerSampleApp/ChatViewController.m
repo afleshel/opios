@@ -37,7 +37,7 @@
 #import "ChatMessageCell.h"
 #import <OpenPeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPMessageRecord+External.h>
-#import <OpenPeerSDK/HOPConversationRecord.h>
+//#import <OpenPeerSDK/HOPConversationRecord.h>
 #import <OpenPeerSDK/HOPConversationThread.h>
 #import <OpenPeerSDK/HOPCallSystemMessage.h>
 #import <OpenPeerSDK/HOPRolodexContact+External.h>
@@ -163,28 +163,6 @@
     [self.session.unreadMessageArray removeAllObjects];
 }
 
-/*- (NSString*) getMessageForStatus:(HOPConversationThreadContactStatus) status contact:(HOPContact*) contact
-{
-    NSString* ret = @"";
-    HOPRolodexContact* rolodexContact = [[[HOPModelManager sharedModelManager] getRolodexContactByPeerURI:[contact getPeerURI]] objectAtIndex:0];
-    switch (status)
-    {
-        case HOPComposingStateComposing:
-            ret = [NSString stringWithFormat:@"%@ is typing...",rolodexContact.name];
-            break;
-            
-        case HOPComposingStatePaused:
-            ret = [NSString stringWithFormat:@"%@ is thinking...",rolodexContact.name];
-            break;
-            
-        case HOPComposingStateActive:
-            break;
-        default:
-            break;
-    }
-    
-    return ret;
-}*/
 
 - (void) updateComposingStatuses
 {

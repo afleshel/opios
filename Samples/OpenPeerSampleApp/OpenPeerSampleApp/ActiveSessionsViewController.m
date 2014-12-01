@@ -30,11 +30,8 @@
  */
 
 #import "ActiveSessionsViewController.h"
-#import <OpenPeerSDK/HOPConversationRecord+External.h>
 #import <OpenPeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPAccount.h>
-//#import <OpenPeerSDK/HOPOpenPeerContact.h>
-#import <OpenPeerSDK/HOPParticipants.h>
 #import <OpenPeerSDK/HOPConversationEvent+External.h>
 #import <OpenPeerSDK/HOPUtility.h>
 #import "SessionManager.h"
@@ -149,8 +146,7 @@
     
     cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"tableViewCell.png"] stretchableImageWithLeftCapWidth:0.0 topCapHeight:5.0]];
     cell.selectedBackgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"tableViewCell_selected.png"] stretchableImageWithLeftCapWidth:0.0 topCapHeight:5.0]];
-    HOPConversationEvent* event = [self.fetchedResultsController objectAtIndexPath:indexPath];//((HOPParticipants*) [self.fetchedResultsController objectAtIndexPath:indexPath]).lastEvent;
-    //HOPConversationRecord* record = event.session;//[self.fetchedResultsController objectAtIndexPath:indexPath];
+    HOPConversationEvent* event = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
     if (event)
         [cell setConversationEvent:event];
@@ -168,10 +164,6 @@
     return 40;
 }
 
-//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-//{
-//    return 3;
-//}
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
@@ -218,9 +210,7 @@
         Session* session = [[SessionManager sharedSessionManager] getSessionForConversationEvent:record];
         if (!session)
         {
-            NSMutableArray* listOfRolodexContacts = [[NSMutableArray alloc] init];
-
-            if([record.participants.participants count] > 0)
+            if([record getContacts] > 0)
             {
                 session = [[SessionManager sharedSessionManager] createSessionForContacts:[record getContacts]];
             }

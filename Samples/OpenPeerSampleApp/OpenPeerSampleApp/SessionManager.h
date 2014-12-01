@@ -73,7 +73,6 @@
 - (void) redialCallForSession:(Session*) inSession;
 
 - (void) onCallEnded:(HOPCall*) call;
-- (void) onFaceDetected;
 
 - (void) startVideoRecording;
 - (void) stopVideoRecording;

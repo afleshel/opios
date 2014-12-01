@@ -41,6 +41,8 @@
 #import "AppConsts.h"
 
 #import <OpenpeerSDK/Openpeer.h>
+#import <OpenpeerSDK/HOPConversationEvent+External.h>
+#import <OpenpeerSDK/HOPConversationRecord+External.h>
 #import "UIDevice+Networking.h"
 
 @interface SessionManager()
@@ -323,7 +325,7 @@
     
     if (!session)
     {
-        HOPOpenPeerContact* contact = [[HOPModelManager sharedModelManager] getOpenPeerContactForPeerURI:[[call getCaller] getPeerURI]];
+        HOPRolodexContact* contact = [[HOPModelManager sharedModelManager] getRolodexContactByPeerURI:[[call getCaller] getPeerURI]];
         session = [[SessionManager sharedSessionManager] getSessionForContacts:@[contact]];
         if (session)
         {
@@ -539,13 +541,6 @@
     [[SessionManager sharedSessionManager] setLastEndedCallSession: session];
 }
 
-/**
- Handle face detected event
- */
-- (void) onFaceDetected
-{
-    
-}
 
 /**
  Starts video recording.
@@ -717,16 +712,6 @@
 {
     if (session && participants.count > 0)
     {
-        //NSMutableArray* contacts = [NSMutableArray new];
-        
-        /*for (HOPRolodexContact* contact in participants)
-        {
-            HOPContact* hopContact = [contact getCoreContact];
-            if (hopContact)
-                [contacts addObject:hopContact];
-        }*/
-        
-        //if (contacts.count > 0)
         [session.conversationThread removeContacts:participants];
     }
 }
@@ -738,8 +723,6 @@
     NSArray* participants = [conversationThread getContacts];
     for (HOPRolodexContact* rolodexContact in participants)
     {
-        //HOPRolodexContact* rolodexContact = [contact getDefaultRolodexContact];
-        
         if (rolodexContact)
         {
             if (ret.length == 0)
@@ -772,7 +755,7 @@
         if (session)
         {
             NSMutableArray *intermediate = [NSMutableArray arrayWithArray:openPeerContacts];
-            [intermediate removeObjectsInArray:session.lastConversationEvent.participants.participants.allObjects];
+            [intermediate removeObjectsInArray:[session.lastConversationEvent getContacts]];
             NSUInteger difference = [intermediate count];
             
             NSString* title = [self getTitleForConversationThread:conversationThread];
@@ -785,7 +768,7 @@
             }
             else
             {
-                if (openPeerContacts.count != session.lastConversationEvent.participants.participants.allObjects.count)
+                if (openPeerContacts.count != [session.lastConversationEvent getContacts].count)
                 {
                     session.lastConversationEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"removedParticipant" conversationRecord:session.sessionRecord partcipants:openPeerContacts title:title];
                     hasChanged = YES;
@@ -805,11 +788,7 @@
                 [sessionViewController updateOnParticipantChange];
             }
         }
-        
-        
     }
-    
-    
 }
 
 @end

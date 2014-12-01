@@ -36,10 +36,8 @@
 #import <OpenPeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPAvatar.h>
 #import <OpenPeerSDK/HOPImage.h>
-//#import <OpenPeerSDK/HOPOpenPeerAccount+External.h>
 #import <OpenPeerSDK/HOPConversationEvent+External.h>
-#import <OpenPeerSDK/HOPParticipants.h>
-//#import <OpenPeerSDK/HOPOpenPeerContact+External.h>
+//#import <OpenPeerSDK/HOPParticipants.h>
 #import <OpenPeerSDK/HOPAccount.h>
 @interface WaitingVideoViewController()
 
@@ -97,9 +95,7 @@ const int CONNECTING_ANIMATION_DURATION = 2;
     
     self.statusLabel.text = self.statusText;
     
-    //HOPRolodexContact* rolodexContact = [[self.session participantsArray] objectAtIndex:0];
     HOPRolodexContact* contact = [self.session.lastConversationEvent getContacts][0];
-//    HOPRolodexContact* rolodexContact = [contact getDefaultRolodexContact];
     self.participantName.text = contact.name;
     self.callerName.text = [[HOPAccount sharedAccount] getFullName];
     

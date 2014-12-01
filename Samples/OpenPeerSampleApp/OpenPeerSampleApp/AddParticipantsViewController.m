@@ -34,7 +34,7 @@
 #import "SessionManager.h"
 #import "Session.h"
 #import <OpenPeerSDK/HOPConversationEvent+External.h>
-#import <OpenPeerSDK/HOPParticipants.h>
+
 @interface AddParticipantsViewController ()
 
 @property (nonatomic, strong) ContactsViewController *contactsViewController;

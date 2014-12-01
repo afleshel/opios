@@ -42,7 +42,7 @@
 #import "InfoViewController.h"
 #import <OpenPeerSDK/HOPCall.h>
 #import <OpenPeerSDK/HOPConversationEvent+External.h>
-#import <OpenPeerSDK/HOPParticipants.h>
+//#import <OpenPeerSDK/HOPParticipants.h>
 
 
 #define ACTION_AUDIO_CALL           1
@@ -245,8 +245,9 @@
             
             //int i = 0;
             
+            NSArray* participants = [self.session.lastConversationEvent getContacts];
             [self.availableActions removeAllObjects];
-            if (self.session.lastConversationEvent.participants.participants.count == 1)
+            if (participants.count == 1)
             {
                 [buttonTitles addObject:NSLocalizedString(@"Audio Call", @"")];
                 [self.availableActions addObject:[NSNumber numberWithInt:ACTION_AUDIO_CALL]];
@@ -259,13 +260,13 @@
             //[buttonTitles addObject:NSLocalizedString(@"Close session", @"")];
             [buttonTitles addObject:NSLocalizedString(@"Add Contact", @"")];
             [self.availableActions addObject:[NSNumber numberWithInt:ACTION_ADD_CONTACT]];
-            if (self.session.lastConversationEvent.participants.participants.count > 1)
+            if (participants.count > 1)
             {
                 [buttonTitles addObject:NSLocalizedString(@"Remove Contact", @"")];
                 [self.availableActions addObject:[NSNumber numberWithInt:ACTION_REMOVE_CONTACT]];
             }
             
-            if (self.session.lastConversationEvent.participants.participants.count == 1)
+            if (participants.count == 1)
             {
                 [buttonTitles addObject:NSLocalizedString(@"Show contact info", @"")];
                 [self.availableActions addObject:[NSNumber numberWithInt:ACTION_SHOW_CONTACT_INFO]];
