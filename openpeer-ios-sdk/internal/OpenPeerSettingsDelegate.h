@@ -81,6 +81,7 @@ public:
     void setDouble(const char *key,double value);
     
     void clear(const char *key);
+    void clearAll();
     
     void addSettingWithKey(NSString* inSetting, NSString* key);
     NSDictionary* getCurrentSettingsDictionary();

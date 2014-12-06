@@ -303,6 +303,12 @@ void OpenPeerSettingsDelegate::clear(const char *key)
     }
 }
 
+void OpenPeerSettingsDelegate::clearAll()
+{
+#define WARNING_IMPLEMENT_ME 1
+#define WARNING_IMPLEMENT_ME 2
+}
+
 void OpenPeerSettingsDelegate::addSettingWithKey(NSString* inSetting, NSString* key)
 {
     if ([inSetting length] > 0 && [key length] >0)
