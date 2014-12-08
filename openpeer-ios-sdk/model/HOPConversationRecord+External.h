@@ -31,8 +31,12 @@
 
 #import "HOPConversationRecord.h"
 
+@class HOPConversation;
 @interface HOPConversationRecord (External)
 
 - (NSString *)sectionIdentifier;
 - (void) setParticipantsWithArray:(NSArray *)values;
+
+- (HOPConversation*) getConversation;
+- (NSArray*) getContacts;
 @end

@@ -55,6 +55,7 @@
 #import <openpeer/core/IHelper.h>
 #import <openpeer/core/IContact.h>
 #import <openpeer/core/types.h>
+#import "HOPConversation.h"
 
 ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
@@ -870,26 +871,26 @@ using namespace openpeer::core;
 }
 
 
-- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date conversationThreadID:(NSString*) conversationThreadID contact:(HOPRolodexContact*) contact messageId:(NSString*)messageId conversationEvent:(HOPConversationEvent*) conversationEvent
+- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date conversation:(HOPConversation*) conversation contact:(HOPRolodexContact*) contact messageId:(NSString*)messageId
 {
     HOPMessageRecord* messageRecord = nil;
-    if ([messageText length] > 0 && [type length] > 0 && date != nil && [conversationThreadID length] > 0 && [messageId length] > 0)
+    if ([messageText length] > 0 && [type length] > 0 && date != nil && conversation != nil && [messageId length] > 0)
     {
         if ([self getMessageRecordByID:messageId] == nil)
         {
-            NSArray* sessionRecords = [self getConversationRecordsForThreadID:conversationThreadID];
-            if ([sessionRecords count] > 0)
+            //NSArray* sessionRecords = [self getConversationRecordsForThreadID:conversationThreadID];
+            //if ([sessionRecords count] > 0)
             {
-                HOPConversationRecord* sessionRecord = [sessionRecords objectAtIndex:0];//[self getSessionRecordByID:sessionRecordId];
+                //HOPConversationRecord* sessionRecord = [sessionRecords objectAtIndex:0];//[self getSessionRecordByID:sessionRecordId];
                 messageRecord = (HOPMessageRecord*)[self createObjectForEntity:@"HOPMessageRecord"];
                 messageRecord.text = messageText;
                 messageRecord.date = date;
                 messageRecord.type = type;
                 messageRecord.senderOpenPeer = contact.openPeerContact;
-                messageRecord.session = sessionRecord;
-                messageRecord.conversationEvent = conversationEvent;
+                messageRecord.session = conversation.record;
+                messageRecord.conversationEvent = conversation.lastEvent;
                 messageRecord.messageID = messageId;
-                sessionRecord.lastActivity = [NSDate date];
+                conversation.record.lastActivity = [NSDate date];
             }
         }
         
@@ -898,33 +899,33 @@ using namespace openpeer::core;
     else
     {
         //NSString* str = [NSString stringWithFormat:@"Some message data are invalid: messageText: %@ - type: %@ - date: %@ - sessionRecordId: %@ - messageId: %@", messageText, type, date,sessionRecordId, messageId];
-        ZS_LOG_ERROR(Debug, [self log:([NSString stringWithFormat:@"Some message data are invalid: messageText: %@ - type: %@ - date: %@ - sessionRecordId: %@ - messageId: %@", messageText, type, date,conversationThreadID, messageId])]);
+        ZS_LOG_ERROR(Debug, [self log:([NSString stringWithFormat:@"Some message data are invalid: messageText: %@ - type: %@ - date: %@ - sessionRecordId: %@ - messageId: %@", messageText, type, date,[conversation getID], messageId])]);
     }
     
     return messageRecord;
 }
 
-- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  conversationThreadID:(NSString*) conversationThreadID contact:(HOPRolodexContact*) contact messageId:(NSString*)messageId conversationEvent:(HOPConversationEvent*) conversationEvent
+- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  conversation:(HOPConversation*) conversation contact:(HOPRolodexContact*) contact messageId:(NSString*)messageId
 {
     HOPMessageRecord* messageRecord = nil;
-    if ([messageText length] > 0 && [type length] > 0 && date != nil && [conversationThreadID length] > 0 && [messageId length] > 0)
+    if ([messageText length] > 0 && [type length] > 0 && date != nil && conversation != nil && [messageId length] > 0)
     {
         if ([self getMessageRecordByID:messageId] == nil)
         {
-            NSArray* sessionRecords = [self getConversationRecordsForThreadID:conversationThreadID];
-            if ([sessionRecords count] > 0)
+            //NSArray* sessionRecords = [self getConversationRecordsForThreadID:conversationThreadID];
+            //if ([sessionRecords count] > 0)
             {
-                HOPConversationRecord* sessionRecord = [sessionRecords objectAtIndex:0];//[self getSessionRecordByID:sessionRecordId];
+                // HOPConversationRecord* sessionRecord = [sessionRecords objectAtIndex:0];//[self getSessionRecordByID:sessionRecordId];
                 messageRecord = (HOPMessageRecord*)[self createObjectForEntity:@"HOPMessageRecord"];
                 messageRecord.text = messageText;
                 messageRecord.date = date;
                 messageRecord.visible = [NSNumber numberWithBool:visible];
                 messageRecord.type = type;
                 messageRecord.senderOpenPeer = contact.openPeerContact;
-                messageRecord.session = sessionRecord;
-                messageRecord.conversationEvent = conversationEvent;
+                messageRecord.session = conversation.record;
+                messageRecord.conversationEvent = conversation.lastEvent;
                 messageRecord.messageID = messageId;
-                sessionRecord.lastActivity = [NSDate date];
+                conversation.record.lastActivity = [NSDate date];
             }
         }
         
@@ -933,7 +934,7 @@ using namespace openpeer::core;
     else
     {
         //NSString* str = [NSString stringWithFormat:@"Some message data are invalid: messageText: %@ - type: %@ - date: %@ - sessionRecordId: %@ - messageId: %@", messageText, type, date,sessionRecordId, messageId];
-        ZS_LOG_ERROR(Debug, [self log:([NSString stringWithFormat:@"Some message data are invalid: messageText: %@ - type: %@ - date: %@ - sessionRecordId: %@ - messageId: %@", messageText, type, date,conversationThreadID, messageId])]);
+        ZS_LOG_ERROR(Debug, [self log:([NSString stringWithFormat:@"Some message data are invalid: messageText: %@ - type: %@ - date: %@ - sessionRecordId: %@ - messageId: %@", messageText, type, date,[conversation getID], messageId])]);
     }
     
     return messageRecord;
@@ -971,6 +972,35 @@ using namespace openpeer::core;
     return ret;
 }
 
+- (HOPConversationRecord*) getConversationRecordForParticipants:(NSArray*) participants
+{
+    HOPConversationRecord* ret = nil;
+    if (participants.count > 0)
+    {
+        NSString* cbcID = [HOPConversation getCBCIDForContacts:participants];//@"";
+        for (HOPRolodexContact* contact in participants)
+        {
+            if (cbcID.length == 0)
+                cbcID = [contact getStableID];
+            else
+                cbcID = [cbcID stringByAppendingString:[NSString stringWithFormat:@"_%@",[contact getStableID]]];
+        }
+        
+        NSArray* results = nil;
+        
+        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"lastActivity" ascending:NO];
+        
+        results = [self getResultsForEntity:@"HOPConversationRecord" withPredicateString:[NSString stringWithFormat:@"homeUser.stableId MATCHES '%@' AND ANY events.participants.cbcID MATCHES '%@'",[self getLastLoggedInUser].stableId,cbcID] orderDescriptors:@[sortDescriptor]];
+        
+        //NSPredicate* predicate = [NSPredicate predicateWithFormat:@"ANY events.participants.cbcID MATCHES '%@'", cbcID];
+        
+        //results = [results filteredArrayUsingPredicate:predicate];
+        
+        if ([results count] > 0)
+            ret = [results objectAtIndex:0];
+    }
+    return ret;
+}
 
 - (HOPConversationRecord*) getConversationRecordForConversationThread:(HOPConversationThread*) conversationThread
 {
@@ -979,13 +1009,17 @@ using namespace openpeer::core;
     {
         NSArray* results = nil;
         
+        NSString* cbcID = [HOPConversation getCBCIDForContacts:[conversationThread getContacts]];
+        
         NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"lastActivity" ascending:NO];
         
-        results = [self getResultsForEntity:@"HOPConversationRecord" withPredicateString:[NSString stringWithFormat:@"homeUser.stableId MATCHES '%@'",[self getLastLoggedInUser].stableId] orderDescriptors:@[sortDescriptor]];
+        results = [self getResultsForEntity:@"HOPConversationRecord" withPredicateString:[NSString stringWithFormat:@"homeUser.stableId MATCHES '%@' AND ANY events.participants.cbcID MATCHES '%@'",[self getLastLoggedInUser].stableId,cbcID] orderDescriptors:@[sortDescriptor]];
         
-        NSPredicate* predicate = [NSPredicate predicateWithFormat:@"ALL participants IN %@", [conversationThread getContacts]];
-        
-        results = [results filteredArrayUsingPredicate:predicate];
+//        results = [self getResultsForEntity:@"HOPConversationRecord" withPredicateString:[NSString stringWithFormat:@"homeUser.stableId MATCHES '%@'",[self getLastLoggedInUser].stableId] orderDescriptors:@[sortDescriptor]];
+//        
+//        NSPredicate* predicate = [NSPredicate predicateWithFormat:@"ALL participants IN %@", [conversationThread getContacts]];
+//        
+//        results = [results filteredArrayUsingPredicate:predicate];
 
         if ([results count] > 0)
             ret = [results objectAtIndex:0];
@@ -1109,12 +1143,12 @@ using namespace openpeer::core;
     }
 }
 
-- (void) updateMessageStateForConversation:(HOPConversationRecord*) conversationRecord lastDeliveryState:(HOPConversationThreadMessageDeliveryState) messageDeliveryStat
+- (void) updateMessageStateForConversation:(HOPConversation*) conversation lastDeliveryState:(HOPConversationThreadMessageDeliveryState) messageDeliveryStat
 {
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"date" ascending:NO];
 	NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
     
-    NSArray* results = [self getResultsForEntity:@"HOPMessageRecord" withPredicateString:[NSString stringWithFormat:@"(session.sessionID MATCHES '%@' AND outMessageStatus MATCHES '%@' AND showStatus = YES)", conversationRecord.sessionID, [HOPConversationThread stringForMessageDeliveryState: messageDeliveryStat]] orderDescriptors:sortDescriptors];
+    NSArray* results = [self getResultsForEntity:@"HOPMessageRecord" withPredicateString:[NSString stringWithFormat:@"(session.sessionID MATCHES '%@' AND outMessageStatus MATCHES '%@' AND showStatus = YES)", [conversation getID], [HOPConversationThread stringForMessageDeliveryState: messageDeliveryStat]] orderDescriptors:sortDescriptors];
     
     if ([results count] > 1)
     {
@@ -1292,6 +1326,7 @@ using namespace openpeer::core;
         HOPParticipants* temp = [self getParticiapantsForListOfContacts:participants];
         event = (HOPConversationEvent*)[self createObjectForEntity:@"HOPConversationEvent"];
         
+        event.eventID = [HOPUtility getGUIDstring];
         event.time = [NSDate date];
         event.eventType = eventType;
         event.session = conversationRecord;
@@ -1388,6 +1423,26 @@ using namespace openpeer::core;
     
     
     return ret;
+}
+
+- (NSFetchRequest*) getMessagesFetchRequestForConversation:(HOPConversation*) conversation sortAscending:(BOOL) ascending
+{
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPMessageRecord" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];
+    [fetchRequest setEntity:entity];
+    
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(visible == YES AND conversationEvent.participants.cbcID MATCHES '%@' AND conversationEvent.session.homeUser.stableId MATCHES '%@')",conversation.lastEvent.participants.cbcID,[self getLastLoggedInUser].stableId]];
+    
+    [fetchRequest setPredicate:predicate];
+    
+    [fetchRequest setFetchBatchSize:20];
+    
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"date" ascending:ascending];
+    NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+    
+    [fetchRequest setSortDescriptors:sortDescriptors];
+    
+    return fetchRequest;
 }
 
 - (NSFetchRequest*) getMessagesFetchRequestForParticipants:(HOPParticipants*) participants sortAscending:(BOOL) ascending

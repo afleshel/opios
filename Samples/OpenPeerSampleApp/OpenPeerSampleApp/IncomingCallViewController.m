@@ -32,7 +32,7 @@
 #import "IncomingCallViewController.h"
 #import "SessionManager.h"
 #import "SoundsManager.h"
-#import "Session.h"
+#import <OpenPeerSDK/HOPConversation.h>
 
 #import <OpenPeerSDK/HOPCall.h>
 #import <OpenPeerSDK/HOPRolodexContact+External.h>
@@ -68,24 +68,24 @@
     return self;
 }
 
-- (id)initWithSession:(Session*) inSession
+- (id)initWithConversation:(HOPConversation*) inConversation
 {
     self = [self initWithNibName:@"IncomingCallView_iPhone" bundle:nil];
     if (self)
     {
-        self.session = inSession;
+        self.conversation = inConversation;
     }
     return self;
 }
 
 -(IBAction)acceptCall:(id)sender
 {
-    [[SessionManager sharedSessionManager] answerCallForSession:self.session];
+    [[SessionManager sharedSessionManager] answerCallForConversation:self.conversation];
 }
 
 -(IBAction)declineCall:(id)sender
 {
-    [[SessionManager sharedSessionManager] endCallForSession:self.session];
+    [[SessionManager sharedSessionManager] endCallForConversation:self.conversation];
 }
 
 - (IBAction)toggleSilent:(id)sender 
@@ -109,13 +109,11 @@
 {
     [super viewDidLoad];
 
-    //HOPRolodexContact* rolodexContact = [self.session.participantsArray objectAtIndex:0];
-    HOPRolodexContact* contact = [self.session.lastConversationEvent getContacts] [0];
-    //HOPRolodexContact* rolodexContact = [contact getDefaultRolodexContact];
+    HOPRolodexContact* contact = [self.conversation getParticipants][0];
     
-    self.labelCallType.text = [self.session.currentCall hasVideo] ? NSLocalizedString(@"Video call from", nil) : NSLocalizedString(@"Audio call from", nil);
+    self.labelCallType.text = [self.conversation.activeCall hasVideo] ? NSLocalizedString(@"Video call from", nil) : NSLocalizedString(@"Audio call from", nil);
     
-    self.buttonAccept.imageView.image = [self.session.currentCall hasVideo] ? [UIImage imageNamed:@"video_indicator_white_big.png"] : [UIImage imageNamed:@"handset_accept_icon.png"];
+    self.buttonAccept.imageView.image = [self.conversation.activeCall hasVideo] ? [UIImage imageNamed:@"video_indicator_white_big.png"] : [UIImage imageNamed:@"handset_accept_icon.png"];
     
     self.labelCaller.text = contact.name;
     

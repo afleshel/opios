@@ -35,6 +35,7 @@
 #import "HOPConversationThread_Internal.h"
 #import "HOPModelManager.h"
 #import "HOPMessageRecord+External.h"
+#import "HOPConversation.h"
 
 #include <zsLib/types.h>
 #import <openpeer/core/ILogger.h>
@@ -46,6 +47,11 @@ OpenPeerConversationThreadDelegate::OpenPeerConversationThreadDelegate(id<HOPCon
     conversationThreadDelegate = inConversationThreadDelegate;
 }
 
+OpenPeerConversationThreadDelegate::OpenPeerConversationThreadDelegate(id<HOPConversationDelegate> inConversationDelegate)
+{
+    conversationDelegate = inConversationDelegate;
+}
+
 OpenPeerConversationThreadDelegate::~OpenPeerConversationThreadDelegate()
 {
     ZS_LOG_DEBUG(zsLib::String("SDK - OpenPeerConversationThreadDelegate destructor is called"));
@@ -54,6 +60,11 @@ OpenPeerConversationThreadDelegate::~OpenPeerConversationThreadDelegate()
 OpenPeerConversationThreadDelegatePtr OpenPeerConversationThreadDelegate::create(id<HOPConversationThreadDelegate> inConversationThreadDelegate)
 {
     return OpenPeerConversationThreadDelegatePtr (new OpenPeerConversationThreadDelegate(inConversationThreadDelegate));
+}
+
+OpenPeerConversationThreadDelegatePtr OpenPeerConversationThreadDelegate::create(id<HOPConversationDelegate> inConversationDelegate)
+{
+    return OpenPeerConversationThreadDelegatePtr (new OpenPeerConversationThreadDelegate(inConversationDelegate));
 }
 
 HOPConversationThread* OpenPeerConversationThreadDelegate::getOpenPeerConversationThread(IConversationThreadPtr conversationThread)
@@ -68,49 +79,124 @@ HOPConversationThread* OpenPeerConversationThreadDelegate::getOpenPeerConversati
     return hopConversationThread;
 }
 
+HOPConversation* OpenPeerConversationThreadDelegate::getOpenPeerConversation(IConversationThreadPtr conversationThread)
+{
+    HOPConversation * hopConversation = nil;
+    
+    NSString* threadId = [[NSString alloc] initWithUTF8String:conversationThread->getThreadID()];
+    if (threadId.length > 0)
+    {
+        hopConversation = [[OpenPeerStorageManager sharedStorageManager] getConversationForThreadID:threadId];
+    }
+    return hopConversation;
+}
+
+
+
 void OpenPeerConversationThreadDelegate::onConversationThreadNew(IConversationThreadPtr conversationThread)
 {
+
     HOPConversationThread * hopConversationThread = this->getOpenPeerConversationThread(conversationThread);
     
     if (!hopConversationThread)
     {
         hopConversationThread = [[HOPConversationThread alloc] initWithConversationThread:conversationThread];
-        [conversationThreadDelegate onConversationThreadNew:hopConversationThread];
+        
+        if (conversationThreadDelegate)
+        {
+            [conversationThreadDelegate onConversationThreadNew:hopConversationThread];
+        }
+        else if (conversationDelegate)
+        {
+            HOPConversation * hopConversation = this->getOpenPeerConversation(conversationThread);
+            
+            if (!hopConversation)
+            {
+                hopConversation = [[OpenPeerStorageManager sharedStorageManager] getConversationForCBCID:[HOPConversation getCBCIDForContacts:[hopConversationThread getContacts]]];
+                if (!hopConversation)
+                    hopConversation = [HOPConversation createConversationWithThread:hopConversationThread];
+                else
+                {
+                    hopConversation.thread = hopConversationThread;
+                    [[OpenPeerStorageManager sharedStorageManager] setConversation:hopConversation threadID:[hopConversationThread getThreadId]];
+                }
+                
+                if (conversationDelegate)
+                    [conversationDelegate onConversationNew:hopConversation];
+            }
+        }
     }
 }
 
 
 void OpenPeerConversationThreadDelegate::onConversationThreadContactsChanged(IConversationThreadPtr conversationThread)
 {
-    HOPConversationThread * hopConversationThread = this->getOpenPeerConversationThread(conversationThread);
-    
-    if (hopConversationThread)
-        [conversationThreadDelegate onConversationThreadContactsChanged:hopConversationThread];
+    if (conversationThreadDelegate)
+    {
+        HOPConversationThread * hopConversationThread = this->getOpenPeerConversationThread(conversationThread);
+        
+        if (hopConversationThread)
+            [conversationThreadDelegate onConversationThreadContactsChanged:hopConversationThread];
+    }
+    else if (conversationDelegate)
+    {
+        HOPConversation * hopConversation = this->getOpenPeerConversation(conversationThread);
+        
+        if (hopConversation)
+            [conversationDelegate onConversationContactsChanged:hopConversation];
+    }
 }
 
 void OpenPeerConversationThreadDelegate::onConversationThreadMessage(IConversationThreadPtr conversationThread,const char *messageID)
 {
-    HOPConversationThread * hopConversationThread = this->getOpenPeerConversationThread(conversationThread);
     NSString* messageId = [NSString stringWithUTF8String:messageID];
-    
-    if (hopConversationThread && [messageId length] > 0)
-        [conversationThreadDelegate onConversationThreadMessage:hopConversationThread messageID:messageId];
+    if ([messageId length] > 0)
+    {
+        if (conversationThreadDelegate)
+        {
+            HOPConversationThread * hopConversationThread = this->getOpenPeerConversationThread(conversationThread);
+            
+            if (hopConversationThread)
+                [conversationThreadDelegate onConversationThreadMessage:hopConversationThread messageID:messageId];
+        }
+        else if (conversationDelegate)
+        {
+            HOPConversation * hopConversation = this->getOpenPeerConversation(conversationThread);
+            
+            if (hopConversation)
+                [conversationDelegate onConversationMessage:hopConversation messageID:messageId];
+        }
+    }
 }
 
 void OpenPeerConversationThreadDelegate::onConversationThreadMessageDeliveryStateChanged(IConversationThreadPtr conversationThread,const char *messageID,MessageDeliveryStates state)
 {
-    HOPConversationThread * hopConversationThread = this->getOpenPeerConversationThread(conversationThread);
     NSString* messageId = [NSString stringWithUTF8String:messageID];
     
-    
-    if (hopConversationThread && [messageId length] > 0)
+    if ([messageId length] > 0)
     {
         HOPMessageRecord* messageRecord = [[HOPModelManager sharedModelManager] getMessageRecordByID:messageId];
-        messageRecord.outgoingMessageStatus = (HOPConversationThreadMessageDeliveryState)state;//[NSNumber numberWithInt:state];
-        messageRecord.showStatus = [NSNumber numberWithBool:YES];
-        [[HOPModelManager sharedModelManager] saveContext];
+        if (messageRecord)
+        {
+            messageRecord.outgoingMessageStatus = (HOPConversationThreadMessageDeliveryState)state;
+            messageRecord.showStatus = [NSNumber numberWithBool:YES];
+            [[HOPModelManager sharedModelManager] saveContext];
+        }
         
-        [conversationThreadDelegate onConversationThreadMessageDeliveryStateChanged:hopConversationThread messageID:messageId messageDeliveryStates:(HOPConversationThreadMessageDeliveryState)state];
+        if (conversationThreadDelegate)
+        {
+            HOPConversationThread * hopConversationThread = this->getOpenPeerConversationThread(conversationThread);
+
+            if (hopConversationThread)
+                [conversationThreadDelegate onConversationThreadMessageDeliveryStateChanged:hopConversationThread messageID:messageId messageDeliveryStates:(HOPConversationThreadMessageDeliveryState)state];
+        }
+        else if (conversationDelegate)
+        {
+            HOPConversation * hopConversation = this->getOpenPeerConversation(conversationThread);
+            
+            if (hopConversation)
+                [conversationDelegate onConversationMessageDeliveryStateChanged:hopConversation messageID:messageId messageDeliveryStates:(HOPConversationThreadMessageDeliveryState)state];
+        }
     }
 }
 
@@ -118,7 +204,7 @@ void OpenPeerConversationThreadDelegate::onConversationThreadPushMessage(IConver
 {
     HOPConversationThread * hopConversationThread = this->getOpenPeerConversationThread(conversationThread);
     NSString* messageId = [NSString stringWithUTF8String:messageID];
-    //HOPContact* hopContact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:[NSString stringWithUTF8String:contact->getPeerURI()]];
+    
     HOPRolodexContact* hopContact = [[HOPModelManager sharedModelManager] getRolodexContactByPeerURI:[NSString stringWithUTF8String:contact->getPeerURI()]];
     
     if (hopConversationThread && hopContact && [messageId length] > 0)
@@ -127,20 +213,46 @@ void OpenPeerConversationThreadDelegate::onConversationThreadPushMessage(IConver
 
 void OpenPeerConversationThreadDelegate::onConversationThreadContactConnectionStateChanged(IConversationThreadPtr conversationThread,IContactPtr contact,ContactConnectionStates state)
 {
-    HOPConversationThread * hopConversationThread = this->getOpenPeerConversationThread(conversationThread);
-    //HOPContact* hopContact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:[NSString stringWithUTF8String:contact->getPeerURI()]];
     HOPRolodexContact* hopContact = [[HOPModelManager sharedModelManager] getRolodexContactByPeerURI:[NSString stringWithUTF8String:contact->getPeerURI()]];
+    if (hopContact)
+    {
+        if (conversationThreadDelegate)
+        {
+            HOPConversationThread * hopConversationThread = this->getOpenPeerConversationThread(conversationThread);
+        
+            if (hopConversationThread)
+                [conversationThreadDelegate onConversationThreadContactConnectionStateChanged:hopConversationThread contact:hopContact contactConnectionState:(HOPConversationThreadContactConnectionState)state];
+        }
+        else if (conversationDelegate)
+        {
+            HOPConversation * hopConversation = this->getOpenPeerConversation(conversationThread);
+            
+            if (hopConversation)
+                [conversationDelegate onConversationContactConnectionStateChanged:hopConversation contact:hopContact contactConnectionState:(HOPConversationThreadContactConnectionState)state];
+        }
+    }
     
-    if (hopConversationThread && hopContact)
-        [conversationThreadDelegate onConversationThreadContactConnectionStateChanged:hopConversationThread contact:hopContact contactConnectionState:(HOPConversationThreadContactConnectionState)state];
 }
 
 void OpenPeerConversationThreadDelegate::onConversationThreadContactStatusChanged(IConversationThreadPtr conversationThread,IContactPtr contact)
 {
-  HOPConversationThread * hopConversationThread = this->getOpenPeerConversationThread(conversationThread);
-    //HOPContact* hopContact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:[NSString stringWithUTF8String:contact->getPeerURI()]];
     HOPRolodexContact* hopContact = [[HOPModelManager sharedModelManager] getRolodexContactByPeerURI:[NSString stringWithUTF8String:contact->getPeerURI()]];
     
-  if (hopConversationThread && hopContact)
-    [conversationThreadDelegate onConversationThreadContactStatusChanged:hopConversationThread contact:hopContact];
+    if (hopContact)
+    {
+        if (conversationThreadDelegate)
+        {
+            HOPConversationThread * hopConversationThread = this->getOpenPeerConversationThread(conversationThread);
+            
+            if (hopConversationThread)
+                [conversationThreadDelegate onConversationThreadContactStatusChanged:hopConversationThread contact:hopContact];
+        }
+        else if (conversationDelegate)
+        {
+            HOPConversation * hopConversation = this->getOpenPeerConversation(conversationThread);
+            
+            if (hopConversation)
+                [conversationDelegate onConversationContactStatusChanged:hopConversation contact:hopContact];
+        }
+    }
 }

@@ -44,7 +44,6 @@
 #import "HTTPDownloader.h"
 
 #import <OpenPeerSDK/HOPRolodexContact+External.h>
-//#import <OpenPeerSDK/HOPContact.h>
 #import <OpenPeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPAccount.h>
 #import <OpenPeerSDK/HOPMessage.h>

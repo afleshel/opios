@@ -31,7 +31,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Delegates.h"
-@class Session;
+@class HOPConversation;
 
 @class LoginViewController;
 @class WebLoginViewController;
@@ -83,12 +83,12 @@ typedef  enum
 - (void) showWebLoginView:(WebLoginViewController*) webLoginViewController;
 - (void) closeWebLoginView:(WebLoginViewController*) webLoginViewController;
 
-- (void) showSessionViewControllerForSession:(Session*) session forIncomingCall:(BOOL) incomingCall forIncomingMessage:(BOOL) incomingMessage;
+- (void) showSessionViewControllerForConversation:(HOPConversation*) conversation forIncomingCall:(BOOL) incomingCall forIncomingMessage:(BOOL) incomingMessage;
 - (void) removeSessionViewControllerForSession:(NSString*) sessionId;
 - (void) removeAllSessionViewControllers;
 - (void) updateSessionViewControllerId:(NSString*) oldSessionId newSesionId:(NSString*) newSesionId;
 
-- (void) showIncominCallForSession:(Session*) session;
+- (void) showIncominCallForConversation:(HOPConversation*) conversation;
 - (void) showNotification:(NSString*) message;
 
 - (void) removeSplashScreen;

@@ -32,7 +32,7 @@
 #import <Foundation/Foundation.h>
 #import <OpenpeerSDK/HOPProtocols.h>
 
-@class Session;
+//@class Session;
 @class HOPConversationThread;
 @class HOPMessage;
 @class HOPContact;
@@ -40,29 +40,31 @@
 @class HOPConversationRecord;
 @class HOPMessageRecord;
 @class HOPConversationEvent;
+@class HOPConversation;
 
 @interface SessionManager : NSObject
 
 @property (strong) NSMutableDictionary* sessionsDictionary;
-@property (assign) Session* lastEndedCallSession;
-@property (nonatomic, assign) Session* sessionWithFaceDetectionOn;
+@property (strong) NSMutableDictionary* conversationsDictionaryForContacts;
+@property (assign) HOPConversation* lastEndedCallConversation;
+@property (nonatomic, assign) HOPConversation* conversationWithFaceDetectionOn;
 
 + (id) sharedSessionManager;
 
-- (Session*) createSessionForContacts:(NSArray*) contacts;
-- (Session*) createSessionForConversationThread:(HOPConversationThread*) inConversationThread;
+//- (Session*) createSessionForContacts:(NSArray*) contacts;
+//- (Session*) createSessionForConversationThread:(HOPConversationThread*) inConversationThread;
 //- (Session*) createSessionInitiatedFromSession:(Session*) inSession forContactPeerURIs:(NSString*) peerURIs;
 //- (Session*) createRemoteSessionForContacts:(NSArray*) participants;
-- (Session*) proceedWithExistingSessionForContacts:(NSArray*) contacts newConversationThread:(HOPConversationThread*) inConversationThread;
-- (Session*) getSessionForContacts:(NSArray*) contacts;
-- (Session*) getSessionForSessionId:(NSString*) sessionId;
-- (Session*) getSessionForConversationEvent:(HOPConversationEvent*) event;
+//- (Session*) proceedWithExistingSessionForContacts:(NSArray*) contacts newConversationThread:(HOPConversationThread*) inConversationThread;
+- (HOPConversation*) getConversationForContacts:(NSArray*) contacts;
+//- (Session*) getSessionForSessionId:(NSString*) sessionId;
+//- (Session*) getSessionForConversationEvent:(HOPConversationEvent*) event;
 
-- (void)setValidSession:(Session *)inSession newSessionId:(NSString *)newSessionId oldSessionId:(NSString *)oldSessionId;
+//- (void)setValidConversation:(Session *)inSession newSessionId:(NSString *)newSessionId oldSessionId:(NSString *)oldSessionId;
 
-- (void) makeCallForSession:(Session*) inSession includeVideo:(BOOL) includeVideo isRedial:(BOOL) isRedial;
-- (void) answerCallForSession:(Session*) inSession;
-- (void) endCallForSession:(Session*) inSession;
+- (void) makeCallForConversation:(HOPConversation*) inConversation includeVideo:(BOOL) includeVideo isRedial:(BOOL) isRedial;
+- (void) answerCallForConversation:(HOPConversation*) inConversation;
+- (void) endCallForConversation:(HOPConversation*) inConversation;
 
 - (void) onCallPreparing:(HOPCall*) call;
 - (void) onCallIncoming:(HOPCall*) call;
@@ -70,7 +72,7 @@
 - (void) onCallOpened:(HOPCall*) call;
 - (void) onCallClosing:(HOPCall*) call;
 
-- (void) redialCallForSession:(Session*) inSession;
+- (void) redialCallForConversation:(HOPConversation*) inConversation;
 
 - (void) onCallEnded:(HOPCall*) call;
 
@@ -83,14 +85,15 @@
 - (void) stopAnyActiveCall;
 - (void) clearAllSessions;
 
-- (void) setLatestValidConversationThread:(HOPConversationThread*) inConversationThread;
+//- (void) setLatestValidConversation:(HOPConversation*) inConversation;
 
 - (int) totalNumberOfUnreadMessages;
 - (NSString* )getSystemMessage:(HOPMessageRecord *)messageRecord;
 - (NSString*) getLastTextMessageForConversationEvent:(HOPConversationEvent*) event;
+- (NSString*) getLastTextMessageForConversationRecord:(HOPConversationRecord*) record;
 
-- (void) addParticipants:(NSArray*) participants toSession:(Session*) session;
-- (void) removeParticipants:(NSArray*) participants toSession:(Session*) session;
+//- (void) addParticipants:(NSArray*) participants toConversation:(HOPConversation*) conversation;
+//- (void) removeParticipants:(NSArray*) participants toConversation:(HOPConversation*) conversation;
 
-- (void) updateParticipantsInConversationThread:(HOPConversationThread*) conversationThread;
+- (void) onParticipantsInConversationUpdate:(HOPConversation*) conversation;
 @end

@@ -41,12 +41,18 @@
 @class HOPIdentityLookup;
 @class HOPBackgroundingNotifier;
 @class HOPBackgroundingSubscription;
+@class HOPConversation;
+
 using namespace zsLib;
 
 @interface OpenPeerStorageManager : NSObject
 {
     NSMutableDictionary* _dictionaryCalls;
     NSMutableDictionary* _dictionaryConversationThreads;
+    NSMutableDictionary* _dictionaryConversations;
+    NSMutableDictionary* _dictionaryConversationsWithThreadID;
+    NSMutableDictionary* _dictionaryConversationsWithCBCID;
+    
     NSMutableDictionary* _dictionaryContacts;
 //    NSMutableDictionary* _dictionaryContactsWithUserId;
 //NSMutableDictionary* _dictionaryProvisioningAccount;
@@ -66,6 +72,14 @@ using namespace zsLib;
 - (HOPConversationThread*) getConversationThreadForId:(NSString*) threadId;
 - (NSArray*) getConversationThreads;
 - (void) setConversationThread:(HOPConversationThread*) conversationThread forId:(NSString*) threadId;
+
+- (HOPConversation*) getConversationForID:(NSString*) conversationID;
+- (HOPConversation*) getConversationForThreadID:(NSString*) threadID;
+- (HOPConversation*) getConversationForCBCID:(NSString*) cbcID;
+- (NSArray*) getConversations;
+- (void) setConversation:(HOPConversation*) conversation conversationID:(NSString*) conversationID;
+- (void) setConversation:(HOPConversation*) conversation threadID:(NSString*) threadID;
+- (void) setConversation:(HOPConversation*) conversation cbcID:(NSString*) cbcID;
 
 - (HOPContact*) getContactForPeerURI:(NSString*) peerURI;
 - (void) setContact:(HOPContact*) contact forPeerURI:(NSString*) contactId;

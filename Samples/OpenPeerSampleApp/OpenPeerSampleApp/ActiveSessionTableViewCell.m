@@ -33,9 +33,11 @@
 #import "UIBadgeView.h"
 #import <OpenPeerSDK/HOPConversationEvent+External.h>
 #import <OpenPeerSDK/HOPAvatar.h>
+#import <OpenPeerSDK/HOPConversationRecord+External.h>
+#import <OpenPeerSDK/HOPConversation.h>
 
 #import "ImageManager.h"
-#import "Session.h"
+//#import "Session.h"
 #import "SessionManager.h"
 #import "Utility.h"
 
@@ -49,7 +51,7 @@
 @property (nonatomic, weak) IBOutlet UILabel *labelLastMessage;
 @property (nonatomic, weak) IBOutlet UIView *messageView;
 
-@property (nonatomic, weak) HOPConversationEvent* event;
+@property (nonatomic, weak) HOPConversationRecord* conversationRecord;
 
 @end
 @implementation ActiveSessionTableViewCell
@@ -68,23 +70,25 @@
 
 - (void)setLastMessage
 {
-    self.labelLastMessage.text = [[SessionManager sharedSessionManager] getLastTextMessageForConversationEvent:self.event];
+    self.labelLastMessage.text = [[SessionManager sharedSessionManager] getLastTextMessageForConversationRecord:self.conversationRecord];
     
     self.labelLastMessage.hidden = [self.labelLastMessage.text length] == 0;
 }
 
-- (void) setConversationEvent:(HOPConversationEvent *)event
+- (void) setRecord:(HOPConversationRecord *)record
 {
     if (self.displayImage)
         [self.displayImage stopAnimating];
     
-    self.event = event;
-    self.displayName.text = self.event.name;
+    _conversationRecord = record;
+    //self.event = event;
+    self.displayName.text = record.name;
     
-    if ([event getContacts].count > 1)
+    NSArray* participants = [record getContacts];
+    if (participants.count > 1)
     {
         NSMutableArray* avatars = [[NSMutableArray alloc] init];
-        for (HOPRolodexContact* contact in [event getContacts])
+        for (HOPRolodexContact* contact in participants)
         {
             UIImage* img = [[ImageManager sharedImageManager] getAvatarImageForRolodexContact:contact];
             if (img)
@@ -95,21 +99,25 @@
         if (avatarsImage)
             self.displayImage.image = avatarsImage;
     }
-    else
+    else if (participants.count == 1)
     {
-        HOPRolodexContact* contact = [[event getContacts] objectAtIndex:0];
+        HOPRolodexContact* contact = [participants objectAtIndex:0];
         UIImage* img = [[ImageManager sharedImageManager] getAvatarImageForRolodexContact:contact];
         if (img)
             self.displayImage.image = img;
     }
+    else
+        return;
+    
     self.displayImage.layer.cornerRadius = 5.0;
     self.displayImage.layer.borderWidth = 1.0;
     self.displayImage.layer.borderColor = [[UIColor whiteColor] CGColor];
     
-    Session* session = [[SessionManager sharedSessionManager] getSessionForConversationEvent:self.event];
-    if ([session.unreadMessageArray count] > 0)
+    //Session* session = [[SessionManager sharedSessionManager] getSessionForConversationEvent:self.event];
+    HOPConversation* conversation = [record getConversation];
+    if (conversation.numberOfUnreadMessages > 0)
     {
-        NSString* numberToDisplay = [NSString stringWithFormat:@"%d",[session.unreadMessageArray count]];
+        NSString* numberToDisplay = [NSString stringWithFormat:@"%d",conversation.numberOfUnreadMessages];
         self.badgeView.hidden = NO;
         self.badgeView.badgeText = numberToDisplay;
     }
@@ -118,7 +126,7 @@
         self.badgeView.hidden = YES;
     }
     
-    self.labelCreationDate.text = [Utility stringFromDate:self.event.time];
+    self.labelCreationDate.text = [Utility stringFromDate:self.conversationRecord.lastActivity];
     [self setLastMessage];
 }
 
@@ -162,7 +170,7 @@
 
 - (void) updateActivity
 {
-    self.labelCreationDate.text = [Utility stringFromDate:self.event.time];
+    self.labelCreationDate.text = [Utility stringFromDate:self.conversationRecord.lastActivity];
     [self setLastMessage];
 }
 @end

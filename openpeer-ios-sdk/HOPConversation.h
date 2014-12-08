@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2012, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -30,24 +30,53 @@
  */
 
 #import <Foundation/Foundation.h>
+#import "HOPTypes.h"
 
 @class HOPCall;
 @class HOPConversationThread;
+@class HOPMessage;
+@class HOPRolodexContact;
 @class HOPConversationRecord;
 @class HOPConversationEvent;
 
-@interface Session : NSObject
+@interface HOPConversation : NSObject
 
-@property (strong) NSMutableArray* participantsArray;
-@property (weak, nonatomic) HOPConversationThread* conversationThread;
-@property (weak, nonatomic) HOPConversationRecord* sessionRecord;
-@property (weak, nonatomic) HOPConversationEvent* lastConversationEvent;
-@property (strong) HOPCall* currentCall;
-@property (assign) BOOL isRedial;
-@property (strong) NSMutableArray* unreadMessageArray;
-@property (strong) NSMutableSet* setOfNotSentMessages;
+//MOVE TO INTERNAL
+@property (nonatomic, strong) HOPConversationThread* thread;
+@property (nonatomic, strong) HOPConversationRecord* record;
+@property (nonatomic, strong) HOPConversationEvent* lastEvent;
+
 @property (nonatomic, copy) NSString* title;
+@property (nonatomic, getter=getParticipants) NSArray* participants;
 
-- (id) initWithContact:(HOPRolodexContact*) inContact conversationThread:(HOPConversationThread*) inConverationThread;
-- (id) initWithContacts:(NSArray*) inContacts conversationThread:(HOPConversationThread*) inConverationThread;
+@property (strong) NSMutableSet* setOfNotSentMessages;
+@property (assign) NSUInteger numberOfUnreadMessages;
+@property (nonatomic, strong) HOPCall* activeCall;
+@property (assign) BOOL redialCall;
+
++ (HOPConversation*) createConversation;
++ (HOPConversation*) createConversationWithParticipants:(NSArray*) participants title:(NSString*) inTitle;
++ (HOPConversation*) createConversationWithThread:(HOPConversationThread*) inConversationThread;
++ (HOPConversation*) createConversationForRecord:(HOPConversationRecord*) inConversationRecord;
+
++ (NSString*) getCBCIDForContacts:(NSArray*) contacts;
+- (void) addParticipants:(NSArray*) inParticipants;
+- (void) removeParticipants:(NSArray*) inParticipants;
+
+- (void) setComposingStatus:(HOPConversationThreadContactStatus) composingStatus;
+
+- (HOPConversationThreadContactStatus) getContactStatus:(HOPRolodexContact*) rolodexCoontact;
+- (HOPMessage*) getMessageForID: (NSString*) messageID;
+- (void) markAllMessagesRead;
+
+- (void) refresh;
+- (void) clear;
+
+- (void) sendMessage: (HOPMessage*) message;
+- (NSString*) getID;
+- (NSString*) getDefaultTitle;
+
+- (NSArray*) getParticipants;
+
+
 @end

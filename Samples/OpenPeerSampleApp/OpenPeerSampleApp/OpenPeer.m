@@ -50,7 +50,7 @@
 //Delegates
 #import "StackDelegate.h"
 #import "MediaEngineDelegate.h"
-#import "ConversationThreadDelegate.h"
+#import "ConversationDelegate.h"
 #import "CallDelegate.h"
 #import "AccountDelegate.h"
 #import "IdentityDelegate.h"
@@ -227,7 +227,7 @@
     
     self.stackDelegate = nil;
     self.mediaEngineDelegate = nil;
-    self.conversationThreadDelegate = nil;
+    self.conversationDelegate = nil;
     self.callDelegate = nil;
     self.accountDelegate = nil;
     self.identityDelegate = nil;
@@ -241,7 +241,7 @@
 {
     self.stackDelegate = [[StackDelegate alloc] init];
     self.mediaEngineDelegate = [[MediaEngineDelegate alloc] init];
-    self.conversationThreadDelegate = [[ConversationThreadDelegate alloc] init];
+    self.conversationDelegate = [[ConversationDelegate alloc] init];
     self.callDelegate = [[CallDelegate alloc] init];
     self.accountDelegate = [[AccountDelegate alloc] init];
     self.identityDelegate = [[IdentityDelegate alloc] init];

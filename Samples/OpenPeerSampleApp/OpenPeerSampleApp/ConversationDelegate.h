@@ -29,10 +29,9 @@
  
  */
 
-#import <UIKit/UIKit.h>
-@class HOPConversation;
+#import <Foundation/Foundation.h>
+#import <OpenpeerSDK/HOPProtocols.h>
 
-@interface AddParticipantsViewController : UIViewController
+@interface ConversationDelegate : NSObject<HOPConversationDelegate>
 
-- (id) initWithConversation:(HOPConversation*) inConversation addingContacts:(BOOL) addingContacts;
 @end

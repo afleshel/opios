@@ -32,26 +32,27 @@
 #import "AddParticipantsViewController.h"
 #import "ContactsViewController.h"
 #import "SessionManager.h"
-#import "Session.h"
+//#import "Session.h"
 #import <OpenPeerSDK/HOPConversationEvent+External.h>
+#import <OpenPeerSDK/HOPConversation.h>
 
 @interface AddParticipantsViewController ()
 
 @property (nonatomic, strong) ContactsViewController *contactsViewController;
 @property (nonatomic, strong) UIBarButtonItem* menuRightbarButton;
-@property (nonatomic, weak) Session* session;
+@property (nonatomic, weak) HOPConversation* conversation;
 @property (nonatomic) BOOL isAdding;
 - (void) actionDoneWithSelection;
 @end
 
 @implementation AddParticipantsViewController
 
-- (id) initWithSession:(Session*) inSession addingContacts:(BOOL) addingContacts
+- (id) initWithConversation:(HOPConversation*) inConversation addingContacts:(BOOL) addingContacts
 {
     self = [self init];
     if (self)
     {
-        self.session = inSession;
+        self.conversation = inConversation;
         self.isAdding = addingContacts;
     }
     return self;
@@ -77,7 +78,7 @@
     [super viewWillAppear:animated];
     
     ContactsTableModes mode = self.isAdding ? CONTACTS_TABLE_MODE_ADDING : CONTACTS_TABLE_MODE_REMOVING;
-    self.contactsViewController = [[ContactsViewController alloc] initInMode:mode allowMultipleSelection:YES filterContacts:[self.session.lastConversationEvent getContacts]];
+    self.contactsViewController = [[ContactsViewController alloc] initInMode:mode allowMultipleSelection:YES filterContacts:self.conversation.participants];
     self.contactsViewController.view.frame = self.view.bounds;
     [self.view addSubview:self.contactsViewController.view];
 }
@@ -92,10 +93,10 @@
 {
     if (self.contactsViewController.getSelectedContacts.count > 0)
     {
-        if ( self.isAdding)
-            [[SessionManager sharedSessionManager] addParticipants:self.contactsViewController.getSelectedContacts toSession:self.session];
+        if (self.isAdding)
+            [self.conversation addParticipants:self.contactsViewController.getSelectedContacts];
         else
-            [[SessionManager sharedSessionManager] removeParticipants:self.contactsViewController.getSelectedContacts toSession:self.session];
+            [self.conversation removeParticipants:self.contactsViewController.getSelectedContacts];
     }
     
     [self.navigationController popViewControllerAnimated:YES];

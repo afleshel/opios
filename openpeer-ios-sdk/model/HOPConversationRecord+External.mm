@@ -32,6 +32,8 @@
 #import "HOPConversationRecord+External.h"
 #import "HOPUtility.h"
 #import "HOPRolodexContact.h"
+#import "HOPOpenPeerContact+External.h"
+#import "OpenPeerStorageManager.h"
 
 //
 //@interface HOPConversationRecord ()
@@ -70,5 +72,23 @@
         if (contact.openPeerContact)
             [self addParticipantsObject:contact.openPeerContact];
     }
+}
+
+- (HOPConversation*) getConversation
+{
+    if (self.sessionID.length > 0)
+        return [[OpenPeerStorageManager sharedStorageManager] getConversationForID:self.sessionID];
+    else
+        return nil;
+}
+
+- (NSArray*) getContacts
+{
+    NSMutableArray* ret = self.participants.count == 0 ? nil : [NSMutableArray new];
+    for (HOPOpenPeerContact* contact in self.participants)
+    {
+        [ret addObject:[contact getDefaultRolodexContact]];
+    }
+    return ret;
 }
 @end

@@ -323,4 +323,66 @@
  */
 - (void) onBackgroundingApplicationWillQuit:(HOPBackgroundingSubscription*) subscription;
 
+
+@end
+
+
+@class HOPConversation;
+/**
+ *  SDK uses methods in this protocol to notify application about conversation thread events.
+ */
+@protocol HOPConversationDelegate <NSObject>
+
+@required
+/**
+ *  Notifies the receiver that new conversation thread is created.
+ *
+ *  @param conversationThread Created conversation thread object.
+ */
+- (void) onConversationNew:(HOPConversation*) conversation;
+
+/**
+ *  Notifies the receiver about change in list of participants.
+ *
+ *  @param conversationThread Conversation thread object.
+ */
+- (void) onConversationContactsChanged:(HOPConversation*) conversation;
+/**
+ *  Notifies the receiver about conversation thread participant connection state.
+ *
+ *  @param conversationThread     Conversation thread object.
+ *  @param contact                Participant whose state in conversation thredad has changed.
+ *  @param contactConnectionState A new participant state
+ */
+- (void) onConversationContactConnectionStateChanged:(HOPConversation*) conversation contact:(HOPRolodexContact*) contact contactConnectionState:(HOPConversationThreadContactConnectionState) contactConnectionState;
+/**
+ *  Notifies the receiver about conversation thread participant status.
+ *
+ *  @param conversationThread     Conversation thread object.
+ *  @param contact                Participant whose status in conversation thredad has changed.
+ */
+- (void) onConversationContactStatusChanged:(HOPConversation*) conversation contact:(HOPRolodexContact*) contact;
+/**
+ *  Notifies the receiver about new message for conversation.
+ *
+ *  @param conversationThread Conversation thread object.
+ *  @param messageID          A message ID. This ID will be used for retrieving message from the conversation thread.
+ */
+- (void) onConversationMessage:(HOPConversation*) conversation messageID:(NSString*) messageID;
+/**
+ *  Notifies the receiver about change in message delivery state.
+ *
+ *  @param conversationThread    Conversation thread object.
+ *  @param messageID             An ID of message whose delivery state has changed.
+ *  @param messageDeliveryStates A new message delivery state.
+ */
+- (void) onConversationMessageDeliveryStateChanged:(HOPConversation*) conversation messageID:(NSString*) messageID messageDeliveryStates:(HOPConversationThreadMessageDeliveryState) messageDeliveryStates;
+/**
+ *  Notifies the receiver that message is not delivered and it is good time to send a push notification if application supports it.
+ *
+ *  @param conversationThread Conversation thread object.
+ *  @param messageID          An ID of undelivered message.
+ *  @param contact            A message recepient.
+ */
+- (void) onConversationPushMessage:(HOPConversation*) conversation messageID:(NSString*) messageID contact:(HOPRolodexContact*) contact;
 @end

@@ -32,7 +32,7 @@
 #import <Foundation/Foundation.h>
 
 @class HOPMessage;
-@class Session;
+@class HOPConversation;
 @class HOPMessageRecord;
 
 typedef enum
@@ -55,14 +55,14 @@ typedef enum
 
 - (HOPMessage*) createSystemMessageWithType:(HOPSystemMessageType) type messageType:(int) messageType reasonCode:(int)reasonCode andRecipient:(HOPRolodexContact*) contact;
 
-- (void) sendCallSystemMessage:(HOPCallSystemMessageType) callSystemMessage reasonCode:(int) reasonCode session:(Session*) inSession;
+- (void) sendCallSystemMessage:(HOPCallSystemMessageType) callSystemMessage reasonCode:(int) reasonCode forConversation:(HOPConversation*) conversation;
 
-- (void) parseSystemMessage:(HOPMessage*) inMessage forSession:(Session*) inSession;
-- (void) sendMessage:(NSString*) message replacesMessageID:(NSString*) replacesMessageID forSession:(Session*) inSession;
-- (void) onMessageReceived:(HOPMessage*) message forSessionId:(NSString*) sessionId;
+- (void) parseSystemMessage:(HOPMessage*) inMessage forConversation:(HOPConversation*) conversation;
+- (void) sendMessage:(NSString*) message replacesMessageID:(NSString*) replacesMessageID forConversation:(HOPConversation*) conversation;
+- (void) onMessageReceived:(HOPMessage*) message forConversation:(HOPConversation*) conversation;
 
 - (SystemMessageTypes) getTypeForSystemMessage:(HOPMessage*) message;
 
 - (void) resendMessages;
-- (void) resendMessage:(HOPMessageRecord*) message forSession:(Session*) inSession;
+- (void) resendMessage:(HOPMessageRecord*) message forConversation:(HOPConversation*) conversation;
 @end

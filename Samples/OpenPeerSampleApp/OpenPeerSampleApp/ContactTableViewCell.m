@@ -34,12 +34,12 @@
 #import <OpenpeerSDK/HOPAssociatedIdentity.h>
 #import <OpenpeerSDK/HOPIdentityProvider.h>
 #import <OpenpeerSDK/HOPAvatar+External.h>
-//#import <OpenpeerSDK/HOPOpenPeerContact.h>
+#import <OpenpeerSDK/HOPConversation.h>
 #import <OpenpeerSDK/HOPModelManager.h>
 #import "AppConsts.h"
 #import "ImageManager.h"
 #import "SessionManager.h"
-#import "Session.h"
+//#import "Session.h"
 #import "UIBadgeView.h"
 
 
@@ -113,10 +113,10 @@
     
     if (openPeerContact)
     {
-        Session* session = [[SessionManager sharedSessionManager] getSessionForContacts:@[openPeerContact]];
-        if ([session.unreadMessageArray count] > 0)
+        HOPConversation* conversation = [[SessionManager sharedSessionManager] getConversationForContacts:@[openPeerContact]];
+        if (conversation.numberOfUnreadMessages > 0)
         {
-            NSString* numberToDisplay = [NSString stringWithFormat:@"%d",[session.unreadMessageArray count]];
+            NSString* numberToDisplay = [NSString stringWithFormat:@"%d",conversation.numberOfUnreadMessages];
             self.badgeView.hidden = NO;
             self.badgeView.badgeText = numberToDisplay;
         }

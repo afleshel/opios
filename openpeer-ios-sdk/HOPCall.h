@@ -33,7 +33,7 @@
 #import "HOPTypes.h"
 
 @class HOPConversationThread;
-//@class HOPContact;
+@class HOPConversation;
 @class HOPRolodexContact;
 
 
@@ -48,6 +48,7 @@
  */
 + (id) placeCall:(HOPConversationThread*) conversationThread includeAudio:(BOOL) includeAudio includeVideo:(BOOL) includeVideo;
 
++ (id) placeCallForConversation:(HOPConversation*) conversation includeAudio:(BOOL) includeAudio includeVideo:(BOOL) includeVideo;
 /**
  *  This init method is not available. You need to use class method placeCall:toContact:includeAudio:includeVideo.
  *
@@ -95,6 +96,8 @@
  @return Pointer to the conversation thread object
  */
 - (HOPConversationThread*) getConversationThread;
+
+- (HOPConversation*) getConversation;
 
 /**
  Returns caller contact.

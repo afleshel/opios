@@ -56,7 +56,8 @@ using namespace openpeer::core;
 @property (nonatomic, strong, getter=getOpenPeerUser) HOPOpenPeerAccount* openPeerAccount;
 
 - (id) initSingleton;
-- (void) setLocalDelegates:(id<HOPAccountDelegate>) inAccountDelegate conversationThread:(id<HOPConversationThreadDelegate>) inConversationThread callDelegate:(id<HOPCallDelegate>) inCallDelegate;
+- (void)setLocalDelegates:(id<HOPAccountDelegate>)inAccountDelegate conversationThreadDelegate:(id<HOPConversationThreadDelegate>)inConversationThread callDelegate:(id<HOPCallDelegate>)inCallDelegate;
+- (void)setLocalDelegates:(id<HOPAccountDelegate>)inAccountDelegate conversationDelegate:(id<HOPConversationDelegate>)inConversationDelegate callDelegate:(id<HOPCallDelegate>)inCallDelegate;
 
 - (IAccountPtr) getAccountPtr;
 
