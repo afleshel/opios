@@ -212,15 +212,15 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    HOPConversationEvent* record = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    HOPConversationRecord* record = [self.fetchedResultsController objectAtIndexPath:indexPath];
     if (record)
     {
-        Session* session = [[SessionManager sharedSessionManager] getSessionForConversationEvent:record];
+        Session* session = [[SessionManager sharedSessionManager] getSessionForContacts:record.participants.allObjects];
         if (!session)
         {
-            NSMutableArray* listOfRolodexContacts = [[NSMutableArray alloc] init];
+            // NSMutableArray* listOfRolodexContacts = [[NSMutableArray alloc] init];
 
-            if([record.participants.participants count] > 0)
+            if([record.participants count] > 0)
             {
                 session = [[SessionManager sharedSessionManager] createSessionForContacts:[record getContacts]];
             }
@@ -271,16 +271,16 @@
     [NSFetchedResultsController deleteCacheWithName:@"SessionRecord"];
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPConversationEvent" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPConversationRecord" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];
     
     [fetchRequest setEntity:entity];
 
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(showEvent = YES AND session.homeUser.stableId MATCHES '%@')",[[HOPAccount sharedAccount] getStableID]]];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(homeUser.stableId MATCHES '%@')",[[HOPAccount sharedAccount] getStableID]]];
     [fetchRequest setPredicate:predicate];
     
     [fetchRequest setFetchBatchSize:20];
     //
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"time" ascending:NO];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"lastActivity" ascending:NO];
     NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
     
     [fetchRequest setSortDescriptors:sortDescriptors];

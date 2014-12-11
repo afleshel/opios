@@ -36,7 +36,7 @@
 #import "HOPModelManager_Internal.h"
 #import "HOPIdentityContact_Internal.h"
 
-@implementation HOPOpenPeerContact
+@implementation HOPOpenPeerContact()
 
 @dynamic stableID;
 @dynamic apnsData;
@@ -44,6 +44,8 @@
 @dynamic publicPeerFile;
 @dynamic sessionRecords;
 @dynamic participants;
+@dynamic rolodexContacts;
+@dynamic account;
 
 + (id) createOpenPeerContacFromCoreContact:(IContactPtr) contactPtr conversationThread:(IConversationThreadPtr) conversationThreadPtr
 {

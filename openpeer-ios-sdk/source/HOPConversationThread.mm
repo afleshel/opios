@@ -42,11 +42,10 @@
 #import "HOPMessage.h"
 #import "HOPModelManager_Internal.h"
 #import "HOPIdentityContact_Internal.h"
-#import "HOPOpenPeerContact.h"
+#import "HOPOpenPeerContact+External.h"
 #import "HOPRolodexContact+External.h"
 #import "HOPAssociatedIdentity.h"
 #import "HOPIdentityProvider.h"
-#import "HOPOpenPeerContact_Internal.h"
 #import "OpenPeerStorageManager.h"
 #import "OpenPeerUtility.h"
 #import "HOPIdentity_Internal.h"
@@ -192,7 +191,7 @@ using namespace openpeer::core;
                 
                 if (!openPeerContact)
                 {
-                    openPeerContact = [HOPOpenPeerContact createOpenPeerContacFromCoreContact:contactPtr conversationThread:conversationThreadPtr];
+                    openPeerContact = [HOPConversationThread createOpenPeerContacFromCoreContact:contactPtr conversationThread:conversationThreadPtr];
                 }
                 
                 //TODO_S: Remove once HOPMEssage is switched to HOPOpenPeerContact
@@ -624,5 +623,45 @@ using namespace openpeer::core;
         return String("HOPConversationThread [") + string(conversationThreadPtr->getID()) + "] " + [message UTF8String];
     else
         return String("HOPConversationThread: ") + [message UTF8String];
+}
+
++ (id) createOpenPeerContacFromCoreContact:(IContactPtr) contactPtr conversationThread:(IConversationThreadPtr) conversationThreadPtr
+{
+    HOPOpenPeerContact* ret = nil;
+    
+    IdentityContactListPtr identityContactListPtr = conversationThreadPtr->getIdentityContactList(contactPtr);
+    
+    for (IdentityContactList::iterator identityContactInfo = identityContactListPtr->begin(); identityContactInfo != identityContactListPtr->end(); ++identityContactInfo)
+    {
+        IdentityContact identityContact = *identityContactInfo;
+        if (identityContact.hasData())
+        {
+            NSString* identityURI = [NSString stringWithUTF8String:identityContact.mIdentityURI];
+            HOPIdentityContact* hopIdentityContact = [[HOPModelManager sharedModelManager] getIdentityContactWithIdentityURI:identityURI];
+            
+            if (!hopIdentityContact)
+            {
+                NSManagedObject* managedObject = [[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPIdentityContact"];
+                if (managedObject && [managedObject isKindOfClass:[HOPIdentityContact class]])
+                {
+                    hopIdentityContact = (HOPIdentityContact*) managedObject;
+                }
+            }
+            
+            if (hopIdentityContact)
+            {
+                [hopIdentityContact updateWithIdentityContact:identityContact];
+                
+                ret = [[HOPModelManager sharedModelManager]  getOpenPeerContactForIdentityContact:identityContact];
+                if (ret)
+                    [ret addIdentityContactsObject:hopIdentityContact];
+                else
+                    ret = [[HOPModelManager sharedModelManager] createOpenPeerContactForIdentityContact:identityContact];
+            }
+            
+        }
+    }
+    
+    return ret;
 }
 @end

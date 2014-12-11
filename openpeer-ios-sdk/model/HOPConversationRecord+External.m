@@ -32,6 +32,7 @@
 #import "HOPConversationRecord+External.h"
 #import "HOPUtility.h"
 #import "HOPRolodexContact.h"
+#import "HOPOpenPeerContact+External.h"
 
 //
 //@interface HOPConversationRecord ()
@@ -70,5 +71,21 @@
         if (contact.openPeerContact)
             [self addParticipantsObject:contact.openPeerContact];
     }
+}
+
+-(NSArray*) getContacts
+{
+    NSMutableArray* ret = nil;
+    if (self.participants && self.participants.count > 0)
+    {
+        ret = [[NSMutableArray alloc] init];
+        for (HOPOpenPeerContact* contact in self.participants)
+        {
+            HOPRolodexContact* rolodexContact = [contact getDefaultRolodexContact];
+            if (rolodexContact)
+                [ret addObject:rolodexContact];
+        }
+    }
+    return ret;
 }
 @end

@@ -38,8 +38,8 @@
 #import "HOPAssociatedIdentity.h"
 #import "HOPIdentityContact.h"
 #import "HOPRolodexContact.h"
-#import "HOPOpenPeerContact_Internal.h"
 #import "HOPPublicPeerFile.h"
+#import "HOPOpenPeerContact.h"
 
 #import <openpeer/core/IAccount.h>
 #import <openpeer/core/IContact.h>

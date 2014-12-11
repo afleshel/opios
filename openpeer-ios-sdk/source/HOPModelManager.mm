@@ -877,10 +877,18 @@ using namespace openpeer::core;
     {
         if ([self getMessageRecordByID:messageId] == nil)
         {
-            NSArray* sessionRecords = [self getConversationRecordsForThreadID:conversationThreadID];
-            if ([sessionRecords count] > 0)
+            HOPConversationRecord* sessionRecord = conversationEvent.session;
+            
+            if (!sessionRecord)
             {
-                HOPConversationRecord* sessionRecord = [sessionRecords objectAtIndex:0];//[self getSessionRecordByID:sessionRecordId];
+                NSArray* sessionRecords = [self getConversationRecordsForThreadID:conversationThreadID];
+                if ([sessionRecords count] > 0)
+                    sessionRecord = [sessionRecords objectAtIndex:0];
+            }
+            
+            if (sessionRecord)
+            {
+                //HOPConversationRecord* sessionRecord = [sessionRecords objectAtIndex:0];//[self getSessionRecordByID:sessionRecordId];
                 messageRecord = (HOPMessageRecord*)[self createObjectForEntity:@"HOPMessageRecord"];
                 messageRecord.text = messageText;
                 messageRecord.date = date;
@@ -911,10 +919,18 @@ using namespace openpeer::core;
     {
         if ([self getMessageRecordByID:messageId] == nil)
         {
-            NSArray* sessionRecords = [self getConversationRecordsForThreadID:conversationThreadID];
-            if ([sessionRecords count] > 0)
+            HOPConversationRecord* sessionRecord = conversationEvent.session;
+            
+            if (!sessionRecord)
             {
-                HOPConversationRecord* sessionRecord = [sessionRecords objectAtIndex:0];//[self getSessionRecordByID:sessionRecordId];
+                NSArray* sessionRecords = [self getConversationRecordsForThreadID:conversationThreadID];
+                if ([sessionRecords count] > 0)
+                    sessionRecord = [sessionRecords objectAtIndex:0];
+            }
+            
+            if (sessionRecord)
+            {
+                //HOPConversationRecord* sessionRecord = [sessionRecords objectAtIndex:0];//[self getSessionRecordByID:sessionRecordId];
                 messageRecord = (HOPMessageRecord*)[self createObjectForEntity:@"HOPMessageRecord"];
                 messageRecord.text = messageText;
                 messageRecord.date = date;
@@ -979,14 +995,12 @@ using namespace openpeer::core;
     {
         NSArray* results = nil;
         
+        NSString* cbcID = [HOPModelManager getCBCIDForContacts:[conversationThread getContacts]];
+        
         NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"lastActivity" ascending:NO];
         
-        results = [self getResultsForEntity:@"HOPConversationRecord" withPredicateString:[NSString stringWithFormat:@"homeUser.stableId MATCHES '%@'",[self getLastLoggedInUser].stableId] orderDescriptors:@[sortDescriptor]];
+        results = [self getResultsForEntity:@"HOPConversationRecord" withPredicateString:[NSString stringWithFormat:@"homeUser.stableId MATCHES '%@' AND ANY events.participants.cbcID MATCHES '%@'",[self getLastLoggedInUser].stableId,cbcID] orderDescriptors:@[sortDescriptor]];
         
-        NSPredicate* predicate = [NSPredicate predicateWithFormat:@"ALL participants IN %@", [conversationThread getContacts]];
-        
-        results = [results filteredArrayUsingPredicate:predicate];
-
         if ([results count] > 0)
             ret = [results objectAtIndex:0];
     }
@@ -1330,16 +1344,16 @@ using namespace openpeer::core;
 - (HOPParticipants*) addParticiapantsForListOfContacts:(NSArray*) contacts
 {
     HOPParticipants* ret = [self createObjectForEntity:@"HOPParticipants"];
-    NSString* cbcID = @"";
-    for (HOPOpenPeerContact* contact in contacts)
-    {
-        if (cbcID.length == 0)
-            cbcID = contact.stableID;
-        else
-            cbcID = [cbcID stringByAppendingString:[NSString stringWithFormat:@"_%@",contact.stableID]];
-        
-        [ret addParticipantsObject:contact];
-    }
+    NSString* cbcID = [HOPModelManager getCBCIDForContacts:contacts];//@"";
+//    for (HOPOpenPeerContact* contact in contacts)
+//    {
+//        if (cbcID.length == 0)
+//            cbcID = contact.stableID;
+//        else
+//            cbcID = [cbcID stringByAppendingString:[NSString stringWithFormat:@"_%@",contact.stableID]];
+//        
+//        [ret addParticipantsObject:contact];
+//    }
     ret.cbcID = cbcID;
     
     [self saveContext];
@@ -1463,6 +1477,31 @@ using namespace openpeer::core;
         ret.peerFile = peerFile;
     }
     [self saveContext];
+    return ret;
+}
+
++ (NSString*) getCBCIDForContacts:(NSArray*) contacts
+{
+    NSString* ret = @"";
+    NSMutableArray* array = [NSMutableArray new];
+    for (id contact in contacts)
+    {
+        if ([[contact class] isSubclassOfClass:[HOPRolodexContact class]])
+            [array addObject:[((HOPRolodexContact*)contact) getStableID]];
+        else if ([[contact class] isSubclassOfClass:[HOPOpenPeerContact class]])
+            [array addObject:((HOPOpenPeerContact*)contact).stableID];
+    }
+    
+    NSArray* sortedArray = [array sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+    
+    for (NSString* stableID in sortedArray)
+    {
+        if (ret.length == 0)
+            ret = stableID;
+        else
+            ret = [ret stringByAppendingString:[NSString stringWithFormat:@"_%@",stableID]];
+    }
+    
     return ret;
 }
 @end

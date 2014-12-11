@@ -459,4 +459,6 @@
  @return HOPPublicPeerFile object
  */
 - (HOPPublicPeerFile*) createPublicPeerFileForPeerURI:(NSString*) peerURI peerFile:(NSString*) peerFile;
+
++ (NSString*) getCBCIDForContacts:(NSArray*) contacts;
 @end

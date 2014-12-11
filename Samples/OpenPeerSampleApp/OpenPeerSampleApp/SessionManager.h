@@ -44,6 +44,7 @@
 @interface SessionManager : NSObject
 
 @property (strong) NSMutableDictionary* sessionsDictionary;
+@property (strong) NSMutableDictionary* sessionsDictionaryWithCBCID;
 @property (assign) Session* lastEndedCallSession;
 @property (nonatomic, assign) Session* sessionWithFaceDetectionOn;
 
@@ -88,7 +89,7 @@
 
 - (int) totalNumberOfUnreadMessages;
 - (NSString* )getSystemMessage:(HOPMessageRecord *)messageRecord;
-- (NSString*) getLastTextMessageForConversationEvent:(HOPConversationEvent*) event;
+- (NSString*) getLastTextMessageForConversationRecord:(HOPConversationRecord*) record;
 
 - (void) addParticipants:(NSArray*) participants toSession:(Session*) session;
 - (void) removeParticipants:(NSArray*) participants toSession:(Session*) session;

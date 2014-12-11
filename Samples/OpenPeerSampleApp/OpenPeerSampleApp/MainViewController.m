@@ -270,6 +270,15 @@
 }
 
 #pragma mark - Session view
+
+- (void) popLastSessionViewController
+{
+    int tabIndex = [self.tabBarController selectedIndex] < 3 ? [self.tabBarController selectedIndex] : 2;
+    
+    UINavigationController* navigationController = (UINavigationController*)[[self.tabBarController viewControllers] objectAtIndex:tabIndex];
+    
+    [navigationController popToRootViewControllerAnimated:NO];
+}
 /**
  Show session view.
  @param session Session which needs to be displyed

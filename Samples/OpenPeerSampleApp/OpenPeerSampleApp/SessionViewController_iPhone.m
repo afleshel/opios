@@ -42,6 +42,7 @@
 #import "InfoViewController.h"
 #import <OpenPeerSDK/HOPCall.h>
 #import <OpenPeerSDK/HOPConversationEvent+External.h>
+#import <OpenPeerSDK/HOPConversationRecord+External.h>
 #import <OpenPeerSDK/HOPParticipants.h>
 
 
@@ -259,13 +260,13 @@
             //[buttonTitles addObject:NSLocalizedString(@"Close session", @"")];
             [buttonTitles addObject:NSLocalizedString(@"Add Contact", @"")];
             [self.availableActions addObject:[NSNumber numberWithInt:ACTION_ADD_CONTACT]];
-            if (self.session.lastConversationEvent.participants.participants.count > 1)
+            if (self.session.lastConversationEvent.session.participants.count > 1)
             {
                 [buttonTitles addObject:NSLocalizedString(@"Remove Contact", @"")];
                 [self.availableActions addObject:[NSNumber numberWithInt:ACTION_REMOVE_CONTACT]];
             }
             
-            if (self.session.lastConversationEvent.participants.participants.count == 1)
+            if (self.session.lastConversationEvent.session.participants.count == 1)
             {
                 [buttonTitles addObject:NSLocalizedString(@"Show contact info", @"")];
                 [self.availableActions addObject:[NSNumber numberWithInt:ACTION_SHOW_CONTACT_INFO]];

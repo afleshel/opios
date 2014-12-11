@@ -34,6 +34,7 @@
 #import "SessionManager.h"
 #import "Session.h"
 #import <OpenPeerSDK/HOPConversationEvent+External.h>
+#import <OpenPeerSDK/HOPConversationRecord+External.h>
 #import <OpenPeerSDK/HOPParticipants.h>
 @interface AddParticipantsViewController ()
 
@@ -77,7 +78,7 @@
     [super viewWillAppear:animated];
     
     ContactsTableModes mode = self.isAdding ? CONTACTS_TABLE_MODE_ADDING : CONTACTS_TABLE_MODE_REMOVING;
-    self.contactsViewController = [[ContactsViewController alloc] initInMode:mode allowMultipleSelection:YES filterContacts:[self.session.lastConversationEvent getContacts]];
+    self.contactsViewController = [[ContactsViewController alloc] initInMode:mode allowMultipleSelection:YES filterContacts:[self.session.lastConversationEvent.session getContacts]];
     self.contactsViewController.view.frame = self.view.bounds;
     [self.view addSubview:self.contactsViewController.view];
 }

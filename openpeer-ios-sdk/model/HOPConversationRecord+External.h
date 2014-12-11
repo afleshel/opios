@@ -35,4 +35,5 @@
 
 - (NSString *)sectionIdentifier;
 - (void) setParticipantsWithArray:(NSArray *)values;
+- (NSArray*) getContacts;
 @end
