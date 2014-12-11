@@ -44,7 +44,6 @@
 #import "Utility.h"
 #import <OpenpeerSDK/HOPAccount.h>
 #import <OpenpeerSDK/HOPModelManager.h>
-//#import <OpenpeerSDK/HOPContact.h>
 #import <OpenpeerSDK/HOPRolodexContact+External.h>
 #import <OpenpeerSDK/HOPConversationThread.h>
 

@@ -58,6 +58,7 @@
 */
 + (id) conversationThreadWithIdentities:(NSArray*) identities;
 
+
 /**
  Returns list of all active conversation threads.
  @return List of HOPConversationThread objects
@@ -141,7 +142,7 @@
  @param contact HOPContact object
  @returns Contact connection state enum
  */
-- (HOPConversationThreadContactConnectionState) getContactConnectionState: (HOPContact*) contact;
+- (HOPConversationThreadContactConnectionState) getContactConnectionState: (HOPRolodexContact*) contact;
 
 /**
  *  Creates an empty JSON status blob ready to fill with additional structure data. Use "ComposingStatus" to insert composing status information into this JSON blob.
@@ -157,7 +158,7 @@
  *
  *  @return Contact composing status 
  */
-- (HOPConversationThreadContactStatus) getContactStatus:(HOPContact*) contact;
+- (HOPConversationThreadContactStatus) getContactStatus:(HOPRolodexContact*) contact;
 
 
 /**

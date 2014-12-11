@@ -58,7 +58,7 @@
 {
     HOPConversationThreadMessageDeliveryState ret;
     
-    ret = [HOPConversationThread toMessageDeliveryStates:self.outMessageStatus];//(HOPConversationThreadMessageDeliveryState) IConversationThread::toMessageDeliveryStates([self.outMessageStatus UTF8String]);
+    ret = [HOPConversationThread toMessageDeliveryStates:self.outMessageStatus];
     
     return ret;
 }

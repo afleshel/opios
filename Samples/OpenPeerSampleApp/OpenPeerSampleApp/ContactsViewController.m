@@ -40,6 +40,7 @@
 #import <OpenpeerSDK/HOPRolodexContact+External.h>
 #import <OpenpeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPAccount.h>
+#import <OpenPeerSDK/HOPConversation.h>
 //#import <OpenpeerSDK/HOPOpenPeerContact+External.h>
 
 #define REMOTE_SESSION_ALERT_TAG 1
@@ -238,14 +239,19 @@
             
             if (!self.isMultipleSelectionAvailable)
             {
-                //HOPOpenPeerContact* openPeerContact = [[HOPModelManager sharedModelManager] getOpenPeerContactForIdentityURI:contact.identityURI];
                 //If not, create a session for selecte contact
                 if ([contact isOpenPeer])
                 {
-                    Session* session = [[SessionManager sharedSessionManager] createSessionForContacts:@[contact]];
-                
-                    if (session)
-                        [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForSession:session forIncomingCall:NO forIncomingMessage:NO];
+                    HOPConversation* conversation = [((SessionManager*)[SessionManager sharedSessionManager]).conversationsDictionaryForContacts objectForKey:[contact getPeerURI]];
+                    
+                    if (!conversation)
+                    {
+                        conversation = [HOPConversation createConversationWithParticipants:@[contact] title:nil];
+                        [((SessionManager*)[SessionManager sharedSessionManager]).conversationsDictionaryForContacts setObject: conversation forKey:[contact getPeerURI]];
+                    }
+                    
+                    if (conversation)
+                        [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForConversation:conversation forIncomingCall:NO forIncomingMessage:NO];
                 }
             }
             else

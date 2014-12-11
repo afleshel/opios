@@ -49,12 +49,12 @@
     return self;
 }
 
-- (id) initWithSession:(Session*) inSession
+- (id) initWithConversation:(HOPConversation*) inConversation
 {
     self = [self initWithNibName:@"AudioCallViewController" bundle:nil];
     if (self) 
     {
-        self.session = inSession;
+        self.conversation = inConversation;
     }
     return self;
 }

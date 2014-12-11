@@ -33,6 +33,7 @@
 #import "HOPUtility.h"
 #import "HOPRolodexContact.h"
 #import "HOPOpenPeerContact+External.h"
+#import "OpenPeerStorageManager.h"
 
 //
 //@interface HOPConversationRecord ()
@@ -87,5 +88,13 @@
         }
     }
     return ret;
+}
+        
+- (HOPConversation*) getConversation
+{
+    if (self.sessionID.length > 0)
+        return [[OpenPeerStorageManager sharedStorageManager] getConversationForID:self.sessionID];
+    else
+        return nil;
 }
 @end

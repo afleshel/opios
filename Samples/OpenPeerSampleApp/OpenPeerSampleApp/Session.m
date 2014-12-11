@@ -42,13 +42,9 @@
     {
         self.participantsArray = [[NSMutableArray alloc] init];
         [self.participantsArray addObject:inContact];
-        self.messageArray = [[NSMutableArray alloc] init];
         self.unreadMessageArray = [[NSMutableArray alloc] init];
-        self.sessionIdsHistory = [[NSMutableSet alloc] init];
-        self.arrayMergedConversationThreads = [[NSMutableArray alloc] init];
         self.setOfNotSentMessages =  [[NSMutableSet alloc] init];
         self.conversationThread = inConverationThread;
-        [self.sessionIdsHistory addObject:[inConverationThread getThreadId]];
     }
     
     return self;
@@ -62,12 +58,9 @@
         self.participantsArray = [[NSMutableArray alloc] init];
         if (inContacts)
             [self.participantsArray addObjectsFromArray:inContacts];
-        self.messageArray = [[NSMutableArray alloc] init];
-        self.sessionIdsHistory = [[NSMutableSet alloc] init];
         self.unreadMessageArray = [[NSMutableArray alloc] init];
         self.setOfNotSentMessages =  [[NSMutableSet alloc] init];
         self.conversationThread = inConverationThread;
-        [self.sessionIdsHistory addObject:[inConverationThread getThreadId]];
     }
     
     return self;
@@ -77,13 +70,6 @@
 {
     @synchronized(self)
     {
-        if (![self.arrayMergedConversationThreads containsObject:inConversationThread])
-        {
-            if (inConversationThread)
-                [self.arrayMergedConversationThreads addObject:inConversationThread];
-            else
-                [self.arrayMergedConversationThreads removeAllObjects];
-        }
         OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, [NSString stringWithFormat:@"%@", (inConversationThread == _conversationThread ? [NSString stringWithFormat:@"Using same conversation thread %@",[inConversationThread getThreadId]] : [NSString stringWithFormat:@"Switched from %@ conversation thread to %@",[_conversationThread getThreadId],[inConversationThread getThreadId]])]);
         
         _conversationThread = inConversationThread;

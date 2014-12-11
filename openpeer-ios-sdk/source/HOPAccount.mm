@@ -108,7 +108,7 @@ using namespace openpeer::core;
     }
     
     //Set account, conversation thread and call delegates
-    [self setLocalDelegates:inAccountDelegate conversationThread:inConversationThreadDelegate callDelegate:inCallDelegate];
+    [self setLocalDelegates:inAccountDelegate conversationThreadDelegate:inConversationThreadDelegate callDelegate:inCallDelegate];
     
     //Start login. This static method will create an account core object
     accountPtr = IAccount::login(openpeerAccountDelegatePtr, openpeerConversationDelegatePtr, openpeerCallDelegatePtr, [namespaceGrantOuterFrameURLUponReload UTF8String], [grantID UTF8String], [lockboxServiceDomain UTF8String], forceCreateNewLockboxAccount);
@@ -127,6 +127,45 @@ using namespace openpeer::core;
     return passedWithoutErrors;
 }
 
+- (BOOL) loginWithAccountDelegate:(id<HOPAccountDelegate>) inAccountDelegate conversationDelegate:(id<HOPConversationDelegate>) inConversationDelegate callDelegate:(id<HOPCallDelegate>) inCallDelegate namespaceGrantOuterFrameURLUponReload:(NSString*) namespaceGrantOuterFrameURLUponReload lockboxServiceDomain:(NSString*) lockboxServiceDomain forceCreateNewLockboxAccount:(BOOL) forceCreateNewLockboxAccount
+{
+    ZS_LOG_DEBUG([self log:@"Starting account login"]);
+    BOOL passedWithoutErrors = NO;
+    NSString* grantID = [[OpenPeerUUIDManager sharedUUIDManager] getUUID];
+    
+    //Check if valid parameters are passed
+    if (!inAccountDelegate || !inConversationDelegate || !inCallDelegate || [namespaceGrantOuterFrameURLUponReload length] == 0 || [grantID length] == 0  || [lockboxServiceDomain length] == 0 )
+    {
+        ZS_LOG_ERROR(Debug, [self log:@"Passed invalid parameters."]);
+        return passedWithoutErrors;
+    }
+    
+    //If core account object already exists, shut it down
+    if (accountPtr)
+    {
+        ZS_LOG_DEBUG([self log:@"Core account object already exists. Shuting down existing account object."]);
+        accountPtr->shutdown();
+    }
+    
+    //Set account, conversation thread and call delegates
+    [self setLocalDelegates:inAccountDelegate conversationDelegate:inConversationDelegate callDelegate:inCallDelegate];
+    
+    //Start login. This static method will create an account core object
+    accountPtr = IAccount::login(openpeerAccountDelegatePtr, openpeerConversationDelegatePtr, openpeerCallDelegatePtr, [namespaceGrantOuterFrameURLUponReload UTF8String], [grantID UTF8String], [lockboxServiceDomain UTF8String], forceCreateNewLockboxAccount);
+    
+    //If core account object is created, return that login process is started successfully
+    if (accountPtr)
+    {
+        ZS_LOG_DEBUG([self log:@"Account object created successfully."]);
+        passedWithoutErrors = YES;
+    }
+    else
+    {
+        ZS_LOG_DEBUG([self log:@"Account object is NOT created successfully."]);
+    }
+    
+    return passedWithoutErrors;
+}
 
 - (BOOL)reloginWithAccountDelegate:(id<HOPAccountDelegate>)inAccountDelegate conversationThreadDelegate:(id<HOPConversationThreadDelegate>)inConversationThreadDelegate callDelegate:(id<HOPCallDelegate>)inCallDelegate lockboxOuterFrameURLUponReload:(NSString *)lockboxOuterFrameURLUponReload
 {
@@ -144,7 +183,43 @@ using namespace openpeer::core;
         }
         
         //Set account, conversation thread and call delegates
-        [self setLocalDelegates:inAccountDelegate conversationThread:inConversationThreadDelegate callDelegate:inCallDelegate];
+        [self setLocalDelegates:inAccountDelegate conversationThreadDelegate:inConversationThreadDelegate callDelegate:inCallDelegate];
+        
+        //Start relogin. This static method will create an account core object
+        accountPtr = IAccount::relogin(openpeerAccountDelegatePtr, openpeerConversationDelegatePtr, openpeerCallDelegatePtr, [lockboxOuterFrameURLUponReload UTF8String],IHelper::createElement([self.openPeerAccount.reloginInfo UTF8String]));
+        
+        //If core account object is created return that relogin process is started successfully
+        if (accountPtr)
+        {
+            ZS_LOG_DEBUG([self log:@"Account object created successfully."]);
+            passedWithoutErrors = YES;
+        }
+        else
+        {
+            ZS_LOG_DEBUG([self log:@"Account object is NOT created successfully."]);
+        }
+    }
+    
+    return passedWithoutErrors;
+}
+
+- (BOOL)reloginWithAccountDelegate:(id<HOPAccountDelegate>)inAccountDelegate conversationDelegate:(id<HOPConversationDelegate>)inConversationDelegate callDelegate:(id<HOPCallDelegate>)inCallDelegate lockboxOuterFrameURLUponReload:(NSString *)lockboxOuterFrameURLUponReload
+{
+    BOOL passedWithoutErrors = NO;
+    
+    self.openPeerAccount = [[HOPModelManager sharedModelManager] getLastLoggedInUser];
+    
+    if (self.openPeerAccount && self.openPeerAccount.reloginInfo.length > 0)
+    {
+        //Check if valid arguments are passed
+        if (!inAccountDelegate || !inConversationDelegate || !inCallDelegate || [lockboxOuterFrameURLUponReload length] == 0)// || [reloginInformation length] == 0)
+        {
+            ZS_LOG_ERROR(Debug, [self log:@"Passed invalid arguments."]);
+            return passedWithoutErrors;
+        }
+        
+        //Set account, conversation thread and call delegates
+        [self setLocalDelegates:inAccountDelegate conversationDelegate:inConversationDelegate callDelegate:inCallDelegate];
         
         //Start relogin. This static method will create an account core object
         accountPtr = IAccount::relogin(openpeerAccountDelegatePtr, openpeerConversationDelegatePtr, openpeerCallDelegatePtr, [lockboxOuterFrameURLUponReload UTF8String],IHelper::createElement([self.openPeerAccount.reloginInfo UTF8String]));
@@ -473,12 +548,20 @@ using namespace openpeer::core;
 
 
 #pragma mark - Internal methods
-- (void)setLocalDelegates:(id<HOPAccountDelegate>)inAccountDelegate conversationThread:(id<HOPConversationThreadDelegate>)inConversationThread callDelegate:(id<HOPCallDelegate>)inCallDelegate
+- (void)setLocalDelegates:(id<HOPAccountDelegate>)inAccountDelegate conversationThreadDelegate:(id<HOPConversationThreadDelegate>)inConversationThread callDelegate:(id<HOPCallDelegate>)inCallDelegate
 {
     openpeerAccountDelegatePtr = OpenPeerAccountDelegate::create(inAccountDelegate);
     openpeerConversationDelegatePtr = OpenPeerConversationThreadDelegate::create(inConversationThread);
     openpeerCallDelegatePtr = OpenPeerCallDelegate::create(inCallDelegate);
 }
+
+- (void)setLocalDelegates:(id<HOPAccountDelegate>)inAccountDelegate conversationDelegate:(id<HOPConversationDelegate>)inConversationDelegate callDelegate:(id<HOPCallDelegate>)inCallDelegate
+{
+    openpeerAccountDelegatePtr = OpenPeerAccountDelegate::create(inAccountDelegate);
+    openpeerConversationDelegatePtr = OpenPeerConversationThreadDelegate::create(inConversationDelegate);
+    openpeerCallDelegatePtr = OpenPeerCallDelegate::create(inCallDelegate);
+}
+
 - (IAccountPtr) getAccountPtr
 {
     return accountPtr;

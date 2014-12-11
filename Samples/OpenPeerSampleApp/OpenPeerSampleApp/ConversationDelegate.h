@@ -29,36 +29,9 @@
  
  */
 
-#import "ChatCell.h"
+#import <Foundation/Foundation.h>
+#import <OpenpeerSDK/HOPProtocols.h>
 
-@implementation ChatCell
+@interface ConversationDelegate : NSObject<HOPConversationDelegate>
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
-{
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (self) {
-        // Initialization code
-    }
-    return self;
-}
-
-- (void)awakeFromNib
-{
-    // Initialization code
-}
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
-{
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
-}
-
-+ (CGSize) calcMessageHeight:(NSString *)message forScreenWidth:(float)width
-{
-    CGSize maxSize = {width, 200000.0};
-    
-    CGSize calcSize = [message boundingRectWithSize: maxSize options: NSStringDrawingUsesLineFragmentOrigin attributes: @{ NSFontAttributeName: [UIFont systemFontOfSize:14.0] } context: nil].size;
-    return calcSize;
-}
 @end

@@ -30,7 +30,7 @@
  */
 
 #import "CallViewController.h"
-#import "Session.h"
+#import <OpenpeerSDK/HOPConversation.h>
 #import "SessionManager.h"
 #import <OpenpeerSDK/HOPMediaEngine.h>
 #import <QuartzCore/QuartzCore.h>
@@ -61,7 +61,7 @@
 }
 
 //Only execute this init method in child class
-- (id) initWithSession:(Session*) inSession
+- (id) initWithConversation:(HOPConversation*) inConversation
 {
     return nil;
 }
@@ -107,7 +107,7 @@
 
 - (IBAction) callHangup:(id)sender
 {
-    [[SessionManager sharedSessionManager] endCallForSession:self.session];
+    [[SessionManager sharedSessionManager] endCallForConversation:self.conversation];
 }
 
 - (IBAction) pauseCall:(id)sender

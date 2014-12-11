@@ -52,6 +52,7 @@
 @class HOPOpenPeerContact;
 @class HOPConversationEvent;
 @class HOPParticipants;
+@class HOPConversation;
 /**
  *  This is the singleton class and it is used for manipulation with core data.
  */
@@ -293,7 +294,7 @@
  @param conversationEvent Conversation event during which message has been received or sent
  @return HOPMessageRecord* message record object
  */
-- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date conversationThreadID:(NSString*) conversationThreadID contact:(HOPRolodexContact*) contact messageId:(NSString*)messageId conversationEvent:(HOPConversationEvent*) conversationEvent;
+- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date conversation:(HOPConversation*) conversation contact:(HOPRolodexContact*) contact messageId:(NSString*)messageId;
 
 /**
  Creates a HOPMessageRecord object.
@@ -307,7 +308,7 @@
  @param conversationEvent Conversation event during which message has been received or sent
  @return HOPMessageRecord* message record object
  */
-- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  conversationThreadID:(NSString*) conversationThreadID contact:(HOPRolodexContact*) contact messageId:(NSString*)messageId conversationEvent:(HOPConversationEvent*) conversationEvent;
+- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  conversation:(HOPConversation*) conversation contact:(HOPRolodexContact*) contact messageId:(NSString*)messageId;
 
 /**
  Returns peer URI for logged in user.
@@ -335,7 +336,7 @@
  @return HOPConversationRecord Conversation record object
  */
 - (HOPConversationRecord*) getConversationRecordForConversationThread:(HOPConversationThread*) conversationThread;
-
+- (HOPConversationRecord*) getConversationRecordForParticipants:(NSArray*) participants;
 /**
  Returns a HOPConversationThreadRecord object for conversation thread ID.
  @param threadID Conversation thread ID
@@ -437,6 +438,7 @@
  */
 - (HOPParticipants*) getParticiapantsForListOfContacts:(NSArray*) contacts;
 
+- (NSFetchRequest*) getMessagesFetchRequestForConversation:(HOPConversation*) conversation sortAscending:(BOOL) ascending;
 /**
  Returns fetch request for the list of messages exchanged within group of participants
  @param participants HOPParticipants object

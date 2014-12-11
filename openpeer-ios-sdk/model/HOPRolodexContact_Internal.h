@@ -30,7 +30,7 @@
  */
 
 
-#import "HOPRolodexContact.h" 
+#import "HOPRolodexContact+External.h" 
 #import <openpeer/core/types.h>
 
 using namespace openpeer;

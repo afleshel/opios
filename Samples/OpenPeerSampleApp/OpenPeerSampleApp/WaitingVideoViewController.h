@@ -31,11 +31,11 @@
 
 #import <UIKit/UIKit.h>
 
-@class Session;
+@class HOPConversation;
 
 @interface WaitingVideoViewController : UIViewController
 
-- (id) initWithSession:(Session*) inSession;
+- (id) initWithConversation:(HOPConversation*) inConversation;
 - (IBAction) callHangup:(id)sender;
 @property (weak, nonatomic) NSString* statusText;
 

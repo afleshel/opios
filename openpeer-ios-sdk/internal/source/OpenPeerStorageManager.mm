@@ -62,6 +62,9 @@
     _dictionaryContacts = [[NSMutableDictionary alloc] init];
 //    _dictionaryContactsWithUserId = [[NSMutableDictionary alloc] init];
     _dictionaryConversationThreads = [[NSMutableDictionary alloc] init];
+    _dictionaryConversations = [[NSMutableDictionary alloc] init];
+    _dictionaryConversationsWithThreadID = [[NSMutableDictionary alloc] init];
+    _dictionaryConversationsWithCBCID = [[NSMutableDictionary alloc] init];
     _dictionaryIdentities = [[NSMutableDictionary alloc] init];
     _dictionaryIdentityLookups = [[NSMutableDictionary alloc] init];
 //    _dictionaryContactPeerFilePublicLookup = [[NSMutableDictionary alloc] init];
@@ -98,6 +101,48 @@
 - (void) setConversationThread:(HOPConversationThread*) conversationThread forId:(NSString*) threadId
 {
     [_dictionaryConversationThreads setObject:conversationThread forKey:threadId];
+}
+
+- (HOPConversation*) getConversationForID:(NSString*) conversationID
+{
+    if (conversationID.length > 0)
+        return [_dictionaryConversations objectForKey:conversationID];
+    else
+        return nil;
+}
+- (HOPConversation*) getConversationForThreadID:(NSString*) threadID
+{
+    if (threadID.length > 0)
+        return [_dictionaryConversationsWithThreadID objectForKey:threadID];
+    else
+        return nil;
+}
+- (HOPConversation*) getConversationForCBCID:(NSString*) cbcID
+{
+    if (cbcID.length > 0)
+        return [_dictionaryConversationsWithCBCID objectForKey:cbcID];
+    else
+        return nil;
+}
+- (NSArray*) getConversations
+{
+    return _dictionaryConversations.allValues;
+}
+
+- (void) setConversation:(HOPConversation*) conversation conversationID:(NSString*) conversationID
+{
+    if (conversation && conversationID.length > 0)
+        [_dictionaryConversations setObject:conversation forKey:conversationID];
+}
+- (void) setConversation:(HOPConversation*) conversation threadID:(NSString*) threadID
+{
+    if (conversation && threadID.length > 0)
+        [_dictionaryConversationsWithThreadID setObject:conversation forKey:threadID];
+}
+- (void) setConversation:(HOPConversation*) conversation cbcID:(NSString*) cbcID
+{
+    if (conversation && cbcID.length > 0)
+        [_dictionaryConversationsWithCBCID setObject:conversation forKey:cbcID];
 }
 
 - (HOPContact*) getContactForPeerURI:(NSString*) peerURI

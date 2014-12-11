@@ -30,9 +30,9 @@
  */
 
 #import <UIKit/UIKit.h>
-@class Session;
+@class HOPConversation;
 
 @interface AddParticipantsViewController : UIViewController
 
-- (id) initWithSession:(Session*) inSession addingContacts:(BOOL) addingContacts;
+- (id) initWithConversation:(HOPConversation*) inConversation addingContacts:(BOOL) addingContacts;
 @end

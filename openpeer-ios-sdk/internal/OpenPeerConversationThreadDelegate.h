@@ -50,14 +50,19 @@ class OpenPeerConversationThreadDelegate : public IConversationThreadDelegate
 {
 protected:
     id<HOPConversationThreadDelegate> conversationThreadDelegate;
+    id<HOPConversationDelegate> conversationDelegate;
     OpenPeerConversationThreadDelegate(id<HOPConversationThreadDelegate> inConversationThreadDelegate);
+    OpenPeerConversationThreadDelegate(id<HOPConversationDelegate> inConversationDelegate);
     HOPConversationThread* getOpenPeerConversationThread(IConversationThreadPtr conversationThread);
+    HOPConversation* getOpenPeerConversation(IConversationThreadPtr conversationThread);
 
 public:
     
     ~OpenPeerConversationThreadDelegate();
     
     static OpenPeerConversationThreadDelegatePtr create(id<HOPConversationThreadDelegate> inConversationThreadDelegate);
+    
+    static OpenPeerConversationThreadDelegatePtr create(id<HOPConversationDelegate> inConversationDelegate);
     
     virtual void onConversationThreadNew(IConversationThreadPtr conversationThread);
     

@@ -59,12 +59,12 @@
     return self;
 }
 
-- (id) initWithSession:(Session*) inSession
+- (id) initWithConversation:(HOPConversation*) inConversation
 {
     self = [self initWithNibName:@"VideoCallViewController" bundle:nil];
     if (self)
     {
-        self.session = inSession;
+        self.conversation = inConversation;
         //self.mediaNavigationViewController = [[[MediaNavigationViewController alloc] initWithSession:inSession] autorelease];
     }
     return self;

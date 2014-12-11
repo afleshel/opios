@@ -38,9 +38,7 @@
 #import <OpenpeerSDK/HOPAssociatedIdentity.h>
 #import <OpenpeerSDK/HOPIdentityProvider.h>
 #import <OpenPeerSDK/HOPAccount.h>
-//#import <OpenpeerSDK/HOPOpenPeerContact+External.h>
 #import <OpenpeerSDK/HOPIdentityProvider.h>
-//#import <OpenpeerSDK/HOPAPNSData.h>
 #import <OpenpeerSDK/HOPIdentity.h>
 
 const CGFloat cellDefaultHeight = 50.0;
