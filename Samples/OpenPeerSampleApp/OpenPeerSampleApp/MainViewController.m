@@ -267,6 +267,10 @@
             [webLoginViewController.view removeFromSuperview];
         }];
     }
+    else
+    {
+        OPLog(HOPLoggerSeverityError, HOPLoggerLevelTrace, @"WebLoginViewController is invalid");
+    }
 }
 
 #pragma mark - Session view
