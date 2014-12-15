@@ -43,7 +43,7 @@ using namespace openpeer::core;
 
 @implementation HOPCallSystemMessage
 
-- (id) initWithMessageType:(HOPCallSystemMessageType) inType callee:(HOPRolodexContact*) inCallee errorCode:(unsigned short) inErrorCode
+- (id) initWithMessageTypeNew:(HOPCallSystemMessageType) inType callee:(HOPRolodexContact*) inCallee errorCode:(unsigned short) inErrorCode
 {
     self = [super init];
     if (self)
@@ -56,6 +56,30 @@ using namespace openpeer::core;
         self.errorCode = inErrorCode;
         
         callSystemMessagePtr->mCallee = [coreContact getContactPtr];
+        callSystemMessagePtr->mType = (CallSystemMessage::CallSystemMessageTypes)inType;
+        
+        ElementPtr elementPtr = ISystemMessage::createEmptySystemMessage();
+        callSystemMessagePtr->insert(elementPtr);
+        
+        String str = IHelper::convertToString(elementPtr);
+        if (str.hasData())
+            self.jsonMessage = [NSString stringWithUTF8String:str];
+    }
+    return self;
+}
+
+- (id) initWithMessageType:(HOPCallSystemMessageType) inType callee:(HOPContact*) inCallee errorCode:(unsigned short) inErrorCode
+{
+    self = [super init];
+    if (self)
+    {
+        callSystemMessagePtr = CallSystemMessagePtr(new CallSystemMessage((CallSystemMessage::CallSystemMessageTypes)inType, [inCallee getContactPtr], inErrorCode));
+        self.type = HOPSystemMessageTypeCall;
+        self.messageType = inType;
+        self.callee = inCallee;
+        self.errorCode = inErrorCode;
+        
+        callSystemMessagePtr->mCallee = [inCallee getContactPtr];
         callSystemMessagePtr->mType = (CallSystemMessage::CallSystemMessageTypes)inType;
         
         ElementPtr elementPtr = ISystemMessage::createEmptySystemMessage();

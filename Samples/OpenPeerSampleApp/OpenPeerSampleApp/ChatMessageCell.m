@@ -498,7 +498,7 @@
     
     if (!self.message.deleted.boolValue)
     {
-        //self.messageLabel.text = _unicodeMessageText;
+        self.messageLabel.text = inMessage.text;//_unicodeMessageText;
         self.messageLabel.textColor = [UIColor blackColor];
     }
     else

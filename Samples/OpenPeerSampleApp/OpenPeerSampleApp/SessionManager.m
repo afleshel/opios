@@ -41,6 +41,7 @@
 #import "AppConsts.h"
 
 #import <OpenpeerSDK/Openpeer.h>
+#import <OpenpeerSDK/HOPOpenPeerContact+External.h>
 #import "UIDevice+Networking.h"
 
 @interface SessionManager()
@@ -83,6 +84,25 @@
     return self;
 }
 
+- (HOPConversationRecord*) getConversationRecordForConversationThread:(HOPConversationThread*) conversationThread
+{
+    HOPConversationRecord* ret = nil;
+    if (conversationThread)
+    {
+        NSArray* results = nil;
+        
+        NSString* cbcID = [HOPModelManager getCBCIDForContacts:[conversationThread getContacts]];
+        
+        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"lastActivity" ascending:NO];
+        
+//        results = [[HOPModelManager sharedModelManager] getResultsForEntity:@"HOPConversationRecord" withPredicateString:[NSString stringWithFormat:@"homeUser.stableId MATCHES '%@' AND ANY events.participants.cbcID MATCHES '%@'",[[HOPModelManager sharedModelManager] getLastLoggedInUser].stableId,cbcID] orderDescriptors:@[sortDescriptor]];
+        
+        results = [[HOPModelManager sharedModelManager] getResultsForEntity:@"HOPConversationRecord" withPredicateString:[NSString stringWithFormat:@"homeUser.stableId MATCHES '%@'",[[HOPModelManager sharedModelManager] getLastLoggedInUser].stableId] orderDescriptors:@[sortDescriptor]];
+        if ([results count] > 0)
+            ret = [results objectAtIndex:0];
+    }
+    return ret;
+}
 
 /**
  Creates a session for the selected contacts
@@ -123,20 +143,25 @@
             {
                 if (contacts.count > 0)
                 {
-                    participants = [[NSMutableArray alloc] init];
-                    for (HOPRolodexContact* contact in contacts)
-                    {
-                        if ([contact isOpenPeer])
-                            [participants addObject:contact];
-                    }
-                    [conversationThread addContacts:participants];
+//                    participants = [[NSMutableArray alloc] init];
+//                    for (HOPOpenPeerContact* contact in contacts)
+//                    {
+//                        //if ([contact isOpenPeer])
+//                            [participants addObject:[contact getDefaultRolodexContact]];
+//                    }
+                    [conversationThread addContacts:contacts];
                 }
 
                 title = [self getTitleForConversationThread:conversationThread];
                 
                 OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Creating session record from conversation thread id: %@", [conversationThread getThreadId]);
                 
-                ret.sessionRecord = [[HOPModelManager sharedModelManager] createConversationRecordForConversationThread:conversationThread type:nil date:[NSDate date] name:title participants:contacts];
+                ret.sessionRecord = [[HOPModelManager sharedModelManager] getConversationRecordForConversationThread:conversationThread];
+                
+                if (!ret.sessionRecord)
+                    ret.sessionRecord = [[HOPModelManager sharedModelManager] createConversationRecordForConversationThread:conversationThread type:nil date:[NSDate date] name:title participants:contacts];
+                
+                
                 
                 ret.title = title;
                 
@@ -166,7 +191,7 @@
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Creating session for conversation thread id: %@", [inConversationThread getThreadId]);
     Session* ret = nil;
     
-    NSArray* contactAaray = [inConversationThread getContacts];
+    NSArray* contactAaray = [inConversationThread getRolodexContacts];
     
     if (contactAaray.count > 0)
     {
@@ -181,7 +206,12 @@
             [self.sessionsDictionaryWithCBCID setObject:ret forKey:cbcID];
             
             OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Creating session record from conversation thread id: %@", [inConversationThread getThreadId]);
-            ret.sessionRecord = [[HOPModelManager sharedModelManager] createConversationRecordForConversationThread:inConversationThread type:nil date:[NSDate date] name:title participants:contactAaray];
+            //ret.sessionRecord = [[HOPModelManager sharedModelManager] createConversationRecordForConversationThread:inConversationThread type:nil date:[NSDate date] name:title participants:contactAaray];
+            
+            ret.sessionRecord = [[HOPModelManager sharedModelManager] getConversationRecordForConversationThread:inConversationThread];
+            
+            if (!ret.sessionRecord)
+                ret.sessionRecord = [[HOPModelManager sharedModelManager] createConversationRecordForConversationThread:inConversationThread type:nil date:[NSDate date] name:title participants:contactAaray];
             
             ret.title = title;
             ret.lastConversationEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"create" conversationRecord:ret.sessionRecord partcipants:contactAaray title:title];
@@ -717,6 +747,7 @@
     return ret;
 }
 
+
 - (void) addParticipants:(NSArray*) participants toSession:(Session*) inSession
 {
     if (participants.count > 0)
@@ -743,6 +774,7 @@
     if (participants.count > 0)
     {
         NSMutableArray* array = [NSMutableArray arrayWithArray:inSession.participantsArray];
+        //NSArray* openPeerContactsToRemove  = [self getOpenPeerContactsFromRolodexContactsArray:participants];
         [array removeObjectsInArray:participants];
         
         Session* session = [self createSessionForContacts:array];
@@ -774,7 +806,7 @@
 {
     NSString* ret = @"";
     
-    NSArray* participants = [conversationThread getContacts];
+    NSArray* participants = [conversationThread getRolodexContacts];
     for (HOPRolodexContact* rolodexContact in participants)
     {
         //HOPRolodexContact* rolodexContact = [contact getDefaultRolodexContact];
@@ -811,6 +843,7 @@
         if (session)
         {
             NSMutableArray *intermediate = [NSMutableArray arrayWithArray:openPeerContacts];
+
             [intermediate removeObjectsInArray:session.lastConversationEvent.participants.participants.allObjects];
             NSUInteger difference = [intermediate count];
             
@@ -835,7 +868,14 @@
             {
                 session.title = title;
                 [session.participantsArray removeAllObjects];
-                [session.participantsArray addObjectsFromArray:openPeerContacts];
+                
+                for (HOPOpenPeerContact* contact in openPeerContacts)
+                {
+                    HOPRolodexContact* rolodex = [contact getDefaultRolodexContact];
+                    if (rolodex)
+                        [session.participantsArray addObject:rolodex];
+                }
+                //[session.participantsArray addObjectsFromArray:openPeerContacts];
         
                 [session.sessionRecord setParticipantsWithArray:openPeerContacts];
                 

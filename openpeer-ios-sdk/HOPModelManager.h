@@ -174,6 +174,7 @@
  @return HOPAssociatedIdentity object
  */
 - (HOPAssociatedIdentity*) addAssociatedIdentityForBaseIdentityURI:(NSString*) baseIdentityURI domain:(NSString*) domain name:(NSString*) name selfRolodexProfileProfile:(HOPRolodexContact*) rolodexContact;
+- (HOPAssociatedIdentity*) addAssociatedIdentityForBaseIdentityURI:(NSString*) baseIdentityURI domain:(NSString*) domain name:(NSString*) name account:(HOPOpenPeerAccount*) account selfRolodexProfileProfile:(HOPRolodexContact*) rolodexContact;
 
  /**
  Returns an identity provider object for spcified identity provider domain, identity name and home user identity URI.
@@ -295,6 +296,8 @@
  */
 - (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date conversationThreadID:(NSString*) conversationThreadID contact:(HOPRolodexContact*) contact messageId:(NSString*)messageId conversationEvent:(HOPConversationEvent*) conversationEvent;
 
+- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date conversationThreadID:(NSString*) conversationThreadID openPeerContact:(HOPOpenPeerContact*) openPeerContact messageId:(NSString*)messageId conversationEvent:(HOPConversationEvent*) conversationEvent;
+
 /**
  Creates a HOPMessageRecord object.
  @param messageText Message text
@@ -308,7 +311,7 @@
  @return HOPMessageRecord* message record object
  */
 - (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  conversationThreadID:(NSString*) conversationThreadID contact:(HOPRolodexContact*) contact messageId:(NSString*)messageId conversationEvent:(HOPConversationEvent*) conversationEvent;
-
+- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  conversationThreadID:(NSString*) conversationThreadID openPeerContact:(HOPOpenPeerContact*) openPeerContact messageId:(NSString*)messageId conversationEvent:(HOPConversationEvent*) conversationEvent;
 /**
  Returns peer URI for logged in user.
  @return peer URI
@@ -461,4 +464,5 @@
 - (HOPPublicPeerFile*) createPublicPeerFileForPeerURI:(NSString*) peerURI peerFile:(NSString*) peerFile;
 
 + (NSString*) getCBCIDForContacts:(NSArray*) contacts;
+- (NSArray*) getResultsForEntity:(NSString*) entityName withPredicateString:(NSString*) predicateString orderDescriptors:(NSArray*) orderDescriptors;;
 @end

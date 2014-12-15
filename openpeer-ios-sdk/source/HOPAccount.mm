@@ -127,6 +127,36 @@ using namespace openpeer::core;
     return passedWithoutErrors;
 }
 
+- (BOOL)reloginWithAccountDelegate:(id<HOPAccountDelegate>)inAccountDelegate conversationThreadDelegate:(id<HOPConversationThreadDelegate>)inConversationThreadDelegate callDelegate:(id<HOPCallDelegate>)inCallDelegate lockboxOuterFrameURLUponReload:(NSString *)lockboxOuterFrameURLUponReload reloginInformation:(NSString *)reloginInformation
+{
+    BOOL passedWithoutErrors = NO;
+    
+    //Check if valid arguments are passed
+    if (!inAccountDelegate || !inConversationThreadDelegate || !inCallDelegate || [lockboxOuterFrameURLUponReload length] == 0 || [reloginInformation length] == 0)
+    {
+        ZS_LOG_ERROR(Debug, [self log:@"Passed invalid arguments."]);
+        return passedWithoutErrors;
+    }
+    
+    //Set account, conversation thread and call delegates
+    [self setLocalDelegates:inAccountDelegate conversationThread:inConversationThreadDelegate callDelegate:inCallDelegate];
+    
+    //Start relogin. This static method will create an account core object
+    accountPtr = IAccount::relogin(openpeerAccountDelegatePtr, openpeerConversationDelegatePtr, openpeerCallDelegatePtr, [lockboxOuterFrameURLUponReload UTF8String],IHelper::createElement([reloginInformation UTF8String]));
+    
+    //If core account object is created return that relogin process is started successfully
+    if (accountPtr)
+    {
+        ZS_LOG_DEBUG([self log:@"Account object created successfully."]);
+        passedWithoutErrors = YES;
+    }
+    else
+    {
+        ZS_LOG_DEBUG([self log:@"Account object is NOT created successfully."]);
+    }
+    
+    return passedWithoutErrors;
+}
 
 - (BOOL)reloginWithAccountDelegate:(id<HOPAccountDelegate>)inAccountDelegate conversationThreadDelegate:(id<HOPConversationThreadDelegate>)inConversationThreadDelegate callDelegate:(id<HOPCallDelegate>)inCallDelegate lockboxOuterFrameURLUponReload:(NSString *)lockboxOuterFrameURLUponReload
 {

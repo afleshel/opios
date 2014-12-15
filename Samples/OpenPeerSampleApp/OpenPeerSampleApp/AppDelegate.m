@@ -190,17 +190,17 @@
     }
 }
 
-/*- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     // Notify UAInbox to fetch any new messages if the notification contains a rich application page id.
-    if (application.applicationState != UIApplicationStateBackground)
-    {
-        [UAInboxPushHandler handleNotification:userInfo];
-    }
+//    if (application.applicationState != UIApplicationStateBackground)
+//    {
+//        [UAInboxPushHandler handleNotification:userInfo];
+//    }
     
     // Notify UAPush that a push came in with the completion handler
 //    [[UAPush shared] handleNotification:userInfo applicationState:application.applicationState fetchCompletionHandler:completionHandler];
-}*/
+}
 
 - (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler
 {

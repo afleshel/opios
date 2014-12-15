@@ -174,6 +174,57 @@ using namespace openpeer::core;
     return [HOPAccount sharedAccount];
 }
 
+- (NSArray*) getRolodexContacts
+{
+    NSMutableArray* contactArray = nil;
+    if (conversationThreadPtr)
+    {
+        contactArray = [[NSMutableArray alloc] init];
+        ContactListPtr contactList = conversationThreadPtr->getContacts();
+        
+        for (ContactList::iterator contact = contactList->begin(); contact != contactList->end(); ++contact)
+        {
+            IContactPtr contactPtr = *contact;
+            if (!contactPtr->isSelf())
+            {
+                HOPOpenPeerContact* openPeerContact = [[HOPModelManager sharedModelManager] getOpenPeerContactForPeerURI:[NSString stringWithUTF8String:contactPtr->getPeerURI()]];
+                
+                if (!openPeerContact)
+                {
+                    openPeerContact = [HOPConversationThread createOpenPeerContacFromCoreContact:contactPtr conversationThread:conversationThreadPtr];
+                }
+                
+                //TODO_S: Remove once HOPMEssage is switched to HOPOpenPeerContact
+                //                HOPContact* tempContact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:[NSString stringWithUTF8String:contactPtr->getPeerURI()]];
+                //                if (!tempContact)
+                //                {
+                //                    IPeerFilePublicPtr publicPtr =  contactPtr->getPeerFilePublic();
+                //                    if (publicPtr)
+                //                    {
+                //                        ElementPtr element = IHelper::convertToElement(publicPtr);
+                //                        if (element)
+                //                        {
+                //                            NSString* pulbicPeer = [NSString stringWithUTF8String:IHelper::convertToString(element)];
+                //                            if ([pulbicPeer length] > 0)
+                //                                tempContact = [[HOPContact alloc] initWithPeerFile:pulbicPeer];
+                //                        }
+                //                    }
+                //                }
+                
+                if (openPeerContact)
+                    [contactArray addObject:[openPeerContact getDefaultRolodexContact]];
+            }
+        }
+    }
+    else
+    {
+        ZS_LOG_ERROR(Debug, [self log:@"Invalid conversation thread object!"]);
+        [NSException raise:NSInvalidArgumentException format:@"Invalid conversation thread object!"];
+    }
+    
+    return contactArray;
+}
+
 - (NSArray*) getContacts
 {
     NSMutableArray* contactArray = nil;
@@ -212,7 +263,7 @@ using namespace openpeer::core;
 //                }
                 
                 if (openPeerContact)
-                    [contactArray addObject:[openPeerContact getDefaultRolodexContact]];
+                    [contactArray addObject:openPeerContact];
             }
         }
     }
@@ -232,9 +283,17 @@ using namespace openpeer::core;
         if ([contacts count] > 0)
         {
             ContactProfileInfoList contactList;
-            for (HOPRolodexContact* rolodexContact in contacts)
+            for (id tempContact in contacts)
             {
-                HOPContact* contact = [rolodexContact getCoreContact];
+                HOPContact* contact = nil;
+                if ([[tempContact class] isSubclassOfClass:[HOPContact class]])
+                    contact = tempContact;
+                else
+                {
+                    HOPRolodexContact* rolodexContact = [[tempContact class] isSubclassOfClass:[HOPRolodexContact class]] ? tempContact : [((HOPOpenPeerContact*)tempContact) getDefaultRolodexContact];
+                    contact = [rolodexContact getCoreContact];
+                }
+                
                 if (contact)
                 {
                     ContactProfileInfo contactInfo;

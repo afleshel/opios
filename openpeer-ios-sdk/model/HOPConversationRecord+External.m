@@ -66,13 +66,20 @@
 
 - (void) setParticipantsWithArray:(NSArray *)values
 {
+    for (HOPOpenPeerContact* contact in values)
+    {
+        [self addParticipantsObject:contact];
+    }
+}
+
+- (void) setParticipantsWithArrayNew:(NSArray *)values
+{
     for (HOPRolodexContact* contact in values)
     {
         if (contact.openPeerContact)
             [self addParticipantsObject:contact.openPeerContact];
     }
 }
-
 -(NSArray*) getContacts
 {
     NSMutableArray* ret = nil;
