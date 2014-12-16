@@ -87,7 +87,7 @@
                 [[SoundManager sharedSoundsManager] stopRingingSound];
                 [[SessionManager sharedSessionManager] onCallOpened:call];
                 
-                if ([[call getCaller] isSelf])
+                if ([[call getCallerNew] isSelf])
                     [[MessageManager sharedMessageManager] sendCallSystemMessage:HOPCallSystemMessageTypeCallAnswered reasonCode:0 session:[[[SessionManager sharedSessionManager] sessionsDictionary] objectForKey:sessionId]];
                 
                 [sessionViewController startTimer];
@@ -112,7 +112,7 @@
                 [[SoundManager sharedSoundsManager] stopRingingSound];
                 [sessionViewController stopTimer];
                 
-                if ([[call getCaller] isSelf])
+                if ([[call getCallerNew] isSelf])
                 {
                     int reasonCode = 0;
                     

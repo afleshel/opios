@@ -149,9 +149,10 @@
         [identity cancel];
     }
     
-    for (HOPIdentity* identity in self.associatingIdentitiesDictionary)
+    for (id identity in self.associatingIdentitiesDictionary.allValues)
     {
-        [identity cancel];
+        if ([[identity class] isSubclassOfClass:[HOPIdentity class]])
+            [identity cancel];
     }
     [self.associatingIdentitiesDictionary removeAllObjects];
 }

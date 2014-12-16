@@ -87,7 +87,7 @@
 {
     HOPMessage* hopMessage = nil;
     
-    HOPCallSystemMessage* callSystemMessage = [[HOPCallSystemMessage alloc] initWithMessageType:(HOPCallSystemMessageType)messageType callee:contact errorCode:reasonCode];
+    HOPCallSystemMessage* callSystemMessage = [[HOPCallSystemMessage alloc] initWithMessageTypeNew:(HOPCallSystemMessageType)messageType callee:contact errorCode:reasonCode];
     NSString* messageBody = callSystemMessage.jsonMessage;
     if ([messageBody length] > 0)
     {

@@ -30,6 +30,7 @@
  */
 
 #import "HOPOpenPeerContact+External.h"
+#import "HOPOpenPeerContact_Internal.h"
 #import "HOPContact.h"
 #import "OpenPeerStorageManager.h"
 #import "HOPPublicPeerFile.h"
@@ -92,4 +93,7 @@
     }
     return array;
 }
+
+
+
 @end

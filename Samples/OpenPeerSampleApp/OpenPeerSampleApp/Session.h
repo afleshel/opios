@@ -50,6 +50,7 @@
 @property (strong) NSMutableArray* arrayMergedConversationThreads;
 @property (strong) NSMutableSet* setOfNotSentMessages;
 @property (nonatomic, copy) NSString* title;
+@property (nonatomic, copy) NSString* cbcID;
 
 - (id) initWithContact:(HOPRolodexContact*) inContact conversationThread:(HOPConversationThread*) inConverationThread;
 - (id) initWithContacts:(NSArray*) inContacts conversationThread:(HOPConversationThread*) inConverationThread;

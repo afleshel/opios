@@ -149,7 +149,7 @@ using namespace openpeer::core;
     return hopConversationThread;
 }
 
-- (HOPRolodexContact*) getCaller
+- (HOPRolodexContact*) getCallerNew
 {
     HOPRolodexContact* ret = nil;
     if(callPtr)
@@ -177,7 +177,33 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (HOPRolodexContact*) getCallee
+- (HOPContact*) getCaller
+{
+    HOPContact* ret = nil;
+    if(callPtr)
+    {
+        IContactPtr contactPtr = callPtr->getCaller();
+        if (contactPtr)
+        {
+            NSString* peerURI = [NSString stringWithUTF8String:contactPtr->getPeerURI()];
+            ret = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:peerURI];
+            if (!ret)
+                ret = [[HOPContact alloc] initWithCoreContact:contactPtr];
+        }
+        else
+        {
+            ZS_LOG_ERROR(Debug, [self log:@"Invalid caller contact object!"]);
+        }
+    }
+    else
+    {
+        ZS_LOG_ERROR(Debug, [self log:@"Invalid call object!"]);
+        [NSException raise:NSInvalidArgumentException format:@"Invalid call object!"];
+    }
+    return ret;
+}
+
+- (HOPRolodexContact*) getCalleeNew
 {
     HOPRolodexContact* ret = nil;
     if(callPtr)
@@ -192,6 +218,32 @@ using namespace openpeer::core;
                 coreContact = [[HOPContact alloc] initWithCoreContact:contactPtr];
             
             ret = [[HOPModelManager sharedModelManager] getRolodexContactByPeerURI:peerURI];
+        }
+        else
+        {
+            ZS_LOG_ERROR(Debug, [self log:@"Invalid callee contact object!"]);
+        }
+    }
+    else
+    {
+        ZS_LOG_ERROR(Debug, [self log:@"Invalid call object!"]);
+        [NSException raise:NSInvalidArgumentException format:@"Invalid call object!"];
+    }
+    return ret;
+}
+
+- (HOPContact*) getCallee
+{
+    HOPContact* ret = nil;
+    if(callPtr)
+    {
+        IContactPtr contactPtr = callPtr->getCallee();
+        if (contactPtr)
+        {
+            NSString* peerURI = [NSString stringWithUTF8String:contactPtr->getPeerURI()];
+            ret = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:peerURI];
+            if (!ret)
+                ret = [[HOPContact alloc] initWithCoreContact:contactPtr];
         }
         else
         {

@@ -42,6 +42,8 @@
 #import <OpenPeerSDK/HOPCallSystemMessage.h>
 #import <OpenPeerSDK/HOPRolodexContact+External.h>
 #import <OpenPeerSDK/HOPConversationEvent.h>
+#import <OpenPeerSDK/HOPContact.h>
+#import <OpenPeerSDK/HOPOpenPeerContact+External.h>
 #import "SystemMessageCell.h"
 #import "ChatCell.h"
 
@@ -712,7 +714,7 @@
     NSIndexPath *swipedIndexPath = [self.chatTableView indexPathForRowAtPoint:location];
     ChatMessageCell *swipedCell  = (ChatMessageCell*)[self.chatTableView cellForRowAtIndexPath:swipedIndexPath];
     
-    if (![swipedCell.message.type isEqualToString:[HOPSystemMessage getMessageType]] && !swipedCell.message.sender && !swipedCell.message.deleted.boolValue)
+    if (![swipedCell.message.type isEqualToString:[HOPSystemMessage getMessageType]] && [[swipedCell.message.senderOpenPeer getCoreContact] isSelf] && !swipedCell.message.deleted.boolValue)
     {
         self.messageTextbox.text = swipedCell.message.text;
         self.messageToEdit = swipedCell.message;
@@ -725,7 +727,7 @@
     NSIndexPath *swipedIndexPath = [self.chatTableView indexPathForRowAtPoint:location];
     ChatMessageCell *swipedCell  = (ChatMessageCell*)[self.chatTableView cellForRowAtIndexPath:swipedIndexPath];
     
-    if (![swipedCell.message.type isEqualToString:[HOPSystemMessage getMessageType]] && !swipedCell.message.sender && !swipedCell.message.deleted.boolValue)
+    if (![swipedCell.message.type isEqualToString:[HOPSystemMessage getMessageType]] && [[swipedCell.message.senderOpenPeer getCoreContact] isSelf] && !swipedCell.message.deleted.boolValue)
     {
         
         self.messageToEdit = swipedCell.message;

@@ -83,6 +83,7 @@ typedef  enum
 - (void) showWebLoginView:(WebLoginViewController*) webLoginViewController;
 - (void) closeWebLoginView:(WebLoginViewController*) webLoginViewController;
 
+- (void) popLastSessionViewController;
 - (void) showSessionViewControllerForSession:(Session*) session forIncomingCall:(BOOL) incomingCall forIncomingMessage:(BOOL) incomingMessage;
 - (void) removeSessionViewControllerForSession:(NSString*) sessionId;
 - (void) removeAllSessionViewControllers;

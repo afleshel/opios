@@ -117,6 +117,7 @@
  @returns Array of HOPContact objects
  */
 - (NSArray*) getContacts;
+- (NSArray*) getRolodexContacts;
 
 /**
  Adds array of contacts to the conversation thread.
