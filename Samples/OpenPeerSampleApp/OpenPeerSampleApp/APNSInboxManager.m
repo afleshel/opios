@@ -339,7 +339,15 @@
 - (void)getAllMessages
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Get all messages from the UA inbox.");
-    [[UAInbox shared].messageList retrieveMessageListWithDelegate:self];
+    //[[UAInbox shared].messageList retrieveMessageListWithDelegate:self];
+    [[UAInbox shared].messageList retrieveMessageListWithSuccessBlock:^
+    {
+        [self messageListLoadSucceeded];
+    }
+    withFailureBlock:^
+    {
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Loading rich push inbox has failed");
+    }];
 }
 
 /**

@@ -584,4 +584,14 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     else
         return String("HOPIdentity: ") + [message UTF8String];
 }
+
+- (BOOL) isValid
+{
+    BOOL ret = NO;
+    
+    if (identityPtr)
+        ret = YES;
+    
+    return ret;
+}
 @end

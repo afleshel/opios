@@ -34,7 +34,7 @@
 #import "UAPush.h"
 #import "Delegates.h"
 
-@interface APNSInboxManager : NSObject<UAInboxPushHandlerDelegate,UAPushNotificationDelegate,HTTPDownloaderDelegate,UAInboxMessageListDelegate>
+@interface APNSInboxManager : NSObject<UAInboxPushHandlerDelegate,UAPushNotificationDelegate,HTTPDownloaderDelegate>
 
 @property (nonatomic, strong) NSDictionary* localNotificationDictionary;
 + (id) sharedAPNSInboxManager;
