@@ -146,13 +146,17 @@
     NSArray* associatedIdentities = [[HOPAccount sharedAccount] getAssociatedIdentities];
     for (HOPIdentity* identity in associatedIdentities)
     {
-        [identity cancel];
+        if ([identity isValid])
+            [identity cancel];
     }
     
     for (id identity in self.associatingIdentitiesDictionary.allValues)
     {
         if ([[identity class] isSubclassOfClass:[HOPIdentity class]])
-            [identity cancel];
+        {
+            if ([identity isValid])
+                [identity cancel];
+        }
     }
     [self.associatingIdentitiesDictionary removeAllObjects];
 }
