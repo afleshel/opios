@@ -134,7 +134,7 @@
         NSString* title = nil;
         if (conversationThread)
         {
-            NSMutableArray* participants = nil;
+            //NSMutableArray* participants = nil;
             //Create a session with new conversation thread
             ret = [[Session alloc] initWithContacts:contacts conversationThread:conversationThread];
             
@@ -169,7 +169,7 @@
                 [self.sessionsDictionary setObject:ret forKey:[conversationThread getThreadId]];
                 [self.sessionsDictionaryWithCBCID setObject:ret forKey:cbcID];
                 
-                ret.lastConversationEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"create" conversationRecord:ret.sessionRecord partcipants:participants title:title];
+                ret.lastConversationEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"create" conversationRecord:ret.sessionRecord partcipants:contacts title:title];
             }
         }
         else
