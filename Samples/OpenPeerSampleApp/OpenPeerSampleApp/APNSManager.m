@@ -399,9 +399,10 @@
     NSMutableArray* array  = [NSMutableArray arrayWithArray:participantPeerURIs];
     [array addObject:[[HOPModelManager sharedModelManager]getPeerURIForHomeUser]];
     [array removeObject:[message.contact getPeerURI]];
-    for (NSString* peerURI in array)
+    for (NSString* tempPeerURI in array)
     {
-        peerURIs = [peerURIs stringByAppendingString: peerURIs.length > 0 ? [NSString stringWithFormat:@",%@",peerURI] : peerURI];
+        if (![tempPeerURI isEqualToString:peerURI])
+            peerURIs = [peerURIs stringByAppendingString: peerURIs.length > 0 ? [NSString stringWithFormat:@",%@",tempPeerURI] : tempPeerURI];
     }
     
     NSString* ret = [NSString stringWithFormat:@"{\\\"peerURI\\\":\\\"%@\\\",\\\"peerURIs\\\":\\\"%@\\\",\\\"messageId\\\":\\\"%@\\\",\\\"replacesMessageId\\\":\\\"%@\\\",\\\"message\\\":\\\"%@\\\",\\\"location\\\":\\\"%@\\\",\\\"date\\\":\\\"%.0f\\\"}",peerURI,peerURIs,message.messageID,message.replacesMessageID,message.text,location,[message.date timeIntervalSince1970]];

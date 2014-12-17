@@ -173,6 +173,7 @@
             HOPRolodexContact* contact = [[HOPModelManager sharedModelManager] getRolodexContactByPeerURI:senderPeerURI];
             if (contact)
             {
+                [contacts addObject:contact];
                 Session* session = [[SessionManager sharedSessionManager] getSessionForContacts:contacts];
                 if (!session)
                     session = [[SessionManager sharedSessionManager]createSessionForContacts:contacts];
