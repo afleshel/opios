@@ -87,8 +87,8 @@
     }
 
     // add message
-    CGSize sizeOfTheMessage = [self.messageText sizeWithFont:[UIFont fontWithName:SYSTEM_MESSAGE_FONT_TYPE size:SYSTEM_MESSAGE_FONT_SIZE]];
-//
+//    CGSize sizeOfTheMessage = [self.messageText sizeWithFont:[UIFont fontWithName:SYSTEM_MESSAGE_FONT_TYPE size:SYSTEM_MESSAGE_FONT_SIZE]];
+    CGSize sizeOfTheMessage = [self.messageText sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:SYSTEM_MESSAGE_FONT_TYPE size:SYSTEM_MESSAGE_FONT_SIZE]}];
 //    UILabel *lblSystemMessage = [[UILabel alloc] initWithFrame:CGRectMake(5, 10, sizeOfTheMessage.width + 2, sizeOfTheMessage.height + 2)];         
 //    lblSystemMessage.backgroundColor = [UIColor clearColor];
 //    lblSystemMessage.textColor = [UIColor whiteColor];

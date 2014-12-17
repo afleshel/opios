@@ -43,7 +43,6 @@
 
 + (id) sharedContactsManager;
 
-- (void) loadAddressBookContacts;
 
 - (void) loadContacts;
 - (void) refreshExisitngContacts;

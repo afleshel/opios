@@ -178,14 +178,12 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    
     if (self.containerView == self.chatViewController.view.superview)
         [self.chatViewController viewWillAppear:animated];
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    
-}
 
 - (void)didReceiveMemoryWarning
 {

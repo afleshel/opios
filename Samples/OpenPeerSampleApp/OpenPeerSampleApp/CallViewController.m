@@ -75,6 +75,7 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    [super viewDidAppear:animated];
     if (self.buttonWithAnimation)
         [self makePulsingAnimationForButton:self.buttonWithAnimation];
 }

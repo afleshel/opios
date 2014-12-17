@@ -100,6 +100,8 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    
     if (![[HOPUtility getTimeSectionForDate:self.lastRefresh] isEqualToString:@"Today"])
     {
         [self reloadData];
@@ -115,6 +117,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    [super viewWillDisappear:animated];
     [self.refreshTimer invalidate];
     self.refreshTimer = nil;
 }
@@ -334,6 +337,9 @@
             
         case NSFetchedResultsChangeDelete:
             [self.tableViewSessions deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+            default:
             break;
     }
 }

@@ -144,7 +144,7 @@
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Received Push Alert: %@", alert);
     NSString *peerURI = [apnsInfo objectForKey:@"peerURI"];
     NSString *locationID = [apnsInfo objectForKey:@"location"];
-    NSString *peerURIs = [apnsInfo objectForKey:@"peerURIs"];
+    //NSString *peerURIs = [apnsInfo objectForKey:@"peerURIs"];
     [HOPRolodexContact hintAboutLocation:locationID peerURI:peerURI];
     //HOPPublicPeerFile* publicPerFile = [[HOPModelManager sharedModelManager] getPublicPeerFileForPeerURI:peerURI];
 //    HOPContact* contact = [[HOPContact alloc] initWithPeerURI:peerURI];
@@ -340,7 +340,7 @@
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Get all messages from the UA inbox.");
     //[[UAInbox shared].messageList retrieveMessageListWithDelegate:self];
-    UADisposable* disposal = [[UAInbox shared].messageList retrieveMessageListWithSuccessBlock:^
+    [[UAInbox shared].messageList retrieveMessageListWithSuccessBlock:^
     {
         [self messageListLoadSucceeded];
     }
@@ -357,14 +357,14 @@
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push message list load succeeded.");
     NSMutableIndexSet *set = [NSMutableIndexSet indexSet];
-    NSMutableArray* arrayOfMessages = [UAInbox shared].messageList.messages;
+    NSArray* arrayOfMessages = [UAInbox shared].messageList.messages;
     int counter = 0;
     
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Numbe of reach push messages is %d",[arrayOfMessages count]);
     
     for (UAInboxMessage* message in arrayOfMessages)
     {
-        [message markAsReadWithDelegate:self];
+        [message markMessageReadWithCompletionHandler:nil];
         [set addIndex:counter];
         
         if ([message unread])
@@ -377,12 +377,12 @@
         counter++;
     }
     
-    UADisposable *disposable = [[UAInbox shared].messageList performBatchUpdateCommand:UABatchDeleteMessages withMessageIndexSet:set withDelegate:self];
-    
-    if (disposable)
-    {
-        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push inbox is cleaned");
-    }
+//    UADisposable *disposable = [[UAInbox shared].messageList performBatchUpdateCommand:UABatchDeleteMessages withMessageIndexSet:set withDelegate:self];
+//    
+//    if (disposable)
+//    {
+//        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push inbox is cleaned");
+//    }
 }
 /**
  * Tells the delegate that a request for inbox messages failed.
