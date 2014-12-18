@@ -327,7 +327,7 @@ using namespace openpeer::core;
             IdentityContact identityContact = *identityContactInfo;
             if (identityContact.hasData())
             {
-                NSString* sId = [NSString stringWithUTF8String:identityContact.mStableID];
+                //NSString* sId = [NSString stringWithUTF8String:identityContact.mStableID];
                 NSString* identityURI = [NSString stringWithUTF8String:identityContact.mIdentityURI];
                 HOPIdentityContact* hopIdentityContact = [[HOPModelManager sharedModelManager] getIdentityContactWithIdentityURI:identityURI];
                 
@@ -354,7 +354,7 @@ using namespace openpeer::core;
 }
 - (NSArray*) getIdentityContactListForContact:(HOPContact*) rolodexCoontact
 {
-    NSMutableArray* ret = nil;
+    NSArray* ret = nil;
     if(conversationThreadPtr)
     {
         HOPContact* contact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:[rolodexCoontact getPeerURI]];
@@ -560,7 +560,7 @@ using namespace openpeer::core;
     }
 }
 
-+ (NSString*) createSystemMessage:(HOPSystemMessageType) systemMessageType messageType:(int) systemMessageType contact:(HOPContact*) contact
+/*+ (NSString*) createSystemMessage:(HOPSystemMessageType) systemMessageType messageType:(int) messageType contact:(HOPContact*) contact
 {
     NSString* ret = nil;
 
@@ -586,7 +586,7 @@ using namespace openpeer::core;
     }
     
     return ret;
-}
+}*/
 
 + (NSString*) getSystemMessageType
 {

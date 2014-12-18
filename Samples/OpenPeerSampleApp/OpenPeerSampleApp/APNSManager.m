@@ -51,6 +51,7 @@
 #import <OpenPeerSDK/HOPUtility.h>
 #import <OpenPeerSDK/HOPAPNSData.h>
 #import <OpenPeerSDK/HOPMessageRecord+External.h>
+#import <OpenPeerSDK/HOPConversationRecord+External.h>
 #import <OpenPeerSDK/HOPTypes.h>
 
 #define  timeBetweenPushNotificationsInSeconds 1
@@ -398,9 +399,11 @@
     NSMutableArray* array  = [NSMutableArray arrayWithArray:participantPeerURIs];
     [array addObject:[[HOPModelManager sharedModelManager]getPeerURIForHomeUser]];
     [array removeObject:[message.contact getPeerURI]];
-    for (NSString* peerURI in array)
+    for (NSString* tempPeerURI in array)
     {
-        peerURIs = [peerURIs stringByAppendingString: peerURIs.length > 0 ? [NSString stringWithFormat:@",%@",peerURI] : peerURI];
+        if (![tempPeerURI isEqualToString:peerURI])
+            peerURIs = [peerURIs stringByAppendingString: peerURIs.length > 0 ? [NSString stringWithFormat:@",%@",tempPeerURI] : tempPeerURI];
+            //peerURIs = [peerURIs stringByAppendingString: peerURIs.length > 0 ? [NSString stringWithFormat:@",%@",peerURI] : peerURI];
     }
     
     NSString* ret = [NSString stringWithFormat:@"{\\\"peerURI\\\":\\\"%@\\\",\\\"peerURIs\\\":\\\"%@\\\",\\\"messageId\\\":\\\"%@\\\",\\\"replacesMessageId\\\":\\\"%@\\\",\\\"message\\\":\\\"%@\\\",\\\"location\\\":\\\"%@\\\",\\\"date\\\":\\\"%.0f\\\"}",peerURI,peerURIs,message.messageID,message.replacesMessageID,message.text,location,[message.date timeIntervalSince1970]];
@@ -544,10 +547,15 @@ didCompleteWithError:(NSError *)error
             HOPMessageRecord* messageRecord = [[HOPModelManager sharedModelManager] getMessageRecordByID:messageID];
             if (messageRecord)
             {
-                messageRecord.outgoingMessageStatus = HOPConversationThreadMessageDeliveryStateSent;//[NSNumber numberWithInt:HOPConversationThreadMessageDeliveryStateSent];
-                [[HOPModelManager sharedModelManager] updateMessageStateForConversation:messageRecord.session lastDeliveryState:HOPConversationThreadMessageDeliveryStateSent];
-
-                [[HOPModelManager sharedModelManager] saveContext];
+                messageRecord.outgoingMessageStatus = HOPConversationThreadMessageDeliveryStateSent;
+                
+                HOPConversation* conversation = [messageRecord.session getConversation];
+                if (conversation)
+                {
+                    [[HOPModelManager sharedModelManager] updateMessageStateForConversation:conversation lastDeliveryState:HOPConversationThreadMessageDeliveryStateSent];
+                    
+                    [[HOPModelManager sharedModelManager] saveContext];
+                }
             }
         }
         NSError* fileError;
@@ -748,9 +756,12 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask
                             NSArray* messages = nil;
                             @synchronized(self.dictionaryOfPushNotificationsToSend)
                             {
-                                if ([self.dictionaryOfPushNotificationsToSend objectForKey:peerURI])
-                                    messages = [NSMutableArray arrayWithArray:[self.dictionaryOfPushNotificationsToSend objectForKey:peerURI]];
-                                [self.dictionaryOfPushNotificationsToSend removeObjectForKey:peerURI];
+                                if (peerURI.length > 0)
+                                {
+                                    if ([self.dictionaryOfPushNotificationsToSend objectForKey:peerURI])
+                                        messages = [NSMutableArray arrayWithArray:[self.dictionaryOfPushNotificationsToSend objectForKey:peerURI]];
+                                    [self.dictionaryOfPushNotificationsToSend removeObjectForKey:peerURI];
+                                }
                             }
 
                             for (NSDictionary * dict in messages)
@@ -796,7 +807,8 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask
         }
     }
     
-    [self.dictionaryOfHTTPRequests removeObjectForKey:peerURI];
+    if (peerURI.length > 0)
+        [self.dictionaryOfHTTPRequests removeObjectForKey:peerURI];
 }
 
 - (void) httpDownloader:(HTTPDownloader *) downloader didFailWithError:(NSError *)error
@@ -813,6 +825,7 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask
             break;
         }
     }
-    [self.dictionaryOfHTTPRequests removeObjectForKey:peerURI];
+    if (peerURI.length > 0)
+        [self.dictionaryOfHTTPRequests removeObjectForKey:peerURI];
 }
 @end

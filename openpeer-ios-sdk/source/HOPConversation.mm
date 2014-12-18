@@ -168,8 +168,6 @@ using namespace openpeer::core;
 {
     HOPConversation* ret = [HOPConversation new];
     
-    ret = [HOPConversation new];
-    
     if (ret)
     {
         ret.thread = inConversationThread;
@@ -207,8 +205,6 @@ using namespace openpeer::core;
 + (HOPConversation*) createConversationForRecord:(HOPConversationRecord*) inConversationRecord
 {
     HOPConversation* ret = [HOPConversation new];
-    
-    ret = [HOPConversation new];
     
     if (ret)
     {

@@ -399,7 +399,8 @@
                 imgName = @"chat_bubble_left.png";
             }
             
-            imageView.frame = rectEditedIcon;
+            if (message.edited.boolValue)
+                imageView.frame = rectEditedIcon;
             
             //Label message
             [self.messageLabel setFrame:CGRectMake(bubbleXpos + 15.0, 25.0, messageSize.width + 10.0, messageSize.height)];

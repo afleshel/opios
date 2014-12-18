@@ -44,7 +44,8 @@
 @dynamic publicPeerFile;
 @dynamic sessionRecords;
 @dynamic participants;
-
+@dynamic rolodexContacts;
+@dynamic account;
 + (id) createOpenPeerContacFromCoreContact:(IContactPtr) contactPtr conversationThread:(IConversationThreadPtr) conversationThreadPtr
 {
     HOPOpenPeerContact* ret = nil;

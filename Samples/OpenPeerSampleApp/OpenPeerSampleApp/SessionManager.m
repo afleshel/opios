@@ -51,7 +51,7 @@
 @property (nonatomic, assign) HOPConversation* conversationWithActiveCall;
 
 - (id) initSingleton;
-- (BOOL) setActiveConversation:(HOPConversation*) inConversation callActive:(BOOL) callActive;
+- (BOOL) setActiveCallConversation:(HOPConversation*) inConversation callActive:(BOOL) callActive;
 - (NSString*) getTitleForConversationThread:(HOPConversationThread*) conversationThread;
 @end
 
@@ -391,7 +391,7 @@
         else
             [call answer];
         
-        BOOL callFlagIsSet = [self setActiveCallConversation:conversation callActive:YES];
+        [self setActiveCallConversation:conversation callActive:YES];
     }
     else //If callFlagIsSet is NO, hangup incoming call. 
     {

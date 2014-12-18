@@ -38,7 +38,7 @@
 #import "SBJsonParser.h"
 #import "SessionManager.h"
 #import "LoginManager.h"
-#import "Session.h"
+//#import "Session.h"
 #import "OpenPeer.h"
 #import "MainViewController.h"
 #import "Utility.h"
@@ -46,6 +46,7 @@
 #import <OpenpeerSDK/HOPModelManager.h>
 #import <OpenpeerSDK/HOPRolodexContact+External.h>
 #import <OpenpeerSDK/HOPConversationThread.h>
+#import <OpenpeerSDK/HOPConversation.h>
 
 @interface APNSInboxManager ()
 
@@ -143,13 +144,8 @@
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Received Push Alert: %@", alert);
     NSString *peerURI = [apnsInfo objectForKey:@"peerURI"];
     NSString *locationID = [apnsInfo objectForKey:@"location"];
-    NSString *peerURIs = [apnsInfo objectForKey:@"peerURIs"];
+
     [HOPRolodexContact hintAboutLocation:locationID peerURI:peerURI];
-    //HOPPublicPeerFile* publicPerFile = [[HOPModelManager sharedModelManager] getPublicPeerFileForPeerURI:peerURI];
-//    HOPContact* contact = [[HOPContact alloc] initWithPeerURI:peerURI];
-//    
-//    if ([locationID length] > 0)
-//        [contact hintAboutLocation:locationID];
 }
 
 
@@ -172,9 +168,10 @@
             HOPRolodexContact* contact = [[HOPModelManager sharedModelManager] getRolodexContactByPeerURI:senderPeerURI];
             if (contact)
             {
-                Session* session = [[SessionManager sharedSessionManager] getSessionForContacts:contacts];
-                if (!session)
-                    session = [[SessionManager sharedSessionManager]createSessionForContacts:contacts];
+                [contacts addObject:contact];
+                HOPConversation* conversation = [[SessionManager sharedSessionManager] getConversationForContacts:contacts];
+                if (!conversation)
+                    conversation = [HOPConversation createConversationWithParticipants:contacts title:nil];
                 
                 NSString* messageID = [richPushDictionary objectForKey:@"messageId"];
                 NSString* messageText = [richPushDictionary objectForKey:@"message"];
@@ -208,19 +205,19 @@
                     }
                     else
                     {
-                        HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:messageText type:messageTypeText date:date conversationThreadID:[session.conversationThread getThreadId] contact:contact messageId:messageID conversationEvent:session.lastConversationEvent];
+                        HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:messageText type:messageTypeText date:date conversation:conversation contact:contact messageId:messageID];
                         
                         
                         if (messageObj)
                         {
-                            [session.unreadMessageArray addObject:messageObj];
+                            conversation.numberOfUnreadMessages++;
                             
                             //If session view controller with message sender is not yet shown, show it
-                            [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForSession:session forIncomingCall:NO forIncomingMessage:YES];
+                            [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForConversation:conversation forIncomingCall:NO forIncomingMessage:YES];
                         }
                         else
                         {
-                            OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"%@ message is not saved - message id %@ - session id %@ - date %@",messageText,messageID,[session.conversationThread getThreadId],date);
+                            OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"%@ message is not saved - message id %@ - session id %@ - date %@",messageText,messageID,[conversation getID],date);
                         }
                     }
                 }
@@ -338,7 +335,15 @@
 - (void)getAllMessages
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Get all messages from the UA inbox.");
-    [[UAInbox shared].messageList retrieveMessageListWithDelegate:self];
+    //[[UAInbox shared].messageList retrieveMessageListWithDelegate:self];
+    [[UAInbox shared].messageList retrieveMessageListWithSuccessBlock:^
+     {
+         [self messageListLoadSucceeded];
+     }
+     withFailureBlock:^
+     {
+         OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Loading rich push inbox has failed");
+     }];
 }
 
 /**
@@ -348,27 +353,29 @@
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push message list load succeeded.");
     NSMutableIndexSet *set = [NSMutableIndexSet indexSet];
-    NSMutableArray* arrayOfMessages = [UAInbox shared].messageList.messages;
+    NSArray* arrayOfMessages = [UAInbox shared].messageList.messages;
     int counter = 0;
     
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Numbe of reach push messages is %d",[arrayOfMessages count]);
     
     for (UAInboxMessage* message in arrayOfMessages)
     {
-        [message markAsReadWithDelegate:self];
+        //[message markAsReadWithDelegate:self];
+        [message markMessageReadWithCompletionHandler:^(UAInboxMessage *message) {
+            [self batchMarkAsReadFinished];
+        }];
+
         [set addIndex:counter];
         
         if ([message unread])
             [self loadMessage:message];
-        else
-        {
-            
-        }
-        //[self launchRichPushMessageAvailable:message];
+        
         counter++;
     }
     
-    UADisposable *disposable = [[UAInbox shared].messageList performBatchUpdateCommand:UABatchDeleteMessages withMessageIndexSet:set withDelegate:self];
+    
+    UADisposable *disposable = [[UAInbox shared].messageList markMessagesDeleted:arrayOfMessages completionHandler:^{[self batchDeleteFinished];}];
+                                //UADisposable *disposable = [[UAInbox shared].messageList performBatchUpdateCommand:UABatchDeleteMessages withMessageIndexSet:set withDelegate:self];
     
     if (disposable)
     {

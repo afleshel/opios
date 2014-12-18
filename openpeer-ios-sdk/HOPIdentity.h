@@ -238,4 +238,6 @@
  Destroys identity core object.
  */
 - (void) destroyCoreObject;
+
+- (BOOL) isValid;
 @end

@@ -391,7 +391,7 @@
  @param conversationRecord Conversation thread record
  @param messageDeliveryState MEssage delivery state
  */
-- (void) updateMessageStateForConversation:(HOPConversationRecord*) conversationRecord lastDeliveryState:(HOPConversationThreadMessageDeliveryState) messageDeliveryState;
+- (void) updateMessageStateForConversation:(HOPConversation*) conversation lastDeliveryState:(HOPConversationThreadMessageDeliveryState) messageDeliveryState;
 
 /**
  Returns open peer contact for peer URI.

@@ -64,5 +64,5 @@ typedef enum
 - (SystemMessageTypes) getTypeForSystemMessage:(HOPMessage*) message;
 
 - (void) resendMessages;
-- (void) resendMessage:(HOPMessageRecord*) message forConversation:(HOPConversation*) conversation;
+- (void) resendMessage:(HOPMessageRecord*) message conversation:(HOPConversation*) conversation;
 @end

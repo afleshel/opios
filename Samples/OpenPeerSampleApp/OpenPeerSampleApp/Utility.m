@@ -324,28 +324,6 @@ static const short _base64DecodingTable[256] = {
     return res;
 }
 
-+ (NSString*) getMessageDeliveryStateAsString:(HOPConversationThreadMessageDeliveryState) messageState
-{
-    NSString *res = nil;
-    
-    switch (messageState)
-    {
-        case HOPConversationThreadMessageDeliveryStateDiscovering:
-            res = NSLocalizedString(@"discovering", @"");
-            break;
-        case HOPConversationThreadMessageDeliveryStateUserNotAvailable:
-            res = NSLocalizedString(@"user not available", @"");
-            break;
-        case HOPConversationThreadMessageDeliveryStateDelivered:
-            res = NSLocalizedString(@"delivered", @"");
-            break;
-      case HOPConversationThreadMessageDeliveryStateRead:
-            res = NSLocalizedString(@"read", @"");
-            break;
-    }
-    return res;
-}
-
 + (NSString*) getFunctionNameForRequest:(NSString*) requestString
 {
     NSString* ret = @"";

@@ -241,10 +241,6 @@
     }
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    
-}
 
 - (void)viewWillDisappear:(BOOL)animated
 {
@@ -349,7 +345,7 @@
         
         if (![swipedCell.message.type isEqualToString:[HOPSystemMessage getMessageType]] && !swipedCell.message.sender && !swipedCell.message.deleted.boolValue && swipedCell.message.outgoingMessageStatus == HOPConversationThreadMessageDeliveryStateUserNotAvailable)
         {
-            [[MessageManager sharedMessageManager] resendMessage:swipedCell.message forConversation:self.conversation];
+            [[MessageManager sharedMessageManager] resendMessage:swipedCell.message conversation:self.conversation];
             
         }
         else
@@ -630,6 +626,9 @@
         case NSFetchedResultsChangeDelete:
             [self.chatTableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex]
                           withRowAnimation:NO];
+            break;
+            
+            default:
             break;
     }
 }

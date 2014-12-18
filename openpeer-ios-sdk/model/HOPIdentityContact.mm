@@ -41,5 +41,5 @@
 @dynamic priority;
 @dynamic weight;
 @dynamic rolodexContact;
-
+@dynamic openPeerContact;
 @end

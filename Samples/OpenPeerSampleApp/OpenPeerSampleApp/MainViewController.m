@@ -107,6 +107,7 @@
 
 -(void)viewDidUnload
 {
+    [super viewDidUnload];
     if (self.threeTapGestureRecognizer)
     {
         [self.view removeGestureRecognizer:self.threeTapGestureRecognizer];
@@ -116,19 +117,13 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     [self showSplashScreen];
     //self.splashViewController.view.frame = self.view.bounds;
     //[self.view addSubview:self.splashViewController.view];
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    
-}
 
-- (void)viewDidDisappear:(BOOL)animated
-{
-}
 
 - (void)didReceiveMemoryWarning
 {

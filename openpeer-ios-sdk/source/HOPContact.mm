@@ -252,10 +252,11 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
 - (HOPIdentityContact*) createIdentityContactForCoreContact
 {
+    HOPIdentityContact* hopIdentityContact = nil;
     NSManagedObject* managedObject = [[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPIdentityContact"];
     if ([managedObject isKindOfClass:[HOPIdentityContact class]])
     {
-        HOPIdentityContact* hopIdentityContact = (HOPIdentityContact*)managedObject;
+        hopIdentityContact = (HOPIdentityContact*)managedObject;
         
         NSManagedObject* managedObject = [[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPPublicPeerFile"];
         if ([managedObject isKindOfClass:[HOPPublicPeerFile class]])
@@ -267,6 +268,8 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
         }
         [[HOPModelManager sharedModelManager] saveContext];
     }
+    
+    return hopIdentityContact;
 }
 
 #pragma mark - Internal methods

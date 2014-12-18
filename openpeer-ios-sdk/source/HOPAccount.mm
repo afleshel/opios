@@ -412,7 +412,7 @@ using namespace openpeer::core;
             array = [[NSMutableArray alloc] init];
             for (IdentityList::iterator it = associatedIdentities->begin(); it != associatedIdentities->end(); ++it)
             {
-                NSString* identityURI = [NSString stringWithUTF8String: it->get()->getIdentityURI()];
+                //NSString* identityURI = [NSString stringWithUTF8String: it->get()->getIdentityURI()];
                 HOPIdentity* identity = [[OpenPeerStorageManager sharedStorageManager] getIdentityForPUID:it->get()->getID()];
                 
                 if (!identity)

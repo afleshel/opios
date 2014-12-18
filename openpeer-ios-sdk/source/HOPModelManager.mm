@@ -1364,7 +1364,7 @@ using namespace openpeer::core;
 
 - (HOPParticipants*) addParticiapantsForListOfContacts:(NSArray*) contacts
 {
-    HOPParticipants* ret = [self createObjectForEntity:@"HOPParticipants"];
+    HOPParticipants* ret = (HOPParticipants*)[self createObjectForEntity:@"HOPParticipants"];
     NSString* cbcID = @"";
     for (HOPOpenPeerContact* contact in contacts)
     {

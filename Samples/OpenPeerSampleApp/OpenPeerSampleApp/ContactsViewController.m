@@ -152,6 +152,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     self.navigationItem.title = self.isInFavoritesMode ? @"Favorites" : @"Contacts";
     [self.contactsTableView reloadRowsAtIndexPaths:[self.contactsTableView indexPathsForVisibleRows]
                      withRowAnimation:UITableViewRowAnimationNone];
@@ -159,11 +160,13 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    [super viewDidAppear:animated];
     [self registerForNotifications:YES];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
+    [super viewDidDisappear:animated];
     [self registerForNotifications:NO];
     if (self.oneTapGestureRecognizer)
         [self.view removeGestureRecognizer:self.oneTapGestureRecognizer];
@@ -343,7 +346,7 @@
         return _fetchedResultsController;
     }
     
-    NSString *cacheName = nil;
+    //NSString *cacheName = nil;
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPRolodexContact" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];
@@ -367,13 +370,13 @@
     switch (self.mode)
     {
         case CONTACTS_TABLE_MODE_REGULAR:
-            cacheName = @"RolodexContacts";
+            //cacheName = @"RolodexContacts";
             break;
             
         case CONTACTS_TABLE_MODE_FAVORITES:
             predicateForFiltering = [NSPredicate predicateWithFormat:@"identityContact != nil"];
             [predicatesArray addObject:predicateForFiltering];
-            cacheName = @"FavoritesContacts";
+            //cacheName = @"FavoritesContacts";
             break;
             
         case CONTACTS_TABLE_MODE_ADDING:
