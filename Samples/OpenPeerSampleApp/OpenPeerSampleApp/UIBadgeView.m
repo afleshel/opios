@@ -141,6 +141,7 @@
         CGContextRestoreGState(context);
         
         CGPathRelease(thePath);
+        CGPathRelease(thePath2);
         CGColorSpaceRelease(colorspace);
         
         

@@ -91,7 +91,7 @@
     {
         NSArray* results = nil;
         
-        NSString* cbcID = [HOPModelManager getCBCIDForContacts:[conversationThread getContacts]];
+        //NSString* cbcID = [HOPModelManager getCBCIDForContacts:[conversationThread getContacts]];
         
         NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"lastActivity" ascending:NO];
         
@@ -134,7 +134,7 @@
         NSString* title = nil;
         if (conversationThread)
         {
-            NSMutableArray* participants = nil;
+            //NSMutableArray* participants = nil;
             //Create a session with new conversation thread
             ret = [[Session alloc] initWithContacts:contacts conversationThread:conversationThread];
             
@@ -169,7 +169,7 @@
                 [self.sessionsDictionary setObject:ret forKey:[conversationThread getThreadId]];
                 [self.sessionsDictionaryWithCBCID setObject:ret forKey:cbcID];
                 
-                ret.lastConversationEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"create" conversationRecord:ret.sessionRecord partcipants:participants title:title];
+                ret.lastConversationEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"create" conversationRecord:ret.sessionRecord partcipants:contacts title:title];
             }
         }
         else
@@ -252,7 +252,7 @@
         NSArray* contacts = [inConversationThread getContacts];
         OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Creating session record from conversation thread id: %@", [inConversationThread getThreadId]);
         
-        [[HOPModelManager sharedModelManager] createConversationRecordForConversationThread:inConversationThread type:nil date:nil name:nil participants:contacts];
+        [[HOPModelManager sharedModelManager] createConversationRecordForConversationThread:inConversationThread type:nil date:[NSDate date] name:nil participants:contacts];
 
         [[HOPModelManager sharedModelManager] saveContext];
         [self setValidSession:ret newSessionId:newSessionId oldSessionId:oldSessionId];
@@ -428,7 +428,7 @@
         else
             [call answer];
         
-        BOOL callFlagIsSet = [self setActiveCallSession:session callActive:YES];
+        [self setActiveCallSession:session callActive:YES];
     }
     else //If callFlagIsSet is NO, hangup incoming call. 
     {
@@ -664,7 +664,7 @@
                 NSArray* contactsArray = [[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:[[participants objectAtIndex:0] getPeerURI]];
                 if (contactsArray)
                 {
-                    [[HOPModelManager sharedModelManager] createConversationRecordForConversationThread:conversationThread type:nil date:nil name:nil participants:contactsArray];
+                    [[HOPModelManager sharedModelManager] createConversationRecordForConversationThread:conversationThread type:nil date:[NSDate date] name:nil participants:contactsArray];
                 
                     [self setValidSession:session newSessionId:newSessionId oldSessionId:oldSessionId];
                 }

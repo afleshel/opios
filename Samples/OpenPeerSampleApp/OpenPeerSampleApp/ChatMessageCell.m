@@ -264,7 +264,7 @@
         [self.messageStatus removeFromSuperview];
 }
 
-- (void)setAvatar
+/*- (void)setAvatar
 {
     UIImage *avat;
     // show avatar
@@ -278,7 +278,7 @@
     
     if (!avat)
         avat = [UIImage imageNamed:@"avatar.png"];
-}
+}*/
 
 -(void)layoutSubviews
 {

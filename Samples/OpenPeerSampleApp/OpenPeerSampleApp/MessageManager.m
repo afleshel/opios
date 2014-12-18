@@ -109,7 +109,7 @@
     {
         HOPMessage* hopMessage = [self createSystemMessageWithType:HOPSystemMessageTypeCall messageType:callSystemMessage reasonCode:reasonCode andRecipient:contact];
         BOOL visible = callSystemMessage != HOPCallSystemMessageTypeCallAnswered;
-        HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:hopMessage.text type:[HOPSystemMessage getMessageType]  date:hopMessage.date visible:visible conversationThreadID:[inSession.conversationThread getThreadId] contact:contact  messageId:hopMessage.messageID conversationEvent:inSession.lastConversationEvent];
+        [[HOPModelManager sharedModelManager] addMessage:hopMessage.text type:[HOPSystemMessage getMessageType]  date:hopMessage.date visible:visible conversationThreadID:[inSession.conversationThread getThreadId] contact:contact  messageId:hopMessage.messageID conversationEvent:inSession.lastConversationEvent];
         [inSession.conversationThread sendMessage:hopMessage];
     }
 }
@@ -282,7 +282,7 @@
     {
         BOOL visible = [message.text rangeOfString:@"\"type\":\"answered\""].location == NSNotFound;
         //Save System message
-        HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:message.text type:[HOPSystemMessage getMessageType] date:message.date visible:visible conversationThreadID:[session.conversationThread getThreadId] contact:message.contact messageId:message.messageID conversationEvent:session.lastConversationEvent];
+        [[HOPModelManager sharedModelManager] addMessage:message.text type:[HOPSystemMessage getMessageType] date:message.date visible:visible conversationThreadID:[session.conversationThread getThreadId] contact:message.contact messageId:message.messageID conversationEvent:session.lastConversationEvent];
         [self parseSystemMessage:message forSession:session];
     }
 }

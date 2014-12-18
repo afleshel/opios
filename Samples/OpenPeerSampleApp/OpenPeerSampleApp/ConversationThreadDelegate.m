@@ -91,7 +91,7 @@
 
 - (void) onConversationThreadContactStatusChanged:(HOPConversationThread*) conversationThread contact:(HOPRolodexContact*) contact
 {
-    HOPConversationThreadContactStatus contactState = [conversationThread getContactStatus:contact];
+    HOPConversationThreadContactStatus contactState = [conversationThread getContactStatus:[contact getCoreContact]];
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread id: <%@> - contact peer URI: <%@> state: %d",[conversationThread getThreadId], [contact getPeerURI],contactState);
     dispatch_async(dispatch_get_main_queue(), ^
     {

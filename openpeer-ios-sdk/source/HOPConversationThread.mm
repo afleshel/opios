@@ -448,7 +448,7 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (HOPConversationThreadContactStatus) getContactStatus:(HOPRolodexContact*) rolodexCoontact
+- (HOPConversationThreadContactStatus) getContactStatusNew:(HOPRolodexContact*) rolodexCoontact
 {
     HOPConversationThreadContactStatus ret = HOPComposingStateInactive;
     if(conversationThreadPtr)
@@ -480,6 +480,36 @@ using namespace openpeer::core;
     return ret;
 }
 
+- (HOPConversationThreadContactStatus) getContactStatus:(HOPContact*) contact
+{
+    HOPConversationThreadContactStatus ret = HOPComposingStateInactive;
+    if(conversationThreadPtr)
+    {
+        IContactPtr contactPtr = [contact getContactPtr];
+        if (contactPtr)
+        {
+            ElementPtr contactStatusJSONPtr = conversationThreadPtr->getContactStatus(contactPtr);
+            if (contactStatusJSONPtr)
+            {
+                ComposingStatusPtr composingStatusPtr = ComposingStatus::extract(contactStatusJSONPtr);
+                if (composingStatusPtr)
+                {
+                    ret = (HOPConversationThreadContactStatus) composingStatusPtr->mComposingStatus;
+                    //                    String str = ComposingStatus::toString(composingStatusPtr->mComposingStatus); //IHelper::convertToString(contactStatusJSONPtr);
+                    //                    if (str.hasData())
+                    //                        ret = [NSString stringWithCString:str encoding:NSUTF8StringEncoding];
+                }
+            }
+        }
+    }
+    else
+    {
+        ZS_LOG_ERROR(Debug, [self log:@"Invalid conversation thread object!"]);
+        [NSException raise:NSInvalidArgumentException format:@"Invalid conversation thread object!"];
+    }
+    
+    return ret;
+}
 
 - (void) setStatusInThread:(HOPConversationThreadContactStatus) status
 {

@@ -264,10 +264,6 @@
     }
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    
-}
 
 - (void)viewWillDisappear:(BOOL)animated
 {
@@ -658,6 +654,9 @@
         case NSFetchedResultsChangeDelete:
             [self.chatTableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex]
                           withRowAnimation:NO];
+            break;
+            
+            default:
             break;
     }
 }
