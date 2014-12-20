@@ -38,17 +38,17 @@
 
 @interface HOPCallSystemMessage : HOPSystemMessage <NSCopying>
 
-@property (nonatomic) HOPCallSystemMessageType messageType;
+@property (nonatomic) HOPCallSystemMessageStatus messageStatus;
 @property (nonatomic,weak) HOPContact* callee;
 @property (nonatomic) unsigned short errorCode;
 @property (nonatomic, copy) NSString* jsonMessage;
 
-- (id) initWithMessageTypeNew:(HOPCallSystemMessageType) inType callee:(HOPRolodexContact*) inCallee errorCode:(unsigned short) inErrorCode;
-- (id) initWithMessageType:(HOPCallSystemMessageType) inType callee:(HOPContact*) inCallee errorCode:(unsigned short) inErrorCode;
+- (id) initWithMessageTypeNew:(HOPCallSystemMessageStatus) inStatus callee:(HOPRolodexContact*) inCallee errorCode:(unsigned short) inErrorCode;
+- (id) initWithMessageType:(HOPCallSystemMessageStatus) inStatus callee:(HOPContact*) inCallee errorCode:(unsigned short) inErrorCode;
 + (id) callSystemMessageFromJSON:(NSString*) jsonMessage;
 
-+ (NSString*) stringForMessageType:(HOPCallSystemMessageType) messageType;
-+ (HOPCallSystemMessageType) messageTypeForString: (NSString*) messageTypeString;
++ (NSString*) stringForMessageStatus:(HOPCallSystemMessageStatus) messageStatus;
++ (HOPCallSystemMessageStatus) messageStatusForString: (NSString*) messageStatusString;
 
 - (BOOL) hasData;
 

@@ -210,7 +210,7 @@
  @param contact Message recepient
  @return NSString formated system message
  */
-+ (NSString*) createSystemMessage:(HOPSystemMessageType) systemMessageType messageType:(int) systemMessageType contact:(HOPContact*) contact;
++ (NSString*) createSystemMessage:(HOPSystemMessageType) systemMessageType messageType:(int) messageType contact:(HOPContact*) contact;
 
 /**
  *  Returns system message type string.

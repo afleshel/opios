@@ -43,21 +43,23 @@ using namespace openpeer::core;
 
 @implementation HOPCallSystemMessage
 
-- (id) initWithMessageTypeNew:(HOPCallSystemMessageType) inType callee:(HOPRolodexContact*) inCallee errorCode:(unsigned short) inErrorCode
+- (id) initWithMessageTypeNew:(HOPCallSystemMessageStatus) inStatus callee:(HOPRolodexContact*) inCallee errorCode:(unsigned short) inErrorCode
 {
     self = [super init];
     if (self)
     {
         HOPContact* coreContact = [inCallee getCoreContact];
-        callSystemMessagePtr = CallSystemMessagePtr(new CallSystemMessage((CallSystemMessage::CallSystemMessageTypes)inType, [coreContact getContactPtr], inErrorCode));
+        callSystemMessagePtr = CallSystemMessagePtr(new CallSystemMessage((CallSystemMessage::CallSystemMessageStatuses)inStatus, String(), String(), [coreContact getContactPtr], inErrorCode));
+#define WARNING_ADD_MEDIA_TYPE_AND_CALL_ID 1
+#define WARNING_ADD_MEDIA_TYPE_AND_CALL_ID 2
         self.type = HOPSystemMessageTypeCall;
-        self.messageType = inType;
+        self.messageStatus = inStatus;
         self.callee = coreContact;
         self.errorCode = inErrorCode;
         
         callSystemMessagePtr->mCallee = [coreContact getContactPtr];
-        callSystemMessagePtr->mType = (CallSystemMessage::CallSystemMessageTypes)inType;
-        
+        callSystemMessagePtr->mStatus = (CallSystemMessage::CallSystemMessageStatuses)inStatus;
+
         ElementPtr elementPtr = ISystemMessage::createEmptySystemMessage();
         callSystemMessagePtr->insert(elementPtr);
         
@@ -68,19 +70,21 @@ using namespace openpeer::core;
     return self;
 }
 
-- (id) initWithMessageType:(HOPCallSystemMessageType) inType callee:(HOPContact*) inCallee errorCode:(unsigned short) inErrorCode
+- (id) initWithMessageType:(HOPCallSystemMessageStatus) inStatus callee:(HOPContact*) inCallee errorCode:(unsigned short) inErrorCode
 {
     self = [super init];
     if (self)
     {
-        callSystemMessagePtr = CallSystemMessagePtr(new CallSystemMessage((CallSystemMessage::CallSystemMessageTypes)inType, [inCallee getContactPtr], inErrorCode));
+        callSystemMessagePtr = CallSystemMessagePtr(new CallSystemMessage((CallSystemMessage::CallSystemMessageStatuses)inStatus, String(), String(), [inCallee getContactPtr], inErrorCode));
+#define WARNING_ADD_MEDIA_TYPE_AND_CALL_ID 1
+#define WARNING_ADD_MEDIA_TYPE_AND_CALL_ID 2
         self.type = HOPSystemMessageTypeCall;
-        self.messageType = inType;
+        self.messageStatus = inStatus;
         self.callee = inCallee;
         self.errorCode = inErrorCode;
         
         callSystemMessagePtr->mCallee = [inCallee getContactPtr];
-        callSystemMessagePtr->mType = (CallSystemMessage::CallSystemMessageTypes)inType;
+        callSystemMessagePtr->mStatus = (CallSystemMessage::CallSystemMessageStatuses)inStatus;
         
         ElementPtr elementPtr = ISystemMessage::createEmptySystemMessage();
         callSystemMessagePtr->insert(elementPtr);
@@ -110,11 +114,11 @@ using namespace openpeer::core;
     return ret;
 }
 
-+ (NSString*) stringForMessageType:(HOPCallSystemMessageType) messageType
++ (NSString*) stringForMessageStatus:(HOPCallSystemMessageStatus) messageStatus
 {
     NSString* ret = nil;
     
-    String str = CallSystemMessage::toString((CallSystemMessage::CallSystemMessageTypes)messageType);
+    String str = CallSystemMessage::toString((CallSystemMessage::CallSystemMessageStatuses)messageStatus);
     
     if (str.hasData())
     {
@@ -124,13 +128,13 @@ using namespace openpeer::core;
     return ret;
 }
 
-+ (HOPCallSystemMessageType) messageTypeForString: (NSString*) messageTypeString
++ (HOPCallSystemMessageStatus) messageTypeForString: (NSString*) messageTypeString
 {
-    HOPCallSystemMessageType ret = HOPCallSystemMessageTypeUnknown;
+    HOPCallSystemMessageStatus ret = HOPCallSystemMessageStatusUnknown;
     
     if ([messageTypeString length] > 0)
     {
-        ret = (HOPCallSystemMessageType)CallSystemMessage::toCallSystemMessageType([messageTypeString UTF8String]);
+        ret = (HOPCallSystemMessageStatus)CallSystemMessage::toCallSystemMessageStatus([messageTypeString UTF8String]);
     }
     
     return ret;
@@ -156,7 +160,7 @@ using namespace openpeer::core;
     {
         callSystemMessagePtr = inCallSystemMessagePtr;
         self.type = HOPSystemMessageTypeCall;
-        self.messageType = (HOPCallSystemMessageType) callSystemMessagePtr->mType;
+        self.messageStatus = (HOPCallSystemMessageStatus) callSystemMessagePtr->mStatus;
         self.callee = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:[NSString stringWithUTF8String:callSystemMessagePtr->mCallee->getPeerURI()]];
         self.errorCode = callSystemMessagePtr->mErrorCode;
     }

@@ -650,7 +650,7 @@ using namespace openpeer::core;
     }
 }
 
-+ (NSString*) createSystemMessage:(HOPSystemMessageType) systemMessageType messageType:(int) systemMessageType contact:(HOPContact*) contact
++ (NSString*) createSystemMessage:(HOPSystemMessageType) systemMessageType messageType:(int) messageType contact:(HOPContact*) contact
 {
     NSString* ret = nil;
 
@@ -662,7 +662,9 @@ using namespace openpeer::core;
         {
             case HOPSystemMessageTypeCall:
             {
-                CallSystemMessagePtr callSystemPtr = CallSystemMessagePtr(new CallSystemMessage((CallSystemMessage::CallSystemMessageTypes) systemMessageType,[contact getContactPtr]));
+#define WARNING_FILL_IN_MEDIA_TYPE_AND_CALL_ID 1
+#define WARNING_FILL_IN_MEDIA_TYPE_AND_CALL_ID 2
+                CallSystemMessagePtr callSystemPtr = CallSystemMessagePtr(new CallSystemMessage((CallSystemMessage::CallSystemMessageStatuses) messageType, String(), String(), [contact getContactPtr]));
                 callSystemPtr->insert(systemMessage);
             }
                 break;

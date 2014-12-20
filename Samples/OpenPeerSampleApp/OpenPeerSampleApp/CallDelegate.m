@@ -88,7 +88,7 @@
                 [[SessionManager sharedSessionManager] onCallOpened:call];
                 
                 if ([[call getCallerNew] isSelf])
-                    [[MessageManager sharedMessageManager] sendCallSystemMessage:HOPCallSystemMessageTypeCallAnswered reasonCode:0 session:[[[SessionManager sharedSessionManager] sessionsDictionary] objectForKey:sessionId]];
+                    [[MessageManager sharedMessageManager] sendCallSystemMessage:HOPCallSystemMessageStatusCallAnswered reasonCode:0 session:[[[SessionManager sharedSessionManager] sessionsDictionary] objectForKey:sessionId]];
                 
                 [sessionViewController startTimer];
                 break;
@@ -124,7 +124,7 @@
                     {
                         reasonCode = 404;
                     }
-                    [[MessageManager sharedMessageManager] sendCallSystemMessage:HOPCallSystemMessageTypeCallHungup reasonCode:reasonCode session:[[[SessionManager sharedSessionManager] sessionsDictionary] objectForKey:sessionId]];
+                    [[MessageManager sharedMessageManager] sendCallSystemMessage:HOPCallSystemMessageStatusCallHungup reasonCode:reasonCode session:[[[SessionManager sharedSessionManager] sessionsDictionary] objectForKey:sessionId]];
                 }
                 break;
                 

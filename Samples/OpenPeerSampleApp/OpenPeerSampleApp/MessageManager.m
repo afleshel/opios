@@ -87,7 +87,7 @@
 {
     HOPMessage* hopMessage = nil;
     
-    HOPCallSystemMessage* callSystemMessage = [[HOPCallSystemMessage alloc] initWithMessageTypeNew:(HOPCallSystemMessageType)messageType callee:contact errorCode:reasonCode];
+    HOPCallSystemMessage* callSystemMessage = [[HOPCallSystemMessage alloc] initWithMessageTypeNew:(HOPCallSystemMessageStatus)messageType callee:contact errorCode:reasonCode];
     NSString* messageBody = callSystemMessage.jsonMessage;
     if ([messageBody length] > 0)
     {
@@ -103,12 +103,12 @@
     return hopMessage;
 }
 
-- (void) sendCallSystemMessage:(HOPCallSystemMessageType) callSystemMessage reasonCode:(int) reasonCode session:(Session*) inSession
+- (void) sendCallSystemMessage:(HOPCallSystemMessageStatus) callSystemMessage reasonCode:(int) reasonCode session:(Session*) inSession
 {
     for (HOPRolodexContact* contact in inSession.participantsArray)
     {
         HOPMessage* hopMessage = [self createSystemMessageWithType:HOPSystemMessageTypeCall messageType:callSystemMessage reasonCode:reasonCode andRecipient:contact];
-        BOOL visible = callSystemMessage != HOPCallSystemMessageTypeCallAnswered;
+        BOOL visible = callSystemMessage != HOPCallSystemMessageStatusCallAnswered;
         [[HOPModelManager sharedModelManager] addMessage:hopMessage.text type:[HOPSystemMessage getMessageType]  date:hopMessage.date visible:visible conversationThreadID:[inSession.conversationThread getThreadId] contact:contact  messageId:hopMessage.messageID conversationEvent:inSession.lastConversationEvent];
         [inSession.conversationThread sendMessage:hopMessage];
     }
@@ -119,7 +119,7 @@
 {
     for (HOPRolodexContact* contact in inSession.participantsArray)
     {
-        HOPMessage* hopMessage = [self createSystemMessageWithType:HOPSystemMessageTypeCall messageType:HOPCallSystemMessageTypeCallPlaced reasonCode:0 andRecipient:contact];
+        HOPMessage* hopMessage = [self createSystemMessageWithType:HOPSystemMessageTypeCall messageType:HOPCallSystemMessageStatusCallPlaced reasonCode:0 andRecipient:contact];
         [inSession.conversationThread sendMessage:hopMessage];
     }
 }

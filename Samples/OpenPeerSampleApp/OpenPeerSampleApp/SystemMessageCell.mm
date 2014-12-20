@@ -102,12 +102,12 @@
     // add image(if need it)
     NSString *imgPath = nil;
 
-    switch (self.callSystemMessage.messageType)
+    switch (self.callSystemMessage.messageStatus)
     {
-        case HOPCallSystemMessageTypeCallPlaced:
+        case HOPCallSystemMessageStatusCallPlaced:
           imgPath = @"message_indicator_call_started.png";
           break;
-        case HOPCallSystemMessageTypeCallHungup:
+        case HOPCallSystemMessageStatusCallHungup:
           imgPath = @"message_indicator_call_ended.png";
           break;
         default:

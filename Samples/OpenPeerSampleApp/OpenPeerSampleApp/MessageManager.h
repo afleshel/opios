@@ -55,7 +55,7 @@ typedef enum
 
 - (HOPMessage*) createSystemMessageWithType:(HOPSystemMessageType) type messageType:(int) messageType reasonCode:(int)reasonCode andRecipient:(HOPRolodexContact*) contact;
 
-- (void) sendCallSystemMessage:(HOPCallSystemMessageType) callSystemMessage reasonCode:(int) reasonCode session:(Session*) inSession;
+- (void) sendCallSystemMessage:(HOPCallSystemMessageStatus) callSystemMessage reasonCode:(int) reasonCode session:(Session*) inSession;
 
 - (void) parseSystemMessage:(HOPMessage*) inMessage forSession:(Session*) inSession;
 - (void) sendMessage:(NSString*) message replacesMessageID:(NSString*) replacesMessageID forSession:(Session*) inSession;

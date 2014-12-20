@@ -311,7 +311,7 @@
         {
             OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Making a call for the session <%p>", inSession);
             
-            [[MessageManager sharedMessageManager] sendCallSystemMessage:HOPCallSystemMessageTypeCallPlaced reasonCode:0 session:inSession];
+            [[MessageManager sharedMessageManager] sendCallSystemMessage:HOPCallSystemMessageStatusCallPlaced reasonCode:0 session:inSession];
             
             //Place a audio or video call for chosen contact
             inSession.isRedial = isRedial;
@@ -715,11 +715,11 @@
     NSString* ret = nil;
     HOPCallSystemMessage* callSystemMessage = [HOPCallSystemMessage callSystemMessageFromJSON:messageRecord.text];
     
-    switch (callSystemMessage.messageType) {
-        case HOPCallSystemMessageTypeCallPlaced:
+    switch (callSystemMessage.messageStatus) {
+        case HOPCallSystemMessageStatusCallPlaced:
             ret = [NSString stringWithFormat:@"Call started: %@", [Utility getLocalDateFromUTCdate:messageRecord.date]];
             break;
-        case HOPCallSystemMessageTypeCallHungup:
+        case HOPCallSystemMessageStatusCallHungup:
             ret = [NSString stringWithFormat:@"%@: %@", [Utility stringForEndingCallReason:callSystemMessage.errorCode],[Utility getLocalDateFromUTCdate:messageRecord.date]];
             break;
         default:

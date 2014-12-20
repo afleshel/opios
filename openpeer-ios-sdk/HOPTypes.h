@@ -122,12 +122,12 @@ typedef enum
 
 typedef enum
 {
-    HOPCallSystemMessageTypeUnknown,      // unknown system message type
+    HOPCallSystemMessageStatusUnknown,      // unknown system message type
     
-    HOPCallSystemMessageTypeCallPlaced,   // call was placed
-    HOPCallSystemMessageTypeCallAnswered, // call was answered
-    HOPCallSystemMessageTypeCallHungup,   // call was hung-up
-} HOPCallSystemMessageType;
+    HOPCallSystemMessageStatusCallPlaced,   // call was placed
+    HOPCallSystemMessageStatusCallAnswered, // call was answered
+    HOPCallSystemMessageStatusCallHungup,   // call was hung-up
+} HOPCallSystemMessageStatus;
 #pragma mark - Provisioning account for future use enum
 /**
  Account states.
