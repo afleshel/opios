@@ -36,7 +36,7 @@
 #import <OpenPeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPAvatar.h>
 #import <OpenPeerSDK/HOPImage.h>
-#import <OpenPeerSDK/HOPConversationEvent+External.h>
+//#import <OpenPeerSDK/HOPConversationEvent+External.h>
 #import <OpenPeerSDK/HOPConversation.h>
 #import <OpenPeerSDK/HOPAccount.h>
 @interface WaitingVideoViewController()

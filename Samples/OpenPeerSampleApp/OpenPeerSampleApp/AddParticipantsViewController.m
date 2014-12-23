@@ -33,7 +33,7 @@
 #import "ContactsViewController.h"
 #import "SessionManager.h"
 //#import "Session.h"
-#import <OpenPeerSDK/HOPConversationEvent+External.h>
+//#import <OpenPeerSDK/HOPConversationEvent+External.h>
 #import <OpenPeerSDK/HOPConversation.h>
 
 @interface AddParticipantsViewController ()

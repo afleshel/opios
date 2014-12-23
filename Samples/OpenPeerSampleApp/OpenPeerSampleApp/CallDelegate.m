@@ -33,7 +33,7 @@
 #import "OpenPeer.h"
 #import <OpenpeerSDK/HOPCall.h>
 #import <OpenpeerSDK/HOPTypes.h>
-#import <OpenpeerSDK/HOPConversationThread.h>
+//#import <OpenpeerSDK/HOPConversationThread.h>
 #import <OpenpeerSDK/HOPRolodexContact+External.h>
 #import "SessionManager.h"
 #import "MessageManager.h"

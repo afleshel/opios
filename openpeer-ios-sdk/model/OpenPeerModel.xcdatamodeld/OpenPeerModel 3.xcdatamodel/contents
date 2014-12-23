@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6252" systemVersion="14B25" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6254" systemVersion="14B25" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="HOPAPNSData" representedClassName="HOPAPNSData" syncable="YES">
         <attribute name="deviceToken" attributeType="String" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" defaultValueString="apns" syncable="YES"/>
@@ -81,16 +81,18 @@
     </entity>
     <entity name="HOPMessageRecord" representedClassName="HOPMessageRecord" syncable="YES">
         <attribute name="date" attributeType="Date" syncable="YES"/>
-        <attribute name="deleted" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="deleted" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="edited" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="image" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="incomingMessageStatus" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="messageID" attributeType="String" syncable="YES"/>
         <attribute name="outMessageStatus" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="read" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="replacedMessageID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="showStatus" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="text" attributeType="String" syncable="YES"/>
         <attribute name="type" attributeType="String" syncable="YES"/>
+        <attribute name="validated" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="visible" optional="YES" attributeType="Boolean" defaultValueString="YES" syncable="YES"/>
         <relationship name="conversationEvent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HOPConversationEvent" inverseName="messages" inverseEntity="HOPConversationEvent" syncable="YES"/>
         <relationship name="messageEvent" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HOPMessageEvent" inverseName="message" inverseEntity="HOPMessageEvent" syncable="YES"/>
@@ -170,7 +172,7 @@
         <element name="HOPIdentityProvider" positionX="459" positionY="-513" width="128" height="88"/>
         <element name="HOPImage" positionX="601" positionY="-738" width="128" height="90"/>
         <element name="HOPMessageEvent" positionX="-279" positionY="-292" width="128" height="103"/>
-        <element name="HOPMessageRecord" positionX="-306" positionY="-628" width="128" height="283"/>
+        <element name="HOPMessageRecord" positionX="-306" positionY="-628" width="128" height="313"/>
         <element name="HOPOpenPeerAccount" positionX="63" positionY="-576" width="128" height="133"/>
         <element name="HOPOpenPeerContact" positionX="-117" positionY="-621" width="128" height="163"/>
         <element name="HOPParticipants" positionX="-90" positionY="-450" width="128" height="88"/>

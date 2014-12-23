@@ -41,7 +41,7 @@
 #import "HOPLogger.h"
 #import "HOPMediaEngine.h"
 #import "HOPMediaEngineRtpRtcpStatistics.h"
-#import "HOPMessage.h"
+//#import "HOPMessage.h"
 #import "HOPModelManager.h"
 #import "HOPProtocols.h"
 #import "HOPStack.h"

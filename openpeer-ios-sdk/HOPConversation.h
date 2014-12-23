@@ -34,7 +34,7 @@
 
 @class HOPCall;
 @class HOPConversationThread;
-@class HOPMessage;
+@class HOPMessageRecord;
 @class HOPRolodexContact;
 @class HOPConversationRecord;
 @class HOPConversationEvent;
@@ -66,15 +66,18 @@
 - (void) setComposingStatus:(HOPConversationThreadContactStatus) composingStatus;
 
 - (HOPConversationThreadContactStatus) getContactStatus:(HOPRolodexContact*) rolodexCoontact;
-- (HOPMessage*) getMessageForID: (NSString*) messageID;
+- (HOPMessageRecord*) getMessageForID: (NSString*) messageID;
 - (void) markAllMessagesRead;
 
 - (void) refresh;
 - (void) clear;
 
-- (void) sendMessage: (HOPMessage*) message;
+- (void) sendMessage: (HOPMessageRecord*) message;
 - (NSString*) getID;
 - (NSString*) getDefaultTitle;
+
++ (NSString*) stringForMessageDeliveryState:(HOPConversationThreadMessageDeliveryState) state;
++ (NSString*) stringForContactConnectionState:(HOPConversationThreadContactConnectionState) state;
 
 - (NSArray*) getParticipants;
 

@@ -34,6 +34,7 @@
 #import "HOPRolodexContact.h"
 #import "HOPOpenPeerContact+External.h"
 #import "OpenPeerStorageManager.h"
+#import "HOPMessageRecord+External.h"
 
 //
 //@interface HOPConversationRecord ()
@@ -88,6 +89,18 @@
     for (HOPOpenPeerContact* contact in self.participants)
     {
         [ret addObject:[contact getDefaultRolodexContact]];
+    }
+    return ret;
+}
+
+- (HOPMessageRecord*) getLastMessage
+{
+    HOPMessageRecord* ret = nil;
+    NSSortDescriptor* sortMessages = [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO];
+    NSArray* sortedMessages = [self.messages.allObjects sortedArrayUsingDescriptors:@[sortMessages]];
+    if (sortedMessages.count > 0)
+    {
+        ret = sortedMessages[0];
     }
     return ret;
 }

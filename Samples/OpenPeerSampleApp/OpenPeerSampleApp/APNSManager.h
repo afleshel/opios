@@ -33,7 +33,7 @@
 
 @class HOPRolodexContact;
 @class HOPContact;
-@class HOPMessage;
+@class HOPMessageRecord;
 @class HTTPDownloaderDelegate;
 
 @interface APNSManager : NSObject<NSURLSessionDelegate, NSURLSessionTaskDelegate,HTTPDownloaderDelegate>
@@ -44,12 +44,10 @@
 
 + (id) sharedAPNSManager;
 - (void) prepareUrbanAirShip;
-//- (void) sendPushNotificationForDeviceToken:(NSString*) deviceToken message:(NSString*) message;
 - (void) registerDeviceToken:(NSData*) devToken;
 
 - (void) sendPushNotificationForContact:(HOPRolodexContact*) contact message:(NSString*) message missedCall:(BOOL) missedCall;
-//- (void) sendRichPushNotificationForContact:(HOPContact*) contact message:(HOPMessage*) message missedCall:(BOOL) missedCall;
-- (void) sendRichPushNotificationForMessage:(HOPMessage*) message missedCall:(BOOL) missedCall participantsPeerURIs:(NSArray*) participantsPeerURIs;
+- (void) sendRichPushNotificationForMessage:(HOPMessageRecord*) message missedCall:(BOOL) missedCall participantsPeerURIs:(NSArray*) participantsPeerURIs;
 - (BOOL) areTherePushesForSending;
 
 - (void) requestDeviceTokenForPeerURI:(NSString*) peerURI;

@@ -310,6 +310,9 @@
  */
 - (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  conversation:(HOPConversation*) conversation contact:(HOPRolodexContact*) contact messageId:(NSString*)messageId;
 
+- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  conversation:(HOPConversation*) conversation contact:(HOPRolodexContact*) contact messageId:(NSString*)messageId validated:(BOOL) validated messageIDToReplace:(NSString*) messageIDToReplace;
+
+
 /**
  Returns peer URI for logged in user.
  @return peer URI

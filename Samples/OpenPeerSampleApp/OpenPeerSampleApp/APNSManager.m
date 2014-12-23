@@ -46,7 +46,6 @@
 #import <OpenPeerSDK/HOPRolodexContact+External.h>
 #import <OpenPeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPAccount.h>
-#import <OpenPeerSDK/HOPMessage.h>
 #import <OpenPeerSDK/HOPBackgrounding.h>
 #import <OpenPeerSDK/HOPUtility.h>
 #import <OpenPeerSDK/HOPAPNSData.h>
@@ -80,7 +79,7 @@
 - (void) pushDataOld:(NSDictionary*) dataToPush sendingRich:(BOOL) sendingRich;
 - (void) pushData:(NSString*) filePath sendingRich:(BOOL) sendingRich messageID:(NSString*) messageID;
 - (BOOL) canSendPushNotificationForPeerURI:(NSString*) peerURI;
-- (NSString*) prepareMessageForRichPush:(HOPMessage*) message peerURI:(NSString*) peerURI location:(NSString*) location participantPeerURIs:(NSArray*) participantPeerURIs;
+- (NSString*) prepareMessageForRichPush:(HOPMessageRecord*) message peerURI:(NSString*) peerURI location:(NSString*) location participantPeerURIs:(NSArray*) participantPeerURIs;
 @end
 
 @implementation APNSManager
@@ -325,7 +324,7 @@
     }
 }
 
-- (void)sendRichPush:(HOPMessage *)message deviceTokens:(NSArray *)deviceTokens participantPeerURIs:(NSArray*) participantPeerURIs
+- (void)sendRichPush:(HOPMessageRecord *)message deviceTokens:(NSArray *)deviceTokens participantPeerURIs:(NSArray*) participantPeerURIs
 {
     NSString* msg = [message.text length] > 22 ? [NSString stringWithFormat:@"%@...",[message.text substringToIndex:22]] : message.text;
     
@@ -367,12 +366,12 @@
             OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Dictionary with push data is not valid. Push notification is not sent.");
         }
     }
-    [self.apnsHisotry setObject:[NSDate date] forKey:[message.contact getPeerURI]];
+    [self.apnsHisotry setObject:[NSDate date] forKey:[message.sender getPeerURI]];
 }
 
-- (void) sendRichPushNotificationForMessage:(HOPMessage*) message missedCall:(BOOL) missedCall participantsPeerURIs:(NSArray*) participantsPeerURIs
+- (void) sendRichPushNotificationForMessage:(HOPMessageRecord*) message missedCall:(BOOL) missedCall participantsPeerURIs:(NSArray*) participantsPeerURIs
 {
-    NSArray* deviceTokens = [self getDeviceTokensForContact2:message.contact];
+    NSArray* deviceTokens = [self getDeviceTokensForContact2:message.sender];
     
     if ([deviceTokens count] > 0)
     {
@@ -380,25 +379,29 @@
     }
     else
     {
-        [self requestDeviceTokenForPeerURI:[message.contact getPeerURI]];
-        @synchronized(self.dictionaryOfPushNotificationsToSend)
+        NSString* peerURI = [message.sender getPeerURI];
+        if (peerURI.length > 0)
         {
-            NSArray* array = [self.dictionaryOfPushNotificationsToSend objectForKey:[message.contact getPeerURI]];
-            NSMutableArray* messages = array.count > 0 ? [NSMutableArray arrayWithArray:array] : [NSMutableArray new];
-            NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:message, @"message", participantsPeerURIs, @"participantsPeerURIs", nil];
-            if (dict.count > 0)
-                [messages addObject:dict];
-            [self.dictionaryOfPushNotificationsToSend setObject:messages forKey:[message.contact getPeerURI]];
+            [self requestDeviceTokenForPeerURI:peerURI];
+            @synchronized(self.dictionaryOfPushNotificationsToSend)
+            {
+                NSArray* array = [self.dictionaryOfPushNotificationsToSend objectForKey:peerURI];
+                NSMutableArray* messages = array.count > 0 ? [NSMutableArray arrayWithArray:array] : [NSMutableArray new];
+                NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:message, @"message", participantsPeerURIs, @"participantsPeerURIs", nil];
+                if (dict.count > 0)
+                    [messages addObject:dict];
+                [self.dictionaryOfPushNotificationsToSend setObject:messages forKey:peerURI];
+            }
         }
     }
 }
 
-- (NSString*) prepareMessageForRichPush:(HOPMessage*) message peerURI:(NSString*) peerURI location:(NSString*) location  participantPeerURIs:(NSArray*) participantPeerURIs
+- (NSString*) prepareMessageForRichPush:(HOPMessageRecord*) message peerURI:(NSString*) peerURI location:(NSString*) location  participantPeerURIs:(NSArray*) participantPeerURIs
 {
     NSString*  peerURIs = @"";
     NSMutableArray* array  = [NSMutableArray arrayWithArray:participantPeerURIs];
     [array addObject:[[HOPModelManager sharedModelManager]getPeerURIForHomeUser]];
-    [array removeObject:[message.contact getPeerURI]];
+    [array removeObject:[message.sender getPeerURI]];
     for (NSString* tempPeerURI in array)
     {
         if (![tempPeerURI isEqualToString:peerURI])
@@ -406,7 +409,7 @@
             //peerURIs = [peerURIs stringByAppendingString: peerURIs.length > 0 ? [NSString stringWithFormat:@",%@",peerURI] : peerURI];
     }
     
-    NSString* ret = [NSString stringWithFormat:@"{\\\"peerURI\\\":\\\"%@\\\",\\\"peerURIs\\\":\\\"%@\\\",\\\"messageId\\\":\\\"%@\\\",\\\"replacesMessageId\\\":\\\"%@\\\",\\\"message\\\":\\\"%@\\\",\\\"location\\\":\\\"%@\\\",\\\"date\\\":\\\"%.0f\\\"}",peerURI,peerURIs,message.messageID,message.replacesMessageID,message.text,location,[message.date timeIntervalSince1970]];
+    NSString* ret = [NSString stringWithFormat:@"{\\\"peerURI\\\":\\\"%@\\\",\\\"peerURIs\\\":\\\"%@\\\",\\\"messageId\\\":\\\"%@\\\",\\\"replacesMessageId\\\":\\\"%@\\\",\\\"message\\\":\\\"%@\\\",\\\"location\\\":\\\"%@\\\",\\\"date\\\":\\\"%.0f\\\"}",peerURI,peerURIs,message.messageID,message.replacedMessageID,message.text,location,[message.date timeIntervalSince1970]];
 
     return ret;
 }
@@ -766,11 +769,11 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask
 
                             for (NSDictionary * dict in messages)
                             {
-                                HOPMessage* msg = [dict objectForKey:@"message"];
+                                HOPMessageRecord* msg = [dict objectForKey:@"message"];
                                 NSArray* peerURIs = [dict objectForKey:@"participantsPeerURIs"];
                                 if (msg)
                                 {
-                                    NSArray* deviceTokens = [self getDeviceTokensForContact2:msg.contact];
+                                    NSArray* deviceTokens = [self getDeviceTokensForContact2:msg.sender];
                                     [self sendRichPush:msg deviceTokens:deviceTokens participantPeerURIs:peerURIs];
                                 }
                             }

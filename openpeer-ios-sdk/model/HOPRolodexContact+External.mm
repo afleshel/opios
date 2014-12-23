@@ -97,10 +97,10 @@
 }
 - (HOPContact*) getCoreContact
 {
-    HOPContact* ret = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:self.identityContact.openPeerContact.publicPeerFile.peerURI];
+    HOPContact* ret = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:self.openPeerContact.publicPeerFile.peerURI];
     if (!ret)
     {
-        ret = [[HOPContact alloc] initWithPeerFile:self.identityContact.openPeerContact.publicPeerFile.peerFile];
+        ret = [[HOPContact alloc] initWithPeerFile:self.openPeerContact.publicPeerFile.peerFile];
     }
     return ret;
 }

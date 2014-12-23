@@ -2,7 +2,7 @@
 //  HOPMessageRecord.m
 //  openpeer-ios-sdk
 //
-//  Created by Sergej on 12/18/14.
+//  Created by Sergej on 12/22/14.
 //  Copyright (c) 2014 Hookflash. All rights reserved.
 //
 
@@ -27,6 +27,8 @@
 @dynamic text;
 @dynamic type;
 @dynamic visible;
+@dynamic validated;
+@dynamic replacedMessageID;
 @dynamic conversationEvent;
 @dynamic messageEvent;
 @dynamic senderOpenPeer;

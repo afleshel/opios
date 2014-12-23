@@ -2,7 +2,7 @@
 //  HOPMessageRecord.h
 //  openpeer-ios-sdk
 //
-//  Created by Sergej on 12/18/14.
+//  Created by Sergej on 12/22/14.
 //  Copyright (c) 2014 Hookflash. All rights reserved.
 //
 
@@ -25,6 +25,8 @@
 @property (nonatomic, retain) NSString * text;
 @property (nonatomic, retain) NSString * type;
 @property (nonatomic, retain) NSNumber * visible;
+@property (nonatomic, retain) NSNumber * validated;
+@property (nonatomic, retain) NSString * replacedMessageID;
 @property (nonatomic, retain) HOPConversationEvent *conversationEvent;
 @property (nonatomic, retain) NSSet *messageEvent;
 @property (nonatomic, retain) HOPOpenPeerContact *senderOpenPeer;

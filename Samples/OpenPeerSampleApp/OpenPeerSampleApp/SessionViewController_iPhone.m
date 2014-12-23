@@ -40,7 +40,7 @@
 #import "AddParticipantsViewController.h"
 #import "InfoViewController.h"
 #import <OpenPeerSDK/HOPCall.h>
-#import <OpenPeerSDK/HOPConversationEvent+External.h>
+//#import <OpenPeerSDK/HOPConversationEvent+External.h>
 #import <OpenPeerSDK/HOPConversation.h>
 
 

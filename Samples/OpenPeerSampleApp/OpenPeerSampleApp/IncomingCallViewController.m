@@ -38,7 +38,7 @@
 #import <OpenPeerSDK/HOPRolodexContact+External.h>
 #import <OpenPeerSDK/HOPAvatar.h>
 #import <OpenPeerSDK/HOPImage.h>
-#import <OpenPeerSDK/HOPConversationEvent+External.h>
+//#import <OpenPeerSDK/HOPConversationEvent+External.h>
 
 @interface IncomingCallViewController ()
 

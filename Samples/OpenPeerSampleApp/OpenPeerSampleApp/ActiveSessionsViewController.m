@@ -32,7 +32,7 @@
 #import "ActiveSessionsViewController.h"
 #import <OpenPeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPAccount.h>
-#import <OpenPeerSDK/HOPConversationEvent+External.h>
+//#import <OpenPeerSDK/HOPConversationEvent+External.h>
 #import <OpenPeerSDK/HOPConversationRecord+External.h>
 #import "HOPConversation.h"
 #import <OpenPeerSDK/HOPUtility.h>

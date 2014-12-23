@@ -933,7 +933,6 @@ using namespace openpeer::core;
     }
     else
     {
-        //NSString* str = [NSString stringWithFormat:@"Some message data are invalid: messageText: %@ - type: %@ - date: %@ - sessionRecordId: %@ - messageId: %@", messageText, type, date,sessionRecordId, messageId];
         ZS_LOG_ERROR(Debug, [self log:([NSString stringWithFormat:@"Some message data are invalid: messageText: %@ - type: %@ - date: %@ - sessionRecordId: %@ - messageId: %@", messageText, type, date,[conversation getID], messageId])]);
     }
     

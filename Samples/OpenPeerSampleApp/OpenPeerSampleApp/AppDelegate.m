@@ -71,7 +71,7 @@
 
 #ifdef APNS_ENABLED
     [[APNSManager sharedAPNSManager] prepareUrbanAirShip];
-    NSDictionary *apnsInfo = [launchOptions valueForKey:@"UIApplicationLaunchOptionsRemoteNotificationKey"];
+    /*NSDictionary *apnsInfo = [launchOptions valueForKey:@"UIApplicationLaunchOptionsRemoteNotificationKey"];
     
     if ([apnsInfo count] > 0)
     {
@@ -82,7 +82,7 @@
         NSDictionary *localInfo = [launchOptions valueForKey:localNotificationKey];
         if ([localInfo count] > 0)
             [[APNSInboxManager sharedAPNSInboxManager] setLocalNotificationDictionary:localInfo];
-    }
+    }*/
 #endif
     return YES;
 }
@@ -112,7 +112,6 @@
             [[OpenPeer sharedOpenPeer]prepareAppForBackground];
         }
         
-        //[[UIApplication sharedApplication] setApplicationIconBadgeNumber:[[SessionManager sharedSessionManager] totalNumberOfUnreadMessages]];
 #ifdef APNS_ENABLED
         [[UAPush shared] setBadgeNumber:[[SessionManager sharedSessionManager] totalNumberOfUnreadMessages]];
 #endif
@@ -147,7 +146,6 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-    //[[UIApplication sharedApplication] setApplicationIconBadgeNumber:[[SessionManager sharedSessionManager] totalNumberOfUnreadMessages]];
 #ifdef APNS_ENABLED
     [[UAPush shared] setBadgeNumber:[[SessionManager sharedSessionManager] totalNumberOfUnreadMessages]];
 #endif
@@ -197,17 +195,6 @@
     }
 }
 
-/*- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
-{
-    // Notify UAInbox to fetch any new messages if the notification contains a rich application page id.
-    if (application.applicationState != UIApplicationStateBackground)
-    {
-        [UAInboxPushHandler handleNotification:userInfo];
-    }
-    
-    // Notify UAPush that a push came in with the completion handler
-//    [[UAPush shared] handleNotification:userInfo applicationState:application.applicationState fetchCompletionHandler:completionHandler];
-}*/
 
 - (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler
 {

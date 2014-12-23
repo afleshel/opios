@@ -42,7 +42,7 @@
 #import "HOPConversationEvent+External.h"
 
 #import "HOPRolodexContact+External.h"
-#import "HOPMessage.h"
+#import "HOPMessageRecord+External.h"
 #import "HOPModelManager.h"
 #import "HOPUtility.h"
 #import "HOPAccount.h"
@@ -143,7 +143,7 @@ using namespace openpeer::core;
             
             if (!ret.record)
                 ret.record = [[HOPModelManager sharedModelManager] createConversationRecordForConversationThread:ret.thread type:nil date:[NSDate date] name:ret.title participants:participants];
-            
+            ret.identifier = ret.record.sessionID;
             ret.lastEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"create" conversationRecord:ret.record partcipants:participants title:ret.title];
             
             NSString* str = [NSString stringWithFormat:@"Conversation object with title %@", ret.title];
@@ -181,7 +181,7 @@ using namespace openpeer::core;
             
             if (!ret.record)
                 ret.record = [[HOPModelManager sharedModelManager] createConversationRecordForConversationThread:ret.thread type:nil date:[NSDate date] name:ret.title participants:participants];
-            
+            ret.identifier = ret.record.sessionID;
             ret.lastEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"create" conversationRecord:ret.record partcipants:participants title:ret.title];
             
             NSString* str = [NSString stringWithFormat:@"Conversation object with title %@", ret.title];
@@ -211,6 +211,7 @@ using namespace openpeer::core;
         ret.record = inConversationRecord;
         if (ret.record)
         {
+            ret.identifier = ret.record.sessionID;
             ret.title = ret.record.name;
             
             //NSArray* participants = [ret getParticipants];
@@ -326,9 +327,9 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (HOPMessage*) getMessageForID: (NSString*) messageID
+- (HOPMessageRecord*) getMessageForID: (NSString*) messageID
 {
-    HOPMessage* ret = nil;
+    HOPMessageRecord* ret = nil;
     
     if (self.thread && messageID.length > 0)
         ret = [self.thread getMessageForID:messageID];
@@ -336,7 +337,7 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (void) sendMessage: (HOPMessage*) message
+- (void) sendMessage: (HOPMessageRecord*) message
 {
     if (self.thread && message)
         [self.thread sendMessage:message];
@@ -371,6 +372,16 @@ using namespace openpeer::core;
         }
     }
     return ret;
+}
+
++ (NSString*) stringForMessageDeliveryState:(HOPConversationThreadMessageDeliveryState) state
+{
+    return [HOPConversationThread stringForMessageDeliveryState:state];
+}
+
++ (NSString*) stringForContactConnectionState:(HOPConversationThreadContactConnectionState) state
+{
+    return [HOPConversationThread stringForContactConnectionState:state];
 }
 
 - (String) log:(NSString*) message

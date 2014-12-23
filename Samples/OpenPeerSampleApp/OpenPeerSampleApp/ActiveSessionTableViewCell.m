@@ -31,13 +31,12 @@
 
 #import "ActiveSessionTableViewCell.h"
 #import "UIBadgeView.h"
-#import <OpenPeerSDK/HOPConversationEvent+External.h>
+//#import <OpenPeerSDK/HOPConversationEvent+External.h>
 #import <OpenPeerSDK/HOPAvatar.h>
 #import <OpenPeerSDK/HOPConversationRecord+External.h>
 #import <OpenPeerSDK/HOPConversation.h>
 
 #import "ImageManager.h"
-//#import "Session.h"
 #import "SessionManager.h"
 #import "Utility.h"
 

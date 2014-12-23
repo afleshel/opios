@@ -35,7 +35,7 @@
 
 #import <OpenpeerSDK/HOPRolodexContact+External.h>
 #import <OpenpeerSDK/HOPMessageRecord+External.h>
-#import <OpenpeerSDK/HOPConversationThread.h>
+#import <OpenpeerSDK/HOPConversation.h>
 
 #define SPACE_BETWEEN_LABELS 2.0
 #define TRAILING_SPACE 10.0
@@ -232,7 +232,7 @@
     
     if(self.message.showStatus.boolValue && message.outgoingMessageStatus >= HOPConversationThreadMessageDeliveryStateSent)
     {
-        NSString* statusString = [HOPConversationThread stringForMessageDeliveryState:(HOPConversationThreadMessageDeliveryState)self.message.outgoingMessageStatus];
+        NSString* statusString = [HOPConversation stringForMessageDeliveryState:(HOPConversationThreadMessageDeliveryState)self.message.outgoingMessageStatus];
         
         if ((HOPConversationThreadMessageDeliveryState)self.message.outgoingMessageStatus == HOPConversationThreadMessageDeliveryStateUserNotAvailable)
             statusString = @"Send failed, try again by tapping this message";

@@ -33,9 +33,12 @@
 #import "HOPTypes.h"
 
 @class HOPRolodexContact;
+@class HOPConversation;
 
 @interface HOPMessageRecord (External)
 
 @property (nonatomic) HOPRolodexContact *sender;
 @property (nonatomic, getter = getOutgoingMessageStatus, setter = setOutgoingMessageStatus:) HOPConversationThreadMessageDeliveryState outgoingMessageStatus;
+
++ (HOPMessageRecord*) createMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  conversation:(HOPConversation*) conversation contact:(HOPRolodexContact*) contact messageId:(NSString*)messageId validated:(BOOL) validated messageIDToReplace:(NSString*) messageIDToReplace;
 @end

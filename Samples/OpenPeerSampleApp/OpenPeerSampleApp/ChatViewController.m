@@ -33,15 +33,12 @@
 #import <UIKit/UIKit.h>
 
 #import "MessageManager.h"
-//#import "Session.h"
 #import "ChatMessageCell.h"
 #import <OpenPeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPMessageRecord+External.h>
 #import <OpenPeerSDK/HOPConversation.h>
-#import <OpenPeerSDK/HOPConversationThread.h>
 #import <OpenPeerSDK/HOPCallSystemMessage.h>
 #import <OpenPeerSDK/HOPRolodexContact+External.h>
-#import <OpenPeerSDK/HOPConversationEvent.h>
 #import "SystemMessageCell.h"
 #import "ChatCell.h"
 

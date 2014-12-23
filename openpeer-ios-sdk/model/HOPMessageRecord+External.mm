@@ -30,19 +30,58 @@
  */
 
 #import "HOPMessageRecord+External.h"
-//#import <openpeer/core/types.h>
+#import <openpeer/core/IHelper.h>
+#import <openpeer/core/types.h>
 //#import <openpeer/core/IConversationThread.h>
 #import "HOPConversationThread.h"
 #import "HOPModelManager.h"
 #import "HOPRolodexContact+External.h"
 #import "HOPOpenPeerContact+External.h"
-
+#import "HOPConversation.h"
+#import "HOPConversationRecord.h"
 //using namespace openpeer;
 //using namespace openpeer::core;
+
+ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
+
+using namespace openpeer;
+using namespace openpeer::core;
 
 @implementation HOPMessageRecord (External)
 
 
++ (HOPMessageRecord*) createMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  conversation:(HOPConversation*) conversation contact:(HOPRolodexContact*) contact messageId:(NSString*)messageId validated:(BOOL) validated messageIDToReplace:(NSString*) messageIDToReplace
+{
+    HOPMessageRecord* ret = nil;
+    
+    if ([messageText length] > 0 && [type length] > 0 && date != nil && conversation != nil && [messageId length] > 0)
+    {
+        ret = [[HOPModelManager sharedModelManager] getMessageRecordByID:messageId];
+        if ( ret == nil)
+        {
+            ret = (HOPMessageRecord*)[[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPMessageRecord"];
+            ret.text = messageText;
+            ret.date = date;
+            ret.visible = [NSNumber numberWithBool:visible];
+            ret.type = type;
+            ret.validated = [NSNumber numberWithBool:validated];
+            ret.replacedMessageID = messageIDToReplace;
+            ret.senderOpenPeer = contact.openPeerContact;
+            ret.session = conversation.record;
+            ret.conversationEvent = conversation.lastEvent;
+            ret.messageID = messageId;
+            conversation.record.lastActivity = [NSDate date];
+            
+            [[HOPModelManager sharedModelManager] saveContext];
+        }
+    }
+    else
+    {
+        ZS_LOG_ERROR(Debug, String([([NSString stringWithFormat:@"Some message data are invalid: messageText: %@ - type: %@ - date: %@ - sessionRecordId: %@ - messageId: %@", messageText, type, date,[conversation getID], messageId]) UTF8String]));
+    }
+    
+    return ret;
+}
 - (void)setOutgoingMessageStatus:(HOPConversationThreadMessageDeliveryState)outgoingMessageStatus
 {
     NSString* statusToSet = [HOPConversationThread stringForMessageDeliveryState:outgoingMessageStatus];

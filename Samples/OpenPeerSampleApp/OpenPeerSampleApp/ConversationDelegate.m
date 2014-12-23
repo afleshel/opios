@@ -37,9 +37,9 @@
 #import "Utility.h"
 
 #import <OpenpeerSDK/HOPConversation.h>
-#import <OpenpeerSDK/HOPConversationThread.h>
+//#import <OpenpeerSDK/HOPConversationThread.h>
 #import <OpenpeerSDK/HOPRolodexContact+External.h>
-#import <OpenpeerSDK/HOPMessage.h>
+#import <OpenpeerSDK/HOPMessageRecord+External.h>
 #import <OpenpeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPAccount.h>
 
@@ -81,7 +81,7 @@
 
 - (void) onConversationContactConnectionStateChanged:(HOPConversation*) conversation contact:(HOPRolodexContact*) contact contactConnectionState:(HOPConversationThreadContactConnectionState) contactConnectionState
 {
-    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread id: <%@> contact peer URI:<%@> state: %@",[conversation getID], [contact getPeerURI],[HOPConversationThread stringForContactConnectionState:contactConnectionState]);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread id: <%@> contact peer URI:<%@> state: %@",[conversation getID], [contact getPeerURI],[HOPConversation stringForContactConnectionState:contactConnectionState]);
     
     dispatch_async(dispatch_get_main_queue(), ^
                    {
@@ -104,7 +104,7 @@
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Handling a new message with id %@ for conversation thread.",messageID);
     dispatch_async(dispatch_get_main_queue(), ^{
         //[[SessionManager sharedSessionManager] setLatestValidConversation:conversation];
-        HOPMessage* message = [conversation getMessageForID:messageID];
+        HOPMessageRecord* message = [conversation getMessageForID:messageID];
         if (message)
         {
             [[MessageManager sharedMessageManager] onMessageReceived:message forConversation:conversation];
@@ -114,7 +114,7 @@
 
 - (void) onConversationMessageDeliveryStateChanged:(HOPConversation*) conversation messageID:(NSString*) messageID messageDeliveryStates:(HOPConversationThreadMessageDeliveryState) messageDeliveryStates
 {
-    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Conversation thread %@ message with id %@ delivery state has changed to: %@",[conversation getID],messageID, [HOPConversationThread stringForMessageDeliveryState:messageDeliveryStates]);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Conversation thread %@ message with id %@ delivery state has changed to: %@",[conversation getID],messageID, [HOPConversation stringForMessageDeliveryState:messageDeliveryStates]);
     
     [[HOPModelManager sharedModelManager] updateMessageStateForConversation:conversation lastDeliveryState:messageDeliveryStates];
 }
@@ -125,11 +125,11 @@
     if (coreContact)
     {
         BOOL missedCall = NO;
-        HOPMessage* message = [conversationThread getMessageForID:messageID];
+        HOPMessageRecord* message = [conversationThread getMessageForID:messageID];
         
         if (message)
         {
-            message.contact = coreContact;
+            //message.sender = coreContact;
             
             HOPRolodexContact* contact  = [[[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:[coreContact getPeerURI]] objectAtIndex:0];
             if (contact)

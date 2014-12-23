@@ -202,13 +202,22 @@ void OpenPeerConversationThreadDelegate::onConversationThreadMessageDeliveryStat
 
 void OpenPeerConversationThreadDelegate::onConversationThreadPushMessage(IConversationThreadPtr conversationThread,const char *messageID,IContactPtr contact)
 {
-    HOPConversationThread * hopConversationThread = this->getOpenPeerConversationThread(conversationThread);
     NSString* messageId = [NSString stringWithUTF8String:messageID];
     
     HOPRolodexContact* hopContact = [[HOPModelManager sharedModelManager] getRolodexContactByPeerURI:[NSString stringWithUTF8String:contact->getPeerURI()]];
     
-    if (hopConversationThread && hopContact && [messageId length] > 0)
-        [conversationThreadDelegate onConversationThreadPushMessage:hopConversationThread messageID:messageId contact:hopContact];
+    if (conversationThreadDelegate)
+    {
+        HOPConversationThread * hopConversationThread = this->getOpenPeerConversationThread(conversationThread);
+        if (hopConversationThread && hopContact && [messageId length] > 0)
+            [conversationThreadDelegate onConversationThreadPushMessage:hopConversationThread messageID:messageId contact:hopContact];
+    }
+    else if (conversationDelegate)
+    {
+        HOPConversation * hopConversation = this->getOpenPeerConversation(conversationThread);
+        if (hopConversation && hopContact && [messageId length] > 0)
+            [conversationDelegate onConversationPushMessage:hopConversation messageID:messageId contact:hopContact];
+    }
 }
 
 void OpenPeerConversationThreadDelegate::onConversationThreadContactConnectionStateChanged(IConversationThreadPtr conversationThread,IContactPtr contact,ContactConnectionStates state)

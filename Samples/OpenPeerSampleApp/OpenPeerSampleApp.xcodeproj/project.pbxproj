@@ -221,7 +221,6 @@
 		875A68C01A2E0CDC0041F650 /* ConversationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 875A68BF1A2E0CDC0041F650 /* ConversationDelegate.m */; };
 		875A68C11A2E0CDC0041F650 /* ConversationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 875A68BF1A2E0CDC0041F650 /* ConversationDelegate.m */; };
 		875CD7E2167A14810037396B /* SessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 875CD7E1167A14810037396B /* SessionManager.m */; };
-		875CD7E5167A14960037396B /* Session.m in Sources */ = {isa = PBXBuildFile; fileRef = 875CD7E4167A14960037396B /* Session.m */; };
 		8766E8C21A07F6D1007384C5 /* boost.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8766E8C01A07F6D1007384C5 /* boost.a */; };
 		8766E8C31A07F6D1007384C5 /* boost.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8766E8C01A07F6D1007384C5 /* boost.a */; };
 		8766E8C41A07F6D1007384C5 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8766E8C11A07F6D1007384C5 /* libcurl.a */; };
@@ -318,7 +317,6 @@
 		87D4BCF018675368008C2D30 /* ContactsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F24B61167003F300A5389F /* ContactsManager.m */; };
 		87D4BCF118675368008C2D30 /* SoundsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87E4DA04180D4E8D002CA2D4 /* SoundsManager.m */; };
 		87D4BCF218675368008C2D30 /* SessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 875CD7E1167A14810037396B /* SessionManager.m */; };
-		87D4BCF318675368008C2D30 /* Session.m in Sources */ = {isa = PBXBuildFile; fileRef = 875CD7E4167A14960037396B /* Session.m */; };
 		87D4BCF418675368008C2D30 /* WaitingVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8730D76D1833A62A008D1D37 /* WaitingVideoViewController.m */; };
 		87D4BCF518675368008C2D30 /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 8723F8E817FC99EE003C8802 /* Settings.m */; };
 		87D4BCF618675368008C2D30 /* ActivityIndicatorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 870F337D168376450090A97F /* ActivityIndicatorViewController.m */; };
@@ -874,8 +872,6 @@
 		875A68BF1A2E0CDC0041F650 /* ConversationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConversationDelegate.m; sourceTree = "<group>"; };
 		875CD7E0167A14810037396B /* SessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SessionManager.h; sourceTree = "<group>"; };
 		875CD7E1167A14810037396B /* SessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionManager.m; sourceTree = "<group>"; };
-		875CD7E3167A14960037396B /* Session.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Session.h; sourceTree = "<group>"; };
-		875CD7E4167A14960037396B /* Session.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Session.m; sourceTree = "<group>"; };
 		8766E8C01A07F6D1007384C5 /* boost.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = boost.a; path = ../../OpenPeerSDK.framework/Versions/D/Libraries/boost.a; sourceTree = SOURCE_ROOT; };
 		8766E8C11A07F6D1007384C5 /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = ../../OpenPeerSDK.framework/Versions/D/Libraries/libcurl.a; sourceTree = SOURCE_ROOT; };
 		8766E8C61A07F6ED007384C5 /* OpenpeerDataModel.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = OpenpeerDataModel.bundle; path = ../../OpenPeerSDK.framework/Versions/D/Resources/OpenpeerDataModel.bundle; sourceTree = SOURCE_ROOT; };
@@ -1577,7 +1573,6 @@
 				872B1EB01918F7AD000E21C9 /* OpenPeerSampleApp.entitlements */,
 				8712BE8517D8CC9900665F42 /* Settings */,
 				87FC39F81709BB66002030D1 /* Session */,
-				87368AE0167600A900166F35 /* Model */,
 				870C5E1B1672355300A3AA4F /* Main */,
 				870C5E19167234A600A3AA4F /* Login */,
 				870C5E1A167234DD00A3AA4F /* Contacts */,
@@ -1607,15 +1602,6 @@
 				877038E518A24774000B7AA1 /* DefaultSettings.plist */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		87368AE0167600A900166F35 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				875CD7E3167A14960037396B /* Session.h */,
-				875CD7E4167A14960037396B /* Session.m */,
-			);
-			name = Model;
 			sourceTree = "<group>";
 		};
 		874AD9D2166CEAC50095FE33 /* Delegates */ = {
@@ -2649,7 +2635,6 @@
 				871AA7F31941DA28003B4400 /* ActiveSessionsViewController.m in Sources */,
 				875CD7E2167A14810037396B /* SessionManager.m in Sources */,
 				8723870E19465A57002643D6 /* ActiveSessionTableViewCell.m in Sources */,
-				875CD7E5167A14960037396B /* Session.m in Sources */,
 				8730D76F1833A62A008D1D37 /* WaitingVideoViewController.m in Sources */,
 				8723F8E917FC99EE003C8802 /* Settings.m in Sources */,
 				870F337F168376450090A97F /* ActivityIndicatorViewController.m in Sources */,
@@ -2718,7 +2703,6 @@
 				87D4BCF018675368008C2D30 /* ContactsManager.m in Sources */,
 				87D4BCF118675368008C2D30 /* SoundsManager.m in Sources */,
 				87D4BCF218675368008C2D30 /* SessionManager.m in Sources */,
-				87D4BCF318675368008C2D30 /* Session.m in Sources */,
 				87D4BCF418675368008C2D30 /* WaitingVideoViewController.m in Sources */,
 				87D4BCF518675368008C2D30 /* Settings.m in Sources */,
 				87D4BCF618675368008C2D30 /* ActivityIndicatorViewController.m in Sources */,
