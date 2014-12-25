@@ -361,7 +361,6 @@
  @return HOPConversationRecord Conversation record object
  */
 - (HOPConversationThreadRecord*) createRecordForConversationThread:(HOPConversationThread*) conversationThread conversationRecord:(HOPConversationRecord*) conversationRecord;
-
 /**
  Creates a HOPConversationRecord object.
  @param conversationThread Conversation thread object

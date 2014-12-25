@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -29,28 +29,25 @@
  
  */
 
+
 #import <Foundation/Foundation.h>
+#import "HOPTypes.h"
+#import "HOPSystemMessage.h"
 
-@class HOPRolodexContact;
-@class HOPContact;
-@class HOPMessageRecord;
-@class HTTPDownloaderDelegate;
 
-@interface APNSManager : NSObject<NSURLSessionDelegate, NSURLSessionTaskDelegate,HTTPDownloaderDelegate>
+@interface HOPConversationType : NSObject
 
-@property (nonatomic, strong) NSString* deviceToken;
-@property  (nonatomic) int pushesToSend;
-@property   (nonatomic) BOOL goingToBackground;
+@property (nonatomic) HOPConversationThreadType conversationThreadType;
+@property (nonatomic, copy) NSString* jsonMessage;
+@property (nonatomic, copy) NSDictionary* typeDictionary;
 
-+ (id) sharedAPNSManager;
-- (void) prepareUrbanAirShip;
-- (void) registerDeviceToken:(NSData*) devToken;
+- (id) initWithConversationThreadType:(HOPConversationThreadType) threadType;
 
-- (void) sendPushNotificationForContact:(HOPRolodexContact*) contact message:(NSString*) message missedCall:(BOOL) missedCall;
-//- (void) sendRichPushNotificationForMessage:(HOPMessageRecord*) message missedCall:(BOOL) missedCall participantsPeerURIs:(NSArray*) participantsPeerURIs;
-- (void) sendRichPushNotificationForMessage:(HOPMessageRecord*) message missedCall:(BOOL) missedCall participants:(NSArray*) participants;
-- (BOOL) areTherePushesForSending;
++ (id) conversationThreadTypeFromJSON:(NSString*) jsonMessage;
 
-- (void) requestDeviceTokenForPeerURI:(NSString*) peerURI;
-- (void) registerDeviceToken;
++ (NSString*) stringForConversationThreadType:(HOPConversationThreadType) threadType;
++ (HOPConversationThreadType) conversationThreadTypeForString: (NSString*) conversationThreadTypeString;
+
+- (BOOL) hasData;
+
 @end

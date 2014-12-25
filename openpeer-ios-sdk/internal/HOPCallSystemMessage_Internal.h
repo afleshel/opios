@@ -43,5 +43,5 @@ using namespace openpeer::core;
 //- (id) initWithCoreCallSystemMessage:(CallSystemMessagePtr) inCallSystemMessagePtr;
 
 - (CallSystemMessagePtr) getCallSystemMessagePtr;
-
+- (void) setCallSystemMessagePtr:(CallSystemMessagePtr) inCallSystemMessagePtr;
 @end

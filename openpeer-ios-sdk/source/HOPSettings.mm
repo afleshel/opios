@@ -223,4 +223,11 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 {
     return ((OpenPeerSettingsDelegate*)openPeerSettingsDelegatePtr.get())->getCurrentSettingsDictionary();
 }
+
+- (NSString*) getDefaultCovnersationType
+{
+    NSString* ret = [[NSUserDefaults standardUserDefaults] objectForKey:OPENPEER_SDK_SETTING_CONVERSATION_TYPE];
+    
+    return ret;
+}
 @end

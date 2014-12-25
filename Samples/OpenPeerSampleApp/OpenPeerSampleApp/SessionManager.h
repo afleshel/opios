@@ -79,5 +79,5 @@
 - (NSString*) getLastTextMessageForConversationEvent:(HOPConversationEvent*) event;
 - (NSString*) getLastTextMessageForConversationRecord:(HOPConversationRecord*) record;
 
-- (void) onParticipantsInConversationUpdate:(HOPConversation*) conversation;
+- (void) onParticipantsInConversationUpdate:(HOPConversation*) conversation numberOfAddedParticipants:(int) numberOfAddedParticipants;
 @end

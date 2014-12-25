@@ -114,6 +114,15 @@ typedef enum
 
 typedef enum
 {
+    HOPConversationThreadTypeNone,
+    
+    HOPConversationThreadTypeContactBased,
+    HOPConversationThreadTypeThreadBased,
+    HOPConversationThreadTypeRoomBased
+} HOPConversationThreadType;
+
+typedef enum
+{
     HOPSystemMessageTypeNA,           // not a system message
     HOPSystemMessageTypeUnknown,      // unknown system message type
     

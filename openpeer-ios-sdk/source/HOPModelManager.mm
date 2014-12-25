@@ -1061,6 +1061,7 @@ using namespace openpeer::core;
     return ret;
 }
 
+
 - (HOPConversationRecord*) createConversationRecordForConversationThread:(HOPConversationThread*) conversationThread type:(NSString*) type date:(NSDate*) date name:(NSString*) name participants:(NSArray*) participants
 {
     HOPConversationRecord* ret = nil;
@@ -1076,7 +1077,7 @@ using namespace openpeer::core;
             {
                 ret = (HOPConversationRecord*)[self createObjectForEntity:@"HOPConversationRecord"];
                 ret.homeUser = [self getLastLoggedInUser];
-                ret.sessionID = [HOPUtility getGUIDstring];
+                ret.sessionID = [conversationThread getThreadId].length > 0 ?  [conversationThread getThreadId] : [HOPUtility getGUIDstring];
                 ret.creationTime = date;
                 ret.type = type;
                 ret.name = name;

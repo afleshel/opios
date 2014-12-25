@@ -560,56 +560,16 @@
     return ret;
 }
 
-- (void) onParticipantsInConversationUpdate:(HOPConversation*) conversation
+- (void) onParticipantsInConversationUpdate:(HOPConversation*) conversation numberOfAddedParticipants:(int) numberOfAddedParticipants
 {
-    /*if (conversation.participants.count == 0)
+    if (conversation.participants.count == 0 || numberOfAddedParticipants == 0)
         return;
     
     NSString* sessionId = [conversation getID];
+
+    SessionViewController_iPhone* sessionViewController = [[[[OpenPeer sharedOpenPeer] mainViewController] sessionViewControllersDictionary] objectForKey:sessionId];
     
-    BOOL hasChanged = NO;
-    
-    //Session* session = nil;
-    //if (sessionId.length > 0)
-    {
-        //session = [self getSessionForSessionId:sessionId];
-        //if (session)
-        {
-            NSMutableArray *intermediate = [NSMutableArray arrayWithArray:openPeerContacts];
-            [intermediate removeObjectsInArray:[session.lastConversationEvent getContacts]];
-            NSUInteger difference = [intermediate count];
-            
-            NSString* title = [self getTitleForConversationThread:conversationThread];
-            
-            if (difference > 0)
-            {
-                session.lastConversationEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"addedNewParticipant" conversationRecord:session.sessionRecord partcipants:openPeerContacts title:title];
-                
-                hasChanged = YES;
-            }
-            else
-            {
-                if (openPeerContacts.count != [session.lastConversationEvent getContacts].count)
-                {
-                    session.lastConversationEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"removedParticipant" conversationRecord:session.sessionRecord partcipants:openPeerContacts title:title];
-                    hasChanged = YES;
-                }
-            }
-            
-            if (hasChanged)
-            {
-                session.title = title;
-                [session.participantsArray removeAllObjects];
-                [session.participantsArray addObjectsFromArray:openPeerContacts];
-        
-                [session.sessionRecord setParticipantsWithArray:openPeerContacts];
-                
-                SessionViewController_iPhone* sessionViewController = [[[[OpenPeer sharedOpenPeer] mainViewController] sessionViewControllersDictionary] objectForKey:sessionId];
-                
-                [sessionViewController updateOnParticipantChange];
-            }
-        }
-    }*/
+    [sessionViewController updateOnParticipantChange];
 }
 
 @end

@@ -36,6 +36,7 @@
 #import "HOPModelManager.h"
 #import "HOPMessageRecord+External.h"
 #import "HOPConversation.h"
+#import "HOPConversationEvent+External.h"
 
 #include <zsLib/types.h>
 #import <openpeer/core/ILogger.h>
@@ -143,7 +144,16 @@ void OpenPeerConversationThreadDelegate::onConversationThreadContactsChanged(ICo
         HOPConversation * hopConversation = this->getOpenPeerConversation(conversationThread);
         
         if (hopConversation)
-            [conversationDelegate onConversationContactsChanged:hopConversation];
+        {
+            int numberOfAddedParticipants = hopConversation.participants.count - [hopConversation.lastEvent getContacts].count;
+            
+            if (numberOfAddedParticipants > 0)
+                hopConversation.lastEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"addedNewParticipant" conversationRecord:hopConversation.record partcipants:hopConversation.participants title:hopConversation.title];
+            else if (numberOfAddedParticipants < 0)
+                hopConversation.lastEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"removedParticipant" conversationRecord:hopConversation.record partcipants:hopConversation.participants title:hopConversation.title];
+
+            [conversationDelegate onConversationContactsChanged:hopConversation  numberOfAddedParticipants:numberOfAddedParticipants];
+        }
     }
 }
 

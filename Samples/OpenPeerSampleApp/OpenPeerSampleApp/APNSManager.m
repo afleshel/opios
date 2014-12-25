@@ -369,33 +369,64 @@
     [self.apnsHisotry setObject:[NSDate date] forKey:[message.sender getPeerURI]];
 }
 
-- (void) sendRichPushNotificationForMessage:(HOPMessageRecord*) message missedCall:(BOOL) missedCall participantsPeerURIs:(NSArray*) participantsPeerURIs
+//- (void) sendRichPushNotificationForMessage:(HOPMessageRecord*) message missedCall:(BOOL) missedCall participantsPeerURIs:(NSArray*) participantsPeerURIs
+//{
+//    NSArray* deviceTokens = [self getDeviceTokensForContact2:message.sender];
+//    
+//    if ([deviceTokens count] > 0)
+//    {
+//        [self sendRichPush:message deviceTokens:deviceTokens participantPeerURIs:participantsPeerURIs];
+//    }
+//    else
+//    {
+//        NSString* peerURI = [message.sender getPeerURI];
+//        if (peerURI.length > 0)
+//        {
+//            [self requestDeviceTokenForPeerURI:peerURI];
+//            @synchronized(self.dictionaryOfPushNotificationsToSend)
+//            {
+//                NSArray* array = [self.dictionaryOfPushNotificationsToSend objectForKey:peerURI];
+//                NSMutableArray* messages = array.count > 0 ? [NSMutableArray arrayWithArray:array] : [NSMutableArray new];
+//                NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:message, @"message", participantsPeerURIs, @"participantsPeerURIs", nil];
+//                if (dict.count > 0)
+//                    [messages addObject:dict];
+//                [self.dictionaryOfPushNotificationsToSend setObject:messages forKey:peerURI];
+//            }
+//        }
+//    }
+//}
+
+- (void) sendRichPushNotificationForMessage:(HOPMessageRecord*) message missedCall:(BOOL) missedCall participants:(NSArray*) participants
 {
-    NSArray* deviceTokens = [self getDeviceTokensForContact2:message.sender];
-    
-    if ([deviceTokens count] > 0)
+    for (HOPRolodexContact* participant in participants)
     {
-        [self sendRichPush:message deviceTokens:deviceTokens participantPeerURIs:participantsPeerURIs];
-    }
-    else
-    {
-        NSString* peerURI = [message.sender getPeerURI];
-        if (peerURI.length > 0)
+        NSArray* deviceTokens = [self getDeviceTokensForContact2:participant];
+        
+        NSArray* participantsPeerURIs = [participants valueForKeyPath:@"openPeerContact.publicPeerFile.peerURI"];
+        if ([deviceTokens count] > 0)
         {
-            [self requestDeviceTokenForPeerURI:peerURI];
-            @synchronized(self.dictionaryOfPushNotificationsToSend)
+            [self sendRichPush:message deviceTokens:deviceTokens participantPeerURIs:participantsPeerURIs];
+        }
+        else
+        {
+            NSString* peerURI = [participant getPeerURI];
+            if (peerURI.length > 0)
             {
-                NSArray* array = [self.dictionaryOfPushNotificationsToSend objectForKey:peerURI];
-                NSMutableArray* messages = array.count > 0 ? [NSMutableArray arrayWithArray:array] : [NSMutableArray new];
-                NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:message, @"message", participantsPeerURIs, @"participantsPeerURIs", nil];
-                if (dict.count > 0)
-                    [messages addObject:dict];
-                [self.dictionaryOfPushNotificationsToSend setObject:messages forKey:peerURI];
+                [self requestDeviceTokenForPeerURI:peerURI];
+                @synchronized(self.dictionaryOfPushNotificationsToSend)
+                {
+                    NSArray* array = [self.dictionaryOfPushNotificationsToSend objectForKey:peerURI];
+                    NSMutableArray* messages = array.count > 0 ? [NSMutableArray arrayWithArray:array] : [NSMutableArray new];
+//                    NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:message, @"message", participantsPeerURIs, @"participantsPeerURIs", nil];
+                    NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:message, @"message", participant, @"participant", nil];
+                    if (dict.count > 0)
+                        [messages addObject:dict];
+                    [self.dictionaryOfPushNotificationsToSend setObject:messages forKey:peerURI];
+                }
             }
         }
     }
 }
-
 - (NSString*) prepareMessageForRichPush:(HOPMessageRecord*) message peerURI:(NSString*) peerURI location:(NSString*) location  participantPeerURIs:(NSArray*) participantPeerURIs
 {
     NSString*  peerURIs = @"";
@@ -770,11 +801,15 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask
                             for (NSDictionary * dict in messages)
                             {
                                 HOPMessageRecord* msg = [dict objectForKey:@"message"];
-                                NSArray* peerURIs = [dict objectForKey:@"participantsPeerURIs"];
+//                                NSArray* peerURIs = [dict objectForKey:@"participantsPeerURIs"];
                                 if (msg)
                                 {
-                                    NSArray* deviceTokens = [self getDeviceTokensForContact2:msg.sender];
-                                    [self sendRichPush:msg deviceTokens:deviceTokens participantPeerURIs:peerURIs];
+                                    HOPRolodexContact* participant = [dict objectForKey:@"participant"];
+                                    if (participant)
+                                    {
+                                        NSArray* deviceTokens = [self getDeviceTokensForContact2:participant];
+                                        [self sendRichPush:msg deviceTokens:deviceTokens participantPeerURIs:@[[participant getPeerURI]]];
+                                    }
                                 }
                             }
 

@@ -35,6 +35,8 @@
 #import <openpeer/core/IHelper.h>
 #import <openpeer/core/ComposingStatus.h>
 #import <openpeer/core/ISystemMessage.h>
+#include <zsLib/Stringize.h>
+#include <zsLib/XML.h>
 
 #import "HOPConversationThread_Internal.h"
 #import "HOPContact_Internal.h"
@@ -51,11 +53,17 @@
 #import "OpenPeerUtility.h"
 #import "HOPIdentity_Internal.h"
 #import "HOPPublicPeerFile.h"
+#import "HOPConversationType.h"
+#import "HOPSettings.h"
 
 ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
 using namespace openpeer;
 using namespace openpeer::core;
+
+@interface HOPConversationThread ()
++ (ContactProfileInfoListPtr) getContactProfileListForContacts:(NSArray*) contacts;
+@end
 
 @implementation HOPConversationThread
 
@@ -85,7 +93,8 @@ static IConversationThreadPtr create(
                                      ElementPtr metaData = ElementPtr()                                     // optional meta data to assign to the thread
 );*/
 
-+ (id) conversationThreadWithParticipants:(NSArray*) participants creatorIdentities:(NSArray*) identities conversationThreadID:(NSString*) conversationThreadID metaData:(NSDictionary*) metaData
+//{"metaData" : { "conversationType" : "contact" } }
++ (id) conversationThreadWithIdentities:(NSArray*) identities participants:(NSArray*) participants conversationThreadID:(NSString*) conversationThreadID metaData:(NSDictionary*) metaData
 {
     HOPConversationThread* ret = nil;
     core::IdentityContactList identityContactsList;
@@ -98,11 +107,25 @@ static IConversationThreadPtr create(
         identityContactsList.push_back(identityContact);
     }
     
-    IConversationThreadPtr tempConversationThreadPtr = IConversationThread::create([[HOPAccount sharedAccount] getAccountPtr], identityContactsList);
+    ContactProfileInfoListPtr contactListPtr = [HOPConversationThread getContactProfileListForContacts:participants];
+    
+//    HOPConversationType *coversationType = [[HOPConversationType alloc] initWithConversationThreadType:[HOPConversationType conversationThreadTypeForString:[[HOPSettings sharedSettings] getDefaultCovnersationType]]];
+//    
+//    NSString* metaDatastr = [NSString stringWithFormat:@"{\"%@\" : {%@}}",@"metaData",coversationType.jsonMessage];
+    
+    NSError* err;
+    NSData *jsonData =[NSJSONSerialization dataWithJSONObject:metaData options:0 error:&err];
+    
+    NSString *metaDatastr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];//[NSString stringWithUTF8String:[jsonData bytes]];
+    
+    ElementPtr elementPtr = IHelper::createElement([metaDatastr UTF8String]);
+    
+    IConversationThreadPtr tempConversationThreadPtr = IConversationThread::create([[HOPAccount sharedAccount] getAccountPtr], identityContactsList, *contactListPtr,"",elementPtr);
     
     if (tempConversationThreadPtr)
     {
         ret = [[self alloc] initWithConversationThread:tempConversationThreadPtr];
+        [ret.participants addObjectsFromArray:participants];
     }
     
     return ret;
@@ -140,10 +163,29 @@ static IConversationThreadPtr create(
 {
     HOPConversationThread* ret = nil;
     if (threadID)
+    {
         ret =[[OpenPeerStorageManager sharedStorageManager] getConversationThreadForId:threadID];
+        if (!ret)
+        {
+            IConversationThreadPtr tempConversationThreadPtr = IConversationThread::getConversationThreadByID([[HOPAccount sharedAccount] getAccountPtr], [threadID UTF8String]);
+            if (tempConversationThreadPtr)
+                ret = [[HOPConversationThread alloc] initWithConversationThread:tempConversationThreadPtr];
+        }
+    }
     return ret;
 }
 
+- (NSString*) getConversationThreadID
+{
+    NSString* ret = nil;
+    
+    String threadID = conversationThreadPtr->getThreadID();
+    
+    if (threadID)
+        ret = [NSString stringWithUTF8String:threadID];
+    
+    return ret;
+}
 
 + (NSString*) stringForMessageDeliveryState:(HOPConversationThreadMessageDeliveryState) state
 {
@@ -259,7 +301,7 @@ static IConversationThreadPtr create(
     return self.participants;
 }
 
-- (ContactProfileInfoListPtr) getContactProfileListForContacts:(NSArray*) contacts
++ (ContactProfileInfoListPtr) getContactProfileListForContacts:(NSArray*) contacts
 {
     ContactProfileInfoListPtr contactListPtr(new ContactProfileInfoList);
     
@@ -301,7 +343,7 @@ static IConversationThreadPtr create(
             }
             contactInfo.mIdentityContacts = identityContactList;
             contactListPtr->push_back(contactInfo);
-            [self.participants addObject:rolodexContact];
+//            [self.participants addObject:rolodexContact];
         }
     }
     
@@ -314,7 +356,12 @@ static IConversationThreadPtr create(
     {
         if ([contacts count] > 0)
         {
-            ContactProfileInfoListPtr contactListPtr = [self getContactProfileListForContacts:contacts];
+            ContactProfileInfoListPtr contactListPtr = [HOPConversationThread getContactProfileListForContacts:contacts];
+            for (HOPRolodexContact* rolodexContact in contacts)
+            {
+                if ([rolodexContact getCoreContact])
+                    [self.participants addObject:rolodexContact];
+            }
             /*ContactProfileInfoList contactList;
             for (HOPRolodexContact* rolodexContact in contacts)
             {
@@ -692,6 +739,14 @@ static IConversationThreadPtr create(
     return ret;
 }
 
+- (void) setMessageDeliveryState: (NSString*) messageID deliveryState:(HOPConversationThreadMessageDeliveryState) deliveryState
+{
+    if(conversationThreadPtr && messageID.length > 0)
+    {
+        conversationThreadPtr->setMessageDeliveryState([messageID UTF8String], (IConversationThread::MessageDeliveryStates) deliveryState);
+    }
+}
+
 - (void) markAllMessagesRead
 {
     if(conversationThreadPtr)
@@ -742,11 +797,31 @@ static IConversationThreadPtr create(
     return ret;
 }
 
-- (NSString *)description
+- (NSString*) getMetaData
+{
+    NSString* ret = nil;
+    
+    if(conversationThreadPtr)
+    {
+        ret = [NSString stringWithUTF8String: IHelper::convertToString(conversationThreadPtr->getMetaData())];
+    }
+    else
+    {
+        ZS_LOG_ERROR(Debug, [self log:@"Invalid conversation thread object!"]);
+        [NSException raise:NSInvalidArgumentException format:@"Invalid conversation thread object!"];
+    }
+    return ret;
+}
+
+- (NSString*)description
 {
     return [NSString stringWithUTF8String: IHelper::convertToString(IConversationThread::toDebug([self getConversationThreadPtr]))];
 }
 
+//- (ElementPtr) createMetaDataForConversationType:(HOPConversationThreadType) converstionType
+//{
+//    ElementPtr elementPtr =
+//}
 
 - (void) destroyCoreObject
 {

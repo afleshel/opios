@@ -147,7 +147,7 @@
 
 - (void) sendMessage:(NSString*) message replacesMessageID:(NSString*) replacesMessageID forConversation:(HOPConversation*) conversation
 {
-    HOPRolodexContact* contact = [conversation.participants objectAtIndex:0];
+    //HOPRolodexContact* contact = [conversation.participants objectAtIndex:0];
     
     HOPMessageRecord* messageRecord = nil;
     
@@ -180,7 +180,8 @@
         {
             OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Message %@ cannot be sent because account is not in the ready state.",messageRecord.messageID);
         #ifdef APNS_ENABLED
-            [[APNSManager sharedAPNSManager]sendRichPushNotificationForMessage:messageRecord missedCall:NO participantsPeerURIs:@[]];
+            [[APNSManager sharedAPNSManager]sendRichPushNotificationForMessage:message missedCall:NO  participants:[conversation getParticipants]];
+            //[[APNSManager sharedAPNSManager]sendRichPushNotificationForMessage:messageRecord missedCall:NO participantsPeerURIs:@[]];
         #endif
         }
         //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resendMessages) name:kReachabilityChangedNotification object:nil];

@@ -62,6 +62,7 @@ extern NSString * const settingsKeyDefaultLogLevel;
 extern NSString * const settingsKeyRedirectAfterLoginCompleteURL;
 extern NSString * const settingsDeviceTokenDownloadURL;
 extern NSString * const settingsDeviceTokenUploadURL;
+extern NSString * const settingsKeyDefaultConversationType;
 
 extern NSString * const archiveEnabled;
 extern NSString * const archiveServer;

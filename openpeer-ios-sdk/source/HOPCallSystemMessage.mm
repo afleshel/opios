@@ -49,14 +49,15 @@ using namespace openpeer::core;
     if (self)
     {
         HOPContact* coreContact = [inCallee getCoreContact];
-        callSystemMessagePtr = CallSystemMessagePtr(new CallSystemMessage((CallSystemMessage::CallSystemMessageTypes)inType, [coreContact getContactPtr], inErrorCode));
+//        callSystemMessagePtr = CallSystemMessagePtr(new CallSystemMessage((CallSystemMessage::CallSystemMessageStatuses)inType, [coreContact getContactPtr], inErrorCode));
+        callSystemMessagePtr = CallSystemMessagePtr(new CallSystemMessage((CallSystemMessage::CallSystemMessageStatuses)inType, "", "", [coreContact getContactPtr], inErrorCode));
         self.type = HOPSystemMessageTypeCall;
         self.messageType = inType;
         self.callee = coreContact;
         self.errorCode = inErrorCode;
         
         callSystemMessagePtr->mCallee = [coreContact getContactPtr];
-        callSystemMessagePtr->mType = (CallSystemMessage::CallSystemMessageTypes)inType;
+        callSystemMessagePtr->mStatus = (CallSystemMessage::CallSystemMessageStatuses)inType;
         
         ElementPtr elementPtr = ISystemMessage::createEmptySystemMessage();
         callSystemMessagePtr->insert(elementPtr);
@@ -90,7 +91,7 @@ using namespace openpeer::core;
 {
     NSString* ret = nil;
     
-    String str = CallSystemMessage::toString((CallSystemMessage::CallSystemMessageTypes)messageType);
+    String str = CallSystemMessage::toString((CallSystemMessage::CallSystemMessageStatuses)messageType);
     
     if (str.hasData())
     {
@@ -106,7 +107,7 @@ using namespace openpeer::core;
     
     if ([messageTypeString length] > 0)
     {
-        ret = (HOPCallSystemMessageType)CallSystemMessage::toCallSystemMessageType([messageTypeString UTF8String]);
+        ret = (HOPCallSystemMessageType)CallSystemMessage::toCallSystemMessageStatus([messageTypeString UTF8String]);
     }
     
     return ret;
@@ -132,11 +133,25 @@ using namespace openpeer::core;
     {
         callSystemMessagePtr = inCallSystemMessagePtr;
         self.type = HOPSystemMessageTypeCall;
-        self.messageType = (HOPCallSystemMessageType) callSystemMessagePtr->mType;
+        self.messageType = (HOPCallSystemMessageType) callSystemMessagePtr->mStatus;
         self.callee = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:[NSString stringWithUTF8String:callSystemMessagePtr->mCallee->getPeerURI()]];
         self.errorCode = callSystemMessagePtr->mErrorCode;
     }
     return self;
+}
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    HOPCallSystemMessage *copy = [[HOPCallSystemMessage allocWithZone: zone] init];
+    
+    copy.type = self.type;
+    copy.messageType = self.messageType;
+    copy.callee = self.callee;
+    copy.errorCode = self.errorCode;
+    copy.jsonMessage = self.jsonMessage;
+    
+    [copy setCallSystemMessagePtr:callSystemMessagePtr];
+    return copy;
 }
 
 - (CallSystemMessagePtr) getCallSystemMessagePtr
@@ -144,5 +159,9 @@ using namespace openpeer::core;
     return callSystemMessagePtr;
 }
 
+- (void) setCallSystemMessagePtr:(CallSystemMessagePtr) inCallSystemMessagePtr
+{
+    callSystemMessagePtr = inCallSystemMessagePtr;
+}
 
 @end

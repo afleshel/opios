@@ -70,12 +70,12 @@
    });
 }
 
-- (void) onConversationContactsChanged:(HOPConversation*) conversation
+- (void) onConversationContactsChanged:(HOPConversation*) conversation numberOfAddedParticipants:(int) numberOfAddedParticipants
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread id %@  - number of contacts: %d.",[conversation getID], conversation.participants.count);
     dispatch_async(dispatch_get_main_queue(), ^
    {
-       [[SessionManager sharedSessionManager] onParticipantsInConversationUpdate:conversation];
+       [[SessionManager sharedSessionManager] onParticipantsInConversationUpdate:conversation numberOfAddedParticipants:numberOfAddedParticipants];
    });
 }
 
@@ -144,8 +144,9 @@
                 }
                 else if (![message.type isEqualToString:messageTypeSystem])
                 {
-                    NSArray *peerURIs = [[conversationThread getParticipants] valueForKeyPath:@"openPeerContact.publicPeerFile.peerURI"];
-                    [[APNSManager sharedAPNSManager]sendRichPushNotificationForMessage:message missedCall:NO  participantsPeerURIs:peerURIs];
+                    [[APNSManager sharedAPNSManager]sendRichPushNotificationForMessage:message missedCall:NO  participants:@[coreContact]];
+//                    NSArray *peerURIs = [[conversationThread getParticipants] valueForKeyPath:@"openPeerContact.publicPeerFile.peerURI"];
+//                    [[APNSManager sharedAPNSManager]sendRichPushNotificationForMessage:message missedCall:NO  participantsPeerURIs:peerURIs];
                 }
             }
         }

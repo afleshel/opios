@@ -80,6 +80,7 @@ NSString * const settingsKeyDefaultLogLevel = @"logLevelForServicesHttp";
 NSString * const settingsKeyRedirectAfterLoginCompleteURL = @"redirectAfterLoginCompleteURL";
 NSString * const settingsDeviceTokenDownloadURL = @"deviceTokenDownloadURL";
 NSString * const settingsDeviceTokenUploadURL = @"deviceTokenUploadURL";
+NSString * const settingsKeyDefaultConversationType = @"applicationConversationType";
 
 NSString * const archiveEnabled = @"enabled";
 NSString * const archiveServer = @"Server";

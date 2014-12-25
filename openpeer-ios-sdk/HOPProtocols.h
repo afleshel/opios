@@ -346,7 +346,7 @@
  *
  *  @param conversationThread Conversation thread object.
  */
-- (void) onConversationContactsChanged:(HOPConversation*) conversation;
+- (void) onConversationContactsChanged:(HOPConversation*) conversation  numberOfAddedParticipants:(int) numberOfAddedParticipants;
 /**
  *  Notifies the receiver about conversation thread participant connection state.
  *

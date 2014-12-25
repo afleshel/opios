@@ -30,7 +30,7 @@
  */
 
 #import <openpeer/core/types.h>
-
+#import <openpeer/core/IConversationThread.h>
 #import "OpenPeerStorageManager.h"
 
 #import "HOPConversation.h"
@@ -40,12 +40,14 @@
 #import "HOPConversationThread.h"
 #import "HOPConversationRecord.h"
 #import "HOPConversationEvent+External.h"
+#import "HOPConversationType.h"
 
 #import "HOPRolodexContact+External.h"
 #import "HOPMessageRecord+External.h"
 #import "HOPModelManager.h"
 #import "HOPUtility.h"
 #import "HOPAccount.h"
+#import "HOPsettings.h"
 
 ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
@@ -105,6 +107,15 @@ using namespace openpeer::core;
     return self;
 }*/
 
++ (NSDictionary*) createMetadataDictionary:(HOPConversationThreadType) threadType
+{
+    HOPConversationType* conversationType = [[HOPConversationType alloc] initWithConversationThreadType:threadType];
+    
+    NSDictionary* conversationTypeDict = [NSDictionary dictionaryWithObject:[[HOPSettings sharedSettings] getDefaultCovnersationType] forKey:[NSString stringWithUTF8String:ConversationThreadType::Definitions::Names::conversationType()]];
+    NSDictionary* dict = [NSDictionary dictionaryWithObject:conversationTypeDict forKey:[NSString stringWithUTF8String:IConversationThread::Definitions::Names::metaDataName()]];
+    
+    return dict;
+}
 
 + (HOPConversation*) createConversation
 {
@@ -112,7 +123,9 @@ using namespace openpeer::core;
     
     if (ret)
     {
-        ret.thread = [HOPConversationThread conversationThreadWithIdentities:[[HOPAccount sharedAccount] getAssociatedIdentities]];
+        //+ (id) conversationThreadWithIdentities:(NSArray*) identities participants:(NSArray*) participants conversationThreadID:(NSString*) conversationThreadID metaData:(NSDictionary*) metaData
+        NSDictionary* metadata = [HOPConversation createMetadataDictionary:[HOPConversationType conversationThreadTypeForString:[[HOPSettings sharedSettings] getDefaultCovnersationType]]];
+        ret.thread = [HOPConversationThread conversationThreadWithIdentities:[[HOPAccount sharedAccount] getAssociatedIdentities] participants:@[] conversationThreadID: @"" metaData: metadata];
         if (!ret.thread)
         {
             ZS_LOG_ERROR(Debug, [ret log:@"Invalid conversation thread object!"]);
@@ -132,14 +145,18 @@ using namespace openpeer::core;
     
     if (ret)
     {
-        ret.thread = [HOPConversationThread conversationThreadWithIdentities:[[HOPAccount sharedAccount] getAssociatedIdentities]];
+        NSDictionary* metadata = [HOPConversation createMetadataDictionary:[HOPConversationType conversationThreadTypeForString:[[HOPSettings sharedSettings] getDefaultCovnersationType]]];
+        ret.thread = [HOPConversationThread conversationThreadWithIdentities:[[HOPAccount sharedAccount] getAssociatedIdentities] participants:participants conversationThreadID: @"" metaData: metadata];
+        
+        //ret.thread = [HOPConversationThread conversationThreadWithIdentities:[[HOPAccount sharedAccount] getAssociatedIdentities]];
         if (ret.thread)
         {
-            [ret.thread addContacts:participants];
+            //[ret.thread addContacts:participants];
             
             ret.title = inTitle.length > 0 ? inTitle : [ret getDefaultTitle];
             
-            ret.record = [[HOPModelManager sharedModelManager] getConversationRecordForParticipants:participants];
+            if ([[[HOPSettings sharedSettings] getDefaultCovnersationType] isEqualToString:[NSString stringWithUTF8String: ConversationThreadType::Definitions::ValueKeywords::contactBased()]])
+                ret.record = [[HOPModelManager sharedModelManager] getConversationRecordForParticipants:participants];
             
             if (!ret.record)
                 ret.record = [[HOPModelManager sharedModelManager] createConversationRecordForConversationThread:ret.thread type:nil date:[NSDate date] name:ret.title participants:participants];
@@ -281,9 +298,10 @@ using namespace openpeer::core;
 }
 - (NSArray*) getParticipants
 {
-    NSArray* ret = nil;
+    NSArray* ret = [self.thread getContacts];
+    return ret;
     
-    if (self.lastEvent && self.lastEvent.eventID.length > 0)
+    /*if (self.lastEvent && self.lastEvent.eventID.length > 0)
     {
         ret = [self.participantsDict objectForKey:self.lastEvent.eventID];
     }
@@ -298,7 +316,7 @@ using namespace openpeer::core;
         }
     }
     
-    return ret;
+    return ret;*/
 }
 
 - (void) refresh

@@ -59,6 +59,8 @@
 + (id) conversationThreadWithIdentities:(NSArray*) identities;
 
 
++ (id) conversationThreadWithIdentities:(NSArray*) identities participants:(NSArray*) participants conversationThreadID:(NSString*) conversationThreadID metaData:(NSDictionary*) metaData;
+
 /**
  Returns list of all active conversation threads.
  @return List of HOPConversationThread objects
@@ -100,6 +102,8 @@
  @return A conversation thread ID
  */
 - (NSString*) getThreadId;
+
+- (NSString*) getConversationThreadID;
 
 /**
  Checks if self is host of the conversation thread.
@@ -198,6 +202,7 @@
  */
 - (BOOL) getMessageDeliveryState: (NSString*) messageID outDeliveryState:(HOPConversationThreadMessageDeliveryState*) outDeliveryState;
 
+- (void) setMessageDeliveryState: (NSString*) messageID deliveryState:(HOPConversationThreadMessageDeliveryState) deliveryState;
 /**
  *  Mark all received messages thus far as read
  */
