@@ -1007,18 +1007,17 @@ using namespace openpeer::core;
     if (conversationThread)
     {
         NSArray* results = nil;
-        
-        NSString* cbcID = [HOPConversation getCBCIDForContacts:[conversationThread getContacts]];
-        
         NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"lastActivity" ascending:NO];
         
-        results = [self getResultsForEntity:@"HOPConversationRecord" withPredicateString:[NSString stringWithFormat:@"homeUser.stableId MATCHES '%@' AND ANY events.participants.cbcID MATCHES '%@'",[self getLastLoggedInUser].stableId,cbcID] orderDescriptors:@[sortDescriptor]];
-        
-//        results = [self getResultsForEntity:@"HOPConversationRecord" withPredicateString:[NSString stringWithFormat:@"homeUser.stableId MATCHES '%@'",[self getLastLoggedInUser].stableId] orderDescriptors:@[sortDescriptor]];
-//        
-//        NSPredicate* predicate = [NSPredicate predicateWithFormat:@"ALL participants IN %@", [conversationThread getContacts]];
-//        
-//        results = [results filteredArrayUsingPredicate:predicate];
+        if (conversationThread.conversationType == HOPConversationThreadTypeContactBased)
+        {
+            NSString* cbcID = [HOPConversation getCBCIDForContacts:[conversationThread getContacts]];
+            results = [self getResultsForEntity:@"HOPConversationRecord" withPredicateString:[NSString stringWithFormat:@"homeUser.stableId MATCHES '%@' AND ANY events.participants.cbcID MATCHES '%@'",[self getLastLoggedInUser].stableId,cbcID] orderDescriptors:@[sortDescriptor]];
+        }
+        else if (conversationThread.conversationType == HOPConversationThreadTypeThreadBased)
+        {
+            results = [self getResultsForEntity:@"HOPConversationRecord" withPredicateString:[NSString stringWithFormat:@"sessionID MATCHES '%@'",[conversationThread getThreadId]] orderDescriptors:@[sortDescriptor]];
+        }
 
         if ([results count] > 0)
             ret = [results objectAtIndex:0];
@@ -1431,8 +1430,9 @@ using namespace openpeer::core;
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPMessageRecord" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];
     [fetchRequest setEntity:entity];
     
-    NSPredicate* predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(visible == YES AND conversationEvent.participants.cbcID MATCHES '%@' AND conversationEvent.session.homeUser.stableId MATCHES '%@')",conversation.lastEvent.participants.cbcID,[self getLastLoggedInUser].stableId]];
+    //NSPredicate* predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(visible == YES AND conversationEvent.participants.cbcID MATCHES '%@' AND conversationEvent.session.homeUser.stableId MATCHES '%@')",conversation.lastEvent.participants.cbcID,[self getLastLoggedInUser].stableId]];
     
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(visible == YES AND session.sessionID MATCHES '%@')",[conversation getID]]];
     [fetchRequest setPredicate:predicate];
     
     [fetchRequest setFetchBatchSize:20];

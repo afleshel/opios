@@ -79,6 +79,8 @@ typedef  enum
 
 @property (nonatomic, strong) UITapGestureRecognizer *threeTapGestureRecognizer;
 
+- (void) popLastConversationViewController;
+
 - (void) showTabBarController;
 - (void) showWebLoginView:(WebLoginViewController*) webLoginViewController;
 - (void) closeWebLoginView:(WebLoginViewController*) webLoginViewController;

@@ -249,7 +249,7 @@
                     
                     if (!conversation)
                     {
-                        conversation = [HOPConversation createConversationWithParticipants:@[contact] title:nil];
+                        conversation = [HOPConversation createConversationWithParticipants:@[contact] title:contact.name type:HOPConversationThreadTypeContactBased];
                         [((SessionManager*)[SessionManager sharedSessionManager]).conversationsDictionaryForContacts setObject: conversation forKey:[contact getPeerURI]];
                     }
                     

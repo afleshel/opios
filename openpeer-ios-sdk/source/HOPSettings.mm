@@ -34,6 +34,7 @@
 #import "OpenPeerSettingsDelegate.h"
 #import <zsLib/Log.h>
 #import <openpeer/stack/types.h>
+#import "HOPConversationType.h"
 
 ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
@@ -224,10 +225,16 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     return ((OpenPeerSettingsDelegate*)openPeerSettingsDelegatePtr.get())->getCurrentSettingsDictionary();
 }
 
-- (NSString*) getDefaultCovnersationType
+- (NSString*) getDefaultCovnersationTypeStr
 {
     NSString* ret = [[NSUserDefaults standardUserDefaults] objectForKey:OPENPEER_SDK_SETTING_CONVERSATION_TYPE];
     
+    return ret;
+}
+
+- (HOPConversationThreadType) getDefaultCovnersationType
+{
+    HOPConversationThreadType ret = [HOPConversationType conversationThreadTypeForString:[self getDefaultCovnersationTypeStr]];
     return ret;
 }
 @end

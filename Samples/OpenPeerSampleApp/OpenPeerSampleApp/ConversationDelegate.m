@@ -35,6 +35,9 @@
 #import "MessageManager.h"
 #import "AppConsts.h"
 #import "Utility.h"
+#import "OpenPeer.h"
+#import "SessionViewController_iPhone.h"
+#import "MainViewController.h"
 
 #import <OpenpeerSDK/HOPConversation.h>
 //#import <OpenpeerSDK/HOPConversationThread.h>
@@ -59,6 +62,8 @@
        {
            if (conversation.participants > 0)
            {
+//               [[[OpenPeer sharedOpenPeer] mainViewController] popLastConversationViewController];
+//               [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForConversation:conversation forIncomingCall:NO forIncomingMessage:NO];
                //HOPContact* participant = [participants objectAtIndex:0];
                
 //               if (![[SessionManager sharedSessionManager] proceedWithExistingSessionForContacts:conversation.participants newConversationThread:conversationThread])

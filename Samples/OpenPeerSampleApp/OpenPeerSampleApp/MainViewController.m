@@ -225,6 +225,15 @@
      completion:nil];
 }
 
+- (void) popLastConversationViewController
+{
+    int tabIndex = [self.tabBarController selectedIndex] < 3 ? [self.tabBarController selectedIndex] : 2;
+    
+    UINavigationController* navigationController = (UINavigationController*)[[self.tabBarController viewControllers] objectAtIndex:tabIndex];
+    
+    [navigationController popToRootViewControllerAnimated:NO];
+}
+
 #pragma mark - Login views
 /**
  Show web view with opened login page.

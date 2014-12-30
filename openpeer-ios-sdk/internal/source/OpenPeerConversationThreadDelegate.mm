@@ -37,6 +37,8 @@
 #import "HOPMessageRecord+External.h"
 #import "HOPConversation.h"
 #import "HOPConversationEvent+External.h"
+#import "HOPConversationRecord+External.h"
+#import "HOPSettings.h"
 
 #include <zsLib/types.h>
 #import <openpeer/core/ILogger.h>
@@ -96,7 +98,6 @@ HOPConversation* OpenPeerConversationThreadDelegate::getOpenPeerConversation(ICo
 
 void OpenPeerConversationThreadDelegate::onConversationThreadNew(IConversationThreadPtr conversationThread)
 {
-
     HOPConversationThread * hopConversationThread = this->getOpenPeerConversationThread(conversationThread);
     
     if (!hopConversationThread)
@@ -113,7 +114,8 @@ void OpenPeerConversationThreadDelegate::onConversationThreadNew(IConversationTh
             
             if (!hopConversation)
             {
-                hopConversation = [[OpenPeerStorageManager sharedStorageManager] getConversationForCBCID:[HOPConversation getCBCIDForContacts:[hopConversationThread getContacts]]];
+//                hopConversation = [[OpenPeerStorageManager sharedStorageManager] getConversationForCBCID:[HOPConversation getCBCIDForContacts:[hopConversationThread getContacts]]];
+                hopConversation = [[OpenPeerStorageManager sharedStorageManager] getConversationForThreadID:[hopConversationThread getThreadId]];
                 if (!hopConversation)
                     hopConversation = [HOPConversation createConversationWithThread:hopConversationThread];
                 else
@@ -147,12 +149,27 @@ void OpenPeerConversationThreadDelegate::onConversationThreadContactsChanged(ICo
         {
             int numberOfAddedParticipants = hopConversation.participants.count - [hopConversation.lastEvent getContacts].count;
             
-            if (numberOfAddedParticipants > 0)
-                hopConversation.lastEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"addedNewParticipant" conversationRecord:hopConversation.record partcipants:hopConversation.participants title:hopConversation.title];
-            else if (numberOfAddedParticipants < 0)
-                hopConversation.lastEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"removedParticipant" conversationRecord:hopConversation.record partcipants:hopConversation.participants title:hopConversation.title];
+            if (numberOfAddedParticipants != 0)
+            {
+                if (hopConversation.conversationType == HOPConversationThreadTypeContactBased && [[HOPSettings sharedSettings] getDefaultCovnersationType] != HOPConversationThreadTypeContactBased)
+                {
+                    HOPConversationThread * hopConversationThread = hopConversation.thread;
+                    hopConversation.thread = nil;
+                    HOPConversation* hopConversation2 = [HOPConversation createConversationWithThread:hopConversationThread];
+                    hopConversation2.conversationType = [[HOPSettings sharedSettings] getDefaultCovnersationType];
+                    [conversationDelegate onConversationNew:hopConversation2];
+                    return;
+                }
+                else
+                {
+                    if (numberOfAddedParticipants > 0)
+                        hopConversation.lastEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"addedNewParticipant" conversationRecord:hopConversation.record partcipants:hopConversation.participants title:hopConversation.title];
+                    else if (numberOfAddedParticipants < 0)
+                        hopConversation.lastEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"removedParticipant" conversationRecord:hopConversation.record partcipants:hopConversation.participants title:hopConversation.title];
+                }
 
-            [conversationDelegate onConversationContactsChanged:hopConversation  numberOfAddedParticipants:numberOfAddedParticipants];
+                [conversationDelegate onConversationContactsChanged:hopConversation  numberOfAddedParticipants:numberOfAddedParticipants];
+            }
         }
     }
 }

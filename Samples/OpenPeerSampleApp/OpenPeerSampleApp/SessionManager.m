@@ -565,11 +565,15 @@
     if (conversation.participants.count == 0 || numberOfAddedParticipants == 0)
         return;
     
-    NSString* sessionId = [conversation getID];
-
-    SessionViewController_iPhone* sessionViewController = [[[[OpenPeer sharedOpenPeer] mainViewController] sessionViewControllersDictionary] objectForKey:sessionId];
     
-    [sessionViewController updateOnParticipantChange];
+    NSString* sessionId = [conversation getID];
+    if (sessionId.length > 0)
+    {
+        conversation.title = [conversation getDefaultTitle];
+        SessionViewController_iPhone* sessionViewController = [[[[OpenPeer sharedOpenPeer] mainViewController] sessionViewControllersDictionary] objectForKey:sessionId];
+        
+        [sessionViewController updateOnParticipantChange];
+    }
 }
 
 @end

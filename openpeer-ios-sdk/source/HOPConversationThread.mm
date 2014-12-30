@@ -81,6 +81,18 @@ using namespace openpeer::core;
         self.participants = [NSMutableArray new];
         conversationThreadPtr = inConversationThreadPtr;
         [[OpenPeerStorageManager sharedStorageManager] setConversationThread:self forId:[NSString stringWithUTF8String:inConversationThreadPtr->getThreadID()]];
+        
+        ElementPtr elementPtr = inConversationThreadPtr->getMetaData();
+        String str = IHelper::convertToString(elementPtr);
+        if (str)
+        {
+            NSString* jsonString = [NSString stringWithUTF8String:str];
+            NSData *data = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+            id dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+            self.conversationType = HOPConversationThreadTypeThreadBased;
+        }
+#warning TODO_S: Read conversation type from core conversation thred object
+        //TODO_S: Read conversation type from core conversation thred object
     }
     return self;
 }
@@ -93,8 +105,19 @@ static IConversationThreadPtr create(
                                      ElementPtr metaData = ElementPtr()                                     // optional meta data to assign to the thread
 );*/
 
++ (NSDictionary*) createMetadataDictionary:(HOPConversationThreadType) threadType
+{
+    HOPConversationType* conversationType = [[HOPConversationType alloc] initWithConversationThreadType:threadType];
+    
+    //NSDictionary* conversationTypeDict = [NSDictionary dictionaryWithObject:[[HOPSettings sharedSettings] getDefaultCovnersationTypeStr] forKey:[NSString stringWithUTF8String:ConversationThreadType::Definitions::Names::conversationType()]];
+    NSDictionary* conversationTypeDict = [NSDictionary dictionaryWithObject:[HOPConversationType stringForConversationThreadType:threadType] forKey:[NSString stringWithUTF8String:ConversationThreadType::Definitions::Names::conversationType()]];
+    NSDictionary* dict = [NSDictionary dictionaryWithObject:conversationTypeDict forKey:[NSString stringWithUTF8String:IConversationThread::Definitions::Names::metaDataName()]];
+    
+    return dict;
+}
+
 //{"metaData" : { "conversationType" : "contact" } }
-+ (id) conversationThreadWithIdentities:(NSArray*) identities participants:(NSArray*) participants conversationThreadID:(NSString*) conversationThreadID metaData:(NSDictionary*) metaData
++ (id) conversationThreadWithIdentities:(NSArray*) identities participants:(NSArray*) participants conversationThreadID:(NSString*) conversationThreadID threadType:(HOPConversationThreadType) threadType
 {
     HOPConversationThread* ret = nil;
     core::IdentityContactList identityContactsList;
@@ -113,6 +136,8 @@ static IConversationThreadPtr create(
 //    
 //    NSString* metaDatastr = [NSString stringWithFormat:@"{\"%@\" : {%@}}",@"metaData",coversationType.jsonMessage];
     
+    NSDictionary* metaData = [HOPConversationThread createMetadataDictionary:threadType];
+    
     NSError* err;
     NSData *jsonData =[NSJSONSerialization dataWithJSONObject:metaData options:0 error:&err];
     
@@ -120,12 +145,13 @@ static IConversationThreadPtr create(
     
     ElementPtr elementPtr = IHelper::createElement([metaDatastr UTF8String]);
     
-    IConversationThreadPtr tempConversationThreadPtr = IConversationThread::create([[HOPAccount sharedAccount] getAccountPtr], identityContactsList, *contactListPtr,"",elementPtr);
+    IConversationThreadPtr tempConversationThreadPtr = IConversationThread::create([[HOPAccount sharedAccount] getAccountPtr], identityContactsList, *contactListPtr,conversationThreadID.length > 0 ? [conversationThreadID UTF8String] : "",elementPtr);
     
     if (tempConversationThreadPtr)
     {
         ret = [[self alloc] initWithConversationThread:tempConversationThreadPtr];
         [ret.participants addObjectsFromArray:participants];
+        ret.conversationType = threadType;
     }
     
     return ret;
@@ -149,7 +175,9 @@ static IConversationThreadPtr create(
     if (tempConversationThreadPtr)
     {
         ret = [[self alloc] initWithConversationThread:tempConversationThreadPtr];
+        ret.conversationType = [[HOPSettings sharedSettings] getDefaultCovnersationType];
     }
+    
     
     return ret;
 }

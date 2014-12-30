@@ -53,9 +53,11 @@
 @property (assign) NSUInteger numberOfUnreadMessages;
 @property (nonatomic, strong) HOPCall* activeCall;
 @property (assign) BOOL redialCall;
+@property (assign) HOPConversationThreadType conversationType;
 
 + (HOPConversation*) createConversation;
 + (HOPConversation*) createConversationWithParticipants:(NSArray*) participants title:(NSString*) inTitle;
++ (HOPConversation*) createConversationWithParticipants:(NSArray*) participants title:(NSString*) inTitle type:(HOPConversationThreadType) type;
 + (HOPConversation*) createConversationWithThread:(HOPConversationThread*) inConversationThread;
 + (HOPConversation*) createConversationForRecord:(HOPConversationRecord*) inConversationRecord;
 

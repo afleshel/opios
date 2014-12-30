@@ -49,6 +49,8 @@
 
 @interface HOPConversationThread : NSObject
 
+@property (assign) HOPConversationThreadType conversationType;
+
 /**
 *  Creates a new conversation thread.
 *
@@ -59,7 +61,7 @@
 + (id) conversationThreadWithIdentities:(NSArray*) identities;
 
 
-+ (id) conversationThreadWithIdentities:(NSArray*) identities participants:(NSArray*) participants conversationThreadID:(NSString*) conversationThreadID metaData:(NSDictionary*) metaData;
++ (id) conversationThreadWithIdentities:(NSArray*) identities participants:(NSArray*) participants conversationThreadID:(NSString*) conversationThreadID  threadType:(HOPConversationThreadType) threadType;
 
 /**
  Returns list of all active conversation threads.
