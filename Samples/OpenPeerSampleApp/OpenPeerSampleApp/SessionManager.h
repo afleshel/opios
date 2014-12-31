@@ -76,7 +76,6 @@
 
 - (int) totalNumberOfUnreadMessages;
 - (NSString* )getSystemMessage:(HOPMessageRecord *)messageRecord;
-- (NSString*) getLastTextMessageForConversationEvent:(HOPConversationEvent*) event;
 - (NSString*) getLastTextMessageForConversationRecord:(HOPConversationRecord*) record;
 
 - (void) onParticipantsInConversationUpdate:(HOPConversation*) conversation numberOfAddedParticipants:(int) numberOfAddedParticipants;

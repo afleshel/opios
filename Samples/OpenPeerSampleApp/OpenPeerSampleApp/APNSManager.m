@@ -801,7 +801,6 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask
                             for (NSDictionary * dict in messages)
                             {
                                 HOPMessageRecord* msg = [dict objectForKey:@"message"];
-//                                NSArray* peerURIs = [dict objectForKey:@"participantsPeerURIs"];
                                 if (msg)
                                 {
                                     HOPRolodexContact* participant = [dict objectForKey:@"participant"];
@@ -812,16 +811,6 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask
                                     }
                                 }
                             }
-
-                            //NSDictionary* dict = [self.dictionaryOfPushNotificationsToSend objectForKey:peerURI];
-//                            HOPMessage* msg = [dict objectForKey:@"message"];//[self.dictionaryOfPushNotificationsToSend objectForKey:peerURI];
-//                            NSArray* peerURIs = [dict objectForKey:@"participantsPeerURIs"];
-//                            if (msg)
-//                            {
-//                                NSArray* deviceTokens = [self getDeviceTokensForContact2:msg.contact];
-//                                [self sendRichPush:msg deviceTokens:deviceTokens participantPeerURIs:peerURIs];
-//                            }
-//                            [self.dictionaryOfPushNotificationsToSend removeObjectForKey:peerURI];
                         }
                         
                     }

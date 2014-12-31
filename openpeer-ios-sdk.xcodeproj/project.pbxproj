@@ -370,7 +370,6 @@
 		871BC9A4179EEB3F00AEA4A6 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		871BC9C317A1233500AEA4A6 /* HOPIdentityContact_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HOPIdentityContact_Internal.h; sourceTree = "<group>"; };
 		871BC9C417A1233600AEA4A6 /* HOPIdentityContact_Internal.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HOPIdentityContact_Internal.mm; sourceTree = "<group>"; };
-		872725C1166636F50089CBB6 /* HOPMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HOPMessage.h; sourceTree = "<group>"; };
 		872C728618C5E94F007846AB /* KeyMappings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = KeyMappings.plist; sourceTree = "<group>"; };
 		872DA9E5175CEC9C000CCA76 /* HOPCache.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HOPCache.mm; sourceTree = "<group>"; };
 		872DA9E7175CECB1000CCA76 /* HOPCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HOPCache.h; sourceTree = "<group>"; };
@@ -426,7 +425,6 @@
 		87A5B19316EDE5EB007E825A /* HOPLogger.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HOPLogger.mm; sourceTree = "<group>"; };
 		87A5B19516EDE5EB007E825A /* HOPMediaEngine.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HOPMediaEngine.mm; sourceTree = "<group>"; };
 		87A5B19616EDE5EB007E825A /* HOPMediaEngineRtpRtcpStatistics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HOPMediaEngineRtpRtcpStatistics.m; sourceTree = "<group>"; };
-		87A5B19716EDE5EB007E825A /* HOPMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HOPMessage.m; sourceTree = "<group>"; };
 		87A5B19E16EDE5EB007E825A /* HOPStack.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HOPStack.mm; sourceTree = "<group>"; };
 		87A5B19F16EDE5EB007E825A /* OpenPeerLoggerDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenPeerLoggerDelegate.mm; sourceTree = "<group>"; };
 		87A5B1B516EDE5F9007E825A /* HOPAccount_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HOPAccount_Internal.h; sourceTree = "<group>"; };
@@ -868,7 +866,6 @@
 				87DFA51D16E7576900C77326 /* HOPLogger.h */,
 				874F657C1652652A00E580F0 /* HOPMediaEngine.h */,
 				87343FE9165E4B0C0070E6E0 /* HOPMediaEngineRtpRtcpStatistics.h */,
-				872725C1166636F50089CBB6 /* HOPMessage.h */,
 				8758405917B17CB0006B9A21 /* HOPModelManager.h */,
 				874F65A716528FCF00E580F0 /* HOPProtocols.h */,
 				8792E9BE1651A43E00DEAC58 /* HOPStack.h */,
@@ -925,7 +922,6 @@
 				87A5B19316EDE5EB007E825A /* HOPLogger.mm */,
 				87A5B19516EDE5EB007E825A /* HOPMediaEngine.mm */,
 				87A5B19616EDE5EB007E825A /* HOPMediaEngineRtpRtcpStatistics.m */,
-				87A5B19716EDE5EB007E825A /* HOPMessage.m */,
 				8758405B17B17CD0006B9A21 /* HOPModelManager.mm */,
 				87A5B19E16EDE5EB007E825A /* HOPStack.mm */,
 				87A5B19F16EDE5EB007E825A /* OpenPeerLoggerDelegate.mm */,

@@ -79,45 +79,19 @@ using namespace openpeer::core;
         self.numberOfUnreadMessages = 0;
         self.redialCall = NO;
         self.conversationType = [[HOPSettings sharedSettings] getDefaultCovnersationType];
-//        self.thread = [HOPConversationThread conversationThreadWithIdentities:[[HOPAccount sharedAccount] getAssociatedIdentities]];
-//        if (!self.thread)
-//        {
-//            self = nil;
-//        }
     }
     return self;
 }
 
-/*- (id) initWithParticipants:(NSArray*) participants title:(NSString*) inTitle
-{
-    self = [self init];
-    if (self && self.thread)
-    {
-        [self.thread addContacts:participants];
-        
-        self.title = inTitle.length > 0 ? inTitle : [self getDefaultTitle];
-        
-        self.record = [[HOPModelManager sharedModelManager] createConversationRecordForConversationThread:self.thread type:nil date:[NSDate date] name:self.title participants:participants];
-        
-        self.lastEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"create" conversationRecord:self.record partcipants:participants title:self.title];
-    }
-    else
-    {
-        self = nil;
-    }
-    return self;
-}*/
-
-+ (NSDictionary*) createMetadataDictionary:(HOPConversationThreadType) threadType
-{
-    HOPConversationType* conversationType = [[HOPConversationType alloc] initWithConversationThreadType:threadType];
-    
-    //NSDictionary* conversationTypeDict = [NSDictionary dictionaryWithObject:[[HOPSettings sharedSettings] getDefaultCovnersationTypeStr] forKey:[NSString stringWithUTF8String:ConversationThreadType::Definitions::Names::conversationType()]];
-    NSDictionary* conversationTypeDict = [NSDictionary dictionaryWithObject:[HOPConversationType stringForConversationThreadType:threadType] forKey:[NSString stringWithUTF8String:ConversationThreadType::Definitions::Names::conversationType()]];
-    NSDictionary* dict = [NSDictionary dictionaryWithObject:conversationTypeDict forKey:[NSString stringWithUTF8String:IConversationThread::Definitions::Names::metaDataName()]];
-    
-    return dict;
-}
+//+ (NSDictionary*) createMetadataDictionary:(HOPConversationThreadType) threadType
+//{
+//    HOPConversationType* conversationType = [[HOPConversationType alloc] initWithConversationThreadType:threadType];
+//    
+//    NSDictionary* conversationTypeDict = [NSDictionary dictionaryWithObject:[HOPConversationType stringForConversationThreadType:threadType] forKey:[NSString stringWithUTF8String:ConversationThreadType::Definitions::Names::conversationType()]];
+//    NSDictionary* dict = [NSDictionary dictionaryWithObject:conversationTypeDict forKey:[NSString stringWithUTF8String:IConversationThread::Definitions::Names::metaDataName()]];
+//    
+//    return dict;
+//}
 
 + (HOPConversation*) createConversation
 {
@@ -125,8 +99,6 @@ using namespace openpeer::core;
     
     if (ret)
     {
-        //+ (id) conversationThreadWithIdentities:(NSArray*) identities participants:(NSArray*) participants conversationThreadID:(NSString*) conversationThreadID metaData:(NSDictionary*) metaData
-        //NSDictionary* metadata = [HOPConversation createMetadataDictionary:[HOPConversationType conversationThreadTypeForString:[[HOPSettings sharedSettings] getDefaultCovnersationTypeStr]]];
         ret.thread = [HOPConversationThread conversationThreadWithIdentities:[[HOPAccount sharedAccount] getAssociatedIdentities] participants:@[] conversationThreadID: @"" threadType:[[HOPSettings sharedSettings] getDefaultCovnersationType]];
         if (!ret.thread)
         {
@@ -190,7 +162,7 @@ using namespace openpeer::core;
     if (ret)
     {
         ret.conversationType = type;
-        NSDictionary* metadata = [HOPConversation createMetadataDictionary:type];
+        //NSDictionary* metadata = [HOPConversation createMetadataDictionary:type];
         ret.thread = [HOPConversationThread conversationThreadWithIdentities:[[HOPAccount sharedAccount] getAssociatedIdentities] participants:participants conversationThreadID: @"" threadType:type];
         
         if (ret.thread)

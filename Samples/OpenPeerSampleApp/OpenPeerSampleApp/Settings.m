@@ -35,11 +35,7 @@
 #import "Logger.h"
 #import "SBJsonParser.h"
 #import "Utility.h"
-#import <OpenPeerSDK/HOPSettings.h>
-#import <OpenPeerSDK/HOPUtility.h>
-#import <OpenPeerSDK/HOPCache.h>
-#import <OpenPeerSDK/HOPAccount.h>
-#import <OpenPeerSDK/HOPModelManager.h>
+#import <OpenPeerSDK/Openpeer.h>
 #import "HTTPDownloader.h"
 
 @interface Settings ()

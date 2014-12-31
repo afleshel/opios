@@ -36,14 +36,10 @@
 #import "SessionViewController_iPhone.h"
 #import "SoundsManager.h"
 #import "Utility.h"
-//#import "Session.h"
 #import "OpenPeer.h"
 #import "AppConsts.h"
 
 #import <OpenpeerSDK/Openpeer.h>
-//#import <OpenpeerSDK/HOPConversationEvent+External.h>
-#import <OpenpeerSDK/HOPConversationRecord+External.h>
-#import <OpenpeerSDK/HOPConversation.h>
 #import "UIDevice+Networking.h"
 
 @interface SessionManager()
@@ -52,7 +48,7 @@
 
 - (id) initSingleton;
 - (BOOL) setActiveCallConversation:(HOPConversation*) inConversation callActive:(BOOL) callActive;
-- (NSString*) getTitleForConversationThread:(HOPConversationThread*) conversationThread;
+
 @end
 
 @implementation SessionManager
@@ -505,60 +501,6 @@
     return ret;
 }
 
-- (NSString*) getLastTextMessageForConversationEvent:(HOPConversationEvent*) event
-{
-    NSString* ret = nil;
-    NSSortDescriptor* sort = [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO];
-    NSArray* sorted = [event.messages.allObjects sortedArrayUsingDescriptors:@[sort]];
-    HOPMessageRecord* messageRecord = sorted.count > 0 ? sorted[0] : nil;//[[HOPModelManager sharedModelManager] getLastMessageRecordForConversationEvent:event];
-    if (messageRecord)
-    {
-        if (![messageRecord.type isEqualToString:[HOPSystemMessage getMessageType]])
-            ret = messageRecord.text;
-        else
-        {
-            ret = [self getSystemMessage:messageRecord];
-        }
-    }
-    return ret;
-}
-
-/*- (void) addParticipants:(NSArray*) participants toSession:(Session*) session
-{
-    if (session && participants.count > 0)
-    {
-        [session.conversationThread addContacts:participants];
-    }
-}
-
-- (void) removeParticipants:(NSArray*) participants toSession:(Session*) session
-{
-    if (session && participants.count > 0)
-    {
-        [session.conversationThread removeContacts:participants];
-    }
-}*/
-
-- (NSString*) getTitleForConversationThread:(HOPConversationThread*) conversationThread
-{
-    NSString* ret = @"";
-    
-    NSArray* participants = [conversationThread getContacts];
-    for (HOPRolodexContact* rolodexContact in participants)
-    {
-        if (rolodexContact)
-        {
-            if (ret.length == 0)
-                ret = rolodexContact.name;
-            else
-            {
-                ret = [ret stringByAppendingString:@", "];
-                ret = [ret stringByAppendingString:rolodexContact.name];
-            }
-        }
-    }
-    return ret;
-}
 
 - (void) onParticipantsInConversationUpdate:(HOPConversation*) conversation numberOfAddedParticipants:(int) numberOfAddedParticipants
 {
