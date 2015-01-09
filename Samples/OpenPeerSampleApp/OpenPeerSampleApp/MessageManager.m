@@ -254,7 +254,9 @@
     }
     else
     {
-        BOOL visible = [message.text rangeOfString:@"\"type\":\"answered\""].location == NSNotFound;
+        BOOL visible = [message.text rangeOfString:@"\"status\":\"answered\""].location == NSNotFound;
+        message.visible = [NSNumber numberWithBool:visible];
+        [[HOPModelManager sharedModelManager] saveContext];
         //Save System message
         //[[HOPModelManager sharedModelManager] addMessage:message.text type:[HOPSystemMessage getMessageType] date:message.date visible:visible conversation:conversation contact:message.contact messageId:message.messageID];
         [self parseSystemMessage:message forConversation:conversation];

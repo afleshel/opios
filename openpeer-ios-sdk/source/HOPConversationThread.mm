@@ -82,6 +82,8 @@ using namespace openpeer::core;
         conversationThreadPtr = inConversationThreadPtr;
         [[OpenPeerStorageManager sharedStorageManager] setConversationThread:self forId:[NSString stringWithUTF8String:inConversationThreadPtr->getThreadID()]];
         
+        self.conversationType = HOPConversationThreadTypeNone;
+        
         ElementPtr elementPtr = inConversationThreadPtr->getMetaData();
         String str = IHelper::convertToString(elementPtr);
         if (str)
@@ -89,15 +91,27 @@ using namespace openpeer::core;
             NSString* jsonString = [NSString stringWithUTF8String:str];
             NSData *data = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
             id dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-            self.conversationType = HOPConversationThreadTypeThreadBased;
-        }
-        if (conversationThreadPtr->getContacts()->size() > 1 && [[HOPSettings sharedSettings] getDefaultCovnersationType] == HOPConversationThreadTypeThreadBased)
-        {
-            self.conversationType = HOPConversationThreadTypeThreadBased;
+            if (dict)
+            {
+                NSDictionary* dictConversationType = [dict objectForKey:@"metaData"];
+                if (dictConversationType)
+                {
+                    NSString* type = [dictConversationType objectForKey:@"conversationType"];
+                    if (type.length > 0)
+                        self.conversationType = [HOPConversationType conversationThreadTypeForString: type];
+                }
+            }
         }
         else
         {
-            self.conversationType = HOPConversationThreadTypeContactBased;
+            if (conversationThreadPtr->getContacts()->size() > 1 && [[HOPSettings sharedSettings] getDefaultCovnersationType] == HOPConversationThreadTypeThreadBased)
+            {
+                self.conversationType = HOPConversationThreadTypeThreadBased;
+            }
+            else
+            {
+                self.conversationType = HOPConversationThreadTypeContactBased;
+            }
         }
 #warning TODO_S: Read conversation type from core conversation thred object
         //TODO_S: Read conversation type from core conversation thred object
@@ -147,7 +161,8 @@ using namespace openpeer::core;
     {
         ret = [[self alloc] initWithConversationThread:tempConversationThreadPtr];
         [ret.participants addObjectsFromArray:participants];
-        ret.conversationType = threadType;
+        if (ret.conversationType == HOPConversationThreadTypeNone)
+            ret.conversationType = threadType;
     }
     
     return ret;
@@ -193,7 +208,11 @@ using namespace openpeer::core;
         {
             IConversationThreadPtr tempConversationThreadPtr = IConversationThread::getConversationThreadByID([[HOPAccount sharedAccount] getAccountPtr], [threadID UTF8String]);
             if (tempConversationThreadPtr)
+            {
                 ret = [[HOPConversationThread alloc] initWithConversationThread:tempConversationThreadPtr];
+                if (ret.conversationType == HOPConversationThreadTypeNone)
+                    ret.conversationType = [[HOPSettings sharedSettings] getDefaultCovnersationType];
+            }
         }
     }
     return ret;

@@ -102,9 +102,9 @@
     return nil;
 }
 
-- (HOPConversation*) getSessionForSessionId:(NSString*) sessionId
+- (HOPConversation*) getConversationForConversationID:(NSString*) conversationID
 {
-    return [self.sessionsDictionary objectForKey:sessionId];
+    return [self.sessionsDictionary objectForKey:conversationID];
 }
 
 - (HOPConversation*) getSessionForConversationEvent:(HOPConversationEvent*) event
@@ -518,4 +518,54 @@
     }
 }
 
+- (HOPConversation *)getConversationForID:(NSString *)conversationID threadType:(NSString *)threadType sender:(HOPContact *)sender items:(NSArray *)items
+{
+    HOPConversation* conversation = nil;
+    if (conversationID.length > 0)
+        conversation = [[SessionManager sharedSessionManager] getConversationForConversationID:conversationID];
+    
+    if (!conversation)
+    {
+        HOPConversationRecord* record = [[HOPModelManager sharedModelManager] getConversationRecordByID:conversationID];
+        if (record)
+            conversation = [HOPConversation createConversationForRecord:record];
+    }
+    
+    if (!conversation)
+    {
+        NSMutableArray* contacts = [NSMutableArray new];
+        for (NSString* peerURI in items)
+        {
+            HOPRolodexContact* tempContact = [[HOPModelManager sharedModelManager] getRolodexContactByPeerURI:peerURI];
+            if (tempContact && ![tempContact isSelf])
+                [contacts addObject:tempContact];
+        }
+        
+        if (sender)
+        {
+            [contacts addObject:sender];
+        }
+        if (threadType.length > 0)
+        {
+            if ([threadType isEqualToString:[HOPConversation stringForConversationThreadType:HOPConversationThreadTypeContactBased]])
+            {
+                conversation = [[SessionManager sharedSessionManager] getConversationForContacts:contacts];
+                if (!conversation)
+                    conversation = [HOPConversation createConversationWithParticipants:contacts title:nil];
+            }
+            else
+            {
+                conversation = [HOPConversation createConversationWithParticipants:contacts title:nil type:[HOPConversation conversationThreadTypeForString:threadType]];
+            }
+        }
+        else
+        {
+            if (contacts.count == 1)
+                conversation = [HOPConversation createConversationWithParticipants:contacts title:nil type:HOPConversationThreadTypeContactBased];
+            else
+                conversation = [HOPConversation createConversationWithParticipants:contacts title:nil type:[[HOPSettings sharedSettings] getDefaultCovnersationType]];
+        }
+    }
+    return conversation;
+}
 @end

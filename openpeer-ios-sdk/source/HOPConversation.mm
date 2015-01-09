@@ -302,7 +302,9 @@ using namespace openpeer::core;
             NSMutableArray* allParticipants = [NSMutableArray arrayWithArray:self.participants];
             [allParticipants addObjectsFromArray:inParticipants];
             
-            [HOPConversation createConversationWithParticipants:allParticipants title:[HOPConversation getDefaultTitleForParticipants:allParticipants] type:HOPConversationThreadTypeThreadBased];
+            //[HOPConversation createConversationWithParticipants:allParticipants title:[HOPConversation getDefaultTitleForParticipants:allParticipants] type:HOPConversationThreadTypeThreadBased];
+            
+            [HOPConversation createConversationWithParticipants:allParticipants title:[HOPConversation getDefaultTitleForParticipants:allParticipants] type:[[HOPSettings sharedSettings] getDefaultCovnersationType]];
         }
     }
     else if (self.conversationType == HOPConversationThreadTypeThreadBased)
@@ -453,6 +455,15 @@ using namespace openpeer::core;
     return [HOPConversationThread stringForContactConnectionState:state];
 }
 
++ (NSString*) stringForConversationThreadType:(HOPConversationThreadType) type
+{
+    return [HOPConversationType stringForConversationThreadType:type];
+}
+
++ (HOPConversationThreadType) conversationThreadTypeForString:(NSString*) type
+{
+    return [HOPConversationType conversationThreadTypeForString:type];
+}
 - (String) log:(NSString*) message
 {
     return String("HOPConversation: ") + [message UTF8String];

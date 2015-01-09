@@ -50,6 +50,7 @@
 
 
 - (HOPConversation*) getConversationForContacts:(NSArray*) contacts;
+- (HOPConversation*) getConversationForConversationID:(NSString*) conversationID;
 
 - (void) makeCallForConversation:(HOPConversation*) inConversation includeVideo:(BOOL) includeVideo isRedial:(BOOL) isRedial;
 - (void) answerCallForConversation:(HOPConversation*) inConversation;
@@ -79,4 +80,6 @@
 - (NSString*) getLastTextMessageForConversationRecord:(HOPConversationRecord*) record;
 
 - (void) onParticipantsInConversationUpdate:(HOPConversation*) conversation numberOfAddedParticipants:(int) numberOfAddedParticipants;
+
+- (HOPConversation *)getConversationForID:(NSString *)conversationID threadType:(NSString *)threadType sender:(HOPContact *)sender items:(NSArray *)items;
 @end

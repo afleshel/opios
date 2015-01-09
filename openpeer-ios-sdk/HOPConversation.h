@@ -80,7 +80,8 @@
 
 + (NSString*) stringForMessageDeliveryState:(HOPConversationThreadMessageDeliveryState) state;
 + (NSString*) stringForContactConnectionState:(HOPConversationThreadContactConnectionState) state;
-
++ (NSString*) stringForConversationThreadType:(HOPConversationThreadType) type;
++ (HOPConversationThreadType) conversationThreadTypeForString:(NSString*) type;
 - (NSArray*) getParticipants;
 
 

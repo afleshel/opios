@@ -340,7 +340,8 @@
         if ([pushNotificationData.type isEqualToString:notificationTypeApple])
             stringToSend = [NSString stringWithFormat:@"{\"audience\" : {\"device_token\" : \"%@\"}, \"device_types\" : [ \"ios\" ], \"notification\" : {\"ios\" : {\"sound\":\"message-received\",\"alert\": \"%@\",\"content-available\": true,\"priority\": 10}}, \"message\" : {\"title\" : \"%@\", \"body\" : \"%@\", \"content_type\" : \"text/html\"} }",pushNotificationData.deviceToken,messageText,messageText,content];
         else if ([pushNotificationData.type isEqualToString:notificationTypeAndroid])
-            stringToSend = [NSString stringWithFormat:@"{\"audience\" : {\"apid\" : \"%@\"}, \"device_types\" : [ \"android\" ],  \"notification\" : {\"android\" : {\"extra\" : {\"date\": \"%.0f\",\"messageId\": \"%@\",\"location\": \"%@\",\"peerURI\": \"%@\",\"peerURIs\": \"%@\"}}, \"alert\" : \"%@\"} }",pushNotificationData.deviceToken,[message.date timeIntervalSince1970],message.messageID,location,[[HOPModelManager sharedModelManager]getPeerURIForHomeUser],@"",message.text];
+            stringToSend = [self prepareMessageForAndroidRichPush:message peerURI:[[HOPModelManager sharedModelManager]getPeerURIForHomeUser] location:location participantPeerURIs:participantPeerURIs deviceToken:pushNotificationData.deviceToken];
+            //[NSString stringWithFormat:@"{\"audience\" : {\"apid\" : \"%@\"}, \"device_types\" : [ \"android\" ],  \"notification\" : {\"android\" : {\"extra\" : {\"date\": \"%.0f\",\"messageId\": \"%@\",\"location\": \"%@\",\"peerURI\": \"%@\",\"peerURIs\": \"%@\",\"messageType\": \"%@\",\"conversationId\": \"%@\", \"conversationType\": \"%@\"}}, \"alert\" : \"%@\"} }",pushNotificationData.deviceToken,[message.date timeIntervalSince1970],message.messageID,location,[[HOPModelManager sharedModelManager]getPeerURIForHomeUser],@"",message.type,message.session.sessionID,message.session.type,message.text];
 
         OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelTrace, @"Rich push content: %@",stringToSend);
         SBJsonParser* parser = [[SBJsonParser alloc] init];
@@ -368,33 +369,6 @@
     }
     [self.apnsHisotry setObject:[NSDate date] forKey:[message.sender getPeerURI]];
 }
-
-//- (void) sendRichPushNotificationForMessage:(HOPMessageRecord*) message missedCall:(BOOL) missedCall participantsPeerURIs:(NSArray*) participantsPeerURIs
-//{
-//    NSArray* deviceTokens = [self getDeviceTokensForContact2:message.sender];
-//    
-//    if ([deviceTokens count] > 0)
-//    {
-//        [self sendRichPush:message deviceTokens:deviceTokens participantPeerURIs:participantsPeerURIs];
-//    }
-//    else
-//    {
-//        NSString* peerURI = [message.sender getPeerURI];
-//        if (peerURI.length > 0)
-//        {
-//            [self requestDeviceTokenForPeerURI:peerURI];
-//            @synchronized(self.dictionaryOfPushNotificationsToSend)
-//            {
-//                NSArray* array = [self.dictionaryOfPushNotificationsToSend objectForKey:peerURI];
-//                NSMutableArray* messages = array.count > 0 ? [NSMutableArray arrayWithArray:array] : [NSMutableArray new];
-//                NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:message, @"message", participantsPeerURIs, @"participantsPeerURIs", nil];
-//                if (dict.count > 0)
-//                    [messages addObject:dict];
-//                [self.dictionaryOfPushNotificationsToSend setObject:messages forKey:peerURI];
-//            }
-//        }
-//    }
-//}
 
 - (void) sendRichPushNotificationForMessage:(HOPMessageRecord*) message missedCall:(BOOL) missedCall participants:(NSArray*) participants
 {
@@ -427,6 +401,23 @@
         }
     }
 }
+- (NSString*) prepareMessageForAndroidRichPush:(HOPMessageRecord*) message peerURI:(NSString*) peerURI location:(NSString*) location  participantPeerURIs:(NSArray*) participantPeerURIs deviceToken:(NSString*) deviceToken
+{
+    NSString*  peerURIs = @"";
+    NSMutableArray* array  = [NSMutableArray arrayWithArray:participantPeerURIs];
+    [array addObject:[[HOPModelManager sharedModelManager]getPeerURIForHomeUser]];
+    [array removeObject:[message.sender getPeerURI]];
+    for (NSString* tempPeerURI in array)
+    {
+        if (![tempPeerURI isEqualToString:peerURI])
+            peerURIs = [peerURIs stringByAppendingString: peerURIs.length > 0 ? [NSString stringWithFormat:@",%@",tempPeerURI] : tempPeerURI];
+    }
+    
+    NSString* ret = [NSString stringWithFormat:@"{\"audience\" : {\"apid\" : \"%@\"}, \"device_types\" : [ \"android\" ],  \"notification\" : {\"android\" : {\"extra\" : {\"date\": \"%.0f\",\"messageId\": \"%@\",\"location\": \"%@\",\"peerURI\": \"%@\",\"peerURIs\": \"%@\",\"messageType\": \"%@\",\"conversationId\": \"%@\", \"conversationType\": \"%@\"}}, \"alert\" : \"%@\"} }",deviceToken,[message.date timeIntervalSince1970],message.messageID,location,[[HOPModelManager sharedModelManager]getPeerURIForHomeUser],peerURIs,message.type,message.session.sessionID,message.session.type,message.text];
+        
+    return ret;
+}
+
 - (NSString*) prepareMessageForRichPush:(HOPMessageRecord*) message peerURI:(NSString*) peerURI location:(NSString*) location  participantPeerURIs:(NSArray*) participantPeerURIs
 {
     NSString*  peerURIs = @"";
@@ -440,7 +431,7 @@
             //peerURIs = [peerURIs stringByAppendingString: peerURIs.length > 0 ? [NSString stringWithFormat:@",%@",peerURI] : peerURI];
     }
     
-    NSString* ret = [NSString stringWithFormat:@"{\\\"peerURI\\\":\\\"%@\\\",\\\"peerURIs\\\":\\\"%@\\\",\\\"messageId\\\":\\\"%@\\\",\\\"replacesMessageId\\\":\\\"%@\\\",\\\"message\\\":\\\"%@\\\",\\\"location\\\":\\\"%@\\\",\\\"date\\\":\\\"%.0f\\\"}",peerURI,peerURIs,message.messageID,message.replacedMessageID,message.text,location,[message.date timeIntervalSince1970]];
+    NSString* ret = [NSString stringWithFormat:@"{\\\"peerURI\\\":\\\"%@\\\",\\\"peerURIs\\\":\\\"%@\\\",\\\"messageId\\\":\\\"%@\\\",\\\"replacesMessageId\\\":\\\"%@\\\",\\\"messageType\\\":\\\"%@\\\",\\\"message\\\":\\\"%@\\\",\\\"conversationId\\\":\\\"%@\\\",\\\"conversationType\\\":\\\"%@\\\",\\\"location\\\":\\\"%@\\\",\\\"date\\\":\\\"%.0f\\\"}",peerURI,peerURIs,message.messageID,message.replacedMessageID,message.type,message.text,message.session.sessionID,message.session.type,location,[message.date timeIntervalSince1970]];
 
     return ret;
 }

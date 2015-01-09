@@ -149,30 +149,30 @@
 }
 
 
+
+
 - (void)createMessageFromRichPushDict:(NSDictionary *)richPushDictionary
 {
     if ([richPushDictionary count] > 0)
     {
         NSString* senderPeerURI = [richPushDictionary objectForKey:@"peerURI"];
         NSString *peerURIs = [richPushDictionary objectForKey:@"peerURIs"];
+        NSString *conversationID = [richPushDictionary objectForKey:@"conversationId"];
+        NSString *threadType = [richPushDictionary objectForKey:@"conversationType"];
+        NSString *messageType = [richPushDictionary objectForKey:@"messageType"];
+        
         NSArray *items = [peerURIs componentsSeparatedByString:@","];
+        HOPRolodexContact* contact = nil;
         if ([senderPeerURI length] > 0)
+            contact = [[HOPModelManager sharedModelManager] getRolodexContactByPeerURI:senderPeerURI];
+        
+        if (contact)
         {
-            NSMutableArray* contacts = [NSMutableArray new];
-            for (NSString* peerURI in items)
+            HOPConversation *conversation = [[SessionManager sharedSessionManager] getConversationForID:conversationID threadType:threadType sender:contact items:items];
+            
+            if (conversation)
             {
-                HOPRolodexContact* tempContact = [[HOPModelManager sharedModelManager] getRolodexContactByPeerURI:peerURI];
-                if (tempContact)
-                    [contacts addObject:tempContact];
-            }
-            HOPRolodexContact* contact = [[HOPModelManager sharedModelManager] getRolodexContactByPeerURI:senderPeerURI];
-            if (contact)
-            {
-                [contacts addObject:contact];
-                HOPConversation* conversation = [[SessionManager sharedSessionManager] getConversationForContacts:contacts];
-                if (!conversation)
-                    conversation = [HOPConversation createConversationWithParticipants:contacts title:nil];
-                
+
                 NSString* messageID = [richPushDictionary objectForKey:@"messageId"];
                 NSString* messageText = [richPushDictionary objectForKey:@"message"];
                 NSString* location = [richPushDictionary objectForKey:@"location"];
@@ -184,18 +184,6 @@
                 if ([messageID length] > 0 && ([messageText length] > 0 || [replacesMessageID length] > 0)  && date)
                 {
                     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push content \"%@\" for message %@ is ready.",messageText,messageID);
-                    
-                    //HOPPublicPeerFile* publicPerFile = [[HOPModelManager sharedModelManager] getPublicPeerFileForPeerURI:senderPeerURI];
-//                    HOPContact* coreContact = [[HOPContact alloc] initWithPeerURI:senderPeerURI];
-//                    if ([location length] > 0)
-//                    {
-//                        [coreContact hintAboutLocation:location];
-//                        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push hit location");
-//                    }
-//                    else
-//                    {
-//                        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Local notification withut location is hit");
-//                    }
                     
                     [HOPRolodexContact hintAboutLocation:location peerURI:senderPeerURI];
                     
