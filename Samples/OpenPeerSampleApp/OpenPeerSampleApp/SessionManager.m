@@ -244,16 +244,11 @@
 
 - (void) onCallRinging:(HOPCall*) call
 {
-//    NSString* sessionId = [[call getConversationThread] getThreadId];
-//    if ([sessionId length] > 0)
+    HOPConversation* conversation = [call getConversation];
+    if (conversation)
     {
-        //Session* session = [[[SessionManager sharedSessionManager] sessionsDictionary] objectForKey:sessionId];
-        HOPConversation* conversation = [call getConversation];
-        if (conversation)
-        {
-            [[[OpenPeer sharedOpenPeer] mainViewController] showIncominCallForConversation:conversation];
-            [[SoundManager sharedSoundsManager] playRingingSound];
-        }
+        [[[OpenPeer sharedOpenPeer] mainViewController] showIncominCallForConversation:conversation];
+        [[SoundManager sharedSoundsManager] playRingingSound];
     }
 }
 
@@ -268,10 +263,6 @@
     
     [sessionViewController showIncomingCall:NO];
     [sessionViewController showCallViewControllerWithVideo:[call hasVideo]];
-    //[sessionViewController prepareForCall:YES withVideo:[call hasVideo]];
-    
-    //At this moment it is possible to do recording, so show the recording button
-    //[sessionViewController stopVideoRecording:YES hideRecordButton:![call hasVideo]];
 }
 
 /**
@@ -280,9 +271,7 @@
  */
 - (void) onCallClosing:(HOPCall*) call
 {
-//    NSString* sessionId = [[call getConversationThread] getThreadId];
-//    Session* session = [[[SessionManager sharedSessionManager] sessionsDictionary] objectForKey:sessionId];
-//    [[HOPMediaEngine sharedInstance] stopVideoCapture];
+
     [call hangup:HOPCallClosedReasonNone];
     //Set flag that there is no active call
     [self setActiveCallConversation:[call getConversation] callActive:NO];
@@ -549,9 +538,9 @@
         {
             if ([threadType isEqualToString:[HOPConversation stringForConversationThreadType:HOPConversationThreadTypeContactBased]])
             {
-                conversation = [[SessionManager sharedSessionManager] getConversationForContacts:contacts];
+                conversation = [HOPConversation getConversationForCBCID:[HOPConversation getCBCIDForContacts:contacts]];//[[SessionManager sharedSessionManager] getConversationForContacts:contacts];
                 if (!conversation)
-                    conversation = [HOPConversation createConversationWithParticipants:contacts title:nil];
+                    conversation = [HOPConversation createConversationWithParticipants:contacts title:nil type:[HOPConversation conversationThreadTypeForString:threadType]];
             }
             else
             {

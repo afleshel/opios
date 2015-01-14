@@ -74,3 +74,9 @@
 //- (void) onSettingsDownloadFailure;
 
 @end
+
+@protocol SessionViewControllerDelegate <NSObject>
+
+- (void) updateOnParticipantChange;
+
+@end

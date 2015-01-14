@@ -55,8 +55,8 @@
 @property (assign) BOOL redialCall;
 @property (assign) HOPConversationThreadType conversationType;
 
-+ (HOPConversation*) createConversation;
-+ (HOPConversation*) createConversationWithParticipants:(NSArray*) participants title:(NSString*) inTitle;
+//+ (HOPConversation*) createConversation;
+//+ (HOPConversation*) createConversationWithParticipants:(NSArray*) participants title:(NSString*) inTitle;
 + (HOPConversation*) createConversationWithParticipants:(NSArray*) participants title:(NSString*) inTitle type:(HOPConversationThreadType) type;
 + (HOPConversation*) createConversationWithThread:(HOPConversationThread*) inConversationThread;
 + (HOPConversation*) createConversationForRecord:(HOPConversationRecord*) inConversationRecord;
@@ -84,5 +84,7 @@
 + (HOPConversationThreadType) conversationThreadTypeForString:(NSString*) type;
 - (NSArray*) getParticipants;
 
-
++ (HOPConversation*) conversationOnParticipantsAdded:(NSArray*) addedParticipants conversation:(HOPConversation*) conversation;
++ (HOPConversation*) conversationOnParticipantsRemoved:(NSArray*) removedParticipants conversation:(HOPConversation*) conversation;
++ (HOPConversation*) getConversationForCBCID:(NSString*) cbcID;
 @end

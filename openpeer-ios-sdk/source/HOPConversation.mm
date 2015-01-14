@@ -93,7 +93,7 @@ using namespace openpeer::core;
 //    return dict;
 //}
 
-+ (HOPConversation*) createConversation
+/*+ (HOPConversation*) createConversation
 {
     HOPConversation* ret = [HOPConversation new];
     
@@ -153,7 +153,7 @@ using namespace openpeer::core;
         }
     }
     return ret;
-}
+}*/
 
 + (HOPConversation*) createConversationWithParticipants:(NSArray*) participants title:(NSString*) inTitle type:(HOPConversationThreadType) type
 {
@@ -162,7 +162,7 @@ using namespace openpeer::core;
     if (ret)
     {
         ret.conversationType = type;
-        //NSDictionary* metadata = [HOPConversation createMetadataDictionary:type];
+        
         ret.thread = [HOPConversationThread conversationThreadWithIdentities:[[HOPAccount sharedAccount] getAssociatedIdentities] participants:participants conversationThreadID: @"" threadType:type];
         
         if (ret.thread)
@@ -202,6 +202,7 @@ using namespace openpeer::core;
     if (ret)
     {
         ret.thread = inConversationThread;
+        ret.conversationType = inConversationThread.conversationType;
         if (ret.thread)
         {
             ret.title = [ret getDefaultTitle];
@@ -211,7 +212,8 @@ using namespace openpeer::core;
             ret.record = [[HOPModelManager sharedModelManager] getConversationRecordForConversationThread:inConversationThread];
             
             if (!ret.record)
-                ret.record = [[HOPModelManager sharedModelManager] createConversationRecordForConversationThread:ret.thread type:[[HOPSettings sharedSettings] getDefaultCovnersationTypeStr] date:[NSDate date] name:ret.title participants:participants];
+                ret.record = [[HOPModelManager sharedModelManager] createConversationRecordForConversationThread:ret.thread type:[HOPConversationType stringForConversationThreadType: ret.thread.conversationType] date:[NSDate date] name:ret.title participants:participants];
+//                ret.record = [[HOPModelManager sharedModelManager] createConversationRecordForConversationThread:ret.thread type:[[HOPSettings sharedSettings] getDefaultCovnersationTypeStr] date:[NSDate date] name:ret.title participants:participants];
             ret.identifier = ret.record.sessionID;
             ret.lastEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"create" conversationRecord:ret.record partcipants:participants title:ret.title];
             
@@ -244,7 +246,7 @@ using namespace openpeer::core;
         {
             ret.identifier = ret.record.sessionID;
             ret.title = ret.record.name;
-            
+            ret.conversationType = [HOPConversationType conversationThreadTypeForString: ret.record.type];
             //NSArray* participants = [ret getParticipants];
             
             NSMutableArray* tempParticipants = [NSMutableArray new];
@@ -293,7 +295,7 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (void) addParticipants:(NSArray*) inParticipants
+/*- (void) addParticipants:(NSArray*) inParticipants
 {
     if (self.conversationType == HOPConversationThreadTypeContactBased)
     {
@@ -322,7 +324,7 @@ using namespace openpeer::core;
     {
         [self.thread removeContacts:inParticipants];
     }
-}
+}*/
 
 - (void) setComposingStatus:(HOPConversationThreadContactStatus) composingStatus
 {
@@ -467,5 +469,117 @@ using namespace openpeer::core;
 - (String) log:(NSString*) message
 {
     return String("HOPConversation: ") + [message UTF8String];
+}
+
++ (HOPConversation*) conversationOnParticipantsAdded:(NSArray*) addedParticipants conversation:(HOPConversation*) conversation
+{
+    HOPConversation* ret = nil;
+    
+    if (conversation.conversationType == HOPConversationThreadTypeContactBased)
+    {
+        if(addedParticipants.count > 0)
+        {
+            NSMutableArray* allParticipants = [NSMutableArray arrayWithArray:conversation.participants];
+            [allParticipants addObjectsFromArray:addedParticipants];
+            
+            if ([[HOPSettings sharedSettings] getDefaultCovnersationType] == HOPConversationThreadTypeContactBased)
+                ret = [[OpenPeerStorageManager sharedStorageManager] getConversationForCBCID:[HOPConversation getCBCIDForContacts:allParticipants]];
+            
+            if (!ret)
+                ret = [HOPConversation createConversationWithParticipants:allParticipants title:[HOPConversation getDefaultTitleForParticipants:allParticipants] type:[[HOPSettings sharedSettings] getDefaultCovnersationType]];
+        }
+    }
+    else if (conversation.conversationType == HOPConversationThreadTypeThreadBased)
+    {
+        if (conversation.thread && addedParticipants.count > 0)
+        {
+            [conversation.thread addContacts:addedParticipants];
+            for (HOPRolodexContact* rolodexContact in addedParticipants)
+            {
+                HOPOpenPeerContact* participant = rolodexContact.openPeerContact;
+                if (participant)
+                    [conversation.record addParticipantsObject:participant];
+            }
+            
+//            [[HOPModelManager sharedModelManager] saveContext];
+        }
+        ret = conversation;
+    }
+    
+    if (ret)
+    {
+        conversation.record.name = [HOPConversation getDefaultTitleForParticipants:conversation.participants];
+        conversation.title = conversation.record.name;
+        
+        conversation.lastEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"addedParticipant" conversationRecord:conversation.record partcipants:conversation.participants title:conversation.title];
+        
+        [[HOPModelManager sharedModelManager] saveContext];
+    }
+    
+    return ret;
+}
+
++ (HOPConversation*) conversationOnParticipantsRemoved:(NSArray*) removedParticipants conversation:(HOPConversation*) conversation
+{
+    HOPConversation* ret = nil;
+    
+    if (conversation.participants.count >= removedParticipants.count)
+    {
+        if (conversation.conversationType == HOPConversationThreadTypeContactBased)
+        {
+            if(removedParticipants.count > 0)
+            {
+                NSMutableArray* allParticipants = [NSMutableArray arrayWithArray:conversation.participants];
+                [allParticipants removeObjectsInArray:removedParticipants];
+                
+                if ([[HOPSettings sharedSettings] getDefaultCovnersationType] == HOPConversationThreadTypeContactBased)
+                    ret = [[OpenPeerStorageManager sharedStorageManager] getConversationForCBCID:[HOPConversation getCBCIDForContacts:allParticipants]];
+                
+                if (!ret)
+                    ret = [HOPConversation createConversationWithParticipants:allParticipants title:[HOPConversation getDefaultTitleForParticipants:allParticipants] type:[[HOPSettings sharedSettings] getDefaultCovnersationType]];
+            }
+        }
+        else if (conversation.conversationType == HOPConversationThreadTypeThreadBased)
+        {
+            if (conversation.thread && removedParticipants.count > 0)
+            {
+                [conversation.thread removeContacts:removedParticipants];
+            }
+            
+            for (HOPRolodexContact* rolodexContact in removedParticipants)
+            {
+                HOPOpenPeerContact* participant = rolodexContact.openPeerContact;
+                if (participant)
+                    [conversation.record removeParticipantsObject:participant];
+            }
+            
+//            conversation.record.name = [HOPConversation getDefaultTitleForParticipants:conversation.participants];
+//            conversation.title = conversation.record.name;
+//            
+//            [[HOPModelManager sharedModelManager] saveContext];
+            ret = conversation;
+        }
+    }
+    else
+    {
+        ret = conversation; //If number of removed participants is equal or greater than number of active partcipants, do nothing.
+    }
+    
+    
+    if (ret)
+    {
+        conversation.record.name = [HOPConversation getDefaultTitleForParticipants:conversation.participants];
+        conversation.title = conversation.record.name;
+        
+        conversation.lastEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"removedParticipant" conversationRecord:conversation.record partcipants:conversation.participants title:conversation.title];
+        
+        [[HOPModelManager sharedModelManager] saveContext];
+    }
+    return ret;
+}
+
++ (HOPConversation*) getConversationForCBCID:(NSString*) cbcID
+{
+    return [[OpenPeerStorageManager sharedStorageManager] getConversationForCBCID:cbcID];
 }
 @end

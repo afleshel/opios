@@ -50,7 +50,7 @@
 @property (nonatomic, weak) IBOutlet UILabel *labelLastMessage;
 @property (nonatomic, weak) IBOutlet UIView *messageView;
 
-@property (nonatomic, weak) HOPConversationRecord* conversationRecord;
+
 
 @end
 @implementation ActiveSessionTableViewCell
@@ -74,15 +74,24 @@
     self.labelLastMessage.hidden = [self.labelLastMessage.text length] == 0;
 }
 
-- (void) setRecord:(HOPConversationRecord *)record
+- (void)updateBadge:(HOPConversationRecord *)record
 {
-    if (self.displayImage)
-        [self.displayImage stopAnimating];
-    
-    _conversationRecord = record;
-    //self.event = event;
-    self.displayName.text = record.name;
-    
+    //Session* session = [[SessionManager sharedSessionManager] getSessionForConversationEvent:self.event];
+    HOPConversation* conversation = [record getConversation];
+    if (conversation.numberOfUnreadMessages > 0)
+    {
+        NSString* numberToDisplay = [NSString stringWithFormat:@"%d",conversation.numberOfUnreadMessages];
+        self.badgeView.hidden = NO;
+        self.badgeView.badgeText = numberToDisplay;
+    }
+    else
+    {
+        self.badgeView.hidden = YES;
+    }
+}
+
+- (void)updateIcon:(HOPConversationRecord *)record
+{
     NSArray* participants = [record getContacts];
     if (participants.count > 1)
     {
@@ -111,19 +120,20 @@
     self.displayImage.layer.cornerRadius = 5.0;
     self.displayImage.layer.borderWidth = 1.0;
     self.displayImage.layer.borderColor = [[UIColor whiteColor] CGColor];
+}
+
+- (void) setRecord:(HOPConversationRecord *)record
+{
+    if (self.displayImage)
+        [self.displayImage stopAnimating];
     
-    //Session* session = [[SessionManager sharedSessionManager] getSessionForConversationEvent:self.event];
-    HOPConversation* conversation = [record getConversation];
-    if (conversation.numberOfUnreadMessages > 0)
-    {
-        NSString* numberToDisplay = [NSString stringWithFormat:@"%d",conversation.numberOfUnreadMessages];
-        self.badgeView.hidden = NO;
-        self.badgeView.badgeText = numberToDisplay;
-    }
-    else
-    {
-        self.badgeView.hidden = YES;
-    }
+    _conversationRecord = record;
+    //self.event = event;
+    self.displayName.text = record.name;
+    
+    [self updateIcon:record];
+    
+    [self updateBadge:record];
     
     self.labelCreationDate.text = [Utility stringFromDate:self.conversationRecord.lastActivity];
     [self setLastMessage];
@@ -171,5 +181,8 @@
 {
     self.labelCreationDate.text = [Utility stringFromDate:self.conversationRecord.lastActivity];
     [self setLastMessage];
+    self.displayName.text = self.conversationRecord.name;
+    [self updateIcon:self.conversationRecord];
+    [self updateBadge:self.conversationRecord];
 }
 @end

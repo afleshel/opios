@@ -110,7 +110,7 @@
         NSInteger currentSeconds = [[NSCalendar currentCalendar] ordinalityOfUnit:NSSecondCalendarUnit inUnit:NSDayCalendarUnit forDate:[NSDate date]];
         NSInteger secondsForTimer = 24 * 60 * 60 - currentSeconds;
         self.refreshTimer = [NSTimer scheduledTimerWithTimeInterval:secondsForTimer target:self selector:@selector(reloadData) userInfo:nil repeats:NO];
-        [self.tableViewSessions reloadRowsAtIndexPaths:[self.tableViewSessions indexPathsForVisibleRows] withRowAnimation:UITableViewRowAnimationNone];
+        //[self.tableViewSessions reloadRowsAtIndexPaths:[self.tableViewSessions indexPathsForVisibleRows] withRowAnimation:UITableViewRowAnimationNone];
     }
 }
 
@@ -147,11 +147,13 @@
     {
         NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"ActiveSessionTableViewCell" owner:self options:nil];
         cell = [topLevelObjects objectAtIndex:0];
-        [cell setBackground];
+        
+        cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"tableViewCell.png"] stretchableImageWithLeftCapWidth:0.0 topCapHeight:5.0]];
+        cell.selectedBackgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"tableViewCell_selected.png"] stretchableImageWithLeftCapWidth:0.0 topCapHeight:5.0]];
+        
+        //[cell setBackground];
     }
     
-    cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"tableViewCell.png"] stretchableImageWithLeftCapWidth:0.0 topCapHeight:5.0]];
-    cell.selectedBackgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"tableViewCell_selected.png"] stretchableImageWithLeftCapWidth:0.0 topCapHeight:5.0]];
     HOPConversationRecord* record = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
     if (record)

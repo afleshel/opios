@@ -32,6 +32,8 @@
 #import "AddParticipantsViewController.h"
 #import "ContactsViewController.h"
 #import "SessionManager.h"
+#import "OpenPeer.h"
+#import "MainViewController.h"
 //#import "Session.h"
 //#import <OpenPeerSDK/HOPConversationEvent+External.h>
 #import <OpenPeerSDK/HOPConversation.h>
@@ -91,14 +93,24 @@
 
 - (void) actionDoneWithSelection
 {
+    HOPConversation* newConversation = nil;
     if (self.contactsViewController.getSelectedContacts.count > 0)
     {
         if (self.isAdding)
-            [self.conversation addParticipants:self.contactsViewController.getSelectedContacts];
+            newConversation = [HOPConversation conversationOnParticipantsAdded:self.contactsViewController.getSelectedContacts conversation:self.conversation];//[self.conversation addParticipants:self.contactsViewController.getSelectedContacts];
         else
-            [self.conversation removeParticipants:self.contactsViewController.getSelectedContacts];
+            newConversation = [HOPConversation conversationOnParticipantsRemoved:self.contactsViewController.getSelectedContacts conversation:self.conversation];//[self.conversation removeParticipants:self.contactsViewController.getSelectedContacts];
     }
     
-    [self.navigationController popViewControllerAnimated:YES];
+    if (newConversation != self.conversation)
+    {
+        [[[OpenPeer sharedOpenPeer] mainViewController] popLastConversationViewController];
+        [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForConversation:newConversation forIncomingCall:NO forIncomingMessage:NO];
+    }
+    else
+    {
+        [self.delegate updateOnParticipantChange];
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 @end

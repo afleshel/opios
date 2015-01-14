@@ -38,7 +38,7 @@
 @class VideoCallViewController;
 @class WaitingVideoViewController;
 
-@interface SessionViewController_iPhone : UIViewController<UINavigationControllerDelegate,ChatViewControllerDelegate,VideoCallViewControllerDelegate,UIActionSheetDelegate>
+@interface SessionViewController_iPhone : UIViewController<UINavigationControllerDelegate,ChatViewControllerDelegate,VideoCallViewControllerDelegate,UIActionSheetDelegate,SessionViewControllerDelegate>
 
 @property (nonatomic, strong) HOPConversation* conversation;
 @property (nonatomic, strong) ChatViewController* chatViewController;
@@ -56,7 +56,7 @@
 - (void) onCallEnded;
 - (void) showWaitingView:(BOOL) show;
 
-- (void) updateOnParticipantChange;
+//- (void) updateOnParticipantChange;
 @end
 
 

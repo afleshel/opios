@@ -287,6 +287,7 @@
 - (void) showContactsChooserForAddingContacts:(BOOL) addingContacts
 {
     self.addParticipantsViewController = [[AddParticipantsViewController alloc] initWithConversation:self.conversation addingContacts:addingContacts];
+    self.addParticipantsViewController.delegate = self;
     [self.navigationController pushViewController:self.addParticipantsViewController animated:YES];
 }
 

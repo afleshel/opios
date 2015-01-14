@@ -35,6 +35,8 @@
 
 @interface ActiveSessionTableViewCell : UITableViewCell
 
+@property (nonatomic, weak) HOPConversationRecord* conversationRecord;
+
 - (void) setRecord:(HOPConversationRecord *)conversationRecord;
 - (void) updateActivity;
 - (void) setBackground;
