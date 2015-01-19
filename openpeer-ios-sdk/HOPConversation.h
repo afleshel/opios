@@ -46,6 +46,11 @@
 @property (nonatomic, strong) HOPConversationRecord* record;
 @property (nonatomic, strong) HOPConversationEvent* lastEvent;
 
+//TODO: MOVE TO INTERNAL-START
+@property (nonatomic, strong) NSTimer* removalTimer;
+@property (nonatomic, strong) NSSet* previousParticipants;
+//TODO: MOVE TO INTERNAL-END
+
 @property (nonatomic, copy) NSString* title;
 @property (nonatomic, getter=getParticipants) NSArray* participants;
 
@@ -87,4 +92,10 @@
 + (HOPConversation*) conversationOnParticipantsAdded:(NSArray*) addedParticipants conversation:(HOPConversation*) conversation;
 + (HOPConversation*) conversationOnParticipantsRemoved:(NSArray*) removedParticipants conversation:(HOPConversation*) conversation;
 + (HOPConversation*) getConversationForCBCID:(NSString*) cbcID;
+
++(NSString*) getDefaultTitleForParticipants:(NSArray*) inParticipants;
+
+- (BOOL) removeSelf;
+
+- (void) onRemovalTimerExpired:(id) object;
 @end

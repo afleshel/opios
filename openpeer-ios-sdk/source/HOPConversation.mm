@@ -582,4 +582,30 @@ using namespace openpeer::core;
 {
     return [[OpenPeerStorageManager sharedStorageManager] getConversationForCBCID:cbcID];
 }
+
+- (BOOL) removeSelf
+{
+    BOOL ret = NO;
+    if (self.participants.count > 1)
+    {
+        self.record.selfRemoved = [NSNumber numberWithBool:YES];
+        [self.thread removeContacts:@[[HOPRolodexContact getSelf]]];
+        [self.thread destroyCoreObject];
+        ret = YES;
+        [[HOPModelManager sharedModelManager] saveContext];
+
+    }
+    
+    return ret;
+}
+
+- (void) onRemovalTimerExpired:(id) object
+{
+    @synchronized(self)
+    {
+        [self.removalTimer invalidate];
+        self.removalTimer = nil;
+        self.previousParticipants = nil;
+    }
+}
 @end

@@ -56,6 +56,7 @@ protected:
     HOPConversationThread* getOpenPeerConversationThread(IConversationThreadPtr conversationThread);
     HOPConversation* getOpenPeerConversation(IConversationThreadPtr conversationThread);
 
+    BOOL checkParticipants;
 public:
     
     ~OpenPeerConversationThreadDelegate();
@@ -78,4 +79,5 @@ public:
 
     virtual void onConversationThreadContactStatusChanged(IConversationThreadPtr conversationThread,IContactPtr contact);
 
+    void addTimerForConversation(HOPConversation* conversation, NSSet* participants);
 };

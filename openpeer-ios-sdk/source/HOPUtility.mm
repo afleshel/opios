@@ -174,4 +174,32 @@
     
     return ret;
 }
+
++ (NSArray*) differenceBetweenArray:(NSArray*) array1 array:(NSArray*) array2
+{
+    NSMutableArray* ret = nil;
+    
+    if (array1)
+    {
+        if (array2)
+        {
+            ret = array2.count > array1.count ? [NSMutableArray arrayWithArray:array2] : [NSMutableArray arrayWithArray:array1];
+            if (array2.count > array1.count)
+                [ret removeObjectsInArray:array1];
+            else
+                [ret removeObjectsInArray:array2];
+        }
+        else
+        {
+            ret = [NSMutableArray arrayWithArray: array1];
+        }
+    }
+    else
+    {
+        if (array2)
+            ret = [NSMutableArray arrayWithArray: array2];
+    }
+    
+    return ret;
+}
 @end

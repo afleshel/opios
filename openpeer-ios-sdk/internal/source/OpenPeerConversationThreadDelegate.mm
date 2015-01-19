@@ -38,7 +38,9 @@
 #import "HOPConversation.h"
 #import "HOPConversationEvent+External.h"
 #import "HOPConversationRecord+External.h"
+#import "HOPRolodexContact+External.h"
 #import "HOPSettings.h"
+#import "HOPUtility.h"
 
 #include <zsLib/types.h>
 #import <openpeer/core/ILogger.h>
@@ -131,6 +133,12 @@ void OpenPeerConversationThreadDelegate::onConversationThreadNew(IConversationTh
     }
 }
 
+void OpenPeerConversationThreadDelegate::addTimerForConversation(HOPConversation* conversation, NSSet* participants)
+{
+    conversation.removalTimer = [NSTimer timerWithTimeInterval:3.0 target:conversation selector:@selector(onRemovalTimerExpired:) userInfo:nil repeats:NO];
+}
+
+
 
 void OpenPeerConversationThreadDelegate::onConversationThreadContactsChanged(IConversationThreadPtr conversationThread)
 {
@@ -147,6 +155,7 @@ void OpenPeerConversationThreadDelegate::onConversationThreadContactsChanged(ICo
         
         if (hopConversation)
         {
+            NSArray* difference = [HOPUtility differenceBetweenArray:hopConversation.participants array:[hopConversation.lastEvent getContacts]];
             int numberOfAddedParticipants = hopConversation.participants.count - [hopConversation.lastEvent getContacts].count;
             
             if (numberOfAddedParticipants != 0)
@@ -163,14 +172,50 @@ void OpenPeerConversationThreadDelegate::onConversationThreadContactsChanged(ICo
                 else
                 {
                     if (numberOfAddedParticipants > 0)
+                    {
+                        for (HOPRolodexContact* contact in difference)
+                        {
+                            [hopConversation.record addParticipantsObject:contact.openPeerContact];
+                        }
+                        
+                        hopConversation.record.name = [HOPConversation getDefaultTitleForParticipants:hopConversation.participants];
+                        hopConversation.title = hopConversation.record.name;
+                        
                         hopConversation.lastEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"addedNewParticipant" conversationRecord:hopConversation.record partcipants:hopConversation.participants title:hopConversation.title];
+                    }
                     else if (numberOfAddedParticipants < 0)
+                    {
+                        @synchronized(hopConversation)
+                        {
+                            if (hopConversation.removalTimer)
+                            {
+                                if ([hopConversation.record.participants isEqualToSet:hopConversation.previousParticipants])
+                                    return;
+                            }
+                            else
+                            {
+                                hopConversation.previousParticipants = [NSSet setWithSet:hopConversation.record.participants];
+                                this->addTimerForConversation(hopConversation, hopConversation.record.participants);
+                            }
+                        }
+                        
+                        for (HOPRolodexContact* contact in difference)
+                        {
+                            [hopConversation.record removeParticipantsObject:contact.openPeerContact];
+                        }
+                        
+                        hopConversation.record.name = [HOPConversation getDefaultTitleForParticipants:hopConversation.participants];
+                        hopConversation.title = hopConversation.record.name;
+                        
                         hopConversation.lastEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"removedParticipant" conversationRecord:hopConversation.record partcipants:hopConversation.participants title:hopConversation.title];
+                    }
                 }
 
                 [conversationDelegate onConversationContactsChanged:hopConversation  numberOfAddedParticipants:numberOfAddedParticipants];
             }
         }
+        
+        [[HOPModelManager sharedModelManager] saveContext];
     }
 }
 

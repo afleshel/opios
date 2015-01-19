@@ -40,6 +40,8 @@
         <attribute name="creationTime" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="lastActivity" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="removed" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="selfRemoved" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="sessionID" attributeType="String" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="conversationThreadRecords" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HOPConversationThreadRecord" inverseName="sessionReords" inverseEntity="HOPConversationThreadRecord" syncable="YES"/>
@@ -166,7 +168,7 @@
         <element name="HOPAvatar" positionX="441" positionY="-738" width="128" height="135"/>
         <element name="HOPCacheData" positionX="612" positionY="-519" width="128" height="105"/>
         <element name="HOPConversationEvent" positionX="-117" positionY="-243" width="128" height="163"/>
-        <element name="HOPConversationRecord" positionX="72" positionY="-423" width="128" height="193"/>
+        <element name="HOPConversationRecord" positionX="72" positionY="-423" width="128" height="223"/>
         <element name="HOPConversationThreadRecord" positionX="261" positionY="-351" width="128" height="103"/>
         <element name="HOPIdentityContact" positionX="63" positionY="-747" width="128" height="148"/>
         <element name="HOPIdentityProvider" positionX="459" positionY="-513" width="128" height="88"/>

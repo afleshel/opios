@@ -34,6 +34,7 @@
 #import "MainViewController.h"
 #import "MessageManager.h"
 #import "SessionViewController_iPhone.h"
+#import "ActiveSessionsViewController.h"
 #import "SoundsManager.h"
 #import "Utility.h"
 #import "OpenPeer.h"
@@ -556,5 +557,16 @@
         }
     }
     return conversation;
+}
+
+- (void) removeSelfFromConversation:(HOPConversation*) conversation
+{
+    if ([conversation removeSelf])
+    {
+        [[[OpenPeer sharedOpenPeer] mainViewController] removeSessionViewControllerForSession:[conversation getID]];
+        [[[[OpenPeer sharedOpenPeer] mainViewController] activeSessionsViewController] reloadData];
+        [[[OpenPeer sharedOpenPeer] mainViewController] popLastConversationViewController];
+        
+    }
 }
 @end

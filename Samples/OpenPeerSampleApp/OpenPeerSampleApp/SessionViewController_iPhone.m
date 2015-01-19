@@ -48,8 +48,9 @@
 #define ACTION_VIDEO_CALL           2
 #define ACTION_ADD_CONTACT          3
 #define ACTION_REMOVE_CONTACT       4
-#define ACTION_SHOW_CONTACT_INFO    5
-#define ACTION_CANCEL               6
+#define ACTION_REMOVE_SELF          5
+#define ACTION_SHOW_CONTACT_INFO    6
+#define ACTION_CANCEL               7
 
 
 @interface SessionViewController_iPhone ()
@@ -259,6 +260,9 @@
             {
                 [buttonTitles addObject:NSLocalizedString(@"Remove Contact", @"")];
                 [self.availableActions addObject:[NSNumber numberWithInt:ACTION_REMOVE_CONTACT]];
+                
+                [buttonTitles addObject:NSLocalizedString(@"Remove self", @"")];
+                [self.availableActions addObject:[NSNumber numberWithInt:ACTION_REMOVE_SELF]];
             }
             
             if (self.conversation.participants.count == 1)
@@ -321,6 +325,10 @@
             break;
         case ACTION_REMOVE_CONTACT:
             [self showContactsChooserForAddingContacts:NO];
+            //[self closeSession:nil];
+            break;
+        case ACTION_REMOVE_SELF:
+            [[SessionManager sharedSessionManager] removeSelfFromConversation:self.conversation];
             //[self closeSession:nil];
             break;
         case ACTION_SHOW_CONTACT_INFO:

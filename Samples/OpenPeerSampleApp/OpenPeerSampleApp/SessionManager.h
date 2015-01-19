@@ -82,4 +82,6 @@
 - (void) onParticipantsInConversationUpdate:(HOPConversation*) conversation numberOfAddedParticipants:(int) numberOfAddedParticipants;
 
 - (HOPConversation *)getConversationForID:(NSString *)conversationID threadType:(NSString *)threadType sender:(HOPContact *)sender items:(NSArray *)items;
+
+- (void) removeSelfFromConversation:(HOPConversation*) conversation;
 @end
