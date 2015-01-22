@@ -36,15 +36,13 @@
 #import "Utility.h"
 #import <OpenPeerSDK/HOPBackgrounding.h>
 #import <OpenPeerSDK/HOPStack.h>
+#import <OpenPeerSDK/HOPModelManager.h>
 #import "BackgroundingDelegate.h"
 #import "SessionManager.h"
 #import "OfflineManager.h"
 #import "Logger.h"
 #ifdef APNS_ENABLED
 #import "APNSManager.h"
-#import "APNSInboxManager.h"
-#import "UAInboxPushHandler.h"
-#import "UAPush.h"
 #endif
 
 @implementation AppDelegate
@@ -70,19 +68,31 @@
     
 
 #ifdef APNS_ENABLED
-    [[APNSManager sharedAPNSManager] prepareUrbanAirShip];
-    /*NSDictionary *apnsInfo = [launchOptions valueForKey:@"UIApplicationLaunchOptionsRemoteNotificationKey"];
+    
+    NSDictionary *apnsInfo = [launchOptions valueForKey:@"UIApplicationLaunchOptionsRemoteNotificationKey"];
     
     if ([apnsInfo count] > 0)
     {
-        [[APNSInboxManager sharedAPNSInboxManager] handleAPNS:apnsInfo];
+        [[APNSManager sharedAPNSManager] handleAPNS:apnsInfo];
+    }
+    
+    if ([application respondsToSelector:@selector(registerUserNotificationSettings:)])
+    {
+#ifdef __IPHONE_8_0
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIRemoteNotificationTypeBadge
+                                                                                             |UIRemoteNotificationTypeSound
+                                                                                             |UIRemoteNotificationTypeAlert) categories:nil];
+        [application registerUserNotificationSettings:settings];
+#endif
     }
     else
     {
-        NSDictionary *localInfo = [launchOptions valueForKey:localNotificationKey];
-        if ([localInfo count] > 0)
-            [[APNSInboxManager sharedAPNSInboxManager] setLocalNotificationDictionary:localInfo];
-    }*/
+        UIRemoteNotificationType myTypes = UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound;
+        [application registerForRemoteNotificationTypes:myTypes];
+    }
+    
+    [[APNSManager sharedAPNSManager] prepare];
+    
 #endif
     return YES;
 }
@@ -113,7 +123,7 @@
         }
         
 #ifdef APNS_ENABLED
-        [[UAPush shared] setBadgeNumber:[[SessionManager sharedSessionManager] totalNumberOfUnreadMessages]];
+        [[APNSManager sharedAPNSManager] setBadgeNumber:[[SessionManager sharedSessionManager] totalNumberOfUnreadMessages]];
 #endif
     }
 }
@@ -133,7 +143,7 @@
             [[HOPBackgrounding sharedBackgrounding]notifyReturningFromBackground];
         }
 #ifdef APNS_ENABLED
-        [[APNSInboxManager sharedAPNSInboxManager] getAllMessages];
+        [[APNSManager sharedAPNSManager] getAllMessages];
 #endif
     }
 }
@@ -147,12 +157,28 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
 #ifdef APNS_ENABLED
-    [[UAPush shared] setBadgeNumber:[[SessionManager sharedSessionManager] totalNumberOfUnreadMessages]];
+    [[APNSManager sharedAPNSManager] setBadgeNumber:[[SessionManager sharedSessionManager] totalNumberOfUnreadMessages]];
 #endif
     [[OpenPeer sharedOpenPeer] shutdownCleanup];
 }
 
 #ifdef APNS_ENABLED
+#ifdef __IPHONE_8_0
+- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
+{
+    //register to receive notifications
+    [application registerForRemoteNotifications];
+}
+
+- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo completionHandler:(void(^)())completionHandler
+{
+    //handle the actions
+    if ([identifier isEqualToString:@"declineAction"]){
+    }
+    else if ([identifier isEqualToString:@"answerAction"]){
+    }
+}
+#endif
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
     if (deviceToken)
@@ -163,8 +189,7 @@
         {
             OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Registered push notification deviceToken:%@",hexString);
 
-            [[APNSManager sharedAPNSManager] setDeviceToken:hexString];
-            [[APNSManager sharedAPNSManager] registerDeviceToken:deviceToken];
+            [[APNSManager sharedAPNSManager] setDeviceToken:deviceToken];
             
             [[OpenPeer sharedOpenPeer] setDeviceToken:hexString];
         }
@@ -191,7 +216,11 @@
     
     if ([apnsInfo count] > 0)
     {
-        [[APNSInboxManager sharedAPNSInboxManager] handleAPNS:apnsInfo];
+        [[APNSManager sharedAPNSManager] handleAPNS:apnsInfo];
+    }
+    else if ([userInfo count] > 0)
+    {
+        [[APNSManager sharedAPNSManager] handleAPNS:userInfo];
     }
 }
 

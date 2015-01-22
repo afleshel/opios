@@ -391,8 +391,8 @@
             }
             self.isLoggedin = YES;
 #ifdef APNS_ENABLED
-            if ([[[HOPModelManager sharedModelManager] getAPNSDataForPeerURI:[[HOPModelManager sharedModelManager] getPeerURIForHomeUser]] count] == 0)
-                [[APNSManager sharedAPNSManager] registerDeviceToken];
+            //if ([[[HOPModelManager sharedModelManager] getAPNSDataForPeerURI:[[HOPModelManager sharedModelManager] getPeerURIForHomeUser]] count] == 0)
+                [[APNSManager sharedAPNSManager] registerDeviceTokenWithOpenPeer];
 #endif
         }
         else
@@ -408,7 +408,7 @@
         }
         self.isRelogin = NO;
 #ifdef APNS_ENABLED
-        [[APNSInboxManager sharedAPNSInboxManager] getAllMessages];
+        [[APNSManager sharedAPNSManager] getAllMessages];
 #endif
         //Login finished. Remove activity indicator
         [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:NO withText:nil inView:nil];

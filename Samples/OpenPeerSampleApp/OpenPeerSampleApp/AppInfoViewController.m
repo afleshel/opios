@@ -32,6 +32,7 @@
 #import "AppInfoViewController.h"
 #import "AppConsts.h"
 #import "Settings.h"
+#import "APNSManager.h"
 
 const CGFloat cellDefaultHeight = 50.0;
 const CGFloat headerDefaultHeight = 40.0;
@@ -50,6 +51,7 @@ typedef enum
     APP_SETTINGS_LOCKBOX_SERVICE_DOMAIN,
     APP_SETTINGS_DEVICE_TOKEN_DOWNLOAD_URL,
     APP_SETTINGS_DEVICE_TOKEN_UPLOAD_URL,
+    APP_SETTINGS_PUSH_PROVIDER,
     
     APP_INFO_SECTIONS
 } AppInfoOptions;
@@ -157,6 +159,11 @@ typedef enum
             cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
             cell.textLabel.text =  [[[Settings sharedSettings] getDeviceTokenUploadURL] length] > 0 ? [[Settings sharedSettings] getDeviceTokenUploadURL]: @"None";
             break;
+           
+        case APP_SETTINGS_PUSH_PROVIDER:
+            cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
+            cell.textLabel.text =  [[[APNSManager sharedAPNSManager] pushProvider] length] > 0 ? [[APNSManager sharedAPNSManager] pushProvider] : @"None";
+            break;
             
         default:
             break;
@@ -215,6 +222,10 @@ typedef enum
             ret = @"Device Token Upload URL";
             break;
             
+        case APP_SETTINGS_PUSH_PROVIDER:
+            ret = @"Push Provider";
+            break;
+            
         default:
             break;
     }
@@ -244,7 +255,6 @@ typedef enum
             ret = (labelSize.height) > cellDefaultHeight ? labelSize.height + 20.0: cellDefaultHeight;
         }
             break;
-            
         default:
             ret = cellDefaultHeight;
             break;

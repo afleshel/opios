@@ -42,7 +42,7 @@
 #import "MessageManager.h"
 
 #ifdef APNS_ENABLED
-#import "APNSInboxManager.h"
+#import "APNSManager.h"
 #endif
 @interface AccountDelegate()
 @property (nonatomic, strong) WebLoginViewController* webLoginViewController;
@@ -120,7 +120,7 @@
             case HOPAccountStateReady:
                 [[LoginManager sharedLoginManager] onUserLoggedIn];
 #ifdef APNS_ENABLED
-                [[APNSInboxManager sharedAPNSInboxManager] handleNewMessages];
+                [[APNSManager sharedAPNSManager] handleExistingMessages];
 #endif
                 break;
                 

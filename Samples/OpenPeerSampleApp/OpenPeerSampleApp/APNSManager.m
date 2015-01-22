@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -42,6 +42,11 @@
 #import "OpenPeer.h"
 #import "BackgroundingDelegate.h"
 #import "HTTPDownloader.h"
+#import "PushNotificationSender.h"
+#import "ParsePushNotificationSender.h"
+#import "UrbanAirshipPushNotificationSender.h"
+#import "ParsePushNotificationReceiver.h"
+#import "UrbanAirshipPushNotificationReceiver.h"
 
 #import <OpenPeerSDK/HOPRolodexContact+External.h>
 #import <OpenPeerSDK/HOPModelManager.h>
@@ -52,6 +57,7 @@
 #import <OpenPeerSDK/HOPMessageRecord+External.h>
 #import <OpenPeerSDK/HOPConversationRecord+External.h>
 #import <OpenPeerSDK/HOPTypes.h>
+#import <Parse/Parse.h>
 
 #define  timeBetweenPushNotificationsInSeconds 1
 
@@ -73,6 +79,9 @@
 @property (nonatomic, strong) NSMutableDictionary* dictionaryOfPushNotificationsToSend;
 
 @property (nonatomic, strong) NSMutableDictionary* dictionaryOfMessageIDsForSending;
+
+@property (nonatomic, strong) PushNotificationSender* pushNotificationSender;
+@property (nonatomic, strong) PushNotificationReceiver* pushNotificationReceiver;
 
 - (id) initSingleton;
 
@@ -103,24 +112,84 @@
     {
         self.pushesToSend = 0;
         self.goingToBackground = NO;
-#ifdef DEBUG
-        self.urbanAirshipAppKey = [[NSUserDefaults standardUserDefaults] stringForKey: settingsKeyUrbanAirShipDevelopmentAppKey];
-        self.urbanAirshipAppSecret = [[NSUserDefaults standardUserDefaults] stringForKey: settingsKeyUrbanAirShipMasterAppSecretDev];
-#else
-        self.urbanAirshipAppKey = [[NSUserDefaults standardUserDefaults] stringForKey: settingsKeyUrbanAirShipProductionAppKey];
-        self.urbanAirshipAppSecret = [[NSUserDefaults standardUserDefaults] stringForKey: settingsKeyUrbanAirShipMasterAppSecret];
-#endif
-        self.apiPushURL = [[NSUserDefaults standardUserDefaults] stringForKey: settingsKeyUrbanAirShipAPIPushURL];
-        self.apnsHisotry = [[NSMutableDictionary alloc] init];
         
-        self.dictionaryOfSentFiles = [[NSMutableDictionary alloc] init];
-        self.dictionaryOfHTTPRequests = [[NSMutableDictionary alloc] init];
-        self.dictionaryOfPushNotificationsToSend = [[NSMutableDictionary alloc] init];
-        self.dictionaryOfMessageIDsForSending = [[NSMutableDictionary alloc] init];
+        self.pushProvider = [[NSUserDefaults standardUserDefaults] stringForKey: settingsKeyDefaultAPNSProvider];
+        
+        if (self.pushProvider.length > 0)
+        {
+            if ([self.pushProvider localizedCaseInsensitiveCompare:@"UrbanAirship"] == NSOrderedSame)
+            {
+                self.pushNotificationSender = [UrbanAirshipPushNotificationSender new];
+                self.pushNotificationReceiver = [UrbanAirshipPushNotificationReceiver new];
+            }
+            else if ([self.pushProvider localizedCaseInsensitiveCompare:@"Parse"] == NSOrderedSame)
+            {
+                self.pushNotificationSender = [ParsePushNotificationSender new];
+                self.pushNotificationReceiver = [ParsePushNotificationReceiver new];
+            }
+        }
     }
     return self;
 }
 
+
+- (void)prepare
+{
+    [self.pushNotificationSender prepare];
+    [self.pushNotificationReceiver prepare];
+}
+
+- (void) registerDeviceToken:(NSData*) devToken
+{
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Registering device token, %@, with Urban Airship",devToken);
+    [self.pushNotificationSender registerDeviceToken:devToken peerURI:[[HOPAccount sharedAccount] getPeerURI]];
+}
+
+- (void) registerDeviceTokenWithOpenPeer
+{
+    [self registerDeviceToken:self.deviceToken];
+    [self.pushNotificationSender registerDeviceTokenWithOpenPeer];
+}
+
+- (void) sendPushNotificationMessage:(NSString*) message missedCall:(BOOL) missedCall recipients:(NSArray*) recipients
+{
+    [self.pushNotificationSender sendPushNotificationMessage:message missedCall:missedCall recipients:recipients];
+}
+
+- (void) sendRichPushNotificationForMessage:(HOPMessageRecord*) message missedCall:(BOOL) missedCall participants:(NSArray*) participants
+{
+    [self.pushNotificationSender sendRichPushNotificationMessage:message missedCall:missedCall recipients:participants];
+}
+
+- (BOOL) areTherePushesForSending
+{
+    BOOL ret = NO;
+    @synchronized(self)
+    {
+        ret = self.pushesToSend > 0;
+    }
+    return ret;
+}
+
+- (void) getAllMessages
+{
+    [self.pushNotificationReceiver downloadAllMessages];
+}
+- (void) handleExistingMessages
+{
+    [self.pushNotificationReceiver handleExistingMessages];
+}
+
+- (void) handleAPNS:(NSDictionary *)apnsInfo
+{
+    [self.pushNotificationReceiver handleAPNS:apnsInfo];
+}
+
+- (void) setBadgeNumber:(NSInteger) numberOfUnreadMessages
+{
+    [self.pushNotificationReceiver setBadgeNumber:numberOfUnreadMessages];
+}
+/*
 - (NSURLSession*) urlSession
 {
     if (_urlSession != nil)
@@ -163,6 +232,7 @@
     [[UAPush shared] resetBadge];
 }
 
+
 - (void) pushDataOld:(NSDictionary*) dataToPush sendingRich:(BOOL) sendingRich
 {
     if ([self.apiPushURL length] > 0)
@@ -187,8 +257,8 @@
     {
         OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Push URL is invalid.");
     }
-}
-
+}*/
+/*
 - (void) pushData:(NSString*) filePath sendingRich:(BOOL) sendingRich messageID:(NSString*) messageID
 {
     if ([filePath length] > 0)
@@ -341,8 +411,7 @@
             stringToSend = [NSString stringWithFormat:@"{\"audience\" : {\"device_token\" : \"%@\"}, \"device_types\" : [ \"ios\" ], \"notification\" : {\"ios\" : {\"sound\":\"message-received\",\"alert\": \"%@\",\"content-available\": true,\"priority\": 10}}, \"message\" : {\"title\" : \"%@\", \"body\" : \"%@\", \"content_type\" : \"text/html\"} }",pushNotificationData.deviceToken,messageText,messageText,content];
         else if ([pushNotificationData.type isEqualToString:notificationTypeAndroid])
             stringToSend = [self prepareMessageForAndroidRichPush:message peerURI:[[HOPModelManager sharedModelManager]getPeerURIForHomeUser] location:location participantPeerURIs:participantPeerURIs deviceToken:pushNotificationData.deviceToken];
-            //[NSString stringWithFormat:@"{\"audience\" : {\"apid\" : \"%@\"}, \"device_types\" : [ \"android\" ],  \"notification\" : {\"android\" : {\"extra\" : {\"date\": \"%.0f\",\"messageId\": \"%@\",\"location\": \"%@\",\"peerURI\": \"%@\",\"peerURIs\": \"%@\",\"messageType\": \"%@\",\"conversationId\": \"%@\", \"conversationType\": \"%@\"}}, \"alert\" : \"%@\"} }",pushNotificationData.deviceToken,[message.date timeIntervalSince1970],message.messageID,location,[[HOPModelManager sharedModelManager]getPeerURIForHomeUser],@"",message.type,message.session.sessionID,message.session.type,message.text];
-
+        
         OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelTrace, @"Rich push content: %@",stringToSend);
         SBJsonParser* parser = [[SBJsonParser alloc] init];
         NSDictionary* dataToPush = [parser objectWithString: stringToSend];
@@ -368,6 +437,43 @@
         }
     }
     [self.apnsHisotry setObject:[NSDate date] forKey:[message.sender getPeerURI]];
+}
+
+- (void) sendRichPushNotificationForMessage2:(HOPMessageRecord*) message missedCall:(BOOL) missedCall participants:(NSArray*) participants
+{
+    NSString* location = [[HOPAccount sharedAccount] isCoreAccountCreated] && ([[HOPAccount sharedAccount] getState].state == HOPAccountStateReady) ? [[HOPAccount sharedAccount] getLocationID] : @"";
+    NSString* peerURI = [[HOPModelManager sharedModelManager]getPeerURIForHomeUser];
+    NSString* peerURIs = @"";
+    for (HOPRolodexContact* participant in participants)
+    {
+        NSMutableArray* tempArray = [NSMutableArray arrayWithArray:participants];
+        [tempArray removeObject:participant];
+        NSArray* participantsPeerURIs = [tempArray valueForKeyPath:@"openPeerContact.publicPeerFile.peerURI"];
+        for (NSString* tempPeerURI in participantsPeerURIs)
+        {
+            if (![tempPeerURI isEqualToString:peerURI])
+                peerURIs = [peerURIs stringByAppendingString: peerURIs.length > 0 ? [NSString stringWithFormat:@",%@",tempPeerURI] : tempPeerURI];
+        }
+        
+        //NSString* stringToSend = [NSString stringWithFormat:@"{\"alert\":\"%@\",\"extras\":\"{\"conversationId\":\"%@\",\"conversationType\":\"%@\",\"date\":\"%f\",\"location\":\"%@\",\"messageId\":\"%@\",\"messageType\":\"%@\",\"peerURI\":\"%@\",\"peerURIs\":\"%@\",\"replacesMessageId\":\"%@\"}\",\"to\":\"%@\"}",message.text,message.session.sessionID,message.session.type,[message.date timeIntervalSince1970],location,message.messageID,message.type,peerURI,peerURIs,message.replacedMessageID,[participant getPeerURI]];
+        
+        NSString* extras = [NSString stringWithFormat:@"{\"conversationId\":\"%@\",\"conversationType\":\"%@\",\"date\":\"%f\",\"location\":\"%@\",\"messageId\":\"%@\",\"messageType\":\"%@\",\"peerURI\":\"%@\",\"peerURIs\":\"%@\",\"replacesMessageId\":\"%@\",\"senderName\":\"%@\"}",message.session.sessionID,message.session.type,[message.date timeIntervalSince1970],location,message.messageID,message.type,peerURI,peerURIs,message.replacedMessageID,[[HOPAccount sharedAccount] getFullName]];
+        
+        NSDictionary* parameters = [NSDictionary dictionaryWithObjectsAndKeys:[participant getPeerURI],@"to", message.text, @"alert", extras, @"extras", nil];
+        [PFCloud callFunctionInBackground:@"sendPushToUser" withParameters:parameters block:^(NSString *result, NSError *error)
+        {
+            if (error)
+            {
+                OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, [error description]);
+            }
+            else
+            {
+                OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Parse push sent");
+            }
+        }];
+    }
+    
+    
 }
 
 - (void) sendRichPushNotificationForMessage:(HOPMessageRecord*) message missedCall:(BOOL) missedCall participants:(NSArray*) participants
@@ -499,23 +605,17 @@
 - (void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session
 {
     
-}
+}*/
 
 #pragma  mark - NSURLSessionTaskDelegate
-- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
-willPerformHTTPRedirection:(NSHTTPURLResponse *)response
-        newRequest:(NSURLRequest *)request
- completionHandler:(void (^)(NSURLRequest *))completionHandler
-{
-    
-}
+
 
 /* The task has received a request specific authentication challenge.
  * If this delegate is not implemented, the session specific authentication challenge
  * will *NOT* be called and the behavior will be the same as using the default handling
  * disposition.
  */
-- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
+/*- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
 didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
  completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler
 {
@@ -535,30 +635,8 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     }
 }
 
-/* Sent if a task requires a new, unopened body stream.  This may be
- * necessary when authentication has failed for any request that
- * involves a body stream.
- */
-- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
- needNewBodyStream:(void (^)(NSInputStream *bodyStream))completionHandler
-{
-    
-}
 
-/* Sent periodically to notify the delegate of upload progress.  This
- * information is also available as properties of the task.
- */
-- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
-   didSendBodyData:(int64_t)bytesSent
-    totalBytesSent:(int64_t)totalBytesSent
-totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend
-{
-    
-}
 
-/* Sent as the last message related to a specific task.  Error may be
- * nil, which implies that no error occurred and this task is complete.
- */
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
 didCompleteWithError:(NSError *)error
 {
@@ -592,6 +670,7 @@ didCompleteWithError:(NSError *)error
             {
                 OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Error occured while deleting sent file: %@", fileError);
             }
+            [self.dictionaryOfSentFiles removeObjectForKey:[NSNumber numberWithInt:task.taskIdentifier]];
         }
     }
     else
@@ -601,45 +680,6 @@ didCompleteWithError:(NSError *)error
     return;
 }
 
-- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
-didReceiveResponse:(NSURLResponse *)response
- completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler
-{
-    
-}
-
-/* Notification that a data task has become a download task.  No
- * future messages will be sent to the data task.
- */
-- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
-didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask
-{
-    
-}
-
-/* Sent when data is available for the delegate to consume.  It is
- * assumed that the delegate will retain and not copy the data.  As
- * the data may be discontiguous, you should use
- * [NSData enumerateByteRangesUsingBlock:] to access it.
- */
-- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
-    didReceiveData:(NSData *)data
-{
-    
-}
-
-/* Invoke the completion routine with a valid NSCachedURLResponse to
- * allow the resulting data to be cached, or pass nil to prevent
- * caching. Note that there is no guarantee that caching will be
- * attempted for a given resource, and you should not rely on this
- * message to receive the resource data.
- */
-- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
- willCacheResponse:(NSCachedURLResponse *)proposedResponse
- completionHandler:(void (^)(NSCachedURLResponse *cachedResponse))completionHandler
-{
-    
-}
 
 - (void) requestDeviceTokenForPeerURI:(NSString*) peerURI
 {
@@ -845,5 +885,5 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask
     }
     if (peerURI.length > 0)
         [self.dictionaryOfHTTPRequests removeObjectForKey:peerURI];
-}
+}*/
 @end

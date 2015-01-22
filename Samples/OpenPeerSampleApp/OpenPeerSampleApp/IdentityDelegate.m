@@ -48,7 +48,7 @@
 #import "Settings.h"
 
 #ifdef APNS_ENABLED
-#import "APNSInboxManager.h"
+#import "APNSManager.h"
 #endif
 
 @interface IdentityDelegate()
@@ -199,7 +199,7 @@
             case HOPIdentityStateReady:
                 [self.loginDelegate onIdentityLoginFinished];
 #ifdef APNS_ENABLED
-                [[APNSInboxManager sharedAPNSInboxManager] handleNewMessages];
+                [[APNSManager sharedAPNSManager] handleExistingMessages];
 #endif
                 if ([[LoginManager sharedLoginManager] isLogin] || [[LoginManager sharedLoginManager] isAssociation])
                     [[LoginManager sharedLoginManager] onIdentityAssociationFinished:identity];

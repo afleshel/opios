@@ -40,7 +40,8 @@ extern NSString * const settingsKeyAppIdSharedSecret;
 extern NSString * const settingsKeyAppName;
 extern NSString * const settingsKeyAppImageURL;
 extern NSString * const settingsKeyAppURL;
-extern NSString * const settingsKeyAPNS;
+extern NSString * const settingsKeyAPNSUrbanAirShip;
+extern NSString * const settingsKeyAPNSParse;
 extern NSString * const settingsKeyTelnetLogger;
 extern NSString * const settingsKeyOutgoingTelnetLogger;
 extern NSString * const settingsKeyStdOutLogger;
@@ -97,6 +98,12 @@ extern NSString* const settingsKeyUrbanAirShipProductionAppKey;
 extern NSString* const settingsKeyUrbanAirShipProductionAppSecret;
 extern NSString* const settingsKeyUrbanAirShipAPIPushURL;
 
+extern NSString* const settingsKeyParseDevelopmentAppID;
+extern NSString* const settingsKeyParseDevelopmentClientKey;
+extern NSString* const settingsKeyParseProductionAppID;
+extern NSString* const settingsKeyParseProductionClientKey;
+
+extern NSString* const settingsKeyDefaultAPNSProvider;
 extern NSString* const settingsKeyAPNSTimeOut;
 #endif
 

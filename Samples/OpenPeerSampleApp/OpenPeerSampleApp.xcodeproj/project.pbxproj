@@ -221,6 +221,18 @@
 		875A68C01A2E0CDC0041F650 /* ConversationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 875A68BF1A2E0CDC0041F650 /* ConversationDelegate.m */; };
 		875A68C11A2E0CDC0041F650 /* ConversationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 875A68BF1A2E0CDC0041F650 /* ConversationDelegate.m */; };
 		875CD7E2167A14810037396B /* SessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 875CD7E1167A14810037396B /* SessionManager.m */; };
+		876635961A6D0BE6001A98BC /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 876635911A6D0BE6001A98BC /* Bolts.framework */; };
+		876635971A6D0BE7001A98BC /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 876635921A6D0BE6001A98BC /* Parse.framework */; };
+		876635981A6D0BE7001A98BC /* ParseCrashReporting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 876635931A6D0BE6001A98BC /* ParseCrashReporting.framework */; };
+		876635991A6D0BE7001A98BC /* ParseFacebookUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 876635941A6D0BE6001A98BC /* ParseFacebookUtils.framework */; };
+		8766359A1A6D0BE7001A98BC /* ParseUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 876635951A6D0BE6001A98BC /* ParseUI.framework */; };
+		8766359B1A6D2A4D001A98BC /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 876635921A6D0BE6001A98BC /* Parse.framework */; };
+		8766359C1A6D2A82001A98BC /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 876635911A6D0BE6001A98BC /* Bolts.framework */; };
+		8766359D1A6D2A82001A98BC /* ParseCrashReporting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 876635931A6D0BE6001A98BC /* ParseCrashReporting.framework */; };
+		8766359F1A6D2A82001A98BC /* ParseUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 876635951A6D0BE6001A98BC /* ParseUI.framework */; };
+		876635A11A6D2BAB001A98BC /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 876635A01A6D2BAB001A98BC /* StoreKit.framework */; };
+		876635A31A6D2C49001A98BC /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 876635A21A6D2C49001A98BC /* Social.framework */; };
+		876635A51A6D2C98001A98BC /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 876635A41A6D2C98001A98BC /* Accounts.framework */; };
 		8766E8C21A07F6D1007384C5 /* boost.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8766E8C01A07F6D1007384C5 /* boost.a */; };
 		8766E8C31A07F6D1007384C5 /* boost.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8766E8C01A07F6D1007384C5 /* boost.a */; };
 		8766E8C41A07F6D1007384C5 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8766E8C11A07F6D1007384C5 /* libcurl.a */; };
@@ -273,6 +285,12 @@
 		8781C579196C86740030E113 /* table_header@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8781C570196C86740030E113 /* table_header@2x.png */; };
 		8781C57A196C86740030E113 /* table_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8781C571196C86740030E113 /* table_background@2x.png */; };
 		8781C57B196C86740030E113 /* table_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8781C571196C86740030E113 /* table_background@2x.png */; };
+		87852CF71A6E5A3700DB1D36 /* PushNotificationSender.m in Sources */ = {isa = PBXBuildFile; fileRef = 87852CF61A6E5A3700DB1D36 /* PushNotificationSender.m */; };
+		87852CFA1A6E5CC600DB1D36 /* ParsePushNotificationSender.m in Sources */ = {isa = PBXBuildFile; fileRef = 87852CF91A6E5CC600DB1D36 /* ParsePushNotificationSender.m */; };
+		87852CFD1A6E712D00DB1D36 /* UrbanAirshipPushNotificationSender.m in Sources */ = {isa = PBXBuildFile; fileRef = 87852CFC1A6E712D00DB1D36 /* UrbanAirshipPushNotificationSender.m */; };
+		87852D001A6FB07F00DB1D36 /* PushNotificationReceiver.m in Sources */ = {isa = PBXBuildFile; fileRef = 87852CFF1A6FB07F00DB1D36 /* PushNotificationReceiver.m */; };
+		87852D031A6FB09A00DB1D36 /* ParsePushNotificationReceiver.m in Sources */ = {isa = PBXBuildFile; fileRef = 87852D021A6FB09A00DB1D36 /* ParsePushNotificationReceiver.m */; };
+		87852D061A6FB0B200DB1D36 /* UrbanAirshipPushNotificationReceiver.m in Sources */ = {isa = PBXBuildFile; fileRef = 87852D051A6FB0B200DB1D36 /* UrbanAirshipPushNotificationReceiver.m */; };
 		878E880C19105076000DAA8A /* OpenPeerSampleAPNSApp-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 878E880B19105076000DAA8A /* OpenPeerSampleAPNSApp-Info.plist */; };
 		87904E9818D06FD1004BC06C /* AppInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87904E9618D06FD1004BC06C /* AppInfoViewController.m */; };
 		87904EA118D07725004BC06C /* AppInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87904E9618D06FD1004BC06C /* AppInfoViewController.m */; };
@@ -872,6 +890,14 @@
 		875A68BF1A2E0CDC0041F650 /* ConversationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConversationDelegate.m; sourceTree = "<group>"; };
 		875CD7E0167A14810037396B /* SessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SessionManager.h; sourceTree = "<group>"; };
 		875CD7E1167A14810037396B /* SessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionManager.m; sourceTree = "<group>"; };
+		876635911A6D0BE6001A98BC /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
+		876635921A6D0BE6001A98BC /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
+		876635931A6D0BE6001A98BC /* ParseCrashReporting.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseCrashReporting.framework; sourceTree = "<group>"; };
+		876635941A6D0BE6001A98BC /* ParseFacebookUtils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseFacebookUtils.framework; sourceTree = "<group>"; };
+		876635951A6D0BE6001A98BC /* ParseUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseUI.framework; sourceTree = "<group>"; };
+		876635A01A6D2BAB001A98BC /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		876635A21A6D2C49001A98BC /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		876635A41A6D2C98001A98BC /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		8766E8C01A07F6D1007384C5 /* boost.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = boost.a; path = ../../OpenPeerSDK.framework/Versions/D/Libraries/boost.a; sourceTree = SOURCE_ROOT; };
 		8766E8C11A07F6D1007384C5 /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = ../../OpenPeerSDK.framework/Versions/D/Libraries/libcurl.a; sourceTree = SOURCE_ROOT; };
 		8766E8C61A07F6ED007384C5 /* OpenpeerDataModel.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = OpenpeerDataModel.bundle; path = ../../OpenPeerSDK.framework/Versions/D/Resources/OpenpeerDataModel.bundle; sourceTree = SOURCE_ROOT; };
@@ -1055,6 +1081,18 @@
 		8781C56F196C86740030E113 /* table_cell_separator@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "table_cell_separator@2x.png"; sourceTree = "<group>"; };
 		8781C570196C86740030E113 /* table_header@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "table_header@2x.png"; sourceTree = "<group>"; };
 		8781C571196C86740030E113 /* table_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "table_background@2x.png"; sourceTree = "<group>"; };
+		87852CF51A6E5A3700DB1D36 /* PushNotificationSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushNotificationSender.h; sourceTree = "<group>"; };
+		87852CF61A6E5A3700DB1D36 /* PushNotificationSender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PushNotificationSender.m; sourceTree = "<group>"; };
+		87852CF81A6E5CC600DB1D36 /* ParsePushNotificationSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParsePushNotificationSender.h; sourceTree = "<group>"; };
+		87852CF91A6E5CC600DB1D36 /* ParsePushNotificationSender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParsePushNotificationSender.m; sourceTree = "<group>"; };
+		87852CFB1A6E712D00DB1D36 /* UrbanAirshipPushNotificationSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UrbanAirshipPushNotificationSender.h; sourceTree = "<group>"; };
+		87852CFC1A6E712D00DB1D36 /* UrbanAirshipPushNotificationSender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UrbanAirshipPushNotificationSender.m; sourceTree = "<group>"; };
+		87852CFE1A6FB07F00DB1D36 /* PushNotificationReceiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushNotificationReceiver.h; sourceTree = "<group>"; };
+		87852CFF1A6FB07F00DB1D36 /* PushNotificationReceiver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PushNotificationReceiver.m; sourceTree = "<group>"; };
+		87852D011A6FB09A00DB1D36 /* ParsePushNotificationReceiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParsePushNotificationReceiver.h; sourceTree = "<group>"; };
+		87852D021A6FB09A00DB1D36 /* ParsePushNotificationReceiver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParsePushNotificationReceiver.m; sourceTree = "<group>"; };
+		87852D041A6FB0B200DB1D36 /* UrbanAirshipPushNotificationReceiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UrbanAirshipPushNotificationReceiver.h; sourceTree = "<group>"; };
+		87852D051A6FB0B200DB1D36 /* UrbanAirshipPushNotificationReceiver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UrbanAirshipPushNotificationReceiver.m; sourceTree = "<group>"; };
 		878E880B19105076000DAA8A /* OpenPeerSampleAPNSApp-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "OpenPeerSampleAPNSApp-Info.plist"; sourceTree = "<group>"; };
 		87904E9518D06FD1004BC06C /* AppInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppInfoViewController.h; sourceTree = "<group>"; };
 		87904E9618D06FD1004BC06C /* AppInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppInfoViewController.m; sourceTree = "<group>"; };
@@ -1175,9 +1213,12 @@
 				87EE5FE9166E917B002C5FA3 /* libresolv.dylib in Frameworks */,
 				8766E8C41A07F6D1007384C5 /* libcurl.a in Frameworks */,
 				87A1F58519A26C130054A6B8 /* OpenPeerSDK.framework in Frameworks */,
+				876635961A6D0BE6001A98BC /* Bolts.framework in Frameworks */,
 				87E0FFB417BB8ADD00F30484 /* AddressBook.framework in Frameworks */,
 				87FF988E170EDB5D0017C627 /* AssetsLibrary.framework in Frameworks */,
+				876635971A6D0BE7001A98BC /* Parse.framework in Frameworks */,
 				87EE5FF8166E9625002C5FA3 /* AVFoundation.framework in Frameworks */,
+				8766359A1A6D0BE7001A98BC /* ParseUI.framework in Frameworks */,
 				87EE5FF4166E9615002C5FA3 /* CoreAudio.framework in Frameworks */,
 				87A73518193D00F700769011 /* AudioToolbox.framework in Frameworks */,
 				871BC9A7179EECC400AEA4A6 /* CoreData.framework in Frameworks */,
@@ -1185,11 +1226,13 @@
 				87FF9892170EDB7D0017C627 /* CoreImage.framework in Frameworks */,
 				8757E1CE1827ED5600D7BDA1 /* CoreText.framework in Frameworks */,
 				87EE5FF5166E9615002C5FA3 /* CoreMedia.framework in Frameworks */,
+				876635981A6D0BE7001A98BC /* ParseCrashReporting.framework in Frameworks */,
 				87A73519193D078A00769011 /* SystemConfiguration.framework in Frameworks */,
 				87EE5FF6166E9615002C5FA3 /* CoreVideo.framework in Frameworks */,
 				8727282F166CBF9B0089CBB6 /* Foundation.framework in Frameworks */,
 				87FF9890170EDB6D0017C627 /* MobileCoreServices.framework in Frameworks */,
 				87448B0517905FFC00E374EE /* QuartzCore.framework in Frameworks */,
+				876635991A6D0BE7001A98BC /* ParseFacebookUtils.framework in Frameworks */,
 				8766E8C21A07F6D1007384C5 /* boost.a in Frameworks */,
 				0024393C178F55BF00B79368 /* Security.framework in Frameworks */,
 				8727282D166CBF9B0089CBB6 /* UIKit.framework in Frameworks */,
@@ -1200,6 +1243,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				876635A51A6D2C98001A98BC /* Accounts.framework in Frameworks */,
+				876635A31A6D2C49001A98BC /* Social.framework in Frameworks */,
+				876635A11A6D2BAB001A98BC /* StoreKit.framework in Frameworks */,
 				8770C34318BB7ABB006F28F0 /* libstdc++.6.0.9.dylib in Frameworks */,
 				8774AC4E1897E305006B91FA /* ImageIO.framework in Frameworks */,
 				87D4BDFC18683B65008C2D30 /* CoreLocation.framework in Frameworks */,
@@ -1220,8 +1266,12 @@
 				87D4BD1F18675368008C2D30 /* CoreData.framework in Frameworks */,
 				87D4BD2018675368008C2D30 /* CoreGraphics.framework in Frameworks */,
 				87D4BD2118675368008C2D30 /* CoreImage.framework in Frameworks */,
+				8766359C1A6D2A82001A98BC /* Bolts.framework in Frameworks */,
+				8766359D1A6D2A82001A98BC /* ParseCrashReporting.framework in Frameworks */,
+				8766359F1A6D2A82001A98BC /* ParseUI.framework in Frameworks */,
 				874B135C1935F96800993F8D /* AudioToolbox.framework in Frameworks */,
 				87D4BD2218675368008C2D30 /* CoreText.framework in Frameworks */,
+				8766359B1A6D2A4D001A98BC /* Parse.framework in Frameworks */,
 				87D4BD2318675368008C2D30 /* CoreMedia.framework in Frameworks */,
 				87D4BD2418675368008C2D30 /* CoreVideo.framework in Frameworks */,
 				87D4BD2518675368008C2D30 /* Foundation.framework in Frameworks */,
@@ -1268,10 +1318,6 @@
 				87BFEDB9183A885C00A48821 /* AppConsts.h */,
 				87091142184762F300E65465 /* ImageManager.h */,
 				87091143184762F300E65465 /* ImageManager.m */,
-				87B5EABE18683E3B00D25C3B /* APNSManager.h */,
-				87B5EABF18683E3B00D25C3B /* APNSManager.m */,
-				872DC43118D9AFE4009B6005 /* APNSInboxManager.h */,
-				872DC43218D9AFE4009B6005 /* APNSInboxManager.m */,
 				872B1EBA191A1C47000E21C9 /* OfflineManager.h */,
 				872B1EBB191A1C47000E21C9 /* OfflineManager.m */,
 			);
@@ -1533,6 +1579,10 @@
 		8727282B166CBF9B0089CBB6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				876635A41A6D2C98001A98BC /* Accounts.framework */,
+				876635A21A6D2C49001A98BC /* Social.framework */,
+				876635A01A6D2BAB001A98BC /* StoreKit.framework */,
+				876635901A6D0BE6001A98BC /* parse-library */,
 				8766E8C01A07F6D1007384C5 /* boost.a */,
 				8766E8C11A07F6D1007384C5 /* libcurl.a */,
 				87A1F58419A26C130054A6B8 /* OpenPeerSDK.framework */,
@@ -1570,6 +1620,7 @@
 		87272832166CBF9B0089CBB6 /* OpenPeerSampleApp */ = {
 			isa = PBXGroup;
 			children = (
+				87852CF41A6E59C900DB1D36 /* APNS */,
 				872B1EB01918F7AD000E21C9 /* OpenPeerSampleApp.entitlements */,
 				8712BE8517D8CC9900665F42 /* Settings */,
 				87FC39F81709BB66002030D1 /* Session */,
@@ -1638,6 +1689,19 @@
 			name = TTTAttributedLabel;
 			path = 3rdParties/TTTAttributedLabel;
 			sourceTree = SOURCE_ROOT;
+		};
+		876635901A6D0BE6001A98BC /* parse-library */ = {
+			isa = PBXGroup;
+			children = (
+				876635911A6D0BE6001A98BC /* Bolts.framework */,
+				876635921A6D0BE6001A98BC /* Parse.framework */,
+				876635931A6D0BE6001A98BC /* ParseCrashReporting.framework */,
+				876635941A6D0BE6001A98BC /* ParseFacebookUtils.framework */,
+				876635951A6D0BE6001A98BC /* ParseUI.framework */,
+			);
+			name = "parse-library";
+			path = "../../libs/parse-library";
+			sourceTree = "<group>";
 		};
 		8780DAAA19E7F25B00AB196C /* Airship */ = {
 			isa = PBXGroup;
@@ -1966,6 +2030,29 @@
 				8780DB6A19E7F25C00AB196C /* UAPushSettingsView.xib */,
 			);
 			path = Shared;
+			sourceTree = "<group>";
+		};
+		87852CF41A6E59C900DB1D36 /* APNS */ = {
+			isa = PBXGroup;
+			children = (
+				87B5EABE18683E3B00D25C3B /* APNSManager.h */,
+				87B5EABF18683E3B00D25C3B /* APNSManager.m */,
+				872DC43118D9AFE4009B6005 /* APNSInboxManager.h */,
+				872DC43218D9AFE4009B6005 /* APNSInboxManager.m */,
+				87852CF51A6E5A3700DB1D36 /* PushNotificationSender.h */,
+				87852CF61A6E5A3700DB1D36 /* PushNotificationSender.m */,
+				87852CF81A6E5CC600DB1D36 /* ParsePushNotificationSender.h */,
+				87852CF91A6E5CC600DB1D36 /* ParsePushNotificationSender.m */,
+				87852CFB1A6E712D00DB1D36 /* UrbanAirshipPushNotificationSender.h */,
+				87852CFC1A6E712D00DB1D36 /* UrbanAirshipPushNotificationSender.m */,
+				87852CFE1A6FB07F00DB1D36 /* PushNotificationReceiver.h */,
+				87852CFF1A6FB07F00DB1D36 /* PushNotificationReceiver.m */,
+				87852D011A6FB09A00DB1D36 /* ParsePushNotificationReceiver.h */,
+				87852D021A6FB09A00DB1D36 /* ParsePushNotificationReceiver.m */,
+				87852D041A6FB0B200DB1D36 /* UrbanAirshipPushNotificationReceiver.h */,
+				87852D051A6FB0B200DB1D36 /* UrbanAirshipPushNotificationReceiver.m */,
+			);
+			name = APNS;
 			sourceTree = "<group>";
 		};
 		879923911917B05400FBD21E /* Reachability */ = {
@@ -2680,11 +2767,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				87852CF71A6E5A3700DB1D36 /* PushNotificationSender.m in Sources */,
+				87852CFA1A6E5CC600DB1D36 /* ParsePushNotificationSender.m in Sources */,
 				87D4BCDC18675368008C2D30 /* main.m in Sources */,
 				872B1EBD191A1C47000E21C9 /* OfflineManager.m in Sources */,
 				87D4BCDD18675368008C2D30 /* AppLog.m in Sources */,
 				87D4BCDE18675368008C2D30 /* TTTAttributedLabel.m in Sources */,
 				87D4BCDF18675368008C2D30 /* AppDelegate.m in Sources */,
+				87852CFD1A6E712D00DB1D36 /* UrbanAirshipPushNotificationSender.m in Sources */,
 				87D4BCE018675368008C2D30 /* MainViewController.m in Sources */,
 				87D4BCE118675368008C2D30 /* Logger.m in Sources */,
 				87D4BCE218675368008C2D30 /* VideoCallViewController.m in Sources */,
@@ -2698,10 +2788,12 @@
 				87D4BCEB18675368008C2D30 /* SplashViewController.m in Sources */,
 				87D4BCEC18675368008C2D30 /* ContactsViewController.m in Sources */,
 				87D4BCED18675368008C2D30 /* OpenPeer.m in Sources */,
+				87852D031A6FB09A00DB1D36 /* ParsePushNotificationReceiver.m in Sources */,
 				87D4BCEE18675368008C2D30 /* WebLoginViewController.m in Sources */,
 				87D4BCEF18675368008C2D30 /* Utility.m in Sources */,
 				87D4BCF018675368008C2D30 /* ContactsManager.m in Sources */,
 				87D4BCF118675368008C2D30 /* SoundsManager.m in Sources */,
+				87852D001A6FB07F00DB1D36 /* PushNotificationReceiver.m in Sources */,
 				87D4BCF218675368008C2D30 /* SessionManager.m in Sources */,
 				87D4BCF418675368008C2D30 /* WaitingVideoViewController.m in Sources */,
 				87D4BCF518675368008C2D30 /* Settings.m in Sources */,
@@ -2728,6 +2820,7 @@
 				87D4BD0318675368008C2D30 /* SBJsonStreamTokeniser.m in Sources */,
 				87E0355B19AF4B89008A195C /* SystemMessageCell.mm in Sources */,
 				87D4BD0418675368008C2D30 /* SBJsonStreamWriter.m in Sources */,
+				87852D061A6FB0B200DB1D36 /* UrbanAirshipPushNotificationReceiver.m in Sources */,
 				87D4BD0518675368008C2D30 /* SBJsonStreamWriterAccumulator.m in Sources */,
 				87D4BD0718675368008C2D30 /* SBJsonStreamWriterState.m in Sources */,
 				8799239F1917C85500FBD21E /* UIDevice+Networking.m in Sources */,
@@ -2964,6 +3057,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/../../libs/parse-library/",
 					"$(inherited)",
 					"$(PROJECT_DIR)/3rdParties/Airship",
 				);
@@ -2999,7 +3093,7 @@
 				PRODUCT_NAME = openpeersample;
 				PROVISIONING_PROFILE = "";
 				SUPPORTED_PLATFORMS = iphoneos;
-				VALID_ARCHS = "armv7 armv7s";
+				VALID_ARCHS = "armv7s armv7";
 				WARNING_CFLAGS = (
 					"-Wno-c++11-extensions",
 					"-Wno-arc-performSelector-leaks",
@@ -3016,6 +3110,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				FRAMEWORK_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/../../libs/parse-library/",
 					"$(inherited)",
 					"$(PROJECT_DIR)/3rdParties/Airship",
 				);
@@ -3046,7 +3141,7 @@
 				PRODUCT_NAME = openpeersample;
 				PROVISIONING_PROFILE = "";
 				SUPPORTED_PLATFORMS = iphoneos;
-				VALID_ARCHS = "armv7 armv7s";
+				VALID_ARCHS = "armv7s armv7";
 				WARNING_CFLAGS = (
 					"-Wno-c++11-extensions",
 					"-Wno-arc-performSelector-leaks",

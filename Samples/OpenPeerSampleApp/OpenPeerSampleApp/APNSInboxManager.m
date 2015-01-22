@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2014, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -47,7 +47,7 @@
 #import <OpenpeerSDK/HOPRolodexContact+External.h>
 #import <OpenpeerSDK/HOPConversationThread.h>
 #import <OpenpeerSDK/HOPConversation.h>
-
+#import <Parse/Parse.h>
 @interface APNSInboxManager ()
 
 @property (strong, nonatomic) NSMutableArray* arrayMessageDownloaders;
@@ -147,8 +147,6 @@
 
     [HOPRolodexContact hintAboutLocation:locationID peerURI:peerURI];
 }
-
-
 
 
 - (void)createMessageFromRichPushDict:(NSDictionary *)richPushDictionary
@@ -322,7 +320,7 @@
 
 - (void)getAllMessages
 {
-    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Get all messages from the UA inbox.");
+    /*OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Get all messages from the UA inbox.");
     //[[UAInbox shared].messageList retrieveMessageListWithDelegate:self];
     [[UAInbox shared].messageList retrieveMessageListWithSuccessBlock:^
      {
@@ -331,7 +329,47 @@
      withFailureBlock:^
      {
          OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Loading rich push inbox has failed");
-     }];
+     }];*/
+    
+    PFQuery* parseQuery = [PFQuery queryWithClassName:@"OPPushMessage"];//predicate:[NSPredicate predicateWithFormat:@"to MATCHES %@",[[HOPAccount sharedAccount] getPeerURI]]];
+    [parseQuery whereKey:@"to" equalTo:[[HOPAccount sharedAccount] getPeerURI]];
+    [parseQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
+    {
+        if (error)
+        {
+            OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, [error description]);
+        }
+        for (PFObject* object in objects)
+        {
+            NSString* str = [[object class] description];
+        }
+        [PFObject deleteAllInBackground:objects];
+    }];
+    
+    /*void downloadMessages(){
+        ParseQuery parseQuery=new ParseQuery("OPPushMessage");
+        parseQuery.whereEqualTo("to",OPDataManager.getInstance().getCurrentUser().getPeerUri());
+        parseQuery.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                for(ParseObject object:list){
+                    //save messages
+                }
+                ParseObject.deleteAllInBackground(list,new DeleteCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if(e==null){
+                            Log.d("ParsePush","downloadMessages deleted "+list.size()+" messages");
+                            ParseInstallation.getCurrentInstallation().put(KEY_BADGE, 0);
+                            ParseInstallation.getCurrentInstallation().saveEventually();
+                        } else {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        });*/
+    //}
 }
 
 /**

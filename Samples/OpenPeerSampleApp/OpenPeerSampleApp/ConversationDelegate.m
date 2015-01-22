@@ -44,6 +44,8 @@
 #import <OpenpeerSDK/HOPRolodexContact+External.h>
 #import <OpenpeerSDK/HOPMessageRecord+External.h>
 #import <OpenpeerSDK/HOPModelManager.h>
+#import <OpenpeerSDK/HOPSystemMessage.h>
+#import <OpenpeerSDK/HOPCallSystemMessage.h>
 #import <OpenPeerSDK/HOPAccount.h>
 
 #ifdef APNS_ENABLED
@@ -124,39 +126,40 @@
     [[HOPModelManager sharedModelManager] updateMessageStateForConversation:conversation lastDeliveryState:messageDeliveryStates];
 }
 
-- (void) onConversationPushMessage:(HOPConversation*) conversationThread messageID:(NSString*) messageID contact:(HOPRolodexContact*) coreContact
+- (void) onConversationPushMessage:(HOPConversation*) conversationThread messageID:(NSString*) messageID contact:(HOPRolodexContact*) contact
 {
 #ifdef APNS_ENABLED
-    if (coreContact)
+    if (contact)
     {
         BOOL missedCall = NO;
         HOPMessageRecord* message = [conversationThread getMessageForID:messageID];
         
         if (message)
         {
-            //message.sender = coreContact;
+            BOOL isSystemMessage = [message.type isEqualToString:[HOPSystemMessage getMessageType]];
             
-            HOPRolodexContact* contact  = [[[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:[coreContact getPeerURI]] objectAtIndex:0];
-            if (contact)
+            //if ([[MessageManager sharedMessageManager] getTypeForSystemMessage:message] == SystemMessage_CheckAvailability)
+            if (isSystemMessage)
             {
-                NSString* messageText = nil;
+                HOPCallSystemMessage* callSystemMessage = [HOPCallSystemMessage callSystemMessageFromJSON:message.text];
                 
-                if ([[MessageManager sharedMessageManager] getTypeForSystemMessage:message] == SystemMessage_CheckAvailability)
-                {
-                    messageText  = [NSString stringWithFormat:@"%@  %@",[[HOPAccount sharedAccount] getFullName],@"Missed call"];
-                    missedCall = YES;
-                    [[APNSManager sharedAPNSManager] sendPushNotificationForContact:coreContact message:messageText missedCall:missedCall];
-                }
-                else if (![message.type isEqualToString:messageTypeSystem])
-                {
-                    [[APNSManager sharedAPNSManager]sendRichPushNotificationForMessage:message missedCall:NO  participants:@[coreContact]];
-//                    NSArray *peerURIs = [[conversationThread getParticipants] valueForKeyPath:@"openPeerContact.publicPeerFile.peerURI"];
-//                    [[APNSManager sharedAPNSManager]sendRichPushNotificationForMessage:message missedCall:NO  participantsPeerURIs:peerURIs];
-                }
+                NSString* messageText  = @"";
+                if (callSystemMessage.messageType == HOPCallSystemMessageTypeCallPlaced)
+                    messageText = [NSString stringWithFormat:@"%@  %@",[[HOPAccount sharedAccount] getFullName],@"Incoming call"];
+                else if (callSystemMessage.type == HOPCallSystemMessageTypeCallHungup)
+                    messageText = [NSString stringWithFormat:@"%@  %@",[[HOPAccount sharedAccount] getFullName],@"Missed call"];
+                
+                missedCall = YES;
+                
+                [[APNSManager sharedAPNSManager] sendPushNotificationMessage:messageText missedCall:missedCall recipients:@[contact]];
+            }
+            else// if (![message.type isEqualToString:messageTypeSystem])
+            {
+                [[APNSManager sharedAPNSManager]sendRichPushNotificationForMessage:message missedCall:NO  participants:@[contact]];
             }
         }
     }
-    #endif
+#endif
 }
 
 @end

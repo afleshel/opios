@@ -80,3 +80,9 @@
 - (void) updateOnParticipantChange;
 
 @end
+
+@protocol PushNotificationSenderDelegate <NSObject>
+
+- (void) onDeviceTokenReceivedForPeerURI:(NSString*) peerURI;
+
+@end
