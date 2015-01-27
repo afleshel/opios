@@ -107,7 +107,6 @@
 		872B1EBD191A1C47000E21C9 /* OfflineManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 872B1EBB191A1C47000E21C9 /* OfflineManager.m */; };
 		872D7E9E1897E19A005D8335 /* QRScannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D7E9C1897E19A005D8335 /* QRScannerViewController.m */; };
 		872D7E9F1897E19A005D8335 /* QRScannerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 872D7E9D1897E19A005D8335 /* QRScannerViewController.xib */; };
-		872DC43B18D9AFED009B6005 /* APNSInboxManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 872DC43218D9AFE4009B6005 /* APNSInboxManager.m */; };
 		8730D6E31832601C008D1D37 /* VideoCallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8730D6E11832601C008D1D37 /* VideoCallViewController.m */; };
 		8730D6E41832601C008D1D37 /* VideoCallViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8730D6E21832601C008D1D37 /* VideoCallViewController.xib */; };
 		8730D6FE18328D6A008D1D37 /* iPhone_switch_camera.png in Resources */ = {isa = PBXBuildFile; fileRef = 8730D6FC18328D6A008D1D37 /* iPhone_switch_camera.png */; };
@@ -736,8 +735,6 @@
 		872D7E9B1897E19A005D8335 /* QRScannerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRScannerViewController.h; sourceTree = "<group>"; };
 		872D7E9C1897E19A005D8335 /* QRScannerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRScannerViewController.m; sourceTree = "<group>"; };
 		872D7E9D1897E19A005D8335 /* QRScannerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QRScannerViewController.xib; sourceTree = "<group>"; };
-		872DC43118D9AFE4009B6005 /* APNSInboxManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APNSInboxManager.h; sourceTree = "<group>"; };
-		872DC43218D9AFE4009B6005 /* APNSInboxManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APNSInboxManager.m; sourceTree = "<group>"; };
 		8730D6E01832601C008D1D37 /* VideoCallViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoCallViewController.h; sourceTree = "<group>"; };
 		8730D6E11832601C008D1D37 /* VideoCallViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoCallViewController.m; sourceTree = "<group>"; };
 		8730D6E21832601C008D1D37 /* VideoCallViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VideoCallViewController.xib; sourceTree = "<group>"; };
@@ -1988,8 +1985,6 @@
 			children = (
 				87B5EABE18683E3B00D25C3B /* APNSManager.h */,
 				87B5EABF18683E3B00D25C3B /* APNSManager.m */,
-				872DC43118D9AFE4009B6005 /* APNSInboxManager.h */,
-				872DC43218D9AFE4009B6005 /* APNSInboxManager.m */,
 				87852CF51A6E5A3700DB1D36 /* PushNotificationSender.h */,
 				87852CF61A6E5A3700DB1D36 /* PushNotificationSender.m */,
 				87852CF81A6E5CC600DB1D36 /* ParsePushNotificationSender.h */,
@@ -2715,7 +2710,6 @@
 				87D4BD0F18675368008C2D30 /* CacheDelegate.m in Sources */,
 				87D4BD1018675368008C2D30 /* ContactTableViewCell.m in Sources */,
 				879923951917B05400FBD21E /* Reachability.m in Sources */,
-				872DC43B18D9AFED009B6005 /* APNSInboxManager.m in Sources */,
 				87D4BD1118675368008C2D30 /* SettingsViewController.m in Sources */,
 				87D4BD1218675368008C2D30 /* LoggerSettingsViewController.m in Sources */,
 				8723870F19465A57002643D6 /* ActiveSessionTableViewCell.m in Sources */,
