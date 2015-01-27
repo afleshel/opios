@@ -32,6 +32,7 @@
 #import "ParsePushNotificationReceiver.h"
 #import <Parse/Parse.h>
 #import <OpenPeerSDK/HOPAccount.h>
+#import <OpenPeerSDK/HOPSystemMessage.h>
 
 @implementation ParsePushNotificationReceiver
 
@@ -46,16 +47,24 @@
          }
          for (PFObject* object in objects)
          {
-             NSString* jsonMessage = object[@"extras"];
+
+//             NSString* jsonMessage = object[@"extras"];
              NSString* jsonMessageText = object[@"alert"];
+              NSDictionary* dictSystem = object[@"system"];
+
+//             NSData *data = [jsonMessage dataUsingEncoding:NSUTF8StringEncoding];
+//             NSDictionary* dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
              
-             NSData *data = [jsonMessage dataUsingEncoding:NSUTF8StringEncoding];
-             NSDictionary* dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-             
+             NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:object[@"conversationId"], @"conversationId", object[@"conversationType"], @"conversationType", object[@"date"], @"date", object[@"location"], @"location", object[@"messageId"], @"messageId", object[@"peerURI"], @"peerURI", object[@"peerURIs"], @"peerURIs", object[@"senderName"], @"senderName", object[@"to"], @"to", object[@"messageType"], @"messageType",  nil];
              if (dict.count > 0)
              {
                  NSMutableDictionary* dictMessage = [NSMutableDictionary dictionaryWithDictionary:dict];
                  [dictMessage setObject:jsonMessageText forKey:@"message"];
+                 if (dictSystem)
+                 {
+                     //[dictMessage setObject:[HOPSystemMessage getMessageType] forKey:@"messageType"];
+                     [dictMessage setObject:dictSystem forKey:@"system"];
+                 }
                  [self createMessageFromRichPushDict:dictMessage];
              }
          }

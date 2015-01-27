@@ -33,7 +33,6 @@
 #import "AppConsts.h"
 #import "OpenPeer.h"
 #import "Logger.h"
-#import "SBJsonParser.h"
 #import "Utility.h"
 #import <OpenPeerSDK/Openpeer.h>
 #import "HTTPDownloader.h"
@@ -668,8 +667,8 @@
 - (NSMutableDictionary*) dictionaryForJSONString:(NSString*) jsonString
 {
     NSMutableDictionary* ret = nil;
-    SBJsonParser* parser = [[SBJsonParser alloc] init];
-    NSDictionary* inputDictionary = [parser objectWithString: jsonString];
+    
+    NSDictionary* inputDictionary = [Utility dictionaryFromJSON:jsonString];
     
     //Check if downloaded JSON is having root object
     if ([inputDictionary count] > 0)

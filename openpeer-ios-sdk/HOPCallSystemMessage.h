@@ -42,8 +42,11 @@
 @property (nonatomic,weak) HOPContact* callee;
 @property (nonatomic) unsigned short errorCode;
 @property (nonatomic, copy) NSString* jsonMessage;
+@property (nonatomic, copy) NSString* mediaType;
+@property (nonatomic, copy) NSString* callID;
 
 - (id) initWithMessageType:(HOPCallSystemMessageType) inType callee:(HOPRolodexContact*) inCallee errorCode:(unsigned short) inErrorCode;
+- (id) initWithMessageType:(HOPCallSystemMessageType) inType mediaType:(NSString*) mediaType callID:(NSString*) callID callee:(HOPRolodexContact*) inCallee errorCode:(unsigned short) inErrorCode;
 
 + (id) callSystemMessageFromJSON:(NSString*) jsonMessage;
 

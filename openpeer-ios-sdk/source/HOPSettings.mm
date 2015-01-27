@@ -92,11 +92,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     }
     return self;
 }
-/*- (void) setupWithDelegate:(id<HOPSettingsDelegate>) inDelegate
-{
-    openPeerSettingsDelegatePtr = OpenPeerSettingsDelegate::create(inDelegate);
-    ISettings::setup(openPeerSettingsDelegatePtr);
-}*/
+
 
 - (void) setup
 {

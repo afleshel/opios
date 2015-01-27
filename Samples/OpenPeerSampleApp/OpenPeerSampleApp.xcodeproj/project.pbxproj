@@ -218,6 +218,8 @@
 		8758C5F21978454800CB8099 /* iPhone_tabBar_favorites_active.png in Resources */ = {isa = PBXBuildFile; fileRef = 8758C5EE1978454800CB8099 /* iPhone_tabBar_favorites_active.png */; };
 		8758C5F31978454800CB8099 /* iPhone_tabBar_favorites_inactive.png in Resources */ = {isa = PBXBuildFile; fileRef = 8758C5EF1978454800CB8099 /* iPhone_tabBar_favorites_inactive.png */; };
 		8758C5F41978454800CB8099 /* iPhone_tabBar_favorites_inactive@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8758C5F01978454800CB8099 /* iPhone_tabBar_favorites_inactive@2x.png */; };
+		875A2BC81A727D4100AAEE5E /* push_incoming_call.wav in Resources */ = {isa = PBXBuildFile; fileRef = 875A2BC71A727D4100AAEE5E /* push_incoming_call.wav */; };
+		875A2BC91A727D4100AAEE5E /* push_incoming_call.wav in Resources */ = {isa = PBXBuildFile; fileRef = 875A2BC71A727D4100AAEE5E /* push_incoming_call.wav */; };
 		875A68C01A2E0CDC0041F650 /* ConversationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 875A68BF1A2E0CDC0041F650 /* ConversationDelegate.m */; };
 		875A68C11A2E0CDC0041F650 /* ConversationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 875A68BF1A2E0CDC0041F650 /* ConversationDelegate.m */; };
 		875CD7E2167A14810037396B /* SessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 875CD7E1167A14810037396B /* SessionManager.m */; };
@@ -340,22 +342,10 @@
 		87D4BCF618675368008C2D30 /* ActivityIndicatorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 870F337D168376450090A97F /* ActivityIndicatorViewController.m */; };
 		87D4BCF718675368008C2D30 /* IdentityDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 876CBCBA16F20A88004D542B /* IdentityDelegate.m */; };
 		87D4BCF818675368008C2D30 /* MessageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC39F51709BB36002030D1 /* MessageManager.m */; };
-		87D4BCF918675368008C2D30 /* XMLWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC39FB1709BD8C002030D1 /* XMLWriter.m */; };
 		87D4BCFA18675368008C2D30 /* SessionViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = 8757E17E1827A0BF00D7BDA1 /* SessionViewController_iPhone.m */; };
-		87D4BCFB18675368008C2D30 /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC39FF1709BD8C002030D1 /* SBJsonParser.m */; };
-		87D4BCFC18675368008C2D30 /* SBJsonStreamParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC3A011709BD8C002030D1 /* SBJsonStreamParser.m */; };
-		87D4BCFD18675368008C2D30 /* SBJsonStreamParserAccumulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC3A031709BD8C002030D1 /* SBJsonStreamParserAccumulator.m */; };
 		87D4BCFE18675368008C2D30 /* CallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87224730182D02F30027DA50 /* CallViewController.m */; };
 		87D4BCFF18675368008C2D30 /* IncomingCallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 874408C9182FE873004AD8FC /* IncomingCallViewController.m */; };
-		87D4BD0018675368008C2D30 /* SBJsonStreamParserAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC3A051709BD8C002030D1 /* SBJsonStreamParserAdapter.m */; };
 		87D4BD0118675368008C2D30 /* UIBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 870059ED184F563800B6B826 /* UIBadgeView.m */; };
-		87D4BD0218675368008C2D30 /* SBJsonStreamParserState.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC3A071709BD8C002030D1 /* SBJsonStreamParserState.m */; };
-		87D4BD0318675368008C2D30 /* SBJsonStreamTokeniser.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC3A091709BD8C002030D1 /* SBJsonStreamTokeniser.m */; };
-		87D4BD0418675368008C2D30 /* SBJsonStreamWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC3A0B1709BD8C002030D1 /* SBJsonStreamWriter.m */; };
-		87D4BD0518675368008C2D30 /* SBJsonStreamWriterAccumulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC3A0D1709BD8C002030D1 /* SBJsonStreamWriterAccumulator.m */; };
-		87D4BD0718675368008C2D30 /* SBJsonStreamWriterState.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC3A0F1709BD8C002030D1 /* SBJsonStreamWriterState.m */; };
-		87D4BD0818675368008C2D30 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC3A111709BD8C002030D1 /* SBJsonWriter.m */; };
-		87D4BD0918675368008C2D30 /* RXMLElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC3A141709BD8D002030D1 /* RXMLElement.m */; };
 		87D4BD0A18675368008C2D30 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F09EDE171EBB1A0045F6A6 /* ChatViewController.m */; };
 		87D4BD0B18675368008C2D30 /* ChatMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F09EE0171EBB1B0045F6A6 /* ChatMessageCell.m */; };
 		87D4BD0D18675368008C2D30 /* IdentityLookupDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 87E3CCE6172A814F00084D2F /* IdentityLookupDelegate.m */; };
@@ -606,18 +596,6 @@
 		87FBC7D819BE030C000C4768 /* chat_edited_message_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 87FBC7D519BE00AB000C4768 /* chat_edited_message_icon@2x.png */; };
 		87FBC7D919BE030F000C4768 /* chat_edited_message_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 87FBC7D419BE00AB000C4768 /* chat_edited_message_icon.png */; };
 		87FC39F71709BB39002030D1 /* MessageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC39F51709BB36002030D1 /* MessageManager.m */; };
-		87FC3A151709BD8D002030D1 /* XMLWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC39FB1709BD8C002030D1 /* XMLWriter.m */; };
-		87FC3A161709BD8D002030D1 /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC39FF1709BD8C002030D1 /* SBJsonParser.m */; };
-		87FC3A171709BD8D002030D1 /* SBJsonStreamParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC3A011709BD8C002030D1 /* SBJsonStreamParser.m */; };
-		87FC3A181709BD8D002030D1 /* SBJsonStreamParserAccumulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC3A031709BD8C002030D1 /* SBJsonStreamParserAccumulator.m */; };
-		87FC3A191709BD8D002030D1 /* SBJsonStreamParserAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC3A051709BD8C002030D1 /* SBJsonStreamParserAdapter.m */; };
-		87FC3A1A1709BD8D002030D1 /* SBJsonStreamParserState.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC3A071709BD8C002030D1 /* SBJsonStreamParserState.m */; };
-		87FC3A1B1709BD8D002030D1 /* SBJsonStreamTokeniser.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC3A091709BD8C002030D1 /* SBJsonStreamTokeniser.m */; };
-		87FC3A1C1709BD8D002030D1 /* SBJsonStreamWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC3A0B1709BD8C002030D1 /* SBJsonStreamWriter.m */; };
-		87FC3A1D1709BD8D002030D1 /* SBJsonStreamWriterAccumulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC3A0D1709BD8C002030D1 /* SBJsonStreamWriterAccumulator.m */; };
-		87FC3A1E1709BD8D002030D1 /* SBJsonStreamWriterState.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC3A0F1709BD8C002030D1 /* SBJsonStreamWriterState.m */; };
-		87FC3A1F1709BD8D002030D1 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC3A111709BD8C002030D1 /* SBJsonWriter.m */; };
-		87FC3A201709BD8D002030D1 /* RXMLElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FC3A141709BD8D002030D1 /* RXMLElement.m */; };
 		87FF9862170EDAF10017C627 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 87FF9861170EDAF00017C627 /* libxml2.dylib */; };
 		87FF988E170EDB5D0017C627 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87FF988D170EDB5C0017C627 /* AssetsLibrary.framework */; };
 		87FF9890170EDB6D0017C627 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87FF988F170EDB6C0017C627 /* MobileCoreServices.framework */; };
@@ -886,6 +864,7 @@
 		8758C5EE1978454800CB8099 /* iPhone_tabBar_favorites_active.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPhone_tabBar_favorites_active.png; sourceTree = "<group>"; };
 		8758C5EF1978454800CB8099 /* iPhone_tabBar_favorites_inactive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPhone_tabBar_favorites_inactive.png; sourceTree = "<group>"; };
 		8758C5F01978454800CB8099 /* iPhone_tabBar_favorites_inactive@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone_tabBar_favorites_inactive@2x.png"; sourceTree = "<group>"; };
+		875A2BC71A727D4100AAEE5E /* push_incoming_call.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = push_incoming_call.wav; sourceTree = "<group>"; };
 		875A68BE1A2E0CDC0041F650 /* ConversationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConversationDelegate.h; sourceTree = "<group>"; };
 		875A68BF1A2E0CDC0041F650 /* ConversationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConversationDelegate.m; sourceTree = "<group>"; };
 		875CD7E0167A14810037396B /* SessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SessionManager.h; sourceTree = "<group>"; };
@@ -1170,31 +1149,6 @@
 		87FBC7D519BE00AB000C4768 /* chat_edited_message_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_edited_message_icon@2x.png"; sourceTree = "<group>"; };
 		87FC39F51709BB36002030D1 /* MessageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageManager.m; sourceTree = "<group>"; };
 		87FC39F61709BB37002030D1 /* MessageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageManager.h; sourceTree = "<group>"; };
-		87FC39FA1709BD8C002030D1 /* XMLWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMLWriter.h; sourceTree = "<group>"; };
-		87FC39FB1709BD8C002030D1 /* XMLWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMLWriter.m; sourceTree = "<group>"; };
-		87FC39FD1709BD8C002030D1 /* SBJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJson.h; sourceTree = "<group>"; };
-		87FC39FE1709BD8C002030D1 /* SBJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonParser.h; sourceTree = "<group>"; };
-		87FC39FF1709BD8C002030D1 /* SBJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonParser.m; sourceTree = "<group>"; };
-		87FC3A001709BD8C002030D1 /* SBJsonStreamParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonStreamParser.h; sourceTree = "<group>"; };
-		87FC3A011709BD8C002030D1 /* SBJsonStreamParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonStreamParser.m; sourceTree = "<group>"; };
-		87FC3A021709BD8C002030D1 /* SBJsonStreamParserAccumulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonStreamParserAccumulator.h; sourceTree = "<group>"; };
-		87FC3A031709BD8C002030D1 /* SBJsonStreamParserAccumulator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonStreamParserAccumulator.m; sourceTree = "<group>"; };
-		87FC3A041709BD8C002030D1 /* SBJsonStreamParserAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonStreamParserAdapter.h; sourceTree = "<group>"; };
-		87FC3A051709BD8C002030D1 /* SBJsonStreamParserAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonStreamParserAdapter.m; sourceTree = "<group>"; };
-		87FC3A061709BD8C002030D1 /* SBJsonStreamParserState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonStreamParserState.h; sourceTree = "<group>"; };
-		87FC3A071709BD8C002030D1 /* SBJsonStreamParserState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonStreamParserState.m; sourceTree = "<group>"; };
-		87FC3A081709BD8C002030D1 /* SBJsonStreamTokeniser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonStreamTokeniser.h; sourceTree = "<group>"; };
-		87FC3A091709BD8C002030D1 /* SBJsonStreamTokeniser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonStreamTokeniser.m; sourceTree = "<group>"; };
-		87FC3A0A1709BD8C002030D1 /* SBJsonStreamWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonStreamWriter.h; sourceTree = "<group>"; };
-		87FC3A0B1709BD8C002030D1 /* SBJsonStreamWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonStreamWriter.m; sourceTree = "<group>"; };
-		87FC3A0C1709BD8C002030D1 /* SBJsonStreamWriterAccumulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonStreamWriterAccumulator.h; sourceTree = "<group>"; };
-		87FC3A0D1709BD8C002030D1 /* SBJsonStreamWriterAccumulator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonStreamWriterAccumulator.m; sourceTree = "<group>"; };
-		87FC3A0E1709BD8C002030D1 /* SBJsonStreamWriterState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonStreamWriterState.h; sourceTree = "<group>"; };
-		87FC3A0F1709BD8C002030D1 /* SBJsonStreamWriterState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonStreamWriterState.m; sourceTree = "<group>"; };
-		87FC3A101709BD8C002030D1 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
-		87FC3A111709BD8C002030D1 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
-		87FC3A131709BD8D002030D1 /* RXMLElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RXMLElement.h; sourceTree = "<group>"; };
-		87FC3A141709BD8D002030D1 /* RXMLElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RXMLElement.m; sourceTree = "<group>"; };
 		87FF9861170EDAF00017C627 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		87FF988D170EDB5C0017C627 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		87FF988F170EDB6C0017C627 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
@@ -1303,9 +1257,6 @@
 				874FE11117FD8DA9007A791B /* AppLog.h */,
 				87D72EC017DDEEB000DEB37E /* IconDownloader.m */,
 				87D72EC117DDEEB000DEB37E /* IconDownloader.h */,
-				87FC39F91709BD8C002030D1 /* XMLWriter */,
-				87FC39FC1709BD8C002030D1 /* SBJSON */,
-				87FC3A121709BD8C002030D1 /* RaptureXML */,
 				87F24B5D166FF0C900A5389F /* Utility.h */,
 				87F24B5E166FF0C900A5389F /* Utility.m */,
 				870F337C168376450090A97F /* ActivityIndicatorViewController.h */,
@@ -2068,6 +2019,7 @@
 		87E4DA06180D5082002CA2D4 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				875A2BC71A727D4100AAEE5E /* push_incoming_call.wav */,
 				87E4DA07180D5082002CA2D4 /* calling.wav */,
 				87E4DA0A180D5082002CA2D4 /* message-received.wav */,
 				87E4DA0B180D5082002CA2D4 /* message-send.wav */,
@@ -2122,55 +2074,6 @@
 			);
 			name = Session;
 			sourceTree = "<group>";
-		};
-		87FC39F91709BD8C002030D1 /* XMLWriter */ = {
-			isa = PBXGroup;
-			children = (
-				87FC39FA1709BD8C002030D1 /* XMLWriter.h */,
-				87FC39FB1709BD8C002030D1 /* XMLWriter.m */,
-			);
-			name = XMLWriter;
-			path = 3rdParties/XMLWriter;
-			sourceTree = SOURCE_ROOT;
-		};
-		87FC39FC1709BD8C002030D1 /* SBJSON */ = {
-			isa = PBXGroup;
-			children = (
-				87FC39FD1709BD8C002030D1 /* SBJson.h */,
-				87FC39FE1709BD8C002030D1 /* SBJsonParser.h */,
-				87FC39FF1709BD8C002030D1 /* SBJsonParser.m */,
-				87FC3A001709BD8C002030D1 /* SBJsonStreamParser.h */,
-				87FC3A011709BD8C002030D1 /* SBJsonStreamParser.m */,
-				87FC3A021709BD8C002030D1 /* SBJsonStreamParserAccumulator.h */,
-				87FC3A031709BD8C002030D1 /* SBJsonStreamParserAccumulator.m */,
-				87FC3A041709BD8C002030D1 /* SBJsonStreamParserAdapter.h */,
-				87FC3A051709BD8C002030D1 /* SBJsonStreamParserAdapter.m */,
-				87FC3A061709BD8C002030D1 /* SBJsonStreamParserState.h */,
-				87FC3A071709BD8C002030D1 /* SBJsonStreamParserState.m */,
-				87FC3A081709BD8C002030D1 /* SBJsonStreamTokeniser.h */,
-				87FC3A091709BD8C002030D1 /* SBJsonStreamTokeniser.m */,
-				87FC3A0A1709BD8C002030D1 /* SBJsonStreamWriter.h */,
-				87FC3A0B1709BD8C002030D1 /* SBJsonStreamWriter.m */,
-				87FC3A0C1709BD8C002030D1 /* SBJsonStreamWriterAccumulator.h */,
-				87FC3A0D1709BD8C002030D1 /* SBJsonStreamWriterAccumulator.m */,
-				87FC3A0E1709BD8C002030D1 /* SBJsonStreamWriterState.h */,
-				87FC3A0F1709BD8C002030D1 /* SBJsonStreamWriterState.m */,
-				87FC3A101709BD8C002030D1 /* SBJsonWriter.h */,
-				87FC3A111709BD8C002030D1 /* SBJsonWriter.m */,
-			);
-			name = SBJSON;
-			path = 3rdParties/SBJSON;
-			sourceTree = SOURCE_ROOT;
-		};
-		87FC3A121709BD8C002030D1 /* RaptureXML */ = {
-			isa = PBXGroup;
-			children = (
-				87FC3A131709BD8D002030D1 /* RXMLElement.h */,
-				87FC3A141709BD8D002030D1 /* RXMLElement.m */,
-			);
-			name = RaptureXML;
-			path = 3rdParties/RaptureXML;
-			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 
@@ -2285,6 +2188,7 @@
 				87E4DA11180D5082002CA2D4 /* message-received.wav in Resources */,
 				8730D7701833A62A008D1D37 /* WaitingVideoViewController.xib in Resources */,
 				8757E1BF1827E5A200D7BDA1 /* iPhone_chat_textfield@2x.png in Resources */,
+				875A2BC81A727D4100AAEE5E /* push_incoming_call.wav in Resources */,
 				8730D7D71833A63D008D1D37 /* iPhone_loader_00022.png in Resources */,
 				8730D7B21833A63D008D1D37 /* iPhone_loader_00003@2x.png in Resources */,
 				87E4DA12180D5082002CA2D4 /* message-send.wav in Resources */,
@@ -2493,6 +2397,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				875A2BC91A727D4100AAEE5E /* push_incoming_call.wav in Resources */,
 				87D4BD2C18675368008C2D30 /* iPhone_loader_00015.png in Resources */,
 				87D4BD2D18675368008C2D30 /* iPhone_loader_00007@2x.png in Resources */,
 				8723871119465A57002643D6 /* ActiveSessionTableViewCell.xib in Resources */,
@@ -2727,27 +2632,15 @@
 				870F337F168376450090A97F /* ActivityIndicatorViewController.m in Sources */,
 				876CBCBB16F20A88004D542B /* IdentityDelegate.m in Sources */,
 				87FC39F71709BB39002030D1 /* MessageManager.m in Sources */,
-				87FC3A151709BD8D002030D1 /* XMLWriter.m in Sources */,
 				8757E17F1827A0BF00D7BDA1 /* SessionViewController_iPhone.m in Sources */,
-				87FC3A161709BD8D002030D1 /* SBJsonParser.m in Sources */,
-				87FC3A171709BD8D002030D1 /* SBJsonStreamParser.m in Sources */,
-				87FC3A181709BD8D002030D1 /* SBJsonStreamParserAccumulator.m in Sources */,
 				87224734182D02F30027DA50 /* CallViewController.m in Sources */,
 				874408CB182FE873004AD8FC /* IncomingCallViewController.m in Sources */,
-				87FC3A191709BD8D002030D1 /* SBJsonStreamParserAdapter.m in Sources */,
 				872B1EBC191A1C47000E21C9 /* OfflineManager.m in Sources */,
 				870059EE184F563800B6B826 /* UIBadgeView.m in Sources */,
 				879923941917B05400FBD21E /* Reachability.m in Sources */,
 				872D7E9E1897E19A005D8335 /* QRScannerViewController.m in Sources */,
-				87FC3A1A1709BD8D002030D1 /* SBJsonStreamParserState.m in Sources */,
-				87FC3A1B1709BD8D002030D1 /* SBJsonStreamTokeniser.m in Sources */,
 				87E0355A19AF4B89008A195C /* SystemMessageCell.mm in Sources */,
-				87FC3A1C1709BD8D002030D1 /* SBJsonStreamWriter.m in Sources */,
 				8799239E1917C85500FBD21E /* UIDevice+Networking.m in Sources */,
-				87FC3A1D1709BD8D002030D1 /* SBJsonStreamWriterAccumulator.m in Sources */,
-				87FC3A1E1709BD8D002030D1 /* SBJsonStreamWriterState.m in Sources */,
-				87FC3A1F1709BD8D002030D1 /* SBJsonWriter.m in Sources */,
-				87FC3A201709BD8D002030D1 /* RXMLElement.m in Sources */,
 				87F09EE3171EBB1B0045F6A6 /* ChatViewController.m in Sources */,
 				87F09EE4171EBB1B0045F6A6 /* ChatMessageCell.m in Sources */,
 				87E3CCE7172A814F00084D2F /* IdentityLookupDelegate.m in Sources */,
@@ -2804,28 +2697,16 @@
 				875A68C11A2E0CDC0041F650 /* ConversationDelegate.m in Sources */,
 				87B541D11897E2440038D427 /* QRScannerViewController.m in Sources */,
 				87D4BCF818675368008C2D30 /* MessageManager.m in Sources */,
-				87D4BCF918675368008C2D30 /* XMLWriter.m in Sources */,
 				871AA7F41941DA28003B4400 /* ActiveSessionsViewController.m in Sources */,
 				87D4BCFA18675368008C2D30 /* SessionViewController_iPhone.m in Sources */,
-				87D4BCFB18675368008C2D30 /* SBJsonParser.m in Sources */,
-				87D4BCFC18675368008C2D30 /* SBJsonStreamParser.m in Sources */,
-				87D4BCFD18675368008C2D30 /* SBJsonStreamParserAccumulator.m in Sources */,
 				87D4BCFE18675368008C2D30 /* CallViewController.m in Sources */,
 				87904EA118D07725004BC06C /* AppInfoViewController.m in Sources */,
 				87D4BCFF18675368008C2D30 /* IncomingCallViewController.m in Sources */,
 				879DC5F418C92FE800DA60C0 /* BackgroundingDelegate.m in Sources */,
-				87D4BD0018675368008C2D30 /* SBJsonStreamParserAdapter.m in Sources */,
 				87D4BD0118675368008C2D30 /* UIBadgeView.m in Sources */,
-				87D4BD0218675368008C2D30 /* SBJsonStreamParserState.m in Sources */,
-				87D4BD0318675368008C2D30 /* SBJsonStreamTokeniser.m in Sources */,
 				87E0355B19AF4B89008A195C /* SystemMessageCell.mm in Sources */,
-				87D4BD0418675368008C2D30 /* SBJsonStreamWriter.m in Sources */,
 				87852D061A6FB0B200DB1D36 /* UrbanAirshipPushNotificationReceiver.m in Sources */,
-				87D4BD0518675368008C2D30 /* SBJsonStreamWriterAccumulator.m in Sources */,
-				87D4BD0718675368008C2D30 /* SBJsonStreamWriterState.m in Sources */,
 				8799239F1917C85500FBD21E /* UIDevice+Networking.m in Sources */,
-				87D4BD0818675368008C2D30 /* SBJsonWriter.m in Sources */,
-				87D4BD0918675368008C2D30 /* RXMLElement.m in Sources */,
 				87D4BD0A18675368008C2D30 /* ChatViewController.m in Sources */,
 				873D174318CD31E100FD88C3 /* HTTPDownloader.m in Sources */,
 				87D4BD0B18675368008C2D30 /* ChatMessageCell.m in Sources */,

@@ -580,4 +580,32 @@ static const short _base64DecodingTable[256] = {
     
     return ret;
 }
+
++ (NSDictionary*) dictionaryFromJSON:(NSString*) json
+{
+    NSDictionary* ret = nil;
+    if (json.length > 0)
+    {
+        NSData* data = [json dataUsingEncoding:NSUTF8StringEncoding];
+        if (data)
+        {
+            ret = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+        }
+    }
+    return ret;
+}
+
++ (NSString*) jsonFromDictionary:(NSDictionary*) dictionary
+{
+    NSString* ret = nil;
+    
+    if (dictionary.count > 0)
+    {
+        NSData* data = [NSJSONSerialization dataWithJSONObject:dictionary options:0 error:nil];
+        if (data)
+            ret = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    }
+    
+    return ret;
+}
 @end

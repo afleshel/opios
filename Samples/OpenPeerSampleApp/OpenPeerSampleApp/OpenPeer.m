@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2012, SMB Phone Inc.
+ Copyright (c) 2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -109,6 +109,7 @@
 - (void) preSetup
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Pre setup");
+    
     //Create all delegates required for communication with core
     [self createDelegates];
     
@@ -124,10 +125,12 @@
         //Set persistent stores
         NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
         NSString *dataPathDirectory = [libraryPath stringByAppendingPathComponent:@"db"];
+        
         [[HOPModelManager sharedModelManager] setDataPath:dataPathDirectory backupData:NO];
      
         //Set settigns delegate
         [[HOPSettings sharedSettings] setup];
+        
         if ([Utility isRuningForTheFirstTime])
             [[HOPSettings sharedSettings] applyDefaults];
         
@@ -153,9 +156,11 @@
 - (void) finishPreSetup
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Pre setup finished");
+    
     if (![[HOPModelManager sharedModelManager] getLastLoggedInUser])
     {
         OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"There is no logged in user");
+        
         if ([[NSUserDefaults standardUserDefaults] boolForKey: settingsKeyQRScannerShownAtStart])
             [[self mainViewController] showQRScanner]; //Show QR scanner if user wants to change settings by reading QR code
         else if ([[NSUserDefaults standardUserDefaults] boolForKey:settingsKeySplashScreenAllowsQRScannerGesture])
@@ -169,6 +174,7 @@
         [self setup];
     }
 }
+
 /**
  Initializes the open peer stack. After initialization succeeds, login screen is displayed, or user relogin started.
  @param inMainViewController MainViewController Input main view controller.
@@ -176,9 +182,7 @@
 - (void) setup
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Started setup");
-    //If authorized application id is missing, generate it 
-//    if ([[[HOPSettings sharedSettings] getAuthorizedApplicationId] length] == 0)
-//        [[HOPSettings sharedSettings] storeAuthorizedApplicationId:[[OpenPeer sharedOpenPeer] authorizedApplicationId]];
+
     [self refreshAuthorizedApplicationId];
     
     long secondsTillExpire = [HOPStack getExpiryForAuthorizedApplicationID:[[HOPSettings sharedSettings] getAuthorizedApplicationId]];

@@ -34,7 +34,12 @@
 #import <OpenPeerSDK/HOPConversationRecord+External.h>
 #import <OpenPeerSDK/HOPRolodexContact+External.h>
 #import <OpenPeerSDK/HOPAccount.h>
+#import <OpenPeerSDK/HOPSystemMessage.h>
+#import <OpenPeerSDK/HOPConversation.h>
+#import <OpenPeerSDK/HOPCall.h>
 #import <Parse/Parse.h>
+#import "MessageManager.h"
+#import "Utility.h"
 
 @implementation ParsePushNotificationSender
 
@@ -65,9 +70,12 @@
     [currentInstallation saveInBackground];
 }
 
-- (void) sendPushNotificationMessage:(NSString*) message missedCall:(BOOL) missedCall recipients:(NSArray*) recipients
+- (void) sendPushNotificationMessage:(NSString*) message outgoingCall:(BOOL) outgoingCall recipients:(NSArray*) recipients
 {
-    NSDictionary *data = [self createPushMessage:message missedCall:missedCall recipients:recipients];
+    [super sendPushNotificationMessage:message outgoingCall:outgoingCall recipients:recipients];
+    
+    NSDictionary *data = [self createPushMessage:message missedCall:outgoingCall recipients:recipients];
+    
     for (HOPRolodexContact* recipient in recipients)
     {
         PFQuery *pushQuery = [PFInstallation query];
@@ -80,11 +88,13 @@
     }
 }
 
-- (void) sendRichPushNotificationMessage:(HOPMessageRecord*) message missedCall:(BOOL) missedCall recipients:(NSArray*) recipients
+- (void) sendRichPushNotificationMessage:(HOPMessageRecord*) message conversation:(HOPConversation*) conversation recipients:(NSArray*) recipients
 {
+    [super sendRichPushNotificationMessage:message conversation:conversation recipients:recipients];
+    
     for (HOPRolodexContact* recipient in recipients)
     {
-        NSDictionary* parameters = [self createRichPushMessage:message recipient:recipient recipients:recipients];
+        NSDictionary* parameters = [self createRichPushMessage:message conversation:conversation recipient:recipient recipients:recipients];
         
         if (parameters.count > 0)
         {
@@ -96,6 +106,8 @@
                  }
                  else
                  {
+                     [self onMessageSent:message.messageID];
+                     [[MessageManager sharedMessageManager] updateMessageStatus:message];
                      OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Parse push sent");
                  }
              }];
@@ -104,18 +116,53 @@
 }
 
 
-- (NSDictionary*) createRichPushMessage:(HOPMessageRecord*) message recipient:(HOPRolodexContact*) recipient recipients:(NSArray*) recipients
+- (NSDictionary*) createRichPushMessage:(HOPMessageRecord*) message conversation:(HOPConversation*) conversation recipient:(HOPRolodexContact*) recipient recipients:(NSArray*) recipients
 {
-    NSDictionary* ret = nil;
+    NSMutableDictionary* dict = [NSMutableDictionary new];
     
     NSMutableArray* tempArray = [NSMutableArray arrayWithArray:recipients];
     [tempArray removeObject:recipient];
     NSString* peerURIs = [self getListOfRecipientsFromPeerURIsArray:tempArray];
     
-    NSString* extras = [NSString stringWithFormat:@"{\"conversationId\":\"%@\",\"conversationType\":\"%@\",\"date\":\"%f\",\"location\":\"%@\",\"messageId\":\"%@\",\"messageType\":\"%@\",\"peerURI\":\"%@\",\"peerURIs\":\"%@\",\"replacesMessageId\":\"%@\",\"senderName\":\"%@\"}",message.session.sessionID,message.session.type,[message.date timeIntervalSince1970],self.location,message.messageID,message.type,self.peerURI,peerURIs,message.replacedMessageID,[[HOPAccount sharedAccount] getFullName]];
+    [dict setObject:message.session.sessionID forKey:@"conversationId"];
+    [dict setObject:message.session.type forKey:@"conversationType"];
+    [dict setObject:[NSNumber numberWithDouble:[message.date timeIntervalSince1970]] forKey:@"date"];
+    [dict setObject:self.location forKey:@"location"];
+    [dict setObject:message.messageID forKey:@"messageId"];
+    [dict setObject:message.type forKey:@"messageType"];
+    [dict setObject:self.peerURI forKey:@"peerURI"];
+    [dict setObject:peerURIs forKey:@"peerURIs"];
+    [dict setObject:[[HOPAccount sharedAccount] getFullName] forKey:@"senderName"];
+    [dict setObject:[recipient getPeerURI] forKey:@"to"];
     
-    ret = [NSDictionary dictionaryWithObjectsAndKeys:[recipient getPeerURI],@"to", message.text, @"alert", extras, @"extras", nil];
+    if ([message.type isEqualToString:[HOPSystemMessage getMessageType]])
+    {
+        //TODO: Go through all keys, find these which starts with $ and replace them.
+        if ([message.text rangeOfString:@"$id"].length != 0)
+        {
+            message.text = [message.text stringByReplacingOccurrencesOfString:@"$id" withString:@"id"];
+        }
+        
+        NSDictionary* jsonDict = [Utility dictionaryFromJSON:message.text];
+        if (jsonDict)
+        {
+            [dict addEntriesFromDictionary:jsonDict];
+            
+            NSString* callStatus = [dict valueForKeyPath:@"system.callStatus.status"];
+            if (callStatus.length > 0)
+            {
+                if ([callStatus isEqualToString:@"placed"])
+                    [dict setObject:@"Incoming call" forKey:@"alert"];
+                else if ([callStatus isEqualToString:@"hungup"])
+                    [dict setObject:@"Missed call" forKey:@"alert"];
+            } 
+        }
+    }
+    else
+    {
+        [dict setObject:message.text forKey:@"alert"];
+    }
     
-    return ret;
+    return dict;
 }
 @end

@@ -35,28 +35,29 @@
 @class HOPContact;
 @class HOPMessageRecord;
 @class HTTPDownloaderDelegate;
+@class HOPSystemMessage;
 
 @interface APNSManager : NSObject
 
 @property (nonatomic, strong) NSData* deviceToken;
 @property  (nonatomic) int pushesToSend;
-@property   (nonatomic) BOOL goingToBackground;
 
 @property (nonatomic, copy) NSString* pushProvider;
 
 + (id) sharedAPNSManager;
 
 - (void) prepare;
-- (void) prepareUrbanAirShip;
 - (void) registerDeviceToken:(NSData*) devToken;
 
 - (void) getAllMessages;
 - (void) handleExistingMessages;
 - (void) handleAPNS:(NSDictionary *)apnsInfo;
 - (void) setBadgeNumber:(NSInteger) numberOfUnreadMessages;
-- (void) sendPushNotificationMessage:(NSString*) message missedCall:(BOOL) missedCall recipients:(NSArray*) recipients;
-- (void) sendRichPushNotificationForMessage:(HOPMessageRecord*) message missedCall:(BOOL) missedCall participants:(NSArray*) participants;
+- (void) sendPushNotificationMessage:(NSString*) message outgoingCall:(BOOL) outgoingCall recipients:(NSArray*) recipients;
+- (void) sendRichPushNotificationForMessage:(HOPMessageRecord*) message conversation:(HOPConversation*) conversation participants:(NSArray*) participants;
 - (BOOL) areTherePushesForSending;
 
 - (void) registerDeviceTokenWithOpenPeer;
+
+- (NSString*) getSelfDeviceToken;
 @end

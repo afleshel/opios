@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2012, SMB Phone Inc.
+ Copyright (c) 2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -592,10 +592,6 @@ using namespace openpeer::core;
     return _openPeerAccount;
 }
 #pragma mark - SDK methods
-- (BOOL) isLoggedIn
-{
-    return self.openPeerAccount.reloginInfo.length > 0;
-}
 - (void) updateLoggedInAccount
 {
     HOPOpenPeerAccount* previousLoggedInHomeUser = [[HOPModelManager sharedModelManager] getLastLoggedInUser];
@@ -619,33 +615,42 @@ using namespace openpeer::core;
 {
     HOPOpenPeerAccount* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInUser];
     homeUser.loggedIn = [NSNumber numberWithBool:NO];
+    self.openPeerAccount = nil;
     [[HOPModelManager sharedModelManager] saveContext];
 }
-- (void) addIdentity:(HOPIdentity*) identity
+
+- (BOOL) addIdentity:(HOPIdentity*) identity
 {
-    HOPIdentityContact* homeIdentityContact = [identity getSelfIdentityContact];
-    
-    HOPAssociatedIdentity*  associatedIdentity = [[HOPModelManager sharedModelManager] getAssociatedIdentityForBaseIdentityURI:[identity getBaseIdentityURI] homeUserStableId:[[HOPAccount sharedAccount] getStableID]];
-    
-    if (!associatedIdentity)
+    BOOL ret = NO;
+    if (self.openPeerAccount)
     {
-        //associatedIdentity = (HOPAssociatedIdentity*)[[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPAssociatedIdentity"];
-        associatedIdentity = [[HOPModelManager sharedModelManager] addAssociatedIdentityForBaseIdentityURI:[identity getBaseIdentityURI] domain:[identity getIdentityProviderDomain] name:[identity getBaseIdentityURI]  selfRolodexProfileProfile:homeIdentityContact.rolodexContact];
+        HOPIdentityContact* homeIdentityContact = [identity getSelfIdentityContact];
+        
+        HOPAssociatedIdentity*  associatedIdentity = [[HOPModelManager sharedModelManager] getAssociatedIdentityForBaseIdentityURI:[identity getBaseIdentityURI] homeUserStableId:[self getStableID]];
+        
+        if (!associatedIdentity)
+        {
+            associatedIdentity = [[HOPModelManager sharedModelManager] addAssociatedIdentityForBaseIdentityURI:[identity getBaseIdentityURI] domain:[identity getIdentityProviderDomain] name:[identity getBaseIdentityURI]  selfRolodexProfileProfile:homeIdentityContact.rolodexContact];
+        }
+        else
+        {
+            associatedIdentity.selfRolodexContact = homeIdentityContact.rolodexContact;
+            associatedIdentity.account = self.openPeerAccount;
+            homeIdentityContact.rolodexContact.associatedIdentityForHomeUser = associatedIdentity;
+        }
+        [[HOPModelManager sharedModelManager] saveContext];
+        ret = YES;
     }
-    else
-    {
-        associatedIdentity.selfRolodexContact = homeIdentityContact.rolodexContact;
-        associatedIdentity.account = self.openPeerAccount;
-        homeIdentityContact.rolodexContact.associatedIdentityForHomeUser = associatedIdentity;
-    }
-    [[HOPModelManager sharedModelManager] saveContext];
+    
+    return ret;
 }
+
 - (NSString*) getPeerURI
 {
     return self.openPeerAccount.contact.publicPeerFile.peerURI;
 }
 - (NSString*) getFullName
 {
-    return [[[HOPModelManager sharedModelManager] getLastLoggedInUser] getFullName];
+    return [self.openPeerAccount getFullName];
 }
 @end

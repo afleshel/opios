@@ -32,7 +32,7 @@
 #import <Foundation/Foundation.h>
 #import <OpenpeerSDK/HOPProtocols.h>
 
-@class HOPContact;
+//@class HOPContact;
 @class HOPRolodexContact;
 @class HOPConversationRecord;
 @class HOPMessageRecord;
@@ -81,7 +81,7 @@
 
 - (void) onParticipantsInConversationUpdate:(HOPConversation*) conversation numberOfAddedParticipants:(int) numberOfAddedParticipants;
 
-- (HOPConversation *)getConversationForID:(NSString *)conversationID threadType:(NSString *)threadType sender:(HOPContact *)sender items:(NSArray *)items;
+- (HOPConversation *)getConversationForID:(NSString *)conversationID threadType:(NSString *)threadType sender:(HOPRolodexContact *)sender items:(NSArray *)items;
 
 - (void) removeSelfFromConversation:(HOPConversation*) conversation;
 @end

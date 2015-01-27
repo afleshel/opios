@@ -1,4 +1,4 @@
-/*
+    /*
  
  Copyright (c) 2012, SMB Phone Inc.
  All rights reserved.
@@ -44,7 +44,6 @@
 #import "MessageManager.h"
 
 #ifdef APNS_ENABLED
-#import "APNSInboxManager.h"
 #import "APNSManager.h"
 #endif
 //SDK
@@ -293,11 +292,9 @@
  */
 - (void) onIdentityAssociationFinished:(HOPIdentity*) identity
 {
-    if ([[HOPAccount sharedAccount] isLoggedIn])
-    {
-        [[HOPAccount sharedAccount] addIdentity:identity];
+    if ([[HOPAccount sharedAccount] addIdentity:identity])
         [self.associatingIdentitiesDictionary removeAllObjects];
-    }
+        //[self.associatingIdentitiesDictionary removeObjectForKey:[identity getIdentityURI]];
     
     [self onUserLoggedIn];
 }

@@ -42,9 +42,6 @@
 #import "OpenPeer.h"
 #import "MainViewController.h"
 
-#import "XMLWriter.h"
-#import "RXMLElement.h"
-
 #import <OpenpeerSDK/Openpeer.h>
 #import <OpenPeerSDK/HOPConversation.h>
 #import <OpenPeerSDK/HOPMessageRecord+External.h>
@@ -88,7 +85,15 @@
 {
     HOPMessageRecord* ret = nil;
     
-    HOPCallSystemMessage* callSystemMessage = [[HOPCallSystemMessage alloc] initWithMessageType:(HOPCallSystemMessageType)messageType callee:contact errorCode:reasonCode];
+    //HOPCallSystemMessage* callSystemMessage = [[HOPCallSystemMessage alloc] initWithMessageType:(HOPCallSystemMessageType)messageType callee:contact errorCode:reasonCode];
+    
+    NSString* mediaType = [conversation.activeCall hasVideo] ? @"video" : @"audio";
+    NSString* callID = [conversation.activeCall getCallID];
+    if (!callID)
+        callID = @"";
+    
+    HOPCallSystemMessage* callSystemMessage = [[HOPCallSystemMessage alloc] initWithMessageType:(HOPCallSystemMessageType)messageType mediaType:mediaType callID:callID callee:contact errorCode:reasonCode];
+    
     NSString* messageBody = callSystemMessage.jsonMessage;
     if ([messageBody length] > 0)
     {
@@ -180,7 +185,7 @@
         {
             OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Message %@ cannot be sent because account is not in the ready state.",messageRecord.messageID);
         #ifdef APNS_ENABLED
-            [[APNSManager sharedAPNSManager]sendRichPushNotificationForMessage:message missedCall:NO  participants:[conversation getParticipants]];
+            [[APNSManager sharedAPNSManager]sendRichPushNotificationForMessage:messageRecord conversation:conversation  participants:[conversation getParticipants]];
             //[[APNSManager sharedAPNSManager]sendRichPushNotificationForMessage:messageRecord missedCall:NO participantsPeerURIs:@[]];
         #endif
         }
@@ -210,7 +215,7 @@
 
     if (isTextMessage)
     {
-        HOPMessageRecord* messageObj = nil;
+        //HOPMessageRecord* messageObj = nil;
         if ([message.replacedMessageID length] > 0)
         {
             [[HOPModelManager sharedModelManager] replaceMessageWithID:message.replacedMessageID newMessageID:message.messageID messageText:message.text];
@@ -263,20 +268,6 @@
     }
 }
 
-- (SystemMessageTypes) getTypeForSystemMessage:(HOPMessageRecord*) message
-{
-    SystemMessageTypes ret = SystemMessage_None;
-    if ([message.type isEqualToString:messageTypeSystem])
-    {
-        RXMLElement *eventElement = [RXMLElement elementFromXMLString:message.text encoding:NSUTF8StringEncoding];
-        if ([eventElement.tag isEqualToString:TagEvent])
-        {
-            ret = (SystemMessageTypes) [[eventElement child:TagId].text intValue];
-        }
-    }
-    return ret;
-}
-
 
 - (void) resendMessages
 {
@@ -309,4 +300,16 @@
     }
 }
 
+- (void)updateMessageStatus:(HOPMessageRecord *)messageRecord
+{
+    messageRecord.outgoingMessageStatus = HOPConversationThreadMessageDeliveryStateSent;
+    
+    HOPConversation* conversation = [messageRecord.session getConversation];
+    if (conversation)
+    {
+        [[HOPModelManager sharedModelManager] updateMessageStateForConversation:conversation lastDeliveryState:HOPConversationThreadMessageDeliveryStateSent];
+        
+        [[HOPModelManager sharedModelManager] saveContext];
+    }
+}
 @end

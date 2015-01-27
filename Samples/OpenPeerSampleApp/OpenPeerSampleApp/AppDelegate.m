@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2012, SMB Phone Inc.
+ Copyright (c) 2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -32,15 +32,14 @@
 #import "AppDelegate.h"
 #import "OpenPeer.h"
 #import "MainViewController.h"
-#import "LoginManager.h"
-#import "Utility.h"
 #import <OpenPeerSDK/HOPBackgrounding.h>
 #import <OpenPeerSDK/HOPStack.h>
-#import <OpenPeerSDK/HOPModelManager.h>
 #import "BackgroundingDelegate.h"
 #import "SessionManager.h"
 #import "OfflineManager.h"
 #import "Logger.h"
+#import "Utility.h"
+
 #ifdef APNS_ENABLED
 #import "APNSManager.h"
 #endif
@@ -68,50 +67,24 @@
     
 
 #ifdef APNS_ENABLED
-    
     NSDictionary *apnsInfo = [launchOptions valueForKey:@"UIApplicationLaunchOptionsRemoteNotificationKey"];
+    
+    [[APNSManager sharedAPNSManager] prepare];
     
     if ([apnsInfo count] > 0)
     {
         [[APNSManager sharedAPNSManager] handleAPNS:apnsInfo];
     }
     
-    if ([application respondsToSelector:@selector(registerUserNotificationSettings:)])
-    {
-#ifdef __IPHONE_8_0
-        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIRemoteNotificationTypeBadge
-                                                                                             |UIRemoteNotificationTypeSound
-                                                                                             |UIRemoteNotificationTypeAlert) categories:nil];
-        [application registerUserNotificationSettings:settings];
-#endif
-    }
-    else
-    {
-        UIRemoteNotificationType myTypes = UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound;
-        [application registerForRemoteNotificationTypes:myTypes];
-    }
-    
-    [[APNSManager sharedAPNSManager] prepare];
-    
 #endif
     return YES;
 }
 
-- (void)applicationWillResignActive:(UIApplication *)application
-{
-    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
-    
-    
-}
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
     if ([[HOPStack sharedStack] isStackReady])
     {
-        // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-        // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-        
         OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Application did enter background.");
         
         [[OpenPeer sharedOpenPeer] setAppEnteredBackground:YES];
@@ -151,7 +124,6 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Application did become active");
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -163,35 +135,27 @@
 }
 
 #ifdef APNS_ENABLED
+
 #ifdef __IPHONE_8_0
 - (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
 {
     //register to receive notifications
     [application registerForRemoteNotifications];
 }
-
-- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo completionHandler:(void(^)())completionHandler
-{
-    //handle the actions
-    if ([identifier isEqualToString:@"declineAction"]){
-    }
-    else if ([identifier isEqualToString:@"answerAction"]){
-    }
-}
 #endif
+
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
     if (deviceToken)
     {
+        [[APNSManager sharedAPNSManager] setDeviceToken:deviceToken];
+        
         NSString* hexString = [Utility hexadecimalStringForData:deviceToken];
         
         if ([hexString length] > 0)
         {
             OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Registered push notification deviceToken:%@",hexString);
 
-            [[APNSManager sharedAPNSManager] setDeviceToken:deviceToken];
-            
-            [[OpenPeer sharedOpenPeer] setDeviceToken:hexString];
         }
         else
         {
@@ -222,12 +186,6 @@
     {
         [[APNSManager sharedAPNSManager] handleAPNS:userInfo];
     }
-}
-
-
-- (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler
-{
-    
 }
 
 - (void)handleNotification:(NSDictionary *)notification applicationState:(UIApplicationState)state

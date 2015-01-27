@@ -36,11 +36,12 @@
 #import <OpenPeerSDK/HOPUtility.h>
 #import "Utility.h"
 #import "HTTPDownloader.h"
-#import "SBJsonParser.h"
 
 @interface PushNotificationSender ()
 
 @property (nonatomic, strong) NSMutableDictionary* dictionaryOfHTTPRequests;
+
+- (BOOL) sendHTTPRequestForDictionary:(NSDictionary*) dict peerURI:(NSString*) peerURI;
 
 @end
 
@@ -53,17 +54,36 @@
     if (self)
     {
         self.dictionaryOfHTTPRequests = [NSMutableDictionary new];
+        self.pushesToSend = 0;
     }
     return self;
 }
 
 - (void) prepare
 {
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Prepare PushNotificationSender");
     
+    UIApplication* application = [UIApplication sharedApplication];
+    if ([application respondsToSelector:@selector(registerUserNotificationSettings:)])
+    {
+#ifdef __IPHONE_8_0
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIRemoteNotificationTypeBadge
+                                                                                             |UIRemoteNotificationTypeSound
+                                                                                             |UIRemoteNotificationTypeAlert) categories:nil];
+        [application registerUserNotificationSettings:settings];
+#endif
+    }
+    else
+    {
+        UIRemoteNotificationType myTypes = UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound;
+        [application registerForRemoteNotificationTypes:myTypes];
+    }
 }
 
 - (void) registerDeviceToken:(NSData*) inDeviceToken peerURI:(NSString*) inPeerURI
 {
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelBasic, @"Registering device token, %@, for peer URI %@",[Utility hexadecimalStringForData:inDeviceToken],inPeerURI);
+    
     if (inDeviceToken.length > 0)
         self.deviceToken = inDeviceToken;
     
@@ -73,11 +93,11 @@
     self.location = [[HOPAccount sharedAccount] isCoreAccountCreated] && ([[HOPAccount sharedAccount] getState].state == HOPAccountStateReady) ? [[HOPAccount sharedAccount] getLocationID] : @"";
 }
 
-- (NSDictionary*) createPushMessage:(NSString*) message missedCall:(BOOL) missedCall recipients:(NSArray*) recipients
+- (NSDictionary*) createPushMessage:(NSString*) message incomingCall:(BOOL) incomingCall recipients:(NSArray*) recipients
 {
     NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
                           message, @"alert",
-                          (missedCall ? @"ringing.caf" : @"message-received.wav"), @"sound",
+                          (incomingCall ? @"push_incoming_call.wav" : @"message-received.wav"), @"sound",
                           self.location, @"location",
                           self.peerURI, @"peerURI",
                           nil];
@@ -85,13 +105,14 @@
     return data;
 }
 
-- (void) sendPushNotificationMessage:(NSString*) message missedCall:(BOOL) missedCall recipients:(NSArray*) recipients
+- (void) sendPushNotificationMessage:(NSString*) message outgoingCall:(BOOL) outgoingCall recipients:(NSArray*) recipients
 {
-    
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Sending push notification, \"%@\"",message);
 }
-- (void) sendRichPushNotificationMessage:(HOPMessageRecord*) message missedCall:(BOOL) missedCall recipients:(NSArray*) recipients
+
+- (void) sendRichPushNotificationMessage:(HOPMessageRecord*) message conversation:(HOPConversation*) conversation recipients:(NSArray*) recipients
 {
-    
+    self.pushesToSend++;
 }
 
 - (NSString *)getLocation
@@ -117,7 +138,7 @@
     return peerURIs;
 }
 
-- (NSDictionary*) createRichPushMessage:(HOPMessageRecord*) message recipient:(HOPRolodexContact*) recipient recipients:(NSArray*) recipients
+- (NSDictionary*) createRichPushMessage:(HOPMessageRecord*) message conversation:(HOPConversation*) conversation recipient:(HOPRolodexContact*) recipient recipients:(NSArray*) recipients
 {
     return nil;
 }
@@ -132,6 +153,18 @@
         ret = [[HOPModelManager sharedModelManager] getPushNotificationDataForPeerURI:peerURI];
     }
     return ret;
+}
+
+- (BOOL) sendHTTPRequestForDictionary:(NSDictionary*) dict peerURI:(NSString*) peerURI
+{
+    NSString* json = [Utility jsonFromDictionary:dict];
+    
+    HTTPDownloader* request = [[HTTPDownloader alloc] initDownloadFromURL:[[Settings sharedSettings] getDeviceTokenUploadURL] data:json post:YES];
+    
+    request.delegate = self;
+    [self.dictionaryOfHTTPRequests setObject:request forKey:peerURI];
+    
+    return [request startDownload];
 }
 
 - (void) requestDeviceTokenForPeerURI:(NSString*) peerURI
@@ -150,26 +183,15 @@
         
         [dictRoot setObject:dictData forKey:@"request"];
         
-        NSString* json = nil;
-        NSError* error = nil;
-        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictRoot
-                                                           options:0 // Pass 0 if you don't care about the readability of the generated string
-                                                             error:&error];
-        
-        if (!jsonData)
-        {
-            OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"JSON data serialization has failed with an error: %@", error);
-        } else
-        {
-            json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-        }
+        /*NSString* json = [Utility jsonFromDictionary:dictData];
         
         HTTPDownloader* request = [[HTTPDownloader alloc] initDownloadFromURL:[[Settings sharedSettings] getDeviceTokenDownloadURL] data:json post:YES];
         
         request.delegate = self;
         [self.dictionaryOfHTTPRequests setObject:request forKey:peerURI];
         
-        if (![request startDownload])
+        if (![request startDownload])*/
+        if (![self sendHTTPRequestForDictionary:dictRoot peerURI:peerURI])
         {
             OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Device token retrievel request is not sent.");
             [self.dictionaryOfHTTPRequests removeObjectForKey:peerURI];
@@ -178,6 +200,9 @@
     
 }
 
+/**
+ *  Register deviceToken, with OpenPeer server, for logged in user.
+ */
 - (void) registerDeviceTokenWithOpenPeer
 {
     NSString* peerURI = [[HOPModelManager sharedModelManager] getPeerURIForHomeUser];
@@ -204,44 +229,36 @@
             
             [dictRoot setObject:dictData forKey:@"request"];
             
-            NSString* json = nil;
-            NSError* error = nil;
-            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictRoot
-                                                               options:0 // Pass 0 if you don't care about the readability of the generated string
-                                                                 error:&error];
+            /*NSString* json = [Utility jsonFromDictionary:dictRoot];
             
-            if (!jsonData)
-            {
-                OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"JSON data serialization has failed with an error: %@", error);
-            } else
-            {
-                json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-            }
-
             HTTPDownloader* request = [[HTTPDownloader alloc] initDownloadFromURL:[[Settings sharedSettings] getDeviceTokenUploadURL] data:json post:YES];
             
             request.delegate = self;
             [self.dictionaryOfHTTPRequests setObject:request forKey:peerURI];
             
-            if (![request startDownload])
+            if (![request startDownload])*/
+            if (![self sendHTTPRequestForDictionary:dictRoot peerURI:peerURI])
             {
                 [self.dictionaryOfHTTPRequests removeObjectForKey:peerURI];
                 OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Device token, %@, registration request is not sent via %@.",self.deviceToken,@"http://push-hack.hcs-stack-v2-i7957106-7.hcs.io/device-associate-set");
             }
             else
             {
-                OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Registering device token, %@, JSON: /n is sent via %@.",self.deviceToken,json,@"http://push-hack.hcs-stack-v2-i7957106-7.hcs.io/device-associate-set");
+                OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Registering device token, %@, JSON: /n is sent via %@.",self.deviceToken,[Utility jsonFromDictionary:dictRoot],@"http://push-hack.hcs-stack-v2-i7957106-7.hcs.io/device-associate-set");
             }
         }
     }
+}
+
+- (void)onDeviceTokenReceivedForPeerURI:(NSString *)peerURI
+{
+    
 }
 
 #pragma mark - HTTPDownloaderDelegate
 
 - (void) httpDownloader:(HTTPDownloader*) downloader downloaded:(NSString*) downloaded
 {
-    NSDictionary* responseDictionary = nil;
-    
     NSString* peerURI = nil;
     
     for (NSString* key in [self.dictionaryOfHTTPRequests allKeys])
@@ -255,8 +272,7 @@
     
     if ([downloaded length] > 0 && [downloaded rangeOfString:@">404<"].location == NSNotFound)
     {
-        SBJsonParser* parser = [[SBJsonParser alloc] init];
-        responseDictionary = [parser objectWithString: downloaded];
+        NSDictionary* responseDictionary = [Utility dictionaryFromJSON:downloaded];
         if ([responseDictionary count] > 0)
         {
             NSDictionary* result = [responseDictionary objectForKey:@"result"];
@@ -320,4 +336,8 @@
         [self.dictionaryOfHTTPRequests removeObjectForKey:peerURI];
 }
 
+- (void) onMessageSent:(NSString*) messageID
+{
+    self.pushesToSend--;
+}
 @end

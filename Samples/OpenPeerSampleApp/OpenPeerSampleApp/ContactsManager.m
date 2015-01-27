@@ -40,7 +40,6 @@
 #import "OpenPeer.h"
 #import "AppConsts.h"
 #import "Utility.h"
-#import "SBJsonParser.h"
 #import <OpenpeerSDK/HOPIdentityLookup.h>
 #import <OpenpeerSDK/HOPIdentityLookupInfo.h>
 #import <OpenpeerSDK/HOPIdentity.h>

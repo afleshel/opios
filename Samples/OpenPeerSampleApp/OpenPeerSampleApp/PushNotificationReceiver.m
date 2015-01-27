@@ -35,9 +35,10 @@
 #import <OpenPeerSDK/HOPRolodexContact+External.h>
 #import <OpenPeerSDK/HOPUtility.h>
 #import <OpenPeerSDK/HOPConversation.h>
+#import <OpenPeerSDK/HOPSystemMessage.h>
 #import "OpenPeer.h"
 #import "MainViewController.h"
-
+#import "Utility.h"
 #import "SessionManager.h"
 
 @implementation PushNotificationReceiver
@@ -79,13 +80,32 @@
             
             if (conversation)
             {
-                
                 NSString* messageID = [richPushDictionary objectForKey:@"messageId"];
                 NSString* messageText = [richPushDictionary objectForKey:@"message"];
                 NSString* location = [richPushDictionary objectForKey:@"location"];
                 NSNumber* timeInterval = [richPushDictionary objectForKey:@"date"];
                 NSString* replacesMessageID = [richPushDictionary objectForKey:@"replacesMessageId"];
                 
+                if ([messageType isEqualToString:[HOPSystemMessage getMessageType]])
+                {
+                    NSDictionary* systemDict = [richPushDictionary objectForKey:@"system"];
+                    if (systemDict)
+                    {
+                        NSDictionary* callDict = [systemDict objectForKey:@"callStatus"];
+                        
+                        if (callDict)
+                        {
+                            NSString* callID = [callDict objectForKey:@"id"];
+                            NSMutableDictionary* mutD = [NSMutableDictionary dictionaryWithDictionary:callDict];
+                            [mutD removeObjectForKey:@"id"];
+                            [mutD setObject:callID forKey:@"$id"];
+                            NSDictionary* callStatusDict = [NSDictionary dictionaryWithObject:mutD forKey:@"callStatus"];
+                            NSDictionary* sysStatusDict = [NSDictionary dictionaryWithObject:callStatusDict forKey:@"system"];
+                            messageText = [Utility jsonFromDictionary:sysStatusDict];
+                        }
+                    }
+                }
+
                 NSDate* date = [NSDate dateWithTimeIntervalSince1970:timeInterval.doubleValue];
                 
                 if ([messageID length] > 0 && ([messageText length] > 0 || [replacesMessageID length] > 0)  && date)
@@ -100,7 +120,7 @@
                     }
                     else
                     {
-                        HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:messageText type:messageTypeText date:date conversation:conversation contact:contact messageId:messageID];
+                        HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:messageText type:messageType date:date conversation:conversation contact:contact messageId:messageID];
                         
                         
                         if (messageObj)

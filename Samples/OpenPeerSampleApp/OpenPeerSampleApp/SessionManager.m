@@ -133,12 +133,11 @@
         {
             OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Making a call for the session <%p>", inConversation);
             
-            [[MessageManager sharedMessageManager] sendCallSystemMessage:HOPCallSystemMessageTypeCallPlaced reasonCode:0 forConversation:inConversation];
-            
             //Place a audio or video call for chosen contact
             //inSession.isRedial = isRedial;
             inConversation.activeCall = [HOPCall placeCallForConversation:inConversation includeAudio:YES includeVideo:includeVideo];
             [self setActiveCallConversation:inConversation callActive:YES];
+            [[MessageManager sharedMessageManager] sendCallSystemMessage:HOPCallSystemMessageTypeCallPlaced reasonCode:0 forConversation:inConversation];
         }
         else
         {
@@ -327,10 +326,6 @@
  */
 - (void) onCallEnded:(HOPCall*) call
 {
-    //Get call session
-//    NSString* sessionId = [[call getConversationThread] getThreadId];
-//    Session* session = [[[SessionManager sharedSessionManager] sessionsDictionary] objectForKey:sessionId];
-    
     HOPConversation* conversation = [call getConversation];
     
     [[HOPMediaEngine sharedInstance] stopVideoCapture];
@@ -339,13 +334,7 @@
     
     if (sessionViewController)
     {
-        //[sessionViewController removeCallViews];
         [sessionViewController onCallEnded];
-        //Update view for case when call is not active
-        //[sessionViewController prepareForCall:NO withVideo:NO];
-        
-        //Enable video recording if face detection is on
-        //[sessionViewController stopVideoRecording:YES hideRecordButton:![[OpenPeer sharedOpenPeer] isFaceDetectionModeOn]];
     }
     
     //[self setLastEndedCallConversation:<#(HOPConversation *)#>: session];
@@ -508,7 +497,7 @@
     }
 }
 
-- (HOPConversation *)getConversationForID:(NSString *)conversationID threadType:(NSString *)threadType sender:(HOPContact *)sender items:(NSArray *)items
+- (HOPConversation *)getConversationForID:(NSString *)conversationID threadType:(NSString *)threadType sender:(HOPRolodexContact *)sender items:(NSArray *)items
 {
     HOPConversation* conversation = nil;
     if (conversationID.length > 0)

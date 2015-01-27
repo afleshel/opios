@@ -34,10 +34,10 @@
 #import "UAInboxMessageList.h"
 #import "UAInboxMessage.h"
 #import "UAUtils.h"
-#import "SBJsonParser.h"
 #import "HTTPDownloader.h"
 #import <OpenPeerSDK/HOPAccount.h>
 #import "LoginManager.h"
+#import "Utility.h"
 
 @interface UrbanAirshipPushNotificationReceiver ()
 
@@ -64,7 +64,6 @@
     [UAInbox shared].pushHandler.delegate = self;
     [UAPush shared].pushNotificationDelegate = self;
 }
-
 - (void)downloadAllMessages
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Get all messages from the UA inbox.");
@@ -83,9 +82,6 @@
 {
     if ([[LoginManager sharedLoginManager] isUserFullyLoggedIn])
     {
-//        if ([self.localNotificationDictionary count] > 0)
-//            [self createMessageFromRichPushDict:self.localNotificationDictionary];
-        
         for (UAInboxMessage* message in self.arrayRichPushMessages)
             [self loadMessage:message];
     }
@@ -254,8 +250,7 @@
 - (void) httpDownloader:(HTTPDownloader*) downloader downloaded:(NSString*) downloaded
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push content is downloaded");
-    SBJsonParser* parser = [[SBJsonParser alloc] init];
-    NSDictionary* richPushDictionary = [parser objectWithString: downloaded];
+    NSDictionary* richPushDictionary = [Utility dictionaryFromJSON:downloaded];
     
     [self createMessageFromRichPushDict:richPushDictionary];
     

@@ -60,8 +60,9 @@ typedef enum
 - (void) sendMessage:(NSString*) message replacesMessageID:(NSString*) replacesMessageID forConversation:(HOPConversation*) conversation;
 - (void) onMessageReceived:(HOPMessageRecord*) message forConversation:(HOPConversation*) conversation;
 
-- (SystemMessageTypes) getTypeForSystemMessage:(HOPMessageRecord*) message;
 
 - (void) resendMessages;
 - (void) resendMessage:(HOPMessageRecord*) message conversation:(HOPConversation*) conversation;
+
+- (void)updateMessageStatus:(HOPMessageRecord *)messageRecord;
 @end

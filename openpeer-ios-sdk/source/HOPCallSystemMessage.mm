@@ -69,6 +69,39 @@ using namespace openpeer::core;
     return self;
 }
 
+- (id) initWithMessageType:(HOPCallSystemMessageType) inType mediaType:(NSString*) mediaType callID:(NSString*) callID callee:(HOPRolodexContact*) inCallee errorCode:(unsigned short) inErrorCode
+{
+    self = [super init];
+    if (self)
+    {
+        HOPContact* coreContact = [inCallee getCoreContact];
+        
+        callSystemMessagePtr = CallSystemMessagePtr(new CallSystemMessage((CallSystemMessage::CallSystemMessageStatuses)inType, mediaType.length > 0 ? [mediaType UTF8String] : "", callID.length > 0 ? [callID UTF8String] : "", [coreContact getContactPtr], inErrorCode));
+        self.type = HOPSystemMessageTypeCall;
+        self.messageType = inType;
+        self.callee = coreContact;
+        self.errorCode = inErrorCode;
+        self.callID = callID;
+        self.mediaType = mediaType;
+        
+        callSystemMessagePtr->mCallee = [coreContact getContactPtr];
+        callSystemMessagePtr->mStatus = (CallSystemMessage::CallSystemMessageStatuses)inType;
+        
+        ElementPtr elementPtr = ISystemMessage::createEmptySystemMessage();
+        callSystemMessagePtr->insert(elementPtr);
+        
+        String str = IHelper::convertToString(elementPtr);
+        if (str.hasData())
+            self.jsonMessage = [NSString stringWithUTF8String:str];
+    }
+    return self;
+}
+
+- (NSString *)getName
+{
+    return @"call";
+}
+
 + (id) callSystemMessageFromJSON:(NSString*) jsonMessage
 {
     HOPCallSystemMessage* ret = nil;
@@ -164,4 +197,9 @@ using namespace openpeer::core;
     callSystemMessagePtr = inCallSystemMessagePtr;
 }
 
+- (NSString*) getSystemMessageType
+{
+    NSString* ret = [NSString stringWithFormat:@"%@/%@/%@",[HOPSystemMessage getMessageType], self.name, [HOPCallSystemMessage stringForMessageType:self.messageType]];
+    return ret;
+}
 @end

@@ -38,5 +38,8 @@
 
 - (NSString*) createEmptySystemMessage;
 + (NSString*) getMessageType;
+- (NSString*) getSystemMessageType;
+
+@property (nonatomic, getter=getName, readonly) NSString* name;
 
 @end

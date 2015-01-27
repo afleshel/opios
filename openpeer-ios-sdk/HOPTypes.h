@@ -136,6 +136,8 @@ typedef enum
     HOPCallSystemMessageTypeCallPlaced,   // call was placed
     HOPCallSystemMessageTypeCallAnswered, // call was answered
     HOPCallSystemMessageTypeCallHungup,   // call was hung-up
+    
+    HOPCallSystemMessageTypeCallMissed = 1000,   // call was hung-up
 } HOPCallSystemMessageType;
 #pragma mark - Provisioning account for future use enum
 /**

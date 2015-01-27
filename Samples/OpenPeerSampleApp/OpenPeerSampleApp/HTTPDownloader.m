@@ -84,9 +84,7 @@
 - (BOOL)startDownload
 {
     BOOL ret = YES;
-    NSMutableURLRequest *theRequest = nil; //[NSMutableURLRequest requestWithURL:[NSURL URLWithString:self.url]
-//                                                            cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
-//                                                        timeoutInterval:20.0];
+    NSMutableURLRequest *theRequest = nil; 
     
     self.receivedData = [NSMutableData dataWithCapacity: 0];
     

@@ -35,7 +35,6 @@
 #import "UAInboxMessage.h"
 #import "HTTPDownloader.h"
 #import "UAUtils.h"
-#import "SBJsonParser.h"
 #import "SessionManager.h"
 #import "LoginManager.h"
 //#import "Session.h"
@@ -305,8 +304,10 @@
 - (void) httpDownloader:(HTTPDownloader*) downloader downloaded:(NSString*) downloaded
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push content is downloaded");
-    SBJsonParser* parser = [[SBJsonParser alloc] init];
-    NSDictionary* richPushDictionary = [parser objectWithString: downloaded];
+//    SBJsonParser* parser = [[SBJsonParser alloc] init];
+//    NSDictionary* richPushDictionary = [parser objectWithString: downloaded];
+    
+    NSDictionary* richPushDictionary = [Utility dictionaryFromJSON:downloaded];
     
     [self createMessageFromRichPushDict:richPushDictionary];
     

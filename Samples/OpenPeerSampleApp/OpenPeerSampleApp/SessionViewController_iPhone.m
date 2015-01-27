@@ -256,14 +256,14 @@
             //[buttonTitles addObject:NSLocalizedString(@"Close session", @"")];
             [buttonTitles addObject:NSLocalizedString(@"Add Contact", @"")];
             [self.availableActions addObject:[NSNumber numberWithInt:ACTION_ADD_CONTACT]];
-            if (self.conversation.participants.count > 1)
+            /*if (self.conversation.participants.count > 1)
             {
                 [buttonTitles addObject:NSLocalizedString(@"Remove Contact", @"")];
                 [self.availableActions addObject:[NSNumber numberWithInt:ACTION_REMOVE_CONTACT]];
                 
                 [buttonTitles addObject:NSLocalizedString(@"Remove self", @"")];
                 [self.availableActions addObject:[NSNumber numberWithInt:ACTION_REMOVE_SELF]];
-            }
+            }*/
             
             if (self.conversation.participants.count == 1)
             {

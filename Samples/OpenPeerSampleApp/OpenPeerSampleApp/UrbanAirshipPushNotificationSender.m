@@ -37,11 +37,12 @@
 #import <OpenPeerSDK/HOPAccount.h>
 #import <OpenPeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPAPNSData.h>
+#import <OpenPeerSDK/HOPSystemMessage.h>
 #import "UAirship.h"
 #import "UAConfig.h"
 #import "UAPush.h"
-#import "SBJsonParser.h"
-
+#import "MessageManager.h"
+#import "Utility.h"
 @interface UrbanAirshipPushNotificationSender ()
 
 @property (nonatomic, strong) NSURLSession *urlSession;
@@ -139,9 +140,11 @@
     [[UAPush shared] appRegisteredForRemoteNotificationsWithDeviceToken:inDeviceToken];
 }
 
-- (void) sendPushNotificationMessage:(NSString*) message missedCall:(BOOL) missedCall recipients:(NSArray*) recipients
+- (void) sendPushNotificationMessage:(NSString*) message outgoingCall:(BOOL) outgoingCall recipients:(NSArray*) recipients
 {
-    NSDictionary *data = [self createPushMessage:message missedCall:missedCall recipients:recipients];
+    [super sendPushNotificationMessage:message outgoingCall:outgoingCall recipients:recipients];
+    
+    NSDictionary *data = [self createPushMessage:message missedCall:outgoingCall recipients:recipients];
     
     if ([self.apiPushURL length] > 0)
     {
@@ -168,14 +171,15 @@
     }
 }
 
-- (void) sendRichPushNotificationMessage:(HOPMessageRecord*) message missedCall:(BOOL) missedCall recipients:(NSArray*) recipients
+- (void) sendRichPushNotificationMessage:(HOPMessageRecord*) message conversation:(HOPConversation*) conversation recipients:(NSArray*) recipients
 {
+    [super sendRichPushNotificationMessage:message conversation:conversation recipients:recipients];
     for (HOPRolodexContact* recipient in recipients)
     {
         NSArray* deviceTokens = [self getDeviceTokensForContact:recipient];
         if ([deviceTokens count] > 0)
         {
-            NSDictionary* dataToPush = [self createRichPushMessage:message recipient:recipient recipients:recipients];
+            NSDictionary* dataToPush = [self createRichPushMessage:message  conversation:conversation recipient:recipient recipients:recipients];
             
             if (dataToPush.count > 0)
             {
@@ -199,14 +203,14 @@
                 [self requestDeviceTokenForPeerURI:peerURI];
                 @synchronized(self.dictionaryOfPushNotificationsToSend)
                 {
-                    [self storeForLaterSending:message missedCall:missedCall recipients:recipients recipient:recipient];
+                    [self storeForLaterSending:message missedCall:NO recipients:recipients recipient:recipient];
                 }
             }
         }
     }
 }
 
-- (NSDictionary*) createRichPushMessage:(HOPMessageRecord*) message recipient:(HOPRolodexContact*) recipient recipients:(NSArray*) recipients
+- (NSDictionary*) createRichPushMessage:(HOPMessageRecord*) message conversation:(HOPConversation*) conversation recipient:(HOPRolodexContact*) recipient recipients:(NSArray*) recipients
 {
     NSDictionary* ret = nil;
     NSArray* deviceTokens = [self getDeviceTokensForContact:recipient];
@@ -218,23 +222,24 @@
     
     NSString* messageText  = [NSString stringWithFormat:@"%@  %@",[[HOPAccount sharedAccount] getFullName],msg];
     
-    NSString* content = [NSString stringWithFormat:@"{\\\"peerURI\\\":\\\"%@\\\",\\\"peerURIs\\\":\\\"%@\\\",\\\"messageId\\\":\\\"%@\\\",\\\"replacesMessageId\\\":\\\"%@\\\",\\\"messageType\\\":\\\"%@\\\",\\\"message\\\":\\\"%@\\\",\\\"conversationId\\\":\\\"%@\\\",\\\"conversationType\\\":\\\"%@\\\",\\\"location\\\":\\\"%@\\\",\\\"date\\\":\\\"%.0f\\\"}",self.peerURI,peerURIs,message.messageID,message.replacedMessageID,message.type,message.text,message.session.sessionID,message.session.type,self.location,[message.date timeIntervalSince1970]];
-    
-    for (HOPAPNSData* pushNotificationData in deviceTokens)
+    if (![message.type isEqualToString:[HOPSystemMessage getMessageType]])
     {
-        NSString* stringToSend = nil;
+        NSString* content = [NSString stringWithFormat:@"{\\\"peerURI\\\":\\\"%@\\\",\\\"peerURIs\\\":\\\"%@\\\",\\\"messageId\\\":\\\"%@\\\",\\\"replacesMessageId\\\":\\\"%@\\\",\\\"messageType\\\":\\\"%@\\\",\\\"message\\\":\\\"%@\\\",\\\"conversationId\\\":\\\"%@\\\",\\\"conversationType\\\":\\\"%@\\\",\\\"location\\\":\\\"%@\\\",\\\"date\\\":\\\"%.0f\\\"}",self.peerURI,peerURIs,message.messageID,message.replacedMessageID,message.type,message.text,message.session.sessionID,message.session.type,self.location,[message.date timeIntervalSince1970]];
         
-        if ([pushNotificationData.type isEqualToString:notificationTypeApple])
-            stringToSend = [NSString stringWithFormat:@"{\"audience\" : {\"device_token\" : \"%@\"}, \"device_types\" : [ \"ios\" ], \"notification\" : {\"ios\" : {\"sound\":\"message-received\",\"alert\": \"%@\",\"content-available\": true,\"priority\": 10}}, \"message\" : {\"title\" : \"%@\", \"body\" : \"%@\", \"content_type\" : \"text/html\"} }",pushNotificationData.deviceToken,messageText,messageText,content];
-        else if ([pushNotificationData.type isEqualToString:notificationTypeAndroid])
-            stringToSend = [NSString stringWithFormat:@"{\"audience\" : {\"apid\" : \"%@\"}, \"device_types\" : [ \"android\" ],  \"notification\" : {\"android\" : {\"extra\" : {\"date\": \"%.0f\",\"messageId\": \"%@\",\"location\": \"%@\",\"peerURI\": \"%@\",\"peerURIs\": \"%@\",\"messageType\": \"%@\",\"conversationId\": \"%@\", \"conversationType\": \"%@\"}}, \"alert\" : \"%@\"} }",pushNotificationData.deviceToken,[message.date timeIntervalSince1970],message.messageID,self.location,self.peerURI,peerURIs,message.type,message.session.sessionID,message.session.type,message.text];
-        
-        OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelTrace, @"Rich push content: %@",stringToSend);
-        
-        NSData *data = [stringToSend dataUsingEncoding:NSUTF8StringEncoding];
-        ret = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-        
-        self.tempJSON = stringToSend;
+        for (HOPAPNSData* pushNotificationData in deviceTokens)
+        {
+            NSString* stringToSend = nil;
+            
+            if ([pushNotificationData.type isEqualToString:notificationTypeApple])
+                stringToSend = [NSString stringWithFormat:@"{\"audience\" : {\"device_token\" : \"%@\"}, \"device_types\" : [ \"ios\" ], \"notification\" : {\"ios\" : {\"sound\":\"message-received\",\"alert\": \"%@\",\"content-available\": true,\"priority\": 10}}, \"message\" : {\"title\" : \"%@\", \"body\" : \"%@\", \"content_type\" : \"text/html\"} }",pushNotificationData.deviceToken,messageText,messageText,content];
+            else if ([pushNotificationData.type isEqualToString:notificationTypeAndroid])
+                stringToSend = [NSString stringWithFormat:@"{\"audience\" : {\"apid\" : \"%@\"}, \"device_types\" : [ \"android\" ],  \"notification\" : {\"android\" : {\"extra\" : {\"date\": \"%.0f\",\"messageId\": \"%@\",\"location\": \"%@\",\"peerURI\": \"%@\",\"peerURIs\": \"%@\",\"messageType\": \"%@\",\"conversationId\": \"%@\", \"conversationType\": \"%@\"}}, \"alert\" : \"%@\"} }",pushNotificationData.deviceToken,[message.date timeIntervalSince1970],message.messageID,self.location,self.peerURI,peerURIs,message.type,message.session.sessionID,message.session.type,message.text];
+            
+            OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelTrace, @"Rich push content: %@",stringToSend);
+
+            ret = [Utility dictionaryFromJSON:stringToSend];
+            self.tempJSON = stringToSend;
+        }
     }
     
     return ret;
@@ -244,21 +249,22 @@
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *filePath = [NSString stringWithFormat:@"%@/%@%@", documentsDirectory, messageID,@".json"];
-    NSLog(@"filePath %@", filePath);
+    NSString *filePath = nil;
     
     NSError *error;
-
-    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:dict options:0 error:nil];
-    NSString* jsonString = [[NSString alloc] initWithBytes:[jsonData bytes] length:[jsonData length] encoding:NSUTF8StringEncoding];
-
+    NSString* jsonString = [Utility jsonFromDictionary:dict];
     
-    [jsonString writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
-    if (![[NSFileManager defaultManager] isWritableFileAtPath:filePath])
+    if (jsonString.length > 0)
     {
-        OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Unable to save rich push notification in file for sendig.");
-        return nil;
+        filePath = [NSString stringWithFormat:@"%@/%@%@", documentsDirectory, messageID,@".json"];
+        [jsonString writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
+        if (![[NSFileManager defaultManager] isWritableFileAtPath:filePath])
+        {
+            OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Unable to save rich push notification in file for sendig.");
+            return nil;
+        }
     }
+    
     return filePath;
 }
     
@@ -269,7 +275,6 @@
         NSMutableURLRequest * request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:self.apiPushURL]];
         [request setHTTPMethod:@"POST"];
         [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-        //if (sendingRich)
         [request setValue:@"application/vnd.urbanairship+json; version=3;" forHTTPHeaderField:@"Accept"];
         
         NSURL *fileURL = [NSURL fileURLWithPath:filePath];
@@ -290,18 +295,6 @@
                 {
                     OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Push notification is not sent, because session upload task is not created");
                 }
-                /*self.sessionDataTask = [self.urlSession uploadTaskWithRequest:request fromFile:fileURL];
-                if (self.sessionDataTask)
-                {
-                    [self.sessionDataTask resume];
-                    [self.dictionaryOfSentFiles setObject:filePath forKey:[NSNumber numberWithInt:self.sessionDataTask.taskIdentifier]];
-                    [self.dictionaryOfMessageIDsForSending setObject:messageID forKey:[NSNumber numberWithInt:self.sessionDataTask.taskIdentifier]];
-                    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Started sending push notification");
-                }
-                else
-                {
-                    OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Push notification is not sent, because session upload task is not created");
-                }*/
             }
             else
             {
@@ -393,15 +386,7 @@ didCompleteWithError:(NSError *)error
             HOPMessageRecord* messageRecord = [[HOPModelManager sharedModelManager] getMessageRecordByID:messageID];
             if (messageRecord)
             {
-                messageRecord.outgoingMessageStatus = HOPConversationThreadMessageDeliveryStateSent;
-                
-                HOPConversation* conversation = [messageRecord.session getConversation];
-                if (conversation)
-                {
-                    [[HOPModelManager sharedModelManager] updateMessageStateForConversation:conversation lastDeliveryState:HOPConversationThreadMessageDeliveryStateSent];
-                    
-                    [[HOPModelManager sharedModelManager] saveContext];
-                }
+                [[MessageManager sharedMessageManager] updateMessageStatus:messageRecord];
             }
         }
         NSError* fileError;
@@ -443,15 +428,15 @@ didCompleteWithError:(NSError *)error
         HOPMessageRecord* message = [dict objectForKey:@"message"];
         if (message)
         {
-            BOOL missedCall = [dict objectForKey:@"missedCall"] != nil ? ((NSNumber*) [dict objectForKey:@"missedCall"]).boolValue : NO;
+            // BOOL missedCall = [dict objectForKey:@"missedCall"] != nil ? ((NSNumber*) [dict objectForKey:@"missedCall"]).boolValue : NO;
             NSArray* recipients = [dict objectForKey:@"recipients"];
             HOPRolodexContact* recipient = [dict objectForKey:@"recipient"];
             if (recipient)
             {
-                if (missedCall)
-                    [self sendPushNotificationMessage:message.text missedCall:YES recipients:recipients];
-                else
-                    [self sendRichPushNotificationMessage:message missedCall:NO recipients:recipients];
+//                if (missedCall)
+//                    [self sendPushNotificationMessage:message.text missedCall:YES recipients:recipients];
+//                else
+                [self sendRichPushNotificationMessage:message conversation:[message.session getConversation] recipients:recipients];
             }
         }
     }

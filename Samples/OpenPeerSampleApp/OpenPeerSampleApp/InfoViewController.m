@@ -31,8 +31,10 @@
 
 #import "InfoViewController.h"
 #import "OpenPeer.h"
-#import <OpenpeerSDK/HOPModelManager.h>
+#import "Utility.h"
+#import "APNSManager.h"
 
+#import <OpenpeerSDK/HOPModelManager.h>
 #import <OpenpeerSDK/HOPRolodexContact+External.h>
 #import <OpenpeerSDK/HOPAssociatedIdentity.h>
 #import <OpenPeerSDK/HOPAccount.h>
@@ -186,9 +188,11 @@ typedef enum
             break;
             
         case USER_INFO_DEVICE_TOKEN:
+        {
             cell.textLabel.lineBreakMode = NSLineBreakByCharWrapping;
             cell.textLabel.numberOfLines = 0;
-            cell.textLabel.text = self.showContactInfo ?  [self.contact getPushNotificationDeviceToken] : ((OpenPeer*)[OpenPeer sharedOpenPeer]).deviceToken;
+            cell.textLabel.text = self.showContactInfo ?  [self.contact getPushNotificationDeviceToken] : [[APNSManager sharedAPNSManager] getSelfDeviceToken];
+        }
             break;
         default:
             break;
@@ -263,7 +267,7 @@ typedef enum
         case USER_INFO_DEVICE_TOKEN:
         {
             UIFont* cellFont = [UIFont boldSystemFontOfSize:17.0];
-            NSString* str = self.showContactInfo ? [self.contact getPushNotificationDeviceToken] : ((OpenPeer*)[OpenPeer sharedOpenPeer]).deviceToken;
+            NSString* str = self.showContactInfo ? [self.contact getPushNotificationDeviceToken] : [[APNSManager sharedAPNSManager] getSelfDeviceToken];
             CGSize labelSize = [str boundingRectWithSize: constraintSize options: NSStringDrawingUsesLineFragmentOrigin attributes: @{ NSFontAttributeName: cellFont } context: nil].size;
             ret = (labelSize.height) > cellDefaultHeight ? labelSize.height : cellDefaultHeight;
         }

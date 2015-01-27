@@ -58,11 +58,7 @@
     self.backgroundingNotifier = notifier;
     self.backgroundingSubscription = subscription;
 #ifdef APNS_ENABLED
-    if ([[APNSManager sharedAPNSManager] areTherePushesForSending])
-    {
-        [[APNSManager sharedAPNSManager]  setGoingToBackground:YES];
-    }
-    else
+    if (![[APNSManager sharedAPNSManager] areTherePushesForSending])
 #endif
     {
         [self.backgroundingNotifier destroy];

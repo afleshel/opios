@@ -71,7 +71,7 @@
 @property (nonatomic) BOOL appEnteredForeground;
 
 @property (nonatomic, strong) NSString* deviceId;
-@property (nonatomic, strong) NSString* deviceToken;
+//@property (nonatomic, strong) NSString* deviceToken;
 
 @property UIBackgroundTaskIdentifier backgroundingTaskId;
 

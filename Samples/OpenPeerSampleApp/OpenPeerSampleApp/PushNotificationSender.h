@@ -33,26 +33,29 @@
 #import "Delegates.h"
 
 @class HOPMessageRecord;
+@class HOPConversation;
 
 @interface PushNotificationSender : NSObject<HTTPDownloaderDelegate>
 
 @property (nonatomic, copy) NSData* deviceToken;
 @property (nonatomic, copy) NSString* peerURI;
 @property (nonatomic, copy, getter=getLocation) NSString* location;
+@property  (nonatomic) int pushesToSend;
 
 - (void) prepare;
 - (void) registerDeviceToken:(NSData*) inDeviceToken peerURI:(NSString*) inPeerURI;
 
-- (void) sendPushNotificationMessage:(NSString*) message missedCall:(BOOL) missedCall recipients:(NSArray*) recipients;
-- (void) sendRichPushNotificationMessage:(HOPMessageRecord*) message missedCall:(BOOL) missedCall recipients:(NSArray*) recipients;
+- (void) sendPushNotificationMessage:(NSString*) message outgoingCall:(BOOL) outgoingCall recipients:(NSArray*) recipients;
+- (void) sendRichPushNotificationMessage:(HOPMessageRecord*) message conversation:(HOPConversation*) conversation recipients:(NSArray*) recipients;
 
 - (NSString*) getListOfRecipientsFromPeerURIsArray:(NSArray*) array;
 - (NSDictionary*) createPushMessage:(NSString*) message missedCall:(BOOL) missedCall recipients:(NSArray*) recipients;
-- (NSDictionary*) createRichPushMessage:(HOPMessageRecord*) message recipient:(HOPRolodexContact*) recipient recipients:(NSArray*) recipients;
+- (NSDictionary*) createRichPushMessage:(HOPMessageRecord*) message conversation:(HOPConversation*) conversation recipient:(HOPRolodexContact*) recipient recipients:(NSArray*) recipients;
 
 - (NSArray*) getDeviceTokensForContact:(HOPRolodexContact*) contact;
 - (void) requestDeviceTokenForPeerURI:(NSString*) peerURI;
 - (void) registerDeviceTokenWithOpenPeer;
 - (void) onDeviceTokenReceivedForPeerURI:(NSString*) peerURI;
 
+- (void) onMessageSent:(NSString*) messageID;
 @end

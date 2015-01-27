@@ -682,7 +682,7 @@
     NSIndexPath *swipedIndexPath = [self.chatTableView indexPathForRowAtPoint:location];
     ChatMessageCell *swipedCell  = (ChatMessageCell*)[self.chatTableView cellForRowAtIndexPath:swipedIndexPath];
     
-    if (![swipedCell.message.type isEqualToString:[HOPSystemMessage getMessageType]] && !swipedCell.message.sender && !swipedCell.message.deleted.boolValue)
+    if (![swipedCell.message.type isEqualToString:[HOPSystemMessage getMessageType]] && [swipedCell.message.sender isSelf] && !swipedCell.message.deleted.boolValue)
     {
         self.messageTextbox.text = swipedCell.message.text;
         self.messageToEdit = swipedCell.message;
@@ -695,7 +695,7 @@
     NSIndexPath *swipedIndexPath = [self.chatTableView indexPathForRowAtPoint:location];
     ChatMessageCell *swipedCell  = (ChatMessageCell*)[self.chatTableView cellForRowAtIndexPath:swipedIndexPath];
     
-    if (![swipedCell.message.type isEqualToString:[HOPSystemMessage getMessageType]] && !swipedCell.message.sender && !swipedCell.message.deleted.boolValue)
+    if (![swipedCell.message.type isEqualToString:[HOPSystemMessage getMessageType]] && [swipedCell.message.sender isSelf] && !swipedCell.message.deleted.boolValue)
     {
         
         self.messageToEdit = swipedCell.message;

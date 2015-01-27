@@ -58,23 +58,6 @@
 - (void) onConversationNew:(HOPConversation*) conversation
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Handling a new conversation thread creation.");
-    dispatch_async(dispatch_get_main_queue(), ^
-   {
-       if (conversation)
-       {
-           if (conversation.participants > 0)
-           {
-//               [[[OpenPeer sharedOpenPeer] mainViewController] popLastConversationViewController];
-//               [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForConversation:conversation forIncomingCall:NO forIncomingMessage:NO];
-               //HOPContact* participant = [participants objectAtIndex:0];
-               
-//               if (![[SessionManager sharedSessionManager] proceedWithExistingSessionForContacts:conversation.participants newConversationThread:conversationThread])
-//               {
-//                   [[SessionManager sharedSessionManager] createSessionForConversationThread: conversationThread];
-//               }
-           }
-       }
-   });
 }
 
 - (void) onConversationContactsChanged:(HOPConversation*) conversation numberOfAddedParticipants:(int) numberOfAddedParticipants
@@ -89,10 +72,6 @@
 - (void) onConversationContactConnectionStateChanged:(HOPConversation*) conversation contact:(HOPRolodexContact*) contact contactConnectionState:(HOPConversationThreadContactConnectionState) contactConnectionState
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread id: <%@> contact peer URI:<%@> state: %@",[conversation getID], [contact getPeerURI],[HOPConversation stringForContactConnectionState:contactConnectionState]);
-    
-    dispatch_async(dispatch_get_main_queue(), ^
-                   {
-                   });
 }
 
 - (void) onConversationContactStatusChanged:(HOPConversation*) conversation contact:(HOPRolodexContact*) contact
@@ -100,17 +79,17 @@
     HOPConversationThreadContactStatus contactState = [conversation getContactStatus:contact];
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread id: <%@> - contact peer URI: <%@> state: %d",[conversation getID], [contact getPeerURI],contactState);
     dispatch_async(dispatch_get_main_queue(), ^
-                   {
-                       NSDictionary* dict = @{@"thread":conversation, @"contact":contact, @"status":@(contactState)};
-                       [[NSNotificationCenter defaultCenter] postNotificationName:notificationComposingStatusChanged object:dict];
-                   });
+    {
+       NSDictionary* dict = @{@"thread":conversation, @"contact":contact, @"status":@(contactState)};
+       [[NSNotificationCenter defaultCenter] postNotificationName:notificationComposingStatusChanged object:dict];
+    });
 }
 
 - (void) onConversationMessage:(HOPConversation*) conversation messageID:(NSString*) messageID
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Handling a new message with id %@ for conversation thread.",messageID);
-    dispatch_async(dispatch_get_main_queue(), ^{
-        //[[SessionManager sharedSessionManager] setLatestValidConversation:conversation];
+    dispatch_async(dispatch_get_main_queue(), ^
+    {
         HOPMessageRecord* message = [conversation getMessageForID:messageID];
         if (message)
         {
@@ -131,32 +110,11 @@
 #ifdef APNS_ENABLED
     if (contact)
     {
-        BOOL missedCall = NO;
         HOPMessageRecord* message = [conversationThread getMessageForID:messageID];
         
         if (message)
         {
-            BOOL isSystemMessage = [message.type isEqualToString:[HOPSystemMessage getMessageType]];
-            
-            //if ([[MessageManager sharedMessageManager] getTypeForSystemMessage:message] == SystemMessage_CheckAvailability)
-            if (isSystemMessage)
-            {
-                HOPCallSystemMessage* callSystemMessage = [HOPCallSystemMessage callSystemMessageFromJSON:message.text];
-                
-                NSString* messageText  = @"";
-                if (callSystemMessage.messageType == HOPCallSystemMessageTypeCallPlaced)
-                    messageText = [NSString stringWithFormat:@"%@  %@",[[HOPAccount sharedAccount] getFullName],@"Incoming call"];
-                else if (callSystemMessage.type == HOPCallSystemMessageTypeCallHungup)
-                    messageText = [NSString stringWithFormat:@"%@  %@",[[HOPAccount sharedAccount] getFullName],@"Missed call"];
-                
-                missedCall = YES;
-                
-                [[APNSManager sharedAPNSManager] sendPushNotificationMessage:messageText missedCall:missedCall recipients:@[contact]];
-            }
-            else// if (![message.type isEqualToString:messageTypeSystem])
-            {
-                [[APNSManager sharedAPNSManager]sendRichPushNotificationForMessage:message missedCall:NO  participants:@[contact]];
-            }
+            [[APNSManager sharedAPNSManager] sendRichPushNotificationForMessage:message conversation:conversationThread participants:@[contact]];
         }
     }
 #endif

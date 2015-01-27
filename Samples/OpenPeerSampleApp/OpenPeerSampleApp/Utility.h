@@ -60,4 +60,7 @@
 + (NSString *)getLocalDateFromUTCdate:(NSDate *)utcDate;
 + (NSString*) stringForEndingCallReason:(int) endingCallReason;
 + (UIImage*) createImageFromImages:(NSArray*) images inFrame:(CGRect) frame;
+
++ (NSDictionary*) dictionaryFromJSON:(NSString*) json;
++ (NSString*) jsonFromDictionary:(NSDictionary*) dictionary;
 @end
