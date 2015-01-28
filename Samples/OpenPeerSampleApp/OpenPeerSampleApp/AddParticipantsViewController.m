@@ -97,9 +97,9 @@
     if (self.contactsViewController.getSelectedContacts.count > 0)
     {
         if (self.isAdding)
-            newConversation = [HOPConversation conversationOnParticipantsAdded:self.contactsViewController.getSelectedContacts conversation:self.conversation];//[self.conversation addParticipants:self.contactsViewController.getSelectedContacts];
+            newConversation = [HOPConversation conversationOnParticipantsAdded:self.contactsViewController.getSelectedContacts conversation:self.conversation];
         else
-            newConversation = [HOPConversation conversationOnParticipantsRemoved:self.contactsViewController.getSelectedContacts conversation:self.conversation];//[self.conversation removeParticipants:self.contactsViewController.getSelectedContacts];
+            newConversation = [HOPConversation conversationOnParticipantsRemoved:self.contactsViewController.getSelectedContacts conversation:self.conversation];
     }
     
     if (newConversation != self.conversation)

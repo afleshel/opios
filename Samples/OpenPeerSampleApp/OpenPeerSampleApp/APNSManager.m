@@ -117,7 +117,7 @@
 {
     [self registerDeviceToken:self.deviceToken];
     //Register device token with Open Peer server
-    if ([[[HOPModelManager sharedModelManager] getAPNSDataForPeerURI:[[HOPModelManager sharedModelManager] getPeerURIForHomeUser]] count] == 0)
+    if ([[[HOPModelManager sharedModelManager] getAPNSDataForPeerURI:[[HOPAccount sharedAccount] getPeerURI]] count] == 0)
         [self.pushNotificationSender registerDeviceTokenWithOpenPeer];
 }
 

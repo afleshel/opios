@@ -34,7 +34,7 @@
 
 #import "OpenPeerStorageManager.h"
 #import "OpenPeerUUIDManager.h"
-#import "HOPModelManager.h"
+#import "HOPModelManager_Internal.h"
 #import "HOPAssociatedIdentity.h"
 #import "HOPIdentityContact.h"
 #import "HOPRolodexContact.h"
@@ -412,7 +412,6 @@ using namespace openpeer::core;
             array = [[NSMutableArray alloc] init];
             for (IdentityList::iterator it = associatedIdentities->begin(); it != associatedIdentities->end(); ++it)
             {
-                //NSString* identityURI = [NSString stringWithUTF8String: it->get()->getIdentityURI()];
                 HOPIdentity* identity = [[OpenPeerStorageManager sharedStorageManager] getIdentityForPUID:it->get()->getID()];
                 
                 if (!identity)
@@ -608,7 +607,14 @@ using namespace openpeer::core;
             self.openPeerAccount.loggedIn = [NSNumber numberWithBool: YES];
             [[HOPModelManager sharedModelManager] saveContext];
         }
-        [self.openPeerAccount updateReloginInfo];
+        
+        //Update relogin info
+        if (![self.openPeerAccount.reloginInfo isEqualToString:[self getReloginInformation]])
+        {
+            self.openPeerAccount.reloginInfo = [self getReloginInformation];
+            
+            [[HOPModelManager sharedModelManager] saveContext];
+        }
     }
 }
 - (void) resetLoggedInAccount
@@ -651,6 +657,14 @@ using namespace openpeer::core;
 }
 - (NSString*) getFullName
 {
-    return [self.openPeerAccount getFullName];
+    return [self.openPeerAccount.contact getDefaultRolodexContact].name;
+    //((HOPAssociatedIdentity*)[self.associatedIdentities anyObject]).selfRolodexContact.name;
+    //return [self.openPeerAccount getFullName];
 }
+
++ (BOOL)isReloginPossible
+{
+    return [[HOPModelManager sharedModelManager] getLastLoggedInUser] != nil;
+}
+
 @end

@@ -32,8 +32,9 @@
 #import "AppInfoViewController.h"
 #import "AppConsts.h"
 #import "Settings.h"
+#ifdef APNS_ENABLED
 #import "APNSManager.h"
-
+#endif
 const CGFloat cellDefaultHeight = 50.0;
 const CGFloat headerDefaultHeight = 40.0;
 
@@ -49,10 +50,11 @@ typedef enum
     APP_SETTINGS_IDENTITY_FEDERATE_BASE_URI,
     APP_SETTINGS_NAMESPACE_GRANT_SERVICE_URL,
     APP_SETTINGS_LOCKBOX_SERVICE_DOMAIN,
+#ifdef APNS_ENABLED
     APP_SETTINGS_DEVICE_TOKEN_DOWNLOAD_URL,
     APP_SETTINGS_DEVICE_TOKEN_UPLOAD_URL,
     APP_SETTINGS_PUSH_PROVIDER,
-    
+#endif
     APP_INFO_SECTIONS
 } AppInfoOptions;
 
@@ -149,7 +151,7 @@ typedef enum
         case APP_SETTINGS_LOCKBOX_SERVICE_DOMAIN:
             cell.textLabel.text =  [[[Settings sharedSettings] getLockBoxServiceDomain] length] > 0 ? [[Settings sharedSettings] getLockBoxServiceDomain]: @"None";
             break;
-            
+#ifdef APNS_ENABLED
         case APP_SETTINGS_DEVICE_TOKEN_DOWNLOAD_URL:
             cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
             cell.textLabel.text =  [[[Settings sharedSettings] getDeviceTokenDownloadURL] length] > 0 ? [[Settings sharedSettings] getDeviceTokenDownloadURL]: @"None";
@@ -164,7 +166,7 @@ typedef enum
             cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
             cell.textLabel.text =  [[[APNSManager sharedAPNSManager] pushProvider] length] > 0 ? [[APNSManager sharedAPNSManager] pushProvider] : @"None";
             break;
-            
+#endif
         default:
             break;
     }
@@ -213,7 +215,7 @@ typedef enum
         case APP_SETTINGS_LOCKBOX_SERVICE_DOMAIN:
             ret = @"Settings Lockbox Service Domain";
             break;
-            
+#ifdef APNS_ENABLED
         case APP_SETTINGS_DEVICE_TOKEN_DOWNLOAD_URL:
             ret = @"Device Token Download URL";
             break;
@@ -225,7 +227,7 @@ typedef enum
         case APP_SETTINGS_PUSH_PROVIDER:
             ret = @"Push Provider";
             break;
-            
+#endif
         default:
             break;
     }
@@ -240,6 +242,7 @@ typedef enum
     
     switch (indexPath.section)
     {
+#ifdef APNS_ENABLED
         case APP_SETTINGS_DEVICE_TOKEN_DOWNLOAD_URL:
         {
             UIFont* cellFont = [UIFont boldSystemFontOfSize:17.0];
@@ -255,6 +258,7 @@ typedef enum
             ret = (labelSize.height) > cellDefaultHeight ? labelSize.height + 20.0: cellDefaultHeight;
         }
             break;
+#endif
         default:
             ret = cellDefaultHeight;
             break;

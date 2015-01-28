@@ -61,7 +61,7 @@
 #import "HOPConversation.h"
 #import "HOPConversationRecord+External.h"
 //#import "HOPConversationThreadRecord.h"
-#import "HOPOpenPeerAccount+External.h"
+//#import "HOPOpenPeerAccount+External.h"
 #import "HOPIdentityProvider.h"
 #import "HOPImage.h"
 #import "HOPMessageEvent.h"

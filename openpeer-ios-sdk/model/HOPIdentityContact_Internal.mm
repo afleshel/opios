@@ -125,4 +125,13 @@
     [[HOPModelManager sharedModelManager] saveContext];
 }
 
+- (HOPContact*) getCoreContact
+{
+    HOPContact* ret = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:self.publicPeerFile.peerURI];
+    if (!ret)
+    {
+        ret = [[HOPContact alloc] initWithPeerFile:self.publicPeerFile.peerFile];
+    }
+    return ret;
+}
 @end

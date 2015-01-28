@@ -41,7 +41,6 @@
 #import <OpenpeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPAccount.h>
 #import <OpenPeerSDK/HOPConversation.h>
-//#import <OpenpeerSDK/HOPOpenPeerContact+External.h>
 
 #define REMOTE_SESSION_ALERT_TAG 1
 #define TABLE_CELL_HEIGHT 55.0
@@ -233,13 +232,12 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     HOPRolodexContact* contact = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    
     if (contact)
     {
         //Check if app is in remote session mode
         if (![[OpenPeer sharedOpenPeer] isRemoteSessionActivationModeOn])
         {
-            //[tableView deselectRowAtIndexPath:indexPath animated:NO];
-            
             if (!self.isMultipleSelectionAvailable)
             {
                 //If not, create a session for selecte contact

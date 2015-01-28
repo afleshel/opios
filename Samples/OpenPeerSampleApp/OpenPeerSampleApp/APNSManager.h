@@ -32,7 +32,6 @@
 #import <Foundation/Foundation.h>
 
 @class HOPRolodexContact;
-@class HOPContact;
 @class HOPMessageRecord;
 @class HTTPDownloaderDelegate;
 @class HOPSystemMessage;

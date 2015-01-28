@@ -50,4 +50,6 @@ using namespace openpeer::core;
  @param homeUserIdentityURI NSString home user identity URI
  */
 - (void) updateWithCoreRolodexContact:(RolodexContact) inRolodexContact identityProviderDomain:(NSString*)identityProviderDomain homeUserIdentityURI:(NSString*)homeUserIdentityURI;
+
+- (HOPContact*) getCoreContact;
 @end

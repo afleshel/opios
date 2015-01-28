@@ -164,7 +164,7 @@
         [[HOPModelManager sharedModelManager] saveContext];
     }
 
-    messageRecord = [HOPMessageRecord createMessage:message type:messageTypeText date:[NSDate date] visible:YES conversation:conversation contact:[[HOPModelManager sharedModelManager] getRolodexContactContactForAccount] messageId:[HOPUtility getGUIDstring] validated:NO messageIDToReplace:replacesMessageID];
+    messageRecord = [HOPMessageRecord createMessage:message type:messageTypeText date:[NSDate date] visible:YES conversation:conversation contact:[[HOPModelManager sharedModelManager] getRolodexContactForAccount] messageId:[HOPUtility getGUIDstring] validated:NO messageIDToReplace:replacesMessageID];
 
     
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Sending message: %@ - message id: %@ - for session with id: %@",message,messageRecord.messageID,[conversation getID]);

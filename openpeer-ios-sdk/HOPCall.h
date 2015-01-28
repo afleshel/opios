@@ -97,17 +97,22 @@
  */
 - (HOPConversationThread*) getConversationThread;
 
+/**
+ *  Returns conversation which owns the call
+ *
+ *  @return Conversation thread object
+ */
 - (HOPConversation*) getConversation;
 
 /**
  Returns caller contact.
- @return Pointer to the caller HOPContact object
+ @return Pointer to the caller HOPRolodexContact object
  */
 - (HOPRolodexContact*) getCaller;
 
 /**
  Returns callee contact.
- @return Pointer to the callee HOPContact object
+ @return Pointer to the callee HOPRolodexContact object
  */
 - (HOPRolodexContact*) getCallee;
 

@@ -32,8 +32,9 @@
 #import "InfoViewController.h"
 #import "OpenPeer.h"
 #import "Utility.h"
+#ifdef APNS_ENABLED
 #import "APNSManager.h"
-
+#endif
 #import <OpenpeerSDK/HOPModelManager.h>
 #import <OpenpeerSDK/HOPRolodexContact+External.h>
 #import <OpenpeerSDK/HOPAssociatedIdentity.h>
@@ -50,14 +51,14 @@ typedef enum
     USER_INFO_STABLE_ID,
     USER_INFO_PEER_URI,
     USER_INFO_IDENTITIES,
+#ifdef APNS_ENABLED
     USER_INFO_DEVICE_TOKEN,
-    
+#endif
     USER_INFO_SECTIONS
 } UserInfoOptions;
 
 @interface InfoViewController ()
 
-@property (nonatomic, strong) HOPOpenPeerAccount* homeUser;
 @property (nonatomic, strong) HOPRolodexContact* contact;
 @property (nonatomic) BOOL showContactInfo;
 
@@ -88,8 +89,6 @@ typedef enum
 {
     [super viewDidLoad];
     
-    self.homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInUser];
-    
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [backButton setImage:[UIImage imageNamed:@"iPhone_back_button.png"] forState:UIControlStateNormal];
     [backButton addTarget:self.navigationController action:@selector(popViewControllerAnimated:) forControlEvents:UIControlEventTouchUpInside];
@@ -118,7 +117,9 @@ typedef enum
         case USER_INFO_NAME:
         case USER_INFO_STABLE_ID:
         case USER_INFO_PEER_URI:
+#ifdef APNS_ENABLED
         case USER_INFO_DEVICE_TOKEN:
+#endif
             ret = 1;
             break;
             
@@ -163,7 +164,7 @@ typedef enum
         case USER_INFO_PEER_URI:
             cell.textLabel.lineBreakMode = NSLineBreakByCharWrapping;
             cell.textLabel.numberOfLines = 0;
-            cell.textLabel.text = self.showContactInfo ? [self.contact getPeerURI]: [[HOPAccount sharedAccount] getPeerURI]; /*((HOPAssociatedIdentity*)[[HOPAccount sharedAccount] getAssociatedIdentities]).selfRolodexContact.identityContact.openPeerContact.publicPeerFile.peerURI*/;
+            cell.textLabel.text = self.showContactInfo ? [self.contact getPeerURI]: [[HOPAccount sharedAccount] getPeerURI];
             break;
             
         case USER_INFO_IDENTITIES:
@@ -186,7 +187,7 @@ typedef enum
             cell.detailTextLabel.text = [NSString stringWithFormat:@"Identity URI: %@",rolodex.identityURI];
         }
             break;
-            
+#ifdef APNS_ENABLED
         case USER_INFO_DEVICE_TOKEN:
         {
             cell.textLabel.lineBreakMode = NSLineBreakByCharWrapping;
@@ -194,6 +195,7 @@ typedef enum
             cell.textLabel.text = self.showContactInfo ?  [self.contact getPushNotificationDeviceToken] : [[APNSManager sharedAPNSManager] getSelfDeviceToken];
         }
             break;
+#endif
         default:
             break;
     }
@@ -263,7 +265,7 @@ typedef enum
             ret = (totalCellHeight) > cellDefaultHeight ? totalCellHeight: cellDefaultHeight;
         }
             break;
-           
+#ifdef APNS_ENABLED
         case USER_INFO_DEVICE_TOKEN:
         {
             UIFont* cellFont = [UIFont boldSystemFontOfSize:17.0];
@@ -272,6 +274,7 @@ typedef enum
             ret = (labelSize.height) > cellDefaultHeight ? labelSize.height : cellDefaultHeight;
         }
             break;
+#endif
         default:
             break;
     }
@@ -309,11 +312,11 @@ typedef enum
         case USER_INFO_IDENTITIES:
             ret.text = @"Associated Identities";
             break;
-         
+#ifdef APNS_ENABLED
         case USER_INFO_DEVICE_TOKEN:
             ret.text = @"Device Token";
             break;
-            
+#endif
         default:
             break;
     }

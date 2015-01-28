@@ -59,6 +59,7 @@ Singleton class that represents the logged in OpenPeer user.
  */
 - (id) init __attribute__((unavailable("HOPAccount is singleton class.")));
 
++ (BOOL)isReloginPossible;
 /**
  *  Converts account state enum to string.
  *

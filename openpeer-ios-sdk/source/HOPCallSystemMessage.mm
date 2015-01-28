@@ -49,7 +49,7 @@ using namespace openpeer::core;
     if (self)
     {
         HOPContact* coreContact = [inCallee getCoreContact];
-//        callSystemMessagePtr = CallSystemMessagePtr(new CallSystemMessage((CallSystemMessage::CallSystemMessageStatuses)inType, [coreContact getContactPtr], inErrorCode));
+
         callSystemMessagePtr = CallSystemMessagePtr(new CallSystemMessage((CallSystemMessage::CallSystemMessageStatuses)inType, "", "", [coreContact getContactPtr], inErrorCode));
         self.type = HOPSystemMessageTypeCall;
         self.messageType = inType;

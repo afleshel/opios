@@ -52,7 +52,6 @@
 #import <OpenPeerSDK/HOPTypes.h>
 #import <OpenpeerSDK/HOPModelManager.h>
 #import <OpenpeerSDK/HOPAssociatedIdentity.h>
-//#import <OpenpeerSDK/HOPIdentityContact.h>
 //#import <OpenpeerSDK/HOPRolodexContact.h>
 #import <OpenpeerSDK/HOPStack.h>
 #import <OpenpeerSDK/HOPBackgrounding.h>
@@ -128,7 +127,7 @@
     if ([UIDevice isNetworkReachable])
     {
         //If peer file doesn't exists, show login view, otherwise start relogin
-        if ([[HOPModelManager sharedModelManager] getLastLoggedInUser])
+        if ([HOPAccount isReloginPossible])
         {
             [self startRelogin];
         }
@@ -190,11 +189,6 @@
     
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane,@"Handle logout on UI level");
     [[[OpenPeer sharedOpenPeer] mainViewController] onLogout];
-    
-
-//    HOPOpenPeerAccount* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInHomeUser];
-//    homeUser.loggedIn = [NSNumber numberWithBool:NO];
-//    [[HOPModelManager sharedModelManager] saveContext];
 
     
     self.isLogin = YES;
@@ -388,7 +382,7 @@
             }
             self.isLoggedin = YES;
 #ifdef APNS_ENABLED
-            //if ([[[HOPModelManager sharedModelManager] getAPNSDataForPeerURI:[[HOPModelManager sharedModelManager] getPeerURIForHomeUser]] count] == 0)
+            //if ([[[HOPModelManager sharedModelManager] getAPNSDataForPeerURI:[[HOPAccount sharedAccount] getPeerURI]] count] == 0)
                 [[APNSManager sharedAPNSManager] registerDeviceTokenWithOpenPeer];
 #endif
         }
@@ -475,7 +469,7 @@
         {
             self.isRecovering = YES;
             //If peer file doesn't exists, show login view, otherwise start relogin
-            if ([[HOPModelManager sharedModelManager] getLastLoggedInUser])
+            if ([HOPAccount isReloginPossible])
             {
                 [self startRelogin];
             }

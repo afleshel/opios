@@ -33,12 +33,21 @@
 #import <openpeer/core/types.h>
 #import <openpeer/core/IIdentityLookup.h>
 #import "HOPIdentityLookupInfo.h"
+#import "HOPIdentityContact.h"
 
 using namespace openpeer;
 using namespace openpeer::core;
 
 @interface HOPIdentityLookupInfo ()
 
+/**
+ *  HOPIdentityLookupInfo initializer.
+ *
+ *  @param inIdentityContact HOPIdentityContact object
+ *
+ *  @return HOPIdentityLookupInfo object
+ */
+- (id) initWithIdentityContact:(HOPIdentityContact*) inIdentityContact;
 - (id) initWithCoreRolodexContact:(RolodexContact) inRolodexContact;
 - (id) initWithCoreIdentityContact:(IdentityContact) inIdentityContact;
 - (id) initWithCoreIdentityLookupInfo:(IIdentityLookup::IdentityLookupInfo) inIdentityLookupInfo;

@@ -34,7 +34,7 @@
 #import "HOPAssociatedIdentity.h"
 #import "HOPPublicPeerFile.h"
 #import "HOPIdentityContact.h"
-#import "HOPModelManager.h"
+#import "HOPModelManager_Internal.h"
 #import "HOPContact.h"
 #import "OpenPeerStorageManager.h"
 #import "HOPUtility.h"

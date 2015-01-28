@@ -51,6 +51,9 @@
 
 - (void) setContact:(HOPRolodexContact *)inContact inTable:(UITableView*) table atIndexPath:(NSIndexPath *)indexPath
 {
+    if (!inContact || !table)
+        return;
+    
     self.contact = inContact;
     
     self.displayName.text = [self.contact name];
@@ -99,27 +102,13 @@
         self.displayName.font = [UIFont fontWithName:@"Helvetica-Bold" size:15];
         self.displayName.textColor = [UIColor blackColor];
     }
-    /*else
-     {
-     self.displayName.font = [UIFont fontWithName:@"Helvetica-Bold" size:15];
-     self.displayName.textColor = [UIColor colorWithRed:112.0/255.0 green:116.0/255.0 blue:119.0/255.0 alpha:1.0];
-     //[self.displayImage setAlpha:0.8];
-     [_displayChatImage setAlpha:0.4];
-     [_displayVoiceImage setAlpha:0.4];
-     [_displayVideoImage setAlpha:0.4];
-     }*/
     
-    HOPOpenPeerContact* openPeerContact = [[HOPModelManager sharedModelManager] getOpenPeerContactForIdentityURI:inContact.identityURI];
-    
-    if (openPeerContact)
+    /*HOPConversation* conversation = [[SessionManager sharedSessionManager] getConversationForContacts:@[inContact]];
+    if (conversation.numberOfUnreadMessages > 0)
     {
-        HOPConversation* conversation = [[SessionManager sharedSessionManager] getConversationForContacts:@[openPeerContact]];
-        if (conversation.numberOfUnreadMessages > 0)
-        {
-            NSString* numberToDisplay = [NSString stringWithFormat:@"%d",conversation.numberOfUnreadMessages];
-            self.badgeView.hidden = NO;
-            self.badgeView.badgeText = numberToDisplay;
-        }
-    }
+        NSString* numberToDisplay = [NSString stringWithFormat:@"%d",conversation.numberOfUnreadMessages];
+        self.badgeView.hidden = NO;
+        self.badgeView.badgeText = numberToDisplay;
+    }*/
 }
 @end

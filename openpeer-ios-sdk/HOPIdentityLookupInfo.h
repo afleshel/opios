@@ -43,14 +43,7 @@
 @property (nonatomic, strong) NSString* identityURI;
 @property (nonatomic, strong) NSDate* lastUpdated;
 
-/**
- *  HOPIdentityLookupInfo initializer.
- *
- *  @param inIdentityContact HOPIdentityContact object
- *
- *  @return HOPIdentityLookupInfo object
- */
-- (id) initWithIdentityContact:(HOPIdentityContact*) inIdentityContact;
+
 
 /**
  *  HOPIdentityLookupInfo initializer.

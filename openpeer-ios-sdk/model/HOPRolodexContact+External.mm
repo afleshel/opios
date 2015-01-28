@@ -35,7 +35,7 @@
 #import "HOPContact.h"
 #import "HOPIdentityContact.h"
 #import "HOPPublicPeerFile.h"
-#import "HOPModelManager.h"
+#import "HOPModelManager_Internal.h"
 #import "HOPUtility.h"
 #import "HOPAssociatedIdentity.h"
 #import "HOPOpenPeerContact.h"
@@ -71,7 +71,7 @@
 
 + (HOPRolodexContact*) getSelf
 {
-    HOPRolodexContact* ret = [[HOPModelManager sharedModelManager] getRolodexContactContactForAccount];
+    HOPRolodexContact* ret = [[HOPModelManager sharedModelManager] getRolodexContactForAccount];
     return ret;
 }
 
@@ -105,6 +105,7 @@
     return ret;
 }
 
+//TODO: Remove image storage from the core data
 - (HOPAvatar*) getAvatarForWidth:(NSNumber*) width height:(NSNumber*) height
 {
     HOPAvatar* ret = nil;
@@ -146,7 +147,7 @@
 }
 - (NSUInteger) getNumberOfAssociatedIdentities
 {
-    NSUInteger ret = 0;
+    NSUInteger ret = 1;
     
     if (self.openPeerContact)
         ret = self.openPeerContact.identityContacts.count;

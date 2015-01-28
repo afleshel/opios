@@ -41,14 +41,14 @@
 + (HOPRolodexContact*) getSelf;
 + (void) hintAboutLocation:(NSString*) locationID peerURI:(NSString*) peerURI;
 - (BOOL) isOpenPeer;
-- (HOPContact*) getCoreContact;
+
 - (HOPAvatar*) getAvatarForWidth:(NSNumber*) width height:(NSNumber*) height;
 - (NSString*) firstLetter;
 
 - (NSString*) getPeerURI;
 - (NSString*) getStableID;
 - (NSUInteger) getNumberOfAssociatedIdentities;
-- (NSArray*) getAssociatedIdentities;
+- (NSArray*) getAssociatedIdentities; //TODO: Check should be deleted
 - (NSString*) getPushNotificationDeviceToken;
 - (NSString*) getPushNotificationType;
 

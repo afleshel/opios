@@ -150,7 +150,7 @@
     NSString* peerURI = [contact getPeerURI];
     if ([peerURI length] > 0)
     {
-        ret = [[HOPModelManager sharedModelManager] getPushNotificationDataForPeerURI:peerURI];
+        ret = [[HOPModelManager sharedModelManager] getAPNSDataForPeerURI:peerURI];
     }
     return ret;
 }
@@ -205,7 +205,7 @@
  */
 - (void) registerDeviceTokenWithOpenPeer
 {
-    NSString* peerURI = [[HOPModelManager sharedModelManager] getPeerURIForHomeUser];
+    NSString* peerURI = [[HOPAccount sharedAccount] getPeerURI];
     
     if ([self.deviceToken length] > 0 && [peerURI length] > 0 && ![[self.dictionaryOfHTTPRequests allKeys] containsObject:peerURI])
     {
@@ -279,7 +279,7 @@
             if ([result count] > 0)
             {
                 OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Received valid response.");
-                if (![peerURI isEqualToString:[[HOPModelManager sharedModelManager] getPeerURIForHomeUser]])
+                if (![peerURI isEqualToString:[[HOPAccount sharedAccount] getPeerURI]])
                 {
                     NSString* type = [result objectForKey:@"type"];
                     //if ([type isEqualToString:@"apns"])
@@ -297,7 +297,7 @@
                 }
                 else
                 {
-                    [[HOPModelManager sharedModelManager] setAPNSData:[Utility hexadecimalStringForData:self.deviceToken] type:notificationTypeApple PeerURI: [[HOPModelManager sharedModelManager] getPeerURIForHomeUser]];
+                    [[HOPModelManager sharedModelManager] setAPNSData:[Utility hexadecimalStringForData:self.deviceToken] type:notificationTypeApple PeerURI: [[HOPAccount sharedAccount] getPeerURI]];
                 }
             }
         }

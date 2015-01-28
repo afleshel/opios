@@ -244,6 +244,7 @@
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"<%p> Identity rolodex contacts are downloaded.",identity);
     //Remove activity indicator
     [[ActivityIndicatorViewController sharedActivityIndicator] showActivityIndicator:NO withText:nil inView:nil];
+    
     if (identity)
     {
         HOPAssociatedIdentity* associatedIdentity = [[HOPModelManager sharedModelManager] getAssociatedIdentityForBaseIdentityURI:[identity getBaseIdentityURI] homeUserStableId:[[HOPAccount sharedAccount] getStableID]];

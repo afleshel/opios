@@ -134,18 +134,18 @@
         if ([Utility isRuningForTheFirstTime])
             [[HOPSettings sharedSettings] applyDefaults];
         
-        BOOL startDownloadingSettings = [[Settings sharedSettings] updateAppSettings];
+        BOOL startedDownloadingSettings = [[Settings sharedSettings] updateAppSettings];
         
-        if (![[HOPModelManager sharedModelManager] getLastLoggedInUser])
+        if (![HOPAccount isReloginPossible])
         {
             //Start settings download. If download is not started finish presetup
-            if (!startDownloadingSettings)
+            if (!startedDownloadingSettings)
                 [self finishPreSetup];
         }
         else
         {
             //Start settings download. If download is not started finish setup
-            if (!startDownloadingSettings)
+            if (!startedDownloadingSettings)
                 [self setup];
         }
     }
@@ -157,7 +157,7 @@
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Pre setup finished");
     
-    if (![[HOPModelManager sharedModelManager] getLastLoggedInUser])
+    if (![HOPAccount isReloginPossible])
     {
         OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"There is no logged in user");
         

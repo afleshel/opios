@@ -31,7 +31,7 @@
 
 #import "OpenPeerCacheDelegate.h"
 #import "OpenPeerUtility.h"
-#import "HOPModelManager.h"
+#import "HOPModelManager_Internal.h"
 
 OpenPeerCacheDelegate::OpenPeerCacheDelegate(id<HOPCacheDelegate> inCacheDelegate)
 {

@@ -36,6 +36,7 @@
 #import <OpenPeerSDK/HOPUtility.h>
 #import <OpenPeerSDK/HOPConversation.h>
 #import <OpenPeerSDK/HOPSystemMessage.h>
+#import <OpenPeerSDK/HOPMessageRecord+External.h>
 #import "OpenPeer.h"
 #import "MainViewController.h"
 #import "Utility.h"
@@ -120,7 +121,9 @@
                     }
                     else
                     {
-                        HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:messageText type:messageType date:date conversation:conversation contact:contact messageId:messageID];
+                        HOPMessageRecord* messageObj = [HOPMessageRecord createMessage:messageText type:messageType date:[NSDate date] visible:YES conversation:conversation contact:contact messageId:messageID validated:NO messageIDToReplace:nil];
+                        
+                        //HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:messageText type:messageType date:date conversation:conversation contact:contact messageId:messageID];
                         
                         
                         if (messageObj)

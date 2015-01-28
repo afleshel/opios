@@ -51,23 +51,21 @@
 @property (nonatomic, strong) NSSet* previousParticipants;
 //TODO: MOVE TO INTERNAL-END
 
-@property (nonatomic, copy) NSString* title;
+@property (nonatomic, copy) NSString* title;                        //Android topic
 @property (nonatomic, getter=getParticipants) NSArray* participants;
 
 @property (strong) NSMutableSet* setOfNotSentMessages;
 @property (assign) NSUInteger numberOfUnreadMessages;
-@property (nonatomic, strong) HOPCall* activeCall;
+@property (nonatomic, strong) HOPCall* activeCall;                  //Android currentCall
 @property (assign) BOOL redialCall;
 @property (assign) HOPConversationThreadType conversationType;
 
-//+ (HOPConversation*) createConversation;
-//+ (HOPConversation*) createConversationWithParticipants:(NSArray*) participants title:(NSString*) inTitle;
 + (HOPConversation*) createConversationWithParticipants:(NSArray*) participants title:(NSString*) inTitle type:(HOPConversationThreadType) type;
 + (HOPConversation*) createConversationWithThread:(HOPConversationThread*) inConversationThread;
 + (HOPConversation*) createConversationForRecord:(HOPConversationRecord*) inConversationRecord;
 
-+ (NSString*) getCBCIDForContacts:(NSArray*) contacts;
-- (void) addParticipants:(NSArray*) inParticipants;
++ (NSString*) getCBCIDForContacts:(NSArray*) contacts;              //Android move to utility
+- (void) addParticipants:(NSArray*) inParticipants;                 //ANDROID add just for thread based
 - (void) removeParticipants:(NSArray*) inParticipants;
 
 - (void) setComposingStatus:(HOPConversationThreadContactStatus) composingStatus;
@@ -80,7 +78,7 @@
 - (void) clear;
 
 - (void) sendMessage: (HOPMessageRecord*) message;
-- (NSString*) getID;
+- (NSString*) getID;                                                    //Android getConversationID
 - (NSString*) getDefaultTitle;
 
 + (NSString*) stringForMessageDeliveryState:(HOPConversationThreadMessageDeliveryState) state;
@@ -93,7 +91,7 @@
 + (HOPConversation*) conversationOnParticipantsRemoved:(NSArray*) removedParticipants conversation:(HOPConversation*) conversation;
 + (HOPConversation*) getConversationForCBCID:(NSString*) cbcID;
 
-+(NSString*) getDefaultTitleForParticipants:(NSArray*) inParticipants;
++ (NSString*) getDefaultTitleForParticipants:(NSArray*) inParticipants;
 
 - (BOOL) removeSelf;
 

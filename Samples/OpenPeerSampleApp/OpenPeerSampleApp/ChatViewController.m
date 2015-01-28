@@ -600,8 +600,7 @@
     {
         return _fetchedResultsController;
     }
-    
-//    NSFetchRequest *fetchRequest = [[HOPModelManager sharedModelManager] getMessagesFetchRequestForConversationID:self.session.sessionRecord.sessionID sortAscending:YES];
+
     NSFetchRequest *fetchRequest = [[HOPModelManager sharedModelManager] getMessagesFetchRequestForConversation:self.conversation sortAscending:YES];
     
     _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext] sectionNameKeyPath:nil cacheName:nil];
