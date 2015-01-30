@@ -76,7 +76,6 @@
 
 - (void)updateBadge:(HOPConversationRecord *)record
 {
-    //Session* session = [[SessionManager sharedSessionManager] getSessionForConversationEvent:self.event];
     HOPConversation* conversation = [record getConversation];
     if (conversation.numberOfUnreadMessages > 0)
     {

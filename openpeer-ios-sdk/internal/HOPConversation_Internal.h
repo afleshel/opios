@@ -29,24 +29,29 @@
  
  */
 
-#import "HOPRolodexContact+External.h"
-#import "HOPAssociatedIdentity.h"
-#import "HOPAvatar.h"
-#import "HOPIdentityContact.h"
-#import "HOPOpenPeerContact.h"
+#include "HOPConversation.h"
 
 
-@implementation HOPRolodexContact
+@class HOPConversationThread;
+@class HOPConversationRecord;
+@class HOPConversationEvent;
 
-@dynamic identityURI;
-@dynamic name;
-@dynamic profileURL;
-@dynamic readyForDeletion;
-@dynamic vProfileURL;
-@dynamic associatedIdentity;
-@dynamic associatedIdentityForHomeUser;
-@dynamic avatars;
-@dynamic identityContact;
-@dynamic openPeerContact;
+@interface HOPConversation()
+
+@property (nonatomic, strong) HOPConversationThread* thread;
+@property (nonatomic, strong) HOPConversationRecord* record;
+@property (nonatomic, strong) HOPConversationEvent* lastEvent;
+
+@property (nonatomic, strong) NSTimer* removalTimer;
+@property (nonatomic, strong) NSSet* previousParticipants;
+
++ (HOPConversation*) conversationWithThread:(HOPConversationThread*) inConversationThread;
+
+//- (HOPConversationThread*) getThread;
+//- (HOPConversationRecord*) getRecord;
+//- (HOPConversationEvent*) getLastEvent;
+//
+//- (NSTimer*) getRemovalTimer;
+//- (NSSet*) getPreviousParticipants;
 
 @end

@@ -32,6 +32,7 @@
 #import "HOPUtility.h"
 #include <zsLib/String.h>
 #import <openpeer/services/IHelper.h>
+#import "HOPRolodexContact+External.h"
 
 #define secondsInYear 31536000.0
 #define secondsInFourWeeks 2419200.0
@@ -198,6 +199,21 @@
     {
         if (array2)
             ret = [NSMutableArray arrayWithArray: array2];
+    }
+    
+    return ret;
+}
+
++ (NSString*) getCBCIDForContacts:(NSArray*) contacts
+{
+    NSString* ret = @"";
+    
+    for (HOPRolodexContact* contact in contacts)
+    {
+        if (ret.length == 0)
+            ret = [contact getStableID];
+        else
+            ret = [ret stringByAppendingString:[NSString stringWithFormat:@"_%@",[contact getStableID]]];
     }
     
     return ret;

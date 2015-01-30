@@ -45,7 +45,7 @@
 #import "HOPModelManager_Internal.h"
 #import "HOPIdentityContact_Internal.h"
 #import "HOPOpenPeerContact.h"
-#import "HOPRolodexContact+External.h"
+#import "HOPRolodexContact_Internal.h"
 #import "HOPAssociatedIdentity.h"
 #import "HOPIdentityProvider.h"
 #import "HOPOpenPeerContact_Internal.h"
@@ -309,7 +309,7 @@ using namespace openpeer::core;
                 
                 if (!openPeerContact)
                 {
-                    openPeerContact = [HOPOpenPeerContact createOpenPeerContacFromCoreContact:contactPtr conversationThread:conversationThreadPtr];
+                    openPeerContact = [[HOPModelManager sharedModelManager] createOpenPeerContacFromCoreContact:contactPtr conversationThread:conversationThreadPtr];
                 }
                 
                 if (openPeerContact)
@@ -570,7 +570,7 @@ using namespace openpeer::core;
     if(conversationThreadPtr)
     {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            conversationThreadPtr->sendMessage([message.messageID UTF8String], [message.replacedMessageID UTF8String], [message.type UTF8String], [message.text UTF8String], message.validated ? true : false);
+            conversationThreadPtr->sendMessage([message.messageID UTF8String], [message.replacedMessageID UTF8String], [message.type UTF8String], message.deleted ? "" : [message.text UTF8String], message.validated ? true : false);
         });
         
     }

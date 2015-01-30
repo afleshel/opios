@@ -87,8 +87,8 @@
     
     //HOPCallSystemMessage* callSystemMessage = [[HOPCallSystemMessage alloc] initWithMessageType:(HOPCallSystemMessageType)messageType callee:contact errorCode:reasonCode];
     
-    NSString* mediaType = [conversation.activeCall hasVideo] ? @"video" : @"audio";
-    NSString* callID = [conversation.activeCall getCallID];
+    NSString* mediaType = [conversation.currentCall hasVideo] ? @"video" : @"audio";
+    NSString* callID = [conversation.currentCall getCallID];
     if (!callID)
         callID = @"";
     
@@ -153,21 +153,29 @@
 - (void) sendMessage:(NSString*) message replacesMessageID:(NSString*) replacesMessageID forConversation:(HOPConversation*) conversation
 {
     //HOPRolodexContact* contact = [conversation.participants objectAtIndex:0];
-    
+    BOOL edited = NO;
     HOPMessageRecord* messageRecord = nil;
     
     if ([replacesMessageID length] > 0)
     {
         HOPMessageRecord* messageRecordOld = [[HOPModelManager sharedModelManager] getMessageRecordByID:replacesMessageID];
         messageRecordOld.visible = [NSNumber numberWithBool:NO];
-        messageRecord.deleted = [NSNumber numberWithBool:([message length] > 0)];
+        if ([message length] == 0)
+        {
+            messageRecordOld.deleted = [NSNumber numberWithBool:([message length] == 0)];
+            messageRecordOld.replacedMessageID = replacesMessageID;
+            messageRecord = messageRecordOld;
+        }
+        edited = YES;
         [[HOPModelManager sharedModelManager] saveContext];
     }
 
-    messageRecord = [HOPMessageRecord createMessage:message type:messageTypeText date:[NSDate date] visible:YES conversation:conversation contact:[[HOPModelManager sharedModelManager] getRolodexContactForAccount] messageId:[HOPUtility getGUIDstring] validated:NO messageIDToReplace:replacesMessageID];
+    if (!messageRecord)
+        messageRecord = [HOPMessageRecord createMessage:message type:messageTypeText date:[NSDate date] visible:YES conversation:conversation contact:[[HOPModelManager sharedModelManager] getRolodexContactForAccount] messageId:[HOPUtility getGUIDstring] validated:NO messageIDToReplace:replacesMessageID];
 
+    messageRecord.edited = [NSNumber numberWithBool:edited];
     
-    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Sending message: %@ - message id: %@ - for session with id: %@",message,messageRecord.messageID,[conversation getID]);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Sending message: %@ - message id: %@ - for session with id: %@",message,messageRecord.messageID,[conversation getConversationID]);
     
     
     if ([UIDevice isNetworkReachable] && [[HOPAccount sharedAccount] isCoreAccountCreated] && ([[HOPAccount sharedAccount] getState].state == HOPAccountStateReady))
@@ -210,7 +218,7 @@
         return;
     }
  
-    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Received %@ message with id: %@ for session:%@",[messageType lowercaseString],message.messageID,[conversation getID]);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Received %@ message with id: %@ for session:%@",[messageType lowercaseString],message.messageID,[conversation getConversationID]);
     
 
     if (isTextMessage)
@@ -234,7 +242,7 @@
             }
 //            else
 //            {
-//                OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"%@ message is not saved - message id %@ - session id %@",message.text,message.messageID,[conversation getID]);
+//                OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"%@ message is not saved - message id %@ - session id %@",message.text,message.messageID,[conversation getConversationID]);
 //            }
             
             if ([[OpenPeer sharedOpenPeer] appEnteredBackground])

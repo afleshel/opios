@@ -95,15 +95,7 @@
 {
     return self.openPeerContact != nil;
 }
-- (HOPContact*) getCoreContact
-{
-    HOPContact* ret = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:self.openPeerContact.publicPeerFile.peerURI];
-    if (!ret)
-    {
-        ret = [[HOPContact alloc] initWithPeerFile:self.openPeerContact.publicPeerFile.peerFile];
-    }
-    return ret;
-}
+
 
 //TODO: Remove image storage from the core data
 - (HOPAvatar*) getAvatarForWidth:(NSNumber*) width height:(NSNumber*) height

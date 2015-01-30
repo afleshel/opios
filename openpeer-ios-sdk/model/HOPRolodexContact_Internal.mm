@@ -38,6 +38,7 @@
 #import "HOPContact.h"
 #import "OpenPeerStorageManager.h"
 #import "HOPUtility.h"
+#import "HOPOpenPeerContact.h"
 
 @implementation HOPRolodexContact
 
@@ -58,13 +59,6 @@
     HOPAssociatedIdentity* associated = [[HOPModelManager sharedModelManager] getAssociatedIdentityByDomain:identityProviderDomain identityName:baseIdentityURI homeUserIdentityURI:homeUserIdentityURI];
     if (!associated)
     {
-//        associated = [NSEntityDescription insertNewObjectForEntityForName:@"HOPAssociatedIdentity" inManagedObjectContext:[[HOPModelManager sharedModelManager]managedObjectContext]];
-//        
-//        associated.baseIdentityURI = baseIdentityURI;
-//        associated.name = baseIdentityURI;
-//        associated.domain = identityProviderDomain;
-//        associated.homeUserProfile = self; //This is set here because this method is called for the first time when is creating home user rolodex contact
-        
         associated = [[HOPModelManager sharedModelManager] addAssociatedIdentityForBaseIdentityURI:baseIdentityURI domain:identityProviderDomain name:baseIdentityURI /*account:nil*/ selfRolodexProfileProfile:self];
     }
     
@@ -105,4 +99,13 @@
         self.avatars = [NSSet setWithSet:tempAvatars];
 }
 
+- (HOPContact*) getCoreContact
+{
+    HOPContact* ret = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:self.openPeerContact.publicPeerFile.peerURI];
+    if (!ret)
+    {
+        ret = [[HOPContact alloc] initWithPeerFile:self.openPeerContact.publicPeerFile.peerFile];
+    }
+    return ret;
+}
 @end

@@ -70,14 +70,24 @@
         NSString *threadType = [richPushDictionary objectForKey:@"conversationType"];
         NSString *messageType = [richPushDictionary objectForKey:@"messageType"];
         
+        
         NSArray *items = [peerURIs componentsSeparatedByString:@","];
         HOPRolodexContact* contact = nil;
         if ([senderPeerURI length] > 0)
             contact = [[HOPModelManager sharedModelManager] getRolodexContactByPeerURI:senderPeerURI];
         
+        
         if (contact)
         {
-            HOPConversation *conversation = [[SessionManager sharedSessionManager] getConversationForID:conversationID threadType:threadType sender:contact items:items];
+            NSMutableArray* participants = [NSMutableArray arrayWithObject:contact];
+            
+            for (NSString* peerURI in items)
+            {
+                HOPRolodexContact* rolodexContact = [[HOPModelManager sharedModelManager] getRolodexContactByPeerURI:peerURI];
+                if (rolodexContact)
+                    [participants addObject:rolodexContact];
+            }
+            HOPConversation *conversation = [HOPConversation conversationForID:conversationID threadType:threadType participants:participants];//[[SessionManager sharedSessionManager] getConversationForID:conversationID threadType:threadType sender:contact items:items];
             
             if (conversation)
             {
@@ -121,7 +131,7 @@
                     }
                     else
                     {
-                        HOPMessageRecord* messageObj = [HOPMessageRecord createMessage:messageText type:messageType date:[NSDate date] visible:YES conversation:conversation contact:contact messageId:messageID validated:NO messageIDToReplace:nil];
+                        HOPMessageRecord* messageObj = [HOPMessageRecord createMessage:messageText type:messageType date:date visible:YES conversation:conversation contact:contact messageId:messageID validated:NO messageIDToReplace:nil];
                         
                         //HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:messageText type:messageType date:date conversation:conversation contact:contact messageId:messageID];
                         
@@ -135,7 +145,7 @@
                         }
                         else
                         {
-                            OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"%@ message is not saved - message id %@ - session id %@ - date %@",messageText,messageID,[conversation getID],date);
+                            OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"%@ message is not saved - message id %@ - session id %@ - date %@",messageText,messageID,[conversation getConversationID],date);
                         }
                     }
                 }

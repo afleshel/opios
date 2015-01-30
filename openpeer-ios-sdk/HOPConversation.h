@@ -42,30 +42,32 @@
 @interface HOPConversation : NSObject
 
 //MOVE TO INTERNAL
-@property (nonatomic, strong) HOPConversationThread* thread;
+/*@property (nonatomic, strong) HOPConversationThread* thread;
 @property (nonatomic, strong) HOPConversationRecord* record;
 @property (nonatomic, strong) HOPConversationEvent* lastEvent;
 
 //TODO: MOVE TO INTERNAL-START
 @property (nonatomic, strong) NSTimer* removalTimer;
-@property (nonatomic, strong) NSSet* previousParticipants;
+@property (nonatomic, strong) NSSet* previousParticipants;*/
 //TODO: MOVE TO INTERNAL-END
 
-@property (nonatomic, copy) NSString* title;                        //Android topic
+@property (nonatomic, copy) NSString* topic;
+@property (nonatomic, copy) NSString* conversationID;
 @property (nonatomic, getter=getParticipants) NSArray* participants;
 
 @property (strong) NSMutableSet* setOfNotSentMessages;
 @property (assign) NSUInteger numberOfUnreadMessages;
-@property (nonatomic, strong) HOPCall* activeCall;                  //Android currentCall
+@property (nonatomic, strong) HOPCall* currentCall;
 @property (assign) BOOL redialCall;
 @property (assign) HOPConversationThreadType conversationType;
 
-+ (HOPConversation*) createConversationWithParticipants:(NSArray*) participants title:(NSString*) inTitle type:(HOPConversationThreadType) type;
-+ (HOPConversation*) createConversationWithThread:(HOPConversationThread*) inConversationThread;
-+ (HOPConversation*) createConversationForRecord:(HOPConversationRecord*) inConversationRecord;
++ (HOPConversation*) conversationWithParticipants:(NSArray*) participants title:(NSString*) inTitle type:(HOPConversationThreadType) type;
++ (HOPConversation*) conversationForRecord:(HOPConversationRecord*) inConversationRecord;
++ (HOPConversation*) conversationForID:(NSString *)conversationID threadType:(NSString *)threadType participants:(NSArray *)participants;
++ (HOPConversation*) getConversationForCBCID:(NSString*) cbcID;
++ (HOPConversation*) getConversationForID:(NSString*) inConversationID;
 
-+ (NSString*) getCBCIDForContacts:(NSArray*) contacts;              //Android move to utility
-- (void) addParticipants:(NSArray*) inParticipants;                 //ANDROID add just for thread based
+- (void) addParticipants:(NSArray*) inParticipants;
 - (void) removeParticipants:(NSArray*) inParticipants;
 
 - (void) setComposingStatus:(HOPConversationThreadContactStatus) composingStatus;
@@ -78,7 +80,10 @@
 - (void) clear;
 
 - (void) sendMessage: (HOPMessageRecord*) message;
-- (NSString*) getID;                                                    //Android getConversationID
+- (HOPCall*) placeCallForParticipants:(NSArray*) participants includeAudio:(BOOL) includeAudio includeVideo:(BOOL) includeVideo;
+
+- (NSString*) getConversationID;
+- (void)setConversationID:(NSString *)conversationID;
 - (NSString*) getDefaultTitle;
 
 + (NSString*) stringForMessageDeliveryState:(HOPConversationThreadMessageDeliveryState) state;
@@ -89,11 +94,12 @@
 
 + (HOPConversation*) conversationOnParticipantsAdded:(NSArray*) addedParticipants conversation:(HOPConversation*) conversation;
 + (HOPConversation*) conversationOnParticipantsRemoved:(NSArray*) removedParticipants conversation:(HOPConversation*) conversation;
-+ (HOPConversation*) getConversationForCBCID:(NSString*) cbcID;
+
 
 + (NSString*) getDefaultTitleForParticipants:(NSArray*) inParticipants;
 
-- (BOOL) removeSelf;
+- (BOOL) quit;
+- (BOOL) isQuit;
 
 - (void) onRemovalTimerExpired:(id) object;
 @end

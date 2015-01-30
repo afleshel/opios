@@ -452,7 +452,7 @@
     [fetchRequest setEntity:entity];
     
     NSPredicate* predicate1 = [fetchRequest predicate];
-    NSPredicate *predicate2 = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(session.sessionID MATCHES '%@')",[self.conversation getID]]];
+    NSPredicate *predicate2 = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(session.sessionID MATCHES '%@')",[self.conversation getConversationID]]];
                               
     [fetchRequest setPredicate:[NSCompoundPredicate orPredicateWithSubpredicates:[NSArray arrayWithObjects:predicate1,predicate2, nil]]];
     

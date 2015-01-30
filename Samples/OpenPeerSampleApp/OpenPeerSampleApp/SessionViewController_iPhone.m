@@ -146,7 +146,7 @@
     titleView.backgroundColor = [UIColor clearColor];
     
     self.labelTitle = [[UILabel alloc] initWithFrame:CGRectMake(15.0, 3.0, 170.0, 24.0)];
-    self.labelTitle.text = self.conversation.title;//[[[self.session participantsArray]objectAtIndex:0] name];
+    self.labelTitle.text = self.conversation.topic;//[[[self.session participantsArray]objectAtIndex:0] name];
     [self.labelTitle setFont:[UIFont fontWithName:@"Helvetica-Bold" size:20.0]];
     self.labelTitle.textColor = [UIColor whiteColor];
     self.labelTitle.adjustsFontSizeToFitWidth = YES;
@@ -417,7 +417,7 @@
 
 - (void) updateCallState
 {
-    NSString *stateStr = [Utility getCallStateAsString:[self.conversation.activeCall getState]];
+    NSString *stateStr = [Utility getCallStateAsString:[self.conversation.currentCall getState]];
     if ([stateStr length] > 0)
         [self.labelDuration setText:stateStr];
 }
@@ -564,7 +564,7 @@
 
 - (void) updateOnParticipantChange
 {
-    self.labelTitle.text = self.conversation.title;
+    self.labelTitle.text = self.conversation.topic;
     
     [self.chatViewController refreshMessages];
 }

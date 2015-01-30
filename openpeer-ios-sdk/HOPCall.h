@@ -49,6 +49,7 @@
 + (id) placeCall:(HOPConversationThread*) conversationThread includeAudio:(BOOL) includeAudio includeVideo:(BOOL) includeVideo;
 
 + (id) placeCallForConversation:(HOPConversation*) conversation includeAudio:(BOOL) includeAudio includeVideo:(BOOL) includeVideo;
++ (id) placeCallForConversation:(HOPConversation*) conversation partcipants:(NSArray*) participants includeAudio:(BOOL) includeAudio includeVideo:(BOOL) includeVideo;
 /**
  *  This init method is not available. You need to use class method placeCall:toContact:includeAudio:includeVideo.
  *

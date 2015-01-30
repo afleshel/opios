@@ -35,7 +35,7 @@
 #import "HOPConversationThread_Internal.h"
 #import "HOPModelManager.h"
 #import "HOPMessageRecord+External.h"
-#import "HOPConversation.h"
+#import "HOPConversation_Internal.h"
 #import "HOPConversationEvent+External.h"
 #import "HOPConversationRecord+External.h"
 #import "HOPRolodexContact+External.h"
@@ -116,10 +116,9 @@ void OpenPeerConversationThreadDelegate::onConversationThreadNew(IConversationTh
             
             if (!hopConversation)
             {
-//                hopConversation = [[OpenPeerStorageManager sharedStorageManager] getConversationForCBCID:[HOPConversation getCBCIDForContacts:[hopConversationThread getContacts]]];
                 hopConversation = [[OpenPeerStorageManager sharedStorageManager] getConversationForThreadID:[hopConversationThread getThreadId]];
                 if (!hopConversation)
-                    hopConversation = [HOPConversation createConversationWithThread:hopConversationThread];
+                    hopConversation = [HOPConversation conversationWithThread:hopConversationThread];
                 else
                 {
                     hopConversation.thread = hopConversationThread;
@@ -164,7 +163,7 @@ void OpenPeerConversationThreadDelegate::onConversationThreadContactsChanged(ICo
                 {
                     HOPConversationThread * hopConversationThread = hopConversation.thread;
                     hopConversation.thread = nil;
-                    HOPConversation* hopConversation2 = [HOPConversation createConversationWithThread:hopConversationThread];
+                    HOPConversation* hopConversation2 = [HOPConversation conversationWithThread:hopConversationThread];
                     hopConversation2.conversationType = [[HOPSettings sharedSettings] getDefaultCovnersationType];
                     [conversationDelegate onConversationNew:hopConversation2];
                     return;
@@ -179,9 +178,9 @@ void OpenPeerConversationThreadDelegate::onConversationThreadContactsChanged(ICo
                         }
                         
                         hopConversation.record.name = [HOPConversation getDefaultTitleForParticipants:hopConversation.participants];
-                        hopConversation.title = hopConversation.record.name;
+                        hopConversation.topic = hopConversation.record.name;
                         
-                        hopConversation.lastEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"addedNewParticipant" conversationRecord:hopConversation.record partcipants:hopConversation.participants title:hopConversation.title];
+                        hopConversation.lastEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"addedNewParticipant" conversationRecord:hopConversation.record partcipants:hopConversation.participants title:hopConversation.topic];
                     }
                     else if (numberOfAddedParticipants < 0)
                     {
@@ -205,9 +204,9 @@ void OpenPeerConversationThreadDelegate::onConversationThreadContactsChanged(ICo
                         }
                         
                         hopConversation.record.name = [HOPConversation getDefaultTitleForParticipants:hopConversation.participants];
-                        hopConversation.title = hopConversation.record.name;
+                        hopConversation.topic = hopConversation.record.name;
                         
-                        hopConversation.lastEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"removedParticipant" conversationRecord:hopConversation.record partcipants:hopConversation.participants title:hopConversation.title];
+                        hopConversation.lastEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"removedParticipant" conversationRecord:hopConversation.record partcipants:hopConversation.participants title:hopConversation.topic];
                     }
                 }
 

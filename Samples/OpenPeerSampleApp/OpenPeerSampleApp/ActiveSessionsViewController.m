@@ -220,7 +220,7 @@
         {
             if(record.participants.count > 0)
             {
-                conversation = [HOPConversation createConversationForRecord:record];
+                conversation = [HOPConversation conversationForRecord:record];
                 //session = [[SessionManager sharedSessionManager] createSessionForContacts:[record getContacts]];
             }
         }

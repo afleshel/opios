@@ -38,7 +38,7 @@
 #import "HOPCall_Internal.h"
 #import "OpenPeerUtility.h"
 #import "HOPConversationThread_Internal.h"
-#import "HOPConversation.h"
+#import "HOPConversation_Internal.h"
 #import "HOPContact_Internal.h"
 #import "HOPRolodexContact_Internal.h"
 #import "OpenPeerStorageManager.h"
@@ -102,6 +102,34 @@ using namespace openpeer::core;
         if (conversation.participants.count > 0)
         {
             toContact = [((HOPRolodexContact*)[conversation.participants objectAtIndex:0]) getCoreContact];
+            //Create the core call object and start placing call procedure
+            ICallPtr tempCallPtr = ICall::placeCall([conversation.thread getConversationThreadPtr], [toContact getContactPtr], includeAudio, includeVideo);
+            
+            if (tempCallPtr)
+            {
+                //If core call object is create, create HOPCall object
+                ret = [[self alloc] initWithCallPtr:tempCallPtr];
+                [[OpenPeerStorageManager sharedStorageManager] setCall:ret forId:[NSString stringWithUTF8String:tempCallPtr->getCallID()]];
+            }
+            else
+            {
+                ZS_LOG_ERROR(Debug, "Call object is not created!");
+            }
+        }
+    }
+    return ret;
+}
+
++ (id) placeCallForConversation:(HOPConversation*) conversation partcipants:(NSArray*) participants includeAudio:(BOOL) includeAudio includeVideo:(BOOL) includeVideo
+{
+    HOPCall* ret = nil;
+    if (conversation != nil)
+    {
+        NSArray* callees = participants.count > 0 ? participants : conversation.participants;
+        HOPContact* toContact = nil;
+        if (callees.count > 0)
+        {
+            toContact = [((HOPRolodexContact*)[callees objectAtIndex:0]) getCoreContact];
             //Create the core call object and start placing call procedure
             ICallPtr tempCallPtr = ICall::placeCall([conversation.thread getConversationThreadPtr], [toContact getContactPtr], includeAudio, includeVideo);
             

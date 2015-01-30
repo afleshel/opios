@@ -186,4 +186,6 @@ using namespace openpeer::core;
  @return HOPIdentityContact object
  */
 - (HOPIdentityContact*) getIdentityContactWithIdentityURI:(NSString*) identityURI;
+
+- (HOPOpenPeerContact*) createOpenPeerContacFromCoreContact:(IContactPtr) contactPtr conversationThread:(IConversationThreadPtr) conversationThreadPtr;
 @end

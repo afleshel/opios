@@ -54,7 +54,7 @@
     HOPConversation* conversation = [call getConversation];
     dispatch_async(dispatch_get_main_queue(), ^{
 
-        SessionViewController_iPhone* sessionViewController = [[[[OpenPeer sharedOpenPeer] mainViewController] sessionViewControllersDictionary] objectForKey:[conversation getID]];
+        SessionViewController_iPhone* sessionViewController = [[[[OpenPeer sharedOpenPeer] mainViewController] sessionViewControllersDictionary] objectForKey:[conversation getConversationID]];
         
         [sessionViewController updateCallState];
         

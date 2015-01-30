@@ -108,16 +108,6 @@
     return [self.sessionsDictionary objectForKey:conversationID];
 }
 
-- (HOPConversation*) getSessionForConversationEvent:(HOPConversationEvent*) event
-{
-    for (HOPConversation* conversation in [self.sessionsDictionary allValues])
-    {
-        if (conversation.lastEvent == event)
-            return conversation;
-    }
-    return nil;
-}
-
 
 /**
  Make call for session.
@@ -129,13 +119,13 @@
 {
     if ([UIDevice isNetworkReachable])
     {
-        if (!inConversation.activeCall)
+        if (!inConversation.currentCall)
         {
             OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Making a call for the session <%p>", inConversation);
             
             //Place a audio or video call for chosen contact
             //inSession.isRedial = isRedial;
-            inConversation.activeCall = [HOPCall placeCallForConversation:inConversation includeAudio:YES includeVideo:includeVideo];
+            inConversation.currentCall = [HOPCall placeCallForConversation:inConversation includeAudio:YES includeVideo:includeVideo];
             [self setActiveCallConversation:inConversation callActive:YES];
             [[MessageManager sharedMessageManager] sendCallSystemMessage:HOPCallSystemMessageTypeCallPlaced reasonCode:0 forConversation:inConversation];
         }
@@ -159,7 +149,7 @@
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Answer a call for the session <%p>", inConversation);
     //Answer an incoming call
-    [inConversation.activeCall answer];
+    [inConversation.currentCall answer];
 }
 
 /**
@@ -170,7 +160,7 @@
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"End the call for the session <%p>", inConversation);
     //Hangup current active call
-    [inConversation.activeCall hangup:HOPCallClosedReasonUser];
+    [inConversation.currentCall hangup:HOPCallClosedReasonUser];
     //Set flag that there is no active call
     [self setActiveCallConversation:inConversation callActive:NO];
 }
@@ -184,7 +174,7 @@
     // NSString* sessionId = [[call getConversationThread] getThreadId];
     HOPConversation* conversation = [call getConversation];
 
-    SessionViewController_iPhone* sessionViewController = [[[[OpenPeer sharedOpenPeer] mainViewController] sessionViewControllersDictionary] objectForKey:[conversation getID]];
+    SessionViewController_iPhone* sessionViewController = [[[[OpenPeer sharedOpenPeer] mainViewController] sessionViewControllersDictionary] objectForKey:[conversation getConversationID]];
     
     if ([[call getCaller] isSelf])
     {
@@ -218,7 +208,7 @@
     //If callFlagIsSet is YES, show incoming call view, and move call to ringing state
     if (![self isCallInProgress])
     {
-        conversation.activeCall = call;
+        conversation.currentCall = call;
         
         if (!conversation.redialCall)
         {
@@ -259,7 +249,7 @@
  */
 - (void) onCallOpened:(HOPCall*) call
 {
-     SessionViewController_iPhone* sessionViewController = [[[[OpenPeer sharedOpenPeer] mainViewController] sessionViewControllersDictionary] objectForKey:[[call getConversation] getID]];
+     SessionViewController_iPhone* sessionViewController = [[[[OpenPeer sharedOpenPeer] mainViewController] sessionViewControllersDictionary] objectForKey:[[call getConversation] getConversationID]];
     
     [sessionViewController showIncomingCall:NO];
     [sessionViewController showCallViewControllerWithVideo:[call hasVideo]];
@@ -314,7 +304,7 @@
     if (inConversation == self.lastEndedCallConversation)
     {
         //Check interval since last attempt, and if last call is ended 10 seconds ago, or earlier try to redial.
-        NSTimeInterval timeInterval = [[inConversation.activeCall getClosedTime] timeIntervalSinceDate:[NSDate date]];
+        NSTimeInterval timeInterval = [[inConversation.currentCall getClosedTime] timeIntervalSinceDate:[NSDate date]];
         if (timeInterval < 10)
             [self makeCallForConversation:inConversation includeVideo:NO isRedial:YES];
     }
@@ -330,7 +320,7 @@
     
     [[HOPMediaEngine sharedInstance] stopVideoCapture];
     //Get view controller for call session
-    SessionViewController_iPhone* sessionViewController = [[[[OpenPeer sharedOpenPeer] mainViewController] sessionViewControllersDictionary] objectForKey:[conversation getID]];
+    SessionViewController_iPhone* sessionViewController = [[[[OpenPeer sharedOpenPeer] mainViewController] sessionViewControllersDictionary] objectForKey:[conversation getConversationID]];
     
     if (sessionViewController)
     {
@@ -356,7 +346,7 @@
     {
         conversation.redialCall = NO;
         //If call is droped because user is a busy at the moment, show notification to caller.
-        if ([conversation.activeCall getClosedReason] == HOPCallClosedReasonBusy)
+        if ([conversation.currentCall getClosedReason] == HOPCallClosedReasonBusy)
         {
             HOPRolodexContact* contact = [conversation.participants objectAtIndex:0];
             NSString* contactName = contact.name;
@@ -364,7 +354,7 @@
          }
     }
     
-    conversation.activeCall = nil;
+    conversation.currentCall = nil;
     [[SessionManager sharedSessionManager] setLastEndedCallConversation: conversation];
 }
 
@@ -423,7 +413,7 @@
 - (void) stopAnyActiveCall
 {
     if (self.conversationWithActiveCall)
-        [self.conversationWithActiveCall.activeCall hangup:HOPCallClosedReasonNone];
+        [self.conversationWithActiveCall.currentCall hangup:HOPCallClosedReasonNone];
 }
 
 - (void) clearAllSessions
@@ -487,17 +477,17 @@
         return;
     
     
-    NSString* sessionId = [conversation getID];
+    NSString* sessionId = [conversation getConversationID];
     if (sessionId.length > 0)
     {
-        conversation.title = [conversation getDefaultTitle];
+        conversation.topic = [conversation getDefaultTitle];
         SessionViewController_iPhone* sessionViewController = [[[[OpenPeer sharedOpenPeer] mainViewController] sessionViewControllersDictionary] objectForKey:sessionId];
         
         [sessionViewController updateOnParticipantChange];
     }
 }
 
-- (HOPConversation *)getConversationForID:(NSString *)conversationID threadType:(NSString *)threadType sender:(HOPRolodexContact *)sender items:(NSArray *)items
+/*- (HOPConversation *)getConversationForID:(NSString *)conversationID threadType:(NSString *)threadType sender:(HOPRolodexContact *)sender items:(NSArray *)items
 {
     HOPConversation* conversation = nil;
     if (conversationID.length > 0)
@@ -528,7 +518,7 @@
         {
             if ([threadType isEqualToString:[HOPConversation stringForConversationThreadType:HOPConversationThreadTypeContactBased]])
             {
-                conversation = [HOPConversation getConversationForCBCID:[HOPConversation getCBCIDForContacts:contacts]];//[[SessionManager sharedSessionManager] getConversationForContacts:contacts];
+                conversation = [HOPConversation getConversationForCBCID:[HOPUtility getCBCIDForContacts:contacts]];
                 if (!conversation)
                     conversation = [HOPConversation createConversationWithParticipants:contacts title:nil type:[HOPConversation conversationThreadTypeForString:threadType]];
             }
@@ -547,12 +537,12 @@
     }
     return conversation;
 }
-
+*/
 - (void) removeSelfFromConversation:(HOPConversation*) conversation
 {
-    if ([conversation removeSelf])
+    if ([conversation quit])
     {
-        [[[OpenPeer sharedOpenPeer] mainViewController] removeSessionViewControllerForSession:[conversation getID]];
+        [[[OpenPeer sharedOpenPeer] mainViewController] removeSessionViewControllerForSession:[conversation getConversationID]];
         [[[[OpenPeer sharedOpenPeer] mainViewController] activeSessionsViewController] reloadData];
         [[[OpenPeer sharedOpenPeer] mainViewController] popLastConversationViewController];
         

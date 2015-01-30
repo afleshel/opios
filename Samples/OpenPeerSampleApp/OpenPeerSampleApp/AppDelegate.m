@@ -186,6 +186,7 @@
     {
         [[APNSManager sharedAPNSManager] handleAPNS:userInfo];
     }
+    [[APNSManager sharedAPNSManager] getAllMessages];
 }
 
 - (void)handleNotification:(NSDictionary *)notification applicationState:(UIApplicationState)state

@@ -36,7 +36,7 @@
 #import "HOPContact_Internal.h"
 #import "HOPAccount_Internal.h"
 #import "OpenPeerStorageManager.h"
-#import "HOPRolodexContact+External.h"
+#import "HOPRolodexContact_Internal.h"
 
 using namespace openpeer;
 using namespace openpeer::core;

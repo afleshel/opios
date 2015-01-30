@@ -37,7 +37,7 @@
 #import "HOPModelManager.h"
 #import "HOPRolodexContact+External.h"
 #import "HOPOpenPeerContact+External.h"
-#import "HOPConversation.h"
+#import "HOPConversation_Internal.h"
 #import "HOPConversationRecord.h"
 //using namespace openpeer;
 //using namespace openpeer::core;
@@ -77,7 +77,7 @@ using namespace openpeer::core;
     }
     else
     {
-        ZS_LOG_ERROR(Debug, String([([NSString stringWithFormat:@"Some message data are invalid: messageText: %@ - type: %@ - date: %@ - sessionRecordId: %@ - messageId: %@", messageText, type, date,[conversation getID], messageId]) UTF8String]));
+        ZS_LOG_ERROR(Debug, String([([NSString stringWithFormat:@"Some message data are invalid: messageText: %@ - type: %@ - date: %@ - sessionRecordId: %@ - messageId: %@", messageText, type, date,[conversation getConversationID], messageId]) UTF8String]));
     }
     
     return ret;

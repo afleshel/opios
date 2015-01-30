@@ -284,11 +284,11 @@
 - (void) showSessionViewControllerForConversation:(HOPConversation*) conversation forIncomingCall:(BOOL) incomingCall forIncomingMessage:(BOOL) incomingMessage
 {
     SessionViewController_iPhone* sessionViewContorller = nil;
-    NSString* conversationID = [conversation getID];
+    NSString* conversationID = [conversation getConversationID];
     
     SessionTransitionStates transition = [self determineViewControllerTransitionStateForSession:conversationID forIncomingCall:incomingCall forIncomingMessage:incomingMessage];
     
-    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Transition %d for session with id:%@ and for participant:%@",transition,conversationID,conversation.title);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Transition %d for session with id:%@ and for participant:%@",transition,conversationID,conversation.topic);
     UINavigationController* navigationController = nil;
     
 //    switch ([self.tabBarController selectedIndex])
@@ -320,7 +320,7 @@
             [self.sessionViewControllersDictionary setObject:sessionViewContorller forKey:conversationID];
             [navigationController pushViewController:sessionViewContorller animated:YES];
             //[navigationController.navigationBar.topItem setTitle:title];
-            sessionViewContorller.chatViewController.title = conversation.title;
+            sessionViewContorller.chatViewController.title = conversation.topic;
         }
             break;
             
@@ -331,7 +331,7 @@
             [navigationController pushViewController:sessionViewContorller animated:YES];
             //[navigationController.navigationBar.topItem setTitle:title];
             //[navigationController pushViewController:sessionViewContorller.chatViewController animated:YES];
-            sessionViewContorller.chatViewController.title = conversation.title;
+            sessionViewContorller.chatViewController.title = conversation.topic;
             break;
             
         case NEW_SESSION_REFRESH_CHAT:
@@ -340,7 +340,7 @@
             [self.sessionViewControllersDictionary setObject:sessionViewContorller forKey:conversationID];
             //[sessionViewContorller.chatViewController refreshViewWithData];
             
-            [self showNotification:[NSString stringWithFormat:@"New message from %@",conversation.title]];
+            [self showNotification:[NSString stringWithFormat:@"New message from %@",conversation.topic]];
         }
             break;
             
@@ -352,11 +352,11 @@
             [navigationController popToRootViewControllerAnimated:NO];
             [navigationController pushViewController:sessionViewContorller animated:YES];
             //[navigationController.navigationBar.topItem setTitle:title];
-            sessionViewContorller.chatViewController.title = conversation.title;
+            sessionViewContorller.chatViewController.title = conversation.topic;
             break;
             
         case EXISTING_SESSION_REFRESH_NOT_VISIBLE_CHAT:
-            [self showNotification:[NSString stringWithFormat:@"New message from %@",conversation.title]];
+            [self showNotification:[NSString stringWithFormat:@"New message from %@",conversation.topic]];
             break;
             
         case EXISTING_SESSION_REFRESH_CHAT:
@@ -376,7 +376,7 @@
             break;
             
         case INCOMING_CALL_WHILE_OTHER_INPROGRESS:
-            [self showNotification:[NSString stringWithFormat:@"%@ is trying to reach you.",conversation.title]];
+            [self showNotification:[NSString stringWithFormat:@"%@ is trying to reach you.",conversation.topic]];
             break;
             
         case EXISTING_SESSION:
@@ -507,7 +507,7 @@
  */
 - (void) showIncominCallForConversation:(HOPConversation*) conversation
 {
-    SessionViewController_iPhone* sessionViewContorller = [self.sessionViewControllersDictionary objectForKey:[conversation getID]];
+    SessionViewController_iPhone* sessionViewContorller = [self.sessionViewControllersDictionary objectForKey:[conversation getConversationID]];
     [sessionViewContorller showIncomingCall:YES];
     //[sessionViewContorller prepareForIncomingCall];
 }

@@ -111,9 +111,9 @@
 
     HOPRolodexContact* contact = [self.conversation getParticipants][0];
     
-    self.labelCallType.text = [self.conversation.activeCall hasVideo] ? NSLocalizedString(@"Video call from", nil) : NSLocalizedString(@"Audio call from", nil);
+    self.labelCallType.text = [self.conversation.currentCall hasVideo] ? NSLocalizedString(@"Video call from", nil) : NSLocalizedString(@"Audio call from", nil);
     
-    self.buttonAccept.imageView.image = [self.conversation.activeCall hasVideo] ? [UIImage imageNamed:@"video_indicator_white_big.png"] : [UIImage imageNamed:@"handset_accept_icon.png"];
+    self.buttonAccept.imageView.image = [self.conversation.currentCall hasVideo] ? [UIImage imageNamed:@"video_indicator_white_big.png"] : [UIImage imageNamed:@"handset_accept_icon.png"];
     
     self.labelCaller.text = contact.name;
     
