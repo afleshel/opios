@@ -42,6 +42,12 @@
 #import "Utility.h"
 #import "SessionManager.h"
 
+@interface PushNotificationReceiver()
+
+@property (nonatomic, weak) HOPConversation* lastUpdatedConversation;
+
+@end
+
 @implementation PushNotificationReceiver
 
 - (void) prepare
@@ -139,9 +145,9 @@
                         if (messageObj)
                         {
                             conversation.numberOfUnreadMessages++;
-                            
-                            //If session view controller with message sender is not yet shown, show it
-                            [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForConversation:conversation forIncomingCall:NO forIncomingMessage:YES];
+                            self.lastUpdatedConversation = conversation;
+//                            //If session view controller with message sender is not yet shown, show it
+//                            [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForConversation:conversation replaceConversation:nil incomingCall:NO incomingMessage:YES];
                         }
                         else
                         {
@@ -158,12 +164,27 @@
     }
 }
 
+- (void)downloadAllMessages
+{
+    self.lastUpdatedConversation = nil;
+}
 - (void) handleExistingMessages
 {
     
 }
 
 - (void) setBadgeNumber:(NSInteger) numberOfUnreadMessages
+{
+    
+}
+
+- (void) onPushNotificationsDownloaded
+{
+    if (self.lastUpdatedConversation)
+        [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForConversation:self.lastUpdatedConversation replaceConversation:nil incomingCall:NO incomingMessage:YES];
+}
+
+- (void)downloadMessageWithID:(NSString *)messageID
 {
     
 }

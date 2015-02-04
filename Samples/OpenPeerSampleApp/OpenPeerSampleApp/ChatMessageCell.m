@@ -292,9 +292,9 @@
             
             UIImage* image = nil;
             UIImageView* imageView = nil;
-            CGRect rectEditedIcon;
+            CGRect rectEditedIcon = CGRectMake(0.0, 0.0, 0.0, 0.0);
             
-            if (message.edited.boolValue)
+            if (message.edited.boolValue && !self.message.deleted.boolValue)
             {
                 image = [UIImage imageNamed:@"chat_edited_message_icon.png"];
                 imageView = [[UIImageView alloc] initWithImage:image];
@@ -323,7 +323,7 @@
             //Label separator
             UILabel *labelSeparator = [[UILabel alloc] initWithFrame:CGRectMake(headerLabelXpos, TOP_SPACE, 10.0, labelHeight)];
             labelSeparator.backgroundColor =[UIColor clearColor];
-            labelSeparator.textColor = [UIColor whiteColor];
+            labelSeparator.textColor = textColor;
             labelSeparator.textAlignment = NSTextAlignmentCenter;
             labelSeparator.font = self.chatTimestampFont;
             labelSeparator.text = @" | ";
@@ -443,7 +443,7 @@
             [self.contentView addSubview:labelSeparator];
             [self.contentView addSubview:lblChatMessageTimestamp];
             
-            if (isHomeUserSender)
+            if (isHomeUserSender && !self.message.deleted.boolValue)
                 [self setMessageStatus];
         }
     }

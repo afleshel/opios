@@ -38,6 +38,7 @@
 
 - (void)downloadAllMessages
 {
+    [super downloadAllMessages];
     PFQuery* parseQuery = [PFQuery queryWithClassName:@"OPPushMessage"];    [parseQuery whereKey:@"to" equalTo:[[HOPAccount sharedAccount] getPeerURI]];
     [parseQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
      {
@@ -45,30 +46,34 @@
          {
              OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, [error description]);
          }
-         for (PFObject* object in objects)
+         else
          {
-
-//             NSString* jsonMessage = object[@"extras"];
-             NSString* jsonMessageText = object[@"alert"];
-              NSDictionary* dictSystem = object[@"system"];
-
-//             NSData *data = [jsonMessage dataUsingEncoding:NSUTF8StringEncoding];
-//             NSDictionary* dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-             
-             NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:object[@"conversationId"], @"conversationId", object[@"conversationType"], @"conversationType", object[@"date"], @"date", object[@"location"], @"location", object[@"messageId"], @"messageId", object[@"peerURI"], @"peerURI", object[@"peerURIs"], @"peerURIs", object[@"senderName"], @"senderName", object[@"to"], @"to", object[@"messageType"], @"messageType",  nil];
-             if (dict.count > 0)
+             for (PFObject* object in objects)
              {
-                 NSMutableDictionary* dictMessage = [NSMutableDictionary dictionaryWithDictionary:dict];
-                 [dictMessage setObject:jsonMessageText forKey:@"message"];
-                 if (dictSystem)
+
+    //             NSString* jsonMessage = object[@"extras"];
+                 NSString* jsonMessageText = object[@"alert"];
+                  NSDictionary* dictSystem = object[@"system"];
+
+    //             NSData *data = [jsonMessage dataUsingEncoding:NSUTF8StringEncoding];
+    //             NSDictionary* dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+                 
+                 NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:object[@"conversationId"], @"conversationId", object[@"conversationType"], @"conversationType", object[@"date"], @"date", object[@"location"], @"location", object[@"messageId"], @"messageId", object[@"peerURI"], @"peerURI", object[@"peerURIs"], @"peerURIs", object[@"senderName"], @"senderName", object[@"to"], @"to", object[@"messageType"], @"messageType",  nil];
+                 if (dict.count > 0)
                  {
-                     //[dictMessage setObject:[HOPSystemMessage getMessageType] forKey:@"messageType"];
-                     [dictMessage setObject:dictSystem forKey:@"system"];
+                     NSMutableDictionary* dictMessage = [NSMutableDictionary dictionaryWithDictionary:dict];
+                     if (jsonMessageText.length > 0)
+                         [dictMessage setObject:jsonMessageText forKey:@"message"];
+                     if (dictSystem)
+                     {
+                         [dictMessage setObject:dictSystem forKey:@"system"];
+                     }
+                     [self createMessageFromRichPushDict:dictMessage];
                  }
-                 [self createMessageFromRichPushDict:dictMessage];
              }
          }
          [PFObject deleteAllInBackground:objects];
+         [self onPushNotificationsDownloaded];
      }];
 
 }

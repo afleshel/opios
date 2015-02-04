@@ -74,9 +74,8 @@
     self.labelLastMessage.hidden = [self.labelLastMessage.text length] == 0;
 }
 
-- (void)updateBadge:(HOPConversationRecord *)record
+- (void)updateBadge:(HOPConversation *)conversation
 {
-    HOPConversation* conversation = [record getConversation];
     if (conversation.numberOfUnreadMessages > 0)
     {
         NSString* numberToDisplay = [NSString stringWithFormat:@"%d",conversation.numberOfUnreadMessages];
@@ -132,7 +131,8 @@
     
     [self updateIcon:record];
     
-    [self updateBadge:record];
+    //HOPConversation* conversation = [record getConversation];
+    [self updateBadge:[record getConversation]];
     
     self.labelCreationDate.text = [Utility stringFromDate:self.conversationRecord.lastActivity];
     [self setLastMessage];
@@ -182,6 +182,6 @@
     [self setLastMessage];
     self.displayName.text = self.conversationRecord.name;
     [self updateIcon:self.conversationRecord];
-    [self updateBadge:self.conversationRecord];
+    [self updateBadge:[self.conversationRecord getConversation]];
 }
 @end

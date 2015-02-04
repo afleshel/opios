@@ -40,5 +40,5 @@
 - (void) setRecord:(HOPConversationRecord *)conversationRecord;
 - (void) updateActivity;
 - (void) setBackground;
-
+- (void) updateBadge:(HOPConversation *)conversation;
 @end

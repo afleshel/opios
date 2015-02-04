@@ -39,6 +39,7 @@ using namespace openpeer::core;
 
 - (HOPOpenPeerContact*) getOpenPeerContactForIdentityContact:(IdentityContact) inIdentityContact;
 - (HOPOpenPeerContact*) createOpenPeerContactForIdentityContact:(IdentityContact) inIdentityContact;
+- (HOPPublicPeerFile*) savePublicPeerFile:(NSString*) publicPeerFile peerURI:(NSString*) peerURI openPeerContact:(HOPOpenPeerContact*) openPeerContact;
 - (HOPOpenPeerContact*) createOrUpdateOpenPeerContactForItentities:(NSArray*) identities coreContact:(IContactPtr) coreContact;
 - (void) updateOpenPeerContact:(HOPOpenPeerContact*) contact identityContact:(IdentityContact) inIdentityContact;
 
@@ -188,4 +189,6 @@ using namespace openpeer::core;
 - (HOPIdentityContact*) getIdentityContactWithIdentityURI:(NSString*) identityURI;
 
 - (HOPOpenPeerContact*) createOpenPeerContacFromCoreContact:(IContactPtr) contactPtr conversationThread:(IConversationThreadPtr) conversationThreadPtr;
+
+- (NSArray*) addUnkownContactsFromConversationThread:(HOPConversationThread*) thread;
 @end

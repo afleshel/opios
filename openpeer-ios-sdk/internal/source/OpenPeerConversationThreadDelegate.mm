@@ -33,7 +33,7 @@
 #import "OpenPeerConversationThreadDelegate.h"
 #import "OpenPeerStorageManager.h"
 #import "HOPConversationThread_Internal.h"
-#import "HOPModelManager.h"
+#import "HOPModelManager_Internal.h"
 #import "HOPMessageRecord+External.h"
 #import "HOPConversation_Internal.h"
 #import "HOPConversationEvent+External.h"
@@ -105,6 +105,8 @@ void OpenPeerConversationThreadDelegate::onConversationThreadNew(IConversationTh
     if (!hopConversationThread)
     {
         hopConversationThread = [[HOPConversationThread alloc] initWithConversationThread:conversationThread];
+        NSArray* updatedContacts = [[HOPModelManager sharedModelManager] addUnkownContactsFromConversationThread:hopConversationThread];
+        [hopConversationThread refreshParticipants];
         
         if (conversationThreadDelegate)
         {
@@ -116,6 +118,10 @@ void OpenPeerConversationThreadDelegate::onConversationThreadNew(IConversationTh
             
             if (!hopConversation)
             {
+                hopConversation.updatedContacts = nil;
+                if (updatedContacts.count > 0)
+                    hopConversation.updatedContacts = [NSArray arrayWithArray:updatedContacts];
+                
                 hopConversation = [[OpenPeerStorageManager sharedStorageManager] getConversationForThreadID:[hopConversationThread getThreadId]];
                 if (!hopConversation)
                     hopConversation = [HOPConversation conversationWithThread:hopConversationThread];
@@ -146,7 +152,11 @@ void OpenPeerConversationThreadDelegate::onConversationThreadContactsChanged(ICo
         HOPConversationThread * hopConversationThread = this->getOpenPeerConversationThread(conversationThread);
         
         if (hopConversationThread)
+        {
+            NSArray* updatedContacts = [[HOPModelManager sharedModelManager] addUnkownContactsFromConversationThread:hopConversationThread];
+            [hopConversationThread refreshParticipants];
             [conversationThreadDelegate onConversationThreadContactsChanged:hopConversationThread];
+        }
     }
     else if (conversationDelegate)
     {
@@ -154,6 +164,12 @@ void OpenPeerConversationThreadDelegate::onConversationThreadContactsChanged(ICo
         
         if (hopConversation)
         {
+             NSArray* updatedContacts = [[HOPModelManager sharedModelManager] addUnkownContactsFromConversationThread:hopConversation.thread];
+            [hopConversation.thread refreshParticipants];
+            hopConversation.updatedContacts = nil;
+            if (updatedContacts.count > 0)
+                hopConversation.updatedContacts = [NSArray arrayWithArray:updatedContacts];
+            
             NSArray* difference = [HOPUtility differenceBetweenArray:hopConversation.participants array:[hopConversation.lastEvent getContacts]];
             int numberOfAddedParticipants = hopConversation.participants.count - [hopConversation.lastEvent getContacts].count;
             

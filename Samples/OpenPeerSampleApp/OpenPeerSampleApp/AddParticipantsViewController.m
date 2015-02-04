@@ -34,6 +34,8 @@
 #import "SessionManager.h"
 #import "OpenPeer.h"
 #import "MainViewController.h"
+#import "MessageManager.h"
+
 //#import "Session.h"
 //#import <OpenPeerSDK/HOPConversationEvent+External.h>
 #import <OpenPeerSDK/HOPConversation.h>
@@ -104,8 +106,9 @@
     
     if (newConversation != self.conversation)
     {
+        [[MessageManager sharedMessageManager] sendSystemForSwitchFromConversation:self.conversation toConversation:newConversation];
         [[[OpenPeer sharedOpenPeer] mainViewController] popLastConversationViewController];
-        [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForConversation:newConversation forIncomingCall:NO forIncomingMessage:NO];
+        [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForConversation:newConversation replaceConversation:nil incomingCall:NO incomingMessage:NO];
     }
     else
     {

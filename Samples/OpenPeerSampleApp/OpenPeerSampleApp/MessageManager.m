@@ -47,7 +47,12 @@
 #import <OpenPeerSDK/HOPMessageRecord+External.h>
 #import "UIDevice+Networking.h"
 
-
+typedef enum
+{
+    ApplicationSystemMessageTypeNone,
+    ApplicationSystemMessageTypeCall,
+    ApplicationSystemMessageTypeConversation,
+}ApplicationMessageTypes;
 
 @interface MessageManager ()
 
@@ -135,25 +140,99 @@
     }
 }
 
+//{"system":{"conversationSwitch":{"from":"conversationId1","to":"conversationId2"}}
+- (void) sendSystemForSwitchFromConversation:(HOPConversation*) conversation toConversation:(HOPConversation*) toConversation
+{
+    NSDictionary* conversationSwitchDict = [NSDictionary dictionaryWithObjectsAndKeys:conversation.conversationID, @"from", toConversation.conversationID, @"to", nil];
+    if (conversationSwitchDict)
+    {
+        NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:[NSDictionary dictionaryWithObjectsAndKeys:conversationSwitchDict,@"conversationSwitch", nil],@"system", nil];
+        
+        if (dict)
+        {
+            NSString* messageBody = [Utility jsonFromDictionary:dict];
+            if (messageBody.length > 0)
+            {
+                HOPMessageRecord* messageRecord = [HOPMessageRecord createMessage:messageBody type:[HOPSystemMessage getMessageType] date:[NSDate date] visible:NO conversation:conversation contact:[HOPRolodexContact getSelf] messageId:[HOPUtility getGUIDstring] validated:NO messageIDToReplace:@""];
+                if (messageRecord)
+                {
+                    [toConversation sendMessage:messageRecord];
+                }
+            }
+        }
+    }
+}
+
+//{"system":{"conversationSwitch":{"from":"conversationId1","to":"conversationId2"}}
+
+- (ApplicationMessageTypes) getSystemMessageType:(HOPMessageRecord*) inMessage
+{
+    ApplicationMessageTypes ret = ApplicationSystemMessageTypeNone;
+    
+    NSDictionary* systemDict = [Utility dictionaryFromJSON:inMessage.text];
+    if (systemDict)
+    {
+        if ([systemDict valueForKeyPath:@"system.callStatus"])
+            ret = ApplicationSystemMessageTypeCall;
+        else if ([systemDict valueForKeyPath:@"system.conversationSwitch"])
+            ret = ApplicationSystemMessageTypeConversation;
+    }
+    return ret;
+}
 
 - (void) parseSystemMessage:(HOPMessageRecord*) inMessage forConversation:(HOPConversation*) conversation
 {
     if ([inMessage.type isEqualToString:[HOPConversationThread getSystemMessageType]])
     {
-        HOPCallSystemMessage* callSystemMessage = [HOPCallSystemMessage callSystemMessageFromJSON:inMessage.text];
-        
-        if (callSystemMessage)
+        NSDictionary* systemDict = [Utility dictionaryFromJSON:inMessage.text];
+        if (systemDict)
         {
-            OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Call system messsage:%@\n",callSystemMessage.jsonMessage);
+            if ([systemDict valueForKeyPath:@"system.callStatus"])
+            {
+                HOPCallSystemMessage* callSystemMessage = [HOPCallSystemMessage callSystemMessageFromJSON:inMessage.text];
+                
+                if (callSystemMessage)
+                {
+                    if (callSystemMessage.messageType == HOPCallSystemMessageTypeCallAnswered)
+                    {
+                        inMessage.visible = [NSNumber numberWithBool:NO];
+                        [[HOPModelManager sharedModelManager]saveContext];
+                    }
+                    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Call system messsage:%@\n",callSystemMessage.jsonMessage);
+                }
+            }
+            else if ([systemDict valueForKeyPath:@"system.conversationSwitch"])
+            {
+                NSDictionary* dictConversationSystem = [systemDict valueForKeyPath:@"system.conversationSwitch"];
+                if (dictConversationSystem.count > 0)
+                {
+                    NSString* replaceConversationID = [dictConversationSystem objectForKey:@"from"];
+                    NSString* conversationID = [dictConversationSystem objectForKey:@"to"];
+                    
+                    HOPConversation* replaceConversation = replaceConversationID.length > 0 ? [HOPConversation getConversationForID:replaceConversationID] : nil;
+                    HOPConversation* conversation = conversationID.length > 0 ? [HOPConversation getConversationForID:conversationID] : nil;
+                    
+                    [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForConversation:conversation replaceConversation:replaceConversation incomingCall:NO incomingMessage:NO];
+                    
+                    inMessage.visible = [NSNumber numberWithBool:NO];
+                    [[HOPModelManager sharedModelManager] saveContext];
+                }
+            }
         }
     }
 }
 
 
+- (void) replaceConversationWithID:(NSString*) conversationID toConversationWithID:(NSString*) toConversationID
+{
+    
+}
+
 - (void) sendMessage:(NSString*) message replacesMessageID:(NSString*) replacesMessageID forConversation:(HOPConversation*) conversation
 {
     //HOPRolodexContact* contact = [conversation.participants objectAtIndex:0];
     BOOL edited = NO;
+    BOOL deleted = NO;
     HOPMessageRecord* messageRecord = nil;
     
     if ([replacesMessageID length] > 0)
@@ -164,7 +243,9 @@
         {
             messageRecordOld.deleted = [NSNumber numberWithBool:([message length] == 0)];
             messageRecordOld.replacedMessageID = replacesMessageID;
-            messageRecord = messageRecordOld;
+            //messageRecord = messageRecordOld;
+            message = @" ";
+            deleted = YES;
         }
         edited = YES;
         [[HOPModelManager sharedModelManager] saveContext];
@@ -174,6 +255,7 @@
         messageRecord = [HOPMessageRecord createMessage:message type:messageTypeText date:[NSDate date] visible:YES conversation:conversation contact:[[HOPModelManager sharedModelManager] getRolodexContactForAccount] messageId:[HOPUtility getGUIDstring] validated:NO messageIDToReplace:replacesMessageID];
 
     messageRecord.edited = [NSNumber numberWithBool:edited];
+    messageRecord.deleted = [NSNumber numberWithBool:deleted];
     
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Sending message: %@ - message id: %@ - for session with id: %@",message,messageRecord.messageID,[conversation getConversationID]);
     
@@ -209,42 +291,33 @@
  */
 - (void) onMessageReceived:(HOPMessageRecord*) message forConversation:(HOPConversation*) conversation
 {
-    BOOL isTextMessage = [message.type isEqualToString:messageTypeText];
-    NSString* messageType = isTextMessage ? @"Text" : @"System";
+    //BOOL isTextMessage = [message.type isEqualToString:messageTypeText];
+    BOOL isSystemMessage = [message.type isEqualToString:[HOPSystemMessage getMessageType]];
+    //NSString* messageType = isTextMessage ? @"Text" : @"System";
     
     if (!conversation)
     {
-        OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"%@ message received with invalid conversation object", messageType);
+        OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"%@ message received with invalid conversation object", message.type);
         return;
     }
  
-    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Received %@ message with id: %@ for session:%@",[messageType lowercaseString],message.messageID,[conversation getConversationID]);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Received %@ message with id: %@ for session:%@",[message.type lowercaseString],message.messageID,[conversation getConversationID]);
     
 
-    if (isTextMessage)
+    if (!isSystemMessage)
     {
-        //HOPMessageRecord* messageObj = nil;
+
         if ([message.replacedMessageID length] > 0)
         {
             [[HOPModelManager sharedModelManager] replaceMessageWithID:message.replacedMessageID newMessageID:message.messageID messageText:message.text];
         }
         else
         {
-            //Message* messageObj = [[Message alloc] initWithMessageText:message.text senderContact:contact sentTime:message.date];
-//            messageObj = [[HOPModelManager sharedModelManager] addMessage:message.text type:messageTypeText date:message.date conversation:conversation contact:message.contact messageId:message.messageID];
-//       
-//            if (messageObj)
-            {
-                conversation.numberOfUnreadMessages++;
+            conversation.numberOfUnreadMessages++;
 
-                //If session view controller with message sender is not yet shown, show it
-                [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForConversation:conversation forIncomingCall:NO forIncomingMessage:YES];
-            }
-//            else
-//            {
-//                OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"%@ message is not saved - message id %@ - session id %@",message.text,message.messageID,[conversation getConversationID]);
-//            }
-            
+            //If session view controller with message sender is not yet shown, show it
+            [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForConversation:conversation replaceConversation:nil incomingCall:NO incomingMessage:YES];
+
             if ([[OpenPeer sharedOpenPeer] appEnteredBackground])
             {
                 NSMutableDictionary* dict = [[NSMutableDictionary alloc] init];
@@ -267,11 +340,6 @@
     }
     else
     {
-        BOOL visible = [message.text rangeOfString:@"\"status\":\"answered\""].location == NSNotFound;
-        message.visible = [NSNumber numberWithBool:visible];
-        [[HOPModelManager sharedModelManager] saveContext];
-        //Save System message
-        //[[HOPModelManager sharedModelManager] addMessage:message.text type:[HOPSystemMessage getMessageType] date:message.date visible:visible conversation:conversation contact:message.contact messageId:message.messageID];
         [self parseSystemMessage:message forConversation:conversation];
     }
 }
@@ -280,7 +348,7 @@
 - (void) resendMessages
 {
     OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"Message resending");
-    NSArray* conversations = [[[SessionManager sharedSessionManager] sessionsDictionary] allValues];
+    NSArray* conversations = [HOPConversation getConversations];
     for (HOPConversation* conversation in conversations)
     {
         NSArray* messages = [conversation.setOfNotSentMessages allObjects];
@@ -320,4 +388,6 @@
         [[HOPModelManager sharedModelManager] saveContext];
     }
 }
+
+
 @end

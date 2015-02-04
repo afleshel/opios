@@ -66,6 +66,8 @@
 }
 - (void)downloadAllMessages
 {
+    [super downloadAllMessages];
+    
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Get all messages from the UA inbox.");
 
      [[UAInbox shared].messageList retrieveMessageListWithSuccessBlock:^
@@ -254,6 +256,7 @@
     
     [self createMessageFromRichPushDict:richPushDictionary];
     
+    [self onPushNotificationsDownloaded];
     return;
 }
 - (void) httpDownloader:(HTTPDownloader *) downloader didFailWithError:(NSError *)error

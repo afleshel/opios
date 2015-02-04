@@ -31,6 +31,7 @@
 
 #import <Foundation/Foundation.h>
 
+@class HOPConversation;
 @interface PushNotificationReceiver : NSObject
 
 - (void) prepare;
@@ -43,4 +44,6 @@
 - (void) handleExistingMessages;
 
 - (void) setBadgeNumber:(NSInteger) numberOfUnreadMessages;
+
+- (void) onPushNotificationsDownloaded;
 @end

@@ -40,16 +40,12 @@
 
 @interface SessionManager : NSObject
 
-@property (strong) NSMutableDictionary* sessionsDictionary;
-@property (strong) NSMutableDictionary* conversationsDictionaryForContacts;
+//@property (strong) NSMutableDictionary* sessionsDictionary;
+//@property (strong) NSMutableDictionary* conversationsDictionaryForContacts;
 @property (assign) HOPConversation* lastEndedCallConversation;
-@property (nonatomic, assign) HOPConversation* conversationWithFaceDetectionOn;
 
 + (id) sharedSessionManager;
 
-
-- (HOPConversation*) getConversationForContacts:(NSArray*) contacts;
-- (HOPConversation*) getConversationForConversationID:(NSString*) conversationID;
 
 - (void) makeCallForConversation:(HOPConversation*) inConversation includeVideo:(BOOL) includeVideo isRedial:(BOOL) isRedial;
 - (void) answerCallForConversation:(HOPConversation*) inConversation;
@@ -79,8 +75,6 @@
 - (NSString*) getLastTextMessageForConversationRecord:(HOPConversationRecord*) record;
 
 - (void) onParticipantsInConversationUpdate:(HOPConversation*) conversation numberOfAddedParticipants:(int) numberOfAddedParticipants;
-
-- (HOPConversation *)getConversationForID:(NSString *)conversationID threadType:(NSString *)threadType sender:(HOPRolodexContact *)sender items:(NSArray *)items;
 
 - (void) removeSelfFromConversation:(HOPConversation*) conversation;
 @end

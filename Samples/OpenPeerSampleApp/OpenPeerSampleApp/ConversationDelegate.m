@@ -58,11 +58,13 @@
 - (void) onConversationNew:(HOPConversation*) conversation
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Handling a new conversation thread creation.");
+    [[ContactsManager sharedContactsManager] identityLookupForContacts:conversation.updatedContacts];
 }
 
 - (void) onConversationContactsChanged:(HOPConversation*) conversation numberOfAddedParticipants:(int) numberOfAddedParticipants
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread id %@  - number of contacts: %d.",[conversation getConversationID], conversation.participants.count);
+    [[ContactsManager sharedContactsManager] identityLookupForContacts:conversation.updatedContacts];
     dispatch_async(dispatch_get_main_queue(), ^
    {
        [[SessionManager sharedSessionManager] onParticipantsInConversationUpdate:conversation numberOfAddedParticipants:numberOfAddedParticipants];

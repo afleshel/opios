@@ -47,6 +47,7 @@
 - (void) refreshExisitngContacts;
 - (void) refreshRolodexContacts;
 - (void) identityLookupForContacts:(NSArray *)contacts identityServiceDomain:(NSString*) identityServiceDomain;
+- (void) identityLookupForContacts:(NSArray *)contacts;
 - (void) updateContactsWithDataFromLookup:(HOPIdentityLookup*) identityLookup;
 
 - (void) removeAllContacts;

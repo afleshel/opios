@@ -47,7 +47,7 @@
 @dynamic rolodexContacts;
 @dynamic account;
 
-+ (id) createOpenPeerContacFromCoreContact:(IContactPtr) contactPtr conversationThread:(IConversationThreadPtr) conversationThreadPtr
+/*+ (id) createOpenPeerContacFromCoreContact:(IContactPtr) contactPtr conversationThread:(IConversationThreadPtr) conversationThreadPtr
 {
     HOPOpenPeerContact* ret = nil;
     
@@ -85,6 +85,6 @@
     }
     
     return ret;
-}
+}*/
 
 @end

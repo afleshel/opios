@@ -59,6 +59,11 @@
     return self;
 }
 
+- (NSDictionary *)createPushMessage:(NSString *)message missedCall:(BOOL)missedCall recipients:(NSArray *)recipients
+{
+    return nil;
+}
+
 - (void) prepare
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Prepare PushNotificationSender");

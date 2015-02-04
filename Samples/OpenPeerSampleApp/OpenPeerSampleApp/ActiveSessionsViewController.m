@@ -226,7 +226,12 @@
         }
         
         if (conversation)
-            [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForConversation:conversation forIncomingCall:NO forIncomingMessage:NO];
+        {
+            ActiveSessionTableViewCell *cell = (ActiveSessionTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
+            if (cell)
+                [cell updateBadge:conversation];
+            [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForConversation:conversation replaceConversation:nil incomingCall:NO incomingMessage:NO];
+        }
     }
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
 }

@@ -165,6 +165,8 @@ using namespace openpeer::core;
             ret.conversationType = threadType;
     }
     
+    [ret refreshParticipants];
+    
     return ret;
 }
 
@@ -189,6 +191,7 @@ using namespace openpeer::core;
         ret.conversationType = [[HOPSettings sharedSettings] getDefaultCovnersationType];
     }
     
+    [ret refreshParticipants];
     
     return ret;
 }
@@ -210,6 +213,7 @@ using namespace openpeer::core;
             if (tempConversationThreadPtr)
             {
                 ret = [[HOPConversationThread alloc] initWithConversationThread:tempConversationThreadPtr];
+                [ret refreshParticipants];
                 if (ret.conversationType == HOPConversationThreadTypeNone)
                     ret.conversationType = [[HOPSettings sharedSettings] getDefaultCovnersationType];
             }
@@ -292,9 +296,16 @@ using namespace openpeer::core;
     return [HOPAccount sharedAccount];
 }
 
-- (NSArray*) getContacts
+//- (NSArray*) getContacts
+//{
+//
+//    return self.participants;
+//}
+
+- (void) refreshParticipants
 {
     [self.participants removeAllObjects];
+    
     if (conversationThreadPtr)
     {
         ContactListPtr contactList = conversationThreadPtr->getContacts();
@@ -307,10 +318,10 @@ using namespace openpeer::core;
                 //It is not obtained rolodex contact, because we need to be sure that open peer contact exists. If doesn't exists create a new one.
                 HOPOpenPeerContact* openPeerContact = [[HOPModelManager sharedModelManager] getOpenPeerContactForPeerURI:[NSString stringWithUTF8String:contactPtr->getPeerURI()]];
                 
-                if (!openPeerContact)
+                /*if (!openPeerContact)
                 {
                     openPeerContact = [[HOPModelManager sharedModelManager] createOpenPeerContacFromCoreContact:contactPtr conversationThread:conversationThreadPtr];
-                }
+                }*/
                 
                 if (openPeerContact)
                     [self.participants addObject:[openPeerContact getDefaultRolodexContact]];
@@ -322,10 +333,7 @@ using namespace openpeer::core;
         ZS_LOG_ERROR(Debug, [self log:@"Invalid conversation thread object!"]);
         [NSException raise:NSInvalidArgumentException format:@"Invalid conversation thread object!"];
     }
-    
-    return self.participants;
 }
-
 + (ContactProfileInfoListPtr) getContactProfileListForContacts:(NSArray*) contacts
 {
     ContactProfileInfoListPtr contactListPtr(new ContactProfileInfoList);
@@ -570,7 +578,7 @@ using namespace openpeer::core;
     if(conversationThreadPtr)
     {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            conversationThreadPtr->sendMessage([message.messageID UTF8String], [message.replacedMessageID UTF8String], [message.type UTF8String], message.deleted ? "" : [message.text UTF8String], message.validated ? true : false);
+            conversationThreadPtr->sendMessage([message.messageID UTF8String], [message.replacedMessageID UTF8String], [message.type UTF8String], message.deleted.boolValue ? " " : [message.text UTF8String], message.validated ? true : false);
         });
         
     }

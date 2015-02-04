@@ -59,11 +59,12 @@ typedef  enum
     EXISTING_SESSION_REFRESH_NOT_VISIBLE_CHAT,
     EXISTIG_SESSION_SHOW_CHAT,
     INCOMING_CALL_WHILE_OTHER_INPROGRESS,
+    REPLACE_EXISTING_SESSION,
     
     ERROR_CALL_ALREADY_IN_PROGRESS = 100
 }SessionTransitionStates;
 
-@interface MainViewController : UIViewController<UIActionSheetDelegate,UITabBarControllerDelegate,UIGestureRecognizerDelegate,LoginEventsDelegate>
+@interface MainViewController : UIViewController<UIActionSheetDelegate,UITabBarControllerDelegate,UIGestureRecognizerDelegate,LoginEventsDelegate,UINavigationControllerDelegate>
 
 @property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, weak) IBOutlet UILabel *activityLabel;
@@ -85,7 +86,7 @@ typedef  enum
 - (void) showWebLoginView:(WebLoginViewController*) webLoginViewController;
 - (void) closeWebLoginView:(WebLoginViewController*) webLoginViewController;
 
-- (void) showSessionViewControllerForConversation:(HOPConversation*) conversation forIncomingCall:(BOOL) incomingCall forIncomingMessage:(BOOL) incomingMessage;
+- (void) showSessionViewControllerForConversation:(HOPConversation*) conversation replaceConversation:(HOPConversation*) replaceConversation incomingCall:(BOOL) incomingCall incomingMessage:(BOOL) incomingMessage;
 - (void) removeSessionViewControllerForSession:(NSString*) sessionId;
 - (void) removeAllSessionViewControllers;
 - (void) updateSessionViewControllerId:(NSString*) oldSessionId newSesionId:(NSString*) newSesionId;

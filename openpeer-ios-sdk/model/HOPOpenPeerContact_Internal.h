@@ -38,5 +38,5 @@ using namespace openpeer::core;
 
 @interface HOPOpenPeerContact ()
 
-+ (id) createOpenPeerContacFromCoreContact:(IContactPtr) contactPtr conversationThread:(IConversationThreadPtr) conversationThreadPtr;
+//+ (id) createOpenPeerContacFromCoreContact:(IContactPtr) contactPtr conversationThread:(IConversationThreadPtr) conversationThreadPtr;
 @end

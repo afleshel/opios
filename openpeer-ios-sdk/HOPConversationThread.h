@@ -123,7 +123,7 @@
  Returns the array of contacts participating in the conversation thread.
  @returns Array of HOPContact objects
  */
-- (NSArray*) getContacts;
+//- (NSArray*) getContacts;
 
 /**
  Adds array of contacts to the conversation thread.

@@ -77,36 +77,12 @@
     self = [super init];
     if (self)
     {
-        self.sessionsDictionary = [[NSMutableDictionary alloc] init];
-        self.conversationsDictionaryForContacts = [[NSMutableDictionary alloc] init];
+        //self.sessionsDictionary = [[NSMutableDictionary alloc] init];
+//        self.conversationsDictionaryForContacts = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
 
-
-
-/**
- Get active session for contact.
- @param contacts HOPRolodexContact One of the participants.
- @return session with participant
-*/
-- (HOPConversation*) getConversationForContacts:(NSArray*) contacts
-{
-    for (HOPConversation* conversation in [self.sessionsDictionary allValues])
-    {
-        NSSet *set1 = [NSSet setWithArray:conversation.participants];
-        NSSet *set2 = [NSSet setWithArray:contacts];
-        
-        if ([set1 isEqualToSet:set2])
-            return conversation;
-    }
-    return nil;
-}
-
-- (HOPConversation*) getConversationForConversationID:(NSString*) conversationID
-{
-    return [self.sessionsDictionary objectForKey:conversationID];
-}
 
 
 /**
@@ -216,7 +192,7 @@
             //If it is an incomming call, get show session view controller
             if (![[call getCaller] isSelf])
             {
-                [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForConversation:conversation forIncomingCall:YES forIncomingMessage:NO];
+                [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForConversation:conversation replaceConversation:nil incomingCall:YES incomingMessage:NO];
             }
             [call ring];
         }
@@ -403,7 +379,7 @@
 {
     OPLog(HOPLoggerSeverityError, HOPLoggerLevelTrace, @"Recreate existing sessions");
     
-    for (HOPConversation* conversation in self.sessionsDictionary.allValues)
+    for (HOPConversation* conversation in [HOPConversation getConversations])
     {
         [conversation refresh];
     }
@@ -419,17 +395,16 @@
 - (void) clearAllSessions
 {
     [self stopAnyActiveCall];
-    for (HOPConversation* conversation in [self.sessionsDictionary allValues])
+    for (HOPConversation* conversation in [HOPConversation getConversations])
     {
         [conversation clear];
     }
-    [self.sessionsDictionary removeAllObjects];
 }
 
 - (int) totalNumberOfUnreadMessages
 {
     int ret = 0;
-    for (HOPConversation* conversation in [self.sessionsDictionary allValues])
+    for (HOPConversation* conversation in [HOPConversation getConversations])
     {
         ret += conversation.numberOfUnreadMessages;
     }
@@ -487,57 +462,7 @@
     }
 }
 
-/*- (HOPConversation *)getConversationForID:(NSString *)conversationID threadType:(NSString *)threadType sender:(HOPRolodexContact *)sender items:(NSArray *)items
-{
-    HOPConversation* conversation = nil;
-    if (conversationID.length > 0)
-        conversation = [[SessionManager sharedSessionManager] getConversationForConversationID:conversationID];
-    
-    if (!conversation)
-    {
-        HOPConversationRecord* record = [[HOPModelManager sharedModelManager] getConversationRecordByID:conversationID];
-        if (record)
-            conversation = [HOPConversation createConversationForRecord:record];
-    }
-    
-    if (!conversation)
-    {
-        NSMutableArray* contacts = [NSMutableArray new];
-        for (NSString* peerURI in items)
-        {
-            HOPRolodexContact* tempContact = [[HOPModelManager sharedModelManager] getRolodexContactByPeerURI:peerURI];
-            if (tempContact && ![tempContact isSelf])
-                [contacts addObject:tempContact];
-        }
-        
-        if (sender)
-        {
-            [contacts addObject:sender];
-        }
-        if (threadType.length > 0)
-        {
-            if ([threadType isEqualToString:[HOPConversation stringForConversationThreadType:HOPConversationThreadTypeContactBased]])
-            {
-                conversation = [HOPConversation getConversationForCBCID:[HOPUtility getCBCIDForContacts:contacts]];
-                if (!conversation)
-                    conversation = [HOPConversation createConversationWithParticipants:contacts title:nil type:[HOPConversation conversationThreadTypeForString:threadType]];
-            }
-            else
-            {
-                conversation = [HOPConversation createConversationWithParticipants:contacts title:nil type:[HOPConversation conversationThreadTypeForString:threadType]];
-            }
-        }
-        else
-        {
-            if (contacts.count == 1)
-                conversation = [HOPConversation createConversationWithParticipants:contacts title:nil type:HOPConversationThreadTypeContactBased];
-            else
-                conversation = [HOPConversation createConversationWithParticipants:contacts title:nil type:[[HOPSettings sharedSettings] getDefaultCovnersationType]];
-        }
-    }
-    return conversation;
-}
-*/
+
 - (void) removeSelfFromConversation:(HOPConversation*) conversation
 {
     if ([conversation quit])

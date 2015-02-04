@@ -36,6 +36,8 @@
 #import "HOPConversationThread.h"
 #import "HOPIdentity.h"
 #import "HOPIdentityLookup.h"
+#import "HOPConversation_Internal.h"
+#import "HOPUtility.h"
 
 @interface OpenPeerStorageManager()
 
@@ -144,6 +146,15 @@
     if (conversation && cbcID.length > 0)
         [_dictionaryConversationsWithCBCID setObject:conversation forKey:cbcID];
 }
+
+- (void) removeConversation:(HOPConversation*) conversation
+{
+    [_dictionaryConversations removeObjectForKey:conversation.conversationID];
+    [_dictionaryConversationsWithThreadID removeObjectForKey:[conversation.thread getThreadId]];
+    if (conversation.conversationType == HOPConversationThreadTypeContactBased)
+        [_dictionaryConversationsWithCBCID removeObjectForKey:[HOPUtility getCBCIDForContacts:conversation.participants]];
+}
+
 
 - (HOPContact*) getContactForPeerURI:(NSString*) peerURI
 {

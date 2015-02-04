@@ -191,4 +191,6 @@
  Destroya call core object.
  */
 - (void) destroyCoreObject;
+
+- (BOOL) isOutgoing;
 @end

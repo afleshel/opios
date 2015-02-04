@@ -47,5 +47,7 @@ using namespace openpeer::core;
 - (id) initWithConversationThread:(IConversationThreadPtr) inConversationThreadPtr;
 - (IConversationThreadPtr) getConversationThreadPtr;
 
+- (void) refreshParticipants;
+
 - (String) log:(NSString*) message;
 @end

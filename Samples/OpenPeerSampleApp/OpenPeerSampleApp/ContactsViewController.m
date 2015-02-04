@@ -41,6 +41,7 @@
 #import <OpenpeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPAccount.h>
 #import <OpenPeerSDK/HOPConversation.h>
+#import <OpenPeerSDK/HOPUtility.h>
 
 #define REMOTE_SESSION_ALERT_TAG 1
 #define TABLE_CELL_HEIGHT 55.0
@@ -243,16 +244,16 @@
                 //If not, create a session for selecte contact
                 if ([contact isOpenPeer])
                 {
-                    HOPConversation* conversation = [((SessionManager*)[SessionManager sharedSessionManager]).conversationsDictionaryForContacts objectForKey:[contact getPeerURI]];
+                    HOPConversation* conversation = [HOPConversation getConversationForCBCID:[HOPUtility getCBCIDForContacts:@[contact]]];//[((SessionManager*)[SessionManager sharedSessionManager]).conversationsDictionaryForContacts objectForKey:[contact getPeerURI]];
                     
                     if (!conversation)
                     {
                         conversation = [HOPConversation conversationWithParticipants:@[contact] title:contact.name type:HOPConversationThreadTypeContactBased];
-                        [((SessionManager*)[SessionManager sharedSessionManager]).conversationsDictionaryForContacts setObject: conversation forKey:[contact getPeerURI]];
+//                        [((SessionManager*)[SessionManager sharedSessionManager]).conversationsDictionaryForContacts setObject: conversation forKey:[contact getPeerURI]];
                     }
                     
                     if (conversation)
-                        [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForConversation:conversation forIncomingCall:NO forIncomingMessage:NO];
+                        [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForConversation:conversation replaceConversation:nil incomingCall:NO incomingMessage:NO];
                 }
             }
             else

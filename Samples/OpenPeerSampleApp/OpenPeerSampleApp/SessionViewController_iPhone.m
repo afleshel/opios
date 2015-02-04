@@ -180,6 +180,8 @@
     [super viewWillAppear:animated];
     if (self.containerView == self.chatViewController.view.superview)
         [self.chatViewController viewWillAppear:animated];
+    
+    self.conversation.numberOfUnreadMessages = 0;
 }
 
 - (void)didReceiveMemoryWarning

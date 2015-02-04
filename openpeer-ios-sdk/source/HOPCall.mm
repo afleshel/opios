@@ -72,9 +72,9 @@ using namespace openpeer::core;
     if (conversationThread != nil)
     {
         HOPContact* toContact = nil;
-        if ([[conversationThread getContacts] count] > 0)
+        if (conversationThread.participants.count > 0)
         {
-            toContact = [((HOPOpenPeerContact*)[[conversationThread getContacts] objectAtIndex:0]) getCoreContact];
+            toContact = [((HOPOpenPeerContact*)[conversationThread.participants objectAtIndex:0]) getCoreContact];
             //Create the core call object and start placing call procedure
             ICallPtr tempCallPtr = ICall::placeCall([conversationThread getConversationThreadPtr], [toContact getContactPtr], includeAudio, includeVideo);
             
@@ -471,6 +471,15 @@ using namespace openpeer::core;
         ZS_LOG_ERROR(Debug, [self log:@"Invalid call object!"]);
         [NSException raise:NSInvalidArgumentException format:@"Invalid call object!"];
     }
+}
+
+- (BOOL) isOutgoing
+{
+    BOOL ret = NO;
+    
+    ret = [HOPRolodexContact getSelf] == [self getCaller];
+    
+    return ret;
 }
 
 - (void) destroyCoreObject

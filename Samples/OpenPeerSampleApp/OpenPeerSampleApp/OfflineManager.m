@@ -40,6 +40,7 @@
 
 #import <OpenPeerSDK/HOPAccount.h>
 #import <OpenpeerSDK/HOPModelManager.h>
+#import <OpenpeerSDK/HOPConversation.h>
 
 typedef enum
 {
@@ -101,7 +102,7 @@ typedef enum
     }
     else if ([[LoginManager sharedLoginManager] isLoggedin])
     {
-        if ([[[SessionManager sharedSessionManager] sessionsDictionary] count] > 0)
+        if ([HOPConversation getConversations].count > 0)
         {
             if ([[SessionManager sharedSessionManager] isCallInProgress])
                 ret = LOGGEDIN_ACTIVE_CALL;

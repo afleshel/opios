@@ -38,7 +38,7 @@
 #import "HOPOpenPeerContact+External.h"
 #import "HOPCall.h"
 
-#import "HOPConversationThread.h"
+#import "HOPConversationThread_Internal.h"
 #import "HOPConversationRecord.h"
 #import "HOPConversationEvent+External.h"
 #import "HOPConversationType.h"
@@ -243,21 +243,30 @@ using namespace openpeer::core;
     return ret;
 }
 
++ (NSArray*) getConversations
+{
+    return [[OpenPeerStorageManager sharedStorageManager] getConversations];
+}
+
 - (void) setComposingStatus:(HOPConversationThreadContactStatus) composingStatus
 {
     [self.thread setStatusInThread:composingStatus];
 }
 - (NSArray*) getParticipants
 {
-    NSArray* ret = [self.thread getContacts];
+    NSArray* ret = self.thread ? self.thread.participants : nil;
+    //NSArray* ret = [self.thread getContacts];
     return ret;
 }
 
 - (void) refresh
 {
+    NSArray* tempParticipants = nil;
+    if (self.thread.participants.count > 0)
+        tempParticipants = [NSArray arrayWithArray:self.thread.participants];
     self.thread = nil;
     self.thread = [HOPConversationThread conversationThreadWithIdentities:[[HOPAccount sharedAccount] getAssociatedIdentities]];
-    [self.thread addContacts:self.participants];
+    [self.thread addContacts:tempParticipants];
 }
 
 
@@ -265,6 +274,8 @@ using namespace openpeer::core;
 {
     if (self.thread)
         [self.thread destroyCoreObject];
+    
+    [[OpenPeerStorageManager sharedStorageManager] removeConversation:self];
 }
 
 - (HOPConversationThreadContactStatus) getContactStatus:(HOPRolodexContact*) rolodexContact
@@ -328,8 +339,7 @@ using namespace openpeer::core;
 {
     NSString* ret = @"";
     
-    NSArray* participants = [self.thread getContacts];
-    ret = [HOPConversation getDefaultTitleForParticipants:participants];
+    ret = [HOPConversation getDefaultTitleForParticipants:self.thread.participants];
     return ret;
 }
 

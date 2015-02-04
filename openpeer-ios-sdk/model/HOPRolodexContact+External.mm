@@ -42,6 +42,7 @@
 #import "HOPAPNSData.h"
 #import "HOPOpenPeerAccount.h"
 #import "HOPIdentityProvider.h"
+#import "HOPAvatar.h"
 
 @implementation HOPRolodexContact (External)
 
@@ -96,6 +97,10 @@
     return self.openPeerContact != nil;
 }
 
+- (BOOL) isKnown
+{
+    return self.associatedIdentity != nil;
+}
 
 //TODO: Remove image storage from the core data
 - (HOPAvatar*) getAvatarForWidth:(NSNumber*) width height:(NSNumber*) height
@@ -108,6 +113,15 @@
     
     if (self.avatars.count > 0)
         ret = self.avatars.allObjects[0];
+    return ret;
+}
+
+- (NSString*) getAvatarURLForWidth:(NSNumber*) width height:(NSNumber*) height
+{
+    NSString* ret = nil;
+    
+    if (self.avatars.count > 0)
+        ret = ((HOPAvatar*)self.avatars.allObjects[0]).url;
     return ret;
 }
 
@@ -147,7 +161,7 @@
     return ret;
 }
 
-- (NSArray*) getAssociatedIdentities
+/*- (NSArray*) getAssociatedIdentities
 {
     NSMutableArray* ret = [NSMutableArray new];
     
@@ -158,7 +172,7 @@
             [ret addObject:name];
     }
     return ret;
-}
+}*/
 
 - (NSString*) getPushNotificationDeviceToken
 {

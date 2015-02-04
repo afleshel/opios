@@ -47,6 +47,7 @@
 #import <OpenpeerSDK/HOPModelManager.h>
 #import <OpenpeerSDK/HOPRolodexContact+External.h>
 #import <OpenpeerSDK/HOPAssociatedIdentity.h>
+#import <OpenpeerSDK/HOPIdentityProvider.h>
 #import <OpenpeerSDK/HOPUtility.h>
 #import <AddressBook/AddressBook.h>
 
@@ -164,6 +165,20 @@
     
     if (identityLookup)
         [self.identityLookupsArray addObject:identityLookup];
+}
+
+- (void) identityLookupForContacts:(NSArray *)contacts
+{
+    if (contacts.count > 0)
+    {
+        for (HOPAssociatedIdentity* associatedIdentity in [[HOPAccount sharedAccount] getAssociatedIdentities])
+        {
+            HOPIdentityLookup* identityLookup = [[HOPIdentityLookup alloc] initWithDelegate:(id<HOPIdentityLookupDelegate>)[[OpenPeer sharedOpenPeer] identityLookupDelegate] identityLookupInfos:contacts identityServiceDomain:associatedIdentity.identityProvider.domain];
+            
+            if (identityLookup)
+                [self.identityLookupsArray addObject:identityLookup];
+        }
+    }
 }
 
 /**

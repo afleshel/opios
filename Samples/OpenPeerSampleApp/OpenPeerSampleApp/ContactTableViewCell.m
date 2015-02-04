@@ -102,13 +102,6 @@
         self.displayName.font = [UIFont fontWithName:@"Helvetica-Bold" size:15];
         self.displayName.textColor = [UIColor blackColor];
     }
-    
-    /*HOPConversation* conversation = [[SessionManager sharedSessionManager] getConversationForContacts:@[inContact]];
-    if (conversation.numberOfUnreadMessages > 0)
-    {
-        NSString* numberToDisplay = [NSString stringWithFormat:@"%d",conversation.numberOfUnreadMessages];
-        self.badgeView.hidden = NO;
-        self.badgeView.badgeText = numberToDisplay;
-    }*/
+
 }
 @end

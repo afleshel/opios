@@ -42,7 +42,7 @@
 #import "HOPMessageRecord.h"
 #import "HOPConversationThreadRecord.h"
 #import "HOPContact.h"
-#import "HOPConversationThread.h"
+#import "HOPConversationThread_Internal.h"
 #import "HOPUtility.h"
 #import "HOPIdentityProvider.h"
 #import "HOPOpenPeerContact+External.h"
@@ -57,6 +57,9 @@
 #import <openpeer/core/types.h>
 #import "HOPConversation.h"
 #import "HOPIdentityContact_Internal.h"
+#import "OpenPeerUtility.h"
+#import "HOPIdentityLookup.h"
+#import "HOPIdentityProvider.h"
 
 ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
@@ -987,7 +990,7 @@ using namespace openpeer::core;
         
         if (conversationThread.conversationType == HOPConversationThreadTypeContactBased)
         {
-            NSString* cbcID = [HOPUtility getCBCIDForContacts:[conversationThread getContacts]];
+            NSString* cbcID = [HOPUtility getCBCIDForContacts:conversationThread.participants];
             results = [self getResultsForEntity:@"HOPConversationRecord" withPredicateString:[NSString stringWithFormat:@"homeUser.stableId MATCHES '%@' AND ANY events.participants.cbcID MATCHES '%@'",[self getLastLoggedInUser].stableId,cbcID] orderDescriptors:@[sortDescriptor]];
         }
         else if (conversationThread.conversationType == HOPConversationThreadTypeThreadBased)
@@ -1080,20 +1083,22 @@ using namespace openpeer::core;
     if ([replacesMessageID length] > 0)
     {
         HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] getMessageRecordByID:replacesMessageID];
+        HOPMessageRecord* newMessageObj = [[HOPModelManager sharedModelManager] getMessageRecordByID:newMessageID];
         
         if (messageObj)
         {
-            messageObj.messageID = newMessageID;
-            if ([messageText length] == 0)
+            //messageObj.messageID = newMessageID;
+            messageObj.visible = [NSNumber numberWithBool:NO];
+            if ([messageText length] == 0 || [messageText isEqualToString:@" "])
             {
-                messageObj.deleted = [NSNumber numberWithBool:YES];
+                newMessageObj.deleted = [NSNumber numberWithBool:YES];
                 //[[HOPModelManager sharedModelManager] deleteObject:messageObj];
             }
-            else
-            {
-                messageObj.text = messageText;
-            }
-            messageObj.edited = [NSNumber numberWithBool:YES];
+//            else
+//            {
+//                messageObj.text = messageText;
+//            }
+            newMessageObj.edited = [NSNumber numberWithBool:YES];
         }
         [[HOPModelManager sharedModelManager] saveContext];
     }
@@ -1217,7 +1222,7 @@ using namespace openpeer::core;
                 [ret addIdentityContactsObject:contact];
         }
         
-        NSString* peerURI =  [NSString stringWithUTF8String: IHelper::getPeerURI(inIdentityContact.mPeerFilePublic)];
+        /*NSString* peerURI =  [NSString stringWithUTF8String: IHelper::getPeerURI(inIdentityContact.mPeerFilePublic)];
         if ([peerURI length] > 0)
         {
             HOPPublicPeerFile* publicPeerFile = [self getPublicPeerFileForPeerURI:peerURI];
@@ -1231,9 +1236,36 @@ using namespace openpeer::core;
                     ret.publicPeerFile = publicPeerFile;
                 }
             }
-        }
+        }*/
         [self saveContext];
     }
+    
+    return ret;
+}
+
+- (HOPPublicPeerFile*) savePublicPeerFile:(NSString*) publicPeerFile peerURI:(NSString*) peerURI openPeerContact:(HOPOpenPeerContact*) openPeerContact
+{
+    HOPPublicPeerFile* ret = nil;
+    
+    if ([peerURI length] > 0)
+    {
+        ret = [self getPublicPeerFileForPeerURI:peerURI];
+        if (!publicPeerFile)
+        {
+            ret = (HOPPublicPeerFile*) [self createObjectForEntity:@"HOPPublicPeerFile"];
+            
+            ret.peerURI = peerURI;
+            openPeerContact.publicPeerFile = ret;
+        }
+        
+        if (publicPeerFile.length > 0)
+        {
+            ret.peerFile = publicPeerFile;
+        }
+        
+        [self saveContext];
+    }
+    
     
     return ret;
 }
@@ -1481,7 +1513,25 @@ using namespace openpeer::core;
                 if (ret)
                     [ret addIdentityContactsObject:hopIdentityContact];
                 else
+                {
+                    String peerURI = contactPtr->getPeerURI();
+                    IPeerFilePublicPtr publicPeer = contactPtr->getPeerFilePublic();
                     ret = [self createOpenPeerContactForIdentityContact:identityContact];
+                    if (ret && (ret.publicPeerFile.peerURI.length == 0 || ret.publicPeerFile.peerFile.length == 0) && peerURI)
+                    {
+                        NSString* strPeerURI = [NSString stringWithUTF8String:peerURI];
+                        NSString* publicPeerFile = nil;
+                        
+                        if (publicPeer)
+                            publicPeerFile = [NSString stringWithCString: IHelper::convertToString(IHelper::convertToElement(publicPeer)) encoding:NSUTF8StringEncoding];
+                        
+                        if (strPeerURI.length > 0)
+                        {
+                            [self savePublicPeerFile:publicPeerFile peerURI:strPeerURI openPeerContact:ret];
+                        }
+                    }
+                }
+                
             }
             
         }
@@ -1490,6 +1540,153 @@ using namespace openpeer::core;
     return ret;
 }
 
+- (NSArray*) addUnkownContactsFromConversationThread:(HOPConversationThread*) thread
+{
+    NSMutableArray* ret = nil;
+    if (thread)
+    {
+        ContactListPtr contactList = [thread getConversationThreadPtr]->getContacts();
+        
+        for (ContactList::iterator contact = contactList->begin(); contact != contactList->end(); ++contact)
+        {
+            IContactPtr contactPtr = *contact;
+            if (!contactPtr->isSelf())
+            {
+                HOPRolodexContact* rolodexContact = [self getRolodexContactByPeerURI:[NSString stringWithUTF8String:contactPtr->getPeerURI()]];
+                if (!rolodexContact || !rolodexContact.openPeerContact)
+                {
+                    NSArray* rolodexContacts = [self createRolodexContactsForCoreContact:contactPtr fromConversation:[thread getConversationThreadPtr]];
+                    if (rolodexContacts.count > 0)
+                    {
+                        if (!ret)
+                            ret = [NSMutableArray arrayWithArray:rolodexContacts];
+                        else
+                            [ret addObjectsFromArray:rolodexContacts];
+                    }
+                }
+            }
+        }
+    }
+    else
+    {
+        ZS_LOG_ERROR(Debug, [self log:@"Invalid conversation thread object!"]);
+        [NSException raise:NSInvalidArgumentException format:@"Invalid conversation thread object!"];
+    }
+    
+    return ret;
+}
+
+- (NSArray*) createRolodexContactsForCoreContact:(IContactPtr) contactPtr fromConversation:(IConversationThreadPtr) conversationThreadPtr
+{
+    NSMutableArray* ret = nil;
+    
+    IdentityContactListPtr identityContactListPtr = conversationThreadPtr->getIdentityContactList(contactPtr);
+    
+    for (IdentityContactList::iterator identityContactInfo = identityContactListPtr->begin(); identityContactInfo != identityContactListPtr->end(); ++identityContactInfo)
+    {
+        IdentityContact identityContact = *identityContactInfo;
+        if (identityContact.hasData())
+        {
+            NSString* identityURI = nil;
+            NSString* name = nil;
+            NSString* stableID = nil;
+            NSString* peerURI = nil;
+            
+            if (identityContact.mIdentityURI)
+                identityURI = [NSString stringWithCString:identityContact.mIdentityURI encoding:NSUTF8StringEncoding];
+            
+            if (identityContact.mName)
+                name = [NSString stringWithCString:identityContact.mName encoding:NSUTF8StringEncoding];
+            
+            if (identityContact.mStableID)
+                stableID = [NSString stringWithCString:identityContact.mName encoding:NSUTF8StringEncoding];
+            
+            if (contactPtr->getPeerURI())
+                peerURI = [NSString stringWithUTF8String:contactPtr->getPeerURI()];
+            
+            if (identityURI.length > 0 && name.length > 0 && stableID.length > 0)
+            {
+                //Create rolodex contact
+                HOPRolodexContact* hopRolodexContact = [self getRolodexContactByIdentityURI:identityURI];
+                
+                if (!hopRolodexContact)
+                {
+                    hopRolodexContact = (HOPRolodexContact*)[self createObjectForEntity:@"HOPRolodexContact"];
+                    hopRolodexContact.identityURI = identityURI;
+                }
+                
+                hopRolodexContact.name = name;
+                //End rolodex contact creation
+                
+                //----------------------------
+                
+                //Create identity contact
+                HOPIdentityContact* hopIdentityContact = [self getIdentityContactWithIdentityURI:identityURI];
+                if (!hopIdentityContact)
+                {
+                    hopIdentityContact = (HOPIdentityContact*)[self createObjectForEntity:@"HOPIdentityContact"];
+                }
+                
+                hopIdentityContact.expires = [OpenPeerUtility convertPosixTimeToDate:identityContact.mExpires];
+                hopIdentityContact.lastUpdated = [OpenPeerUtility convertPosixTimeToDate:identityContact.mLastUpdated];
+                hopIdentityContact.identityProofBundle = [NSString stringWithCString:core::IHelper::convertToString(identityContact.mIdentityProofBundleEl) encoding:NSUTF8StringEncoding];
+                hopIdentityContact.priority = [NSNumber numberWithInt:identityContact.mPriority];
+                hopIdentityContact.weight = [NSNumber numberWithInt:identityContact.mWeight];
+                hopIdentityContact.rolodexContact = hopRolodexContact;
+                //End identity contact creation
+                
+                //----------------------------
+                
+                
+                //Public peer file creation
+                HOPPublicPeerFile* publicPeerFile = nil;
+                if ([peerURI length] > 0)
+                {
+                    publicPeerFile = [self getPublicPeerFileForPeerURI:peerURI];
+                    if (!publicPeerFile)
+                    {
+                        publicPeerFile = (HOPPublicPeerFile*) [self createObjectForEntity:@"HOPPublicPeerFile"];
+                        publicPeerFile.peerURI = peerURI;
+                    }
+                    
+                    IPeerFilePublicPtr publicPeer = identityContact.mPeerFilePublic ? identityContact.mPeerFilePublic : contactPtr->getPeerFilePublic();
+                    if (publicPeer)
+                    {
+                        publicPeerFile.peerFile = [NSString stringWithCString: IHelper::convertToString(IHelper::convertToElement(publicPeer)) encoding:NSUTF8StringEncoding];
+                    }
+                }
+                //End public peer file creation
+                
+                //----------------------------
+                
+                //Create open peer contact
+                HOPOpenPeerContact*  hopOpenPeerContact = [self  getOpenPeerContactForIdentityContact:identityContact];
+                if (!hopOpenPeerContact)
+                {
+                    hopOpenPeerContact = (HOPOpenPeerContact*)[self createObjectForEntity:@"HOPOpenPeerContact"];
+                }
+                
+                hopOpenPeerContact.stableID = stableID;
+                [hopOpenPeerContact addIdentityContactsObject:hopIdentityContact];
+                [hopOpenPeerContact addRolodexContactsObject:hopRolodexContact];
+                hopOpenPeerContact.publicPeerFile = publicPeerFile;
+                //End open peer contact creation
+                
+                [self saveContext];
+                
+                if (publicPeerFile.peerFile.length == 0)
+                {
+                    if (!ret)
+                        ret = [NSMutableArray new];
+                    
+                    [ret addObject:hopRolodexContact];
+                }
+            }
+        }
+    }
+    
+    return ret;
+}
 @end
 
 

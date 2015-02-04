@@ -62,7 +62,11 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
                 {
                     IIdentityLookup::IdentityLookupInfo lookupInfo;
                     lookupInfo.mIdentityURI = [contact.identityURI UTF8String];
-                    lookupInfo.mLastUpdated = [contact isKindOfClass:[HOPIdentityContact class]] ? boost::posix_time::from_time_t([[(HOPIdentityContact*)contact lastUpdated] timeIntervalSince1970]) : Time();
+                    if (contact.identityContact && contact.identityContact.lastUpdated)
+                        lookupInfo.mLastUpdated =  boost::posix_time::from_time_t([contact.identityContact.lastUpdated timeIntervalSince1970]);
+                    else
+                        lookupInfo.mLastUpdated = Time();
+                        //[contact isKindOfClass:[HOPIdentityContact class]] ? boost::posix_time::from_time_t([[(HOPIdentityContact*)contact lastUpdated] timeIntervalSince1970]) : Time();
                     
                     identityLookupInfoList.push_back(lookupInfo);
                 }

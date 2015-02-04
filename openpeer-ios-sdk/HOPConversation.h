@@ -54,6 +54,8 @@
 @property (nonatomic, copy) NSString* topic;
 @property (nonatomic, copy) NSString* conversationID;
 @property (nonatomic, getter=getParticipants) NSArray* participants;
+@property (nonatomic, strong) NSArray* updatedContacts;
+
 
 @property (strong) NSMutableSet* setOfNotSentMessages;
 @property (assign) NSUInteger numberOfUnreadMessages;
@@ -67,6 +69,7 @@
 + (HOPConversation*) getConversationForCBCID:(NSString*) cbcID;
 + (HOPConversation*) getConversationForID:(NSString*) inConversationID;
 
++ (NSArray*) getConversations;
 - (void) addParticipants:(NSArray*) inParticipants;
 - (void) removeParticipants:(NSArray*) inParticipants;
 

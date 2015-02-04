@@ -47,6 +47,7 @@
 
 + (HOPConversation*) conversationWithThread:(HOPConversationThread*) inConversationThread;
 
+
 //- (HOPConversationThread*) getThread;
 //- (HOPConversationRecord*) getRecord;
 //- (HOPConversationEvent*) getLastEvent;
