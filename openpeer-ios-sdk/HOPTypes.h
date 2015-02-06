@@ -110,7 +110,7 @@ typedef enum
     HOPComposingStateGone,      // contact is effectively gone from conversation
     HOPComposingStateComposing, // contact is composing a message
     HOPComposingStatePaused    // contact was composing a message but is no longer composing
-} HOPConversationThreadContactStatus;
+} HOPComposingState;
 
 typedef enum
 {

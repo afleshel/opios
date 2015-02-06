@@ -182,7 +182,7 @@ typedef enum
 
 - (void) parseSystemMessage:(HOPMessageRecord*) inMessage forConversation:(HOPConversation*) conversation
 {
-    if ([inMessage.type isEqualToString:[HOPConversationThread getSystemMessageType]])
+    if ([inMessage.type isEqualToString:[HOPSystemMessage getMessageType]])
     {
         NSDictionary* systemDict = [Utility dictionaryFromJSON:inMessage.text];
         if (systemDict)
@@ -212,10 +212,13 @@ typedef enum
                     HOPConversation* replaceConversation = replaceConversationID.length > 0 ? [HOPConversation getConversationForID:replaceConversationID] : nil;
                     HOPConversation* conversation = conversationID.length > 0 ? [HOPConversation getConversationForID:conversationID] : nil;
                     
-                    [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForConversation:conversation replaceConversation:replaceConversation incomingCall:NO incomingMessage:NO];
-                    
-                    inMessage.visible = [NSNumber numberWithBool:NO];
-                    [[HOPModelManager sharedModelManager] saveContext];
+                    if (conversation)
+                    {
+                        [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForConversation:conversation replaceConversation:replaceConversation incomingCall:NO incomingMessage:NO];
+                        
+                        inMessage.visible = [NSNumber numberWithBool:NO];
+                        [[HOPModelManager sharedModelManager] saveContext];
+                    }
                 }
             }
         }
@@ -241,7 +244,7 @@ typedef enum
         messageRecordOld.visible = [NSNumber numberWithBool:NO];
         if ([message length] == 0)
         {
-            messageRecordOld.deleted = [NSNumber numberWithBool:([message length] == 0)];
+            messageRecordOld.removed = [NSNumber numberWithBool:([message length] == 0)];
             messageRecordOld.replacedMessageID = replacesMessageID;
             //messageRecord = messageRecordOld;
             message = @" ";
@@ -255,7 +258,7 @@ typedef enum
         messageRecord = [HOPMessageRecord createMessage:message type:messageTypeText date:[NSDate date] visible:YES conversation:conversation contact:[[HOPModelManager sharedModelManager] getRolodexContactForAccount] messageId:[HOPUtility getGUIDstring] validated:NO messageIDToReplace:replacesMessageID];
 
     messageRecord.edited = [NSNumber numberWithBool:edited];
-    messageRecord.deleted = [NSNumber numberWithBool:deleted];
+    messageRecord.removed = [NSNumber numberWithBool:deleted];
     
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Sending message: %@ - message id: %@ - for session with id: %@",message,messageRecord.messageID,[conversation getConversationID]);
     

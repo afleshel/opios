@@ -37,7 +37,7 @@
 @interface HOPMessageRecord : NSManagedObject
 
 @property (nonatomic, retain) NSDate * date;
-@property (nonatomic, retain) NSNumber * deleted;
+@property (nonatomic, retain) NSNumber * removed;
 @property (nonatomic, retain) NSNumber * edited;
 @property (nonatomic, retain) NSData * image;
 @property (nonatomic, retain) NSNumber * incomingMessageStatus;

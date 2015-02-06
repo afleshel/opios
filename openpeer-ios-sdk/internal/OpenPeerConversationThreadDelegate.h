@@ -80,4 +80,5 @@ public:
     virtual void onConversationThreadContactStatusChanged(IConversationThreadPtr conversationThread,IContactPtr contact);
 
     void addTimerForConversation(HOPConversation* conversation, NSSet* participants);
+    void callProperConversationDelegate(HOPConversation * conversation, NSString* messageID);
 };

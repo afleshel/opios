@@ -155,6 +155,7 @@
 		87E6C03319CC542F001D6110 /* HOPPublicPeerFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 87E6C03119CC542F001D6110 /* HOPPublicPeerFile.m */; };
 		87E6C03619CC542F001D6110 /* HOPAPNSData.h in Headers */ = {isa = PBXBuildFile; fileRef = 87E6C03419CC542F001D6110 /* HOPAPNSData.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		87E6C03719CC542F001D6110 /* HOPAPNSData.m in Sources */ = {isa = PBXBuildFile; fileRef = 87E6C03519CC542F001D6110 /* HOPAPNSData.m */; };
+		87E6E3601A83C945000D599D /* HOPOpenPeerAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 87C0931819CB087100508B09 /* HOPOpenPeerAccount.m */; };
 		87E8CD9319D1822100BAF67E /* HOPMessageEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 87E8CD9119D1822100BAF67E /* HOPMessageEvent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		87E8CD9419D1822100BAF67E /* HOPMessageEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 87E8CD9219D1822100BAF67E /* HOPMessageEvent.m */; };
 		87E9EEB51A7A798100C17FC7 /* HOPOpenPeerContact.h in Headers */ = {isa = PBXBuildFile; fileRef = 87E9EEB31A7A798100C17FC7 /* HOPOpenPeerContact.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1308,6 +1309,7 @@
 			files = (
 				87A5B1A016EDE5EB007E825A /* HOPAccount.mm in Sources */,
 				87A5B1A216EDE5EB007E825A /* HOPCall.mm in Sources */,
+				87E6E3601A83C945000D599D /* HOPOpenPeerAccount.m in Sources */,
 				87A5B1A316EDE5EB007E825A /* HOPContact.mm in Sources */,
 				87A5B1A416EDE5EB007E825A /* HOPConversationThread.mm in Sources */,
 				87E6C03719CC542F001D6110 /* HOPAPNSData.m in Sources */,

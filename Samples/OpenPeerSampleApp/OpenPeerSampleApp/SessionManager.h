@@ -74,7 +74,7 @@
 - (NSString* )getSystemMessage:(HOPMessageRecord *)messageRecord;
 - (NSString*) getLastTextMessageForConversationRecord:(HOPConversationRecord*) record;
 
-- (void) onParticipantsInConversationUpdate:(HOPConversation*) conversation numberOfAddedParticipants:(int) numberOfAddedParticipants;
+- (void) onParticipantsInConversationUpdate:(HOPConversation*) conversation;
 
 - (void) removeSelfFromConversation:(HOPConversation*) conversation;
 @end

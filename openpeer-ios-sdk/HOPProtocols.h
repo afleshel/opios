@@ -328,6 +328,7 @@
 
 
 @class HOPConversation;
+@class HOPMessageRecord;
 /**
  *  SDK uses methods in this protocol to notify application about conversation thread events.
  */
@@ -346,7 +347,7 @@
  *
  *  @param conversationThread Conversation thread object.
  */
-- (void) onConversationContactsChanged:(HOPConversation*) conversation  numberOfAddedParticipants:(int) numberOfAddedParticipants;
+- (void) onConversationContactsChanged:(HOPConversation*) conversation;
 /**
  *  Notifies the receiver about conversation thread participant connection state.
  *
@@ -362,6 +363,7 @@
  *  @param contact                Participant whose status in conversation thredad has changed.
  */
 - (void) onConversationContactStatusChanged:(HOPConversation*) conversation contact:(HOPRolodexContact*) contact;
+- (void) onConversationContactComposingStateChanged:(HOPConversation*) conversation state:(HOPComposingState)state contact:(HOPRolodexContact*) contact;
 /**
  *  Notifies the receiver about new message for conversation.
  *
@@ -369,6 +371,11 @@
  *  @param messageID          A message ID. This ID will be used for retrieving message from the conversation thread.
  */
 - (void) onConversationMessage:(HOPConversation*) conversation messageID:(NSString*) messageID;
+- (void) onConversationNewMessage:(HOPConversation*) conversation message:(HOPMessageRecord*) message;
+- (void) onConversationCallSystemMessageReceived:(HOPConversation*) conversation jsonMessage:(NSString*) jsonMessage;
+- (void) onConversationSwitch:(HOPConversation*) conversation fromConversationId:(NSString*)fromConversationId toConversationId:(NSString*)toConversationId;
+
+
 /**
  *  Notifies the receiver about change in message delivery state.
  *
@@ -385,4 +392,8 @@
  *  @param contact            A message recepient.
  */
 - (void) onConversationPushMessage:(HOPConversation*) conversation messageID:(NSString*) messageID contact:(HOPRolodexContact*) contact;
+- (void) onConversationPushMessageRequired:(HOPConversation*) conversation message:(HOPMessageRecord*) message recipient:(HOPRolodexContact*) recipient;
+
+//- (void) onConversationTopicChanged:(HOPConversation*) conversation newTopic:(NSString*) newTopic;
+
 @end

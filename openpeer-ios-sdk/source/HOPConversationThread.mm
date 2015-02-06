@@ -520,9 +520,9 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (HOPConversationThreadContactStatus) getContactStatus:(HOPRolodexContact*) rolodexCoontact
+- (HOPComposingState) getComposingStateForContact:(HOPRolodexContact*) rolodexCoontact
 {
-    HOPConversationThreadContactStatus ret = HOPComposingStateInactive;
+    HOPComposingState ret = HOPComposingStateInactive;
     if(conversationThreadPtr)
     {
         HOPContact* contact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:[rolodexCoontact getPeerURI]];
@@ -535,7 +535,7 @@ using namespace openpeer::core;
                 ComposingStatusPtr composingStatusPtr = ComposingStatus::extract(contactStatusJSONPtr);
                 if (composingStatusPtr)
                 {
-                    ret = (HOPConversationThreadContactStatus) composingStatusPtr->mComposingStatus;
+                    ret = (HOPComposingState) composingStatusPtr->mComposingStatus;
 //                    String str = ComposingStatus::toString(composingStatusPtr->mComposingStatus); //IHelper::convertToString(contactStatusJSONPtr);
 //                    if (str.hasData())
 //                        ret = [NSString stringWithCString:str encoding:NSUTF8StringEncoding];
@@ -553,7 +553,7 @@ using namespace openpeer::core;
 }
 
 
-- (void) setStatusInThread:(HOPConversationThreadContactStatus) status
+- (void) setComposingStatusInThread:(HOPComposingState) status
 {
     if(conversationThreadPtr)
     {
@@ -578,7 +578,7 @@ using namespace openpeer::core;
     if(conversationThreadPtr)
     {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            conversationThreadPtr->sendMessage([message.messageID UTF8String], [message.replacedMessageID UTF8String], [message.type UTF8String], message.deleted.boolValue ? " " : [message.text UTF8String], message.validated ? true : false);
+            conversationThreadPtr->sendMessage([message.messageID UTF8String], [message.replacedMessageID UTF8String], [message.type UTF8String], message.removed.boolValue ? " " : [message.text UTF8String], message.validated ? true : false);
         });
         
     }

@@ -164,7 +164,7 @@
  *
  *  @return Contact composing status 
  */
-- (HOPConversationThreadContactStatus) getContactStatus:(HOPRolodexContact*) contact;
+- (HOPComposingState) getComposingStateForContact:(HOPRolodexContact*) contact;
 
 
 /**
@@ -172,7 +172,7 @@
  *
  *  @param status  Contact composing status
  */
-- (void) setStatusInThread:(HOPConversationThreadContactStatus) status;
+- (void) setComposingStatusInThread:(HOPComposingState) status;
 
 /**
  Sends message to all contacts in the conversation thread. Deprecated.

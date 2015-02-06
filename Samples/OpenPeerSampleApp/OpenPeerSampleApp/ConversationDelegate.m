@@ -61,13 +61,13 @@
     [[ContactsManager sharedContactsManager] identityLookupForContacts:conversation.updatedContacts];
 }
 
-- (void) onConversationContactsChanged:(HOPConversation*) conversation numberOfAddedParticipants:(int) numberOfAddedParticipants
+- (void) onConversationContactsChanged:(HOPConversation*) conversation
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread id %@  - number of contacts: %d.",[conversation getConversationID], conversation.participants.count);
     [[ContactsManager sharedContactsManager] identityLookupForContacts:conversation.updatedContacts];
     dispatch_async(dispatch_get_main_queue(), ^
    {
-       [[SessionManager sharedSessionManager] onParticipantsInConversationUpdate:conversation numberOfAddedParticipants:numberOfAddedParticipants];
+       [[SessionManager sharedSessionManager] onParticipantsInConversationUpdate:conversation];
    });
 }
 
@@ -78,13 +78,23 @@
 
 - (void) onConversationContactStatusChanged:(HOPConversation*) conversation contact:(HOPRolodexContact*) contact
 {
-    HOPConversationThreadContactStatus contactState = [conversation getContactStatus:contact];
+    HOPComposingState contactState = [conversation getComposingStateForContact:contact];
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread id: <%@> - contact peer URI: <%@> state: %d",[conversation getConversationID], [contact getPeerURI],contactState);
     dispatch_async(dispatch_get_main_queue(), ^
     {
        NSDictionary* dict = @{@"thread":conversation, @"contact":contact, @"status":@(contactState)};
        [[NSNotificationCenter defaultCenter] postNotificationName:notificationComposingStatusChanged object:dict];
     });
+}
+
+- (void) onConversationContactComposingStateChanged:(HOPConversation*) conversation state:(HOPComposingState)state contact:(HOPRolodexContact*) contact
+{
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread id: <%@> - contact peer URI: <%@> state: %d",[conversation getConversationID], [contact getPeerURI],state);
+    dispatch_async(dispatch_get_main_queue(), ^
+   {
+       NSDictionary* dict = @{@"thread":conversation, @"contact":contact, @"status":@(state)};
+       [[NSNotificationCenter defaultCenter] postNotificationName:notificationComposingStatusChanged object:dict];
+   });
 }
 
 - (void) onConversationMessage:(HOPConversation*) conversation messageID:(NSString*) messageID
@@ -118,6 +128,16 @@
         {
             [[APNSManager sharedAPNSManager] sendRichPushNotificationForMessage:message conversation:conversationThread participants:@[contact]];
         }
+    }
+#endif
+}
+
+- (void) onConversationPushMessageRequired:(HOPConversation*) conversation message:(HOPMessageRecord*) message recipient:(HOPRolodexContact*) recipient
+{
+#ifdef APNS_ENABLED
+    if (recipient && message)
+    {
+        [[APNSManager sharedAPNSManager] sendRichPushNotificationForMessage:message conversation:conversation participants:@[recipient]];
     }
 #endif
 }

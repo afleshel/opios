@@ -41,6 +41,7 @@
 #import "HOPRolodexContact+External.h"
 #import "HOPSettings.h"
 #import "HOPUtility.h"
+#import "HOPSystemMessage.h"
 
 #include <zsLib/types.h>
 #import <openpeer/core/ILogger.h>
@@ -167,11 +168,14 @@ void OpenPeerConversationThreadDelegate::onConversationThreadContactsChanged(ICo
              NSArray* updatedContacts = [[HOPModelManager sharedModelManager] addUnkownContactsFromConversationThread:hopConversation.thread];
             [hopConversation.thread refreshParticipants];
             hopConversation.updatedContacts = nil;
-            if (updatedContacts.count > 0)
-                hopConversation.updatedContacts = [NSArray arrayWithArray:updatedContacts];
             
             NSArray* difference = [HOPUtility differenceBetweenArray:hopConversation.participants array:[hopConversation.lastEvent getContacts]];
             int numberOfAddedParticipants = hopConversation.participants.count - [hopConversation.lastEvent getContacts].count;
+            
+            if (updatedContacts.count > 0)
+                hopConversation.updatedContacts = [NSArray arrayWithArray:updatedContacts];
+            else
+                hopConversation.updatedContacts = [NSArray arrayWithArray:difference];
             
             if (numberOfAddedParticipants != 0)
             {
@@ -226,7 +230,7 @@ void OpenPeerConversationThreadDelegate::onConversationThreadContactsChanged(ICo
                     }
                 }
 
-                [conversationDelegate onConversationContactsChanged:hopConversation  numberOfAddedParticipants:numberOfAddedParticipants];
+                [conversationDelegate onConversationContactsChanged:hopConversation];
             }
         }
         
@@ -251,10 +255,31 @@ void OpenPeerConversationThreadDelegate::onConversationThreadMessage(IConversati
             HOPConversation * hopConversation = this->getOpenPeerConversation(conversationThread);
             
             if (hopConversation)
+            {
                 [conversationDelegate onConversationMessage:hopConversation messageID:messageId];
+            }
         }
     }
 }
+void OpenPeerConversationThreadDelegate::callProperConversationDelegate(HOPConversation * conversation, NSString* messageID)
+{
+    HOPMessageRecord* message = [conversation getMessageForID:messageID];
+    BOOL isSystemMessage = [message.type isEqualToString:[HOPSystemMessage getMessageType]];
+    
+    if (!isSystemMessage)
+    {
+        [conversationDelegate onConversationNewMessage:conversation message:message];
+    }
+    else
+    {
+        
+    }
+}
+//- (void) onConversationNewMessage:(HOPConversation*) conversation messageID:(NSString*) messageID;
+//- (void) onConversationCallSystemMessageReceived:(HOPConversation*) conversation jsonMessage:(NSString*) jsonMessage;
+//- (void) onConversationSwitch:(HOPConversation*) conversation fromConversationId:(NSString*)fromConversationId toConversationId:(NSString*)toConversationId;
+
+
 
 void OpenPeerConversationThreadDelegate::onConversationThreadMessageDeliveryStateChanged(IConversationThreadPtr conversationThread,const char *messageID,MessageDeliveryStates state)
 {
@@ -303,7 +328,9 @@ void OpenPeerConversationThreadDelegate::onConversationThreadPushMessage(IConver
     {
         HOPConversation * hopConversation = this->getOpenPeerConversation(conversationThread);
         if (hopConversation && hopContact && [messageId length] > 0)
-            [conversationDelegate onConversationPushMessage:hopConversation messageID:messageId contact:hopContact];
+            [conversationDelegate onConversationPushMessageRequired:hopConversation message:[hopConversation getMessageForID:messageId] recipient:hopContact];
+            
+        //[conversationDelegate onConversationPushMessage:hopConversation messageID:messageId contact:hopContact];
     }
 }
 
@@ -347,8 +374,13 @@ void OpenPeerConversationThreadDelegate::onConversationThreadContactStatusChange
         {
             HOPConversation * hopConversation = this->getOpenPeerConversation(conversationThread);
             
+            
             if (hopConversation)
-                [conversationDelegate onConversationContactStatusChanged:hopConversation contact:hopContact];
+           {
+               HOPComposingState state = [hopConversation getComposingStateForContact:hopContact];
+               [conversationDelegate onConversationContactComposingStateChanged:hopConversation state:state contact:hopContact];
+           }
+                //[conversationDelegate onConversationContactStatusChanged:hopConversation contact:hopContact];
         }
     }
 }

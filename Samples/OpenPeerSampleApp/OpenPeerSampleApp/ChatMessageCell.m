@@ -48,6 +48,8 @@
 @property (nonatomic, strong) UIFont *chatTimestampFont;
 @property (nonatomic, strong) NSString *unicodeMessageText;
 @property (nonatomic, strong) UILabel *messageStatus;
+@property (nonatomic, strong) UIImage *baloonImageLeft;
+@property (nonatomic, strong) UIImage *baloonImageRight;
 
 - (void) setUnicodeChars:(NSString *)str;
 
@@ -69,6 +71,9 @@
         self.chatTimestampFont = [UIFont fontWithName:@"Helvetica" size:9.0];
         self.messageLabel = [[TTTAttributedLabel alloc] init];
         self.messageStatus = [[UILabel alloc] init];
+        
+        self.baloonImageLeft = [[UIImage imageNamed:@"chat_bubble_left.png"] stretchableImageWithLeftCapWidth:38.0 topCapHeight:14];
+        self.baloonImageRight = [[UIImage imageNamed:@"chat_bubble_right.png"] stretchableImageWithLeftCapWidth:13.0 topCapHeight:14];
     }
     return self;
 }
@@ -244,7 +249,7 @@
         float y = self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 6*TOP_SPACE;
         self.messageStatus.frame = CGRectMake(headerLabelXpos, y, statusLabelSize.width + SPACE_BETWEEN_LABELS, labelHeight);
         self.messageStatus.backgroundColor = [UIColor clearColor];
-        self.messageStatus.textColor = !self.message.deleted.boolValue ? [UIColor whiteColor] : [UIColor grayColor];
+        self.messageStatus.textColor = !self.message.removed.boolValue ? [UIColor whiteColor] : [UIColor grayColor];
 
         self.messageStatus.font = self.chatNameFont;
         self.messageStatus.text = statusString;
@@ -259,6 +264,7 @@
 -(void)layoutSubviews
 {
     BOOL isHomeUserSender = [self.message.sender isSelf];
+    UIImage *msgBaloonImg;
     
     [self.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     self.contentView.frame = self.bounds;
@@ -284,7 +290,7 @@
             
             UIColor* textColor;
             
-            if (!self.message.deleted.boolValue)
+            if (!self.message.removed.boolValue)
                 textColor = [UIColor whiteColor];
             else
                 textColor = [UIColor grayColor];
@@ -294,7 +300,7 @@
             UIImageView* imageView = nil;
             CGRect rectEditedIcon = CGRectMake(0.0, 0.0, 0.0, 0.0);
             
-            if (message.edited.boolValue && !self.message.deleted.boolValue)
+            if (message.edited.boolValue && !self.message.removed.boolValue)
             {
                 image = [UIImage imageNamed:@"chat_edited_message_icon.png"];
                 imageView = [[UIImageView alloc] initWithImage:image];
@@ -343,20 +349,18 @@
             
             
             CGSize messageSize;
-            if (!self.message.deleted.boolValue)
+            if (!self.message.removed.boolValue)
                 messageSize = [ChatCell calcMessageHeight:_unicodeMessageText forScreenWidth:(self.frame.size.width - (2*TRAILING_SPACE + LEADING_SPACE + TRAILING_SPACE))];
             else
                 messageSize = [ChatCell calcMessageHeight:stringDeletedeMessageText forScreenWidth:(self.frame.size.width - (2*TRAILING_SPACE + LEADING_SPACE + TRAILING_SPACE))];
             
             NSString* imgName = nil;
-            NSInteger streachCapWidth = 0;
+            //NSInteger streachCapWidth = 0;
             float bubbleXpos = TRAILING_SPACE;
             
             if(isHomeUserSender)
             {
-                streachCapWidth = 13;//15;
-                // my messages, show them from the right side
-                imgName = @"chat_bubble_right.png";
+                msgBaloonImg = self.baloonImageRight;
                 
                 bubbleXpos = self.frame.size.width - (messageSize.width + 2*TRAILING_SPACE + LEADING_SPACE + TRAILING_SPACE);
                 
@@ -395,8 +399,7 @@
             }
             else
             {
-                streachCapWidth = 38;//25;
-                imgName = @"chat_bubble_left.png";
+                msgBaloonImg = self.baloonImageLeft;
             }
             
             if (message.edited.boolValue)
@@ -409,7 +412,7 @@
             self.messageLabel.font = [UIFont systemFontOfSize:14.0];
             self.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
             
-            if (!self.message.deleted.boolValue)
+            if (!self.message.removed.boolValue)
             {
                 self.messageLabel.text = _unicodeMessageText;
                 self.messageLabel.textColor = [UIColor blackColor];
@@ -426,16 +429,12 @@
             float baloonViewH = messageSize.height + 34 < 52.0 ? 52.0 : messageSize.height + 34;
             
             
-            UIImage *msgBaloonImg = [[UIImage imageNamed:imgName] stretchableImageWithLeftCapWidth:streachCapWidth topCapHeight:14];
+
             UIImageView *msgBaloonView = [[UIImageView alloc] initWithFrame:CGRectMake(bubbleXpos, 20, messageSize.width + 30, baloonViewH)];
             
-            UIView *cellView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
-            
             [msgBaloonView setImage:msgBaloonImg];
-            if (!self.message.deleted.boolValue)
-                [cellView addSubview:msgBaloonView];
-            
-            self.backgroundView = cellView;
+            if (!self.message.removed.boolValue)
+                [self.contentView addSubview:msgBaloonView];
             
             [self.contentView addSubview:self.messageLabel];
             [self.contentView addSubview:imageView];
@@ -443,7 +442,7 @@
             [self.contentView addSubview:labelSeparator];
             [self.contentView addSubview:lblChatMessageTimestamp];
             
-            if (isHomeUserSender && !self.message.deleted.boolValue)
+            if (isHomeUserSender && !self.message.removed.boolValue)
                 [self setMessageStatus];
         }
     }
@@ -453,7 +452,7 @@
 {
     message = inMessage;
     
-    if (!self.message.deleted.boolValue)
+    if (!self.message.removed.boolValue)
     {
         self.messageLabel.textColor = [UIColor blackColor];
     }

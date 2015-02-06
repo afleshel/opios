@@ -39,7 +39,7 @@
 @implementation HOPMessageRecord
 
 @dynamic date;
-@dynamic deleted;
+@dynamic removed;
 @dynamic edited;
 @dynamic image;
 @dynamic incomingMessageStatus;

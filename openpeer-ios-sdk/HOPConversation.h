@@ -73,9 +73,9 @@
 - (void) addParticipants:(NSArray*) inParticipants;
 - (void) removeParticipants:(NSArray*) inParticipants;
 
-- (void) setComposingStatus:(HOPConversationThreadContactStatus) composingStatus;
+- (void) setComposingState:(HOPComposingState) composingState;
 
-- (HOPConversationThreadContactStatus) getContactStatus:(HOPRolodexContact*) rolodexCoontact;
+- (HOPComposingState) getComposingStateForContact:(HOPRolodexContact*) rolodexCoontact;
 - (HOPMessageRecord*) getMessageForID: (NSString*) messageID;
 - (void) markAllMessagesRead;
 

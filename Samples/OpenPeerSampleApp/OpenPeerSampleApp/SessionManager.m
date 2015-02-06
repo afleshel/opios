@@ -446,9 +446,9 @@
 }
 
 
-- (void) onParticipantsInConversationUpdate:(HOPConversation*) conversation numberOfAddedParticipants:(int) numberOfAddedParticipants
+- (void) onParticipantsInConversationUpdate:(HOPConversation*) conversation
 {
-    if (conversation.participants.count == 0 || numberOfAddedParticipants == 0)
+    if (conversation.participants.count == 0 || conversation.updatedContacts.count == 0)
         return;
     
     

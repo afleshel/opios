@@ -1091,7 +1091,7 @@ using namespace openpeer::core;
             messageObj.visible = [NSNumber numberWithBool:NO];
             if ([messageText length] == 0 || [messageText isEqualToString:@" "])
             {
-                newMessageObj.deleted = [NSNumber numberWithBool:YES];
+                newMessageObj.removed = [NSNumber numberWithBool:YES];
                 //[[HOPModelManager sharedModelManager] deleteObject:messageObj];
             }
 //            else
