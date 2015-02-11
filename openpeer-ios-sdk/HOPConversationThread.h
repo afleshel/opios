@@ -32,16 +32,16 @@
 #import <Foundation/Foundation.h>
 #import "HOPTypes.h"
 
-@class HOPContact;
+@class HOPCoreContact;
 @class HOPRolodexContact;
 @class HOPMessageRecord;
 @class HOPAccount;
-@class HOPIdentity;
+@class HOPAccountIdentity;
 @class HOPOpenPeerContact;
 //HOP_NOTICE: Don't expose this till group conversations are not enabled
 @interface ContactInfo
 {
-  HOPContact* mContact;
+  HOPCoreContact* mContact;
   NSString* mProfileBundleEl;
 };
 
@@ -121,31 +121,31 @@
 
 /**
  Returns the array of contacts participating in the conversation thread.
- @returns Array of HOPContact objects
+ @returns Array of HOPCoreContact objects
  */
 //- (NSArray*) getContacts;
 
 /**
  Adds array of contacts to the conversation thread.
- @param contacts  Array of HOPContact objects to be added to the conversation thread
+ @param contacts  Array of HOPCoreContact objects to be added to the conversation thread
  */
 - (void) addContacts: (NSArray*) contacts;
 
 /**
  Removes an array of contacts from the conversation thread.
- @param contacts Array of HOPContact objects to be removed from the conversation thread
+ @param contacts Array of HOPCoreContact objects to be removed from the conversation thread
  */
 - (void) removeContacts: (NSArray*) contacts;
 
 /**
- Returns list of HOPIdentity objects for associated with HOPContact object.
- @param coAn array for HOPIdentity objects
+ Returns list of HOPAccountIdentity objects for associated with HOPCoreContact object.
+ @param coAn array for HOPAccountIdentity objects
  */
-- (NSArray*) getIdentityContactListForContact:(HOPContact*) contact;
+- (NSArray*) getIdentityContactListForContact:(HOPCoreContact*) contact;
 
 /**
  Returns a state of the provided contact.
- @param contact HOPContact object
+ @param contact HOPCoreContact object
  @returns Contact connection state enum
  */
 - (HOPConversationThreadContactConnectionState) getContactConnectionState: (HOPRolodexContact*) contact;
@@ -217,7 +217,7 @@
  @param contact Message recepient
  @return NSString formated system message
  */
-//+ (NSString*) createSystemMessage:(HOPSystemMessageType) systemMessageType messageType:(int) messageType contact:(HOPContact*) contact;
+//+ (NSString*) createSystemMessage:(HOPSystemMessageType) systemMessageType messageType:(int) messageType contact:(HOPCoreContact*) contact;
 
 /**
  *  Returns system message type string.

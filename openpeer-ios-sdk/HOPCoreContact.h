@@ -36,32 +36,32 @@
 @class HOPAccount;
 @class HOPIdentityContact;
 
-@interface HOPContact : NSObject
+@interface HOPCoreContact : NSObject
 
-- (id) init __attribute__((unavailable("Don't use init for HOPContact object creation. Use class method contactWithPeerFile.")));
+- (id) init __attribute__((unavailable("Don't use init for HOPCoreContact object creation. Use class method contactWithPeerFile.")));
 
 /**
  Contact initializer used when the contact's data (stableUniqueId and peerFile) are stored locally.
  @param publicPeerFile Public peer file of the contact that will be created (self or remote). This is passed if peer file is sored locally. Otherwise it is nil
- @return Ponter to the created HOPContact object
+ @return Ponter to the created HOPCoreContact object
  */
 - (id) initWithPeerFile:(NSString*) publicPeerFile;
 - (id) initWithPeerURI:(NSString*) peerURI;
 
 /**
- Returns HOPContact object for logged in user.
- @return HOPContact object
+ Returns HOPCoreContact object for logged in user.
+ @return HOPCoreContact object
  */
-+ (HOPContact*) getForSelf;
++ (HOPCoreContact*) getForSelf;
 
 /**
- Checks if HOPContact object is self contact.
+ Checks if HOPCoreContact object is self contact.
  @return YES if contact is self, NO if contact is remote
  */
 - (BOOL) isSelf;
 
 /**
- Returns peer URI from the HOPContact object.
+ Returns peer URI from the HOPCoreContact object.
  @return A string representation of peer URI
  */
 - (NSString*) getPeerURI;

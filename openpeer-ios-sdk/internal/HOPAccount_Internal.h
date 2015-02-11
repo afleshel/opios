@@ -40,8 +40,6 @@
 using namespace openpeer;
 using namespace openpeer::core;
 
-@class HOPIdentity;
-
 @interface HOPAccount ()
 {
     boost::shared_ptr<OpenPeerAccountDelegate> openpeerAccountDelegatePtr;

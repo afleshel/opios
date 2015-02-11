@@ -31,7 +31,7 @@
 
 
 #import "OpenPeerIdentityDelegate.h"
-#import "HOPIdentity_Internal.h"
+#import "HOPAccountIdentity_Internal.h"
 #import "OpenPeerStorageManager.h"
 #import "HOPUtility.h"
 #import "HOPRolodexContact_Internal.h"
@@ -40,7 +40,7 @@
 
 ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
-OpenPeerIdentityDelegate::OpenPeerIdentityDelegate(id<HOPIdentityDelegate> inIdentityDelegate)
+OpenPeerIdentityDelegate::OpenPeerIdentityDelegate(id<HOPAccountIdentityDelegate> inIdentityDelegate)
 {
     identityDelegate = inIdentityDelegate;
 }
@@ -50,7 +50,7 @@ OpenPeerIdentityDelegate::~OpenPeerIdentityDelegate()
     ZS_LOG_DEBUG(zsLib::String("SDK - OpenPeerIdentityDelegate destructor is called"));
 }
 
-boost::shared_ptr<OpenPeerIdentityDelegate>  OpenPeerIdentityDelegate::create(id<HOPIdentityDelegate> inIdentityDelegate)
+boost::shared_ptr<OpenPeerIdentityDelegate>  OpenPeerIdentityDelegate::create(id<HOPAccountIdentityDelegate> inIdentityDelegate)
 {
     return boost::shared_ptr<OpenPeerIdentityDelegate>  (new OpenPeerIdentityDelegate(inIdentityDelegate));
 }
@@ -58,71 +58,62 @@ boost::shared_ptr<OpenPeerIdentityDelegate>  OpenPeerIdentityDelegate::create(id
 void OpenPeerIdentityDelegate::onIdentityStateChanged(IIdentityPtr identity,IdentityStates state)
 {
     ZS_LOG_DEBUG(zsLib::String("SDK - onIdentityStateChanged for URI: ") + identity->getIdentityURI());
-    //HOPIdentity* hopIdentity = this->getHOPIdentity(identity);
-    HOPIdentity* hopIdentity = this->getHOPIdentity(identity, state != HOPIdentityStateShutdown);
+    //HOPAccountIdentity* accountIdentity = this->getHOPIdentity(identity);
+    HOPAccountIdentity* accountIdentity = this->getHOPAccountIdentity(identity, state != HOPIdentityStateShutdown);
     
-    [identityDelegate identity:hopIdentity stateChanged:(HOPIdentityState) state];
+    [identityDelegate identity:accountIdentity stateChanged:(HOPAccountIdentityState) state];
 }
 
 void OpenPeerIdentityDelegate::onIdentityPendingMessageForInnerBrowserWindowFrame(IIdentityPtr identity)
 {
-    HOPIdentity* hopIdentity = this->getHOPIdentity(identity);
+    HOPAccountIdentity* accountIdentity = this->getHOPAccountIdentity(identity);
     
-    [identityDelegate onIdentityPendingMessageForInnerBrowserWindowFrame:hopIdentity];
+    [identityDelegate onIdentityPendingMessageForInnerBrowserWindowFrame:accountIdentity];
 }
 
 void OpenPeerIdentityDelegate::onIdentityRolodexContactsDownloaded(IIdentityPtr identity)
 {
     this->storeDownloadedContactsForIdentity(identity);
     
-    HOPIdentity* hopIdentity = this->getHOPIdentity(identity);
+    HOPAccountIdentity* accountIdentity = this->getHOPAccountIdentity(identity);
     
-    [identityDelegate onIdentityRolodexContactsDownloaded:hopIdentity];
+    [identityDelegate onIdentityRolodexContactsDownloaded:accountIdentity];
 }
 
-HOPIdentity* OpenPeerIdentityDelegate::getHOPIdentity(IIdentityPtr identity)
+HOPAccountIdentity* OpenPeerIdentityDelegate::getHOPAccountIdentity(IIdentityPtr identity)
 {
-    HOPIdentity* hopIdentity = this->getHOPIdentity(identity, YES);//[[OpenPeerStorageManager sharedStorageManager] getIdentityForPUID:identity->getID()];
-    
-    /*if (!hopIdentity)
-    {
-        hopIdentity = [[HOPIdentity alloc] initWithIdentityPtr:identity];
-        [identityDelegate onNewIdentity:hopIdentity];
-        
-        if (hopIdentity)
-            [[OpenPeerStorageManager sharedStorageManager] setIdentity:hopIdentity forPUID:identity->getID()];
-    }*/
-    return hopIdentity;
+    HOPAccountIdentity* ret = this->getHOPAccountIdentity(identity, YES);
+    return ret;
 }
 
-HOPIdentity* OpenPeerIdentityDelegate::getHOPIdentity(IIdentityPtr identity, BOOL createNewIfMissing)
+HOPAccountIdentity* OpenPeerIdentityDelegate::getHOPAccountIdentity(IIdentityPtr identity, BOOL createNewIfMissing)
 {
-    HOPIdentity* hopIdentity = [[OpenPeerStorageManager sharedStorageManager] getIdentityForPUID:identity->getID()];
-    if (!hopIdentity && createNewIfMissing)
+    HOPAccountIdentity* ret = [[OpenPeerStorageManager sharedStorageManager] getIdentityForPUID:identity->getID()];
+    if (!ret && createNewIfMissing)
     {
-        hopIdentity = [[HOPIdentity alloc] initWithIdentityPtr:identity];
-        [identityDelegate onNewIdentity:hopIdentity];
+        ret = [[HOPAccountIdentity alloc] initWithIdentityPtr:identity];
+        [identityDelegate onNewIdentity:ret];
         
-        if (hopIdentity)
-            [[OpenPeerStorageManager sharedStorageManager] setIdentity:hopIdentity forPUID:identity->getID()];
+        if (ret)
+            [[OpenPeerStorageManager sharedStorageManager] setIdentity:ret forPUID:identity->getID()];
     }
-    return hopIdentity;
+    return ret;
 }
 
 void OpenPeerIdentityDelegate::storeDownloadedContactsForIdentity(IIdentityPtr identityPtr)
 {
     if(identityPtr)
     {
-        HOPIdentity* hopIdentity = this->getHOPIdentity(identityPtr);
+        HOPAccountIdentity* accountIdentity = this->getHOPAccountIdentity(identityPtr);
         
         bool flushAllRolodexContacts;
         String versionDownloadedStr;
         RolodexContactListPtr rolodexContacts;
-        hopIdentity.rolodexContactsObtained = identityPtr->getDownloadedRolodexContacts(flushAllRolodexContacts,versionDownloadedStr, rolodexContacts);
+        accountIdentity.rolodexContactsObtained = identityPtr->getDownloadedRolodexContacts(flushAllRolodexContacts,versionDownloadedStr, rolodexContacts);
         
-        hopIdentity.flushAllRolodexContacts = flushAllRolodexContacts;
+        accountIdentity.flushAllRolodexContacts = flushAllRolodexContacts;
         if (versionDownloadedStr)
-            hopIdentity.versionDownloadedStr = [NSString stringWithCString:versionDownloadedStr encoding:NSUTF8StringEncoding];
+            accountIdentity.versionDownloadedStr = [NSString stringWithCString:versionDownloadedStr encoding:NSUTF8StringEncoding];
         
         if (rolodexContacts && rolodexContacts->size() > 0)
         {
@@ -142,7 +133,7 @@ void OpenPeerIdentityDelegate::storeDownloadedContactsForIdentity(IIdentityPtr i
                         if (hopRolodexContact)
                         {
                             //Update existing rolodex contact
-                            [hopRolodexContact updateWithCoreRolodexContact:rolodexContact identityProviderDomain:[hopIdentity getIdentityProviderDomain] homeUserIdentityURI:[hopIdentity getIdentityURI]];
+                            [hopRolodexContact updateWithCoreRolodexContact:rolodexContact identityProviderDomain:[accountIdentity getIdentityProviderDomain] homeUserIdentityURI:[accountIdentity getIdentityURI]];
                             [[HOPModelManager sharedModelManager] saveContext];
                         }
                         else
@@ -152,7 +143,7 @@ void OpenPeerIdentityDelegate::storeDownloadedContactsForIdentity(IIdentityPtr i
                             if ([managedObject isKindOfClass:[HOPRolodexContact class]])
                             {
                                 hopRolodexContact = (HOPRolodexContact*)managedObject;
-                                [hopRolodexContact updateWithCoreRolodexContact:rolodexContact identityProviderDomain:[hopIdentity getIdentityProviderDomain] homeUserIdentityURI:[hopIdentity getIdentityURI]];
+                                [hopRolodexContact updateWithCoreRolodexContact:rolodexContact identityProviderDomain:[accountIdentity getIdentityProviderDomain] homeUserIdentityURI:[accountIdentity getIdentityURI]];
                                 [[HOPModelManager sharedModelManager] saveContext];
                             }
                         }
@@ -178,8 +169,8 @@ void OpenPeerIdentityDelegate::storeDownloadedContactsForIdentity(IIdentityPtr i
             
             if ([tempArray count] > 0)
             {
-                hopIdentity.arrayLastDownloadedRolodexContacts = nil;
-                hopIdentity.arrayLastDownloadedRolodexContacts = [NSArray arrayWithArray:tempArray];
+                accountIdentity.arrayLastDownloadedRolodexContacts = nil;
+                accountIdentity.arrayLastDownloadedRolodexContacts = [NSArray arrayWithArray:tempArray];
             }
         }
     }

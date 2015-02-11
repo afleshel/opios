@@ -30,12 +30,12 @@
  */
 
 
-#import "HOPContact.h"
+#import "HOPCoreContact.h"
 #import "HOPAccount_Internal.h"
 #import <openpeer/core/IContact.h>
 #import <openpeer/core/IAccount.h>
 #import <openpeer/core/IHelper.h>
-#import "HOPContact_Internal.h"
+#import "HOPCoreContact_Internal.h"
 #import "OpenPeerStorageManager.h"
 #import "HOPPublicPeerFile.h"
 #import "HOPModelManager_Internal.h"
@@ -44,7 +44,7 @@
 
 ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
-@implementation HOPContact
+@implementation HOPCoreContact
 
 - (id)init
 {
@@ -59,7 +59,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     {
         coreContactPtr = inContactPtr;
         NSString* peerURI = [NSString stringWithCString:coreContactPtr->getPeerURI() encoding:NSUTF8StringEncoding];
-        //If there is no stable id, then there is no valid openpeer contact, so stop creation of HOPContact
+        //If there is no stable id, then there is no valid openpeer contact, so stop creation of HOPCoreContact
         if ([peerURI length] > 0)
             [[OpenPeerStorageManager sharedStorageManager] setContact:self forPeerURI:peerURI];
         else
@@ -125,14 +125,14 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     return self;
 }
 
-+ (HOPContact*) getForSelf
++ (HOPCoreContact*) getForSelf
 {
-    HOPContact* ret = nil;
+    HOPCoreContact* ret = nil;
     
     IContactPtr selfContact = IContact::getForSelf([[HOPAccount sharedAccount] getAccountPtr]);
     ret = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:[NSString stringWithCString:selfContact->getPeerURI() encoding:NSUTF8StringEncoding]];
     if (!ret)
-        ret = [[HOPContact alloc] initWithCoreContact:selfContact];
+        ret = [[HOPCoreContact alloc] initWithCoreContact:selfContact];
     
     return ret;
 }
@@ -194,7 +194,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     
     if (coreContactPtr)
     {
-        ret = [HOPContact getPeerFilePublicFromCoreContact:coreContactPtr];
+        ret = [HOPCoreContact getPeerFilePublicFromCoreContact:coreContactPtr];
 //        IPeerFilePublicPtr peerFilePublicPtr = coreContactPtr->getPeerFilePublic();
 //        if (peerFilePublicPtr)
 //        {
@@ -281,8 +281,8 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 - (String) log:(NSString*) message
 {
     if (coreContactPtr)
-        return String("HOPContact [") + string(coreContactPtr->getID()) + "] " + [message UTF8String];
+        return String("HOPCoreContact [") + string(coreContactPtr->getID()) + "] " + [message UTF8String];
     else
-        return String("HOPContact: ") + [message UTF8String];
+        return String("HOPCoreContact: ") + [message UTF8String];
 }
 @end

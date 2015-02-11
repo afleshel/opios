@@ -34,7 +34,7 @@
 #import "WebLoginViewController.h"
 #import "Delegates.h"
 
-@interface IdentityDelegate : NSObject<HOPIdentityDelegate>
+@interface IdentityDelegate : NSObject<HOPAccountIdentityDelegate>
 
 @property (nonatomic, weak) id<LoginEventsDelegate> loginDelegate;
 

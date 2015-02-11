@@ -30,7 +30,7 @@
  */
 
 
-#import "HOPIdentity_Internal.h"
+#import "HOPAccountIdentity_Internal.h"
 #import <openpeer/core/IIdentity.h>
 #import <openpeer/core/IHelper.h>
 
@@ -52,7 +52,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
 @end
 
-@interface HOPIdentity()
+@interface HOPAccountIdentity()
 
 - (void) deleteMarkedRolodexContacts;
 
@@ -60,11 +60,11 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
 
 
-@implementation HOPIdentity
+@implementation HOPAccountIdentity
 
-+ (id) loginWithDelegate:(id<HOPIdentityDelegate>) inIdentityDelegate identityProviderDomain:(NSString*) identityProviderDomain  identityURIOridentityBaseURI:(NSString*) identityURIOridentityBaseURI outerFrameURLUponReload:(NSString*) outerFrameURLUponReload
++ (id) loginWithDelegate:(id<HOPAccountIdentityDelegate>) inIdentityDelegate identityProviderDomain:(NSString*) identityProviderDomain  identityURIOridentityBaseURI:(NSString*) identityURIOridentityBaseURI outerFrameURLUponReload:(NSString*) outerFrameURLUponReload
 {
-    HOPIdentity* ret = nil;
+    HOPAccountIdentity* ret = nil;
     
     ZS_LOG(Debug,"Starting identity login");
     
@@ -91,9 +91,9 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     return ret;
 }
 
-+ (id) loginWithDelegate:(id<HOPIdentityDelegate>) inIdentityDelegate identityProviderDomain:(NSString*) identityProviderDomain identityPreauthorizedURI:(NSString*) identityURI identityAccessToken:(NSString*) identityAccessToken identityAccessSecret:(NSString*) identityAccessSecret identityAccessSecretExpires:(NSDate*) identityAccessSecretExpires
++ (id) loginWithDelegate:(id<HOPAccountIdentityDelegate>) inIdentityDelegate identityProviderDomain:(NSString*) identityProviderDomain identityPreauthorizedURI:(NSString*) identityURI identityAccessToken:(NSString*) identityAccessToken identityAccessSecret:(NSString*) identityAccessSecret identityAccessSecretExpires:(NSDate*) identityAccessSecretExpires
 {
-    HOPIdentity* ret = nil;
+    HOPAccountIdentity* ret = nil;
     
     if (!inIdentityDelegate || [identityURI length] == 0 || [identityAccessToken length] == 0 || [identityAccessSecret length] == 0)
     {
@@ -141,7 +141,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 {
     WORD lastErrorCode;
     zsLib::String lastErrorReason;
-    HOPIdentityState state = (HOPIdentityState)identityPtr->getState(&lastErrorCode, &lastErrorReason);
+    HOPAccountIdentityState state = (HOPAccountIdentityState)identityPtr->getState(&lastErrorCode, &lastErrorReason);
     HOPIdnState* ret = [[HOPIdnState alloc] init];
     ret.state = state;
     ret.lastErrorCode = lastErrorCode;
@@ -165,7 +165,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     return ret;
 }
 
-- (void) attachDelegate:(id<HOPIdentityDelegate>) inIdentityDelegate redirectionURL:(NSString*) redirectionURL
+- (void) attachDelegate:(id<HOPAccountIdentityDelegate>) inIdentityDelegate redirectionURL:(NSString*) redirectionURL
 {
     if(identityPtr)
     {
@@ -181,7 +181,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 }
 
 
-- (void) attachDelegateAndPreauthorizedLogin:(id<HOPIdentityDelegate>) inIdentityDelegate identityAccessToken:(NSString*) identityAccessToken identityAccessSecret:(NSString*) identityAccessSecret identityAccessSecretExpires:(NSDate*) identityAccessSecretExpires
+- (void) attachDelegateAndPreauthorizedLogin:(id<HOPAccountIdentityDelegate>) inIdentityDelegate identityAccessToken:(NSString*) identityAccessToken identityAccessSecret:(NSString*) identityAccessSecret identityAccessSecretExpires:(NSDate*) identityAccessSecretExpires
 {
     if(identityPtr)
     {
@@ -378,11 +378,11 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     }
 }
 
-+ stateToString:(HOPIdentityState) state
++ stateToString:(HOPAccountIdentityState) state
 {
     return [NSString stringWithUTF8String: IIdentity::toString((IIdentity::IdentityStates) state)];
 }
-+ (NSString*) stringForIdentityState:(HOPIdentityState) state
++ (NSString*) stringForIdentityState:(HOPAccountIdentityState) state
 {
     return [NSString stringWithUTF8String: IIdentity::toString((IIdentity::IdentityStates) state)];
 }
@@ -567,7 +567,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     return self;
 }
 
-- (void) setLocalDelegate:(id<HOPIdentityDelegate>) inIdentityDelegate
+- (void) setLocalDelegate:(id<HOPAccountIdentityDelegate>) inIdentityDelegate
 {
     openPeerIdentityDelegatePtr = OpenPeerIdentityDelegate::create(inIdentityDelegate);
 }
@@ -580,9 +580,9 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 - (String) log:(NSString*) message
 {
     if (identityPtr)
-        return String("HOPIdentity [") + string(identityPtr->getID()) + "] " + [message UTF8String];
+        return String("HOPAccountIdentity [") + string(identityPtr->getID()) + "] " + [message UTF8String];
     else
-        return String("HOPIdentity: ") + [message UTF8String];
+        return String("HOPAccountIdentity: ") + [message UTF8String];
 }
 
 - (BOOL) isValid

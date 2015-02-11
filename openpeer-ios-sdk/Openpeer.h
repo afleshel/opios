@@ -35,7 +35,7 @@
 #import "HOPCache.h"
 #import "HOPCall.h"
 #import "HOPConversationThread.h"
-#import "HOPIdentity.h"
+#import "HOPAccountIdentity.h"
 #import "HOPIdentityLookup.h"
 #import "HOPIdentityLookupInfo.h"
 #import "HOPLogger.h"

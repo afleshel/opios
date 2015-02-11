@@ -36,7 +36,7 @@
 using namespace openpeer;
 using namespace openpeer::core;
 
-@class HOPContact;
+@class HOPCoreContact;
 
 @interface HOPRolodexContact ()
 {
@@ -51,5 +51,5 @@ using namespace openpeer::core;
  */
 - (void) updateWithCoreRolodexContact:(RolodexContact) inRolodexContact identityProviderDomain:(NSString*)identityProviderDomain homeUserIdentityURI:(NSString*)homeUserIdentityURI;
 
-- (HOPContact*) getCoreContact;
+- (HOPCoreContact*) getCoreContact;
 @end

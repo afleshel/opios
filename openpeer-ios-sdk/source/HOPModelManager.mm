@@ -41,14 +41,14 @@
 #import "HOPConversationRecord.h"
 #import "HOPMessageRecord.h"
 #import "HOPConversationThreadRecord.h"
-#import "HOPContact.h"
+#import "HOPCoreContact.h"
 #import "HOPConversationThread_Internal.h"
 #import "HOPUtility.h"
 #import "HOPIdentityProvider.h"
 #import "HOPOpenPeerContact+External.h"
 #import "HOPConversationEvent.h"
 #import "HOPParticipants.h"
-#import "HOPContact_Internal.h"
+#import "HOPCoreContact_Internal.h"
 #import "HOPAccount_Internal.h"
 #import "OpenPeerConstants.h"
 #import <CoreData/CoreData.h>
@@ -1447,7 +1447,7 @@ using namespace openpeer::core;
 - (HOPOpenPeerContact*) createOrUpdateOpenPeerContactForItentities:(NSArray*) identities coreContact:(IContactPtr) coreContact
 {
     HOPOpenPeerContact* ret = nil;
-    NSString* peerFile = [HOPContact getPeerFilePublicFromCoreContact:coreContact];//[NSString stringWithUTF8String:coreContact->ge];
+    NSString* peerFile = [HOPCoreContact getPeerFilePublicFromCoreContact:coreContact];//[NSString stringWithUTF8String:coreContact->ge];
     NSString* peerURI = [NSString stringWithUTF8String:coreContact->getPeerURI()];
     
     if (peerFile.length > 0 && peerURI.length > 0 && identities.count >0)

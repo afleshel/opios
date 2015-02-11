@@ -39,13 +39,13 @@
 #import "OpenPeerUtility.h"
 #import "HOPConversationThread_Internal.h"
 #import "HOPConversation_Internal.h"
-#import "HOPContact_Internal.h"
+#import "HOPCoreContact_Internal.h"
 #import "HOPRolodexContact_Internal.h"
 #import "OpenPeerStorageManager.h"
 #import "HOPOpenPeerContact+External.h"
 
 #import "HOPCall.h"
-#import "HOPContact.h"
+#import "HOPCoreContact.h"
 #import "HOPModelManager.h"
 
 ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
@@ -71,7 +71,7 @@ using namespace openpeer::core;
     HOPCall* ret = nil;
     if (conversationThread != nil)
     {
-        HOPContact* toContact = nil;
+        HOPCoreContact* toContact = nil;
         if (conversationThread.participants.count > 0)
         {
             toContact = [((HOPOpenPeerContact*)[conversationThread.participants objectAtIndex:0]) getCoreContact];
@@ -98,7 +98,7 @@ using namespace openpeer::core;
     HOPCall* ret = nil;
     if (conversation != nil)
     {
-        HOPContact* toContact = nil;
+        HOPCoreContact* toContact = nil;
         if (conversation.participants.count > 0)
         {
             toContact = [((HOPRolodexContact*)[conversation.participants objectAtIndex:0]) getCoreContact];
@@ -126,7 +126,7 @@ using namespace openpeer::core;
     if (conversation != nil)
     {
         NSArray* callees = participants.count > 0 ? participants : conversation.participants;
-        HOPContact* toContact = nil;
+        HOPCoreContact* toContact = nil;
         if (callees.count > 0)
         {
             toContact = [((HOPRolodexContact*)[callees objectAtIndex:0]) getCoreContact];
@@ -239,9 +239,9 @@ using namespace openpeer::core;
         {
             NSString* peerURI = [NSString stringWithUTF8String:contactPtr->getPeerURI()];
             //It needs to be checked if core contact is created, because it is mandatory to have
-            HOPContact* coreContact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:peerURI];
+            HOPCoreContact* coreContact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:peerURI];
             if (!coreContact)
-                coreContact = [[HOPContact alloc] initWithCoreContact:contactPtr];
+                coreContact = [[HOPCoreContact alloc] initWithCoreContact:contactPtr];
             ret = [[HOPModelManager sharedModelManager] getRolodexContactByPeerURI:peerURI];
         }
         else
@@ -267,9 +267,9 @@ using namespace openpeer::core;
         {
             NSString* peerURI = [NSString stringWithUTF8String:contactPtr->getPeerURI()];
             //It needs to be checked if core contact is created, because it is mandatory to have
-            HOPContact* coreContact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:peerURI];
+            HOPCoreContact* coreContact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:peerURI];
             if (!coreContact)
-                coreContact = [[HOPContact alloc] initWithCoreContact:contactPtr];
+                coreContact = [[HOPCoreContact alloc] initWithCoreContact:contactPtr];
             
             ret = [[HOPModelManager sharedModelManager] getRolodexContactByPeerURI:peerURI];
         }

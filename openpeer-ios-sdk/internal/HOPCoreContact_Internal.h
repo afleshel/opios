@@ -30,13 +30,13 @@
  */
 
 
-#import "HOPContact.h"
+#import "HOPCoreContact.h"
 #import <openpeer/core/types.h>
 
 using namespace openpeer;
 using namespace openpeer::core;
 
-@interface HOPContact ()
+@interface HOPCoreContact ()
 {
     IContactPtr coreContactPtr;
 }

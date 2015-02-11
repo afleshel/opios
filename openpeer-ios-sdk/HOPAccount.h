@@ -33,7 +33,7 @@
 #import "HOPTypes.h"
 #import "HOPProtocols.h"
 
-@class HOPIdentity;
+@class HOPAccountIdentity;
 
 @interface HOPAccState : NSObject
 
@@ -278,5 +278,5 @@ Singleton class that represents the logged in OpenPeer user.
  *
  *  @return <#return value description#>
  */
-- (BOOL) addIdentity:(HOPIdentity*) identity;
+- (BOOL) addAccountIdentity:(HOPAccountIdentity*) accountIdentity;
 @end

@@ -40,7 +40,7 @@
 #import <OpenpeerSDK/HOPAssociatedIdentity.h>
 #import <OpenPeerSDK/HOPAccount.h>
 #import <OpenpeerSDK/HOPIdentityProvider.h>
-#import <OpenpeerSDK/HOPIdentity.h>
+#import <OpenpeerSDK/HOPAccountIdentity.h>
 
 const CGFloat cellDefaultHeight = 50.0;
 const CGFloat headerDefaultHeight = 40.0;
@@ -176,8 +176,8 @@ typedef enum
             }
             else
             {
-                HOPIdentity* identityInfo = [[[HOPAccount sharedAccount] getAssociatedIdentities] objectAtIndex:indexPath.row];
-                rolodex = [[HOPModelManager sharedModelManager] getRolodexContactByIdentityURI:[identityInfo getIdentityURI]];
+                HOPAccountIdentity* accountIdentity = [[[HOPAccount sharedAccount] getAssociatedIdentities] objectAtIndex:indexPath.row];
+                rolodex = [[HOPModelManager sharedModelManager] getRolodexContactByIdentityURI:[accountIdentity getIdentityURI]];
             }
             cell.textLabel.lineBreakMode = NSLineBreakByCharWrapping;
             cell.textLabel.numberOfLines = 0;
@@ -243,7 +243,7 @@ typedef enum
             
         case USER_INFO_IDENTITIES:
         {
-            HOPIdentity* identityInfo = [[[HOPAccount sharedAccount] getAssociatedIdentities] objectAtIndex:indexPath.row];
+            HOPAccountIdentity* accountIdentity = [[[HOPAccount sharedAccount] getAssociatedIdentities] objectAtIndex:indexPath.row];
             
             HOPRolodexContact* rolodex = nil;
             if (self.showContactInfo)
@@ -252,14 +252,14 @@ typedef enum
             }
             else
             {
-                rolodex = [[HOPModelManager sharedModelManager] getRolodexContactByIdentityURI:[identityInfo getIdentityURI]];//identityInfo.selfRolodexContact;
+                rolodex = [[HOPModelManager sharedModelManager] getRolodexContactByIdentityURI:[accountIdentity getIdentityURI]];//identityInfo.selfRolodexContact;
             }
             
             UIFont* cellFont = [UIFont boldSystemFontOfSize:17.0];
             UIFont* cellDetailFont = [UIFont boldSystemFontOfSize:14.0];
 
             
-            CGSize labelSize = [[identityInfo getIdentityProviderDomain] boundingRectWithSize: constraintSize options: NSStringDrawingUsesLineFragmentOrigin attributes: @{ NSFontAttributeName: cellFont } context: nil].size;
+            CGSize labelSize = [[accountIdentity getIdentityProviderDomain] boundingRectWithSize: constraintSize options: NSStringDrawingUsesLineFragmentOrigin attributes: @{ NSFontAttributeName: cellFont } context: nil].size;
             NSString* str = [NSString stringWithFormat:@"Identity URI: %@",rolodex.identityURI];
             CGSize labelDetailSize = [str boundingRectWithSize: constraintSize options: NSStringDrawingUsesLineFragmentOrigin attributes: @{ NSFontAttributeName: cellDetailFont } context: nil].size;            CGFloat totalCellHeight = labelSize.height + labelDetailSize.height;
             ret = (totalCellHeight) > cellDefaultHeight ? totalCellHeight: cellDefaultHeight;

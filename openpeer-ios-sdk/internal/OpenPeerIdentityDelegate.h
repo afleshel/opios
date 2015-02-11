@@ -40,7 +40,7 @@
 using namespace openpeer;
 using namespace openpeer::core;
 
-@class HOPIdentity;
+@class HOPAccountIdentity;
 
 /**
  Wrapper Class that creates delegate object used in core.
@@ -48,9 +48,9 @@ using namespace openpeer::core;
 class OpenPeerIdentityDelegate : public IIdentityDelegate
 {
 protected:
-    id<HOPIdentityDelegate> identityDelegate;
+    id<HOPAccountIdentityDelegate> identityDelegate;
     
-    OpenPeerIdentityDelegate(id<HOPIdentityDelegate> inIdentityDelegate);
+    OpenPeerIdentityDelegate(id<HOPAccountIdentityDelegate> inIdentityDelegate);
 
 public:
     ~OpenPeerIdentityDelegate();
@@ -58,14 +58,14 @@ public:
      Create OpenPeerIdentityDelegate object packed in boost shared pointer.
      @returns OpenPeerIdentityDelegate object boost shared object
      */
-    static boost::shared_ptr<OpenPeerIdentityDelegate>  create(id<HOPIdentityDelegate> inIdentityDelegate);
+    static boost::shared_ptr<OpenPeerIdentityDelegate>  create(id<HOPAccountIdentityDelegate> inIdentityDelegate);
     
     virtual void onIdentityStateChanged(IIdentityPtr identity,IdentityStates state);
     virtual void onIdentityPendingMessageForInnerBrowserWindowFrame(IIdentityPtr identity);
     virtual void onIdentityRolodexContactsDownloaded(IIdentityPtr identity);
     
 private:
-    HOPIdentity* getHOPIdentity(IIdentityPtr identity);
-    HOPIdentity* getHOPIdentity(IIdentityPtr identity, BOOL createNewIfMissing);
+    HOPAccountIdentity* getHOPAccountIdentity(IIdentityPtr identity);
+    HOPAccountIdentity* getHOPAccountIdentity(IIdentityPtr identity, BOOL createNewIfMissing);
     void storeDownloadedContactsForIdentity(IIdentityPtr identity);
 };

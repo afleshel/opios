@@ -156,7 +156,7 @@ typedef enum
     HOPAccountStateShutdown,
 } HOPAccountState;
 
-#pragma mark - HOPIdentity enums
+#pragma mark - HOPAccountIdentity enums
 /**
  *  Identity state.
  */
@@ -170,7 +170,7 @@ typedef enum
     HOPIdentityStateWaitingForBrowserWindowToClose,
     HOPIdentityStateReady,
     HOPIdentityStateShutdown
-} HOPIdentityState;
+} HOPAccountIdentityState;
 
 
 #pragma mark - HOPClientLog enums

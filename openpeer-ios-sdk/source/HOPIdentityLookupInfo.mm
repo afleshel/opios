@@ -32,7 +32,7 @@
 #include "HOPIdentityLookupInfo_Internal.h"
 #include "OpenPeerUtility.h"
 #include "OpenPeerStorageManager.h"
-#include "HOPContact_Internal.h"
+#include "HOPCoreContact_Internal.h"
 #import "HOPIdentityContact.h"
 #import "HOPRolodexContact.h"
 #import <openpeer/core/IContact.h>

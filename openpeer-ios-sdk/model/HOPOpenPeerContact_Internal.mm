@@ -32,7 +32,7 @@
 #import "HOPOpenPeerContact_Internal.h"
 #import <openpeer/core/IHelper.h>
 #import "OpenPeerStorageManager.h"
-#import "HOPContact.h"
+#import "HOPCoreContact.h"
 #import "HOPModelManager_Internal.h"
 #import "HOPIdentityContact_Internal.h"
 

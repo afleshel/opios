@@ -31,12 +31,12 @@
 
 #import "HOPOpenPeerContact.h"
 
-@class HOPContact;
+@class HOPCoreContact;
 @class HOPRolodexContact;
 
 @interface HOPOpenPeerContact(External)
 
-- (HOPContact*) getCoreContact;
+- (HOPCoreContact*) getCoreContact;
 - (HOPRolodexContact*) getDefaultRolodexContact;
 - (NSString*) getFullName;
 - (NSString*) getPeerURI;

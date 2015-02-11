@@ -41,13 +41,13 @@
  */
 @interface HOPIdnState : NSObject
 
-@property (nonatomic, assign) HOPIdentityState state;
+@property (nonatomic, assign) HOPAccountIdentityState state;
 @property (nonatomic, assign) unsigned short lastErrorCode;
 @property (nonatomic, strong) NSString* lastErrorReason;
 @end
 
 
-@interface HOPIdentity : NSObject
+@interface HOPAccountIdentity : NSObject
 
 @property (nonatomic, strong) NSString* identityBaseURI;
 @property (copy) NSString* identityId;
@@ -60,7 +60,7 @@
 *
 *  @return A string representation of identity state.
 */
-+ stateToString:(HOPIdentityState) state __attribute__((deprecated("use method stringForIdentityState instead")));
++ stateToString:(HOPAccountIdentityState) state __attribute__((deprecated("use method stringForIdentityState instead")));
 
 /**
  *  Converts identity state enum to string.
@@ -69,7 +69,7 @@
  *
  *  @return A string representation of identity state.
  */
-+ (NSString*) stringForIdentityState:(HOPIdentityState) state;
++ (NSString*) stringForIdentityState:(HOPAccountIdentityState) state;
 
 
 /**
@@ -80,9 +80,9 @@
  *  @param identityURIOridentityBaseURI Base URI of identity provider (e.g. identity://facebook.com/),  or contact specific identity URI (e.g. identity://facebook.com/contact_facebook_id)
  *  @param outerFrameURLUponReload      Outer frame URL on reload
  *
- *  @return HOPIdentity object if login is started successfully
+ *  @return HOPAccountIdentity object if login is started successfully
  */
-+ (id) loginWithDelegate:(id<HOPIdentityDelegate>) inIdentityDelegate identityProviderDomain:(NSString*) identityProviderDomain  identityURIOridentityBaseURI:(NSString*) identityURIOridentityBaseURI outerFrameURLUponReload:(NSString*) outerFrameURLUponReload;
++ (id) loginWithDelegate:(id<HOPAccountIdentityDelegate>) inIdentityDelegate identityProviderDomain:(NSString*) identityProviderDomain  identityURIOridentityBaseURI:(NSString*) identityURIOridentityBaseURI outerFrameURLUponReload:(NSString*) outerFrameURLUponReload;
 
 /**
  *  Creates identity object and starts identity login for preauthorized identites. This method is called only on login procedure. During relogin procedure this method is not invoked.
@@ -94,9 +94,9 @@
  *  @param identityAccessSecret        Access secret obtained from YOUR server.
  *  @param identityAccessSecretExpires Access secret expiry date.
  *
- *  @return HOPIdentity object if login is started successfully
+ *  @return HOPAccountIdentity object if login is started successfully
  */
-+ (id) loginWithDelegate:(id<HOPIdentityDelegate>) inIdentityDelegate identityProviderDomain:(NSString*) identityProviderDomain identityPreauthorizedURI:(NSString*) identityURI identityAccessToken:(NSString*) identityAccessToken identityAccessSecret:(NSString*) identityAccessSecret identityAccessSecretExpires:(NSDate*) identityAccessSecretExpires;
++ (id) loginWithDelegate:(id<HOPAccountIdentityDelegate>) inIdentityDelegate identityProviderDomain:(NSString*) identityProviderDomain identityPreauthorizedURI:(NSString*) identityURI identityAccessToken:(NSString*) identityAccessToken identityAccessSecret:(NSString*) identityAccessSecret identityAccessSecretExpires:(NSDate*) identityAccessSecretExpires;
 
 /**
  *  This init method is not available. You need to use class method loginWithDelegate:identityProviderDomain:identityURIOridentityBaseURI:outerFrameURLUponReload:.
@@ -131,7 +131,7 @@
  *  @param inIdentityDelegate Delegate object that implements the HOPIdentityDelegate protocol
  *  @param redirectionURL     Redirection URL that will be received after login is completed
  */
-- (void) attachDelegate:(id<HOPIdentityDelegate>) inIdentityDelegate redirectionURL:(NSString*) redirectionURL;
+- (void) attachDelegate:(id<HOPAccountIdentityDelegate>) inIdentityDelegate redirectionURL:(NSString*) redirectionURL;
 
 /**
  *  Attaches identity delegate for preauthorized login.
@@ -141,7 +141,7 @@
  *  @param identityAccessSecret        Access secret obtained from YOUR server
  *  @param identityAccessSecretExpires Access secret expiry date
  */
-- (void) attachDelegateAndPreauthorizedLogin:(id<HOPIdentityDelegate>) inIdentityDelegate identityAccessToken:(NSString*) identityAccessToken identityAccessSecret:(NSString*) identityAccessSecret identityAccessSecretExpires:(NSDate*) identityAccessSecretExpires;
+- (void) attachDelegateAndPreauthorizedLogin:(id<HOPAccountIdentityDelegate>) inIdentityDelegate identityAccessToken:(NSString*) identityAccessToken identityAccessSecret:(NSString*) identityAccessSecret identityAccessSecretExpires:(NSDate*) identityAccessSecretExpires;
 
 /**
  Returns identity URI.

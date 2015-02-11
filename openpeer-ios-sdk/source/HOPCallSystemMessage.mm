@@ -31,9 +31,8 @@
 
 #import "HOPCallSystemMessage_Internal.h"
 #import <openpeer/core/ISystemMessage.h>
-#import <HOPContact_Internal.h>
 #import <openpeer/core/IHelper.h>
-#import "HOPContact_Internal.h"
+#import "HOPCoreContact_Internal.h"
 #import "HOPAccount_Internal.h"
 #import "OpenPeerStorageManager.h"
 #import "HOPRolodexContact_Internal.h"
@@ -48,7 +47,7 @@ using namespace openpeer::core;
     self = [super init];
     if (self)
     {
-        HOPContact* coreContact = [inCallee getCoreContact];
+        HOPCoreContact* coreContact = [inCallee getCoreContact];
 
         callSystemMessagePtr = CallSystemMessagePtr(new CallSystemMessage((CallSystemMessage::CallSystemMessageStatuses)inType, "", "", [coreContact getContactPtr], inErrorCode));
         self.type = HOPSystemMessageTypeCall;
@@ -74,7 +73,7 @@ using namespace openpeer::core;
     self = [super init];
     if (self)
     {
-        HOPContact* coreContact = [inCallee getCoreContact];
+        HOPCoreContact* coreContact = [inCallee getCoreContact];
         
         callSystemMessagePtr = CallSystemMessagePtr(new CallSystemMessage((CallSystemMessage::CallSystemMessageStatuses)inType, mediaType.length > 0 ? [mediaType UTF8String] : "", callID.length > 0 ? [callID UTF8String] : "", [coreContact getContactPtr], inErrorCode));
         self.type = HOPSystemMessageTypeCall;

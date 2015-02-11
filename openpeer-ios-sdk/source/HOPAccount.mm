@@ -30,7 +30,7 @@
  */
 
 #import "HOPAccount_Internal.h"
-#import "HOPIdentity_Internal.h"
+#import "HOPAccountIdentity_Internal.h"
 
 #import "OpenPeerStorageManager.h"
 #import "OpenPeerUUIDManager.h"
@@ -412,15 +412,15 @@ using namespace openpeer::core;
             array = [[NSMutableArray alloc] init];
             for (IdentityList::iterator it = associatedIdentities->begin(); it != associatedIdentities->end(); ++it)
             {
-                HOPIdentity* identity = [[OpenPeerStorageManager sharedStorageManager] getIdentityForPUID:it->get()->getID()];
+                HOPAccountIdentity* accountIdentity = [[OpenPeerStorageManager sharedStorageManager] getIdentityForPUID:it->get()->getID()];
                 
-                if (!identity)
+                if (!accountIdentity)
                 {
-                    identity = [[HOPIdentity alloc] initWithIdentityPtr:*it openPeerIdentityDelegate:boost::shared_ptr<OpenPeerIdentityDelegate>()];
-                    [[OpenPeerStorageManager sharedStorageManager] setIdentity:identity forPUID:it->get()->getID()];
+                    accountIdentity = [[HOPAccountIdentity alloc] initWithIdentityPtr:*it openPeerIdentityDelegate:boost::shared_ptr<OpenPeerIdentityDelegate>()];
+                    [[OpenPeerStorageManager sharedStorageManager] setIdentity:accountIdentity forPUID:it->get()->getID()];
                 }
-                if (identity)
-                    [array addObject:identity];
+                if (accountIdentity)
+                    [array addObject:accountIdentity];
             }
         }
     }
@@ -440,11 +440,11 @@ using namespace openpeer::core;
         
         if ([identities count] > 0)
         {
-            for (HOPIdentity* identity in identities)
+            for (HOPAccountIdentity* accountIdentity in identities)
             {
-                if ([identity getIdentityPtr])
+                if ([accountIdentity getIdentityPtr])
                 {
-                    identitiesToRemove.push_back([identity getIdentityPtr]);
+                    identitiesToRemove.push_back([accountIdentity getIdentityPtr]);
                 }
             }
             accountPtr->removeIdentities(identitiesToRemove);
@@ -625,18 +625,18 @@ using namespace openpeer::core;
     [[HOPModelManager sharedModelManager] saveContext];
 }
 
-- (BOOL) addIdentity:(HOPIdentity*) identity
+- (BOOL) addAccountIdentity:(HOPAccountIdentity*) accountIdentity
 {
     BOOL ret = NO;
     if (self.openPeerAccount)
     {
-        HOPIdentityContact* homeIdentityContact = [identity getSelfIdentityContact];
+        HOPIdentityContact* homeIdentityContact = [accountIdentity getSelfIdentityContact];
         
-        HOPAssociatedIdentity*  associatedIdentity = [[HOPModelManager sharedModelManager] getAssociatedIdentityForBaseIdentityURI:[identity getBaseIdentityURI] homeUserStableId:[self getStableID]];
+        HOPAssociatedIdentity*  associatedIdentity = [[HOPModelManager sharedModelManager] getAssociatedIdentityForBaseIdentityURI:[accountIdentity getBaseIdentityURI] homeUserStableId:[self getStableID]];
         
         if (!associatedIdentity)
         {
-            associatedIdentity = [[HOPModelManager sharedModelManager] addAssociatedIdentityForBaseIdentityURI:[identity getBaseIdentityURI] domain:[identity getIdentityProviderDomain] name:[identity getBaseIdentityURI]  selfRolodexProfileProfile:homeIdentityContact.rolodexContact];
+            associatedIdentity = [[HOPModelManager sharedModelManager] addAssociatedIdentityForBaseIdentityURI:[accountIdentity getBaseIdentityURI] domain:[accountIdentity getIdentityProviderDomain] name:[accountIdentity getBaseIdentityURI]  selfRolodexProfileProfile:homeIdentityContact.rolodexContact];
         }
         else
         {

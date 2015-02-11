@@ -39,7 +39,7 @@
 #include <zsLib/XML.h>
 
 #import "HOPConversationThread_Internal.h"
-#import "HOPContact_Internal.h"
+#import "HOPCoreContact_Internal.h"
 #import "HOPAccount_Internal.h"
 #import "HOPMessageRecord+External.h"
 #import "HOPModelManager_Internal.h"
@@ -51,7 +51,7 @@
 #import "HOPOpenPeerContact_Internal.h"
 #import "OpenPeerStorageManager.h"
 #import "OpenPeerUtility.h"
-#import "HOPIdentity_Internal.h"
+#import "HOPAccountIdentity_Internal.h"
 #import "HOPPublicPeerFile.h"
 #import "HOPConversationType.h"
 #import "HOPSettings.h"
@@ -136,10 +136,10 @@ using namespace openpeer::core;
     HOPConversationThread* ret = nil;
     core::IdentityContactList identityContactsList;
     
-    for (HOPIdentity* identity in identities)
+    for (HOPAccountIdentity* accountIdentity in identities)
     {
         IdentityContact identityContact;
-        [identity getIdentityPtr]->getSelfIdentityContact(identityContact);
+        [accountIdentity getIdentityPtr]->getSelfIdentityContact(identityContact);
         
         identityContactsList.push_back(identityContact);
     }
@@ -175,10 +175,10 @@ using namespace openpeer::core;
     HOPConversationThread* ret = nil;
     core::IdentityContactList identityContactsList;
     
-    for (HOPIdentity* identity in identities)
+    for (HOPAccountIdentity* accountIdentity in identities)
     {
         IdentityContact identityContact;
-        [identity getIdentityPtr]->getSelfIdentityContact(identityContact);
+        [accountIdentity getIdentityPtr]->getSelfIdentityContact(identityContact);
         
         identityContactsList.push_back(identityContact);
     }
@@ -340,7 +340,7 @@ using namespace openpeer::core;
     
     for (HOPRolodexContact* rolodexContact in contacts)
     {
-        HOPContact* contact = [rolodexContact getCoreContact];
+        HOPCoreContact* contact = [rolodexContact getCoreContact];
         if (contact)
         {
             ContactProfileInfo contactInfo;
@@ -415,7 +415,7 @@ using namespace openpeer::core;
             ContactList contactList;
             for (HOPRolodexContact* contact in contacts)
             {
-                HOPContact* coreContact = [contact getCoreContact];
+                HOPCoreContact* coreContact = [contact getCoreContact];
                 if (coreContact)
                 {
                     contactList.push_back([coreContact getContactPtr]);
@@ -470,12 +470,12 @@ using namespace openpeer::core;
     }
     return ret;
 }
-- (NSArray*) getIdentityContactListForContact:(HOPContact*) rolodexCoontact
+- (NSArray*) getIdentityContactListForContact:(HOPCoreContact*) rolodexCoontact
 {
     NSArray* ret = nil;
     if(conversationThreadPtr)
     {
-        HOPContact* contact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:[rolodexCoontact getPeerURI]];
+        HOPCoreContact* contact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:[rolodexCoontact getPeerURI]];
         if (contact)
             ret = [self getIdentityContactListForCoreContact:[contact getContactPtr]];
     }
@@ -488,7 +488,7 @@ using namespace openpeer::core;
     HOPConversationThreadContactConnectionState ret = HOPConversationThreadContactConnectionStateNotApplicable;
     if(conversationThreadPtr)
     {
-        HOPContact* contact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:[rolodexCoontact getPeerURI]];
+        HOPCoreContact* contact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:[rolodexCoontact getPeerURI]];
         if (contact)
             ret = (HOPConversationThreadContactConnectionState) conversationThreadPtr->getContactConnectionState([contact getContactPtr]);
     }
@@ -525,7 +525,7 @@ using namespace openpeer::core;
     HOPComposingState ret = HOPComposingStateInactive;
     if(conversationThreadPtr)
     {
-        HOPContact* contact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:[rolodexCoontact getPeerURI]];
+        HOPCoreContact* contact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:[rolodexCoontact getPeerURI]];
         IContactPtr contactPtr = [contact getContactPtr];
         if (contactPtr)
         {

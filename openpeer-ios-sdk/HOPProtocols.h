@@ -189,11 +189,11 @@
 
 
 
-@class HOPIdentity;
+@class HOPAccountIdentity;
 /**
  *  SDK uses methods in this protocol to notify application about identity events.
  */
-@protocol HOPIdentityDelegate <NSObject>
+@protocol HOPAccountIdentityDelegate <NSObject>
 @required
 /**
  *  Notifies the receiver about identity object state change.
@@ -201,28 +201,28 @@
  *  @param account      Identity object whose state is changed.
  *  @param accountState A new identity object state
  */
-- (void) identity:(HOPIdentity*) identity stateChanged:(HOPIdentityState) state;
+- (void) identity:(HOPAccountIdentity*) accountIdentity stateChanged:(HOPAccountIdentityState) state;
 
 /**
  *  Notifies the receiver about core message for inner browser frame.
  *
- *  @param identity HOPIdentity object.
+ *  @param identity HOPAccountIdentity object.
  */
-- (void) onIdentityPendingMessageForInnerBrowserWindowFrame:(HOPIdentity*) identity;
+- (void) onIdentityPendingMessageForInnerBrowserWindowFrame:(HOPAccountIdentity*) accountIdentity;
 
 /**
  *  Notifies the receiver that rolodex contacts has been downloaded.
  *
- *  @param identity HOPIdentity object.
+ *  @param identity HOPAccountIdentity object.
  */
-- (void) onIdentityRolodexContactsDownloaded:(HOPIdentity*) identity;
+- (void) onIdentityRolodexContactsDownloaded:(HOPAccountIdentity*) accountIdentity;
 
 /**
  *  Notifies the receiver that rolodex contacts has been downloaded.
  *
- *  @param identity New HOPIdentity object.
+ *  @param identity New HOPAccountIdentity object.
  */
-- (void) onNewIdentity:(HOPIdentity*) identity;
+- (void) onNewIdentity:(HOPAccountIdentity*) accountIdentity;
 @end
 
 @class HOPIdentityLookup;

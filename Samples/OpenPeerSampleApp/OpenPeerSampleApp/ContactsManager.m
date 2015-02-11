@@ -42,7 +42,7 @@
 #import "Utility.h"
 #import <OpenpeerSDK/HOPIdentityLookup.h>
 #import <OpenpeerSDK/HOPIdentityLookupInfo.h>
-#import <OpenpeerSDK/HOPIdentity.h>
+#import <OpenpeerSDK/HOPAccountIdentity.h>
 #import <OpenpeerSDK/HOPAccount.h>
 #import <OpenpeerSDK/HOPModelManager.h>
 #import <OpenpeerSDK/HOPRolodexContact+External.h>
@@ -104,23 +104,23 @@
     //For the first login and association it should be performed contacts download on just associated identity
     NSArray* associatedIdentities = [[HOPAccount sharedAccount] getAssociatedIdentities];
     
-    for (HOPIdentity* identity in associatedIdentities)
+    for (HOPAccountIdentity* accountIdentity in associatedIdentities)
     {
-        if (![self.setOfIdentitiesWhoseContactsDownloadInProgress containsObject:[identity getIdentityURI]])
+        if (![self.setOfIdentitiesWhoseContactsDownloadInProgress containsObject:[accountIdentity getIdentityURI]])
         {
-            [self.setOfIdentitiesWhoseContactsDownloadInProgress addObject:[identity getIdentityURI]];
-            if (![identity isDelegateAttached])
-                [[LoginManager sharedLoginManager] attachDelegateForIdentity:identity forceAttach:NO];
+            [self.setOfIdentitiesWhoseContactsDownloadInProgress addObject:[accountIdentity getIdentityURI]];
+            if (![accountIdentity isDelegateAttached])
+                [[LoginManager sharedLoginManager] attachDelegateForIdentity:accountIdentity forceAttach:NO];
             
-            HOPAssociatedIdentity* associatedIdentity = [[HOPModelManager sharedModelManager] getAssociatedIdentityForBaseIdentityURI:[identity getBaseIdentityURI] homeUserStableId:[[HOPAccount sharedAccount] getStableID]];
+            HOPAssociatedIdentity* associatedIdentity = [[HOPModelManager sharedModelManager] getAssociatedIdentityForBaseIdentityURI:[accountIdentity getBaseIdentityURI] homeUserStableId:[[HOPAccount sharedAccount] getStableID]];
         
             if ([[LoginManager sharedLoginManager] isLogin] || [[LoginManager sharedLoginManager] isAssociation])
             {
                 [[[OpenPeer sharedOpenPeer] mainViewController] onContactsLoadingStarted];
             }
             
-            [identity startRolodexDownload:associatedIdentity.downloadedVersion];
-            OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Start rolodex contacts download - identity URI: - Version: %@",[identity getIdentityURI], associatedIdentity.downloadedVersion);
+            [accountIdentity startRolodexDownload:associatedIdentity.downloadedVersion];
+            OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Start rolodex contacts download - identity URI: - Version: %@",[accountIdentity getIdentityURI], associatedIdentity.downloadedVersion);
         }
     }
     
@@ -130,12 +130,12 @@
 {
     NSArray* associatedIdentities = [[HOPAccount sharedAccount] getAssociatedIdentities];
     
-    for (HOPIdentity* identity in associatedIdentities)
+    for (HOPAccountIdentity* accountIdentity in associatedIdentities)
     {
-        NSArray* rolodexContactsForRefresh = [[HOPModelManager sharedModelManager] getRolodexContactsForRefreshByHomeUserIdentityURI:[identity getIdentityURI] lastRefreshTime:[NSDate date]];
+        NSArray* rolodexContactsForRefresh = [[HOPModelManager sharedModelManager] getRolodexContactsForRefreshByHomeUserIdentityURI:[accountIdentity getIdentityURI] lastRefreshTime:[NSDate date]];
         
         if ([rolodexContactsForRefresh count] > 0)
-            [self identityLookupForContacts:rolodexContactsForRefresh identityServiceDomain:[identity getIdentityProviderDomain]];
+            [self identityLookupForContacts:rolodexContactsForRefresh identityServiceDomain:[accountIdentity getIdentityProviderDomain]];
     }
 }
 
@@ -145,12 +145,12 @@
     
     [[HOPModelManager sharedModelManager] clearAPNSData];
     
-    for (HOPIdentity* identity in associatedIdentities)
+    for (HOPAccountIdentity* accountIdentity in associatedIdentities)
     {
-        if (![self.setOfIdentitiesWhoseContactsDownloadInProgress containsObject:[identity getIdentityURI]])
+        if (![self.setOfIdentitiesWhoseContactsDownloadInProgress containsObject:[accountIdentity getIdentityURI]])
         {
-            [self.setOfIdentitiesWhoseContactsDownloadInProgress addObject:[identity getIdentityURI]];
-            [identity refreshRolodexContacts];
+            [self.setOfIdentitiesWhoseContactsDownloadInProgress addObject:[accountIdentity getIdentityURI]];
+            [accountIdentity refreshRolodexContacts];
         }
     }
 }

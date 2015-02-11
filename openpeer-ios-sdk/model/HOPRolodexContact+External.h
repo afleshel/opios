@@ -31,7 +31,7 @@
 
 #import "HOPRolodexContact.h"
 
-@class HOPContact;
+@class HOPCoreContact;
 
 @interface HOPRolodexContact (External)
 

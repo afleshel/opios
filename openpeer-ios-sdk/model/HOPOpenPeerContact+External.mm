@@ -30,7 +30,7 @@
  */
 
 #import "HOPOpenPeerContact+External.h"
-#import "HOPContact.h"
+#import "HOPCoreContact.h"
 #import "OpenPeerStorageManager.h"
 #import "HOPPublicPeerFile.h"
 #import "HOPIdentityContact.h"

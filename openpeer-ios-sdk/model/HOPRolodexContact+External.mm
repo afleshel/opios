@@ -32,7 +32,7 @@
 #import "HOPRolodexContact+External.h"
 #import "HOPRolodexContact_Internal.h"
 #import "OpenPeerStorageManager.h"
-#import "HOPContact.h"
+#import "HOPCoreContact.h"
 #import "HOPIdentityContact.h"
 #import "HOPPublicPeerFile.h"
 #import "HOPModelManager_Internal.h"
@@ -80,11 +80,11 @@
 {
     if (peerURI.length > 0 && locationID.length > 0)
     {
-        HOPContact* contact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:peerURI];
+        HOPCoreContact* contact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:peerURI];
         
         if (!contact)
         {
-            contact = [[HOPContact alloc] initWithPeerURI:peerURI];
+            contact = [[HOPCoreContact alloc] initWithPeerURI:peerURI];
         }
         
         if (contact)

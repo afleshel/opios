@@ -158,9 +158,9 @@
     dispatch_async(dispatch_get_main_queue(), ^
     {
         NSArray* associatedIdentities = [account getAssociatedIdentities];
-        for (HOPIdentity* identity in associatedIdentities)
+        for (HOPAccountIdentity* accountIdentity in associatedIdentities)
         {
-            [[LoginManager sharedLoginManager] attachDelegateForIdentity:identity forceAttach:NO];
+            [[LoginManager sharedLoginManager] attachDelegateForIdentity:accountIdentity forceAttach:NO];
         }
     });
 }

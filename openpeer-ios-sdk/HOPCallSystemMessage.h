@@ -33,13 +33,13 @@
 #import "HOPTypes.h"
 #import "HOPSystemMessage.h"
 
-@class HOPContact;
+@class HOPCoreContact;
 @class HOPRolodexContact;
 
 @interface HOPCallSystemMessage : HOPSystemMessage <NSCopying>
 
 @property (nonatomic) HOPCallSystemMessageType messageType;
-@property (nonatomic,weak) HOPContact* callee;
+@property (nonatomic,weak) HOPCoreContact* callee;
 @property (nonatomic) unsigned short errorCode;
 @property (nonatomic, copy) NSString* jsonMessage;
 @property (nonatomic, copy) NSString* mediaType;

@@ -30,14 +30,14 @@
  */
 
 
-#import "HOPIdentity.h"
+#import "HOPAccountIdentity.h"
 #import <openpeer/core/types.h>
 #import "OpenPeerIdentityDelegate.h"
 
 using namespace openpeer;
 using namespace openpeer::core;
 
-@interface HOPIdentity ()
+@interface HOPAccountIdentity ()
 {
     IIdentityPtr identityPtr;
     boost::shared_ptr<OpenPeerIdentityDelegate> openPeerIdentityDelegatePtr;
@@ -52,7 +52,7 @@ using namespace openpeer::core;
 
 - (id) initWithIdentityPtr:(IIdentityPtr) inIdentityPtr;
 - (id) initWithIdentityPtr:(IIdentityPtr) inIdentityPtr openPeerIdentityDelegate:(boost::shared_ptr<OpenPeerIdentityDelegate>) inOpenPeerIdentityDelegate;
-- (void) setLocalDelegate:(id<HOPIdentityDelegate>) inIdentityDelegate;
+- (void) setLocalDelegate:(id<HOPAccountIdentityDelegate>) inIdentityDelegate;
 - (IIdentityPtr) getIdentityPtr;
 
 - (String) log:(NSString*) message;

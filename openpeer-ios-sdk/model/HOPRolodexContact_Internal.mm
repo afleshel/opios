@@ -35,7 +35,7 @@
 #import "HOPPublicPeerFile.h"
 #import "HOPIdentityContact.h"
 #import "HOPModelManager_Internal.h"
-#import "HOPContact.h"
+#import "HOPCoreContact.h"
 #import "OpenPeerStorageManager.h"
 #import "HOPUtility.h"
 #import "HOPOpenPeerContact.h"
@@ -99,12 +99,12 @@
         self.avatars = [NSSet setWithSet:tempAvatars];
 }
 
-- (HOPContact*) getCoreContact
+- (HOPCoreContact*) getCoreContact
 {
-    HOPContact* ret = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:self.openPeerContact.publicPeerFile.peerURI];
+    HOPCoreContact* ret = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:self.openPeerContact.publicPeerFile.peerURI];
     if (!ret)
     {
-        ret = [[HOPContact alloc] initWithPeerFile:self.openPeerContact.publicPeerFile.peerFile];
+        ret = [[HOPCoreContact alloc] initWithPeerFile:self.openPeerContact.publicPeerFile.peerFile];
     }
     return ret;
 }
