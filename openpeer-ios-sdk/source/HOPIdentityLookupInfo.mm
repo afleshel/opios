@@ -33,7 +33,7 @@
 #include "OpenPeerUtility.h"
 #include "OpenPeerStorageManager.h"
 #include "HOPCoreContact_Internal.h"
-#import "HOPRolodexContact.h"
+#import "HOPIdentity.h"
 #import <openpeer/core/IContact.h>
 
 @implementation HOPIdentityLookupInfo
@@ -50,9 +50,9 @@
 }
 
 
-- (id)initWithRolodexContact:(HOPRolodexContact *)inRolodexContact
+- (id)initWithIdentity:(HOPIdentity *)inIdentity
 {
-    self = [self initWithIdentityURI:inRolodexContact.identityURI dateOfLastUpdate:nil];
+    self = [self initWithIdentityURI:inIdentity.identityURI dateOfLastUpdate:nil];
     return self;
 }
 

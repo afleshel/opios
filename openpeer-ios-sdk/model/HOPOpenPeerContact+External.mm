@@ -33,30 +33,30 @@
 #import "HOPCoreContact.h"
 #import "OpenPeerStorageManager.h"
 #import "HOPPublicPeerFile.h"
-#import "HOPRolodexContact.h"
+#import "HOPIdentity.h"
 #import "HOPAPNSData.h"
 
 @implementation HOPOpenPeerContact (External)
 
 
 
-- (HOPRolodexContact*) getDefaultRolodexContact
+- (HOPIdentity*) getDefaultIdentity
 {
-    HOPRolodexContact* ret = nil;
+    HOPIdentity* ret = nil;
     
     NSSortDescriptor* prioritySort = [NSSortDescriptor sortDescriptorWithKey:@"priority" ascending:YES];
     NSSortDescriptor* weightSort = [NSSortDescriptor sortDescriptorWithKey:@"weight" ascending:YES];
     
-    NSArray* sortedIdentities = [self.rolodexContacts.allObjects sortedArrayUsingDescriptors:@[prioritySort,weightSort]];
+    NSArray* sortedIdentities = [self.identities.allObjects sortedArrayUsingDescriptors:@[prioritySort,weightSort]];
     
     if (sortedIdentities.count > 0)
-        ret = ((HOPRolodexContact*)sortedIdentities[0]);
+        ret = ((HOPIdentity*)sortedIdentities[0]);
     
     return ret;
 }
 - (NSString*) getFullName
 {
-    return [self getDefaultRolodexContact].name;
+    return [self getDefaultIdentity].name;
 }
 
 - (NSString*) getPeerURI
@@ -77,7 +77,7 @@
 - (NSArray*) getIdentityURIs
 {
     NSMutableArray* array = [NSMutableArray new];
-    for (HOPRolodexContact* identity in self.rolodexContacts)
+    for (HOPIdentity* identity in self.identities)
     {
         [array addObject:identity.identityURI];
     }

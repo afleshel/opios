@@ -30,7 +30,7 @@
  */
 
 #import "HOPModelManager.h"
-#import "HOPRolodexContact+External.h"
+#import "HOPIdentity+External.h"
 #import "HOPAssociatedIdentity.h"
 #import "HOPPublicPeerFile.h"
 #import "HOPAvatar.h"
@@ -388,11 +388,11 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (HOPRolodexContact *) getRolodexContactByIdentityURI:(NSString*) identityURI
+- (HOPIdentity *) getIdentityByIdentityURI:(NSString*) identityURI
 {
-    HOPRolodexContact* ret = nil;
+    HOPIdentity* ret = nil;
     
-    NSArray* results = [self getResultsForEntity:@"HOPRolodexContact" withPredicateString:[NSString stringWithFormat:@"(identityURI MATCHES '%@')", identityURI] orderDescriptors:nil];
+    NSArray* results = [self getResultsForEntity:@"HOPIdentity" withPredicateString:[NSString stringWithFormat:@"(identityURI MATCHES '%@')", identityURI] orderDescriptors:nil];
     
     if([results count] > 0)
     {
@@ -402,62 +402,62 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (HOPRolodexContact *) getRolodexContactByPeerURI:(NSString*) peerURI
+- (HOPIdentity *) getIdentityByPeerURI:(NSString*) peerURI
 {
-    HOPRolodexContact* ret = nil;
+    HOPIdentity* ret = nil;
     
     if ([peerURI length] > 0)
     {
         NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"priority" ascending:NO];
-        NSArray* array = [self getResultsForEntity:@"HOPRolodexContact" withPredicateString:[NSString stringWithFormat:@"openPeerContact.publicPeerFile.peerURI MATCHES '%@'",peerURI] orderDescriptors:@[sortDescriptor]];
+        NSArray* array = [self getResultsForEntity:@"HOPIdentity" withPredicateString:[NSString stringWithFormat:@"openPeerContact.publicPeerFile.peerURI MATCHES '%@'",peerURI] orderDescriptors:@[sortDescriptor]];
         if (array.count > 0)
             ret = array[0];
     }
     return ret;
 }
 
-- (NSArray *) getRolodexContactsByPeerURI:(NSString*) peerURI
+- (NSArray *) getIdentitiesByPeerURI:(NSString*) peerURI
 {
 	NSArray* ret = nil;
     
     if ([peerURI length] > 0)
     {
         NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"priority" ascending:NO];
-        ret = [self getResultsForEntity:@"HOPRolodexContact" withPredicateString:[NSString stringWithFormat:@"openPeerContact.publicPeerFile.peerURI MATCHES '%@'",peerURI] orderDescriptors:@[sortDescriptor]];
+        ret = [self getResultsForEntity:@"HOPIdentity" withPredicateString:[NSString stringWithFormat:@"openPeerContact.publicPeerFile.peerURI MATCHES '%@'",peerURI] orderDescriptors:@[sortDescriptor]];
     }
     
     
     return ret;
 }
 
-- (NSArray*) getAllRolodexContactForHomeUserIdentityURI:(NSString*) homeUserIdentityURI
+- (NSArray*) getAllIdentitiesForHomeUserIdentityURI:(NSString*) homeUserIdentityURI
 {
     NSArray* ret = nil;
-    NSArray* results = [self getResultsForEntity:@"HOPAssociatedIdentity" withPredicateString:[NSString stringWithFormat:@"(selfRolodexContact.identityURI MATCHES '%@')",homeUserIdentityURI] orderDescriptors:nil];
+    NSArray* results = [self getResultsForEntity:@"HOPAssociatedIdentity" withPredicateString:[NSString stringWithFormat:@"(selfIdentity.identityURI MATCHES '%@')",homeUserIdentityURI] orderDescriptors:nil];
     
     if([results count] > 0)
     {
         HOPAssociatedIdentity* associatedIdentity = [results objectAtIndex:0];
-        ret = [associatedIdentity.rolodexContacts allObjects];
+        ret = [associatedIdentity.identities allObjects];
     }
     return ret;
 }
 
-- (NSArray*) getRolodexContactsForHomeUserIdentityURI:(NSString*) homeUserIdentityURI openPeerContacts:(BOOL) openPeerContacts
+- (NSArray*) getIdentitiesForAccountIdentityURI:(NSString*) homeUserIdentityURI openPeerContacts:(BOOL) openPeerContacts
 {
     NSArray* ret = nil;
     NSString* stringFormat = nil;
     
     if (openPeerContacts)
     {
-        stringFormat = [NSString stringWithFormat:@"(openPeerContact != nil && associatedIdentity.selfRolodexContact.identityURI MATCHES '%@')",homeUserIdentityURI];
+        stringFormat = [NSString stringWithFormat:@"(openPeerContact != nil && associatedIdentity.selfIdentity.identityURI MATCHES '%@')",homeUserIdentityURI];
     }
     else
     {
-        stringFormat = [NSString stringWithFormat:@"(openPeerContact == nil  && associatedIdentity.selfRolodexContact.identityURI MATCHES '%@')",homeUserIdentityURI];
+        stringFormat = [NSString stringWithFormat:@"(openPeerContact == nil  && associatedIdentity.selfIdentity.identityURI MATCHES '%@')",homeUserIdentityURI];
     }
     
-    ret = [self getResultsForEntity:@"HOPRolodexContact" withPredicateString:stringFormat orderDescriptors:nil];
+    ret = [self getResultsForEntity:@"HOPIdentity" withPredicateString:stringFormat orderDescriptors:nil];
     
     return ret;
 }
@@ -504,7 +504,7 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (HOPAssociatedIdentity*) addAssociatedIdentityForBaseIdentityURI:(NSString*) baseIdentityURI domain:(NSString*) domain name:(NSString*) name selfRolodexProfileProfile:(HOPRolodexContact*) rolodexContact
+- (HOPAssociatedIdentity*) addAssociatedIdentityForBaseIdentityURI:(NSString*) baseIdentityURI domain:(NSString*) domain name:(NSString*) name selfIdentityProfile:(HOPIdentity*) identity
 {
     HOPAssociatedIdentity* ret = nil;
     
@@ -516,8 +516,8 @@ using namespace openpeer::core;
 
     ret.identityProvider = identityProvider;
     
-    if (rolodexContact)
-        ret.selfRolodexContact = rolodexContact;
+    if (identity)
+        ret.selfIdentity = identity;
     
     if ([[HOPAccount sharedAccount] getOpenPeerUser])
         ret.account = [[HOPAccount sharedAccount] getOpenPeerUser];
@@ -531,7 +531,7 @@ using namespace openpeer::core;
 {
     HOPAssociatedIdentity* ret = nil;
     
-    NSArray* results = [self getResultsForEntity:@"HOPAssociatedIdentity" withPredicateString:[NSString stringWithFormat:@"(identityProvider.domain MATCHES '%@' AND identityProvider.baseURI MATCHES '%@' AND selfRolodexContact.identityURI MATCHES '%@')", identityProviderDomain, identityName, homeUserIdentityURI] orderDescriptors:nil];
+    NSArray* results = [self getResultsForEntity:@"HOPAssociatedIdentity" withPredicateString:[NSString stringWithFormat:@"(identityProvider.domain MATCHES '%@' AND identityProvider.baseURI MATCHES '%@' AND selfIdentity.identityURI MATCHES '%@')", identityProviderDomain, identityName, homeUserIdentityURI] orderDescriptors:nil];
     
     if([results count] > 0)
     {
@@ -601,15 +601,15 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (void) deleteAllMarkedRolodexContactsForHomeUserIdentityURI:(NSString*) homeUserIdentityURI
+- (void) deleteAllMarkedIdentitiesForHomeUserIdentityURI:(NSString*) homeUserIdentityURI
 {
     NSArray* objectsForDeleteion = nil;
-    NSArray* results = [self getResultsForEntity:@"HOPAssociatedIdentity" withPredicateString:[NSString stringWithFormat:@"(ANY rolodexContacts.readyForDeletion == YES AND selfRolodexContact.identityURI MATCHES '%@')",homeUserIdentityURI] orderDescriptors:nil];
+    NSArray* results = [self getResultsForEntity:@"HOPAssociatedIdentity" withPredicateString:[NSString stringWithFormat:@"(ANY identities.readyForDeletion == YES AND selfIdentity.identityURI MATCHES '%@')",homeUserIdentityURI] orderDescriptors:nil];
     
     if([results count] > 0)
     {
         HOPAssociatedIdentity* associatedIdentity = [results objectAtIndex:0];
-        objectsForDeleteion = [associatedIdentity.rolodexContacts allObjects];
+        objectsForDeleteion = [associatedIdentity.identities allObjects];
         for (NSManagedObject* objectToDelete in objectsForDeleteion)
         {
             [self deleteObject:objectToDelete];
@@ -618,16 +618,16 @@ using namespace openpeer::core;
     }
 }
 
-- (NSArray*) getAllRolodexContactsMarkedForDeletionForHomeUserIdentityURI:(NSString*) homeUserIdentityURI
+- (NSArray*) getAllIdentitiesMarkedForDeletionForHomeUserIdentityURI:(NSString*) homeUserIdentityURI
 {
-     NSArray* ret = [self getResultsForEntity:@"HOPRolodexContact" withPredicateString:[NSString stringWithFormat:@"(readyForDeletion == YES AND associatedIdentity.selfRolodexContact.identityURI MATCHES '%@')",homeUserIdentityURI] orderDescriptors:nil];
+     NSArray* ret = [self getResultsForEntity:@"HOPIdentity" withPredicateString:[NSString stringWithFormat:@"(readyForDeletion == YES AND associatedIdentity.selfIdentity.identityURI MATCHES '%@')",homeUserIdentityURI] orderDescriptors:nil];
     
     return ret;
 }
 
-- (NSArray*) getRolodexContactsForRefreshByHomeUserIdentityURI:(NSString*) homeUserIdentityURI lastRefreshTime:(NSDate*) lastRefreshTime
+- (NSArray*) getIdentitiesForRefreshByHomeUserIdentityURI:(NSString*) homeUserIdentityURI lastRefreshTime:(NSDate*) lastRefreshTime
 {
-    NSArray* ret = [self getResultsForEntity:@"HOPRolodexContact" withPredicateString:[NSString stringWithFormat:@"(associatedIdentity.selfRolodexContact.identityURI MATCHES '%@' AND (ANY associatedIdentity.rolodexContacts.openPeerContact == nil OR ANY associatedIdentity.rolodexContacts.lastUpdated < %@)",homeUserIdentityURI,lastRefreshTime] orderDescriptors:nil];
+    NSArray* ret = [self getResultsForEntity:@"HOPIdentity" withPredicateString:[NSString stringWithFormat:@"(associatedIdentity.selfIdentity.identityURI MATCHES '%@' AND (ANY associatedIdentity.identities.openPeerContact == nil OR ANY associatedIdentity.identities.lastUpdated < %@)",homeUserIdentityURI,lastRefreshTime] orderDescriptors:nil];
     
     return ret;
 }
@@ -840,7 +840,7 @@ using namespace openpeer::core;
 }
 
 
-/*- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date conversation:(HOPConversation*) conversation contact:(HOPRolodexContact*) contact messageId:(NSString*)messageId
+/*- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date conversation:(HOPConversation*) conversation contact:(HOPIdentity*) contact messageId:(NSString*)messageId
 {
     HOPMessageRecord* messageRecord = nil;
     if ([messageText length] > 0 && [type length] > 0 && date != nil && conversation != nil && [messageId length] > 0)
@@ -874,7 +874,7 @@ using namespace openpeer::core;
     return messageRecord;
 }
 
-- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  conversation:(HOPConversation*) conversation contact:(HOPRolodexContact*) contact messageId:(NSString*)messageId
+- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  conversation:(HOPConversation*) conversation contact:(HOPIdentity*) contact messageId:(NSString*)messageId
 {
     HOPMessageRecord* messageRecord = nil;
     if ([messageText length] > 0 && [type length] > 0 && date != nil && conversation != nil && [messageId length] > 0)
@@ -940,7 +940,7 @@ using namespace openpeer::core;
     if (participants.count > 0)
     {
         NSString* cbcID = [HOPUtility getCBCIDForContacts:participants];//@"";
-        for (HOPRolodexContact* contact in participants)
+        for (HOPIdentity* contact in participants)
         {
             if (cbcID.length == 0)
                 cbcID = [contact getStableID];
@@ -1048,9 +1048,9 @@ using namespace openpeer::core;
             ret.lastActivity = date;
             [ret addConversationThreadRecordsObject:conversationThreadRecord];
             
-            for (HOPRolodexContact* rolodexContact in participants)
+            for (HOPIdentity* identity in participants)
             {
-                HOPOpenPeerContact* participant = rolodexContact.openPeerContact;
+                HOPOpenPeerContact* participant = identity.openPeerContact;
                 if (participant)
                     [ret addParticipantsObject:participant];
             }
@@ -1148,7 +1148,7 @@ using namespace openpeer::core;
     
     if ([identityURI length] > 0)
     {
-        NSArray* results = [self getResultsForEntity:@"HOPOpenPeerContact" withPredicateString:[NSString stringWithFormat:@"(ANY rolodexContacts.identityURI MATCHES '%@')", identityURI] orderDescriptors:nil];
+        NSArray* results = [self getResultsForEntity:@"HOPOpenPeerContact" withPredicateString:[NSString stringWithFormat:@"(ANY identities.identityURI MATCHES '%@')", identityURI] orderDescriptors:nil];
         
         if([results count] > 0)
         {
@@ -1295,10 +1295,10 @@ using namespace openpeer::core;
         
         NSMutableSet *set = [NSMutableSet new];
         
-        for (HOPRolodexContact* rolodexContact in contacts)
+        for (HOPIdentity* identity in contacts)
         {
-            if (rolodexContact.openPeerContact)
-                [set addObject:rolodexContact.openPeerContact];
+            if (identity.openPeerContact)
+                [set addObject:identity.openPeerContact];
         }
         
         if (result.count > 0)
@@ -1340,12 +1340,12 @@ using namespace openpeer::core;
 }
 
 
-- (HOPRolodexContact*) getRolodexContactForAccount
+- (HOPIdentity*) getIdentityForAccount
 {
-    HOPRolodexContact* ret = nil;
+    HOPIdentity* ret = nil;
     HOPOpenPeerAccount* account = [self getLastLoggedInUser];
     if (account && account.stableId.length > 0)
-        ret = [[self getOpenPeerContactForStableID:account.stableId] getDefaultRolodexContact];
+        ret = [[self getOpenPeerContactForStableID:account.stableId] getDefaultIdentity];
     return ret;
 }
 
@@ -1374,16 +1374,16 @@ using namespace openpeer::core;
             IContactPtr contactPtr = *contact;
             if (!contactPtr->isSelf())
             {
-                HOPRolodexContact* rolodexContact = [self getRolodexContactByPeerURI:[NSString stringWithUTF8String:contactPtr->getPeerURI()]];
-                if (!rolodexContact || !rolodexContact.openPeerContact)
+                HOPIdentity* identity = [self getIdentityByPeerURI:[NSString stringWithUTF8String:contactPtr->getPeerURI()]];
+                if (!identity || !identity.openPeerContact)
                 {
-                    NSArray* rolodexContacts = [self createRolodexContactsForCoreContact:contactPtr fromConversation:[thread getConversationThreadPtr]];
-                    if (rolodexContacts.count > 0)
+                    NSArray* identities = [self createIdentitiesForCoreContact:contactPtr fromConversation:[thread getConversationThreadPtr]];
+                    if (identities.count > 0)
                     {
                         if (!ret)
-                            ret = [NSMutableArray arrayWithArray:rolodexContacts];
+                            ret = [NSMutableArray arrayWithArray:identities];
                         else
-                            [ret addObjectsFromArray:rolodexContacts];
+                            [ret addObjectsFromArray:identities];
                     }
                 }
             }
@@ -1398,7 +1398,7 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (NSArray*) createRolodexContactsForCoreContact:(IContactPtr) contactPtr fromConversation:(IConversationThreadPtr) conversationThreadPtr
+- (NSArray*) createIdentitiesForCoreContact:(IContactPtr) contactPtr fromConversation:(IConversationThreadPtr) conversationThreadPtr
 {
     NSMutableArray* ret = nil;
     
@@ -1428,17 +1428,17 @@ using namespace openpeer::core;
             
             if (identityURI.length > 0 && name.length > 0 && stableID.length > 0)
             {
-                //Create rolodex contact
-                HOPRolodexContact* hopRolodexContact = [self getRolodexContactByIdentityURI:identityURI];
+                //Create identity
+                HOPIdentity* identity = [self getIdentityByIdentityURI:identityURI];
                 
-                if (!hopRolodexContact)
+                if (!identity)
                 {
-                    hopRolodexContact = (HOPRolodexContact*)[self createObjectForEntity:@"HOPRolodexContact"];
-                    hopRolodexContact.identityURI = identityURI;
+                    identity = (HOPIdentity*)[self createObjectForEntity:@"HOPIdentity"];
+                    identity.identityURI = identityURI;
                 }
                 
-                hopRolodexContact.name = name;
-                //End rolodex contact creation
+                identity.name = name;
+                //End identity creation
                 
                 //----------------------------
                 
@@ -1472,7 +1472,7 @@ using namespace openpeer::core;
                 }
                 
                 hopOpenPeerContact.stableID = stableID;
-                [hopOpenPeerContact addRolodexContactsObject:hopRolodexContact];
+                [hopOpenPeerContact addIdentitiesObject:identity];
                 hopOpenPeerContact.publicPeerFile = publicPeerFile;
                 //End open peer contact creation
                 
@@ -1483,7 +1483,7 @@ using namespace openpeer::core;
                     if (!ret)
                         ret = [NSMutableArray new];
                     
-                    [ret addObject:hopRolodexContact];
+                    [ret addObject:identity];
                 }
             }
         }
@@ -1492,9 +1492,9 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (HOPRolodexContact*) createRolodexContactsForCoreIdentity:(IdentityContact) identityContact
+- (HOPIdentity*) createIdentityForCoreIdentity:(IdentityContact) identityContact
 {
-    HOPRolodexContact* ret = [self identityForCoreIdentity:identityContact];
+    HOPIdentity* ret = [self identityForCoreIdentity:identityContact];
     if (ret)
     {
         HOPPublicPeerFile* publicPeerFile = nil;
@@ -1516,8 +1516,8 @@ using namespace openpeer::core;
                 NSString* stableID = [NSString stringWithCString:identityContact.mStableID encoding:NSUTF8StringEncoding];
                 if (stableID.length > 0)
                 {
-                    HOPOpenPeerContact* contact = [self openPeerContactForRolodexContact:ret publicPeerFile:publicPeerFile stableID:stableID];
-                    [contact addRolodexContactsObject:ret];
+                    HOPOpenPeerContact* contact = [self openPeerContactForIdentities:ret publicPeerFile:publicPeerFile stableID:stableID];
+                    [contact addIdentitiesObject:ret];
                 }
             }
         }
@@ -1528,9 +1528,9 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (HOPRolodexContact*) identityForCoreIdentity:(IdentityContact) identityContact
+- (HOPIdentity*) identityForCoreIdentity:(IdentityContact) identityContact
 {
-    HOPRolodexContact* ret = nil;
+    HOPIdentity* ret = nil;
     
     if (identityContact.hasData())
     {
@@ -1546,12 +1546,12 @@ using namespace openpeer::core;
         
         if (identityURI.length > 0 && name.length > 0)
         {
-            //Create rolodex contact
-            ret = [self getRolodexContactByIdentityURI:identityURI];
+            //Create identity
+            ret = [self getIdentityByIdentityURI:identityURI];
             
             if (!ret)
             {
-                ret = (HOPRolodexContact*)[self createObjectForEntity:@"HOPRolodexContact"];
+                ret = (HOPIdentity*)[self createObjectForEntity:@"HOPIdentity"];
                 ret.identityURI = identityURI;
             }
             
@@ -1587,7 +1587,7 @@ using namespace openpeer::core;
     return ret;
 }
 
--(HOPOpenPeerContact*) openPeerContactForRolodexContact:(HOPRolodexContact*) identity publicPeerFile:(HOPPublicPeerFile*) publicPeerFile stableID:(NSString*) stableID
+-(HOPOpenPeerContact*) openPeerContactForIdentities:(HOPIdentity*) identity publicPeerFile:(HOPPublicPeerFile*) publicPeerFile stableID:(NSString*) stableID
 {
     HOPOpenPeerContact* ret = nil;
     
@@ -1610,7 +1610,7 @@ using namespace openpeer::core;
     {
         ret = (HOPOpenPeerContact*)[self createObjectForEntity:@"HOPOpenPeerContact"];
         ret.stableID = stableID;
-        [ret addRolodexContactsObject:identity];
+        [ret addIdentitiesObject:identity];
         ret.publicPeerFile = publicPeerFile;
         ret.account = [HOPAccount sharedAccount].openPeerAccount;
     }

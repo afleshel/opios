@@ -34,7 +34,7 @@
 #import "HOPTypes.h"
 #import "HOPProtocols.h"
 
-@class HOPRolodexContact;
+@class HOPIdentity;
 
 /**
  Wrapper for identity state data.
@@ -163,9 +163,9 @@
 
 /**
  Returns identity contact for logged in user
- @return HOPRolodexContact object
+ @return HOPIdentity object
  */
-- (HOPRolodexContact*) getSelfIdentity;
+- (HOPIdentity*) getSelfIdentity;
 
 
 /**
@@ -203,21 +203,21 @@
  *
  *  @param lastDownloadedVersion If a previous version of the rolodex was downloaded/stored, pass in the version of the last information downloaded to prevent redownloading infomration again
  */
-- (void) startRolodexDownload:(NSString*) lastDownloadedVersion;
+- (void) startIdentitiesDownload:(NSString*) lastDownloadedVersion;
 
 /**
  Tells rolodex server to refresh its list of contacts. After contacts are refreshed it will be downloaded and delegate method will be invoked. 
  */
-- (void) refreshRolodexContacts;
+- (void) refreshIdentities;
 
 /**
  Returns list of contacts downloaded using rolodex service.
- @param outFlushAllRolodexContacts  This value is returned by core and if its value is YES, be prepeared to remove all your rolodex contacts stored locally if they are not downloaded in some period of time
+ @param outFlushAllIdentities  This value is returned by core and if its value is YES, be prepeared to remove all your rolodex contacts stored locally if they are not downloaded in some period of time
  @param outVersionDownloaded  This is output parameter that will hold information about rolodex download version
- @param outRolodexContacts  This is outpit list of all downloaded contacts
+ @param outIdentities  This is outpit list of all downloaded contacts
  @return BOOL Returns YES if contacts are downloaded, otherwise NO
  */
-- (BOOL) getDownloadedRolodexContacts:(BOOL*) outFlushAllRolodexContacts outVersionDownloaded:(NSString**) outVersionDownloaded outRolodexContacts:(NSArray**) outRolodexContacts;
+- (BOOL) getDownloadedIdentities:(BOOL*) outFlushAllIdentities outVersionDownloaded:(NSString**) outVersionDownloaded outIdentities:(NSArray**) outIdentities;
 
 /**
  Cancels identity login.

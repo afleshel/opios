@@ -44,9 +44,9 @@
         ret = [[NSMutableArray alloc] init];
         for (HOPOpenPeerContact* contact in self.participants.participants)
         {
-            HOPRolodexContact* rolodexContact = [contact getDefaultRolodexContact];
-            if (rolodexContact)
-                [ret addObject:rolodexContact];
+            HOPIdentity* identity = [contact getDefaultIdentity];
+            if (identity)
+                [ret addObject:identity];
         }
     }
     return ret;

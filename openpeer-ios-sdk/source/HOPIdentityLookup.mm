@@ -37,7 +37,7 @@
 #import <openpeer/core/IHelper.h>
 #import "OpenPeerStorageManager.h"
 #import "HOPAccount_Internal.h"
-#import "HOPRolodexContact.h"
+#import "HOPIdentity.h"
 #import "HOPModelManager.h"
 
 ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
@@ -55,7 +55,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
         if (self = [super init])
         {
             IIdentityLookup::IdentityLookupInfoList identityLookupInfoList;
-            for (HOPRolodexContact* contact in identityLookupInfos)
+            for (HOPIdentity* contact in identityLookupInfos)
             {
                 if (contact.identityURI.length > 0)
                 {

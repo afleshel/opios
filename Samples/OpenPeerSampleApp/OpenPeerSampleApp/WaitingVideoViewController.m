@@ -32,7 +32,7 @@
 #import "WaitingVideoViewController.h"
 //#import "Session.h"
 #import "SessionManager.h"
-#import <OpenPeerSDK/HOPRolodexContact+External.h>
+#import <OpenPeerSDK/HOPIdentity+External.h>
 #import <OpenPeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPAvatar.h>
 #import <OpenPeerSDK/HOPImage.h>
@@ -95,7 +95,7 @@ const int CONNECTING_ANIMATION_DURATION = 2;
     
     self.statusLabel.text = self.statusText;
     
-    HOPRolodexContact* contact = [self.conversation getParticipants][0];
+    HOPIdentity* contact = [self.conversation getParticipants][0];
     self.participantName.text = contact.name;
     self.callerName.text = [[HOPAccount sharedAccount] getFullName];
     

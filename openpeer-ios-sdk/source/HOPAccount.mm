@@ -36,7 +36,7 @@
 #import "OpenPeerUUIDManager.h"
 #import "HOPModelManager_Internal.h"
 #import "HOPAssociatedIdentity.h"
-#import "HOPRolodexContact.h"
+#import "HOPIdentity.h"
 #import "HOPOpenPeerContact_Internal.h"
 #import "HOPPublicPeerFile.h"
 
@@ -629,17 +629,17 @@ using namespace openpeer::core;
     BOOL ret = NO;
     if (self.openPeerAccount)
     {
-        HOPRolodexContact* userIdentity = [accountIdentity getSelfIdentity];
+        HOPIdentity* userIdentity = [accountIdentity getSelfIdentity];
         
         HOPAssociatedIdentity*  associatedIdentity = [[HOPModelManager sharedModelManager] getAssociatedIdentityForBaseIdentityURI:[accountIdentity getBaseIdentityURI] homeUserStableId:[self getStableID]];
         
         if (!associatedIdentity)
         {
-            associatedIdentity = [[HOPModelManager sharedModelManager] addAssociatedIdentityForBaseIdentityURI:[accountIdentity getBaseIdentityURI] domain:[accountIdentity getIdentityProviderDomain] name:[accountIdentity getBaseIdentityURI]  selfRolodexProfileProfile:userIdentity];
+            associatedIdentity = [[HOPModelManager sharedModelManager] addAssociatedIdentityForBaseIdentityURI:[accountIdentity getBaseIdentityURI] domain:[accountIdentity getIdentityProviderDomain] name:[accountIdentity getBaseIdentityURI]  selfIdentityProfile:userIdentity];
         }
         else
         {
-            associatedIdentity.selfRolodexContact = userIdentity;
+            associatedIdentity.selfIdentity = userIdentity;
             associatedIdentity.account = self.openPeerAccount;
             userIdentity.associatedIdentityForHomeUser = associatedIdentity;
         }
@@ -656,9 +656,7 @@ using namespace openpeer::core;
 }
 - (NSString*) getFullName
 {
-    return [self.openPeerAccount.contact getDefaultRolodexContact].name;
-    //((HOPAssociatedIdentity*)[self.associatedIdentities anyObject]).selfRolodexContact.name;
-    //return [self.openPeerAccount getFullName];
+    return [self.openPeerAccount.contact getDefaultIdentity].name;
 }
 
 + (BOOL)isReloginPossible

@@ -40,7 +40,7 @@
 #import "HOPConversationThread_Internal.h"
 #import "HOPConversation_Internal.h"
 #import "HOPCoreContact_Internal.h"
-#import "HOPRolodexContact_Internal.h"
+#import "HOPIdentity_Internal.h"
 #import "OpenPeerStorageManager.h"
 #import "HOPOpenPeerContact+External.h"
 
@@ -101,7 +101,7 @@ using namespace openpeer::core;
         HOPCoreContact* toContact = nil;
         if (conversation.participants.count > 0)
         {
-            toContact = [((HOPRolodexContact*)[conversation.participants objectAtIndex:0]) getCoreContact];
+            toContact = [((HOPIdentity*)[conversation.participants objectAtIndex:0]) getCoreContact];
             //Create the core call object and start placing call procedure
             ICallPtr tempCallPtr = ICall::placeCall([conversation.thread getConversationThreadPtr], [toContact getContactPtr], includeAudio, includeVideo);
             
@@ -129,7 +129,7 @@ using namespace openpeer::core;
         HOPCoreContact* toContact = nil;
         if (callees.count > 0)
         {
-            toContact = [((HOPRolodexContact*)[callees objectAtIndex:0]) getCoreContact];
+            toContact = [((HOPIdentity*)[callees objectAtIndex:0]) getCoreContact];
             //Create the core call object and start placing call procedure
             ICallPtr tempCallPtr = ICall::placeCall([conversation.thread getConversationThreadPtr], [toContact getContactPtr], includeAudio, includeVideo);
             
@@ -229,9 +229,9 @@ using namespace openpeer::core;
     return hopConversation;
 }
 
-- (HOPRolodexContact*) getCaller
+- (HOPIdentity*) getCaller
 {
-    HOPRolodexContact* ret = nil;
+    HOPIdentity* ret = nil;
     if(callPtr)
     {
         IContactPtr contactPtr = callPtr->getCaller();
@@ -242,7 +242,7 @@ using namespace openpeer::core;
             HOPCoreContact* coreContact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:peerURI];
             if (!coreContact)
                 coreContact = [[HOPCoreContact alloc] initWithCoreContact:contactPtr];
-            ret = [[HOPModelManager sharedModelManager] getRolodexContactByPeerURI:peerURI];
+            ret = [[HOPModelManager sharedModelManager] getIdentityByPeerURI:peerURI];
         }
         else
         {
@@ -257,9 +257,9 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (HOPRolodexContact*) getCallee
+- (HOPIdentity*) getCallee
 {
-    HOPRolodexContact* ret = nil;
+    HOPIdentity* ret = nil;
     if(callPtr)
     {
         IContactPtr contactPtr = callPtr->getCallee();
@@ -271,7 +271,7 @@ using namespace openpeer::core;
             if (!coreContact)
                 coreContact = [[HOPCoreContact alloc] initWithCoreContact:contactPtr];
             
-            ret = [[HOPModelManager sharedModelManager] getRolodexContactByPeerURI:peerURI];
+            ret = [[HOPModelManager sharedModelManager] getIdentityByPeerURI:peerURI];
         }
         else
         {
@@ -477,7 +477,7 @@ using namespace openpeer::core;
 {
     BOOL ret = NO;
     
-    ret = [HOPRolodexContact getSelf] == [self getCaller];
+    ret = [HOPIdentity getSelf] == [self getCaller];
     
     return ret;
 }

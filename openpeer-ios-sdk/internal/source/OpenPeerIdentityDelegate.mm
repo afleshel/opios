@@ -34,7 +34,7 @@
 #import "HOPAccountIdentity_Internal.h"
 #import "OpenPeerStorageManager.h"
 #import "HOPUtility.h"
-#import "HOPRolodexContact_Internal.h"
+#import "HOPIdentity_Internal.h"
 #import "HOPModelManager.h"
 #import <openpeer/core/ILogger.h>
 
@@ -77,7 +77,7 @@ void OpenPeerIdentityDelegate::onIdentityRolodexContactsDownloaded(IIdentityPtr 
     
     HOPAccountIdentity* accountIdentity = this->getHOPAccountIdentity(identity);
     
-    [identityDelegate onIdentityRolodexContactsDownloaded:accountIdentity];
+    [identityDelegate onIdentityContactsDownloaded:accountIdentity];
 }
 
 HOPAccountIdentity* OpenPeerIdentityDelegate::getHOPAccountIdentity(IIdentityPtr identity)
@@ -106,12 +106,12 @@ void OpenPeerIdentityDelegate::storeDownloadedContactsForIdentity(IIdentityPtr i
     {
         HOPAccountIdentity* accountIdentity = this->getHOPAccountIdentity(identityPtr);
         
-        bool flushAllRolodexContacts;
+        bool flushAllIdentities;
         String versionDownloadedStr;
         RolodexContactListPtr rolodexContacts;
-        accountIdentity.rolodexContactsObtained = identityPtr->getDownloadedRolodexContacts(flushAllRolodexContacts,versionDownloadedStr, rolodexContacts);
+        accountIdentity.identitiesObtained = identityPtr->getDownloadedRolodexContacts(flushAllIdentities,versionDownloadedStr, rolodexContacts);
         
-        accountIdentity.flushAllRolodexContacts = flushAllRolodexContacts;
+        accountIdentity.flushAllIdentities = flushAllIdentities;
         if (versionDownloadedStr)
             accountIdentity.versionDownloadedStr = [NSString stringWithCString:versionDownloadedStr encoding:NSUTF8StringEncoding];
         
@@ -121,7 +121,7 @@ void OpenPeerIdentityDelegate::storeDownloadedContactsForIdentity(IIdentityPtr i
             
             for (RolodexContactList::iterator contact = rolodexContacts->begin(); contact != rolodexContacts->end(); ++contact)
             {
-                HOPRolodexContact* hopRolodexContact = nil;
+                HOPIdentity* identity = nil;
                 RolodexContact rolodexContact = *contact;
                 NSString* contactIdentityURI = [NSString stringWithCString:rolodexContact.mIdentityURI encoding:NSUTF8StringEncoding];
                 
@@ -129,29 +129,29 @@ void OpenPeerIdentityDelegate::storeDownloadedContactsForIdentity(IIdentityPtr i
                 {
                     if (rolodexContact.mDisposition == RolodexContact::Disposition_Update)
                     {
-                        hopRolodexContact = [[HOPModelManager sharedModelManager] getRolodexContactByIdentityURI:contactIdentityURI];
-                        if (hopRolodexContact)
+                        identity = [[HOPModelManager sharedModelManager] getIdentityByIdentityURI:contactIdentityURI];
+                        if (identity)
                         {
                             //Update existing rolodex contact
-                            [hopRolodexContact updateWithCoreRolodexContact:rolodexContact identityProviderDomain:[accountIdentity getIdentityProviderDomain] homeUserIdentityURI:[accountIdentity getIdentityURI]];
+                            [identity updateWithCoreRolodexContact:rolodexContact identityProviderDomain:[accountIdentity getIdentityProviderDomain] homeUserIdentityURI:[accountIdentity getIdentityURI]];
                             [[HOPModelManager sharedModelManager] saveContext];
                         }
                         else
                         {
                             //Create a new menaged object for new rolodex contact
-                            NSManagedObject* managedObject = [[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPRolodexContact"];
-                            if ([managedObject isKindOfClass:[HOPRolodexContact class]])
+                            NSManagedObject* managedObject = [[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPIdentity"];
+                            if ([managedObject isKindOfClass:[HOPIdentity class]])
                             {
-                                hopRolodexContact = (HOPRolodexContact*)managedObject;
-                                [hopRolodexContact updateWithCoreRolodexContact:rolodexContact identityProviderDomain:[accountIdentity getIdentityProviderDomain] homeUserIdentityURI:[accountIdentity getIdentityURI]];
+                                identity = (HOPIdentity*)managedObject;
+                                [identity updateWithCoreRolodexContact:rolodexContact identityProviderDomain:[accountIdentity getIdentityProviderDomain] homeUserIdentityURI:[accountIdentity getIdentityURI]];
                                 [[HOPModelManager sharedModelManager] saveContext];
                             }
                         }
                     }
                     else if (rolodexContact.mDisposition == RolodexContact::Disposition_Remove)
                     {
-                        hopRolodexContact = [[HOPModelManager sharedModelManager] getRolodexContactByIdentityURI:contactIdentityURI];
-                        [[HOPModelManager sharedModelManager] deleteObject:hopRolodexContact];
+                        identity = [[HOPModelManager sharedModelManager] getIdentityByIdentityURI:contactIdentityURI];
+                        [[HOPModelManager sharedModelManager] deleteObject:identity];
                     }
                     else if (rolodexContact.mDisposition == RolodexContact::Disposition_NA)
                     {
@@ -163,14 +163,14 @@ void OpenPeerIdentityDelegate::storeDownloadedContactsForIdentity(IIdentityPtr i
                     }
                 }
                 
-                if (hopRolodexContact)
-                    [tempArray addObject:hopRolodexContact];
+                if (identity)
+                    [tempArray addObject:identity];
             }
             
             if ([tempArray count] > 0)
             {
-                accountIdentity.arrayLastDownloadedRolodexContacts = nil;
-                accountIdentity.arrayLastDownloadedRolodexContacts = [NSArray arrayWithArray:tempArray];
+                accountIdentity.arrayLastDownloadedIdentities = nil;
+                accountIdentity.arrayLastDownloadedIdentities = [NSArray arrayWithArray:tempArray];
             }
         }
     }

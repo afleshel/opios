@@ -126,7 +126,7 @@
 
 
 @class HOPConversationThread;
-@class HOPRolodexContact;
+@class HOPIdentity;
 
 /**
  *  SDK uses methods in this protocol to notify application about conversation thread events.
@@ -154,14 +154,14 @@
  *  @param contact                Participant whose state in conversation thredad has changed.
  *  @param contactConnectionState A new participant state
  */
-- (void) onConversationThreadContactConnectionStateChanged:(HOPConversationThread*) conversationThread contact:(HOPRolodexContact*) contact contactConnectionState:(HOPConversationThreadContactConnectionState) contactConnectionState;
+- (void) onConversationThreadContactConnectionStateChanged:(HOPConversationThread*) conversationThread contact:(HOPIdentity*) contact contactConnectionState:(HOPConversationThreadContactConnectionState) contactConnectionState;
 /**
  *  Notifies the receiver about conversation thread participant status.
  *
  *  @param conversationThread     Conversation thread object.
  *  @param contact                Participant whose status in conversation thredad has changed.
  */
-- (void) onConversationThreadContactStatusChanged:(HOPConversationThread*) conversationThread contact:(HOPRolodexContact*) contact;
+- (void) onConversationThreadContactStatusChanged:(HOPConversationThread*) conversationThread contact:(HOPIdentity*) contact;
 /**
  *  Notifies the receiver about new message for conversation.
  *
@@ -184,7 +184,7 @@
  *  @param messageID          An ID of undelivered message.
  *  @param contact            A message recepient.
  */
-- (void) onConversationThreadPushMessage:(HOPConversationThread*) conversationThread messageID:(NSString*) messageID contact:(HOPRolodexContact*) contact;
+- (void) onConversationThreadPushMessage:(HOPConversationThread*) conversationThread messageID:(NSString*) messageID contact:(HOPIdentity*) contact;
 @end
 
 
@@ -211,14 +211,14 @@
 - (void) onIdentityPendingMessageForInnerBrowserWindowFrame:(HOPAccountIdentity*) accountIdentity;
 
 /**
- *  Notifies the receiver that rolodex contacts has been downloaded.
+ *  Notifies the receiver that identitues has been downloaded.
  *
  *  @param identity HOPAccountIdentity object.
  */
-- (void) onIdentityRolodexContactsDownloaded:(HOPAccountIdentity*) accountIdentity;
+- (void) onIdentityContactsDownloaded:(HOPAccountIdentity*) accountIdentity;
 
 /**
- *  Notifies the receiver that rolodex contacts has been downloaded.
+ *  Notifies the receiver that identity has been downloaded.
  *
  *  @param identity New HOPAccountIdentity object.
  */
@@ -355,15 +355,15 @@
  *  @param contact                Participant whose state in conversation thredad has changed.
  *  @param contactConnectionState A new participant state
  */
-- (void) onConversationContactConnectionStateChanged:(HOPConversation*) conversation contact:(HOPRolodexContact*) contact contactConnectionState:(HOPConversationThreadContactConnectionState) contactConnectionState;
+- (void) onConversationContactConnectionStateChanged:(HOPConversation*) conversation contact:(HOPIdentity*) contact contactConnectionState:(HOPConversationThreadContactConnectionState) contactConnectionState;
 /**
  *  Notifies the receiver about conversation thread participant status.
  *
  *  @param conversationThread     Conversation thread object.
  *  @param contact                Participant whose status in conversation thredad has changed.
  */
-- (void) onConversationContactStatusChanged:(HOPConversation*) conversation contact:(HOPRolodexContact*) contact;
-- (void) onConversationContactComposingStateChanged:(HOPConversation*) conversation state:(HOPComposingState)state contact:(HOPRolodexContact*) contact;
+- (void) onConversationContactStatusChanged:(HOPConversation*) conversation contact:(HOPIdentity*) contact;
+- (void) onConversationContactComposingStateChanged:(HOPConversation*) conversation state:(HOPComposingState)state contact:(HOPIdentity*) contact;
 /**
  *  Notifies the receiver about new message for conversation.
  *
@@ -391,8 +391,8 @@
  *  @param messageID          An ID of undelivered message.
  *  @param contact            A message recepient.
  */
-- (void) onConversationPushMessage:(HOPConversation*) conversation messageID:(NSString*) messageID contact:(HOPRolodexContact*) contact;
-- (void) onConversationPushMessageRequired:(HOPConversation*) conversation message:(HOPMessageRecord*) message recipient:(HOPRolodexContact*) recipient;
+- (void) onConversationPushMessage:(HOPConversation*) conversation messageID:(NSString*) messageID contact:(HOPIdentity*) contact;
+- (void) onConversationPushMessageRequired:(HOPConversation*) conversation message:(HOPMessageRecord*) message recipient:(HOPIdentity*) recipient;
 
 //- (void) onConversationTopicChanged:(HOPConversation*) conversation newTopic:(NSString*) newTopic;
 

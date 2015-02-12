@@ -29,16 +29,16 @@
  
  */
 
-#import "HOPRolodexContact.h"
+#import "HOPIdentity.h"
 
 @class HOPCoreContact;
 
-@interface HOPRolodexContact(External)
+@interface HOPIdentity(External)
 
 - (void) updateWithName:(NSString*) inName identityURI:(NSString*) inIdentityURI identityProviderDomain:(NSString*)identityProviderDomain  homeUserIdentityURI:(NSString*)homeUserIdentityURI;
 
 - (BOOL) isSelf;
-+ (HOPRolodexContact*) getSelf;
++ (HOPIdentity*) getSelf;
 + (void) hintAboutLocation:(NSString*) locationID peerURI:(NSString*) peerURI;
 - (BOOL) isOpenPeer;
 - (BOOL) isKnown;

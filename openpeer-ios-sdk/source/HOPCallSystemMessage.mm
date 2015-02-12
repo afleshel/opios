@@ -35,14 +35,14 @@
 #import "HOPCoreContact_Internal.h"
 #import "HOPAccount_Internal.h"
 #import "OpenPeerStorageManager.h"
-#import "HOPRolodexContact_Internal.h"
+#import "HOPIdentity_Internal.h"
 
 using namespace openpeer;
 using namespace openpeer::core;
 
 @implementation HOPCallSystemMessage
 
-- (id) initWithMessageType:(HOPCallSystemMessageType) inType callee:(HOPRolodexContact*) inCallee errorCode:(unsigned short) inErrorCode
+- (id) initWithMessageType:(HOPCallSystemMessageType) inType callee:(HOPIdentity*) inCallee errorCode:(unsigned short) inErrorCode
 {
     self = [super init];
     if (self)
@@ -68,7 +68,7 @@ using namespace openpeer::core;
     return self;
 }
 
-- (id) initWithMessageType:(HOPCallSystemMessageType) inType mediaType:(NSString*) mediaType callID:(NSString*) callID callee:(HOPRolodexContact*) inCallee errorCode:(unsigned short) inErrorCode
+- (id) initWithMessageType:(HOPCallSystemMessageType) inType mediaType:(NSString*) mediaType callID:(NSString*) callID callee:(HOPIdentity*) inCallee errorCode:(unsigned short) inErrorCode
 {
     self = [super init];
     if (self)

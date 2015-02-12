@@ -32,7 +32,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class HOPRolodexContact;
+@class HOPIdentity;
 
 /**
  Wrapper for identiy lookup info
@@ -47,10 +47,10 @@
 /**
  *  HOPIdentityLookupInfo initializer.
  *
- *  @param inRolodexContact HOPRolodexContact object
+ *  @param inIdentity HOPIdentity object
  *
  *  @return HOPIdentityLookupInfo object
  */
-- (id) initWithRolodexContact:(HOPRolodexContact*) inRolodexContact;
+- (id) initWithRolodexContact:(HOPIdentity*) inIdentity;
 
 @end

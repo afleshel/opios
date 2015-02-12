@@ -29,8 +29,8 @@
  
  */
 
-#import "HOPRolodexContact+External.h"
-#import "HOPRolodexContact_Internal.h"
+#import "HOPIdentity+External.h"
+#import "HOPIdentity_Internal.h"
 #import "OpenPeerStorageManager.h"
 #import "HOPCoreContact.h"
 #import "HOPPublicPeerFile.h"
@@ -43,7 +43,7 @@
 #import "HOPIdentityProvider.h"
 #import "HOPAvatar.h"
 
-@implementation HOPRolodexContact (External)
+@implementation HOPIdentity (External)
 
 
 - (void) updateWithName:(NSString*) inName identityURI:(NSString*) inIdentityURI identityProviderDomain:(NSString*)identityProviderDomain  homeUserIdentityURI:(NSString*) homeUserIdentityURI
@@ -52,12 +52,7 @@
     HOPAssociatedIdentity* associated = [[HOPModelManager sharedModelManager] getAssociatedIdentityByDomain:identityProviderDomain identityName:baseIdentityURI homeUserIdentityURI:homeUserIdentityURI];
     if (!associated)
     {
-//        associated = [NSEntityDescription insertNewObjectForEntityForName:@"HOPAssociatedIdentity" inManagedObjectContext:[[HOPModelManager sharedModelManager]managedObjectContext]];
-//        
-//        associated.baseIdentityURI = baseIdentityURI;
-//        associated.name = baseIdentityURI;
-//        associated.domain = identityProviderDomain;
-        [[HOPModelManager sharedModelManager] addAssociatedIdentityForBaseIdentityURI:baseIdentityURI domain:identityProviderDomain name:baseIdentityURI /*account:nil*/ selfRolodexProfileProfile:nil];
+        [[HOPModelManager sharedModelManager] addAssociatedIdentityForBaseIdentityURI:baseIdentityURI domain:identityProviderDomain name:baseIdentityURI selfIdentityProfile:nil];
     }
     
     if (inName.length > 0)
@@ -69,9 +64,9 @@
     return [[self getCoreContact] isSelf];
 }
 
-+ (HOPRolodexContact*) getSelf
++ (HOPIdentity*) getSelf
 {
-    HOPRolodexContact* ret = [[HOPModelManager sharedModelManager] getRolodexContactForAccount];
+    HOPIdentity* ret = [[HOPModelManager sharedModelManager] getIdentityForAccount];
     return ret;
 }
 
@@ -155,7 +150,7 @@
     NSUInteger ret = 1;
     
     if (self.openPeerContact)
-        ret = self.openPeerContact.rolodexContacts.count;
+        ret = self.openPeerContact.identities.count;
     
     return ret;
 }

@@ -32,7 +32,7 @@
 #import "HOPUtility.h"
 #include <zsLib/String.h>
 #import <openpeer/services/IHelper.h>
-#import "HOPRolodexContact+External.h"
+#import "HOPIdentity+External.h"
 
 #define secondsInYear 31536000.0
 #define secondsInFourWeeks 2419200.0
@@ -208,7 +208,7 @@
 {
     NSString* ret = @"";
     
-    for (HOPRolodexContact* contact in contacts)
+    for (HOPIdentity* contact in contacts)
     {
         if (ret.length == 0)
             ret = [contact getStableID];

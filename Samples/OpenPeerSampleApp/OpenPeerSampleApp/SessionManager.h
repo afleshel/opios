@@ -32,7 +32,7 @@
 #import <Foundation/Foundation.h>
 #import <OpenpeerSDK/HOPProtocols.h>
 
-@class HOPRolodexContact;
+@class HOPIdentity;
 @class HOPConversationRecord;
 @class HOPMessageRecord;
 @class HOPConversationEvent;

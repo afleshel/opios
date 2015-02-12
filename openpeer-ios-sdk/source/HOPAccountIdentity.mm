@@ -40,7 +40,7 @@
 #import "OpenPeerIdentityDelegate.h"
 #import "OpenPeerUtility.h"
 #import "HOPUtility.h"
-#import "HOPRolodexContact_Internal.h"
+#import "HOPIdentity_Internal.h"
 #import "OpenPeerConstants.h"
 #import "HOPOpenPeerContact.h"
 
@@ -53,7 +53,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
 @interface HOPAccountIdentity()
 
-- (void) deleteMarkedRolodexContacts;
+- (void) deleteMarkedIdentities;
 
 @end
 
@@ -252,9 +252,9 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     return ret;
 }
 
-- (HOPRolodexContact*) getSelfIdentity
+- (HOPIdentity*) getSelfIdentity
 {
-    HOPRolodexContact* ret = nil;
+    HOPIdentity* ret = nil;
     
     if(identityPtr)
     {
@@ -262,10 +262,10 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
         identityPtr->getSelfIdentityContact(identityContact);
         
         NSString* identityURI = [NSString stringWithUTF8String:identityContact.mIdentityURI];
-        ret = [[HOPModelManager sharedModelManager] getRolodexContactByIdentityURI:identityURI];
+        ret = [[HOPModelManager sharedModelManager] getIdentityByIdentityURI:identityURI];
         if (!ret)
         {
-            ret = [[HOPModelManager sharedModelManager] createRolodexContactsForCoreIdentity:identityContact];
+            ret = [[HOPModelManager sharedModelManager] createIdentityForCoreIdentity:identityContact];
         }
     }
     else
@@ -380,14 +380,14 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     return ret;
 }
 
-- (void) startRolodexDownload:(NSString*) lastDownloadedVersion
+- (void) startIdentitiesDownload:(NSString*) lastDownloadedVersion
 {
     if(identityPtr)
     {
-        self.flushAllRolodexContacts = NO;
+        self.flushAllIdentities = NO;
         self.versionDownloadedStr = nil;
-        self.arrayLastDownloadedRolodexContacts = nil;
-        self.rolodexContactsObtained = NO;
+        self.arrayLastDownloadedIdentities = nil;
+        self.identitiesObtained = NO;
         
         identityPtr->startRolodexDownload([lastDownloadedVersion UTF8String]);
     }
@@ -398,7 +398,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     }
 }
 
-- (void) refreshRolodexContacts
+- (void) refreshIdentities
 {
     if(identityPtr)
     {
@@ -411,81 +411,17 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     }
 }
 
-- (BOOL) getDownloadedRolodexContacts:(BOOL*) outFlushAllRolodexContacts outVersionDownloaded:(NSString**) outVersionDownloaded outRolodexContacts:(NSArray**) outRolodexContacts
+- (BOOL) getDownloadedIdentities:(BOOL*) outFlushAllIdentities outVersionDownloaded:(NSString**) outVersionDownloaded outIdentities:(NSArray**) outIdentities
 {
     BOOL ret = NO;
     if(identityPtr)
     {
-        *outFlushAllRolodexContacts = self.flushAllRolodexContacts;
+        *outFlushAllIdentities = self.flushAllIdentities;
         if ([self.versionDownloadedStr length] > 0)
             *outVersionDownloaded = self.versionDownloadedStr;
         
-        *outRolodexContacts = self.arrayLastDownloadedRolodexContacts;
-        ret = self.rolodexContactsObtained;
-        /*bool flushAllRolodexContacts;
-        String versionDownloadedStr;
-        RolodexContactListPtr rolodexContacts;
-        ret = identityPtr->getDownloadedRolodexContacts(flushAllRolodexContacts,versionDownloadedStr, rolodexContacts);
-        
-        *outFlushAllRolodexContacts = flushAllRolodexContacts;
-        if (versionDownloadedStr)
-            *outVersionDownloaded = [NSString stringWithCString:versionDownloadedStr encoding:NSUTF8StringEncoding];
-        
-        if (rolodexContacts && rolodexContacts->size() > 0)
-        {
-            NSMutableArray* tempArray = [[NSMutableArray alloc] init];
-            
-            for (RolodexContactList::iterator contact = rolodexContacts->begin(); contact != rolodexContacts->end(); ++contact)
-            {
-                HOPRolodexContact* hopRolodexContact = nil;
-                RolodexContact rolodexContact = *contact;
-                NSString* contactIdentityURI = [NSString stringWithCString:rolodexContact.mIdentityURI encoding:NSUTF8StringEncoding];
-                
-                if ([contactIdentityURI length] > 0)
-                {
-                    if (rolodexContact.mDisposition == RolodexContact::Disposition_Update)
-                    {
-                        hopRolodexContact = [[HOPModelManager sharedModelManager] getRolodexContactByIdentityURI:contactIdentityURI];
-                        if (hopRolodexContact)
-                        {
-                            //Update existing rolodex contact
-                            [hopRolodexContact updateWithCoreRolodexContact:rolodexContact identityProviderDomain:[self getIdentityProviderDomain] homeUserIdentityURI:[self getIdentityURI]];
-                            [[HOPModelManager sharedModelManager] saveContext];
-                        }
-                        else
-                        {
-                            //Create a new menaged object for new rolodex contact
-                            NSManagedObject* managedObject = [[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPRolodexContact"];
-                            if ([managedObject isKindOfClass:[HOPRolodexContact class]])
-                            {
-                                hopRolodexContact = (HOPRolodexContact*)managedObject;
-                                [hopRolodexContact updateWithCoreRolodexContact:rolodexContact identityProviderDomain:[self getIdentityProviderDomain] homeUserIdentityURI:[self getIdentityURI]];
-                                [[HOPModelManager sharedModelManager] saveContext];
-                            }
-                        }
-                    }
-                    else if (rolodexContact.mDisposition == RolodexContact::Disposition_Remove)
-                    {
-                        hopRolodexContact = [[HOPModelManager sharedModelManager] getRolodexContactByIdentityURI:contactIdentityURI];
-                        [[HOPModelManager sharedModelManager] deleteObject:hopRolodexContact];
-                    }
-                    else if (rolodexContact.mDisposition == RolodexContact::Disposition_NA)
-                    {
-                        
-                    }
-                    else
-                    {
-                        
-                    }
-                }
-                
-                if (hopRolodexContact)
-                    [tempArray addObject:hopRolodexContact];
-            }
-            
-            if ([tempArray count] > 0)
-                *outRolodexContacts = [NSArray arrayWithArray:tempArray];
-        }*/
+        *outIdentities = self.arrayLastDownloadedIdentities;
+        ret = self.identitiesObtained;
     }
     else
     {
@@ -500,7 +436,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 {
     [self stopTimerForContactsDeletion];
     
-    self.deletionTimer = [NSTimer scheduledTimerWithTimeInterval:flushContactsDownloadTime target:self selector:@selector(deleteMarkedRolodexContacts) userInfo:nil repeats:NO];
+    self.deletionTimer = [NSTimer scheduledTimerWithTimeInterval:flushContactsDownloadTime target:self selector:@selector(deleteMarkedIdentities) userInfo:nil repeats:NO];
 }
 
 - (void) stopTimerForContactsDeletion
@@ -509,7 +445,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
         [self.deletionTimer invalidate];
 }
 
-- (void) deleteMarkedRolodexContacts
+- (void) deleteMarkedIdentities
 {
     //[[HOPModelManager sharedModelManager] deleteAllMarkedRolodexContactsForHomeUserIdentityURI:[self getIdentityURI]];
 }

@@ -35,7 +35,7 @@
 #import <OpenPeerSDK/HOPConversation.h>
 
 #import <OpenPeerSDK/HOPCall.h>
-#import <OpenPeerSDK/HOPRolodexContact+External.h>
+#import <OpenPeerSDK/HOPIdentity+External.h>
 #import <OpenPeerSDK/HOPAvatar.h>
 #import <OpenPeerSDK/HOPImage.h>
 //#import <OpenPeerSDK/HOPConversationEvent+External.h>
@@ -109,7 +109,7 @@
 {
     [super viewDidLoad];
 
-    HOPRolodexContact* contact = [self.conversation getParticipants][0];
+    HOPIdentity* contact = [self.conversation getParticipants][0];
     
     self.labelCallType.text = [self.conversation.currentCall hasVideo] ? NSLocalizedString(@"Video call from", nil) : NSLocalizedString(@"Audio call from", nil);
     

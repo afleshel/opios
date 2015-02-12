@@ -32,12 +32,12 @@
 #import "HOPOpenPeerContact.h"
 
 @class HOPCoreContact;
-@class HOPRolodexContact;
+@class HOPIdentity;
 
 @interface HOPOpenPeerContact(External)
 
 - (HOPCoreContact*) getCoreContact;
-- (HOPRolodexContact*) getDefaultRolodexContact;
+- (HOPIdentity*) getDefaultIdentity;
 - (NSString*) getFullName;
 - (NSString*) getPeerURI;
 - (NSString*) getPushNotificationDeviceToken;

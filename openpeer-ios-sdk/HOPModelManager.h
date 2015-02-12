@@ -39,7 +39,7 @@
 @class NSFetchRequest;
 
 
-@class HOPRolodexContact;
+@class HOPIdentity;
 @class HOPAssociatedIdentity;
 @class HOPPublicPeerFile;
 @class HOPOpenPeerAccount;
@@ -115,40 +115,40 @@
 - (NSManagedObject*) createObjectForEntity:(NSString*) entityName;
 
 /**
- Returns a rolodex contact for a specified identity URI.
+ Returns a identity for a specified identity URI.
  @param identityURI Identity URI
- @return HOPRolodexContact HOPRolodexContact object
+ @return HOPIdentity HOPIdentity object
  */
-- (HOPRolodexContact*) getRolodexContactByIdentityURI:(NSString*) identityURI;
+- (HOPIdentity*) getIdentityByIdentityURI:(NSString*) identityURI;
 
 /**
- Returns a rolodex contact with highest priority for a specified peer URI.
+ Returns a identity with highest priority for a specified peer URI.
  @param peerURI Peer URI
- @return HOPRolodexContact HOPRolodexContact object
+ @return HOPIdentity HOPIdentity object
  */
-- (HOPRolodexContact *) getRolodexContactByPeerURI:(NSString*) peerURI;
+- (HOPIdentity *) getIdentityByPeerURI:(NSString*) peerURI;
 
 /**
- Returns an array of rolodex contacts for a specified peer URI.
+ Returns an array of identities for a specified peer URI.
  @param peerURI Contact peer URI
- @return An array of HOPRolodexContact objects
+ @return An array of HOPIdentity objects
  */
-- (NSArray*) getRolodexContactsByPeerURI:(NSString*) peerURI;
+- (NSArray*) getIdentitiesByPeerURI:(NSString*) peerURI;
 
 /**
- Returns an array of all rolodex contacts for home user identity URI.
+ Returns an array of all identities for home user identity URI.
  @param homeUserIdentityURI Home user identity URI
- @return An array of HOPRolodexContact objects
+ @return An array of HOPIdentity objects
  */
-- (NSArray*) getAllRolodexContactForHomeUserIdentityURI:(NSString*) homeUserIdentityURI;
+- (NSArray*) getAllIdentitiesForHomeUserIdentityURI:(NSString*) homeUserIdentityURI;
 
 /**
- Returns an array of all or just registered rolodex contacts for home user identity URI.
+ Returns an array of all or just registered identities for home user identity URI.
  @param homeUserIdentityURI Home user identity URI
- @param openPeerContacts If YES is passed, only registered rolodex contacts will be returned
- @return An array of HOPRolodexContact objects
+ @param openPeerContacts If YES is passed, only registered identities will be returned
+ @return An array of HOPIdentity objects
  */
-- (NSArray*) getRolodexContactsForHomeUserIdentityURI:(NSString*) homeUserIdentityURI openPeerContacts:(BOOL) openPeerContacts;
+- (NSArray*) getIdentitiesForAccountIdentityURI:(NSString*) homeUserIdentityURI openPeerContacts:(BOOL) openPeerContacts;
 
 
 /**
@@ -169,25 +169,25 @@
 
 
 /**
- Deletes all marked rolodex contacts for home user specific identity URI.
+ Deletes all marked identities for home user specific identity URI.
  @param homeUserIdentityURI Home user identity URI
  */
-- (void) deleteAllMarkedRolodexContactsForHomeUserIdentityURI:(NSString*) homeUserIdentityURI;
+- (void) deleteAllMarkedIdentitiesForHomeUserIdentityURI:(NSString*) homeUserIdentityURI;
 
 /**
- Returns all rolodex contacts ready for deletion for home user specific identity URI.
+ Returns all identities ready for deletion for home user specific identity URI.
  @param homeUserIdentityURI Home user identity URI
- @return An array of rolodex contacts ready for deleteion
+ @return An array of identities ready for deleteion
  */
-- (NSArray*) getAllRolodexContactsMarkedForDeletionForHomeUserIdentityURI:(NSString*) homeUserIdentityURI;
+- (NSArray*) getAllIdentitiesMarkedForDeletionForHomeUserIdentityURI:(NSString*) homeUserIdentityURI;
 
 /**
- Returns all rolodex contacts that should be refreshed. It refreshes all contacts that are not openpeer and contacts that are refreshed some time ago.
+ Returns all identities that should be refreshed. It refreshes all contacts that are not openpeer and contacts that are refreshed some time ago.
  @param homeUserIdentityURI Home user identity URI
  @param lastRefreshTime All contacts that are refreshed earlier than this date should be refreshed
- @return Array of rolodex contacts ready for refresh
+ @return Array of identities ready for refresh
  */
-- (NSArray*) getRolodexContactsForRefreshByHomeUserIdentityURI:(NSString*) homeUserIdentityURI lastRefreshTime:(NSDate*) lastRefreshTime;
+- (NSArray*) getIdentitiesForRefreshByHomeUserIdentityURI:(NSString*) homeUserIdentityURI lastRefreshTime:(NSDate*) lastRefreshTime;
 
 /**
  Returns device tokens for specific URI.
@@ -221,7 +221,7 @@
  @param conversationEvent Conversation event during which message has been received or sent
  @return HOPMessageRecord* message record object
  */
-//- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date conversation:(HOPConversation*) conversation contact:(HOPRolodexContact*) contact messageId:(NSString*)messageId;
+//- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date conversation:(HOPConversation*) conversation contact:(HOPIdentity*) contact messageId:(NSString*)messageId;
 
 /**
  Creates a HOPMessageRecord object.
@@ -235,9 +235,9 @@
  @param conversationEvent Conversation event during which message has been received or sent
  @return HOPMessageRecord* message record object
  */
-//- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  conversation:(HOPConversation*) conversation contact:(HOPRolodexContact*) contact messageId:(NSString*)messageId;
+//- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  conversation:(HOPConversation*) conversation contact:(HOPIdentity*) contact messageId:(NSString*)messageId;
 
-//- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  conversation:(HOPConversation*) conversation contact:(HOPRolodexContact*) contact messageId:(NSString*)messageId validated:(BOOL) validated messageIDToReplace:(NSString*) messageIDToReplace;
+//- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  conversation:(HOPConversation*) conversation contact:(HOPIdentity*) contact messageId:(NSString*)messageId validated:(BOOL) validated messageIDToReplace:(NSString*) messageIDToReplace;
 
 
 
@@ -266,7 +266,7 @@
  @param type Conversation type
  @param date Time of creation
  @param name Conversation name
- @param participants List of HOPRolodexContact objects
+ @param participants List of HOPIdentity objects
  @return HOPConversationRecord  object
  */
 - (HOPConversationRecord*) createConversationRecordForConversationThread:(HOPConversationThread*) conversationThread type:(NSString*) type date:(NSDate*) date name:(NSString*) name participants:(NSArray*) participants;
@@ -304,10 +304,10 @@
 
 
 /**
- Returns HOPRolodexContact object for logged in user.
- @return HOPRolodexContact object
+ Returns HOPIdentity object for logged in user.
+ @return HOPIdentity object
  */
-- (HOPRolodexContact*) getRolodexContactForAccount;
+- (HOPIdentity*) getIdentityForAccount;
 
 
 @end

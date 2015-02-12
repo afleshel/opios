@@ -42,7 +42,7 @@
 @dynamic publicPeerFile;
 @dynamic sessionRecords;
 @dynamic participants;
-@dynamic rolodexContacts;
+@dynamic identities;
 @dynamic account;
 
 

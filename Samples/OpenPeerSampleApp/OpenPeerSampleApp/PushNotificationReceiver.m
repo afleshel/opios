@@ -32,7 +32,7 @@
 #import "PushNotificationReceiver.h"
 #import <OpenPeerSDK/HOPAccount.h>
 #import <OpenPeerSDK/HOPModelManager.h>
-#import <OpenPeerSDK/HOPRolodexContact+External.h>
+#import <OpenPeerSDK/HOPIdentity+External.h>
 #import <OpenPeerSDK/HOPUtility.h>
 #import <OpenPeerSDK/HOPConversation.h>
 #import <OpenPeerSDK/HOPSystemMessage.h>
@@ -63,7 +63,7 @@
     NSString *peerURI = [apnsInfo objectForKey:@"peerURI"];
     NSString *locationID = [apnsInfo objectForKey:@"location"];
     
-    [HOPRolodexContact hintAboutLocation:locationID peerURI:peerURI];
+    [HOPIdentity hintAboutLocation:locationID peerURI:peerURI];
 }
 
 - (void)createMessageFromRichPushDict:(NSDictionary *)richPushDictionary
@@ -78,9 +78,9 @@
         
         
         NSArray *items = [peerURIs componentsSeparatedByString:@","];
-        HOPRolodexContact* contact = nil;
+        HOPIdentity* contact = nil;
         if ([senderPeerURI length] > 0)
-            contact = [[HOPModelManager sharedModelManager] getRolodexContactByPeerURI:senderPeerURI];
+            contact = [[HOPModelManager sharedModelManager] getIdentityByPeerURI:senderPeerURI];
         
         
         if (contact)
@@ -89,9 +89,9 @@
             
             for (NSString* peerURI in items)
             {
-                HOPRolodexContact* rolodexContact = [[HOPModelManager sharedModelManager] getRolodexContactByPeerURI:peerURI];
-                if (rolodexContact)
-                    [participants addObject:rolodexContact];
+                HOPIdentity* identity = [[HOPModelManager sharedModelManager] getIdentityByPeerURI:peerURI];
+                if (identity)
+                    [participants addObject:identity];
             }
             HOPConversation *conversation = [HOPConversation conversationForID:conversationID threadType:threadType participants:participants];//[[SessionManager sharedSessionManager] getConversationForID:conversationID threadType:threadType sender:contact items:items];
             
@@ -129,7 +129,7 @@
                 {
                     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push content \"%@\" for message %@ is ready.",messageText,messageID);
                     
-                    [HOPRolodexContact hintAboutLocation:location peerURI:senderPeerURI];
+                    [HOPIdentity hintAboutLocation:location peerURI:senderPeerURI];
                     
                     if ([replacesMessageID length] > 0)
                     {

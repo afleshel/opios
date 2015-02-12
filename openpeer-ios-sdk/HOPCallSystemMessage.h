@@ -34,7 +34,7 @@
 #import "HOPSystemMessage.h"
 
 @class HOPCoreContact;
-@class HOPRolodexContact;
+@class HOPIdentity;
 
 @interface HOPCallSystemMessage : HOPSystemMessage <NSCopying>
 
@@ -45,8 +45,8 @@
 @property (nonatomic, copy) NSString* mediaType;
 @property (nonatomic, copy) NSString* callID;
 
-- (id) initWithMessageType:(HOPCallSystemMessageType) inType callee:(HOPRolodexContact*) inCallee errorCode:(unsigned short) inErrorCode;
-- (id) initWithMessageType:(HOPCallSystemMessageType) inType mediaType:(NSString*) mediaType callID:(NSString*) callID callee:(HOPRolodexContact*) inCallee errorCode:(unsigned short) inErrorCode;
+- (id) initWithMessageType:(HOPCallSystemMessageType) inType callee:(HOPIdentity*) inCallee errorCode:(unsigned short) inErrorCode;
+- (id) initWithMessageType:(HOPCallSystemMessageType) inType mediaType:(NSString*) mediaType callID:(NSString*) callID callee:(HOPIdentity*) inCallee errorCode:(unsigned short) inErrorCode;
 
 + (id) callSystemMessageFromJSON:(NSString*) jsonMessage;
 

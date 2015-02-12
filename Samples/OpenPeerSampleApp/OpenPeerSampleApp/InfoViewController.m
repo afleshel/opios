@@ -36,7 +36,7 @@
 #import "APNSManager.h"
 #endif
 #import <OpenpeerSDK/HOPModelManager.h>
-#import <OpenpeerSDK/HOPRolodexContact+External.h>
+#import <OpenpeerSDK/HOPIdentity+External.h>
 #import <OpenpeerSDK/HOPAssociatedIdentity.h>
 #import <OpenPeerSDK/HOPAccount.h>
 #import <OpenpeerSDK/HOPIdentityProvider.h>
@@ -59,14 +59,14 @@ typedef enum
 
 @interface InfoViewController ()
 
-@property (nonatomic, strong) HOPRolodexContact* contact;
+@property (nonatomic, strong) HOPIdentity* contact;
 @property (nonatomic) BOOL showContactInfo;
 
 @end
 
 @implementation InfoViewController
 
-- (id) initWithContact:(HOPRolodexContact*) inContact style:(UITableViewStyle)style
+- (id) initWithContact:(HOPIdentity*) inContact style:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
     if (self)
@@ -169,22 +169,22 @@ typedef enum
             
         case USER_INFO_IDENTITIES:
         {
-            HOPRolodexContact* rolodex = nil;
+            HOPIdentity* identity = nil;
             if (self.showContactInfo)
             {
-                rolodex = self.contact;
+                identity = self.contact;
             }
             else
             {
                 HOPAccountIdentity* accountIdentity = [[[HOPAccount sharedAccount] getAssociatedIdentities] objectAtIndex:indexPath.row];
-                rolodex = [[HOPModelManager sharedModelManager] getRolodexContactByIdentityURI:[accountIdentity getIdentityURI]];
+                identity = [[HOPModelManager sharedModelManager] getIdentityByIdentityURI:[accountIdentity getIdentityURI]];
             }
             cell.textLabel.lineBreakMode = NSLineBreakByCharWrapping;
             cell.textLabel.numberOfLines = 0;
-            cell.textLabel.text = rolodex.associatedIdentity.identityProvider.name;
+            cell.textLabel.text = identity.associatedIdentity.identityProvider.name;
             cell.detailTextLabel.lineBreakMode = NSLineBreakByCharWrapping;
             cell.detailTextLabel.numberOfLines = 0;
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"Identity URI: %@",rolodex.identityURI];
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"Identity URI: %@",identity.identityURI];
         }
             break;
 #ifdef APNS_ENABLED
@@ -245,14 +245,14 @@ typedef enum
         {
             HOPAccountIdentity* accountIdentity = [[[HOPAccount sharedAccount] getAssociatedIdentities] objectAtIndex:indexPath.row];
             
-            HOPRolodexContact* rolodex = nil;
+            HOPIdentity* identity = nil;
             if (self.showContactInfo)
             {
-                rolodex = self.contact;
+                identity = self.contact;
             }
             else
             {
-                rolodex = [[HOPModelManager sharedModelManager] getRolodexContactByIdentityURI:[accountIdentity getIdentityURI]];//identityInfo.selfRolodexContact;
+                identity = [[HOPModelManager sharedModelManager] getIdentityByIdentityURI:[accountIdentity getIdentityURI]];
             }
             
             UIFont* cellFont = [UIFont boldSystemFontOfSize:17.0];
@@ -260,7 +260,7 @@ typedef enum
 
             
             CGSize labelSize = [[accountIdentity getIdentityProviderDomain] boundingRectWithSize: constraintSize options: NSStringDrawingUsesLineFragmentOrigin attributes: @{ NSFontAttributeName: cellFont } context: nil].size;
-            NSString* str = [NSString stringWithFormat:@"Identity URI: %@",rolodex.identityURI];
+            NSString* str = [NSString stringWithFormat:@"Identity URI: %@",identity.identityURI];
             CGSize labelDetailSize = [str boundingRectWithSize: constraintSize options: NSStringDrawingUsesLineFragmentOrigin attributes: @{ NSFontAttributeName: cellDetailFont } context: nil].size;            CGFloat totalCellHeight = labelSize.height + labelDetailSize.height;
             ret = (totalCellHeight) > cellDefaultHeight ? totalCellHeight: cellDefaultHeight;
         }

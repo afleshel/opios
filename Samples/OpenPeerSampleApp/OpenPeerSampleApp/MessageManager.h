@@ -52,7 +52,7 @@ typedef enum
 
 + (id) sharedMessageManager;
 
-- (HOPMessageRecord*) createSystemMessageWithType:(HOPSystemMessageType) type messageType:(int) messageType reasonCode:(int)reasonCode andRecipient:(HOPRolodexContact*) contact conversation:(HOPConversation*) conversation;
+- (HOPMessageRecord*) createSystemMessageWithType:(HOPSystemMessageType) type messageType:(int) messageType reasonCode:(int)reasonCode andRecipient:(HOPIdentity*) contact conversation:(HOPConversation*) conversation;
 
 - (void) sendCallSystemMessage:(HOPCallSystemMessageType) callSystemMessage reasonCode:(int) reasonCode forConversation:(HOPConversation*) conversation;
 - (void) sendSystemForSwitchFromConversation:(HOPConversation*) conversation toConversation:(HOPConversation*) toConversation;

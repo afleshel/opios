@@ -35,7 +35,7 @@
 //#import <openpeer/core/IConversationThread.h>
 #import "HOPConversationThread.h"
 #import "HOPModelManager.h"
-#import "HOPRolodexContact+External.h"
+#import "HOPIdentity+External.h"
 #import "HOPOpenPeerContact+External.h"
 #import "HOPConversation_Internal.h"
 #import "HOPConversationRecord.h"
@@ -50,7 +50,7 @@ using namespace openpeer::core;
 @implementation HOPMessageRecord (External)
 
 
-+ (HOPMessageRecord*) createMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  conversation:(HOPConversation*) conversation contact:(HOPRolodexContact*) contact messageId:(NSString*)messageId validated:(BOOL) validated messageIDToReplace:(NSString*) messageIDToReplace
++ (HOPMessageRecord*) createMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  conversation:(HOPConversation*) conversation contact:(HOPIdentity*) contact messageId:(NSString*)messageId validated:(BOOL) validated messageIDToReplace:(NSString*) messageIDToReplace
 {
     HOPMessageRecord* ret = nil;
     
@@ -102,19 +102,19 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (HOPRolodexContact*) sender
+- (HOPIdentity*) sender
 {
-    HOPRolodexContact* ret = nil;
+    HOPIdentity* ret = nil;
     
     if (self.senderOpenPeer)
     {
-        ret = [self.senderOpenPeer getDefaultRolodexContact];
+        ret = [self.senderOpenPeer getDefaultIdentity];
     }
     
     return ret;
 }
 
-- (void) setSender:(HOPRolodexContact *)sender
+- (void) setSender:(HOPIdentity *)sender
 {
     if (sender && sender.openPeerContact)
         self.senderOpenPeer = sender.openPeerContact;

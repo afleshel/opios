@@ -33,7 +33,7 @@
 
 @implementation HOPAvatar
 
-@dynamic rolodexContacts;
+@dynamic identities;
 
 @dynamic height;
 @dynamic name;

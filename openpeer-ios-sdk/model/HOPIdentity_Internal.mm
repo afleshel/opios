@@ -29,7 +29,7 @@
  
  */
 
-#import "HOPRolodexContact_Internal.h"
+#import "HOPIdentity_Internal.h"
 #import "HOPAvatar_Internal.h"
 #import "HOPAssociatedIdentity.h"
 #import "HOPPublicPeerFile.h"
@@ -39,7 +39,7 @@
 #import "HOPUtility.h"
 #import "HOPOpenPeerContact.h"
 
-@implementation HOPRolodexContact(Internal)
+@implementation HOPIdentity(Internal)
 
 /*@dynamic identityURI;
 @dynamic name;
@@ -63,7 +63,7 @@
     HOPAssociatedIdentity* associated = [[HOPModelManager sharedModelManager] getAssociatedIdentityByDomain:identityProviderDomain identityName:baseIdentityURI homeUserIdentityURI:homeUserIdentityURI];
     if (!associated)
     {
-        associated = [[HOPModelManager sharedModelManager] addAssociatedIdentityForBaseIdentityURI:baseIdentityURI domain:identityProviderDomain name:baseIdentityURI /*account:nil*/ selfRolodexProfileProfile:self];
+        associated = [[HOPModelManager sharedModelManager] addAssociatedIdentityForBaseIdentityURI:baseIdentityURI domain:identityProviderDomain name:baseIdentityURI /*account:nil*/ selfIdentityProfile:self];
     }
     
     self.associatedIdentity = associated;

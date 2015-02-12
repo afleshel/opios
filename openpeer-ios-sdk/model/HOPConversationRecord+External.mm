@@ -31,7 +31,7 @@
 
 #import "HOPConversationRecord+External.h"
 #import "HOPUtility.h"
-#import "HOPRolodexContact.h"
+#import "HOPIdentity.h"
 #import "HOPOpenPeerContact+External.h"
 #import "OpenPeerStorageManager.h"
 #import "HOPMessageRecord+External.h"
@@ -68,7 +68,7 @@
 
 - (void) setParticipantsWithArray:(NSArray *)values
 {
-    for (HOPRolodexContact* contact in values)
+    for (HOPIdentity* contact in values)
     {
         if (contact.openPeerContact)
             [self addParticipantsObject:contact.openPeerContact];
@@ -88,7 +88,7 @@
     NSMutableArray* ret = self.participants.count == 0 ? nil : [NSMutableArray new];
     for (HOPOpenPeerContact* contact in self.participants)
     {
-        [ret addObject:[contact getDefaultRolodexContact]];
+        [ret addObject:[contact getDefaultIdentity]];
     }
     return ret;
 }

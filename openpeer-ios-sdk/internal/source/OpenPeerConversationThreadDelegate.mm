@@ -38,7 +38,7 @@
 #import "HOPConversation_Internal.h"
 #import "HOPConversationEvent+External.h"
 #import "HOPConversationRecord+External.h"
-#import "HOPRolodexContact+External.h"
+#import "HOPIdentity+External.h"
 #import "HOPSettings.h"
 #import "HOPUtility.h"
 #import "HOPSystemMessage.h"
@@ -192,7 +192,7 @@ void OpenPeerConversationThreadDelegate::onConversationThreadContactsChanged(ICo
                 {
                     if (numberOfAddedParticipants > 0)
                     {
-                        for (HOPRolodexContact* contact in difference)
+                        for (HOPIdentity* contact in difference)
                         {
                             [hopConversation.record addParticipantsObject:contact.openPeerContact];
                         }
@@ -218,7 +218,7 @@ void OpenPeerConversationThreadDelegate::onConversationThreadContactsChanged(ICo
                             }
                         }
                         
-                        for (HOPRolodexContact* contact in difference)
+                        for (HOPIdentity* contact in difference)
                         {
                             [hopConversation.record removeParticipantsObject:contact.openPeerContact];
                         }
@@ -316,7 +316,7 @@ void OpenPeerConversationThreadDelegate::onConversationThreadPushMessage(IConver
 {
     NSString* messageId = [NSString stringWithUTF8String:messageID];
     
-    HOPRolodexContact* hopContact = [[HOPModelManager sharedModelManager] getRolodexContactByPeerURI:[NSString stringWithUTF8String:contact->getPeerURI()]];
+    HOPIdentity* hopContact = [[HOPModelManager sharedModelManager] getIdentityByPeerURI:[NSString stringWithUTF8String:contact->getPeerURI()]];
     
     if (conversationThreadDelegate)
     {
@@ -336,7 +336,7 @@ void OpenPeerConversationThreadDelegate::onConversationThreadPushMessage(IConver
 
 void OpenPeerConversationThreadDelegate::onConversationThreadContactConnectionStateChanged(IConversationThreadPtr conversationThread,IContactPtr contact,ContactConnectionStates state)
 {
-    HOPRolodexContact* hopContact = [[HOPModelManager sharedModelManager] getRolodexContactByPeerURI:[NSString stringWithUTF8String:contact->getPeerURI()]];
+    HOPIdentity* hopContact = [[HOPModelManager sharedModelManager] getIdentityByPeerURI:[NSString stringWithUTF8String:contact->getPeerURI()]];
     if (hopContact)
     {
         if (conversationThreadDelegate)
@@ -359,7 +359,7 @@ void OpenPeerConversationThreadDelegate::onConversationThreadContactConnectionSt
 
 void OpenPeerConversationThreadDelegate::onConversationThreadContactStatusChanged(IConversationThreadPtr conversationThread,IContactPtr contact)
 {
-    HOPRolodexContact* hopContact = [[HOPModelManager sharedModelManager] getRolodexContactByPeerURI:[NSString stringWithUTF8String:contact->getPeerURI()]];
+    HOPIdentity* hopContact = [[HOPModelManager sharedModelManager] getIdentityByPeerURI:[NSString stringWithUTF8String:contact->getPeerURI()]];
     
     if (hopContact)
     {

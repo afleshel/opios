@@ -37,7 +37,7 @@
 #import "SessionManager.h"
 #import "ContactsManager.h"
 
-#import <OpenpeerSDK/HOPRolodexContact+External.h>
+#import <OpenpeerSDK/HOPIdentity+External.h>
 #import <OpenpeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPAccount.h>
 #import <OpenPeerSDK/HOPConversation.h>
@@ -215,7 +215,7 @@
     cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"tableViewCell.png"] stretchableImageWithLeftCapWidth:0.0 topCapHeight:5.0]];
     cell.selectedBackgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"tableViewCell_selected.png"] stretchableImageWithLeftCapWidth:0.0 topCapHeight:5.0]];
     
-    HOPRolodexContact* contact = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    HOPIdentity* contact = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
     [cell setContact:contact inTable:self.contactsTableView atIndexPath:indexPath];
     
@@ -232,7 +232,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    HOPRolodexContact* contact = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    HOPIdentity* contact = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
     if (contact)
     {
@@ -316,7 +316,7 @@
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath NS_AVAILABLE_IOS(3_0)
 {
-    HOPRolodexContact* contact = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    HOPIdentity* contact = [self.fetchedResultsController objectAtIndexPath:indexPath];
     if (contact)
     {
         if ([self.listOfSelectedContacts containsObject:contact])
@@ -348,28 +348,15 @@
     //NSString *cacheName = nil;
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPRolodexContact" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPIdentity" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];
     [fetchRequest setEntity:entity];
     
     NSMutableArray *predicatesArray = [[NSMutableArray alloc] init];
     NSPredicate *predicateForFiltering = nil;
-    //NSPredicate *predicateWithoutContacts = nil;
-    
-//    if (self.isInFavoritesMode)
-//    {
-//        predicateOnlyOpenPeerContacts = [NSPredicate predicateWithFormat:@"openPeerContact != nil"];
-//        [predicatesArray addObject:predicateOnlyOpenPeerContacts];
-//        cacheName = @"FavoritesContacts";
-//    }
-//    else
-//    {
-//        cacheName = @"RolodexContacts";
-//    }
-    
+
     switch (self.mode)
     {
         case CONTACTS_TABLE_MODE_REGULAR:
-            //cacheName = @"RolodexContacts";
             break;
             
         case CONTACTS_TABLE_MODE_FAVORITES:
@@ -381,7 +368,7 @@
         case CONTACTS_TABLE_MODE_ADDING:
         {
             NSMutableArray* identityURIs = [NSMutableArray new];
-            for (HOPRolodexContact* contact in self.listOfFilterContacts)
+            for (HOPIdentity* contact in self.listOfFilterContacts)
             {
                 if (contact.identityURI.length > 0)
                     [identityURIs addObject:contact.identityURI];
@@ -394,7 +381,7 @@
         case CONTACTS_TABLE_MODE_REMOVING:
         {
             NSMutableArray* identityURIs = [NSMutableArray new];
-            for (HOPRolodexContact* contact in self.listOfFilterContacts)
+            for (HOPIdentity* contact in self.listOfFilterContacts)
             {
                 if (contact.identityURI.length > 0)
                     [identityURIs addObject:contact.identityURI];
@@ -421,9 +408,7 @@
 	NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
 	
 	[fetchRequest setSortDescriptors:sortDescriptors];
-    
-	//_fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext] sectionNameKeyPath:@"firstLetter" cacheName:@"RolodexContacts"];
-    
+
     if (!self.isInFavoritesMode)
         _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext] sectionNameKeyPath:nil cacheName:@"RolodexContacts"];
     else
@@ -450,7 +435,7 @@
             [self.contactsTableView  insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
 			break;
 		case NSFetchedResultsChangeUpdate:
-			//[[self.contactsTableView cellForRowAtIndexPath:indexPath].textLabel setText:((HOPRolodexContact*)[[[self.fetchedResultsController sections] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]).name];
+			//[[self.contactsTableView cellForRowAtIndexPath:indexPath].textLabel setText:((HOPIdentity*)[[[self.fetchedResultsController sections] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]).name];
 			break;
 		case NSFetchedResultsChangeDelete:
 			[self.contactsTableView  deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
@@ -602,7 +587,7 @@
                                    userInfo:nil
                                     repeats:NO];
     self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@"Refreshing Contacts"];
-    [[ContactsManager sharedContactsManager] refreshRolodexContacts];
+    [[ContactsManager sharedContactsManager] refreshIdentities];
 }
 
 - (void) resetRefreshTitle

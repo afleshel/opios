@@ -324,7 +324,7 @@
         //If call is droped because user is a busy at the moment, show notification to caller.
         if ([conversation.currentCall getClosedReason] == HOPCallClosedReasonBusy)
         {
-            HOPRolodexContact* contact = [conversation.participants objectAtIndex:0];
+            HOPIdentity* contact = [conversation.participants objectAtIndex:0];
             NSString* contactName = contact.name;
             [[[OpenPeer sharedOpenPeer] mainViewController] showNotification:[NSString stringWithFormat:@"%@ is busy.",contactName]];
          }

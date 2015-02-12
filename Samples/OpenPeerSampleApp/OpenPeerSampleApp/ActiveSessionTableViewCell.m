@@ -94,9 +94,9 @@
     if (participants.count > 1)
     {
         NSMutableArray* avatars = [[NSMutableArray alloc] init];
-        for (HOPRolodexContact* contact in participants)
+        for (HOPIdentity* identity in participants)
         {
-            UIImage* img = [[ImageManager sharedImageManager] getAvatarImageForRolodexContact:contact];
+            UIImage* img = [[ImageManager sharedImageManager] getAvatarImageForIdentity:identity];
             if (img)
                 [avatars addObject:img];
         }
@@ -107,8 +107,8 @@
     }
     else if (participants.count == 1)
     {
-        HOPRolodexContact* contact = [participants objectAtIndex:0];
-        UIImage* img = [[ImageManager sharedImageManager] getAvatarImageForRolodexContact:contact];
+        HOPIdentity* identity = [participants objectAtIndex:0];
+        UIImage* img = [[ImageManager sharedImageManager] getAvatarImageForIdentity:identity];
         if (img)
             self.displayImage.image = img;
     }

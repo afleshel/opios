@@ -315,7 +315,7 @@
 			break;
 		case NSFetchedResultsChangeUpdate:
             [((ActiveSessionTableViewCell*) [self.tableViewSessions cellForRowAtIndexPath:indexPath]) updateActivity];
-//			[[self.tableViewSessions cellForRowAtIndexPath:indexPath].textLabel setText:((HOPRolodexContact*)[[[self.fetchedResultsController sections] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]).name];
+//			[[self.tableViewSessions cellForRowAtIndexPath:indexPath].textLabel setText:((HOPIdentity*)[[[self.fetchedResultsController sections] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]).name];
 			break;
 		case NSFetchedResultsChangeDelete:
 			[self.tableViewSessions  deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];

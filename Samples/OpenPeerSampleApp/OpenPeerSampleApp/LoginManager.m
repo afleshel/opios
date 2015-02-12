@@ -52,7 +52,7 @@
 #import <OpenPeerSDK/HOPTypes.h>
 #import <OpenpeerSDK/HOPModelManager.h>
 #import <OpenpeerSDK/HOPAssociatedIdentity.h>
-//#import <OpenpeerSDK/HOPRolodexContact.h>
+//#import <OpenpeerSDK/HOPIdentity.h>
 #import <OpenpeerSDK/HOPStack.h>
 #import <OpenpeerSDK/HOPBackgrounding.h>
 //Delegates

@@ -2,7 +2,7 @@
 //  HOPIdentity.h
 //  openpeer-ios-sdk
 //
-//  Created by Sergej on 2/11/15.
+//  Created by Sergej on 2/12/15.
 //  Copyright (c) 2015 Hookflash. All rights reserved.
 //
 

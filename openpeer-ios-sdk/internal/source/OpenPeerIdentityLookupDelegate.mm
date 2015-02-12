@@ -35,7 +35,7 @@
 #import "OpenPeerStorageManager.h"
 #import "HOPModelManager_Internal.h"
 #import "HOPOpenPeerContact.h"
-#import "HOPRolodexContact.h"
+#import "HOPIdentity.h"
 
 #import <openpeer/core/ILogger.h>
 
@@ -83,7 +83,7 @@ void OpenPeerIdentityLookupDelegate::updateContactsReceivedOnIdentityLookup(IIde
                 IdentityContact identityContact = *identityContactInfo;
                 if (identityContact.hasData())
                 {
-                    HOPRolodexContact* identity = [[HOPModelManager sharedModelManager] createRolodexContactsForCoreIdentity:identityContact];
+                    HOPIdentity* identity = [[HOPModelManager sharedModelManager] createIdentityForCoreIdentity:identityContact];
                     if (identity)
                     {
                         [identityLookup.arrayLastUpdatedContacts addObject:identity];

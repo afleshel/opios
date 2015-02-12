@@ -30,7 +30,7 @@
  */
 
 #import "ContactTableViewCell.h"
-#import <OpenpeerSDK/HOPRolodexContact+External.h>
+#import <OpenpeerSDK/HOPIdentity+External.h>
 #import <OpenpeerSDK/HOPAssociatedIdentity.h>
 #import <OpenpeerSDK/HOPIdentityProvider.h>
 #import <OpenpeerSDK/HOPAvatar+External.h>
@@ -49,7 +49,7 @@
 
 @implementation ContactTableViewCell
 
-- (void) setContact:(HOPRolodexContact *)inContact inTable:(UITableView*) table atIndexPath:(NSIndexPath *)indexPath
+- (void) setContact:(HOPIdentity *)inContact inTable:(UITableView*) table atIndexPath:(NSIndexPath *)indexPath
 {
     if (!inContact || !table)
         return;

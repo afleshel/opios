@@ -45,7 +45,7 @@
 #import <OpenpeerSDK/HOPAccountIdentity.h>
 #import <OpenpeerSDK/HOPAccount.h>
 #import <OpenpeerSDK/HOPModelManager.h>
-#import <OpenpeerSDK/HOPRolodexContact+External.h>
+#import <OpenpeerSDK/HOPIdentity+External.h>
 #import <OpenpeerSDK/HOPAssociatedIdentity.h>
 #import <OpenpeerSDK/HOPIdentityProvider.h>
 #import <OpenpeerSDK/HOPUtility.h>
@@ -119,8 +119,8 @@
                 [[[OpenPeer sharedOpenPeer] mainViewController] onContactsLoadingStarted];
             }
             
-            [accountIdentity startRolodexDownload:associatedIdentity.downloadedVersion];
-            OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Start rolodex contacts download - identity URI: - Version: %@",[accountIdentity getIdentityURI], associatedIdentity.downloadedVersion);
+            [accountIdentity startIdentitiesDownload:associatedIdentity.downloadedVersion];
+            OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Start identities download - identity URI: - Version: %@",[accountIdentity getIdentityURI], associatedIdentity.downloadedVersion);
         }
     }
     
@@ -132,14 +132,14 @@
     
     for (HOPAccountIdentity* accountIdentity in associatedIdentities)
     {
-        NSArray* rolodexContactsForRefresh = [[HOPModelManager sharedModelManager] getRolodexContactsForRefreshByHomeUserIdentityURI:[accountIdentity getIdentityURI] lastRefreshTime:[NSDate date]];
+        NSArray* identitiesForRefresh = [[HOPModelManager sharedModelManager] getIdentitiesForRefreshByHomeUserIdentityURI:[accountIdentity getIdentityURI] lastRefreshTime:[NSDate date]];
         
-        if ([rolodexContactsForRefresh count] > 0)
-            [self identityLookupForContacts:rolodexContactsForRefresh identityServiceDomain:[accountIdentity getIdentityProviderDomain]];
+        if ([identitiesForRefresh count] > 0)
+            [self identityLookupForContacts:identitiesForRefresh identityServiceDomain:[accountIdentity getIdentityProviderDomain]];
     }
 }
 
-- (void) refreshRolodexContacts
+- (void) refreshIdentities
 {
     NSArray* associatedIdentities = [[HOPAccount sharedAccount] getAssociatedIdentities];
     
@@ -150,7 +150,7 @@
         if (![self.setOfIdentitiesWhoseContactsDownloadInProgress containsObject:[accountIdentity getIdentityURI]])
         {
             [self.setOfIdentitiesWhoseContactsDownloadInProgress addObject:[accountIdentity getIdentityURI]];
-            [accountIdentity refreshRolodexContacts];
+            [accountIdentity refreshIdentities];
         }
     }
 }

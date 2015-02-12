@@ -33,7 +33,7 @@
 #import "TTTAttributedLabel.h"
 #import "Utility.h"
 
-#import <OpenpeerSDK/HOPRolodexContact+External.h>
+#import <OpenpeerSDK/HOPIdentity+External.h>
 #import <OpenpeerSDK/HOPMessageRecord+External.h>
 #import <OpenpeerSDK/HOPConversation.h>
 

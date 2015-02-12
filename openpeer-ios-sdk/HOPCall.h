@@ -34,7 +34,7 @@
 
 @class HOPConversationThread;
 @class HOPConversation;
-@class HOPRolodexContact;
+@class HOPIdentity;
 
 
 @interface HOPCall : NSObject
@@ -107,15 +107,15 @@
 
 /**
  Returns caller contact.
- @return Pointer to the caller HOPRolodexContact object
+ @return Pointer to the caller HOPIdentity object
  */
-- (HOPRolodexContact*) getCaller;
+- (HOPIdentity*) getCaller;
 
 /**
  Returns callee contact.
- @return Pointer to the callee HOPRolodexContact object
+ @return Pointer to the callee HOPIdentity object
  */
-- (HOPRolodexContact*) getCallee;
+- (HOPIdentity*) getCallee;
 
 /**
  Checks if call has audio stream.

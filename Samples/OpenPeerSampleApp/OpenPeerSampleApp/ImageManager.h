@@ -36,7 +36,7 @@
 
 @class HOPAvatar;
 @class HOPImage;
-@class HOPRolodexContact;
+@class HOPIdentity;
 
 @interface ImageManager : NSObject
 
@@ -46,5 +46,5 @@
 
 - (void) donwloadImageForAvatar:(HOPAvatar*) avatar tableView:(UITableView*) inTableView indexPath:(NSIndexPath*) inIndexPath;
 
-- (UIImage*) getAvatarImageForRolodexContact:(HOPRolodexContact*) inRolodexContact;
+- (UIImage*) getAvatarImageForIdentity:(HOPIdentity*) identity;
 @end

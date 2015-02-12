@@ -33,7 +33,7 @@
 #import "HOPTypes.h"
 
 @class HOPCoreContact;
-@class HOPRolodexContact;
+@class HOPIdentity;
 @class HOPMessageRecord;
 @class HOPAccount;
 @class HOPAccountIdentity;
@@ -143,7 +143,7 @@
  @param contact HOPCoreContact object
  @returns Contact connection state enum
  */
-- (HOPConversationThreadContactConnectionState) getContactConnectionState: (HOPRolodexContact*) contact;
+- (HOPConversationThreadContactConnectionState) getContactConnectionState: (HOPIdentity*) contact;
 
 /**
  *  Creates an empty JSON status blob ready to fill with additional structure data. Use "ComposingStatus" to insert composing status information into this JSON blob.
@@ -159,7 +159,7 @@
  *
  *  @return Contact composing status 
  */
-- (HOPComposingState) getComposingStateForContact:(HOPRolodexContact*) contact;
+- (HOPComposingState) getComposingStateForContact:(HOPIdentity*) contact;
 
 
 /**

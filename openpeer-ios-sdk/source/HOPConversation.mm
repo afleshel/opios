@@ -43,7 +43,7 @@
 #import "HOPConversationEvent+External.h"
 #import "HOPConversationType.h"
 
-#import "HOPRolodexContact+External.h"
+#import "HOPIdentity+External.h"
 #import "HOPMessageRecord+External.h"
 #import "HOPModelManager_Internal.h"
 #import "HOPUtility.h"
@@ -218,7 +218,7 @@ using namespace openpeer::core;
             NSMutableArray* tempParticipants = [NSMutableArray new];
             for (HOPOpenPeerContact* contact in ret.record.participants)
             {
-                [tempParticipants addObject:[contact getDefaultRolodexContact]];
+                [tempParticipants addObject:[contact getDefaultIdentity]];
             }
 
             ret.thread = [HOPConversationThread conversationThreadWithIdentities:[[HOPAccount sharedAccount] getAssociatedIdentities] participants:tempParticipants conversationThreadID: inConversationRecord.sessionID threadType:[HOPConversationType conversationThreadTypeForString:inConversationRecord.type]];
@@ -278,13 +278,13 @@ using namespace openpeer::core;
     [[OpenPeerStorageManager sharedStorageManager] removeConversation:self];
 }
 
-- (HOPComposingState) getComposingStateForContact:(HOPRolodexContact*) rolodexContact
+- (HOPComposingState) getComposingStateForContact:(HOPIdentity*) identity
 {
     HOPComposingState ret = HOPComposingStateInactive;
     
     if (self.thread)
     {
-        ret = [self.thread getComposingStateForContact:rolodexContact];
+        ret = [self.thread getComposingStateForContact:identity];
     }
     
     return ret;
@@ -347,16 +347,16 @@ using namespace openpeer::core;
 {
     NSString* ret = @"";
     
-    for (HOPRolodexContact* rolodexContact in inParticipants)
+    for (HOPIdentity* identity in inParticipants)
     {
-        if (rolodexContact)
+        if (identity)
         {
             if (ret.length == 0)
-                ret = rolodexContact.name;
+                ret = identity.name;
             else
             {
                 ret = [ret stringByAppendingString:@", "];
-                ret = [ret stringByAppendingString:rolodexContact.name];
+                ret = [ret stringByAppendingString:identity.name];
             }
         }
     }
@@ -413,9 +413,9 @@ using namespace openpeer::core;
         if (conversation.thread && arrayOfAddedParticipants.count > 0)
         {
             [conversation.thread addContacts:arrayOfAddedParticipants];
-            for (HOPRolodexContact* rolodexContact in arrayOfAddedParticipants)
+            for (HOPIdentity* identity in arrayOfAddedParticipants)
             {
-                HOPOpenPeerContact* participant = rolodexContact.openPeerContact;
+                HOPOpenPeerContact* participant = identity.openPeerContact;
                 if (participant)
                     [conversation.record addParticipantsObject:participant];
             }
@@ -427,9 +427,9 @@ using namespace openpeer::core;
         {
             [conversation.thread removeContacts:arrayOfRemovedParticipants];
             
-            for (HOPRolodexContact* rolodexContact in arrayOfRemovedParticipants)
+            for (HOPIdentity* identity in arrayOfRemovedParticipants)
             {
-                HOPOpenPeerContact* participant = rolodexContact.openPeerContact;
+                HOPOpenPeerContact* participant = identity.openPeerContact;
                 if (participant)
                     [conversation.record removeParticipantsObject:participant];
             }
@@ -471,9 +471,9 @@ using namespace openpeer::core;
         if (conversation.thread && addedParticipants.count > 0)
         {
             [conversation.thread addContacts:addedParticipants];
-            for (HOPRolodexContact* rolodexContact in addedParticipants)
+            for (HOPIdentity* identity in addedParticipants)
             {
-                HOPOpenPeerContact* participant = rolodexContact.openPeerContact;
+                HOPOpenPeerContact* participant = identity.openPeerContact;
                 if (participant)
                     [conversation.record addParticipantsObject:participant];
             }
@@ -522,9 +522,9 @@ using namespace openpeer::core;
                 [conversation.thread removeContacts:removedParticipants];
             }
             
-            for (HOPRolodexContact* rolodexContact in removedParticipants)
+            for (HOPIdentity* identity in removedParticipants)
             {
-                HOPOpenPeerContact* participant = rolodexContact.openPeerContact;
+                HOPOpenPeerContact* participant = identity.openPeerContact;
                 if (participant)
                     [conversation.record removeParticipantsObject:participant];
             }
@@ -566,7 +566,7 @@ using namespace openpeer::core;
     if (self.participants.count > 1)
     {
         self.record.selfRemoved = [NSNumber numberWithBool:YES];
-        [self.thread removeContacts:@[[HOPRolodexContact getSelf]]];
+        [self.thread removeContacts:@[[HOPIdentity getSelf]]];
         [self.thread destroyCoreObject];
         ret = YES;
         [[HOPModelManager sharedModelManager] saveContext];

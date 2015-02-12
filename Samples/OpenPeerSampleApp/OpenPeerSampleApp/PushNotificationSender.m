@@ -32,7 +32,7 @@
 #import "PushNotificationSender.h"
 #import <OpenPeerSDK/HOPAccount.h>
 #import <OpenPeerSDK/HOPModelManager.h>
-#import <OpenPeerSDK/HOPRolodexContact+External.h>
+#import <OpenPeerSDK/HOPIdentity+External.h>
 #import <OpenPeerSDK/HOPUtility.h>
 #import "Utility.h"
 #import "HTTPDownloader.h"
@@ -143,12 +143,12 @@
     return peerURIs;
 }
 
-- (NSDictionary*) createRichPushMessage:(HOPMessageRecord*) message conversation:(HOPConversation*) conversation recipient:(HOPRolodexContact*) recipient recipients:(NSArray*) recipients
+- (NSDictionary*) createRichPushMessage:(HOPMessageRecord*) message conversation:(HOPConversation*) conversation recipient:(HOPIdentity*) recipient recipients:(NSArray*) recipients
 {
     return nil;
 }
 
-- (NSArray*) getDeviceTokensForContact:(HOPRolodexContact*) contact
+- (NSArray*) getDeviceTokensForContact:(HOPIdentity*) contact
 {
     NSArray* ret = nil;
     

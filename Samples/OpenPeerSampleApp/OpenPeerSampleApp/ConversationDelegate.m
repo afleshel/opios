@@ -41,7 +41,7 @@
 
 #import <OpenpeerSDK/HOPConversation.h>
 //#import <OpenpeerSDK/HOPConversationThread.h>
-#import <OpenpeerSDK/HOPRolodexContact+External.h>
+#import <OpenpeerSDK/HOPIdentity+External.h>
 #import <OpenpeerSDK/HOPMessageRecord+External.h>
 #import <OpenpeerSDK/HOPModelManager.h>
 #import <OpenpeerSDK/HOPSystemMessage.h>
@@ -71,12 +71,12 @@
    });
 }
 
-- (void) onConversationContactConnectionStateChanged:(HOPConversation*) conversation contact:(HOPRolodexContact*) contact contactConnectionState:(HOPConversationThreadContactConnectionState) contactConnectionState
+- (void) onConversationContactConnectionStateChanged:(HOPConversation*) conversation contact:(HOPIdentity*) contact contactConnectionState:(HOPConversationThreadContactConnectionState) contactConnectionState
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread id: <%@> contact peer URI:<%@> state: %@",[conversation getConversationID], [contact getPeerURI],[HOPConversation stringForContactConnectionState:contactConnectionState]);
 }
 
-- (void) onConversationContactStatusChanged:(HOPConversation*) conversation contact:(HOPRolodexContact*) contact
+- (void) onConversationContactStatusChanged:(HOPConversation*) conversation contact:(HOPIdentity*) contact
 {
     HOPComposingState contactState = [conversation getComposingStateForContact:contact];
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread id: <%@> - contact peer URI: <%@> state: %d",[conversation getConversationID], [contact getPeerURI],contactState);
@@ -87,7 +87,7 @@
     });
 }
 
-- (void) onConversationContactComposingStateChanged:(HOPConversation*) conversation state:(HOPComposingState)state contact:(HOPRolodexContact*) contact
+- (void) onConversationContactComposingStateChanged:(HOPConversation*) conversation state:(HOPComposingState)state contact:(HOPIdentity*) contact
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread id: <%@> - contact peer URI: <%@> state: %d",[conversation getConversationID], [contact getPeerURI],state);
     dispatch_async(dispatch_get_main_queue(), ^
@@ -117,7 +117,7 @@
     [[HOPModelManager sharedModelManager] updateMessageStateForConversation:conversation lastDeliveryState:messageDeliveryStates];
 }
 
-- (void) onConversationPushMessage:(HOPConversation*) conversationThread messageID:(NSString*) messageID contact:(HOPRolodexContact*) contact
+- (void) onConversationPushMessage:(HOPConversation*) conversationThread messageID:(NSString*) messageID contact:(HOPIdentity*) contact
 {
 #ifdef APNS_ENABLED
     if (contact)
@@ -132,7 +132,7 @@
 #endif
 }
 
-- (void) onConversationPushMessageRequired:(HOPConversation*) conversation message:(HOPMessageRecord*) message recipient:(HOPRolodexContact*) recipient
+- (void) onConversationPushMessageRequired:(HOPConversation*) conversation message:(HOPMessageRecord*) message recipient:(HOPIdentity*) recipient
 {
 #ifdef APNS_ENABLED
     if (recipient && message)

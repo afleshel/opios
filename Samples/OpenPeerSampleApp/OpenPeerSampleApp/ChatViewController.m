@@ -38,7 +38,7 @@
 #import <OpenPeerSDK/HOPMessageRecord+External.h>
 #import <OpenPeerSDK/HOPConversation.h>
 #import <OpenPeerSDK/HOPCallSystemMessage.h>
-#import <OpenPeerSDK/HOPRolodexContact+External.h>
+#import <OpenPeerSDK/HOPIdentity+External.h>
 #import "SystemMessageCell.h"
 #import "ChatCell.h"
 
@@ -185,11 +185,11 @@
         
         for (NSString* peerURI in participants)
         {
-            HOPRolodexContact* rolodexContact = [[[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:peerURI] objectAtIndex:0];
+            HOPIdentity* identity = [[[HOPModelManager sharedModelManager] getIdentitiesByPeerURI:peerURI] objectAtIndex:0];
             if (statusString.length == 0)
-                statusString = rolodexContact.name;
+                statusString = identity.name;
             else
-                statusString = [statusString stringByAppendingFormat:@", %@",rolodexContact.name];
+                statusString = [statusString stringByAppendingFormat:@", %@",identity.name];
         }
         
         switch (key.intValue)
@@ -229,7 +229,7 @@
     HOPConversation* hopConversation = [object objectForKey:@"thread"];
     if (self.conversation == hopConversation)
     {
-        HOPRolodexContact* contact = [object objectForKey:@"contact"];
+        HOPIdentity* contact = [object objectForKey:@"contact"];
         NSNumber* status = [object objectForKey:@"status"];
 
         [self.dictionaryComposingStatuses setObject:status forKey:[contact getPeerURI]];

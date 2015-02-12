@@ -30,7 +30,7 @@
  */
 
 
-#import "HOPRolodexContact+External.h" 
+#import "HOPIdentity+External.h" 
 #import <openpeer/core/types.h>
 
 using namespace openpeer;
@@ -38,7 +38,7 @@ using namespace openpeer::core;
 
 @class HOPCoreContact;
 
-@interface HOPRolodexContact(Internal)
+@interface HOPIdentity(Internal)
 
 
 /**

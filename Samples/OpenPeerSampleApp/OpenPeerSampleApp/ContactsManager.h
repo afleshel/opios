@@ -33,7 +33,7 @@
 #import <OpenpeerSDK/HOPProtocols.h>
 
 @class HOPIdentityLookup;
-@class HOPRolodexContact;
+@class HOPIdentity;
 
 @interface ContactsManager : NSObject<UIWebViewDelegate>
 
@@ -44,7 +44,7 @@
 
 - (void) loadContacts;
 - (void) refreshExisitngContacts;
-- (void) refreshRolodexContacts;
+- (void) refreshIdentities;
 - (void) identityLookupForContacts:(NSArray *)contacts identityServiceDomain:(NSString*) identityServiceDomain;
 - (void) identityLookupForContacts:(NSArray *)contacts;
 - (void) updateContactsWithDataFromLookup:(HOPIdentityLookup*) identityLookup;

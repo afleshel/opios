@@ -164,10 +164,10 @@ using namespace openpeer::core;
  @param domain Identity provider domain
  @param name Identity name
  @param account Open Peer account
- @param rolodexContact Rolodex contact of associated identity
+ @param identity Identity of associated identity
  @return HOPAssociatedIdentity object
  */
-- (HOPAssociatedIdentity*) addAssociatedIdentityForBaseIdentityURI:(NSString*) baseIdentityURI domain:(NSString*) domain name:(NSString*) name selfRolodexProfileProfile:(HOPRolodexContact*) rolodexContact;
+- (HOPAssociatedIdentity*) addAssociatedIdentityForBaseIdentityURI:(NSString*) baseIdentityURI domain:(NSString*) domain name:(NSString*) name selfIdentityProfile:(HOPIdentity*) identity;
 
 /**
  Returns an identity provider object for spcified identity provider domain, identity name and home user identity URI.
@@ -180,5 +180,5 @@ using namespace openpeer::core;
 
 - (NSArray*) addUnkownContactsFromConversationThread:(HOPConversationThread*) thread;
 
-- (HOPRolodexContact*) createRolodexContactsForCoreIdentity:(IdentityContact) identityContact;
+- (HOPIdentity*) createIdentityForCoreIdentity:(IdentityContact) identityContact;
 @end
