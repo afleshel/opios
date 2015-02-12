@@ -38,7 +38,6 @@
 #import "OpenPeerStorageManager.h"
 #import "HOPAccount_Internal.h"
 #import "HOPRolodexContact.h"
-#import "HOPIdentityContact_Internal.h"
 #import "HOPModelManager.h"
 
 ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
@@ -62,11 +61,10 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
                 {
                     IIdentityLookup::IdentityLookupInfo lookupInfo;
                     lookupInfo.mIdentityURI = [contact.identityURI UTF8String];
-                    if (contact.identityContact && contact.identityContact.lastUpdated)
-                        lookupInfo.mLastUpdated =  boost::posix_time::from_time_t([contact.identityContact.lastUpdated timeIntervalSince1970]);
+                    if (contact.lastUpdated)
+                        lookupInfo.mLastUpdated =  boost::posix_time::from_time_t([contact.lastUpdated timeIntervalSince1970]);
                     else
                         lookupInfo.mLastUpdated = Time();
-                        //[contact isKindOfClass:[HOPIdentityContact class]] ? boost::posix_time::from_time_t([[(HOPIdentityContact*)contact lastUpdated] timeIntervalSince1970]) : Time();
                     
                     identityLookupInfoList.push_back(lookupInfo);
                 }

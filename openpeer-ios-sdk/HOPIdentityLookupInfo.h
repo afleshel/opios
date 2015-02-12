@@ -33,7 +33,6 @@
 #import <Foundation/Foundation.h>
 
 @class HOPRolodexContact;
-@class HOPIdentityContact;
 
 /**
  Wrapper for identiy lookup info

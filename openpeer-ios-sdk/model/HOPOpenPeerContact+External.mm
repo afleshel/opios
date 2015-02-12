@@ -33,7 +33,6 @@
 #import "HOPCoreContact.h"
 #import "OpenPeerStorageManager.h"
 #import "HOPPublicPeerFile.h"
-#import "HOPIdentityContact.h"
 #import "HOPRolodexContact.h"
 #import "HOPAPNSData.h"
 
@@ -48,10 +47,10 @@
     NSSortDescriptor* prioritySort = [NSSortDescriptor sortDescriptorWithKey:@"priority" ascending:YES];
     NSSortDescriptor* weightSort = [NSSortDescriptor sortDescriptorWithKey:@"weight" ascending:YES];
     
-    NSArray* sortedIdentities = [self.identityContacts.allObjects sortedArrayUsingDescriptors:@[prioritySort,weightSort]];
+    NSArray* sortedIdentities = [self.rolodexContacts.allObjects sortedArrayUsingDescriptors:@[prioritySort,weightSort]];
     
     if (sortedIdentities.count > 0)
-        ret = ((HOPIdentityContact*)sortedIdentities[0]).rolodexContact;
+        ret = ((HOPRolodexContact*)sortedIdentities[0]);
     
     return ret;
 }
@@ -78,9 +77,9 @@
 - (NSArray*) getIdentityURIs
 {
     NSMutableArray* array = [NSMutableArray new];
-    for (HOPIdentityContact* identityContact in self.identityContacts)
+    for (HOPRolodexContact* identity in self.rolodexContacts)
     {
-        [array addObject:identityContact.rolodexContact.identityURI];
+        [array addObject:identity.identityURI];
     }
     return array;
 }

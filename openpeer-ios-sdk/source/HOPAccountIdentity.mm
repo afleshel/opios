@@ -41,7 +41,6 @@
 #import "OpenPeerUtility.h"
 #import "HOPUtility.h"
 #import "HOPRolodexContact_Internal.h"
-#import "HOPIdentityContact_Internal.h"
 #import "OpenPeerConstants.h"
 #import "HOPOpenPeerContact.h"
 
@@ -253,38 +252,20 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     return ret;
 }
 
-- (HOPIdentityContact*) getSelfIdentityContact
+- (HOPRolodexContact*) getSelfIdentity
 {
-    HOPIdentityContact* ret = nil;
+    HOPRolodexContact* ret = nil;
     
     if(identityPtr)
     {
         IdentityContact identityContact;
         identityPtr->getSelfIdentityContact(identityContact);
         
-        //HACK: Because identityContact.mStableID is not filled correctly in the core
-        //NSString* sId = [[HOPAccount sharedAccount] getStableID];//
-        //NSString* stID = [NSString stringWithUTF8String:identityContact.mStableID];
         NSString* identityURI = [NSString stringWithUTF8String:identityContact.mIdentityURI];
-        ret = [[HOPModelManager sharedModelManager] getIdentityContactWithIdentityURI:identityURI];
+        ret = [[HOPModelManager sharedModelManager] getRolodexContactByIdentityURI:identityURI];
         if (!ret)
         {
-            NSManagedObject* managedObject = [[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPIdentityContact"];
-            if (managedObject && [managedObject isKindOfClass:[HOPIdentityContact class]])
-            {
-                ret = (HOPIdentityContact*) managedObject;
-                [ret updateWithIdentityContact:identityContact];
-                HOPOpenPeerContact* contact = [[HOPModelManager sharedModelManager]  getOpenPeerContactForIdentityContact:identityContact];
-                if (contact)
-                    [contact addIdentityContactsObject:ret];
-                else
-                    contact = [[HOPModelManager sharedModelManager] createOpenPeerContactForIdentityContact:identityContact];
-                
-                contact.account = [HOPAccount sharedAccount].openPeerAccount;
-                [[HOPModelManager sharedModelManager]saveContext];
-                //HACK: Because identityContact.mStableID is not filled correctly in the core
-                //ret.stableID = sId;
-            }
+            ret = [[HOPModelManager sharedModelManager] createRolodexContactsForCoreIdentity:identityContact];
         }
     }
     else

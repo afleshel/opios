@@ -33,7 +33,6 @@
 #import "HOPRolodexContact_Internal.h"
 #import "OpenPeerStorageManager.h"
 #import "HOPCoreContact.h"
-#import "HOPIdentityContact.h"
 #import "HOPPublicPeerFile.h"
 #import "HOPModelManager_Internal.h"
 #import "HOPUtility.h"
@@ -156,7 +155,7 @@
     NSUInteger ret = 1;
     
     if (self.openPeerContact)
-        ret = self.openPeerContact.identityContacts.count;
+        ret = self.openPeerContact.rolodexContacts.count;
     
     return ret;
 }

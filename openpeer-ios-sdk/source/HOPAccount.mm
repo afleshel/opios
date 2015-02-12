@@ -36,7 +36,6 @@
 #import "OpenPeerUUIDManager.h"
 #import "HOPModelManager_Internal.h"
 #import "HOPAssociatedIdentity.h"
-#import "HOPIdentityContact.h"
 #import "HOPRolodexContact.h"
 #import "HOPOpenPeerContact_Internal.h"
 #import "HOPPublicPeerFile.h"
@@ -630,19 +629,19 @@ using namespace openpeer::core;
     BOOL ret = NO;
     if (self.openPeerAccount)
     {
-        HOPIdentityContact* homeIdentityContact = [accountIdentity getSelfIdentityContact];
+        HOPRolodexContact* userIdentity = [accountIdentity getSelfIdentity];
         
         HOPAssociatedIdentity*  associatedIdentity = [[HOPModelManager sharedModelManager] getAssociatedIdentityForBaseIdentityURI:[accountIdentity getBaseIdentityURI] homeUserStableId:[self getStableID]];
         
         if (!associatedIdentity)
         {
-            associatedIdentity = [[HOPModelManager sharedModelManager] addAssociatedIdentityForBaseIdentityURI:[accountIdentity getBaseIdentityURI] domain:[accountIdentity getIdentityProviderDomain] name:[accountIdentity getBaseIdentityURI]  selfRolodexProfileProfile:homeIdentityContact.rolodexContact];
+            associatedIdentity = [[HOPModelManager sharedModelManager] addAssociatedIdentityForBaseIdentityURI:[accountIdentity getBaseIdentityURI] domain:[accountIdentity getIdentityProviderDomain] name:[accountIdentity getBaseIdentityURI]  selfRolodexProfileProfile:userIdentity];
         }
         else
         {
-            associatedIdentity.selfRolodexContact = homeIdentityContact.rolodexContact;
+            associatedIdentity.selfRolodexContact = userIdentity;
             associatedIdentity.account = self.openPeerAccount;
-            homeIdentityContact.rolodexContact.associatedIdentityForHomeUser = associatedIdentity;
+            userIdentity.associatedIdentityForHomeUser = associatedIdentity;
         }
         [[HOPModelManager sharedModelManager] saveContext];
         ret = YES;

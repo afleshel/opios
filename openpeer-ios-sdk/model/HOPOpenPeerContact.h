@@ -2,21 +2,20 @@
 //  HOPOpenPeerContact.h
 //  openpeer-ios-sdk
 //
-//  Created by Sergej on 1/29/15.
+//  Created by Sergej on 2/11/15.
 //  Copyright (c) 2015 Hookflash. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class HOPAPNSData, HOPConversationRecord, HOPIdentityContact, HOPOpenPeerAccount, HOPParticipants, HOPPublicPeerFile, HOPRolodexContact;
+@class HOPAPNSData, HOPConversationRecord, HOPOpenPeerAccount, HOPParticipants, HOPPublicPeerFile, HOPRolodexContact;
 
 @interface HOPOpenPeerContact : NSManagedObject
 
 @property (nonatomic, retain) NSString * stableID;
 @property (nonatomic, retain) HOPOpenPeerAccount *account;
 @property (nonatomic, retain) HOPAPNSData *apnsData;
-@property (nonatomic, retain) NSSet *identityContacts;
 @property (nonatomic, retain) NSSet *participants;
 @property (nonatomic, retain) HOPPublicPeerFile *publicPeerFile;
 @property (nonatomic, retain) NSSet *rolodexContacts;
@@ -24,11 +23,6 @@
 @end
 
 @interface HOPOpenPeerContact (CoreDataGeneratedAccessors)
-
-- (void)addIdentityContactsObject:(HOPIdentityContact *)value;
-- (void)removeIdentityContactsObject:(HOPIdentityContact *)value;
-- (void)addIdentityContacts:(NSSet *)values;
-- (void)removeIdentityContacts:(NSSet *)values;
 
 - (void)addParticipantsObject:(HOPParticipants *)value;
 - (void)removeParticipantsObject:(HOPParticipants *)value;

@@ -43,7 +43,6 @@
 #import "HOPAccount_Internal.h"
 #import "HOPMessageRecord+External.h"
 #import "HOPModelManager_Internal.h"
-#import "HOPIdentityContact_Internal.h"
 #import "HOPOpenPeerContact.h"
 #import "HOPRolodexContact_Internal.h"
 #import "HOPAssociatedIdentity.h"
@@ -318,10 +317,6 @@ using namespace openpeer::core;
                 //It is not obtained rolodex contact, because we need to be sure that open peer contact exists. If doesn't exists create a new one.
                 HOPOpenPeerContact* openPeerContact = [[HOPModelManager sharedModelManager] getOpenPeerContactForPeerURI:[NSString stringWithUTF8String:contactPtr->getPeerURI()]];
                 
-                /*if (!openPeerContact)
-                {
-                    openPeerContact = [[HOPModelManager sharedModelManager] createOpenPeerContacFromCoreContact:contactPtr conversationThread:conversationThreadPtr];
-                }*/
                 
                 if (openPeerContact)
                     [self.participants addObject:[openPeerContact getDefaultRolodexContact]];
@@ -350,26 +345,27 @@ using namespace openpeer::core;
             HOPOpenPeerContact* openPeerContact = [[HOPModelManager sharedModelManager] getOpenPeerContactForPeerURI:[contact getPeerURI]];
             if (openPeerContact)
             {
-                for (HOPIdentityContact* identityContact in openPeerContact.identityContacts)
+                for (HOPRolodexContact* identity in openPeerContact.rolodexContacts)
+
                 {
                     IdentityContact coreIdentityContact;
                     
-                    coreIdentityContact.mIdentityProofBundleEl = IHelper::createElement([identityContact.identityProofBundle UTF8String]);
+                    coreIdentityContact.mIdentityProofBundleEl = IHelper::createElement([identity.identityProofBundle UTF8String]);
                     coreIdentityContact.mStableID = [openPeerContact.stableID UTF8String];
-                    coreIdentityContact.mPriority = identityContact.priority.intValue;
-                    coreIdentityContact.mWeight = identityContact.weight.intValue;
+                    coreIdentityContact.mPriority = identity.priority.intValue;
+                    coreIdentityContact.mWeight = identity.weight.intValue;
                     
-                    if (identityContact.rolodexContact)
+                    //if (identityContact.rolodexContact)
                     {
-                        if (identityContact.rolodexContact.identityURI.length > 0)
-                            coreIdentityContact.mIdentityURI = [identityContact.rolodexContact.identityURI UTF8String];
-                        if (identityContact.rolodexContact.name.length > 0)
-                            coreIdentityContact.mName = [identityContact.rolodexContact.name UTF8String];
-                        if (identityContact.rolodexContact.profileURL.length > 0)
-                            coreIdentityContact.mProfileURL = [identityContact.rolodexContact.profileURL UTF8String];
+                        if (identity.identityURI.length > 0)
+                            coreIdentityContact.mIdentityURI = [identity.identityURI UTF8String];
+                        if (identity.name.length > 0)
+                            coreIdentityContact.mName = [identity.name UTF8String];
+                        if (identity.profileURL.length > 0)
+                            coreIdentityContact.mProfileURL = [identity.profileURL UTF8String];
                     }
-                    if (identityContact.rolodexContact.associatedIdentity && identityContact.rolodexContact.associatedIdentity.identityProvider)
-                        coreIdentityContact.mIdentityProvider = [identityContact.rolodexContact.associatedIdentity.identityProvider.domain UTF8String];
+                    if (identity.associatedIdentity && identity.associatedIdentity.identityProvider)
+                        coreIdentityContact.mIdentityProvider = [identity.associatedIdentity.identityProvider.domain UTF8String];
                     
                     identityContactList.push_back(coreIdentityContact);
                 }
@@ -433,55 +429,7 @@ using namespace openpeer::core;
     }
 }
 
-- (NSArray*) getIdentityContactListForCoreContact:(IContactPtr) contact
-{
-    NSMutableArray* ret = nil;
-    IdentityContactListPtr identityContactListPtr = conversationThreadPtr->getIdentityContactList(contact);
-    if (identityContactListPtr)
-    {
-        ret = [[NSMutableArray alloc] init];
-        for (IdentityContactList::iterator identityContactInfo = identityContactListPtr->begin(); identityContactInfo != identityContactListPtr->end(); ++identityContactInfo)
-        {
-            IdentityContact identityContact = *identityContactInfo;
-            if (identityContact.hasData())
-            {
-                //NSString* sId = [NSString stringWithUTF8String:identityContact.mStableID];
-                NSString* identityURI = [NSString stringWithUTF8String:identityContact.mIdentityURI];
-                HOPIdentityContact* hopIdentityContact = [[HOPModelManager sharedModelManager] getIdentityContactWithIdentityURI:identityURI];
-                
-                if (!hopIdentityContact)
-                {
-                    NSManagedObject* managedObject = [[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPIdentityContact"];
-                    if (managedObject && [managedObject isKindOfClass:[HOPIdentityContact class]])
-                    {
-                        hopIdentityContact = (HOPIdentityContact*) managedObject;
-                    }
-                }
-                
-                if (hopIdentityContact)
-                {
-                    [hopIdentityContact updateWithIdentityContact:identityContact];
-                    
-                    [ret addObject:hopIdentityContact];
-                }
-            }
-        }
-        [[HOPModelManager sharedModelManager] saveContext];
-    }
-    return ret;
-}
-- (NSArray*) getIdentityContactListForContact:(HOPCoreContact*) rolodexCoontact
-{
-    NSArray* ret = nil;
-    if(conversationThreadPtr)
-    {
-        HOPCoreContact* contact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:[rolodexCoontact getPeerURI]];
-        if (contact)
-            ret = [self getIdentityContactListForCoreContact:[contact getContactPtr]];
-    }
-    
-    return ret;
-}
+
 
 - (HOPConversationThreadContactConnectionState) getContactConnectionState: (HOPRolodexContact*) rolodexCoontact
 {

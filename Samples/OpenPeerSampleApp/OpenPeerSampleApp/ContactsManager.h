@@ -34,7 +34,6 @@
 
 @class HOPIdentityLookup;
 @class HOPRolodexContact;
-@class HOPIdentityContact;
 
 @interface ContactsManager : NSObject<UIWebViewDelegate>
 

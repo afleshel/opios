@@ -33,7 +33,7 @@
 
 @class HOPCoreContact;
 
-@interface HOPRolodexContact (External)
+@interface HOPRolodexContact(External)
 
 - (void) updateWithName:(NSString*) inName identityURI:(NSString*) inIdentityURI identityProviderDomain:(NSString*)identityProviderDomain  homeUserIdentityURI:(NSString*)homeUserIdentityURI;
 

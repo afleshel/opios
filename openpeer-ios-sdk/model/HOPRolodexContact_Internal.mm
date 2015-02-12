@@ -33,16 +33,15 @@
 #import "HOPAvatar_Internal.h"
 #import "HOPAssociatedIdentity.h"
 #import "HOPPublicPeerFile.h"
-#import "HOPIdentityContact.h"
 #import "HOPModelManager_Internal.h"
 #import "HOPCoreContact.h"
 #import "OpenPeerStorageManager.h"
 #import "HOPUtility.h"
 #import "HOPOpenPeerContact.h"
 
-@implementation HOPRolodexContact
+@implementation HOPRolodexContact(Internal)
 
-@dynamic identityURI;
+/*@dynamic identityURI;
 @dynamic name;
 @dynamic profileURL;
 @dynamic vProfileURL;
@@ -52,6 +51,11 @@
 @dynamic readyForDeletion;
 @dynamic associatedIdentityForHomeUser;
 @dynamic openPeerContact;
+@dynamic expires;
+@dynamic identityProofBundle;
+@dynamic lastUpdated;
+@dynamic weight;
+@dynamic priority;*/
 
 - (void) updateWithCoreRolodexContact:(RolodexContact) inRolodexContact identityProviderDomain:(NSString*)identityProviderDomain homeUserIdentityURI:(NSString*)homeUserIdentityURI
 {

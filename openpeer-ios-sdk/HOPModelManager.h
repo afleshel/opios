@@ -41,7 +41,6 @@
 
 @class HOPRolodexContact;
 @class HOPAssociatedIdentity;
-@class HOPIdentityContact;
 @class HOPPublicPeerFile;
 @class HOPOpenPeerAccount;
 @class HOPAvatar;

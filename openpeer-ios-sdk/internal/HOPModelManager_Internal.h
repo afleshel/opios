@@ -38,10 +38,7 @@ using namespace openpeer::core;
 @interface HOPModelManager()
 
 - (HOPOpenPeerContact*) getOpenPeerContactForIdentityContact:(IdentityContact) inIdentityContact;
-- (HOPOpenPeerContact*) createOpenPeerContactForIdentityContact:(IdentityContact) inIdentityContact;
 - (HOPPublicPeerFile*) savePublicPeerFile:(NSString*) publicPeerFile peerURI:(NSString*) peerURI openPeerContact:(HOPOpenPeerContact*) openPeerContact;
-- (HOPOpenPeerContact*) createOrUpdateOpenPeerContactForItentities:(NSArray*) identities coreContact:(IContactPtr) coreContact;
-- (void) updateOpenPeerContact:(HOPOpenPeerContact*) contact identityContact:(IdentityContact) inIdentityContact;
 
 /**
  Creates a peer file object for the given peer URI and peer file
@@ -181,14 +178,7 @@ using namespace openpeer::core;
  */
 - (HOPAssociatedIdentity*) getAssociatedIdentityByDomain:(NSString*) identityProviderDomain identityName:(NSString*) identityName homeUserIdentityURI:(NSString*) homeUserIdentityURI;
 
-/**
- Returns an identity contact for specified stable ID and identity URI.
- @param identityURI Identity URI
- @return HOPIdentityContact object
- */
-- (HOPIdentityContact*) getIdentityContactWithIdentityURI:(NSString*) identityURI;
-
-- (HOPOpenPeerContact*) createOpenPeerContacFromCoreContact:(IContactPtr) contactPtr conversationThread:(IConversationThreadPtr) conversationThreadPtr;
-
 - (NSArray*) addUnkownContactsFromConversationThread:(HOPConversationThread*) thread;
+
+- (HOPRolodexContact*) createRolodexContactsForCoreIdentity:(IdentityContact) identityContact;
 @end

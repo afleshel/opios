@@ -357,7 +357,7 @@
     
 //    if (self.isInFavoritesMode)
 //    {
-//        predicateOnlyOpenPeerContacts = [NSPredicate predicateWithFormat:@"identityContact != nil"];
+//        predicateOnlyOpenPeerContacts = [NSPredicate predicateWithFormat:@"openPeerContact != nil"];
 //        [predicatesArray addObject:predicateOnlyOpenPeerContacts];
 //        cacheName = @"FavoritesContacts";
 //    }
@@ -373,7 +373,7 @@
             break;
             
         case CONTACTS_TABLE_MODE_FAVORITES:
-            predicateForFiltering = [NSPredicate predicateWithFormat:@"identityContact != nil"];
+            predicateForFiltering = [NSPredicate predicateWithFormat:@"openPeerContact != nil"];
             [predicatesArray addObject:predicateForFiltering];
             //cacheName = @"FavoritesContacts";
             break;
@@ -386,7 +386,7 @@
                 if (contact.identityURI.length > 0)
                     [identityURIs addObject:contact.identityURI];
             }
-            predicateForFiltering = [NSPredicate predicateWithFormat:@"identityContact != nil AND NOT (identityURI IN %@)",identityURIs];
+            predicateForFiltering = [NSPredicate predicateWithFormat:@"openPeerContact != nil AND NOT (identityURI IN %@)",identityURIs];
             [predicatesArray addObject:predicateForFiltering];
         }
             break;
@@ -474,7 +474,7 @@
     NSPredicate *predicateOnlyOpenPeerContacts = nil;
     if (self.isInFavoritesMode)
     {
-        predicateOnlyOpenPeerContacts = [NSPredicate predicateWithFormat:@"identityContact != nil"];
+        predicateOnlyOpenPeerContacts = [NSPredicate predicateWithFormat:@"openPeerContact != nil"];
         [predicatesArray addObject:predicateOnlyOpenPeerContacts];
     }
     

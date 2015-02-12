@@ -38,10 +38,8 @@ using namespace openpeer::core;
 
 @class HOPCoreContact;
 
-@interface HOPRolodexContact ()
-{
-    
-}
+@interface HOPRolodexContact(Internal)
+
 
 /**
  Update data model with core rolodex contact data

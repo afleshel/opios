@@ -34,7 +34,6 @@
 #import "HOPTypes.h"
 
 @class HOPAccount;
-@class HOPIdentityContact;
 
 @interface HOPCoreContact : NSObject
 
@@ -90,5 +89,4 @@
  */
 - (void) destroyCoreObject;
 
-- (HOPIdentityContact*) createIdentityContactForCoreContact;
 @end

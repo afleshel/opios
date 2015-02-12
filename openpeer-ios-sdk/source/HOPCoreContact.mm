@@ -39,7 +39,6 @@
 #import "OpenPeerStorageManager.h"
 #import "HOPPublicPeerFile.h"
 #import "HOPModelManager_Internal.h"
-#import "HOPIdentityContact.h"
 #import "HOPOpenPeerContact.h"
 
 ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
@@ -250,27 +249,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
         coreContactPtr.reset();
 }
 
-- (HOPIdentityContact*) createIdentityContactForCoreContact
-{
-    HOPIdentityContact* hopIdentityContact = nil;
-    NSManagedObject* managedObject = [[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPIdentityContact"];
-    if ([managedObject isKindOfClass:[HOPIdentityContact class]])
-    {
-        hopIdentityContact = (HOPIdentityContact*)managedObject;
-        
-        NSManagedObject* managedObject = [[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPPublicPeerFile"];
-        if ([managedObject isKindOfClass:[HOPPublicPeerFile class]])
-        {
-            HOPPublicPeerFile* hopPublicPeerFile = (HOPPublicPeerFile*)managedObject;
-            hopPublicPeerFile.peerURI = [self getPeerURI];
-            hopPublicPeerFile.peerFile = [self getPeerFilePublic];
-            hopIdentityContact.openPeerContact.publicPeerFile = hopPublicPeerFile;
-        }
-        [[HOPModelManager sharedModelManager] saveContext];
-    }
-    
-    return hopIdentityContact;
-}
+
 
 #pragma mark - Internal methods
 - (IContactPtr) getContactPtr

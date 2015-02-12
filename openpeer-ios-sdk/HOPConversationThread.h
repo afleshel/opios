@@ -137,11 +137,6 @@
  */
 - (void) removeContacts: (NSArray*) contacts;
 
-/**
- Returns list of HOPAccountIdentity objects for associated with HOPCoreContact object.
- @param coAn array for HOPAccountIdentity objects
- */
-- (NSArray*) getIdentityContactListForContact:(HOPCoreContact*) contact;
 
 /**
  Returns a state of the provided contact.

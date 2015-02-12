@@ -34,7 +34,7 @@
 #import "HOPTypes.h"
 #import "HOPProtocols.h"
 
-@class HOPIdentityContact;
+@class HOPRolodexContact;
 
 /**
  Wrapper for identity state data.
@@ -163,9 +163,9 @@
 
 /**
  Returns identity contact for logged in user
- @return HOPIdentityContact object
+ @return HOPRolodexContact object
  */
-- (HOPIdentityContact*) getSelfIdentityContact;
+- (HOPRolodexContact*) getSelfIdentity;
 
 
 /**
