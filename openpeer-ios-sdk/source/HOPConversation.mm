@@ -35,7 +35,7 @@
 
 #import "HOPConversation_Internal.h"
 #import "HOPAccount.h"
-#import "HOPOpenPeerContact+External.h"
+#import "HOPContact+External.h"
 #import "HOPCall.h"
 
 #import "HOPConversationThread_Internal.h"
@@ -216,7 +216,7 @@ using namespace openpeer::core;
             ret.conversationType = [HOPConversationType conversationThreadTypeForString: ret.record.type];
             
             NSMutableArray* tempParticipants = [NSMutableArray new];
-            for (HOPOpenPeerContact* contact in ret.record.participants)
+            for (HOPContact* contact in ret.record.participants)
             {
                 [tempParticipants addObject:[contact getDefaultIdentity]];
             }
@@ -415,7 +415,7 @@ using namespace openpeer::core;
             [conversation.thread addContacts:arrayOfAddedParticipants];
             for (HOPIdentity* identity in arrayOfAddedParticipants)
             {
-                HOPOpenPeerContact* participant = identity.openPeerContact;
+                HOPContact* participant = identity.contact;
                 if (participant)
                     [conversation.record addParticipantsObject:participant];
             }
@@ -429,7 +429,7 @@ using namespace openpeer::core;
             
             for (HOPIdentity* identity in arrayOfRemovedParticipants)
             {
-                HOPOpenPeerContact* participant = identity.openPeerContact;
+                HOPContact* participant = identity.contact;
                 if (participant)
                     [conversation.record removeParticipantsObject:participant];
             }
@@ -473,7 +473,7 @@ using namespace openpeer::core;
             [conversation.thread addContacts:addedParticipants];
             for (HOPIdentity* identity in addedParticipants)
             {
-                HOPOpenPeerContact* participant = identity.openPeerContact;
+                HOPContact* participant = identity.contact;
                 if (participant)
                     [conversation.record addParticipantsObject:participant];
             }
@@ -524,7 +524,7 @@ using namespace openpeer::core;
             
             for (HOPIdentity* identity in removedParticipants)
             {
-                HOPOpenPeerContact* participant = identity.openPeerContact;
+                HOPContact* participant = identity.contact;
                 if (participant)
                     [conversation.record removeParticipantsObject:participant];
             }

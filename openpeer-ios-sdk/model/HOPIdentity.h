@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class HOPAssociatedIdentity, HOPAvatar, HOPOpenPeerContact;
+@class HOPAssociatedIdentity, HOPAvatar, HOPContact;
 
 @interface HOPIdentity : NSManagedObject
 
@@ -26,7 +26,7 @@
 @property (nonatomic, retain) HOPAssociatedIdentity *associatedIdentity;
 @property (nonatomic, retain) HOPAssociatedIdentity *associatedIdentityForHomeUser;
 @property (nonatomic, retain) NSSet *avatars;
-@property (nonatomic, retain) HOPOpenPeerContact *openPeerContact;
+@property (nonatomic, retain) HOPContact *contact;
 @end
 
 @interface HOPIdentity (CoreDataGeneratedAccessors)

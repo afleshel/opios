@@ -86,7 +86,7 @@
         [self.displayImage addSubview:facebookTag];
     }
     
-    if (inContact.openPeerContact)
+    if (inContact.contact)
     {
         self.userInteractionEnabled = YES;
         self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;

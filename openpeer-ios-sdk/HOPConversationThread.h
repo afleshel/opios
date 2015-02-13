@@ -37,7 +37,7 @@
 @class HOPMessageRecord;
 @class HOPAccount;
 @class HOPAccountIdentity;
-@class HOPOpenPeerContact;
+@class HOPContact;
 //HOP_NOTICE: Don't expose this till group conversations are not enabled
 @interface ContactInfo
 {

@@ -102,7 +102,7 @@ typedef enum
     NSString* messageBody = callSystemMessage.jsonMessage;
     if ([messageBody length] > 0)
     {
-        ret = [HOPMessageRecord createMessage:messageBody type:[HOPSystemMessage getMessageType] date:[NSDate date] visible:NO conversation:conversation contact:contact messageId:[HOPUtility getGUIDstring] validated:NO messageIDToReplace:@""];
+        ret = [HOPMessageRecord createMessage:messageBody type:[HOPSystemMessage getMessageType] date:[NSDate date] visible:NO conversation:conversation sender:contact messageId:[HOPUtility getGUIDstring] validated:NO messageIDToReplace:@""];
         
         OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Created system messsage with id:%@ %@\n",ret.messageID,messageBody);
     }
@@ -153,7 +153,7 @@ typedef enum
             NSString* messageBody = [Utility jsonFromDictionary:dict];
             if (messageBody.length > 0)
             {
-                HOPMessageRecord* messageRecord = [HOPMessageRecord createMessage:messageBody type:[HOPSystemMessage getMessageType] date:[NSDate date] visible:NO conversation:conversation contact:[HOPIdentity getSelf] messageId:[HOPUtility getGUIDstring] validated:NO messageIDToReplace:@""];
+                HOPMessageRecord* messageRecord = [HOPMessageRecord createMessage:messageBody type:[HOPSystemMessage getMessageType] date:[NSDate date] visible:NO conversation:conversation sender:[HOPIdentity getSelf] messageId:[HOPUtility getGUIDstring] validated:NO messageIDToReplace:@""];
                 if (messageRecord)
                 {
                     [toConversation sendMessage:messageRecord];
@@ -255,7 +255,7 @@ typedef enum
     }
 
     if (!messageRecord)
-        messageRecord = [HOPMessageRecord createMessage:message type:messageTypeText date:[NSDate date] visible:YES conversation:conversation contact:[[HOPModelManager sharedModelManager] getIdentityForAccount] messageId:[HOPUtility getGUIDstring] validated:NO messageIDToReplace:replacesMessageID];
+        messageRecord = [HOPMessageRecord createMessage:message type:messageTypeText date:[NSDate date] visible:YES conversation:conversation sender:[[HOPModelManager sharedModelManager] getIdentityForAccount] messageId:[HOPUtility getGUIDstring] validated:NO messageIDToReplace:replacesMessageID];
 
     messageRecord.edited = [NSNumber numberWithBool:edited];
     messageRecord.removed = [NSNumber numberWithBool:deleted];

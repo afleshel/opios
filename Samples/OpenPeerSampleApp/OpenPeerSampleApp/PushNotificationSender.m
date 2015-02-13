@@ -133,7 +133,7 @@
 - (NSString*) getListOfRecipientsFromPeerURIsArray:(NSArray*) array
 {
     NSString* peerURIs = @"";
-    NSArray* participantsPeerURIs = [array valueForKeyPath:@"openPeerContact.publicPeerFile.peerURI"];
+    NSArray* participantsPeerURIs = [array valueForKeyPath:@"contact.publicPeerFile.peerURI"];
     for (NSString* tempPeerURI in participantsPeerURIs)
     {
         if (![tempPeerURI isEqualToString:self.peerURI])

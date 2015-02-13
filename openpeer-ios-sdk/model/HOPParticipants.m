@@ -31,7 +31,7 @@
 
 #import "HOPParticipants.h"
 #import "HOPConversationEvent.h"
-#import "HOPOpenPeerContact.h"
+#import "HOPContact.h"
 #import "HOPUtility.h"
 
 @implementation HOPParticipants

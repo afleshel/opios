@@ -34,7 +34,7 @@
 #import "HOPConversationThreadRecord.h"
 #import "HOPMessageRecord.h"
 #import "HOPOpenPeerAccount.h"
-#import "HOPOpenPeerContact.h"
+#import "HOPContact.h"
 
 
 @implementation HOPConversationRecord

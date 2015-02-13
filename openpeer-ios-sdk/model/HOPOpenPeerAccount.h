@@ -32,7 +32,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class HOPAssociatedIdentity, HOPConversationRecord, HOPOpenPeerContact;
+@class HOPAssociatedIdentity, HOPConversationRecord, HOPContact;
 
 @interface HOPOpenPeerAccount : NSManagedObject
 
@@ -41,7 +41,7 @@
 @property (nonatomic, retain) NSString * stableId;
 @property (nonatomic, retain) NSSet *associatedIdentities;
 @property (nonatomic, retain) NSSet *sessionRecords;
-@property (nonatomic, retain) HOPOpenPeerContact *contact;
+@property (nonatomic, retain) HOPContact *contact;
 @end
 
 @interface HOPOpenPeerAccount (CoreDataGeneratedAccessors)

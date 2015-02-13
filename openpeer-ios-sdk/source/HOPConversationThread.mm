@@ -43,11 +43,11 @@
 #import "HOPAccount_Internal.h"
 #import "HOPMessageRecord+External.h"
 #import "HOPModelManager_Internal.h"
-#import "HOPOpenPeerContact.h"
+#import "HOPContact.h"
 #import "HOPIdentity_Internal.h"
 #import "HOPAssociatedIdentity.h"
 #import "HOPIdentityProvider.h"
-#import "HOPOpenPeerContact_Internal.h"
+#import "HOPContact_Internal.h"
 #import "OpenPeerStorageManager.h"
 #import "OpenPeerUtility.h"
 #import "HOPAccountIdentity_Internal.h"
@@ -315,7 +315,7 @@ using namespace openpeer::core;
             if (!contactPtr->isSelf())
             {
                 //It is not obtained rolodex contact, because we need to be sure that open peer contact exists. If doesn't exists create a new one.
-                HOPOpenPeerContact* openPeerContact = [[HOPModelManager sharedModelManager] getOpenPeerContactForPeerURI:[NSString stringWithUTF8String:contactPtr->getPeerURI()]];
+                HOPContact* openPeerContact = [[HOPModelManager sharedModelManager] getOpenPeerContactForPeerURI:[NSString stringWithUTF8String:contactPtr->getPeerURI()]];
                 
                 
                 if (openPeerContact)
@@ -342,7 +342,7 @@ using namespace openpeer::core;
             IdentityContactList identityContactList;
             contactInfo.mContact = [contact getContactPtr];
             
-            HOPOpenPeerContact* openPeerContact = [[HOPModelManager sharedModelManager] getOpenPeerContactForPeerURI:[contact getPeerURI]];
+            HOPContact* openPeerContact = [[HOPModelManager sharedModelManager] getOpenPeerContactForPeerURI:[contact getPeerURI]];
             if (openPeerContact)
             {
                 for (HOPIdentity* identity in openPeerContact.identities)
@@ -556,7 +556,7 @@ using namespace openpeer::core;
                 NSString* peerURI = [NSString stringWithUTF8String:fromContact->getPeerURI()];
                 if (peerURI.length > 0)
                 {
-                    ret = [HOPMessageRecord createMessage:[NSString stringWithUTF8String:message] type:[NSString stringWithUTF8String:messageType] date:[OpenPeerUtility convertPosixTimeToDate:messageTime] visible:YES conversation:[[OpenPeerStorageManager sharedStorageManager] getConversationForThreadID:[self getThreadId]] contact:[[HOPModelManager sharedModelManager] getIdentityByPeerURI:peerURI] messageId:messageID validated:validated messageIDToReplace:[NSString stringWithUTF8String:replacesMessageID]];
+                    ret = [HOPMessageRecord createMessage:[NSString stringWithUTF8String:message] type:[NSString stringWithUTF8String:messageType] date:[OpenPeerUtility convertPosixTimeToDate:messageTime] visible:YES conversation:[[OpenPeerStorageManager sharedStorageManager] getConversationForThreadID:[self getThreadId]] sender:[[HOPModelManager sharedModelManager] getIdentityByPeerURI:peerURI] messageId:messageID validated:validated messageIDToReplace:[NSString stringWithUTF8String:replacesMessageID]];
                 }
             }
         }

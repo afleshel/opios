@@ -37,7 +37,7 @@
 #import "HOPModelManager_Internal.h"
 #import "HOPUtility.h"
 #import "HOPAssociatedIdentity.h"
-#import "HOPOpenPeerContact.h"
+#import "HOPContact.h"
 #import "HOPAPNSData.h"
 #import "HOPOpenPeerAccount.h"
 #import "HOPIdentityProvider.h"
@@ -88,7 +88,7 @@
 
 - (BOOL) isOpenPeer
 {
-    return self.openPeerContact != nil;
+    return self.contact != nil;
 }
 
 - (BOOL) isKnown
@@ -130,8 +130,8 @@
 {
     NSString* ret = nil;
     
-    if (self.openPeerContact)
-        ret = self.openPeerContact.publicPeerFile.peerURI;
+    if (self.contact)
+        ret = self.contact.publicPeerFile.peerURI;
     
     return ret;
 }
@@ -140,8 +140,8 @@
 {
     NSString* ret = nil;
     
-    if (self.openPeerContact)
-        ret = self.openPeerContact.stableID;
+    if (self.contact)
+        ret = self.contact.stableID;
     
     return ret;
 }
@@ -149,8 +149,8 @@
 {
     NSUInteger ret = 1;
     
-    if (self.openPeerContact)
-        ret = self.openPeerContact.identities.count;
+    if (self.contact)
+        ret = self.contact.identities.count;
     
     return ret;
 }
@@ -172,8 +172,8 @@
 {
     NSString* ret = nil;
     
-    if (self.openPeerContact)
-        ret = self.openPeerContact.apnsData.deviceToken;
+    if (self.contact)
+        ret = self.contact.apnsData.deviceToken;
     
     return ret;
 }
@@ -182,8 +182,8 @@
 {
     NSString* ret = nil;
     
-    if (self.openPeerContact)
-        ret = self.openPeerContact.apnsData.type;
+    if (self.contact)
+        ret = self.contact.apnsData.type;
     
     return ret;
 }

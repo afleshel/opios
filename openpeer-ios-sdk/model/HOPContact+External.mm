@@ -29,18 +29,58 @@
  
  */
 
-#import "HOPOpenPeerContact.h"
+#import "HOPContact+External.h"
+#import "HOPCoreContact.h"
+#import "OpenPeerStorageManager.h"
+#import "HOPPublicPeerFile.h"
+#import "HOPIdentity.h"
+#import "HOPAPNSData.h"
 
-@class HOPCoreContact;
-@class HOPIdentity;
+@implementation HOPContact (External)
 
-@interface HOPOpenPeerContact(External)
 
-- (HOPCoreContact*) getCoreContact;
-- (HOPIdentity*) getDefaultIdentity;
-- (NSString*) getFullName;
-- (NSString*) getPeerURI;
-- (NSString*) getPushNotificationDeviceToken;
-- (NSString*) getPushNotificationType;
-- (NSArray*) getIdentityURIs;
+
+- (HOPIdentity*) getDefaultIdentity
+{
+    HOPIdentity* ret = nil;
+    
+    NSSortDescriptor* prioritySort = [NSSortDescriptor sortDescriptorWithKey:@"priority" ascending:YES];
+    NSSortDescriptor* weightSort = [NSSortDescriptor sortDescriptorWithKey:@"weight" ascending:YES];
+    
+    NSArray* sortedIdentities = [self.identities.allObjects sortedArrayUsingDescriptors:@[prioritySort,weightSort]];
+    
+    if (sortedIdentities.count > 0)
+        ret = ((HOPIdentity*)sortedIdentities[0]);
+    
+    return ret;
+}
+- (NSString*) getFullName
+{
+    return [self getDefaultIdentity].name;
+}
+
+- (NSString*) getPeerURI
+{
+    return self.publicPeerFile.peerURI;
+}
+
+- (NSString*) getPushNotificationDeviceToken
+{
+    return self.apnsData.deviceToken;
+}
+
+- (NSString*) getPushNotificationType
+{
+    return self.apnsData.type;
+}
+
+- (NSArray*) getIdentityURIs
+{
+    NSMutableArray* array = [NSMutableArray new];
+    for (HOPIdentity* identity in self.identities)
+    {
+        [array addObject:identity.identityURI];
+    }
+    return array;
+}
 @end

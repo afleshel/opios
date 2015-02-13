@@ -39,7 +39,7 @@
 #import "OpenPeerStorageManager.h"
 #import "HOPPublicPeerFile.h"
 #import "HOPModelManager_Internal.h"
-#import "HOPOpenPeerContact.h"
+#import "HOPContact.h"
 
 ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 

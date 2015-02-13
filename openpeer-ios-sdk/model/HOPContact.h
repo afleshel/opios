@@ -1,5 +1,5 @@
 //
-//  HOPOpenPeerContact.h
+//  HOPContact.h
 //  openpeer-ios-sdk
 //
 //  Created by Sergej on 2/12/15.
@@ -11,7 +11,7 @@
 
 @class HOPAPNSData, HOPConversationRecord, HOPIdentity, HOPOpenPeerAccount, HOPParticipants, HOPPublicPeerFile;
 
-@interface HOPOpenPeerContact : NSManagedObject
+@interface HOPContact : NSManagedObject
 
 @property (nonatomic, retain) NSString * stableID;
 @property (nonatomic, retain) HOPOpenPeerAccount *account;
@@ -22,7 +22,7 @@
 @property (nonatomic, retain) NSSet *sessionRecords;
 @end
 
-@interface HOPOpenPeerContact (CoreDataGeneratedAccessors)
+@interface HOPContact (CoreDataGeneratedAccessors)
 
 - (void)addParticipantsObject:(HOPParticipants *)value;
 - (void)removeParticipantsObject:(HOPParticipants *)value;

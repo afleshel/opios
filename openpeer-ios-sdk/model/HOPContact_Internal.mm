@@ -29,14 +29,21 @@
  
  */
 
-#import <HOPOpenPeerContact+External.h>
-#import <openpeer/core/IContact.h>
-#import <openpeer/core/IConversationThread.h>
+#import "HOPContact_Internal.h"
+#import <openpeer/core/IHelper.h>
+#import "OpenPeerStorageManager.h"
+#import "HOPCoreContact.h"
+#import "HOPModelManager_Internal.h"
 
-using namespace openpeer;
-using namespace openpeer::core;
+@implementation HOPContact
 
-@interface HOPOpenPeerContact ()
+@dynamic stableID;
+@dynamic apnsData;
+@dynamic publicPeerFile;
+@dynamic sessionRecords;
+@dynamic participants;
+@dynamic identities;
+@dynamic account;
 
 
 @end

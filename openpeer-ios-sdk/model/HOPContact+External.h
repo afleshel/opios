@@ -29,21 +29,18 @@
  
  */
 
-#import "HOPOpenPeerContact_Internal.h"
-#import <openpeer/core/IHelper.h>
-#import "OpenPeerStorageManager.h"
-#import "HOPCoreContact.h"
-#import "HOPModelManager_Internal.h"
+#import "HOPContact.h"
 
-@implementation HOPOpenPeerContact
+@class HOPCoreContact;
+@class HOPIdentity;
 
-@dynamic stableID;
-@dynamic apnsData;
-@dynamic publicPeerFile;
-@dynamic sessionRecords;
-@dynamic participants;
-@dynamic identities;
-@dynamic account;
+@interface HOPContact(External)
 
-
+- (HOPCoreContact*) getCoreContact;
+- (HOPIdentity*) getDefaultIdentity;
+- (NSString*) getFullName;
+- (NSString*) getPeerURI;
+- (NSString*) getPushNotificationDeviceToken;
+- (NSString*) getPushNotificationType;
+- (NSArray*) getIdentityURIs;
 @end

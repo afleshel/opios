@@ -37,7 +37,7 @@
 #import "HOPModelManager_Internal.h"
 #import "HOPAssociatedIdentity.h"
 #import "HOPIdentity.h"
-#import "HOPOpenPeerContact_Internal.h"
+#import "HOPContact_Internal.h"
 #import "HOPPublicPeerFile.h"
 
 #import <openpeer/core/IAccount.h>

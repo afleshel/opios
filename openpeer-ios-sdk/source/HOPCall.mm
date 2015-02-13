@@ -42,7 +42,7 @@
 #import "HOPCoreContact_Internal.h"
 #import "HOPIdentity_Internal.h"
 #import "OpenPeerStorageManager.h"
-#import "HOPOpenPeerContact+External.h"
+#import "HOPContact+External.h"
 
 #import "HOPCall.h"
 #import "HOPCoreContact.h"
@@ -74,7 +74,7 @@ using namespace openpeer::core;
         HOPCoreContact* toContact = nil;
         if (conversationThread.participants.count > 0)
         {
-            toContact = [((HOPOpenPeerContact*)[conversationThread.participants objectAtIndex:0]) getCoreContact];
+            toContact = [((HOPContact*)[conversationThread.participants objectAtIndex:0]) getCoreContact];
             //Create the core call object and start placing call procedure
             ICallPtr tempCallPtr = ICall::placeCall([conversationThread getConversationThreadPtr], [toContact getContactPtr], includeAudio, includeVideo);
             

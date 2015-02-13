@@ -32,7 +32,7 @@
 #import "HOPOpenPeerAccount.h"
 #import "HOPAssociatedIdentity.h"
 #import "HOPConversationRecord.h"
-#import "HOPOpenPeerContact.h"
+#import "HOPContact.h"
 
 
 @implementation HOPOpenPeerAccount

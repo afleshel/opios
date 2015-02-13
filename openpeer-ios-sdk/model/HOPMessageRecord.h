@@ -32,7 +32,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class HOPConversationEvent, HOPConversationRecord, HOPMessageEvent, HOPOpenPeerContact;
+@class HOPConversationEvent, HOPConversationRecord, HOPMessageEvent, HOPContact;
 
 @interface HOPMessageRecord : NSManagedObject
 
@@ -52,7 +52,7 @@
 @property (nonatomic, retain) NSString * replacedMessageID;
 @property (nonatomic, retain) HOPConversationEvent *conversationEvent;
 @property (nonatomic, retain) NSSet *messageEvent;
-@property (nonatomic, retain) HOPOpenPeerContact *senderOpenPeer;
+@property (nonatomic, retain) HOPContact *senderOpenPeer;
 @property (nonatomic, retain) HOPConversationRecord *session;
 @end
 

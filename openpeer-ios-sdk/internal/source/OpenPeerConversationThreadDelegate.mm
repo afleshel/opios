@@ -194,7 +194,7 @@ void OpenPeerConversationThreadDelegate::onConversationThreadContactsChanged(ICo
                     {
                         for (HOPIdentity* contact in difference)
                         {
-                            [hopConversation.record addParticipantsObject:contact.openPeerContact];
+                            [hopConversation.record addParticipantsObject:contact.contact];
                         }
                         
                         hopConversation.record.name = [HOPConversation getDefaultTitleForParticipants:hopConversation.participants];
@@ -220,7 +220,7 @@ void OpenPeerConversationThreadDelegate::onConversationThreadContactsChanged(ICo
                         
                         for (HOPIdentity* contact in difference)
                         {
-                            [hopConversation.record removeParticipantsObject:contact.openPeerContact];
+                            [hopConversation.record removeParticipantsObject:contact.contact];
                         }
                         
                         hopConversation.record.name = [HOPConversation getDefaultTitleForParticipants:hopConversation.participants];

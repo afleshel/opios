@@ -48,7 +48,7 @@
 @class HOPMessageRecord;
 @class HOPConversationThreadRecord;
 @class HOPConversationThread;
-@class HOPOpenPeerContact;
+@class HOPContact;
 @class HOPConversationEvent;
 @class HOPParticipants;
 @class HOPConversation;
@@ -216,7 +216,7 @@
  @param type Message type
  @param date Time of creation
  @param conversationThreadID Conversation Thread ID
- @param openPeerContact Sender - HOPOpenPeerContact object
+ @param openPeerContact Sender - HOPContact object
  @param messageId Message ID
  @param conversationEvent Conversation event during which message has been received or sent
  @return HOPMessageRecord* message record object
@@ -230,7 +230,7 @@
  @param date Time of creation
  @param visible True if message should be visible in chat
  @param conversationThreadID Conversation Thread ID
- @param openPeerContact Sender - HOPOpenPeerContact object
+ @param openPeerContact Sender - HOPContact object
  @param messageId Message ID
  @param conversationEvent Conversation event during which message has been received or sent
  @return HOPMessageRecord* message record object

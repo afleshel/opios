@@ -37,7 +37,7 @@
 #import "HOPCoreContact.h"
 #import "OpenPeerStorageManager.h"
 #import "HOPUtility.h"
-#import "HOPOpenPeerContact.h"
+#import "HOPContact.h"
 
 @implementation HOPIdentity(Internal)
 
@@ -105,10 +105,10 @@
 
 - (HOPCoreContact*) getCoreContact
 {
-    HOPCoreContact* ret = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:self.openPeerContact.publicPeerFile.peerURI];
+    HOPCoreContact* ret = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:self.contact.publicPeerFile.peerURI];
     if (!ret)
     {
-        ret = [[HOPCoreContact alloc] initWithPeerFile:self.openPeerContact.publicPeerFile.peerFile];
+        ret = [[HOPCoreContact alloc] initWithPeerFile:self.contact.publicPeerFile.peerFile];
     }
     return ret;
 }

@@ -32,7 +32,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class HOPConversationEvent, HOPConversationThreadRecord, HOPMessageRecord, HOPOpenPeerAccount, HOPOpenPeerContact;
+@class HOPConversationEvent, HOPConversationThreadRecord, HOPMessageRecord, HOPOpenPeerAccount, HOPContact;
 
 @interface HOPConversationRecord : NSManagedObject
 
@@ -67,8 +67,8 @@
 - (void)addMessages:(NSSet *)values;
 - (void)removeMessages:(NSSet *)values;
 
-- (void)addParticipantsObject:(HOPOpenPeerContact *)value;
-- (void)removeParticipantsObject:(HOPOpenPeerContact *)value;
+- (void)addParticipantsObject:(HOPContact *)value;
+- (void)removeParticipantsObject:(HOPContact *)value;
 - (void)addParticipants:(NSSet *)values;
 - (void)removeParticipants:(NSSet *)values;
 

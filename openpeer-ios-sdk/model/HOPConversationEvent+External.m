@@ -31,7 +31,7 @@
 
 #import "HOPConversationEvent+External.h"
 #import "HOPParticipants.h"
-#import "HOPOpenPeerContact+External.h"
+#import "HOPContact+External.h"
 
 @implementation HOPConversationEvent (External)
 
@@ -42,7 +42,7 @@
     if (self.participants && self.participants.participants.count > 0)
     {
         ret = [[NSMutableArray alloc] init];
-        for (HOPOpenPeerContact* contact in self.participants.participants)
+        for (HOPContact* contact in self.participants.participants)
         {
             HOPIdentity* identity = [contact getDefaultIdentity];
             if (identity)

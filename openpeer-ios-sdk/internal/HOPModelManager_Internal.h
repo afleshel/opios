@@ -37,8 +37,8 @@ using namespace openpeer::core;
 
 @interface HOPModelManager()
 
-- (HOPOpenPeerContact*) getOpenPeerContactForIdentityContact:(IdentityContact) inIdentityContact;
-- (HOPPublicPeerFile*) savePublicPeerFile:(NSString*) publicPeerFile peerURI:(NSString*) peerURI openPeerContact:(HOPOpenPeerContact*) openPeerContact;
+- (HOPContact*) getOpenPeerContactForIdentityContact:(IdentityContact) inIdentityContact;
+- (HOPPublicPeerFile*) savePublicPeerFile:(NSString*) publicPeerFile peerURI:(NSString*) peerURI contact:(HOPContact*) contact;
 
 /**
  Creates a peer file object for the given peer URI and peer file
@@ -50,34 +50,34 @@ using namespace openpeer::core;
 /**
  Returns open peer contact for peer URI.
  @param peerURI Peer URI
- @return HOPOpenPeerContact object
+ @return HOPContact object
  */
-- (HOPOpenPeerContact*) getOpenPeerContactForPeerURI:(NSString*) peerURI;
+- (HOPContact*) getOpenPeerContactForPeerURI:(NSString*) peerURI;
 
 /**
  Returns open peer contact for stable ID.
  @param stableID Stable ID
- @return HOPOpenPeerContact object
+ @return HOPContact object
  */
-- (HOPOpenPeerContact*) getOpenPeerContactForStableID:(NSString*) stableID;
+- (HOPContact*) getOpenPeerContactForStableID:(NSString*) stableID;
 
 /**
  Returns open peer contact for identity URI.
  @param identityURI Identity URI
- @return HOPOpenPeerContact object
+ @return HOPContact object
  */
-- (HOPOpenPeerContact*) getOpenPeerContactForIdentityURI:(NSString*) identityURI;
+- (HOPContact*) getOpenPeerContactForIdentityURI:(NSString*) identityURI;
 
 /**
  Returns list of open peer contacts for list of peer URIs.
  @param peerURIs List of peer URIs
- @return List of HOPOpenPeerContact objects
+ @return List of HOPContact objects
  */
 - (NSArray *) getOpenPeerContactsByPeerURIs:(NSArray*) peerURIs;
 
 /**
  Returns HOPParticipants object for list of contacts
- @param contacts List of HOPOpenPeerContact objects
+ @param contacts List of HOPContact objects
  @return HOPParticipants object
  */
 - (HOPParticipants*) getParticiapantsForListOfContacts:(NSArray*) contacts;

@@ -1,12 +1,12 @@
 //
-//  HOPOpenPeerContact.m
+//  HOPContact.m
 //  openpeer-ios-sdk
 //
 //  Created by Sergej on 2/12/15.
 //  Copyright (c) 2015 Hookflash. All rights reserved.
 //
 
-#import "HOPOpenPeerContact.h"
+#import "HOPContact.h"
 #import "HOPAPNSData.h"
 #import "HOPConversationRecord.h"
 #import "HOPIdentity.h"
@@ -15,7 +15,7 @@
 #import "HOPPublicPeerFile.h"
 
 
-@implementation HOPOpenPeerContact
+@implementation HOPContact
 
 @dynamic stableID;
 @dynamic account;

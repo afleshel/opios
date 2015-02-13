@@ -78,14 +78,14 @@
         
         
         NSArray *items = [peerURIs componentsSeparatedByString:@","];
-        HOPIdentity* contact = nil;
+        HOPIdentity* sender = nil;
         if ([senderPeerURI length] > 0)
-            contact = [[HOPModelManager sharedModelManager] getIdentityByPeerURI:senderPeerURI];
+            sender = [[HOPModelManager sharedModelManager] getIdentityByPeerURI:senderPeerURI];
         
         
-        if (contact)
+        if (sender)
         {
-            NSMutableArray* participants = [NSMutableArray arrayWithObject:contact];
+            NSMutableArray* participants = [NSMutableArray arrayWithObject:sender];
             
             for (NSString* peerURI in items)
             {
@@ -137,7 +137,7 @@
                     }
                     else
                     {
-                        HOPMessageRecord* messageObj = [HOPMessageRecord createMessage:messageText type:messageType date:date visible:YES conversation:conversation contact:contact messageId:messageID validated:NO messageIDToReplace:nil];
+                        HOPMessageRecord* messageObj = [HOPMessageRecord createMessage:messageText type:messageType date:date visible:YES conversation:conversation sender:sender messageId:messageID validated:NO messageIDToReplace:nil];
                         
                         //HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:messageText type:messageType date:date conversation:conversation contact:contact messageId:messageID];
                         

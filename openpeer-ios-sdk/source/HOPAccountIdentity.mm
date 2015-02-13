@@ -42,7 +42,7 @@
 #import "HOPUtility.h"
 #import "HOPIdentity_Internal.h"
 #import "OpenPeerConstants.h"
-#import "HOPOpenPeerContact.h"
+#import "HOPContact.h"
 
 ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 

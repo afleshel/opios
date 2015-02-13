@@ -34,7 +34,7 @@
 #import "HOPIdentityLookup_Internal.h"
 #import "OpenPeerStorageManager.h"
 #import "HOPModelManager_Internal.h"
-#import "HOPOpenPeerContact.h"
+#import "HOPContact.h"
 #import "HOPIdentity.h"
 
 #import <openpeer/core/ILogger.h>

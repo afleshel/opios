@@ -32,7 +32,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class HOPConversationEvent, HOPOpenPeerContact;
+@class HOPConversationEvent, HOPContact;
 
 @interface HOPParticipants : NSManagedObject
 
@@ -52,8 +52,8 @@
 - (void)addEvents:(NSSet *)values;
 - (void)removeEvents:(NSSet *)values;
 
-- (void)addParticipantsObject:(HOPOpenPeerContact *)value;
-- (void)removeParticipantsObject:(HOPOpenPeerContact *)value;
+- (void)addParticipantsObject:(HOPContact *)value;
+- (void)removeParticipantsObject:(HOPContact *)value;
 - (void)addParticipants:(NSSet *)values;
 - (void)removeParticipants:(NSSet *)values;
 

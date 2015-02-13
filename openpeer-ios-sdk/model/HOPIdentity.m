@@ -9,7 +9,7 @@
 #import "HOPIdentity.h"
 #import "HOPAssociatedIdentity.h"
 #import "HOPAvatar.h"
-#import "HOPOpenPeerContact.h"
+#import "HOPContact.h"
 
 
 @implementation HOPIdentity
@@ -27,6 +27,6 @@
 @dynamic associatedIdentity;
 @dynamic associatedIdentityForHomeUser;
 @dynamic avatars;
-@dynamic openPeerContact;
+@dynamic contact;
 
 @end
