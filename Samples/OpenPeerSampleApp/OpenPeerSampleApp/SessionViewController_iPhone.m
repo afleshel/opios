@@ -42,7 +42,7 @@
 #import <OpenPeerSDK/HOPCall.h>
 //#import <OpenPeerSDK/HOPConversationEvent+External.h>
 #import <OpenPeerSDK/HOPConversation.h>
-
+#import <OpenPeerSDK/HOPContact+External.h>
 
 #define ACTION_AUDIO_CALL           1
 #define ACTION_VIDEO_CALL           2
@@ -302,7 +302,7 @@
     //NSArray* contacts = [self.session.lastConversationEvent getContacts];
     if (self.conversation.participants.count == 1)
     {
-        InfoViewController* infoViewController = [[InfoViewController alloc] initWithContact:self.conversation.participants[0] style:UITableViewStyleGrouped];
+        InfoViewController* infoViewController = [[InfoViewController alloc] initWithContact:[((HOPContact*)self.conversation.participants[0]) getDefaultIdentity] style:UITableViewStyleGrouped];
         infoViewController.title = @"User Info";
         [self.navigationController pushViewController:infoViewController animated:YES];
     }

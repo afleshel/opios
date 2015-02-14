@@ -128,6 +128,7 @@
  */
 - (HOPIdentity *) getIdentityByPeerURI:(NSString*) peerURI;
 
+- (HOPContact *) getContactByPeerURI:(NSString*) peerURI;
 /**
  Returns an array of identities for a specified peer URI.
  @param peerURI Contact peer URI
@@ -208,36 +209,6 @@
  *  Delete push notification data for all contacts
  */
 - (void) clearAPNSData;
-
-
-/**
- Creates a HOPMessageRecord object.
- @param messageText Message text
- @param type Message type
- @param date Time of creation
- @param conversationThreadID Conversation Thread ID
- @param openPeerContact Sender - HOPContact object
- @param messageId Message ID
- @param conversationEvent Conversation event during which message has been received or sent
- @return HOPMessageRecord* message record object
- */
-//- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date conversation:(HOPConversation*) conversation contact:(HOPIdentity*) contact messageId:(NSString*)messageId;
-
-/**
- Creates a HOPMessageRecord object.
- @param messageText Message text
- @param type Message type
- @param date Time of creation
- @param visible True if message should be visible in chat
- @param conversationThreadID Conversation Thread ID
- @param openPeerContact Sender - HOPContact object
- @param messageId Message ID
- @param conversationEvent Conversation event during which message has been received or sent
- @return HOPMessageRecord* message record object
- */
-//- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  conversation:(HOPConversation*) conversation contact:(HOPIdentity*) contact messageId:(NSString*)messageId;
-
-//- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  conversation:(HOPConversation*) conversation contact:(HOPIdentity*) contact messageId:(NSString*)messageId validated:(BOOL) validated messageIDToReplace:(NSString*) messageIDToReplace;
 
 
 

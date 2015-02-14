@@ -33,14 +33,17 @@
 
 @class HOPCoreContact;
 @class HOPIdentity;
+@class HOPContact;
 
 @interface HOPContact(External)
 
-- (HOPCoreContact*) getCoreContact;
+
+- (BOOL) isSelf;
 - (HOPIdentity*) getDefaultIdentity;
 - (NSString*) getFullName;
 - (NSString*) getPeerURI;
 - (NSString*) getPushNotificationDeviceToken;
 - (NSString*) getPushNotificationType;
 - (NSArray*) getIdentityURIs;
++ (HOPContact*) getSelf;
 @end

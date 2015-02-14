@@ -52,7 +52,7 @@ using namespace openpeer::core;
  @param peerURI Peer URI
  @return HOPContact object
  */
-- (HOPContact*) getOpenPeerContactForPeerURI:(NSString*) peerURI;
+- (HOPContact*) getContactForPeerURI:(NSString*) peerURI;
 
 /**
  Returns open peer contact for stable ID.
@@ -180,5 +180,5 @@ using namespace openpeer::core;
 
 - (NSArray*) addUnkownContactsFromConversationThread:(HOPConversationThread*) thread;
 
-- (HOPIdentity*) createIdentityForCoreIdentity:(IdentityContact) identityContact;
+- (HOPIdentity*) createIdentityForCoreIdentity:(IdentityContact) identityContact isSelf:(BOOL) isSelf;
 @end

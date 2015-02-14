@@ -35,14 +35,14 @@
 #import "HOPCoreContact_Internal.h"
 #import "HOPAccount_Internal.h"
 #import "OpenPeerStorageManager.h"
-#import "HOPIdentity_Internal.h"
+#import "HOPContact_Internal.h"
 
 using namespace openpeer;
 using namespace openpeer::core;
 
 @implementation HOPCallSystemMessage
 
-- (id) initWithMessageType:(HOPCallSystemMessageType) inType callee:(HOPIdentity*) inCallee errorCode:(unsigned short) inErrorCode
+- (id) initWithMessageType:(HOPCallSystemMessageType) inType callee:(HOPContact*) inCallee errorCode:(unsigned short) inErrorCode
 {
     self = [super init];
     if (self)
@@ -68,7 +68,7 @@ using namespace openpeer::core;
     return self;
 }
 
-- (id) initWithMessageType:(HOPCallSystemMessageType) inType mediaType:(NSString*) mediaType callID:(NSString*) callID callee:(HOPIdentity*) inCallee errorCode:(unsigned short) inErrorCode
+- (id) initWithMessageType:(HOPCallSystemMessageType) inType mediaType:(NSString*) mediaType callID:(NSString*) callID callee:(HOPContact*) inCallee errorCode:(unsigned short) inErrorCode
 {
     self = [super init];
     if (self)
@@ -166,7 +166,7 @@ using namespace openpeer::core;
         callSystemMessagePtr = inCallSystemMessagePtr;
         self.type = HOPSystemMessageTypeCall;
         self.messageType = (HOPCallSystemMessageType) callSystemMessagePtr->mStatus;
-        self.callee = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:[NSString stringWithUTF8String:callSystemMessagePtr->mCallee->getPeerURI()]];
+        self.callee = [[OpenPeerStorageManager sharedStorageManager] getCoreContactForPeerURI:[NSString stringWithUTF8String:callSystemMessagePtr->mCallee->getPeerURI()]];
         self.errorCode = callSystemMessagePtr->mErrorCode;
     }
     return self;

@@ -83,7 +83,7 @@ void OpenPeerIdentityLookupDelegate::updateContactsReceivedOnIdentityLookup(IIde
                 IdentityContact identityContact = *identityContactInfo;
                 if (identityContact.hasData())
                 {
-                    HOPIdentity* identity = [[HOPModelManager sharedModelManager] createIdentityForCoreIdentity:identityContact];
+                    HOPIdentity* identity = [[HOPModelManager sharedModelManager] createIdentityForCoreIdentity:identityContact isSelf:NO];
                     if (identity)
                     {
                         [identityLookup.arrayLastUpdatedContacts addObject:identity];

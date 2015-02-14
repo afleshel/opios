@@ -34,16 +34,20 @@
 #import "OpenPeerStorageManager.h"
 #import "HOPCoreContact.h"
 #import "HOPModelManager_Internal.h"
+#import "HOPPublicPeerFile.h"
 
-@implementation HOPContact
+@implementation HOPContact(Internal)
 
-@dynamic stableID;
-@dynamic apnsData;
-@dynamic publicPeerFile;
-@dynamic sessionRecords;
-@dynamic participants;
-@dynamic identities;
-@dynamic account;
 
+
+- (HOPCoreContact*) getCoreContact
+{
+    HOPCoreContact* ret = [[OpenPeerStorageManager sharedStorageManager] getCoreContactForPeerURI:self.publicPeerFile.peerURI];
+    if (!ret)
+    {
+        ret = [[HOPCoreContact alloc] initWithPeerFile:self.publicPeerFile.peerFile];
+    }
+    return ret;
+}
 
 @end

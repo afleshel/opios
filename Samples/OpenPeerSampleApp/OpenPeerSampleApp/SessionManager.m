@@ -42,7 +42,7 @@
 
 #import <OpenpeerSDK/Openpeer.h>
 #import "UIDevice+Networking.h"
-
+#import <OpenpeerSDK/HOPContact+External.h>
 @interface SessionManager()
 
 @property (nonatomic, assign) HOPConversation* conversationWithActiveCall;

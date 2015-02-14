@@ -45,6 +45,7 @@
 #import "Utility.h"
 #import <OpenpeerSDK/HOPMediaEngine.h>
 #import <OpenpeerSDK/HOPConversation.h>
+#import <OpenpeerSDK/HOPContact+External.h>
 @implementation CallDelegate
 
 - (void) onCallStateChanged:(HOPCall*) call callState:(HOPCallState) callState

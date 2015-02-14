@@ -52,7 +52,7 @@
 @property (nonatomic, retain) NSString * replacedMessageID;
 @property (nonatomic, retain) HOPConversationEvent *conversationEvent;
 @property (nonatomic, retain) NSSet *messageEvent;
-@property (nonatomic, retain) HOPContact *senderOpenPeer;
+@property (nonatomic, retain) HOPContact *sender;
 @property (nonatomic, retain) HOPConversationRecord *session;
 @end
 

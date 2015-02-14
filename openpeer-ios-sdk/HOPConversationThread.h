@@ -143,7 +143,7 @@
  @param contact HOPCoreContact object
  @returns Contact connection state enum
  */
-- (HOPConversationThreadContactConnectionState) getContactConnectionState: (HOPIdentity*) contact;
+- (HOPConversationThreadContactConnectionState) getContactConnectionState: (HOPContact*) contact;
 
 /**
  *  Creates an empty JSON status blob ready to fill with additional structure data. Use "ComposingStatus" to insert composing status information into this JSON blob.
@@ -159,7 +159,7 @@
  *
  *  @return Contact composing status 
  */
-- (HOPComposingState) getComposingStateForContact:(HOPIdentity*) contact;
+- (HOPComposingState) getComposingStateForContact:(HOPContact*) contact;
 
 
 /**

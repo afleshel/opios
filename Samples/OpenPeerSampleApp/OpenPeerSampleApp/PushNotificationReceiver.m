@@ -78,9 +78,9 @@
         
         
         NSArray *items = [peerURIs componentsSeparatedByString:@","];
-        HOPIdentity* sender = nil;
+        HOPContact* sender = nil;
         if ([senderPeerURI length] > 0)
-            sender = [[HOPModelManager sharedModelManager] getIdentityByPeerURI:senderPeerURI];
+            sender = [[HOPModelManager sharedModelManager] getContactByPeerURI:senderPeerURI];
         
         
         if (sender)
@@ -89,11 +89,11 @@
             
             for (NSString* peerURI in items)
             {
-                HOPIdentity* identity = [[HOPModelManager sharedModelManager] getIdentityByPeerURI:peerURI];
-                if (identity)
-                    [participants addObject:identity];
+                HOPContact* contact = [[HOPModelManager sharedModelManager] getContactByPeerURI:peerURI];
+                if (contact)
+                    [participants addObject:contact];
             }
-            HOPConversation *conversation = [HOPConversation conversationForID:conversationID threadType:threadType participants:participants];//[[SessionManager sharedSessionManager] getConversationForID:conversationID threadType:threadType sender:contact items:items];
+            HOPConversation *conversation = [HOPConversation conversationForID:conversationID threadType:threadType participants:participants];
             
             if (conversation)
             {
@@ -139,15 +139,10 @@
                     {
                         HOPMessageRecord* messageObj = [HOPMessageRecord createMessage:messageText type:messageType date:date visible:YES conversation:conversation sender:sender messageId:messageID validated:NO messageIDToReplace:nil];
                         
-                        //HOPMessageRecord* messageObj = [[HOPModelManager sharedModelManager] addMessage:messageText type:messageType date:date conversation:conversation contact:contact messageId:messageID];
-                        
-                        
                         if (messageObj)
                         {
                             conversation.numberOfUnreadMessages++;
                             self.lastUpdatedConversation = conversation;
-//                            //If session view controller with message sender is not yet shown, show it
-//                            [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForConversation:conversation replaceConversation:nil incomingCall:NO incomingMessage:YES];
                         }
                         else
                         {

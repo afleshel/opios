@@ -39,6 +39,7 @@
 #import <OpenPeerSDK/HOPConversation.h>
 #import <OpenPeerSDK/HOPCallSystemMessage.h>
 #import <OpenPeerSDK/HOPIdentity+External.h>
+#import <OpenPeerSDK/HOPContact+External.h>
 #import "SystemMessageCell.h"
 #import "ChatCell.h"
 

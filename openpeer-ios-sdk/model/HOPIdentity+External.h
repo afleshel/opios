@@ -37,7 +37,7 @@
 
 - (void) updateWithName:(NSString*) inName identityURI:(NSString*) inIdentityURI identityProviderDomain:(NSString*)identityProviderDomain  homeUserIdentityURI:(NSString*)homeUserIdentityURI;
 
-- (BOOL) isSelf;
+
 + (HOPIdentity*) getSelf;
 + (void) hintAboutLocation:(NSString*) locationID peerURI:(NSString*) peerURI;
 - (BOOL) isOpenPeer;

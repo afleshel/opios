@@ -37,7 +37,7 @@
 #import "HOPModelManager_Internal.h"
 #import "HOPUtility.h"
 #import "HOPAssociatedIdentity.h"
-#import "HOPContact.h"
+#import "HOPContact_Internal.h"
 #import "HOPAPNSData.h"
 #import "HOPOpenPeerAccount.h"
 #import "HOPIdentityProvider.h"
@@ -59,10 +59,7 @@
         self.name = inName;
 }
 
-- (BOOL) isSelf
-{
-    return [[self getCoreContact] isSelf];
-}
+
 
 + (HOPIdentity*) getSelf
 {
@@ -74,7 +71,7 @@
 {
     if (peerURI.length > 0 && locationID.length > 0)
     {
-        HOPCoreContact* contact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:peerURI];
+        HOPCoreContact* contact = [[OpenPeerStorageManager sharedStorageManager] getCoreContactForPeerURI:peerURI];
         
         if (!contact)
         {

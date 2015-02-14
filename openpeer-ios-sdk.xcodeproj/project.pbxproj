@@ -158,7 +158,7 @@
 		87EADBB01A8CD96F002401A9 /* HOPAvatar.m in Sources */ = {isa = PBXBuildFile; fileRef = 87EADBAE1A8CD96F002401A9 /* HOPAvatar.m */; };
 		87EADBB31A8CD970002401A9 /* HOPAssociatedIdentity.h in Headers */ = {isa = PBXBuildFile; fileRef = 87EADBB11A8CD970002401A9 /* HOPAssociatedIdentity.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		87EADBB41A8CD970002401A9 /* HOPAssociatedIdentity.m in Sources */ = {isa = PBXBuildFile; fileRef = 87EADBB21A8CD970002401A9 /* HOPAssociatedIdentity.m */; };
-		87EADBB71A8D0417002401A9 /* HOPContact.h in Headers */ = {isa = PBXBuildFile; fileRef = 87EADBB51A8D0417002401A9 /* HOPContact.h */; };
+		87EADBB71A8D0417002401A9 /* HOPContact.h in Headers */ = {isa = PBXBuildFile; fileRef = 87EADBB51A8D0417002401A9 /* HOPContact.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		87EADBB81A8D0417002401A9 /* HOPContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 87EADBB61A8D0417002401A9 /* HOPContact.m */; };
 		87ED986619D96A3D00902839 /* HOPParticipants.h in Headers */ = {isa = PBXBuildFile; fileRef = 87ED986419D96A3D00902839 /* HOPParticipants.h */; };
 		87ED986719D96A3D00902839 /* HOPParticipants.m in Sources */ = {isa = PBXBuildFile; fileRef = 87ED986519D96A3D00902839 /* HOPParticipants.m */; };
@@ -1034,6 +1034,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				87EADBB71A8D0417002401A9 /* HOPContact.h in Headers */,
 				87EADBB31A8CD970002401A9 /* HOPAssociatedIdentity.h in Headers */,
 				87EADB9C1A8BADC3002401A9 /* HOPIdentity+External.h in Headers */,
 				87EADBAF1A8CD96F002401A9 /* HOPAvatar.h in Headers */,
@@ -1089,7 +1090,6 @@
 				87A5B1EF16EDE5F9007E825A /* OpenPeerCallDelegate.h in Headers */,
 				87A5B1E416EDE5F9007E825A /* HOPMediaEngine_Internal.h in Headers */,
 				87A5B1EA16EDE5F9007E825A /* HOPStack_Internal.h in Headers */,
-				87EADBB71A8D0417002401A9 /* HOPContact.h in Headers */,
 				87A5B1EB16EDE5F9007E825A /* OpenPeerAccountDelegate.h in Headers */,
 				87A5B1EC16EDE5F9007E825A /* OpenPeerIdentityLookupDelegate.h in Headers */,
 				87A5B1F016EDE5F9007E825A /* OpenPeerConversationThreadDelegate.h in Headers */,

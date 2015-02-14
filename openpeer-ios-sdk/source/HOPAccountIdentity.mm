@@ -265,7 +265,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
         ret = [[HOPModelManager sharedModelManager] getIdentityByIdentityURI:identityURI];
         if (!ret)
         {
-            ret = [[HOPModelManager sharedModelManager] createIdentityForCoreIdentity:identityContact];
+            ret = [[HOPModelManager sharedModelManager] createIdentityForCoreIdentity:identityContact isSelf:YES];
         }
     }
     else

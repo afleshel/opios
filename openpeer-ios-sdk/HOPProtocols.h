@@ -126,7 +126,7 @@
 
 
 @class HOPConversationThread;
-@class HOPIdentity;
+@class HOPContact;
 
 /**
  *  SDK uses methods in this protocol to notify application about conversation thread events.
@@ -154,14 +154,14 @@
  *  @param contact                Participant whose state in conversation thredad has changed.
  *  @param contactConnectionState A new participant state
  */
-- (void) onConversationThreadContactConnectionStateChanged:(HOPConversationThread*) conversationThread contact:(HOPIdentity*) contact contactConnectionState:(HOPConversationThreadContactConnectionState) contactConnectionState;
+- (void) onConversationThreadContactConnectionStateChanged:(HOPConversationThread*) conversationThread contact:(HOPContact*) contact contactConnectionState:(HOPConversationThreadContactConnectionState) contactConnectionState;
 /**
  *  Notifies the receiver about conversation thread participant status.
  *
  *  @param conversationThread     Conversation thread object.
  *  @param contact                Participant whose status in conversation thredad has changed.
  */
-- (void) onConversationThreadContactStatusChanged:(HOPConversationThread*) conversationThread contact:(HOPIdentity*) contact;
+- (void) onConversationThreadContactStatusChanged:(HOPConversationThread*) conversationThread contact:(HOPContact*) contact;
 /**
  *  Notifies the receiver about new message for conversation.
  *
@@ -184,7 +184,7 @@
  *  @param messageID          An ID of undelivered message.
  *  @param contact            A message recepient.
  */
-- (void) onConversationThreadPushMessage:(HOPConversationThread*) conversationThread messageID:(NSString*) messageID contact:(HOPIdentity*) contact;
+- (void) onConversationThreadPushMessage:(HOPConversationThread*) conversationThread messageID:(NSString*) messageID contact:(HOPContact*) contact;
 @end
 
 
@@ -329,6 +329,8 @@
 
 @class HOPConversation;
 @class HOPMessageRecord;
+
+
 /**
  *  SDK uses methods in this protocol to notify application about conversation thread events.
  */
@@ -355,15 +357,15 @@
  *  @param contact                Participant whose state in conversation thredad has changed.
  *  @param contactConnectionState A new participant state
  */
-- (void) onConversationContactConnectionStateChanged:(HOPConversation*) conversation contact:(HOPIdentity*) contact contactConnectionState:(HOPConversationThreadContactConnectionState) contactConnectionState;
+- (void) onConversationContactConnectionStateChanged:(HOPConversation*) conversation contact:(HOPContact*) contact contactConnectionState:(HOPConversationThreadContactConnectionState) contactConnectionState;
 /**
  *  Notifies the receiver about conversation thread participant status.
  *
  *  @param conversationThread     Conversation thread object.
  *  @param contact                Participant whose status in conversation thredad has changed.
  */
-- (void) onConversationContactStatusChanged:(HOPConversation*) conversation contact:(HOPIdentity*) contact;
-- (void) onConversationContactComposingStateChanged:(HOPConversation*) conversation state:(HOPComposingState)state contact:(HOPIdentity*) contact;
+- (void) onConversationContactStatusChanged:(HOPConversation*) conversation contact:(HOPContact*) contact;
+- (void) onConversationContactComposingStateChanged:(HOPConversation*) conversation state:(HOPComposingState)state contact:(HOPContact*) contact;
 /**
  *  Notifies the receiver about new message for conversation.
  *
@@ -391,8 +393,8 @@
  *  @param messageID          An ID of undelivered message.
  *  @param contact            A message recepient.
  */
-- (void) onConversationPushMessage:(HOPConversation*) conversation messageID:(NSString*) messageID contact:(HOPIdentity*) contact;
-- (void) onConversationPushMessageRequired:(HOPConversation*) conversation message:(HOPMessageRecord*) message recipient:(HOPIdentity*) recipient;
+- (void) onConversationPushMessage:(HOPConversation*) conversation messageID:(NSString*) messageID contact:(HOPContact*) contact;
+- (void) onConversationPushMessageRequired:(HOPConversation*) conversation message:(HOPMessageRecord*) message recipient:(HOPContact*) recipient;
 
 //- (void) onConversationTopicChanged:(HOPConversation*) conversation newTopic:(NSString*) newTopic;
 

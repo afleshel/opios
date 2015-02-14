@@ -320,12 +320,13 @@
     
     switch (transition)
     {
+        case NEW_SESSION:
         case NEW_SESSION_SWITCH:
         {
 //            [navigationController popToRootViewControllerAnimated:NO];
             [self popSessionViewControllerForNavigationController:navigationController];
         }
-        case NEW_SESSION:
+//        case NEW_SESSION:
         case NEW_SESSION_WITH_CHAT:
         {
             sessionViewContorller = [[SessionViewController_iPhone alloc] initWithConversation:conversation];

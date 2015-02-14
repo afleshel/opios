@@ -38,6 +38,7 @@
 #import "ContactsManager.h"
 
 #import <OpenpeerSDK/HOPIdentity+External.h>
+#import <OpenpeerSDK/HOPContact.h>
 #import <OpenpeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPAccount.h>
 #import <OpenPeerSDK/HOPConversation.h>
@@ -232,9 +233,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    HOPIdentity* contact = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    HOPIdentity* identity = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
-    if (contact)
+    if (identity)
     {
         //Check if app is in remote session mode
         if (![[OpenPeer sharedOpenPeer] isRemoteSessionActivationModeOn])
@@ -242,14 +243,13 @@
             if (!self.isMultipleSelectionAvailable)
             {
                 //If not, create a session for selecte contact
-                if ([contact isOpenPeer])
+                if ([identity isOpenPeer])
                 {
-                    HOPConversation* conversation = [HOPConversation getConversationForCBCID:[HOPUtility getCBCIDForContacts:@[contact]]];//[((SessionManager*)[SessionManager sharedSessionManager]).conversationsDictionaryForContacts objectForKey:[contact getPeerURI]];
+                    HOPConversation* conversation = [HOPConversation getConversationForCBCID:[HOPUtility getCBCIDForContacts:@[identity.contact]]];//
                     
                     if (!conversation)
                     {
-                        conversation = [HOPConversation conversationWithParticipants:@[contact] title:contact.name type:HOPConversationThreadTypeContactBased];
-//                        [((SessionManager*)[SessionManager sharedSessionManager]).conversationsDictionaryForContacts setObject: conversation forKey:[contact getPeerURI]];
+                        conversation = [HOPConversation conversationWithParticipants:@[identity.contact] title:identity.name type:HOPConversationThreadTypeContactBased];
                     }
                     
                     if (conversation)
@@ -258,13 +258,13 @@
             }
             else
             {
-                if ([self.listOfSelectedContacts containsObject:contact])
+                if ([self.listOfSelectedContacts containsObject:identity])
                 {
-                    [self.listOfSelectedContacts removeObject:contact];
+                    [self.listOfSelectedContacts removeObject:identity];
                 }
                 else
                 {
-                    [self.listOfSelectedContacts addObject:contact];
+                    [self.listOfSelectedContacts addObject:identity];
                 }
             }
         }
@@ -273,13 +273,13 @@
             self.contactsTableView.allowsMultipleSelection = YES;
             //If app is in remote session mode, add selected contact to the list of contacts which will take a part in a remote session
             //If contact is already in the list, remove it
-            if ([self.listOfSelectedContacts containsObject:contact])
+            if ([self.listOfSelectedContacts containsObject:identity])
             {
-                [self.listOfSelectedContacts removeObject:contact];
+                [self.listOfSelectedContacts removeObject:identity];
             }
             else
             {
-                [self.listOfSelectedContacts addObject:contact];
+                [self.listOfSelectedContacts addObject:identity];
             }
             
             //If two contacts are selected ask user to create remote session between selected contacts
@@ -368,10 +368,9 @@
         case CONTACTS_TABLE_MODE_ADDING:
         {
             NSMutableArray* identityURIs = [NSMutableArray new];
-            for (HOPIdentity* contact in self.listOfFilterContacts)
+            for (HOPContact* contact in self.listOfFilterContacts)
             {
-                if (contact.identityURI.length > 0)
-                    [identityURIs addObject:contact.identityURI];
+                [identityURIs addObjectsFromArray:[contact.identities.allObjects valueForKey:@"identityURI"]];
             }
             predicateForFiltering = [NSPredicate predicateWithFormat:@"contact != nil AND NOT (identityURI IN %@)",identityURIs];
             [predicatesArray addObject:predicateForFiltering];
@@ -381,10 +380,9 @@
         case CONTACTS_TABLE_MODE_REMOVING:
         {
             NSMutableArray* identityURIs = [NSMutableArray new];
-            for (HOPIdentity* contact in self.listOfFilterContacts)
+            for (HOPContact* contact in self.listOfFilterContacts)
             {
-                if (contact.identityURI.length > 0)
-                    [identityURIs addObject:contact.identityURI];
+                [identityURIs addObjectsFromArray:[contact.identities.allObjects valueForKey:@"identityURI"]];
             }
             predicateForFiltering = [NSPredicate predicateWithFormat:@"identityURI IN %@",identityURIs];
             [predicatesArray addObject:predicateForFiltering];

@@ -81,7 +81,7 @@ using namespace zsLib;
 - (void) setConversation:(HOPConversation*) conversation threadID:(NSString*) threadID;
 - (void) setConversation:(HOPConversation*) conversation cbcID:(NSString*) cbcID;
 - (void) removeConversation:(HOPConversation*) conversation;
-- (HOPCoreContact*) getContactForPeerURI:(NSString*) peerURI;
+- (HOPCoreContact*) getCoreContactForPeerURI:(NSString*) peerURI;
 - (void) setContact:(HOPCoreContact*) contact forPeerURI:(NSString*) contactId;
 
 //- (HOPProvisioningAccount*) getProvisioningAccountForUserId:(NSString*) userId;

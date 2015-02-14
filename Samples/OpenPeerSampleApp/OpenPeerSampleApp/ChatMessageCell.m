@@ -36,6 +36,7 @@
 #import <OpenpeerSDK/HOPIdentity+External.h>
 #import <OpenpeerSDK/HOPMessageRecord+External.h>
 #import <OpenpeerSDK/HOPConversation.h>
+#import <OpenPeerSDK/HOPContact+External.h>
 
 #define SPACE_BETWEEN_LABELS 2.0
 #define TRAILING_SPACE 10.0
@@ -286,7 +287,7 @@
             [self setUnicodeChars:self.message.text];
             
 
-            messageSenderName = self.message.sender.name;
+            messageSenderName = [self.message.sender getDefaultIdentity].name;
             
             UIColor* textColor;
             

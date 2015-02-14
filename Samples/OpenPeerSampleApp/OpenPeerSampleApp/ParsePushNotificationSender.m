@@ -32,6 +32,7 @@
 #import "ParsePushNotificationSender.h"
 #import <OpenPeerSDK/HOPMessageRecord+External.h>
 #import <OpenPeerSDK/HOPConversationRecord+External.h>
+#import <OpenPeerSDK/HOPContact+External.h>
 #import <OpenPeerSDK/HOPIdentity+External.h>
 #import <OpenPeerSDK/HOPAccount.h>
 #import <OpenPeerSDK/HOPSystemMessage.h>
@@ -76,7 +77,7 @@
     
     NSDictionary *data = [self createPushMessage:message missedCall:outgoingCall recipients:recipients];
     
-    for (HOPIdentity* recipient in recipients)
+    for (HOPContact* recipient in recipients)
     {
         PFQuery *pushQuery = [PFInstallation query];
         [pushQuery whereKey:@"peerUri" equalTo:[recipient getPeerURI]];
@@ -92,7 +93,7 @@
 {
     [super sendRichPushNotificationMessage:message conversation:conversation recipients:recipients];
     
-    for (HOPIdentity* recipient in recipients)
+    for (HOPContact* recipient in recipients)
     {
         NSDictionary* parameters = [self createRichPushMessage:message conversation:conversation recipient:recipient recipients:recipients];
         
@@ -116,7 +117,7 @@
 }
 
 
-- (NSDictionary*) createRichPushMessage:(HOPMessageRecord*) message conversation:(HOPConversation*) conversation recipient:(HOPIdentity*) recipient recipients:(NSArray*) recipients
+- (NSDictionary*) createRichPushMessage:(HOPMessageRecord*) message conversation:(HOPConversation*) conversation recipient:(HOPContact*) recipient recipients:(NSArray*) recipients
 {
     NSMutableDictionary* dict = [NSMutableDictionary new];
     

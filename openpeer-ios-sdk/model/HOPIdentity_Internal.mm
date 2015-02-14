@@ -103,13 +103,4 @@
         self.avatars = [NSSet setWithSet:tempAvatars];
 }
 
-- (HOPCoreContact*) getCoreContact
-{
-    HOPCoreContact* ret = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:self.contact.publicPeerFile.peerURI];
-    if (!ret)
-    {
-        ret = [[HOPCoreContact alloc] initWithPeerFile:self.contact.publicPeerFile.peerFile];
-    }
-    return ret;
-}
 @end

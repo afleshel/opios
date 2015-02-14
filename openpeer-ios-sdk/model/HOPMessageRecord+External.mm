@@ -50,7 +50,7 @@ using namespace openpeer::core;
 @implementation HOPMessageRecord (External)
 
 
-+ (HOPMessageRecord*) createMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  conversation:(HOPConversation*) conversation sender:(HOPIdentity*) sender messageId:(NSString*)messageId validated:(BOOL) validated messageIDToReplace:(NSString*) messageIDToReplace
++ (HOPMessageRecord*) createMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  conversation:(HOPConversation*) conversation sender:(HOPContact*) sender messageId:(NSString*)messageId validated:(BOOL) validated messageIDToReplace:(NSString*) messageIDToReplace
 {
     HOPMessageRecord* ret = nil;
     
@@ -66,7 +66,7 @@ using namespace openpeer::core;
             ret.type = type;
             ret.validated = [NSNumber numberWithBool:validated];
             ret.replacedMessageID = messageIDToReplace;
-            ret.senderOpenPeer = sender.contact;
+            ret.sender = sender;
             ret.session = conversation.record;
             ret.conversationEvent = conversation.lastEvent;
             ret.messageID = messageId;
@@ -102,21 +102,4 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (HOPIdentity*) sender
-{
-    HOPIdentity* ret = nil;
-    
-    if (self.senderOpenPeer)
-    {
-        ret = [self.senderOpenPeer getDefaultIdentity];
-    }
-    
-    return ret;
-}
-
-- (void) setSender:(HOPIdentity *)sender
-{
-    if (sender && sender.contact)
-        self.senderOpenPeer = sender.contact;
-}
 @end

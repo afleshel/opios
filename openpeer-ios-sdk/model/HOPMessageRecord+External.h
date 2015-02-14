@@ -34,11 +34,11 @@
 
 @class HOPIdentity;
 @class HOPConversation;
+@class HOPContact;
 
 @interface HOPMessageRecord (External)
 
-@property (nonatomic) HOPIdentity *sender;
 @property (nonatomic, getter = getOutgoingMessageStatus, setter = setOutgoingMessageStatus:) HOPConversationThreadMessageDeliveryState outgoingMessageStatus;
 
-+ (HOPMessageRecord*) createMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  conversation:(HOPConversation*) conversation sender:(HOPIdentity*) sender messageId:(NSString*)messageId validated:(BOOL) validated messageIDToReplace:(NSString*) messageIDToReplace;
++ (HOPMessageRecord*) createMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  conversation:(HOPConversation*) conversation sender:(HOPContact*) sender messageId:(NSString*)messageId validated:(BOOL) validated messageIDToReplace:(NSString*) messageIDToReplace;
 @end

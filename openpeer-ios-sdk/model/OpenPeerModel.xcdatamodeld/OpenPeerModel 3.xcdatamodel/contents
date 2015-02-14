@@ -114,7 +114,7 @@
         <attribute name="visible" optional="YES" attributeType="Boolean" defaultValueString="YES" syncable="YES"/>
         <relationship name="conversationEvent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HOPConversationEvent" inverseName="messages" inverseEntity="HOPConversationEvent" syncable="YES"/>
         <relationship name="messageEvent" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HOPMessageEvent" inverseName="message" inverseEntity="HOPMessageEvent" syncable="YES"/>
-        <relationship name="senderOpenPeer" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HOPContact" syncable="YES"/>
+        <relationship name="sender" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HOPContact" syncable="YES"/>
         <relationship name="session" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HOPConversationRecord" inverseName="messages" inverseEntity="HOPConversationRecord" syncable="YES"/>
     </entity>
     <entity name="HOPOpenPeerAccount" representedClassName="HOPOpenPeerAccount" syncable="YES">

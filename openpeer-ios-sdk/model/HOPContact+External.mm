@@ -29,12 +29,14 @@
  
  */
 
-#import "HOPContact+External.h"
+#import "HOPContact_Internal.h"
 #import "HOPCoreContact.h"
 #import "OpenPeerStorageManager.h"
 #import "HOPPublicPeerFile.h"
 #import "HOPIdentity.h"
 #import "HOPAPNSData.h"
+#import "HOPAccount_Internal.h"
+#import "HOPOpenPeerAccount.h"
 
 @implementation HOPContact (External)
 
@@ -82,5 +84,16 @@
         [array addObject:identity.identityURI];
     }
     return array;
+}
+
+- (BOOL) isSelf
+{
+    return [[self getCoreContact] isSelf];
+}
+
++ (HOPContact*) getSelf
+{
+    HOPContact* ret = [HOPAccount sharedAccount].openPeerAccount.contact;
+    return ret;
 }
 @end

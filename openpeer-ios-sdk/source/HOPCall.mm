@@ -42,11 +42,11 @@
 #import "HOPCoreContact_Internal.h"
 #import "HOPIdentity_Internal.h"
 #import "OpenPeerStorageManager.h"
-#import "HOPContact+External.h"
+#import "HOPContact_Internal.h"
 
 #import "HOPCall.h"
 #import "HOPCoreContact.h"
-#import "HOPModelManager.h"
+#import "HOPModelManager_Internal.h"
 
 ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
@@ -101,7 +101,7 @@ using namespace openpeer::core;
         HOPCoreContact* toContact = nil;
         if (conversation.participants.count > 0)
         {
-            toContact = [((HOPIdentity*)[conversation.participants objectAtIndex:0]) getCoreContact];
+            toContact = [((HOPContact*)[conversation.participants objectAtIndex:0]) getCoreContact];
             //Create the core call object and start placing call procedure
             ICallPtr tempCallPtr = ICall::placeCall([conversation.thread getConversationThreadPtr], [toContact getContactPtr], includeAudio, includeVideo);
             
@@ -129,7 +129,7 @@ using namespace openpeer::core;
         HOPCoreContact* toContact = nil;
         if (callees.count > 0)
         {
-            toContact = [((HOPIdentity*)[callees objectAtIndex:0]) getCoreContact];
+            toContact = [((HOPContact*)[callees objectAtIndex:0]) getCoreContact];
             //Create the core call object and start placing call procedure
             ICallPtr tempCallPtr = ICall::placeCall([conversation.thread getConversationThreadPtr], [toContact getContactPtr], includeAudio, includeVideo);
             
@@ -229,9 +229,9 @@ using namespace openpeer::core;
     return hopConversation;
 }
 
-- (HOPIdentity*) getCaller
+- (HOPContact*) getCaller
 {
-    HOPIdentity* ret = nil;
+    HOPContact* ret = nil;
     if(callPtr)
     {
         IContactPtr contactPtr = callPtr->getCaller();
@@ -239,10 +239,10 @@ using namespace openpeer::core;
         {
             NSString* peerURI = [NSString stringWithUTF8String:contactPtr->getPeerURI()];
             //It needs to be checked if core contact is created, because it is mandatory to have
-            HOPCoreContact* coreContact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:peerURI];
+            HOPCoreContact* coreContact = [[OpenPeerStorageManager sharedStorageManager] getCoreContactForPeerURI:peerURI];
             if (!coreContact)
                 coreContact = [[HOPCoreContact alloc] initWithCoreContact:contactPtr];
-            ret = [[HOPModelManager sharedModelManager] getIdentityByPeerURI:peerURI];
+            ret = [[HOPModelManager sharedModelManager] getContactForPeerURI:peerURI];
         }
         else
         {
@@ -257,9 +257,9 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (HOPIdentity*) getCallee
+- (HOPContact*) getCallee
 {
-    HOPIdentity* ret = nil;
+    HOPContact* ret = nil;
     if(callPtr)
     {
         IContactPtr contactPtr = callPtr->getCallee();
@@ -267,11 +267,11 @@ using namespace openpeer::core;
         {
             NSString* peerURI = [NSString stringWithUTF8String:contactPtr->getPeerURI()];
             //It needs to be checked if core contact is created, because it is mandatory to have
-            HOPCoreContact* coreContact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:peerURI];
+            HOPCoreContact* coreContact = [[OpenPeerStorageManager sharedStorageManager] getCoreContactForPeerURI:peerURI];
             if (!coreContact)
                 coreContact = [[HOPCoreContact alloc] initWithCoreContact:contactPtr];
             
-            ret = [[HOPModelManager sharedModelManager] getIdentityByPeerURI:peerURI];
+            ret = [[HOPModelManager sharedModelManager] getContactForPeerURI:peerURI];
         }
         else
         {

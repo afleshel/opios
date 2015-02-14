@@ -156,7 +156,7 @@
 }
 
 
-- (HOPCoreContact*) getContactForPeerURI:(NSString*) peerURI
+- (HOPCoreContact*) getCoreContactForPeerURI:(NSString*) peerURI
 {
     HOPCoreContact* contact = nil;
     

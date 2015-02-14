@@ -54,7 +54,7 @@
 @dynamic replacedMessageID;
 @dynamic conversationEvent;
 @dynamic messageEvent;
-@dynamic senderOpenPeer;
+@dynamic sender;
 @dynamic session;
 
 @end

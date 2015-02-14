@@ -36,7 +36,8 @@
 using namespace openpeer;
 using namespace openpeer::core;
 
-@interface HOPContact ()
+@interface HOPContact(Internal)
 
+- (HOPCoreContact*) getCoreContact;
 
 @end

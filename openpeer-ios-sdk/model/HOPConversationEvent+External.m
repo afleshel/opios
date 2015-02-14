@@ -44,9 +44,7 @@
         ret = [[NSMutableArray alloc] init];
         for (HOPContact* contact in self.participants.participants)
         {
-            HOPIdentity* identity = [contact getDefaultIdentity];
-            if (identity)
-                [ret addObject:identity];
+            [ret addObject:contact];
         }
     }
     return ret;

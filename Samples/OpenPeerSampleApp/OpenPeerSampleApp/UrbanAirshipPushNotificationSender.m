@@ -34,6 +34,7 @@
 #import <OpenPeerSDK/HOPMessageRecord+External.h>
 #import <OpenPeerSDK/HOPConversationRecord+External.h>
 #import <OpenPeerSDK/HOPIdentity+External.h>
+#import <OpenPeerSDK/HOPContact+External.h>
 #import <OpenPeerSDK/HOPAccount.h>
 #import <OpenPeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPAPNSData.h>
@@ -58,7 +59,7 @@
 @property (nonatomic, copy) NSString* tempJSON;
 
 - (NSString*) saveRichPushForSending:(NSDictionary*) dict messageID:(NSString*) messageID;
-- (void)storeForLaterSending:(HOPMessageRecord *)message missedCall:(BOOL)missedCall recipients:(NSArray *)recipients recipient:(HOPIdentity *)recipient;
+- (void)storeForLaterSending:(HOPMessageRecord *)message missedCall:(BOOL)missedCall recipients:(NSArray *)recipients recipient:(HOPContact *)recipient;
 
 - (void) pushData:(NSString*) filePath sendingRich:(BOOL) sendingRich messageID:(NSString*) messageID;
 @end
@@ -174,7 +175,7 @@
 - (void) sendRichPushNotificationMessage:(HOPMessageRecord*) message conversation:(HOPConversation*) conversation recipients:(NSArray*) recipients
 {
     [super sendRichPushNotificationMessage:message conversation:conversation recipients:recipients];
-    for (HOPIdentity* recipient in recipients)
+    for (HOPContact* recipient in recipients)
     {
         NSArray* deviceTokens = [self getDeviceTokensForContact:recipient];
         if ([deviceTokens count] > 0)
@@ -210,7 +211,7 @@
     }
 }
 
-- (NSDictionary*) createRichPushMessage:(HOPMessageRecord*) message conversation:(HOPConversation*) conversation recipient:(HOPIdentity*) recipient recipients:(NSArray*) recipients
+- (NSDictionary*) createRichPushMessage:(HOPMessageRecord*) message conversation:(HOPConversation*) conversation recipient:(HOPContact*) recipient recipients:(NSArray*) recipients
 {
     NSDictionary* ret = nil;
     NSArray* deviceTokens = [self getDeviceTokensForContact:recipient];
@@ -312,7 +313,7 @@
     }
 }
 
-- (void)storeForLaterSending:(HOPMessageRecord *)message missedCall:(BOOL)missedCall recipients:(NSArray *)recipients recipient:(HOPIdentity *)recipient
+- (void)storeForLaterSending:(HOPMessageRecord *)message missedCall:(BOOL)missedCall recipients:(NSArray *)recipients recipient:(HOPContact *)recipient
 {
     NSString* recipientPeerURI = [recipient getPeerURI];
     NSArray* array = [self.dictionaryOfPushNotificationsToSend objectForKey:recipientPeerURI];
@@ -430,7 +431,7 @@ didCompleteWithError:(NSError *)error
         {
             // BOOL missedCall = [dict objectForKey:@"missedCall"] != nil ? ((NSNumber*) [dict objectForKey:@"missedCall"]).boolValue : NO;
             NSArray* recipients = [dict objectForKey:@"recipients"];
-            HOPIdentity* recipient = [dict objectForKey:@"recipient"];
+            HOPContact* recipient = [dict objectForKey:@"recipient"];
             if (recipient)
             {
 //                if (missedCall)

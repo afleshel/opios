@@ -46,7 +46,7 @@
 #import <OpenPeerSDK/HOPConversation.h>
 #import <OpenPeerSDK/HOPMessageRecord+External.h>
 #import "UIDevice+Networking.h"
-
+#import <OpenPeerSDK/HOPContact+External.h>
 typedef enum
 {
     ApplicationSystemMessageTypeNone,
@@ -86,12 +86,10 @@ typedef enum
     return self;
 }
 
-- (HOPMessageRecord*) createSystemMessageWithType:(HOPSystemMessageType) type messageType:(int) messageType reasonCode:(int)reasonCode andRecipient:(HOPIdentity*) contact conversation:(HOPConversation*) conversation
+- (HOPMessageRecord*) createSystemMessageWithType:(HOPSystemMessageType) type messageType:(int) messageType reasonCode:(int)reasonCode andRecipient:(HOPContact*) contact conversation:(HOPConversation*) conversation
 {
     HOPMessageRecord* ret = nil;
-    
-    //HOPCallSystemMessage* callSystemMessage = [[HOPCallSystemMessage alloc] initWithMessageType:(HOPCallSystemMessageType)messageType callee:contact errorCode:reasonCode];
-    
+
     NSString* mediaType = [conversation.currentCall hasVideo] ? @"video" : @"audio";
     NSString* callID = [conversation.currentCall getCallID];
     if (!callID)
@@ -116,7 +114,7 @@ typedef enum
 
 - (void) sendCallSystemMessage:(HOPCallSystemMessageType) callSystemMessage reasonCode:(int) reasonCode forConversation:(HOPConversation*) conversation
 {
-    for (HOPIdentity* contact in conversation.participants)
+    for (HOPContact* contact in conversation.participants)
     {
         HOPMessageRecord* messageRecord = [self createSystemMessageWithType:HOPSystemMessageTypeCall messageType:callSystemMessage reasonCode:reasonCode andRecipient:contact conversation:conversation];
         if (messageRecord)
@@ -132,7 +130,7 @@ typedef enum
 
 - (void) sendSystemMessageToCheckAvailability:(HOPConversation*) conversation
 {
-    for (HOPIdentity* contact in conversation.participants)
+    for (HOPContact* contact in conversation.participants)
     {
         HOPMessageRecord* messageRecord = [self createSystemMessageWithType:HOPSystemMessageTypeCall messageType:HOPCallSystemMessageTypeCallPlaced reasonCode:0 andRecipient:contact conversation:conversation];
         if (messageRecord)
@@ -153,7 +151,7 @@ typedef enum
             NSString* messageBody = [Utility jsonFromDictionary:dict];
             if (messageBody.length > 0)
             {
-                HOPMessageRecord* messageRecord = [HOPMessageRecord createMessage:messageBody type:[HOPSystemMessage getMessageType] date:[NSDate date] visible:NO conversation:conversation sender:[HOPIdentity getSelf] messageId:[HOPUtility getGUIDstring] validated:NO messageIDToReplace:@""];
+                HOPMessageRecord* messageRecord = [HOPMessageRecord createMessage:messageBody type:[HOPSystemMessage getMessageType] date:[NSDate date] visible:NO conversation:conversation sender:[HOPContact getSelf] messageId:[HOPUtility getGUIDstring] validated:NO messageIDToReplace:@""];
                 if (messageRecord)
                 {
                     [toConversation sendMessage:messageRecord];
@@ -255,7 +253,7 @@ typedef enum
     }
 
     if (!messageRecord)
-        messageRecord = [HOPMessageRecord createMessage:message type:messageTypeText date:[NSDate date] visible:YES conversation:conversation sender:[[HOPModelManager sharedModelManager] getIdentityForAccount] messageId:[HOPUtility getGUIDstring] validated:NO messageIDToReplace:replacesMessageID];
+        messageRecord = [HOPMessageRecord createMessage:message type:messageTypeText date:[NSDate date] visible:YES conversation:conversation sender:[HOPContact getSelf] messageId:[HOPUtility getGUIDstring] validated:NO messageIDToReplace:replacesMessageID];
 
     messageRecord.edited = [NSNumber numberWithBool:edited];
     messageRecord.removed = [NSNumber numberWithBool:deleted];

@@ -192,9 +192,9 @@ void OpenPeerConversationThreadDelegate::onConversationThreadContactsChanged(ICo
                 {
                     if (numberOfAddedParticipants > 0)
                     {
-                        for (HOPIdentity* contact in difference)
+                        for (HOPContact* contact in difference)
                         {
-                            [hopConversation.record addParticipantsObject:contact.contact];
+                            [hopConversation.record addParticipantsObject:contact];
                         }
                         
                         hopConversation.record.name = [HOPConversation getDefaultTitleForParticipants:hopConversation.participants];
@@ -218,9 +218,9 @@ void OpenPeerConversationThreadDelegate::onConversationThreadContactsChanged(ICo
                             }
                         }
                         
-                        for (HOPIdentity* contact in difference)
+                        for (HOPContact* contact in difference)
                         {
-                            [hopConversation.record removeParticipantsObject:contact.contact];
+                            [hopConversation.record removeParticipantsObject:contact];
                         }
                         
                         hopConversation.record.name = [HOPConversation getDefaultTitleForParticipants:hopConversation.participants];
@@ -316,7 +316,7 @@ void OpenPeerConversationThreadDelegate::onConversationThreadPushMessage(IConver
 {
     NSString* messageId = [NSString stringWithUTF8String:messageID];
     
-    HOPIdentity* hopContact = [[HOPModelManager sharedModelManager] getIdentityByPeerURI:[NSString stringWithUTF8String:contact->getPeerURI()]];
+    HOPContact* hopContact = [[HOPModelManager sharedModelManager] getContactByPeerURI:[NSString stringWithUTF8String:contact->getPeerURI()]];
     
     if (conversationThreadDelegate)
     {
@@ -336,7 +336,7 @@ void OpenPeerConversationThreadDelegate::onConversationThreadPushMessage(IConver
 
 void OpenPeerConversationThreadDelegate::onConversationThreadContactConnectionStateChanged(IConversationThreadPtr conversationThread,IContactPtr contact,ContactConnectionStates state)
 {
-    HOPIdentity* hopContact = [[HOPModelManager sharedModelManager] getIdentityByPeerURI:[NSString stringWithUTF8String:contact->getPeerURI()]];
+    HOPContact* hopContact = [[HOPModelManager sharedModelManager] getContactByPeerURI:[NSString stringWithUTF8String:contact->getPeerURI()]];
     if (hopContact)
     {
         if (conversationThreadDelegate)
@@ -359,7 +359,7 @@ void OpenPeerConversationThreadDelegate::onConversationThreadContactConnectionSt
 
 void OpenPeerConversationThreadDelegate::onConversationThreadContactStatusChanged(IConversationThreadPtr conversationThread,IContactPtr contact)
 {
-    HOPIdentity* hopContact = [[HOPModelManager sharedModelManager] getIdentityByPeerURI:[NSString stringWithUTF8String:contact->getPeerURI()]];
+    HOPContact* hopContact = [[HOPModelManager sharedModelManager] getContactByPeerURI:[NSString stringWithUTF8String:contact->getPeerURI()]];
     
     if (hopContact)
     {

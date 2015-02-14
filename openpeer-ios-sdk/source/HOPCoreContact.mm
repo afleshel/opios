@@ -129,7 +129,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     HOPCoreContact* ret = nil;
     
     IContactPtr selfContact = IContact::getForSelf([[HOPAccount sharedAccount] getAccountPtr]);
-    ret = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:[NSString stringWithCString:selfContact->getPeerURI() encoding:NSUTF8StringEncoding]];
+    ret = [[OpenPeerStorageManager sharedStorageManager] getCoreContactForPeerURI:[NSString stringWithCString:selfContact->getPeerURI() encoding:NSUTF8StringEncoding]];
     if (!ret)
         ret = [[HOPCoreContact alloc] initWithCoreContact:selfContact];
     
