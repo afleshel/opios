@@ -35,6 +35,7 @@
 #import "AppConsts.h"
 #import "Utility.h"
 #import "OpenPeer.h"
+#import "SessionManager.h"
 #import "BackgroundingDelegate.h"
 #import "HTTPDownloader.h"
 #import "PushNotificationSender.h"
@@ -54,6 +55,7 @@
 @property (nonatomic, strong) PushNotificationReceiver* pushNotificationReceiver;
 
 - (id) initSingleton;
+- (void) updateBadgeNumber;
 @end
 
 @implementation APNSManager
@@ -92,6 +94,8 @@
                 self.pushNotificationSender = [ParsePushNotificationSender new];
                 self.pushNotificationReceiver = [ParsePushNotificationReceiver new];
             }
+            
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateBadgeNumber) name:notificationMessagesRead object:nil];
         }
     }
     return self;
@@ -166,6 +170,11 @@
 - (void) setBadgeNumber:(NSInteger) numberOfUnreadMessages
 {
     [self.pushNotificationReceiver setBadgeNumber:numberOfUnreadMessages];
+}
+
+- (void) updateBadgeNumber
+{
+    [self setBadgeNumber:[[SessionManager sharedSessionManager] totalNumberOfUnreadMessages]];
 }
 
 - (NSString*) getSelfDeviceToken

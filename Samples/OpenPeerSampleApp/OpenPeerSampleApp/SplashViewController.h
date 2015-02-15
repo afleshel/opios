@@ -32,6 +32,7 @@
 #import <UIKit/UIKit.h>
 
 @interface SplashViewController : UIViewController
+@property (weak, nonatomic) IBOutlet UIImageView *logoImageView;
 
 @property (nonatomic, weak) IBOutlet UIView* infoView;
 @end

@@ -267,6 +267,10 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
         {
             ret = [[HOPModelManager sharedModelManager] createIdentityForCoreIdentity:identityContact isSelf:YES];
         }
+        else
+        {
+            ret.contact.account = [HOPAccount sharedAccount].openPeerAccount;
+        }
     }
     else
     {

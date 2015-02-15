@@ -44,6 +44,12 @@
     return self;
 }
 
+- (void)viewDidLoad
+{
+    self.logoImageView.layer.cornerRadius = 5.0f;
+    self.logoImageView.layer.masksToBounds = YES;
+}
+
 - (IBAction)actionStartLogger:(id)sender
 {
     [Logger startTelnetLoggerOnStartUp];

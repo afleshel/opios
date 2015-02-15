@@ -181,7 +181,11 @@
     if (self.containerView == self.chatViewController.view.superview)
         [self.chatViewController viewWillAppear:animated];
     
-    self.conversation.numberOfUnreadMessages = 0;
+    if (self.conversation.numberOfUnreadMessages > 0)
+    {
+        self.conversation.numberOfUnreadMessages = 0;
+        [[NSNotificationCenter defaultCenter] postNotificationName:notificationMessagesRead object:self.conversation];
+    }
 }
 
 - (void)didReceiveMemoryWarning

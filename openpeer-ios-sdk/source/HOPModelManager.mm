@@ -1212,18 +1212,7 @@ using namespace openpeer::core;
     
     if (contacts.count > 0)
     {
-        //NSPredicate* predicate = [NSPredicate predicateWithFormat:@"SUBQUERY(participants,$p,ALL $p.stableID IN %@)",[contacts valueForKeyPath: @"stableID"]];
-//        NSArray* result = [self getResultsForEntity:@"HOPParticipants" withPredicateString:[NSString stringWithFormat:@"SUBQUERY(participants,$p,ALL $p.stableID IN %@).@count > 0",[contacts valueForKeyPath: @"stableID"]] orderDescriptors:nil];
         NSArray* result = [self getResultsForEntity:@"HOPParticipants" withPredicateString:nil orderDescriptors:nil];
-        
-//        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-//        NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPParticipants" inManagedObjectContext:self.managedObjectContext];
-//        [fetchRequest setEntity:entity];
-//        
-//        NSPredicate* predicate = [NSPredicate predicateWithFormat:@"ALL participants IN %@",contacts];
-//        [fetchRequest setPredicate:predicate];
-//        
-//        NSArray* result  = [self.managedObjectContext executeFetchRequest:fetchRequest error:nil];
         
         NSMutableSet *set = [NSMutableSet new];
         

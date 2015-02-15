@@ -48,6 +48,8 @@
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, strong) NSDate *lastRefresh;
 @property (nonatomic, strong) NSTimer *refreshTimer;
+
+- (void) updateCellForConversation:(HOPConversation*) conversation;
 @end
 
 @implementation ActiveSessionsViewController
@@ -78,6 +80,7 @@
     
     [self fetchData];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadData) name:notifictionAppReturnedFromBackground object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCellForConversation:) name:notificationMessagesRead object:nil];
 }
 
 - (void)fetchData
@@ -229,7 +232,10 @@
         {
             ActiveSessionTableViewCell *cell = (ActiveSessionTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
             if (cell)
+            {
+                conversation.numberOfUnreadMessages = 0;
                 [cell updateBadge:conversation];
+            }
             [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForConversation:conversation replaceConversation:nil incomingCall:NO incomingMessage:NO];
         }
     }
@@ -342,6 +348,21 @@
             
             default:
             break;
+    }
+}
+
+- (void) updateCellForConversation:(NSNotification *)notification
+{
+    HOPConversation* conversation = notification.object;
+    if (conversation)
+    {
+        NSIndexPath *indexPath = [self.fetchedResultsController indexPathForObject:conversation];
+        if (indexPath)
+        {
+            ActiveSessionTableViewCell *cell = (ActiveSessionTableViewCell *)[self.tableViewSessions cellForRowAtIndexPath:indexPath];
+            if (cell)
+                [cell updateBadge:conversation];
+        }
     }
 }
 @end
