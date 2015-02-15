@@ -345,7 +345,7 @@
         return _fetchedResultsController;
     }
     
-    //NSString *cacheName = nil;
+    NSString *cacheName = nil;
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPIdentity" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];
@@ -357,12 +357,13 @@
     switch (self.mode)
     {
         case CONTACTS_TABLE_MODE_REGULAR:
+            cacheName = @"RolodexContacts";
             break;
             
         case CONTACTS_TABLE_MODE_FAVORITES:
             predicateForFiltering = [NSPredicate predicateWithFormat:@"contact != nil"];
             [predicatesArray addObject:predicateForFiltering];
-            //cacheName = @"FavoritesContacts";
+            cacheName = @"FavoritesContacts";
             break;
             
         case CONTACTS_TABLE_MODE_ADDING:
@@ -370,8 +371,14 @@
             NSMutableArray* identityURIs = [NSMutableArray new];
             for (HOPContact* contact in self.listOfFilterContacts)
             {
-                [identityURIs addObjectsFromArray:[contact.identities.allObjects valueForKey:@"identityURI"]];
+                for (HOPIdentity* identity in contact.identities)
+                {
+                    if (identity.identityURI.length > 0)
+                        [identityURIs addObject:identity.identityURI];
+                }
+                //[identityURIs addObjectsFromArray:[contact.identities.allObjects valueForKey:@"identityURI"]];
             }
+            //predicateForFiltering = [NSPredicate predicateWithFormat:@"contact != nil"];
             predicateForFiltering = [NSPredicate predicateWithFormat:@"contact != nil AND NOT (identityURI IN %@)",identityURIs];
             [predicatesArray addObject:predicateForFiltering];
         }
@@ -408,9 +415,9 @@
 	[fetchRequest setSortDescriptors:sortDescriptors];
 
     if (!self.isInFavoritesMode)
-        _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext] sectionNameKeyPath:nil cacheName:@"RolodexContacts"];
+        _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext] sectionNameKeyPath:nil cacheName:cacheName];
     else
-        _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext] sectionNameKeyPath:nil cacheName:@"FavoritesContacts"];
+        _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext] sectionNameKeyPath:nil cacheName:cacheName];
     
     _fetchedResultsController.delegate = self;
     

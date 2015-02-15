@@ -50,7 +50,7 @@
 
 - (NSString*) getListOfRecipientsFromPeerURIsArray:(NSArray*) array;
 - (NSDictionary*) createPushMessage:(NSString*) message missedCall:(BOOL) missedCall recipients:(NSArray*) recipients;
-- (NSDictionary*) createRichPushMessage:(HOPMessageRecord*) message conversation:(HOPConversation*) conversation recipient:(HOPContact*) recipient recipients:(NSArray*) recipients;
+- (NSDictionary*) createRichPushMessage:(HOPMessageRecord*) message conversation:(HOPConversation*) conversation recipient:(HOPContact*) recipient participants:(NSArray*) participants;
 
 - (NSArray*) getDeviceTokensForContact:(HOPContact*) contact;
 - (void) requestDeviceTokenForPeerURI:(NSString*) peerURI;

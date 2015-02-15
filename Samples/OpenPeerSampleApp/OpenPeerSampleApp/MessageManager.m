@@ -151,7 +151,7 @@ typedef enum
             NSString* messageBody = [Utility jsonFromDictionary:dict];
             if (messageBody.length > 0)
             {
-                HOPMessageRecord* messageRecord = [HOPMessageRecord createMessage:messageBody type:[HOPSystemMessage getMessageType] date:[NSDate date] visible:NO conversation:conversation sender:[HOPContact getSelf] messageId:[HOPUtility getGUIDstring] validated:NO messageIDToReplace:@""];
+                HOPMessageRecord* messageRecord = [HOPMessageRecord createMessage:messageBody type:[HOPSystemMessage getMessageType] date:[NSDate date] visible:NO conversation:toConversation sender:[HOPContact getSelf] messageId:[HOPUtility getGUIDstring] validated:NO messageIDToReplace:@""];
                 if (messageRecord)
                 {
                     [toConversation sendMessage:messageRecord];
@@ -210,11 +210,12 @@ typedef enum
                     HOPConversation* replaceConversation = replaceConversationID.length > 0 ? [HOPConversation getConversationForID:replaceConversationID] : nil;
                     HOPConversation* conversation = conversationID.length > 0 ? [HOPConversation getConversationForID:conversationID] : nil;
                     
-                    if (conversation)
+                    inMessage.visible = [NSNumber numberWithBool:NO];
+                    
+                    if (conversation && replaceConversation)
                     {
                         [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForConversation:conversation replaceConversation:replaceConversation incomingCall:NO incomingMessage:NO];
                         
-                        inMessage.visible = [NSNumber numberWithBool:NO];
                         [[HOPModelManager sharedModelManager] saveContext];
                     }
                 }

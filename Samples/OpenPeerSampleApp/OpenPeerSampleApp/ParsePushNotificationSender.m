@@ -95,7 +95,7 @@
     
     for (HOPContact* recipient in recipients)
     {
-        NSDictionary* parameters = [self createRichPushMessage:message conversation:conversation recipient:recipient recipients:recipients];
+        NSDictionary* parameters = [self createRichPushMessage:message conversation:conversation recipient:recipient participants:conversation.participants];
         
         if (parameters.count > 0)
         {
@@ -117,11 +117,11 @@
 }
 
 
-- (NSDictionary*) createRichPushMessage:(HOPMessageRecord*) message conversation:(HOPConversation*) conversation recipient:(HOPContact*) recipient recipients:(NSArray*) recipients
+- (NSDictionary*) createRichPushMessage:(HOPMessageRecord*) message conversation:(HOPConversation*) conversation recipient:(HOPContact*) recipient participants:(NSArray*) participants
 {
     NSMutableDictionary* dict = [NSMutableDictionary new];
     
-    NSMutableArray* tempArray = [NSMutableArray arrayWithArray:recipients];
+    NSMutableArray* tempArray = [NSMutableArray arrayWithArray:participants];
     [tempArray removeObject:recipient];
     NSString* peerURIs = [self getListOfRecipientsFromPeerURIsArray:tempArray];
     

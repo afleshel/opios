@@ -99,6 +99,8 @@
             UIImage* img = [[ImageManager sharedImageManager] getAvatarImageForIdentity:identity];
             if (img)
                 [avatars addObject:img];
+            else
+                [avatars addObject:[UIImage imageNamed:@"avatar.png"]];
         }
         
         UIImage* avatarsImage = [Utility createImageFromImages:avatars inFrame:self.displayImage.frame];

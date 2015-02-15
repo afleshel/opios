@@ -134,7 +134,7 @@
 - (NSString*) getListOfRecipientsFromPeerURIsArray:(NSArray*) array
 {
     NSString* peerURIs = @"";
-    NSArray* participantsPeerURIs = [array valueForKeyPath:@"contact.publicPeerFile.peerURI"];
+    NSArray* participantsPeerURIs = [array valueForKeyPath:@"publicPeerFile.peerURI"];
     for (NSString* tempPeerURI in participantsPeerURIs)
     {
         if (![tempPeerURI isEqualToString:self.peerURI])
@@ -144,7 +144,7 @@
     return peerURIs;
 }
 
-- (NSDictionary*) createRichPushMessage:(HOPMessageRecord*) message conversation:(HOPConversation*) conversation recipient:(HOPContact*) recipient recipients:(NSArray*) recipients
+- (NSDictionary*) createRichPushMessage:(HOPMessageRecord*) message conversation:(HOPConversation*) conversation recipient:(HOPContact*) recipient participants:(NSArray*) participants
 {
     return nil;
 }

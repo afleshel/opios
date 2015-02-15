@@ -85,7 +85,6 @@ using namespace openpeer::core;
 + (HOPConversation*) conversationWithParticipants:(NSArray*) participants title:(NSString*) inTitle type:(HOPConversationThreadType) type
 {
     HOPConversation* ret = [HOPConversation new];
-    
     if (ret)
     {
         ret.conversationType = type;
@@ -149,6 +148,8 @@ using namespace openpeer::core;
             else
             {
                 conversation = [HOPConversation conversationWithParticipants:participants title:nil type:[HOPConversation conversationThreadTypeForString:threadType]];
+                [conversation setConversationID:conversationID];
+                [[OpenPeerStorageManager sharedStorageManager] setConversation:conversation conversationID:conversation.record.sessionID];
             }
         }
         else

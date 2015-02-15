@@ -36,7 +36,7 @@
 #import <OpenPeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPAvatar.h>
 #import <OpenPeerSDK/HOPImage.h>
-//#import <OpenPeerSDK/HOPConversationEvent+External.h>
+#import <OpenPeerSDK/HOPContact+External.h>
 #import <OpenPeerSDK/HOPConversation.h>
 #import <OpenPeerSDK/HOPAccount.h>
 @interface WaitingVideoViewController()
@@ -95,7 +95,7 @@ const int CONNECTING_ANIMATION_DURATION = 2;
     
     self.statusLabel.text = self.statusText;
     
-    HOPIdentity* contact = [self.conversation getParticipants][0];
+    HOPIdentity* contact = [((HOPContact*)[self.conversation getParticipants][0]) getDefaultIdentity];
     self.participantName.text = contact.name;
     self.callerName.text = [[HOPAccount sharedAccount] getFullName];
     

@@ -33,6 +33,7 @@
 
 #import <OpenPeerSDK/HOPMessageRecord+External.h>
 #import <OpenPeerSDK/HOPConversationRecord+External.h>
+#import <OpenPeerSDK/HOPConversation.h>
 #import <OpenPeerSDK/HOPIdentity+External.h>
 #import <OpenPeerSDK/HOPContact+External.h>
 #import <OpenPeerSDK/HOPAccount.h>
@@ -180,7 +181,7 @@
         NSArray* deviceTokens = [self getDeviceTokensForContact:recipient];
         if ([deviceTokens count] > 0)
         {
-            NSDictionary* dataToPush = [self createRichPushMessage:message  conversation:conversation recipient:recipient recipients:recipients];
+            NSDictionary* dataToPush = [self createRichPushMessage:message  conversation:conversation recipient:recipient participants:conversation.participants];
             
             if (dataToPush.count > 0)
             {
@@ -211,11 +212,11 @@
     }
 }
 
-- (NSDictionary*) createRichPushMessage:(HOPMessageRecord*) message conversation:(HOPConversation*) conversation recipient:(HOPContact*) recipient recipients:(NSArray*) recipients
+- (NSDictionary*) createRichPushMessage:(HOPMessageRecord*) message conversation:(HOPConversation*) conversation recipient:(HOPContact*) recipient participants:(NSArray *)participants
 {
     NSDictionary* ret = nil;
     NSArray* deviceTokens = [self getDeviceTokensForContact:recipient];
-    NSMutableArray* tempArray = [NSMutableArray arrayWithArray:recipients];
+    NSMutableArray* tempArray = [NSMutableArray arrayWithArray:participants];
     [tempArray removeObject:recipient];
     NSString* peerURIs = [self getListOfRecipientsFromPeerURIsArray:tempArray];
     
