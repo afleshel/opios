@@ -29,7 +29,16 @@
                         <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" image="iPhone_background_navigation_mode.png" translatesAutoresizingMaskIntoConstraints="NO" id="59" userLabel="Background Image View - iPhone_background_navigation_mode.png">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         </imageView>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="68" userLabel="Message Entry View">
+                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="13">
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="291"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <color key="separatorColor" red="0.75759631240000003" green="0.81539670289999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <outlet property="dataSource" destination="-1" id="26"/>
+                                <outlet property="delegate" destination="-1" id="27"/>
+                            </connections>
+                        </tableView>
+                        <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="68" userLabel="Message Entry View">
                             <rect key="frame" x="0.0" y="270" width="320" height="71"/>
                             <subviews>
                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="iPhone_chat_textfield_bkgd.png" translatesAutoresizingMaskIntoConstraints="NO" id="72">
@@ -63,8 +72,11 @@
                                         <outlet property="delegate" destination="-1" id="260"/>
                                     </connections>
                                 </textView>
-                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m4V-nR-VhO">
-                                    <rect key="frame" x="15" y="0.0" width="300" height="21"/>
+                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m4V-nR-VhO">
+                                    <rect key="frame" x="40" y="0.0" width="240" height="21"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="21" id="2lX-Bg-rae"/>
+                                    </constraints>
                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                     <color key="textColor" white="0.79998289233576647" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
@@ -76,32 +88,26 @@
                                 <constraint firstItem="69" firstAttribute="top" secondItem="70" secondAttribute="top" id="Fb2-Z6-tzS"/>
                                 <constraint firstAttribute="height" constant="71" id="Qjb-hb-MR0"/>
                                 <constraint firstItem="69" firstAttribute="bottom" secondItem="70" secondAttribute="bottom" id="TwD-sb-TZE"/>
+                                <constraint firstAttribute="trailing" secondItem="m4V-nR-VhO" secondAttribute="trailing" constant="40" id="UNq-Rq-nmK"/>
                                 <constraint firstItem="72" firstAttribute="centerY" secondItem="71" secondAttribute="centerY" id="WIl-L1-N5B"/>
                                 <constraint firstItem="72" firstAttribute="top" secondItem="68" secondAttribute="top" constant="21" id="Xe2-gn-WM9"/>
                                 <constraint firstItem="71" firstAttribute="leading" secondItem="70" secondAttribute="trailing" constant="7" id="XzQ-gC-d4y"/>
+                                <constraint firstItem="m4V-nR-VhO" firstAttribute="top" secondItem="68" secondAttribute="top" id="Ymw-PH-bYa"/>
                                 <constraint firstItem="71" firstAttribute="centerY" secondItem="69" secondAttribute="centerY" id="bP7-Y9-Ln6"/>
                                 <constraint firstItem="70" firstAttribute="trailing" secondItem="69" secondAttribute="trailing" id="eyI-D2-jJc"/>
+                                <constraint firstItem="m4V-nR-VhO" firstAttribute="leading" secondItem="68" secondAttribute="leading" constant="40" id="faB-UD-zev"/>
                                 <constraint firstAttribute="bottom" secondItem="72" secondAttribute="bottom" id="gDA-VR-mjB"/>
                                 <constraint firstItem="69" firstAttribute="leading" secondItem="68" secondAttribute="leading" constant="7" id="nri-rz-SmK"/>
                                 <constraint firstItem="72" firstAttribute="leading" secondItem="68" secondAttribute="leading" id="qdY-oO-PM6"/>
                             </constraints>
                         </view>
-                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="13">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="290"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            <color key="separatorColor" red="0.75759631240000003" green="0.81539670289999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                            <connections>
-                                <outlet property="dataSource" destination="-1" id="26"/>
-                                <outlet property="delegate" destination="-1" id="27"/>
-                            </connections>
-                        </tableView>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="13" secondAttribute="trailing" id="0KT-Qb-rja"/>
                         <constraint firstItem="13" firstAttribute="top" secondItem="RCN-I5-Cvn" secondAttribute="top" id="BrU-pr-VTZ"/>
                         <constraint firstAttribute="bottom" secondItem="68" secondAttribute="bottom" id="OG7-93-wgp"/>
-                        <constraint firstItem="68" firstAttribute="bottom" secondItem="13" secondAttribute="bottom" constant="51" id="VYt-rA-D4U"/>
+                        <constraint firstItem="68" firstAttribute="bottom" secondItem="13" secondAttribute="bottom" constant="50" id="VYt-rA-D4U"/>
                         <constraint firstAttribute="trailing" secondItem="68" secondAttribute="trailing" id="byM-kd-J1J"/>
                         <constraint firstItem="68" firstAttribute="leading" secondItem="RCN-I5-Cvn" secondAttribute="leading" id="jUI-j7-11U"/>
                         <constraint firstItem="13" firstAttribute="leading" secondItem="RCN-I5-Cvn" secondAttribute="leading" id="yf0-gE-GcU"/>

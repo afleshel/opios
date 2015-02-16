@@ -394,7 +394,7 @@
         if (videoCall)
             [self.containerView addConstraint:[NSLayoutConstraint constraintWithItem:callViewController.view attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.containerView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
         else
-            [self.containerView addConstraint:[NSLayoutConstraint constraintWithItem:callViewController.view attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.containerView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:-self.chatViewController.typingMessageView.frame.size.height]];
+            [self.containerView addConstraint:[NSLayoutConstraint constraintWithItem:callViewController.view attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.containerView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:(0-[self.chatViewController getTextFieldHeight])]];
         
         [self.containerView addConstraint:[NSLayoutConstraint constraintWithItem:callViewController.view attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:self.containerView attribute:NSLayoutAttributeTrailing multiplier:1.0 constant:0]];
     }
@@ -417,7 +417,7 @@
         
         [self setRightBarButtonWithEndCall:YES forWaitingView:NO];
     }
-    [[SessionManager sharedSessionManager] makeCallForConversation:self.conversation includeVideo:videoCall isRedial:NO];
+    //[[SessionManager sharedSessionManager] makeCallForConversation:self.conversation includeVideo:videoCall isRedial:NO];
 }
 
 

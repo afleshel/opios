@@ -95,19 +95,27 @@
 {
     if ([UIDevice isNetworkReachable])
     {
-        if (!inConversation.currentCall)
+        if (![self isCallInProgress])
         {
-            OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Making a call for the session <%p>", inConversation);
-            
-            //Place a audio or video call for chosen contact
-            //inSession.isRedial = isRedial;
-            inConversation.currentCall = [HOPCall placeCallForConversation:inConversation includeAudio:YES includeVideo:includeVideo];
-            [self setActiveCallConversation:inConversation callActive:YES];
-            [[MessageManager sharedMessageManager] sendCallSystemMessage:HOPCallSystemMessageTypeCallPlaced reasonCode:0 forConversation:inConversation];
+            if (!inConversation.currentCall)
+            {
+                OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Making a call for the session <%p>", inConversation);
+                
+                //Place a audio or video call for chosen contact
+                //inSession.isRedial = isRedial;
+                inConversation.currentCall = [HOPCall placeCallForConversation:inConversation includeAudio:YES includeVideo:includeVideo];
+                [self setActiveCallConversation:inConversation callActive:YES];
+                [[MessageManager sharedMessageManager] sendCallSystemMessage:HOPCallSystemMessageTypeCallPlaced reasonCode:0 forConversation:inConversation];
+            }
+            else
+            {
+                OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Call is already in a progress");
+            }
         }
         else
         {
-            OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Call is already in a progress");
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Call in progress" message:[NSString stringWithFormat:@"You are already have an active call."] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [alert show];
         }
     }
     else
@@ -388,8 +396,13 @@
 
 - (void) stopAnyActiveCall
 {
-    if (self.conversationWithActiveCall)
-        [self.conversationWithActiveCall.currentCall hangup:HOPCallClosedReasonNone];
+    if ([self isCallInProgress])
+    {
+        @synchronized(self)
+        {
+            [self.conversationWithActiveCall.currentCall hangup:HOPCallClosedReasonNone];
+        }
+    }
 }
 
 - (void) clearAllSessions

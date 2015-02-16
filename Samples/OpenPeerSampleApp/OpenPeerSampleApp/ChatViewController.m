@@ -726,5 +726,10 @@
     [self.view bringSubviewToFront:self.chatTableView];
     [self.chatTableView reloadData];
 }
+
+- (float) getTextFieldHeight
+{
+    return self.typingMessageView.frame.size.height - self.labelComposingStatus.frame.size.height;
+}
 @end
 

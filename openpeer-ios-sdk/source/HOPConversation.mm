@@ -273,10 +273,11 @@ using namespace openpeer::core;
 
 - (void) clear
 {
+    [[OpenPeerStorageManager sharedStorageManager] removeConversation:self];
+    
     if (self.thread)
         [self.thread destroyCoreObject];
     
-    [[OpenPeerStorageManager sharedStorageManager] removeConversation:self];
 }
 
 - (HOPComposingState) getComposingStateForContact:(HOPContact*) contact

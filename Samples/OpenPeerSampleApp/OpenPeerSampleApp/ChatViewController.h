@@ -49,6 +49,6 @@
 - (void) hideKeyboard;
 - (void) updateFetchControllerForSession:(NSString*) sessionID;
 - (void) refreshMessages;
-//- (float) getHeaderHeight:(float)tableViewHeight;
+- (float) getTextFieldHeight;
 //- (void) setFooterMessage:(NSString*) message;
 @end

@@ -150,7 +150,8 @@
 - (void) removeConversation:(HOPConversation*) conversation
 {
     [_dictionaryConversations removeObjectForKey:conversation.conversationID];
-    [_dictionaryConversationsWithThreadID removeObjectForKey:[conversation.thread getThreadId]];
+    if (conversation.thread && [conversation.thread getThreadId].length > 0)
+        [_dictionaryConversationsWithThreadID removeObjectForKey:[conversation.thread getThreadId]];
     if (conversation.conversationType == HOPConversationThreadTypeContactBased)
         [_dictionaryConversationsWithCBCID removeObjectForKey:[HOPUtility getCBCIDForContacts:conversation.participants]];
 }
