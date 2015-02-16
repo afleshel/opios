@@ -230,7 +230,7 @@
     HOPConversation* hopConversation = [object objectForKey:@"thread"];
     if (self.conversation == hopConversation)
     {
-        HOPIdentity* contact = [object objectForKey:@"contact"];
+        HOPContact* contact = [object objectForKey:@"contact"];
         NSNumber* status = [object objectForKey:@"status"];
 
         [self.dictionaryComposingStatuses setObject:status forKey:[contact getPeerURI]];

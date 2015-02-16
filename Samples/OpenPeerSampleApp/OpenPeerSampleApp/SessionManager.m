@@ -204,7 +204,7 @@
     else //If callFlagIsSet is NO, hangup incoming call. 
     {
         [call hangup:HOPCallClosedReasonBusy];
-        [[[OpenPeer sharedOpenPeer] mainViewController] showNotification:[NSString stringWithFormat:@"%@ is busy.",[[conversation.participants objectAtIndex:0] name]]];
+        [[[OpenPeer sharedOpenPeer] mainViewController] showNotification:[NSString stringWithFormat:@"%@ is trying to reach you.",[[conversation.participants objectAtIndex:0] getFullName]]];
     }
 }
 
@@ -324,8 +324,8 @@
         //If call is droped because user is a busy at the moment, show notification to caller.
         if ([conversation.currentCall getClosedReason] == HOPCallClosedReasonBusy)
         {
-            HOPIdentity* contact = [conversation.participants objectAtIndex:0];
-            NSString* contactName = contact.name;
+            HOPContact* contact = [conversation.participants objectAtIndex:0];
+            NSString* contactName = [contact getFullName];
             [[[OpenPeer sharedOpenPeer] mainViewController] showNotification:[NSString stringWithFormat:@"%@ is busy.",contactName]];
          }
     }
