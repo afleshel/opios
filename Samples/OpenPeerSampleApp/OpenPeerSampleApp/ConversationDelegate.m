@@ -56,16 +56,35 @@
 
 @implementation ConversationDelegate
 
+- (NSArray*) getIdentitiesForContacts:(NSArray*) contacts
+{
+    NSMutableArray* identities = nil;
+    
+    if (contacts.count > 0)
+        identities = [NSMutableArray new];
+    
+    for (HOPContact* contact in contacts)
+    {
+        if (contact.identities.count > 0)
+            [identities addObjectsFromArray:contact.identities.allObjects];
+    }
+    
+    return identities;
+}
 - (void) onConversationNew:(HOPConversation*) conversation
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Handling a new conversation thread creation.");
-    [[ContactsManager sharedContactsManager] identityLookupForContacts:conversation.updatedContacts];
+    NSArray* identities = [self getIdentitiesForContacts:conversation.unknownContacts];
+    if (identities.count > 0)
+        [[ContactsManager sharedContactsManager] identityLookupForContacts:identities];
 }
 
 - (void) onConversationContactsChanged:(HOPConversation*) conversation
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread id %@  - number of contacts: %d.",[conversation getConversationID], conversation.participants.count);
-    [[ContactsManager sharedContactsManager] identityLookupForContacts:conversation.updatedContacts];
+    NSArray* identities = [self getIdentitiesForContacts:conversation.unknownContacts];
+    if (identities.count > 0)
+    [[ContactsManager sharedContactsManager] identityLookupForContacts:identities];
     dispatch_async(dispatch_get_main_queue(), ^
    {
        [[SessionManager sharedSessionManager] onParticipantsInConversationUpdate:conversation];

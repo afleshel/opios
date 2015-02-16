@@ -55,6 +55,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
         if (self = [super init])
         {
             IIdentityLookup::IdentityLookupInfoList identityLookupInfoList;
+            
             for (HOPIdentity* contact in identityLookupInfos)
             {
                 if (contact.identityURI.length > 0)

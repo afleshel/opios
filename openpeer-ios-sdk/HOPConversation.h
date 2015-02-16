@@ -55,6 +55,7 @@
 @property (nonatomic, copy) NSString* conversationID;
 @property (nonatomic, getter=getParticipants) NSArray* participants;
 @property (nonatomic, strong) NSArray* updatedContacts;
+@property (nonatomic, strong) NSArray* unknownContacts;
 
 
 @property (strong) NSMutableSet* setOfNotSentMessages;

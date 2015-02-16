@@ -171,9 +171,9 @@
 {
     if (contacts.count > 0)
     {
-        for (HOPAssociatedIdentity* associatedIdentity in [[HOPAccount sharedAccount] getAssociatedIdentities])
+        for (HOPAccountIdentity* associatedIdentity in [[HOPAccount sharedAccount] getAssociatedIdentities])
         {
-            HOPIdentityLookup* identityLookup = [[HOPIdentityLookup alloc] initWithDelegate:(id<HOPIdentityLookupDelegate>)[[OpenPeer sharedOpenPeer] identityLookupDelegate] identityLookupInfos:contacts identityServiceDomain:associatedIdentity.identityProvider.domain];
+            HOPIdentityLookup* identityLookup = [[HOPIdentityLookup alloc] initWithDelegate:(id<HOPIdentityLookupDelegate>)[[OpenPeer sharedOpenPeer] identityLookupDelegate] identityLookupInfos:contacts identityServiceDomain:[associatedIdentity getIdentityProviderDomain]];
             
             if (identityLookup)
                 [self.identityLookupsArray addObject:identityLookup];

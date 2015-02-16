@@ -746,8 +746,9 @@
 
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated;
 {
-    //if (![viewController isKindOfClass:[SessionViewController_iPhone class]])
     if ([viewController isKindOfClass:[ContactsViewController class]] || [viewController isKindOfClass:[ActiveSessionsViewController class]] || [viewController isKindOfClass:[SettingsViewController class]])
         self.currentlyVisibleViewController = nil;
+    else if ([viewController isKindOfClass:[SessionViewController_iPhone class]])
+        self.currentlyVisibleViewController = (SessionViewController_iPhone*)viewController;
 }
 @end
