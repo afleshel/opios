@@ -39,11 +39,26 @@
 		<key>apiPushURL</key>
 		<string></string>
 	</dict>
+	<key>APNS-Parse</key>
+	<dict>
+		<key>developmentAppID</key>
+		<string></string>
+		<key>developmentClientKey</key>
+		<string></string>
+		<key>productionAppID</key>
+		<string></string>
+		<key>productionClientKey</key>
+		<string></string>
+	</dict>
 	<key>applicationTimeBetweenTwoPushes</key>
 	<integer>0</integer>
 	<key>applicationSettingsVersion</key>
 	<string>1.0</string>
 	<key>applicationOverwriteSettings</key>
 	<true/>
+	<key>applicationConversationType</key>
+	<string>thread</string>
+	<key>applicationDefaultAPNSProvider</key>
+	<string>Parse</string>
 </dict>
 </plist>
