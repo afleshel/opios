@@ -586,7 +586,7 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (HOPOpenPeerAccount*) getLastLoggedInUser
+- (HOPOpenPeerAccount*) getLoggedInAccount
 {
     HOPOpenPeerAccount* ret = nil;
     
@@ -889,7 +889,7 @@ using namespace openpeer::core;
         
         NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"lastActivity" ascending:NO];
         
-        results = [self getResultsForEntity:@"HOPConversationRecord" withPredicateString:[NSString stringWithFormat:@"homeUser.stableId MATCHES '%@' AND ANY events.participants.cbcID MATCHES '%@'",[self getLastLoggedInUser].stableId,cbcID] orderDescriptors:@[sortDescriptor]];
+        results = [self getResultsForEntity:@"HOPConversationRecord" withPredicateString:[NSString stringWithFormat:@"homeUser.stableId MATCHES '%@' AND ANY events.participants.cbcID MATCHES '%@'",[self getLoggedInAccount].stableId,cbcID] orderDescriptors:@[sortDescriptor]];
         
         
         if ([results count] > 0)
@@ -909,7 +909,7 @@ using namespace openpeer::core;
         if (conversationThread.conversationType == HOPConversationThreadTypeContactBased)
         {
             NSString* cbcID = [HOPUtility getCBCIDForContacts:conversationThread.participants];
-            results = [self getResultsForEntity:@"HOPConversationRecord" withPredicateString:[NSString stringWithFormat:@"homeUser.stableId MATCHES '%@' AND ANY events.participants.cbcID MATCHES '%@'",[self getLastLoggedInUser].stableId,cbcID] orderDescriptors:@[sortDescriptor]];
+            results = [self getResultsForEntity:@"HOPConversationRecord" withPredicateString:[NSString stringWithFormat:@"homeUser.stableId MATCHES '%@' AND ANY events.participants.cbcID MATCHES '%@'",[self getLoggedInAccount].stableId,cbcID] orderDescriptors:@[sortDescriptor]];
         }
         else if (conversationThread.conversationType == HOPConversationThreadTypeThreadBased)
         {
@@ -972,7 +972,7 @@ using namespace openpeer::core;
             if (!ret)
             {
                 ret = (HOPConversationRecord*)[self createObjectForEntity:@"HOPConversationRecord"];
-                ret.homeUser = [self getLastLoggedInUser];
+                ret.homeUser = [self getLoggedInAccount];
                 ret.sessionID = [conversationThread getThreadId].length > 0 ?  [conversationThread getThreadId] : [HOPUtility getGUIDstring];
                 ret.creationTime = date;
                 ret.type = type;
@@ -1244,8 +1244,6 @@ using namespace openpeer::core;
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPMessageRecord" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];
     [fetchRequest setEntity:entity];
     
-    //NSPredicate* predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(visible == YES AND conversationEvent.participants.cbcID MATCHES '%@' AND conversationEvent.session.homeUser.stableId MATCHES '%@')",conversation.lastEvent.participants.cbcID,[self getLastLoggedInUser].stableId]];
-    
     NSPredicate* predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(visible == YES AND session.sessionID MATCHES '%@')",[conversation getConversationID]]];
     [fetchRequest setPredicate:predicate];
     
@@ -1263,7 +1261,7 @@ using namespace openpeer::core;
 - (HOPIdentity*) getIdentityForAccount
 {
     HOPIdentity* ret = nil;
-    HOPOpenPeerAccount* account = [self getLastLoggedInUser];
+    HOPOpenPeerAccount* account = [self getLoggedInAccount];
     if (account && account.stableId.length > 0)
         ret = [[self getOpenPeerContactForStableID:account.stableId] getDefaultIdentity];
     return ret;
@@ -1535,6 +1533,21 @@ using namespace openpeer::core;
         [ret addIdentitiesObject:identity];
         ret.publicPeerFile = publicPeerFile;
     }
+    return ret;
+}
+
+- (NSArray*) getAllContactsForLoggedInAccount
+{
+    NSArray* ret = nil;
+    
+    NSString* stableID = [[HOPAccount sharedAccount] getStableID];
+    
+    if (stableID.length > 0)
+    {
+        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
+        ret = [self getResultsForEntity:@"HOPIdentity" withPredicateString:[NSString stringWithFormat:@"(associatedIdentity.account.stableId MATCHES '%@')",stableID] orderDescriptors:@[sortDescriptor]];
+    }
+  
     return ret;
 }
 @end

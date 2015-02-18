@@ -181,4 +181,6 @@ using namespace openpeer::core;
 - (NSArray*) addUnkownContactsFromConversationThread:(HOPConversationThread*) thread;
 
 - (HOPIdentity*) createIdentityForCoreIdentity:(IdentityContact) identityContact isSelf:(BOOL) isSelf;
+
+- (NSArray*) getAllContactsForLoggedInAccount;
 @end

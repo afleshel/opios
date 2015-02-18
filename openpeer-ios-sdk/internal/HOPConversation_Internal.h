@@ -48,11 +48,4 @@
 + (HOPConversation*) conversationWithThread:(HOPConversationThread*) inConversationThread;
 
 
-//- (HOPConversationThread*) getThread;
-//- (HOPConversationRecord*) getRecord;
-//- (HOPConversationEvent*) getLastEvent;
-//
-//- (NSTimer*) getRemovalTimer;
-//- (NSSet*) getPreviousParticipants;
-
 @end

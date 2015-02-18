@@ -41,16 +41,6 @@
 
 @interface HOPConversation : NSObject
 
-//MOVE TO INTERNAL
-/*@property (nonatomic, strong) HOPConversationThread* thread;
-@property (nonatomic, strong) HOPConversationRecord* record;
-@property (nonatomic, strong) HOPConversationEvent* lastEvent;
-
-//TODO: MOVE TO INTERNAL-START
-@property (nonatomic, strong) NSTimer* removalTimer;
-@property (nonatomic, strong) NSSet* previousParticipants;*/
-//TODO: MOVE TO INTERNAL-END
-
 @property (nonatomic, copy) NSString* topic;
 @property (nonatomic, copy) NSString* conversationID;
 @property (nonatomic, getter=getParticipants) NSArray* participants;
@@ -102,8 +92,9 @@
 
 + (NSString*) getDefaultTitleForParticipants:(NSArray*) inParticipants;
 
-- (BOOL) quit;
-- (BOOL) isQuit;
-
-- (void) onRemovalTimerExpired:(id) object;
+//NOT YET SUPPORTED SELF REMOVAL FROM CONVERSATION
+//- (BOOL) quit;
+//- (BOOL) isQuit;
+//- (void) onRemovalTimerExpired:(id) object;
+//- (BOOL) amIRemoved;
 @end

@@ -165,7 +165,7 @@
  Returns last logged in user.
  @return HOPOpenPeerAccount object
  */
-- (HOPOpenPeerAccount*) getLastLoggedInUser;
+- (HOPOpenPeerAccount*) getLoggedInAccount;
 
 
 

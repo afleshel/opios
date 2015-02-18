@@ -87,6 +87,11 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
         ZS_LOG_ERROR(Debug, "Identity login is not started successfully!");
     }
     
+    if ([HOPAccount sharedAccount].openPeerAccount.associatedIdentities.count > 0)
+        ret.isAssociating = YES;
+    else
+        ret.isLoggingIn = YES;
+    
     return ret;
 }
 
@@ -114,6 +119,11 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     {
         ZS_LOG_ERROR(Debug, "Identity login is not started successfully!");
     }
+    
+    if ([HOPAccount sharedAccount].openPeerAccount.associatedIdentities.count > 0)
+        ret.isAssociating = YES;
+    else
+        ret.isLoggingIn = YES;
     
     return ret;
 }

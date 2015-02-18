@@ -53,6 +53,9 @@
 @property (copy) NSString* identityId;
 @property (nonatomic, strong) NSTimer* deletionTimer;
 
+@property (nonatomic, assign) BOOL isAssociating;
+@property (nonatomic, assign) BOOL isLoggingIn;
+
 /**
 *  Converts identity state enum to string. (Deprecated)
 *
@@ -240,4 +243,6 @@
 - (void) destroyCoreObject;
 
 - (BOOL) isValid;
+
+
 @end

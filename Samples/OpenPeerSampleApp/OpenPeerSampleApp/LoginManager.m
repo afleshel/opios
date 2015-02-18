@@ -283,9 +283,9 @@
  */
 - (void) onIdentityAssociationFinished:(HOPAccountIdentity*) accountIdentity
 {
-    if ([[HOPAccount sharedAccount] addAccountIdentity:accountIdentity])
-        [self.associatingIdentitiesDictionary removeAllObjects];
-        //[self.associatingIdentitiesDictionary removeObjectForKey:[identity getIdentityURI]];
+    [[HOPAccount sharedAccount] addAccountIdentity:accountIdentity];
+    [self.associatingIdentitiesDictionary removeAllObjects];
+    //[self.associatingIdentitiesDictionary removeObjectForKey:[identity getIdentityURI]];
     
     [self onUserLoggedIn];
 }

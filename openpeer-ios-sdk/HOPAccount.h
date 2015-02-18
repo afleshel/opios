@@ -40,7 +40,7 @@
 @property (nonatomic, assign) HOPAccountState state;
 @property (nonatomic, assign) unsigned short errorCode;
 @property (nonatomic, strong) NSString* errorReason;
-
+@property (nonatomic, getter=getIdentities) NSArray* identityContacts;
 @end
 
 /**
@@ -59,7 +59,13 @@ Singleton class that represents the logged in OpenPeer user.
  */
 - (id) init __attribute__((unavailable("HOPAccount is singleton class.")));
 
-+ (BOOL)isReloginPossible;
+/**
+ *  Check if there is already logged in account with valid relogin information
+ *
+ *  @return YES if it is possible to do relogin for account
+ */
++ (BOOL) isReloginPossible;
+
 /**
  *  Converts account state enum to string.
  *
@@ -78,25 +84,13 @@ Singleton class that represents the logged in OpenPeer user.
  */
 + (NSString*) stringForAccountState:(HOPAccountState) state;
 
-/**
- *  Starts account login procedure.
- *
- *  @param inAccountDelegate                     Delegate object that implements the HOPAccountDelegate protocol
- *  @param inConversationThreadDelegate          Delegate object that implements the HOPConversationThreadDelegate protocol
- *  @param inCallDelegate                        Delegate object that implements the HOPCallDelegate protocol
- *  @param namespaceGrantOuterFrameURLUponReload An outer frame URL
- *  @param lockboxServiceDomain                  Lockbox service domain
- *  @param forceCreateNewLockboxAccount          A flag that tells core to create a new user if old user data is corrupted
- *
- *  @return YES if IAccount object is created sucessfull, otherwise, NO
- */
-- (BOOL) loginWithAccountDelegate:(id<HOPAccountDelegate>) inAccountDelegate conversationThreadDelegate:(id<HOPConversationThreadDelegate>) inConversationThreadDelegate callDelegate:(id<HOPCallDelegate>) inCallDelegate namespaceGrantOuterFrameURLUponReload:(NSString*) namespaceGrantOuterFrameURLUponReload lockboxServiceDomain:(NSString*) lockboxServiceDomain forceCreateNewLockboxAccount:(BOOL) forceCreateNewLockboxAccount;
+- (BOOL) loginWithAccountDelegate:(id<HOPAccountDelegate>) inAccountDelegate conversationThreadDelegate:(id<HOPConversationThreadDelegate>) inConversationThreadDelegate callDelegate:(id<HOPCallDelegate>) inCallDelegate namespaceGrantOuterFrameURLUponReload:(NSString*) namespaceGrantOuterFrameURLUponReload lockboxServiceDomain:(NSString*) lockboxServiceDomain forceCreateNewLockboxAccount:(BOOL) forceCreateNewLockboxAccount __attribute__((unavailable("use method loginWithAccountDelegate:conversationDelegate:callDelegate:namespaceGrantOuterFrameURLUponReload:lockboxServiceDomain:forceCreateNewLockboxAccount:  instead")));
 
 /**
  *  Starts account login procedure.
  *
  *  @param inAccountDelegate                     Delegate object that implements the HOPAccountDelegate protocol
- *  @param inConversationDelegate          Delegate object that implements the HOPConversationDelegate protocol
+ *  @param inConversationDelegate                Delegate object that implements the HOPConversationDelegate protocol
  *  @param inCallDelegate                        Delegate object that implements the HOPCallDelegate protocol
  *  @param namespaceGrantOuterFrameURLUponReload An outer frame URL
  *  @param lockboxServiceDomain                  Lockbox service domain
@@ -106,19 +100,9 @@ Singleton class that represents the logged in OpenPeer user.
  */
 - (BOOL) loginWithAccountDelegate:(id<HOPAccountDelegate>) inAccountDelegate conversationDelegate:(id<HOPConversationDelegate>) inConversationDelegate callDelegate:(id<HOPCallDelegate>) inCallDelegate namespaceGrantOuterFrameURLUponReload:(NSString*) namespaceGrantOuterFrameURLUponReload lockboxServiceDomain:(NSString*) lockboxServiceDomain forceCreateNewLockboxAccount:(BOOL) forceCreateNewLockboxAccount;
 
-/**
- *  Starts relogin procedure.
- *
- *  @param inAccountDelegate              Delegate object that implements the HOPAccountDelegate protocol
- *  @param inConversationThreadDelegate   Delegate object that implements the HOPConversationThreadDelegate protocol
- *  @param inCallDelegate                 Delegate object that implements the HOPCallDelegate protocol
- *  @param lockboxOuterFrameURLUponReload An outer frame URL
- *  @param reloginInformation             A relogin information stored on login.
- *
- *  @return YES, if relogin procedure started succesfully, otherwise NO
- */
-- (BOOL) reloginWithAccountDelegate:(id<HOPAccountDelegate>) inAccountDelegate conversationThreadDelegate:(id<HOPConversationThreadDelegate>) inConversationThreadDelegate callDelegate:(id<HOPCallDelegate>) inCallDelegate lockboxOuterFrameURLUponReload:(NSString *)lockboxOuterFrameURLUponReload;
 
+- (BOOL) reloginWithAccountDelegate:(id<HOPAccountDelegate>) inAccountDelegate conversationThreadDelegate:(id<HOPConversationThreadDelegate>) inConversationThreadDelegate callDelegate:(id<HOPCallDelegate>) inCallDelegate lockboxOuterFrameURLUponReload:(NSString *)lockboxOuterFrameURLUponReload __attribute__((unavailable("use method reloginWithAccountDelegate:conversationDelegate:callDelegate:lockboxOuterFrameURLUponReload:  instead")));
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
 /**
  *  Starts relogin procedure.
  *
@@ -272,11 +256,24 @@ Singleton class that represents the logged in OpenPeer user.
 - (NSString*) getFullName;
 
 /**
- *  Update 
+ *  Store information about associated identituy
  *
- *  @param identity <#identity description#>
+ *  @param accountIdentity associated identity
  *
- *  @return <#return value description#>
  */
-- (BOOL) addAccountIdentity:(HOPAccountIdentity*) accountIdentity;
+- (void) addAccountIdentity:(HOPAccountIdentity*) accountIdentity;
+
+/**
+ *  Returns list of associated social identities for logged in account.
+ *
+ *  @return List of identities
+ */
+- (NSArray*) getSelfIdentities;
+
+/**
+ *  Returns all connected social identities for logged in account
+ *
+ *  @return List of identities
+ */
+- (NSArray*) getIdentities;
 @end

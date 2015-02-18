@@ -86,46 +86,6 @@ using namespace openpeer::core;
 }
 
 
-- (BOOL) loginWithAccountDelegate:(id<HOPAccountDelegate>) inAccountDelegate conversationThreadDelegate:(id<HOPConversationThreadDelegate>) inConversationThreadDelegate callDelegate:(id<HOPCallDelegate>) inCallDelegate namespaceGrantOuterFrameURLUponReload:(NSString*) namespaceGrantOuterFrameURLUponReload lockboxServiceDomain:(NSString*) lockboxServiceDomain forceCreateNewLockboxAccount:(BOOL) forceCreateNewLockboxAccount
-{
-    ZS_LOG_DEBUG([self log:@"Starting account login"]);
-    BOOL passedWithoutErrors = NO;
-    NSString* grantID = [[OpenPeerUUIDManager sharedUUIDManager] getUUID];
-    
-    //Check if valid parameters are passed
-    if (!inAccountDelegate || !inConversationThreadDelegate || !inCallDelegate || [namespaceGrantOuterFrameURLUponReload length] == 0 || [grantID length] == 0  || [lockboxServiceDomain length] == 0 )
-    {
-        ZS_LOG_ERROR(Debug, [self log:@"Passed invalid parameters."]);
-        return passedWithoutErrors;
-    }
-    
-    //If core account object already exists, shut it down
-    if (accountPtr)
-    {
-        ZS_LOG_DEBUG([self log:@"Core account object already exists. Shuting down existing account object."]);
-        accountPtr->shutdown();
-    }
-    
-    //Set account, conversation thread and call delegates
-    [self setLocalDelegates:inAccountDelegate conversationThreadDelegate:inConversationThreadDelegate callDelegate:inCallDelegate];
-    
-    //Start login. This static method will create an account core object
-    accountPtr = IAccount::login(openpeerAccountDelegatePtr, openpeerConversationDelegatePtr, openpeerCallDelegatePtr, [namespaceGrantOuterFrameURLUponReload UTF8String], [grantID UTF8String], [lockboxServiceDomain UTF8String], forceCreateNewLockboxAccount);
-    
-    //If core account object is created, return that login process is started successfully
-    if (accountPtr)
-    {
-        ZS_LOG_DEBUG([self log:@"Account object created successfully."]);
-        passedWithoutErrors = YES;
-    }
-    else
-    {
-        ZS_LOG_DEBUG([self log:@"Account object is NOT created successfully."]);
-    }
-    
-    return passedWithoutErrors;
-}
-
 - (BOOL) loginWithAccountDelegate:(id<HOPAccountDelegate>) inAccountDelegate conversationDelegate:(id<HOPConversationDelegate>) inConversationDelegate callDelegate:(id<HOPCallDelegate>) inCallDelegate namespaceGrantOuterFrameURLUponReload:(NSString*) namespaceGrantOuterFrameURLUponReload lockboxServiceDomain:(NSString*) lockboxServiceDomain forceCreateNewLockboxAccount:(BOOL) forceCreateNewLockboxAccount
 {
     ZS_LOG_DEBUG([self log:@"Starting account login"]);
@@ -166,47 +126,12 @@ using namespace openpeer::core;
     return passedWithoutErrors;
 }
 
-- (BOOL)reloginWithAccountDelegate:(id<HOPAccountDelegate>)inAccountDelegate conversationThreadDelegate:(id<HOPConversationThreadDelegate>)inConversationThreadDelegate callDelegate:(id<HOPCallDelegate>)inCallDelegate lockboxOuterFrameURLUponReload:(NSString *)lockboxOuterFrameURLUponReload
-{
-    BOOL passedWithoutErrors = NO;
-    
-    self.openPeerAccount = [[HOPModelManager sharedModelManager] getLastLoggedInUser];
-    
-    if (self.openPeerAccount && self.openPeerAccount.reloginInfo.length > 0)
-    {
-        //Check if valid arguments are passed
-            if (!inAccountDelegate || !inConversationThreadDelegate || !inCallDelegate || [lockboxOuterFrameURLUponReload length] == 0)// || [reloginInformation length] == 0)
-        {
-            ZS_LOG_ERROR(Debug, [self log:@"Passed invalid arguments."]);
-            return passedWithoutErrors;
-        }
-        
-        //Set account, conversation thread and call delegates
-        [self setLocalDelegates:inAccountDelegate conversationThreadDelegate:inConversationThreadDelegate callDelegate:inCallDelegate];
-        
-        //Start relogin. This static method will create an account core object
-        accountPtr = IAccount::relogin(openpeerAccountDelegatePtr, openpeerConversationDelegatePtr, openpeerCallDelegatePtr, [lockboxOuterFrameURLUponReload UTF8String],IHelper::createElement([self.openPeerAccount.reloginInfo UTF8String]));
-        
-        //If core account object is created return that relogin process is started successfully
-        if (accountPtr)
-        {
-            ZS_LOG_DEBUG([self log:@"Account object created successfully."]);
-            passedWithoutErrors = YES;
-        }
-        else
-        {
-            ZS_LOG_DEBUG([self log:@"Account object is NOT created successfully."]);
-        }
-    }
-    
-    return passedWithoutErrors;
-}
 
 - (BOOL)reloginWithAccountDelegate:(id<HOPAccountDelegate>)inAccountDelegate conversationDelegate:(id<HOPConversationDelegate>)inConversationDelegate callDelegate:(id<HOPCallDelegate>)inCallDelegate lockboxOuterFrameURLUponReload:(NSString *)lockboxOuterFrameURLUponReload
 {
     BOOL passedWithoutErrors = NO;
     
-    self.openPeerAccount = [[HOPModelManager sharedModelManager] getLastLoggedInUser];
+    self.openPeerAccount = [[HOPModelManager sharedModelManager] getLoggedInAccount];
     
     if (self.openPeerAccount && self.openPeerAccount.reloginInfo.length > 0)
     {
@@ -302,11 +227,6 @@ using namespace openpeer::core;
             ZS_LOG_WARNING(Debug, [self log:@"Account object relogin information are not available!"]);
         }
     }
-//    else
-//    {
-//        ZS_LOG_ERROR(Debug, [self log:@"Invalid account object!"]);
-//        [NSException raise:NSInvalidArgumentException format:@"Invalid account object!"];
-//    }
     return ret;
 }
 
@@ -592,7 +512,7 @@ using namespace openpeer::core;
 #pragma mark - SDK methods
 - (void) updateLoggedInAccount
 {
-    HOPOpenPeerAccount* previousLoggedInHomeUser = [[HOPModelManager sharedModelManager] getLastLoggedInUser];
+    HOPOpenPeerAccount* previousLoggedInHomeUser = [[HOPModelManager sharedModelManager] getLoggedInAccount];
     self.openPeerAccount = [[HOPModelManager sharedModelManager] getAccountForStableID:[[HOPAccount sharedAccount] getStableID]];
     
     if (self.openPeerAccount)
@@ -618,15 +538,14 @@ using namespace openpeer::core;
 }
 - (void) resetLoggedInAccount
 {
-    HOPOpenPeerAccount* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInUser];
+    HOPOpenPeerAccount* homeUser = [[HOPModelManager sharedModelManager] getLoggedInAccount];
     homeUser.loggedIn = [NSNumber numberWithBool:NO];
     self.openPeerAccount = nil;
     [[HOPModelManager sharedModelManager] saveContext];
 }
 
-- (BOOL) addAccountIdentity:(HOPAccountIdentity*) accountIdentity
+- (void) addAccountIdentity:(HOPAccountIdentity*) accountIdentity
 {
-    BOOL ret = NO;
     if (self.openPeerAccount)
     {
         HOPIdentity* userIdentity = [accountIdentity getSelfIdentity];
@@ -644,10 +563,7 @@ using namespace openpeer::core;
             userIdentity.associatedIdentityForHomeUser = associatedIdentity;
         }
         [[HOPModelManager sharedModelManager] saveContext];
-        ret = YES;
     }
-    
-    return ret;
 }
 
 - (NSString*) getPeerURI
@@ -661,7 +577,21 @@ using namespace openpeer::core;
 
 + (BOOL)isReloginPossible
 {
-    return [[HOPModelManager sharedModelManager] getLastLoggedInUser] != nil;
+    HOPOpenPeerAccount* account = [[HOPModelManager sharedModelManager] getLoggedInAccount];
+    return account != nil && account.reloginInfo.length > 0;
+}
+
+- (NSArray*) getSelfIdentities
+{
+    if (self.openPeerAccount && self.openPeerAccount.contact)
+        return self.openPeerAccount.contact.identities.allObjects;
+    else
+        return nil;
+}
+
+- (NSArray*) getIdentities
+{
+    return [[HOPModelManager sharedModelManager] getAllContactsForLoggedInAccount];
 }
 
 @end

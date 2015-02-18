@@ -476,7 +476,7 @@
 }
 
 
-- (void) removeSelfFromConversation:(HOPConversation*) conversation
+/*- (void) removeSelfFromConversation:(HOPConversation*) conversation
 {
     if ([conversation quit])
     {
@@ -485,5 +485,5 @@
         [[[OpenPeer sharedOpenPeer] mainViewController] popLastConversationViewController];
         
     }
-}
+}*/
 @end

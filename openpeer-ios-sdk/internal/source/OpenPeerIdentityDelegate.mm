@@ -62,6 +62,12 @@ void OpenPeerIdentityDelegate::onIdentityStateChanged(IIdentityPtr identity,Iden
     HOPAccountIdentity* accountIdentity = this->getHOPAccountIdentity(identity, state != HOPIdentityStateShutdown);
     
     [identityDelegate identity:accountIdentity stateChanged:(HOPAccountIdentityState) state];
+    
+    if (state == HOPIdentityStateReady || state == HOPIdentityStateShutdown)
+    {
+        accountIdentity.isLoggingIn = NO;
+        accountIdentity.isAssociating = NO;
+    }
 }
 
 void OpenPeerIdentityDelegate::onIdentityPendingMessageForInnerBrowserWindowFrame(IIdentityPtr identity)
