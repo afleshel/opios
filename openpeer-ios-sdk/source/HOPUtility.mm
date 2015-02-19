@@ -32,7 +32,7 @@
 #import "HOPUtility.h"
 #include <zsLib/String.h>
 #import <openpeer/services/IHelper.h>
-#import "HOPContact.h"
+#import "HOPContact+External.h"
 
 #define secondsInYear 31536000.0
 #define secondsInFourWeeks 2419200.0
@@ -216,6 +216,26 @@
             ret = [ret stringByAppendingString:[NSString stringWithFormat:@"_%@",contact.stableID]];
     }
     
+    return ret;
+}
+
++ (NSString*) getDefaultTitleForParticipants:(NSArray*) inParticipants
+{
+    NSString* ret = @"";
+    
+    for (HOPContact* contact in inParticipants)
+    {
+        if (contact)
+        {
+            if (ret.length == 0)
+                ret = [contact getFullName];
+            else
+            {
+                ret = [ret stringByAppendingString:@", "];
+                ret = [ret stringByAppendingString:[contact getFullName]];
+            }
+        }
+    }
     return ret;
 }
 @end

@@ -41,6 +41,7 @@
 
 @dynamic creationTime;
 @dynamic lastActivity;
+@dynamic topic;
 @dynamic name;
 @dynamic sessionID;
 @dynamic type;

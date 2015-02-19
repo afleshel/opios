@@ -52,6 +52,7 @@
         <attribute name="removed" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="selfRemoved" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="sessionID" attributeType="String" syncable="YES"/>
+        <attribute name="topic" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="conversationThreadRecords" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HOPConversationThreadRecord" inverseName="sessionReords" inverseEntity="HOPConversationThreadRecord" syncable="YES"/>
         <relationship name="events" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HOPConversationEvent" inverseName="session" inverseEntity="HOPConversationEvent" syncable="YES"/>
@@ -160,17 +161,17 @@
         <element name="HOPAssociatedIdentity" positionX="261" positionY="-522" width="128" height="118"/>
         <element name="HOPAvatar" positionX="441" positionY="-738" width="128" height="133"/>
         <element name="HOPCacheData" positionX="612" positionY="-519" width="128" height="105"/>
+        <element name="HOPContact" positionX="-110" positionY="-769" width="128" height="148"/>
         <element name="HOPConversationEvent" positionX="-117" positionY="-243" width="128" height="163"/>
-        <element name="HOPConversationRecord" positionX="72" positionY="-423" width="128" height="223"/>
+        <element name="HOPConversationRecord" positionX="72" positionY="-423" width="128" height="238"/>
         <element name="HOPConversationThreadRecord" positionX="261" positionY="-351" width="128" height="103"/>
+        <element name="HOPIdentity" positionX="277" positionY="-846" width="128" height="253"/>
         <element name="HOPIdentityProvider" positionX="459" positionY="-513" width="128" height="88"/>
         <element name="HOPImage" positionX="601" positionY="-738" width="128" height="90"/>
         <element name="HOPMessageEvent" positionX="-279" positionY="-292" width="128" height="103"/>
         <element name="HOPMessageRecord" positionX="-306" positionY="-628" width="128" height="313"/>
         <element name="HOPOpenPeerAccount" positionX="63" positionY="-576" width="128" height="133"/>
-        <element name="HOPContact" positionX="-110" positionY="-769" width="128" height="148"/>
         <element name="HOPParticipants" positionX="-110" positionY="-477" width="128" height="88"/>
         <element name="HOPPublicPeerFile" positionX="124" positionY="-819" width="128" height="88"/>
-        <element name="HOPIdentity" positionX="277" positionY="-846" width="128" height="253"/>
     </elements>
 </model>

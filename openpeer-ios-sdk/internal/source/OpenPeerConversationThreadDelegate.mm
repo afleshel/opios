@@ -203,10 +203,7 @@ void OpenPeerConversationThreadDelegate::onConversationThreadContactsChanged(ICo
                             [hopConversation.record addParticipantsObject:contact];
                         }
                         
-                        hopConversation.record.name = [HOPConversation getDefaultTitleForParticipants:hopConversation.participants];
-                        hopConversation.topic = hopConversation.record.name;
-                        
-                        hopConversation.lastEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"addedNewParticipant" conversationRecord:hopConversation.record partcipants:hopConversation.participants title:hopConversation.topic];
+                        hopConversation.lastEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"addedNewParticipant" conversationRecord:hopConversation.record partcipants:hopConversation.participants title:hopConversation.name];
                     }
                     else if (numberOfAddedParticipants < 0)
                     {
@@ -229,10 +226,7 @@ void OpenPeerConversationThreadDelegate::onConversationThreadContactsChanged(ICo
                             [hopConversation.record removeParticipantsObject:contact];
                         }
                         
-                        hopConversation.record.name = [HOPConversation getDefaultTitleForParticipants:hopConversation.participants];
-                        hopConversation.topic = hopConversation.record.name;
-                        
-                        hopConversation.lastEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"removedParticipant" conversationRecord:hopConversation.record partcipants:hopConversation.participants title:hopConversation.topic];
+                        hopConversation.lastEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"removedParticipant" conversationRecord:hopConversation.record partcipants:hopConversation.participants title:hopConversation.name];
                     }
                 }
 

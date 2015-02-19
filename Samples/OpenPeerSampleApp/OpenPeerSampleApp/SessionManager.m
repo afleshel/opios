@@ -468,7 +468,7 @@
     NSString* sessionId = [conversation getConversationID];
     if (sessionId.length > 0)
     {
-        conversation.topic = [conversation getDefaultTitle];
+        conversation.name = [conversation getDefaultTitle];
         SessionViewController_iPhone* sessionViewController = [[[[OpenPeer sharedOpenPeer] mainViewController] sessionViewControllersDictionary] objectForKey:sessionId];
         
         [sessionViewController updateOnParticipantChange];
@@ -486,4 +486,21 @@
         
     }
 }*/
+
+
+
+- (NSString*) getNavigationTitleForConversation:(HOPConversation*) conversation
+{
+    NSString* ret = nil;
+    
+    if (conversation.name)
+        ret = conversation.name;
+    else
+    {
+        ret = [HOPUtility getDefaultTitleForParticipants:conversation.participants];
+        conversation.name = ret;
+    }
+    
+    return ret;
+}
 @end

@@ -141,19 +141,22 @@
 
 - (void)clearIdentities
 {
-    NSArray* associatedIdentities = [[HOPAccount sharedAccount] getAssociatedIdentities];
-    for (HOPAccountIdentity* accountIdentity in associatedIdentities)
+    if ([[HOPAccount sharedAccount] isCoreAccountCreated])
     {
-        if ([accountIdentity isValid])
-            [accountIdentity cancel];
-    }
-    
-    for (id accountIdentity in self.associatingIdentitiesDictionary.allValues)
-    {
-        if ([[accountIdentity class] isSubclassOfClass:[HOPAccountIdentity class]])
+        NSArray* associatedIdentities = [[HOPAccount sharedAccount] getAssociatedIdentities];
+        for (HOPAccountIdentity* accountIdentity in associatedIdentities)
         {
             if ([accountIdentity isValid])
                 [accountIdentity cancel];
+        }
+        
+        for (id accountIdentity in self.associatingIdentitiesDictionary.allValues)
+        {
+            if ([[accountIdentity class] isSubclassOfClass:[HOPAccountIdentity class]])
+            {
+                if ([accountIdentity isValid])
+                    [accountIdentity cancel];
+            }
         }
     }
     [self.associatingIdentitiesDictionary removeAllObjects];

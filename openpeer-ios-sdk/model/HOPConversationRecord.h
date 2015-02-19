@@ -38,6 +38,7 @@
 
 @property (nonatomic, retain) NSDate * creationTime;
 @property (nonatomic, retain) NSDate * lastActivity;
+@property (nonatomic, retain) NSString * topic;
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSString * sessionID;
 @property (nonatomic, retain) NSString * type;

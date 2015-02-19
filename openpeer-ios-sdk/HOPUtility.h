@@ -45,4 +45,5 @@
 + (NSArray*) differenceBetweenArray:(NSArray*) array1 array:(NSArray*) array2;
 
 + (NSString*) getCBCIDForContacts:(NSArray*) contacts;
++ (NSString*) getDefaultTitleForParticipants:(NSArray*) inParticipants;
 @end

@@ -35,7 +35,6 @@
 #import <OpenPeerSDK/HOPAvatar.h>
 #import <OpenPeerSDK/HOPConversationRecord+External.h>
 #import <OpenPeerSDK/HOPConversation.h>
-
 #import "ImageManager.h"
 #import "SessionManager.h"
 #import "Utility.h"
@@ -124,17 +123,18 @@
 
 - (void) setRecord:(HOPConversationRecord *)record
 {
+    HOPConversation* conversation = [record getConversation];
+    
     if (self.displayImage)
         [self.displayImage stopAnimating];
     
     _conversationRecord = record;
     //self.event = event;
-    self.displayName.text = record.name;
+    self.displayName.text = record.name.length > 0 ? record.name : [conversation getDefaultTitle];
     
     [self updateIcon:record];
     
-    //HOPConversation* conversation = [record getConversation];
-    [self updateBadge:[record getConversation]];
+    [self updateBadge:conversation];
     
     self.labelCreationDate.text = [Utility stringFromDate:self.conversationRecord.lastActivity];
     [self setLastMessage];

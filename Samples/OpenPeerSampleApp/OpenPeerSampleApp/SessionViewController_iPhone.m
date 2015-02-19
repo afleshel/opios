@@ -146,7 +146,7 @@
     titleView.backgroundColor = [UIColor clearColor];
     
     self.labelTitle = [[UILabel alloc] initWithFrame:CGRectMake(15.0, 3.0, 170.0, 24.0)];
-    self.labelTitle.text = self.conversation.topic;//[[[self.session participantsArray]objectAtIndex:0] name];
+    self.labelTitle.text = [[SessionManager sharedSessionManager] getNavigationTitleForConversation:self.conversation];
     [self.labelTitle setFont:[UIFont fontWithName:@"Helvetica-Bold" size:20.0]];
     self.labelTitle.textColor = [UIColor whiteColor];
     self.labelTitle.adjustsFontSizeToFitWidth = YES;
@@ -570,7 +570,7 @@
 
 - (void) updateOnParticipantChange
 {
-    self.labelTitle.text = self.conversation.topic;
+    self.labelTitle.text = [[SessionManager sharedSessionManager] getNavigationTitleForConversation:self.conversation];
     
     [self.chatViewController refreshMessages];
 }

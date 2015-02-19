@@ -309,7 +309,7 @@
     
     SessionTransitionStates transition = [self determineViewControllerTransitionStateForConversationID:conversationID replaceConversationID:replaceConversationID incomingCall:incomingCall incomingMessage:incomingMessage];
     
-    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Transition %d for session with id:%@ and for participant:%@",transition,conversationID,conversation.topic);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Transition %d for session with id:%@ and for participant:%@",transition,conversationID,[[SessionManager sharedSessionManager] getNavigationTitleForConversation:conversation]);
     UINavigationController* navigationController = nil;
     
     int tabIndex = [self.tabBarController selectedIndex] < 3 ? [self.tabBarController selectedIndex] : 2;
@@ -332,9 +332,8 @@
             sessionViewContorller = [[SessionViewController_iPhone alloc] initWithConversation:conversation];
             sessionViewContorller.hidesBottomBarWhenPushed = YES;
             [self.sessionViewControllersDictionary setObject:sessionViewContorller forKey:conversationID];
-            //[navigationController pushViewController:sessionViewContorller animated:YES];
             [self pushSessionViewController:sessionViewContorller navigationController:navigationController];
-            sessionViewContorller.chatViewController.title = conversation.topic;
+            sessionViewContorller.chatViewController.title = [[SessionManager sharedSessionManager] getNavigationTitleForConversation:conversation];
         }
             break;
             
@@ -342,9 +341,8 @@
             sessionViewContorller = [[SessionViewController_iPhone alloc] initWithConversation:conversation];
             sessionViewContorller.hidesBottomBarWhenPushed = YES;
             [self.sessionViewControllersDictionary setObject:sessionViewContorller forKey:conversationID];
-            //[navigationController pushViewController:sessionViewContorller animated:YES];
             [self pushSessionViewController:sessionViewContorller navigationController:navigationController];
-            sessionViewContorller.chatViewController.title = conversation.topic;
+            sessionViewContorller.chatViewController.title = [[SessionManager sharedSessionManager] getNavigationTitleForConversation:conversation];
             break;
             
         case NEW_SESSION_REFRESH_CHAT:
@@ -352,24 +350,19 @@
             sessionViewContorller = [[SessionViewController_iPhone alloc] initWithConversation:conversation];
             [self.sessionViewControllersDictionary setObject:sessionViewContorller forKey:conversationID];
             
-            [self showNotification:[NSString stringWithFormat:@"New message from %@",conversation.topic]];
+            [self showNotification:[NSString stringWithFormat:@"New message from %@",[[SessionManager sharedSessionManager] getNavigationTitleForConversation:conversation]]];
         }
             break;
             
         case EXISITNG_SESSION_SWITCH:
             sessionViewContorller = [self.sessionViewControllersDictionary objectForKey:conversationID];
             sessionViewContorller.hidesBottomBarWhenPushed = YES;
-            //[sessionViewContorller.chatViewController refreshViewWithData];
-//            [navigationController popToRootViewControllerAnimated:NO];
             [self popSessionViewControllerForNavigationController:navigationController];
-            //[navigationController pushViewController:sessionViewContorller animated:YES];
             [self pushSessionViewController:sessionViewContorller navigationController:navigationController];
-            //[navigationController.navigationBar.topItem setTitle:title];
-            sessionViewContorller.chatViewController.title = conversation.topic;
-            break;
+            sessionViewContorller.chatViewController.title = [[SessionManager sharedSessionManager] getNavigationTitleForConversation:conversation];            break;
             
         case EXISTING_SESSION_REFRESH_NOT_VISIBLE_CHAT:
-            [self showNotification:[NSString stringWithFormat:@"New message from %@",conversation.topic]];
+            [self showNotification:[NSString stringWithFormat:@"New message from %@",[[SessionManager sharedSessionManager] getNavigationTitleForConversation:conversation]]];
             break;
             
         case EXISTING_SESSION_REFRESH_CHAT:
@@ -391,7 +384,7 @@
             break;
             
         case INCOMING_CALL_WHILE_OTHER_INPROGRESS:
-            [self showNotification:[NSString stringWithFormat:@"%@ is trying to reach you.",conversation.topic]];
+            [self showNotification:[NSString stringWithFormat:@"%@ is trying to reach you.",[[SessionManager sharedSessionManager] getNavigationTitleForConversation:conversation]]];
             break;
             
         case REPLACE_EXISTING_SESSION:
@@ -406,7 +399,7 @@
             [self popSessionViewControllerForNavigationController:navigationController];
             //[navigationController pushViewController:sessionViewContorller animated:YES];
             [self pushSessionViewController:sessionViewContorller navigationController:navigationController];
-            sessionViewContorller.chatViewController.title = conversation.topic;
+            sessionViewContorller.chatViewController.title = [[SessionManager sharedSessionManager] getNavigationTitleForConversation:conversation];
             break;
             
         case EXISTING_SESSION:

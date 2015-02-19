@@ -77,4 +77,6 @@
 - (void) onParticipantsInConversationUpdate:(HOPConversation*) conversation;
 
 - (void) removeSelfFromConversation:(HOPConversation*) conversation;
+
+- (NSString*) getNavigationTitleForConversation:(HOPConversation*) conversation;
 @end

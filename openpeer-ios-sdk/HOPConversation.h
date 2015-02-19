@@ -41,7 +41,8 @@
 
 @interface HOPConversation : NSObject
 
-@property (nonatomic, copy) NSString* topic;
+@property (nonatomic, getter=getTopic, setter=setTopic:) NSString* topic;
+@property (nonatomic, getter=getName, setter=setName:) NSString* name;
 @property (nonatomic, copy) NSString* conversationID;
 @property (nonatomic, getter=getParticipants) NSArray* participants;
 @property (nonatomic, strong) NSArray* updatedContacts;
@@ -92,9 +93,11 @@
 
 + (NSString*) getDefaultTitleForParticipants:(NSArray*) inParticipants;
 
+- (void) setDisabled:(BOOL) disabled;
 //NOT YET SUPPORTED SELF REMOVAL FROM CONVERSATION
 //- (BOOL) quit;
 //- (BOOL) isQuit;
 //- (void) onRemovalTimerExpired:(id) object;
 //- (BOOL) amIRemoved;
+//-()
 @end

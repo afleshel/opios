@@ -958,7 +958,7 @@ using namespace openpeer::core;
 }
 
 
-- (HOPConversationRecord*) createConversationRecordForConversationThread:(HOPConversationThread*) conversationThread type:(NSString*) type date:(NSDate*) date name:(NSString*) name participants:(NSArray*) participants
+- (HOPConversationRecord*) createConversationRecordForConversationThread:(HOPConversationThread*) conversationThread type:(NSString*) type date:(NSDate*) date topic:(NSString*) topic name:(NSString*) name participants:(NSArray*) participants
 {
     HOPConversationRecord* ret = nil;
     if (conversationThread)
@@ -976,6 +976,7 @@ using namespace openpeer::core;
                 ret.sessionID = [conversationThread getThreadId].length > 0 ?  [conversationThread getThreadId] : [HOPUtility getGUIDstring];
                 ret.creationTime = date;
                 ret.type = type;
+                ret.topic = topic;
                 ret.name = name;
             }
         
@@ -1155,7 +1156,7 @@ using namespace openpeer::core;
         event.time = [NSDate date];
         event.eventType = eventType;
         event.session = conversationRecord;
-        conversationRecord.name = title;
+        //conversationRecord.topic = title;
         event.participants = temp;
         event.name = title;
         

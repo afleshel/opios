@@ -39,6 +39,7 @@
 //#import "Session.h"
 //#import <OpenPeerSDK/HOPConversationEvent+External.h>
 #import <OpenPeerSDK/HOPConversation.h>
+#import <OpenPeerSDK/HOPUtility.h>
 
 @interface AddParticipantsViewController ()
 
@@ -103,6 +104,8 @@
         else
             newConversation = [HOPConversation conversationOnParticipantsRemoved:[self.contactsViewController.getSelectedContacts valueForKey:@"contact"] conversation:self.conversation];
     }
+    
+    newConversation.name = [HOPUtility getDefaultTitleForParticipants:newConversation.participants];
     
     if (newConversation != self.conversation)
     {

@@ -131,8 +131,8 @@
         OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"<%p> Identity owns web view visibility mutex. identityURI: %@ identityObjectId: %d",accountIdentity,[accountIdentity getIdentityURI],[[accountIdentity getObjectId] integerValue]);
     }
     
-    dispatch_async(dispatch_get_main_queue(), ^
-    {
+//    dispatch_async(dispatch_get_main_queue(), ^
+//    {
         WebLoginViewController* webLoginViewController = nil;
         
         switch (state)
@@ -218,7 +218,7 @@
             default:
                 break;
         }
-    });
+    //});
 }
 
 - (void)onIdentityPendingMessageForInnerBrowserWindowFrame:(HOPAccountIdentity *)accountIdentity

@@ -73,6 +73,8 @@
              }
          }
          [PFObject deleteAllInBackground:objects];
+         //[[PFInstallation currentInstallation] setObject:[NSNumber numberWithInt:0] forKey:KEY_BADGE];
+         //[[PFInstallation currentInstallation] saveEventually];
          [self onPushNotificationsDownloaded];
      }];
 

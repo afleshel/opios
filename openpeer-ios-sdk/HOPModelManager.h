@@ -240,7 +240,7 @@
  @param participants List of HOPIdentity objects
  @return HOPConversationRecord  object
  */
-- (HOPConversationRecord*) createConversationRecordForConversationThread:(HOPConversationThread*) conversationThread type:(NSString*) type date:(NSDate*) date name:(NSString*) name participants:(NSArray*) participants;
+- (HOPConversationRecord*) createConversationRecordForConversationThread:(HOPConversationThread*) conversationThread type:(NSString*) type date:(NSDate*) date topic:(NSString*) topic  name:(NSString*) name participants:(NSArray*) participants;
 
 /**
  Replaces old message text with a new one.
