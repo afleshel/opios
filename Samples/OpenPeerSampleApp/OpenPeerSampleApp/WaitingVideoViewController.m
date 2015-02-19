@@ -30,16 +30,14 @@
  */
 
 #import "WaitingVideoViewController.h"
-#import "Session.h"
+//#import "Session.h"
 #import "SessionManager.h"
-#import <OpenPeerSDK/HOPRolodexContact+External.h>
+#import <OpenPeerSDK/HOPIdentity+External.h>
 #import <OpenPeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPAvatar.h>
 #import <OpenPeerSDK/HOPImage.h>
-//#import <OpenPeerSDK/HOPOpenPeerAccount+External.h>
-#import <OpenPeerSDK/HOPConversationEvent+External.h>
-#import <OpenPeerSDK/HOPParticipants.h>
-//#import <OpenPeerSDK/HOPOpenPeerContact+External.h>
+#import <OpenPeerSDK/HOPContact+External.h>
+#import <OpenPeerSDK/HOPConversation.h>
 #import <OpenPeerSDK/HOPAccount.h>
 @interface WaitingVideoViewController()
 
@@ -51,7 +49,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *callEndedLabel;
 @property (weak, nonatomic) IBOutlet UILabel* statusLabel;
 
-@property (weak, nonatomic) Session* session;
+@property (weak, nonatomic) HOPConversation* conversation;
 -(NSMutableArray*)getAnimationImages;
 
 @end
@@ -71,12 +69,12 @@ const int CONNECTING_ANIMATION_DURATION = 2;
     return self;
 }
 
-- (id) initWithSession:(Session*) inSession
+- (id) initWithConversation:(HOPConversation*) inConversation
 {
     self = [self initWithNibName:@"WaitingVideoViewController" bundle:nil];
     if (self)
     {
-        self.session = inSession;
+        self.conversation = inConversation;
     }
     return self;
 }
@@ -97,9 +95,7 @@ const int CONNECTING_ANIMATION_DURATION = 2;
     
     self.statusLabel.text = self.statusText;
     
-    //HOPRolodexContact* rolodexContact = [[self.session participantsArray] objectAtIndex:0];
-    HOPRolodexContact* contact = [self.session.lastConversationEvent getContacts][0];
-//    HOPRolodexContact* rolodexContact = [contact getDefaultRolodexContact];
+    HOPIdentity* contact = [((HOPContact*)[self.conversation getParticipants][0]) getDefaultIdentity];
     self.participantName.text = contact.name;
     self.callerName.text = [[HOPAccount sharedAccount] getFullName];
     
@@ -153,6 +149,6 @@ const int CONNECTING_ANIMATION_DURATION = 2;
 - (IBAction) callHangup:(id)sender
 {
 
-    [[SessionManager sharedSessionManager] endCallForSession:self.session];
+    [[SessionManager sharedSessionManager] endCallForConversation:self.conversation];
 }
 @end

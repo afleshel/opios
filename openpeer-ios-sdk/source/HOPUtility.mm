@@ -32,6 +32,7 @@
 #import "HOPUtility.h"
 #include <zsLib/String.h>
 #import <openpeer/services/IHelper.h>
+#import "HOPContact+External.h"
 
 #define secondsInYear 31536000.0
 #define secondsInFourWeeks 2419200.0
@@ -172,6 +173,69 @@
         }
     }
     
+    return ret;
+}
+
++ (NSArray*) differenceBetweenArray:(NSArray*) array1 array:(NSArray*) array2
+{
+    NSMutableArray* ret = nil;
+    
+    if (array1)
+    {
+        if (array2)
+        {
+            ret = array2.count > array1.count ? [NSMutableArray arrayWithArray:array2] : [NSMutableArray arrayWithArray:array1];
+            if (array2.count > array1.count)
+                [ret removeObjectsInArray:array1];
+            else
+                [ret removeObjectsInArray:array2];
+        }
+        else
+        {
+            ret = [NSMutableArray arrayWithArray: array1];
+        }
+    }
+    else
+    {
+        if (array2)
+            ret = [NSMutableArray arrayWithArray: array2];
+    }
+    
+    return ret;
+}
+
++ (NSString*) getCBCIDForContacts:(NSArray*) contacts
+{
+    NSString* ret = @"";
+    
+    for (HOPContact* contact in contacts)
+    {
+        if (ret.length == 0)
+            ret = contact.stableID;
+        else
+            ret = [ret stringByAppendingString:[NSString stringWithFormat:@"_%@",contact.stableID]];
+    }
+    
+    return ret;
+}
+
++ (NSString*) getDefaultTitleForParticipants:(NSArray*) inParticipants
+{
+    NSString* ret = @"";
+    
+    for (HOPContact* contact in inParticipants)
+    {
+        if (contact)
+        {
+            if (ret.length == 0)
+                ret = [contact getFullName];
+            else
+            {
+                ret = [ret stringByAppendingString:@", "];
+                ret = [ret stringByAppendingString:[contact getFullName]];
+            }
+        }
+    }
     return ret;
 }
 @end

@@ -36,17 +36,23 @@
 
 @class HOPCall;
 @class HOPConversationThread;
-@class HOPContact;
-@class HOPIdentity;
+@class HOPCoreContact;
+@class HOPAccountIdentity;
 @class HOPIdentityLookup;
 @class HOPBackgroundingNotifier;
 @class HOPBackgroundingSubscription;
+@class HOPConversation;
+
 using namespace zsLib;
 
 @interface OpenPeerStorageManager : NSObject
 {
     NSMutableDictionary* _dictionaryCalls;
     NSMutableDictionary* _dictionaryConversationThreads;
+    NSMutableDictionary* _dictionaryConversations;
+    NSMutableDictionary* _dictionaryConversationsWithThreadID;
+    NSMutableDictionary* _dictionaryConversationsWithCBCID;
+    
     NSMutableDictionary* _dictionaryContacts;
 //    NSMutableDictionary* _dictionaryContactsWithUserId;
 //NSMutableDictionary* _dictionaryProvisioningAccount;
@@ -67,17 +73,25 @@ using namespace zsLib;
 - (NSArray*) getConversationThreads;
 - (void) setConversationThread:(HOPConversationThread*) conversationThread forId:(NSString*) threadId;
 
-- (HOPContact*) getContactForPeerURI:(NSString*) peerURI;
-- (void) setContact:(HOPContact*) contact forPeerURI:(NSString*) contactId;
+- (HOPConversation*) getConversationForID:(NSString*) conversationID;
+- (HOPConversation*) getConversationForThreadID:(NSString*) threadID;
+- (HOPConversation*) getConversationForCBCID:(NSString*) cbcID;
+- (NSArray*) getConversations;
+- (void) setConversation:(HOPConversation*) conversation conversationID:(NSString*) conversationID;
+- (void) setConversation:(HOPConversation*) conversation threadID:(NSString*) threadID;
+- (void) setConversation:(HOPConversation*) conversation cbcID:(NSString*) cbcID;
+- (void) removeConversation:(HOPConversation*) conversation;
+- (HOPCoreContact*) getCoreContactForPeerURI:(NSString*) peerURI;
+- (void) setContact:(HOPCoreContact*) contact forPeerURI:(NSString*) contactId;
 
 //- (HOPProvisioningAccount*) getProvisioningAccountForUserId:(NSString*) userId;
 //- (void) setCProvisioningAccount:(HOPProvisioningAccount*) account forUserId:(NSString*) userId;
 
-- (HOPIdentity*) getIdentityForId:(NSString*) identityId;
-- (void) setIdentity:(HOPIdentity*) identity forId:(NSString*) identityId;
+- (HOPAccountIdentity*) getIdentityForId:(NSString*) identityId;
+- (void) setIdentity:(HOPAccountIdentity*) accountIdentity forId:(NSString*) identityId;
 - (void) removeIdentityWithPUID:(PUID) puid;
-- (HOPIdentity*) getIdentityForPUID:(PUID) puid;
-- (void) setIdentity:(HOPIdentity*) identity forPUID:(PUID) puid;
+- (HOPAccountIdentity*) getIdentityForPUID:(PUID) puid;
+- (void) setIdentity:(HOPAccountIdentity*) accountIdentity forPUID:(PUID) puid;
 - (NSArray*) getIdentities;
 
 - (HOPIdentityLookup*) getIdentityLookupForPUID:(PUID) puid;

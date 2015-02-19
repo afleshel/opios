@@ -33,8 +33,8 @@
 #import "HOPTypes.h"
 
 @class HOPConversationThread;
+@class HOPConversation;
 @class HOPContact;
-@class HOPRolodexContact;
 
 
 @interface HOPCall : NSObject
@@ -48,6 +48,8 @@
  */
 + (id) placeCall:(HOPConversationThread*) conversationThread includeAudio:(BOOL) includeAudio includeVideo:(BOOL) includeVideo;
 
++ (id) placeCallForConversation:(HOPConversation*) conversation includeAudio:(BOOL) includeAudio includeVideo:(BOOL) includeVideo;
++ (id) placeCallForConversation:(HOPConversation*) conversation partcipants:(NSArray*) participants includeAudio:(BOOL) includeAudio includeVideo:(BOOL) includeVideo;
 /**
  *  This init method is not available. You need to use class method placeCall:toContact:includeAudio:includeVideo.
  *
@@ -97,17 +99,22 @@
 - (HOPConversationThread*) getConversationThread;
 
 /**
- Returns caller contact.
- @return Pointer to the caller HOPContact object
+ *  Returns conversation which owns the call
+ *
+ *  @return Conversation thread object
  */
-- (HOPRolodexContact*) getCallerNew;
+- (HOPConversation*) getConversation;
+
+/**
+ Returns caller contact.
+ @return Pointer to the caller HOPIdentity object
+ */
 - (HOPContact*) getCaller;
 
 /**
  Returns callee contact.
- @return Pointer to the callee HOPContact object
+ @return Pointer to the callee HOPIdentity object
  */
-- (HOPRolodexContact*) getCalleeNew;
 - (HOPContact*) getCallee;
 
 /**
@@ -184,4 +191,6 @@
  Destroya call core object.
  */
 - (void) destroyCoreObject;
+
+- (BOOL) isOutgoing;
 @end

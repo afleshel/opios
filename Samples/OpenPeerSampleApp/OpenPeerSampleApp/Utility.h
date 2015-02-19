@@ -42,7 +42,7 @@
 + (void) removeCookiesAndClearCredentials;
 //+ (NSString *) getGUIDstring;
 + (NSString*) getCallStateAsString:(HOPCallState) callState;
-+ (NSString*) getMessageDeliveryStateAsString:(HOPConversationThreadMessageDeliveryState) messageState;
+
 + (NSString*) getFunctionNameForRequest:(NSString*) requestString;
 + (NSString*) getParametersNameForRequest:(NSString*) requestString;
 + (UIBarButtonItem*) createNavigationBackButtonForTarget:(id) target;
@@ -60,4 +60,7 @@
 + (NSString *)getLocalDateFromUTCdate:(NSDate *)utcDate;
 + (NSString*) stringForEndingCallReason:(int) endingCallReason;
 + (UIImage*) createImageFromImages:(NSArray*) images inFrame:(CGRect) frame;
+
++ (NSDictionary*) dictionaryFromJSON:(NSString*) json;
++ (NSString*) jsonFromDictionary:(NSDictionary*) dictionary;
 @end

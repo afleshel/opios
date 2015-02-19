@@ -33,7 +33,7 @@
 #import <OpenpeerSDK/HOPTypes.h>
 
 @class WebLoginViewController;
-@class HOPIdentity;
+@class HOPAccountIdentity;
 
 @interface LoginManager : NSObject
 
@@ -52,8 +52,8 @@
 - (void) login;
 - (void) logout;
 
-- (void) onIdentityAssociationFinished:(HOPIdentity*) identity;
-- (void) attachDelegateForIdentity:(HOPIdentity*) identity forceAttach:(BOOL) forceAttach;
+- (void) onIdentityAssociationFinished:(HOPAccountIdentity*) accountIdentity;
+- (void) attachDelegateForIdentity:(HOPAccountIdentity*) accountIdentity forceAttach:(BOOL) forceAttach;
 
 - (void) onUserLoggedIn;
 - (void) onUserLogOut;

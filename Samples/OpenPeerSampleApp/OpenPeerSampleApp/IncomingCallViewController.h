@@ -32,13 +32,13 @@
 #import <UIKit/UIKit.h>
 
 
-@class Session;
+@class HOPConversation;
 
 @interface IncomingCallViewController : UIViewController <UIWebViewDelegate>
 
-@property (nonatomic, weak) Session* session;
+@property (nonatomic, weak) HOPConversation* conversation;
 
-- (id)initWithSession:(Session*) inSession;
+- (id)initWithConversation:(HOPConversation*) inConversation;
 
 - (IBAction)acceptCall:(id)sender;
 - (IBAction)declineCall:(id)sender;

@@ -32,15 +32,18 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class HOPConversationEvent, HOPConversationThreadRecord, HOPMessageRecord, HOPOpenPeerAccount, HOPOpenPeerContact;
+@class HOPConversationEvent, HOPConversationThreadRecord, HOPMessageRecord, HOPOpenPeerAccount, HOPContact;
 
 @interface HOPConversationRecord : NSManagedObject
 
 @property (nonatomic, retain) NSDate * creationTime;
 @property (nonatomic, retain) NSDate * lastActivity;
+@property (nonatomic, retain) NSString * topic;
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSString * sessionID;
 @property (nonatomic, retain) NSString * type;
+@property (nonatomic, retain) NSNumber * removed;
+@property (nonatomic, retain) NSNumber * selfRemoved;
 @property (nonatomic, retain) NSSet *conversationThreadRecords;
 @property (nonatomic, retain) NSSet *events;
 @property (nonatomic, retain) HOPOpenPeerAccount *homeUser;
@@ -65,8 +68,8 @@
 - (void)addMessages:(NSSet *)values;
 - (void)removeMessages:(NSSet *)values;
 
-- (void)addParticipantsObject:(HOPOpenPeerContact *)value;
-- (void)removeParticipantsObject:(HOPOpenPeerContact *)value;
+- (void)addParticipantsObject:(HOPContact *)value;
+- (void)removeParticipantsObject:(HOPContact *)value;
 - (void)addParticipants:(NSSet *)values;
 - (void)removeParticipants:(NSSet *)values;
 

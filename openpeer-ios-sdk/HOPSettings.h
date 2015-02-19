@@ -32,6 +32,9 @@
 
 #import <Foundation/Foundation.h>
 #import "HOPProtocols.h"
+#import "HOPTypes.h"
+
+#define OPENPEER_SDK_SETTING_CONVERSATION_TYPE                   @"applicationConversationType"
 
 /**
  Singleton class to handle various app settings.
@@ -123,4 +126,7 @@
  @return NSDictionary* dictionary with currently set settings
  */
 - (NSDictionary*) getCurrentSettingsDictionary;
+
+- (NSString*) getDefaultCovnersationTypeStr;
+- (HOPConversationThreadType) getDefaultCovnersationType;
 @end

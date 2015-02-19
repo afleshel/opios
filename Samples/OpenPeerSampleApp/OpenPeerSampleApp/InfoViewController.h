@@ -32,10 +32,10 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 
-@class HOPRolodexContact;
+@class HOPIdentity;
 
 @interface InfoViewController : UITableViewController<NSFetchedResultsControllerDelegate>
 
-- (id) initWithContact:(HOPRolodexContact*) inContact style:(UITableViewStyle)style;
+- (id) initWithContact:(HOPIdentity*) inContact style:(UITableViewStyle)style;
 
 @end

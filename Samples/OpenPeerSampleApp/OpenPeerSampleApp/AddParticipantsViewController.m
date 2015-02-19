@@ -32,27 +32,32 @@
 #import "AddParticipantsViewController.h"
 #import "ContactsViewController.h"
 #import "SessionManager.h"
-#import "Session.h"
-#import <OpenPeerSDK/HOPConversationEvent+External.h>
-#import <OpenPeerSDK/HOPConversationRecord+External.h>
-#import <OpenPeerSDK/HOPParticipants.h>
+#import "OpenPeer.h"
+#import "MainViewController.h"
+#import "MessageManager.h"
+
+//#import "Session.h"
+//#import <OpenPeerSDK/HOPConversationEvent+External.h>
+#import <OpenPeerSDK/HOPConversation.h>
+#import <OpenPeerSDK/HOPUtility.h>
+
 @interface AddParticipantsViewController ()
 
 @property (nonatomic, strong) ContactsViewController *contactsViewController;
 @property (nonatomic, strong) UIBarButtonItem* menuRightbarButton;
-@property (nonatomic, weak) Session* session;
+@property (nonatomic, weak) HOPConversation* conversation;
 @property (nonatomic) BOOL isAdding;
 - (void) actionDoneWithSelection;
 @end
 
 @implementation AddParticipantsViewController
 
-- (id) initWithSession:(Session*) inSession addingContacts:(BOOL) addingContacts
+- (id) initWithConversation:(HOPConversation*) inConversation addingContacts:(BOOL) addingContacts
 {
     self = [self init];
     if (self)
     {
-        self.session = inSession;
+        self.conversation = inConversation;
         self.isAdding = addingContacts;
     }
     return self;
@@ -78,7 +83,7 @@
     [super viewWillAppear:animated];
     
     ContactsTableModes mode = self.isAdding ? CONTACTS_TABLE_MODE_ADDING : CONTACTS_TABLE_MODE_REMOVING;
-    self.contactsViewController = [[ContactsViewController alloc] initInMode:mode allowMultipleSelection:YES filterContacts:[self.session.lastConversationEvent.session getContacts]];
+    self.contactsViewController = [[ContactsViewController alloc] initInMode:mode allowMultipleSelection:YES filterContacts:self.conversation.participants];
     self.contactsViewController.view.frame = self.view.bounds;
     [self.view addSubview:self.contactsViewController.view];
 }
@@ -91,14 +96,27 @@
 
 - (void) actionDoneWithSelection
 {
+    HOPConversation* newConversation = nil;
     if (self.contactsViewController.getSelectedContacts.count > 0)
     {
-        if ( self.isAdding)
-            [[SessionManager sharedSessionManager] addParticipants:self.contactsViewController.getSelectedContacts toSession:self.session];
+        if (self.isAdding)
+            newConversation = [HOPConversation conversationOnParticipantsAdded:[self.contactsViewController.getSelectedContacts valueForKey:@"contact"] conversation:self.conversation];
         else
-            [[SessionManager sharedSessionManager] removeParticipants:self.contactsViewController.getSelectedContacts toSession:self.session];
+            newConversation = [HOPConversation conversationOnParticipantsRemoved:[self.contactsViewController.getSelectedContacts valueForKey:@"contact"] conversation:self.conversation];
     }
     
-    [self.navigationController popViewControllerAnimated:YES];
+    newConversation.name = [HOPUtility getDefaultTitleForParticipants:newConversation.participants];
+    
+    if (newConversation != self.conversation)
+    {
+        [[MessageManager sharedMessageManager] sendSystemForSwitchFromConversation:self.conversation toConversation:newConversation];
+        [[[OpenPeer sharedOpenPeer] mainViewController] popLastConversationViewController];
+        [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForConversation:newConversation replaceConversation:nil incomingCall:NO incomingMessage:NO];
+    }
+    else
+    {
+        [self.delegate updateOnParticipantChange];
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 @end

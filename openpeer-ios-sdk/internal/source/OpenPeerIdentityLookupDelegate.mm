@@ -33,10 +33,9 @@
 #import "OpenPeerIdentityLookupDelegate.h"
 #import "HOPIdentityLookup_Internal.h"
 #import "OpenPeerStorageManager.h"
-#import "HOPIdentityContact_Internal.h"
 #import "HOPModelManager_Internal.h"
-#import "HOPOpenPeerContact.h"
-#import "HOPRolodexContact.h"
+#import "HOPContact.h"
+#import "HOPIdentity.h"
 
 #import <openpeer/core/ILogger.h>
 
@@ -84,26 +83,11 @@ void OpenPeerIdentityLookupDelegate::updateContactsReceivedOnIdentityLookup(IIde
                 IdentityContact identityContact = *identityContactInfo;
                 if (identityContact.hasData())
                 {
-                    NSString* sId = [NSString stringWithUTF8String:identityContact.mStableID];
-                    NSString* identityURI = [NSString stringWithUTF8String:identityContact.mIdentityURI];
-                    HOPIdentityContact* hopIdentityContact = [[HOPModelManager sharedModelManager] getIdentityContactWithIdentityURI:identityURI];
-                    
-                    if (!hopIdentityContact)
+                    HOPIdentity* identity = [[HOPModelManager sharedModelManager] createIdentityForCoreIdentity:identityContact isSelf:NO];
+                    if (identity)
                     {
-                        NSManagedObject* managedObject = [[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPIdentityContact"];
-                        if (managedObject && [managedObject isKindOfClass:[HOPIdentityContact class]])
-                        {
-                            hopIdentityContact = (HOPIdentityContact*) managedObject;
-                        }
+                        [identityLookup.arrayLastUpdatedContacts addObject:identity];
                     }
-                    
-                    if (hopIdentityContact)
-                    {
-                        [hopIdentityContact updateWithIdentityContact:identityContact];
-                        
-                        [identityLookup.arrayLastUpdatedContacts addObject:hopIdentityContact];
-                    }
-                    
                 }
             }
             [[HOPModelManager sharedModelManager] saveContext];

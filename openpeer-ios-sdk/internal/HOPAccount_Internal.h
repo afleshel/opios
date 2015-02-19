@@ -32,16 +32,13 @@
 
 #import <openpeer/core/types.h>
 #import "HOPAccount.h"
-#import "HOPOpenPeerAccount+External.h"
-
+#import "HOPOpenPeerAccount.h"
 #import "OpenPeerAccountDelegate.h"
 #import "OpenPeerConversationThreadDelegate.h"
 #import "OpenPeerCallDelegate.h"
 
 using namespace openpeer;
 using namespace openpeer::core;
-
-@class HOPIdentity;
 
 @interface HOPAccount ()
 {
@@ -56,7 +53,8 @@ using namespace openpeer::core;
 @property (nonatomic, strong, getter=getOpenPeerUser) HOPOpenPeerAccount* openPeerAccount;
 
 - (id) initSingleton;
-- (void) setLocalDelegates:(id<HOPAccountDelegate>) inAccountDelegate conversationThread:(id<HOPConversationThreadDelegate>) inConversationThread callDelegate:(id<HOPCallDelegate>) inCallDelegate;
+- (void)setLocalDelegates:(id<HOPAccountDelegate>)inAccountDelegate conversationThreadDelegate:(id<HOPConversationThreadDelegate>)inConversationThread callDelegate:(id<HOPCallDelegate>)inCallDelegate;
+- (void)setLocalDelegates:(id<HOPAccountDelegate>)inAccountDelegate conversationDelegate:(id<HOPConversationDelegate>)inConversationDelegate callDelegate:(id<HOPCallDelegate>)inCallDelegate;
 
 - (IAccountPtr) getAccountPtr;
 

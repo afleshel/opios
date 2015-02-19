@@ -32,15 +32,13 @@
 #import "IncomingCallViewController.h"
 #import "SessionManager.h"
 #import "SoundsManager.h"
+#import <OpenPeerSDK/HOPConversation.h>
 
 #import <OpenPeerSDK/HOPCall.h>
-#import <OpenPeerSDK/HOPRolodexContact+External.h>
+#import <OpenPeerSDK/HOPIdentity+External.h>
 #import <OpenPeerSDK/HOPAvatar.h>
 #import <OpenPeerSDK/HOPImage.h>
-#import "Session.h"
-#import <OpenPeerSDK/HOPConversationEvent+External.h>
-#import <OpenPeerSDK/HOPParticipants.h>
-//#import <OpenPeerSDK/HOPOpenPeerContact+External.h>
+#import <OpenPeerSDK/HOPContact+External.h>
 
 @interface IncomingCallViewController ()
 
@@ -70,24 +68,24 @@
     return self;
 }
 
-- (id)initWithSession:(Session*) inSession
+- (id)initWithConversation:(HOPConversation*) inConversation
 {
     self = [self initWithNibName:@"IncomingCallView_iPhone" bundle:nil];
     if (self)
     {
-        self.session = inSession;
+        self.conversation = inConversation;
     }
     return self;
 }
 
 -(IBAction)acceptCall:(id)sender
 {
-    [[SessionManager sharedSessionManager] answerCallForSession:self.session];
+    [[SessionManager sharedSessionManager] answerCallForConversation:self.conversation];
 }
 
 -(IBAction)declineCall:(id)sender
 {
-    [[SessionManager sharedSessionManager] endCallForSession:self.session];
+    [[SessionManager sharedSessionManager] endCallForConversation:self.conversation];
 }
 
 - (IBAction)toggleSilent:(id)sender 
@@ -111,23 +109,22 @@
 {
     [super viewDidLoad];
 
-    //HOPRolodexContact* rolodexContact = [self.session.participantsArray objectAtIndex:0];
-    HOPRolodexContact* contact = [self.session.lastConversationEvent getContacts] [0];
-    //HOPRolodexContact* rolodexContact = [contact getDefaultRolodexContact];
+    HOPContact* contact = [self.conversation getParticipants][0];
+    HOPIdentity* identity = [contact getDefaultIdentity];
     
-    self.labelCallType.text = [self.session.currentCall hasVideo] ? NSLocalizedString(@"Video call from", nil) : NSLocalizedString(@"Audio call from", nil);
+    self.labelCallType.text = [self.conversation.currentCall hasVideo] ? NSLocalizedString(@"Video call from", nil) : NSLocalizedString(@"Audio call from", nil);
     
-    self.buttonAccept.imageView.image = [self.session.currentCall hasVideo] ? [UIImage imageNamed:@"video_indicator_white_big.png"] : [UIImage imageNamed:@"handset_accept_icon.png"];
+    self.buttonAccept.imageView.image = [self.conversation.currentCall hasVideo] ? [UIImage imageNamed:@"video_indicator_white_big.png"] : [UIImage imageNamed:@"handset_accept_icon.png"];
     
-    self.labelCaller.text = contact.name;
+    self.labelCaller.text = identity.name;
     
-    if ([contact.profileURL length] > 0)
+    if ([identity.profileURL length] > 0)
     {
-        NSURL* url = [NSURL URLWithString:contact.profileURL];
+        NSURL* url = [NSURL URLWithString:identity.profileURL];
         [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:url]];
     }
     
-    HOPAvatar* avatar = [contact getAvatarForWidth:[NSNumber numberWithFloat:self.imageViewCallerAvatar.frame.size.width] height:[NSNumber numberWithFloat:self.imageViewCallerAvatar.frame.size.height]];
+    HOPAvatar* avatar = [identity getAvatarForWidth:[NSNumber numberWithFloat:self.imageViewCallerAvatar.frame.size.width] height:[NSNumber numberWithFloat:self.imageViewCallerAvatar.frame.size.height]];
 
     if (avatar && avatar.avatarImage.image)
     {

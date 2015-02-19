@@ -58,7 +58,8 @@ NSString * const settingsKeyAppIdSharedSecret = @"applicationSharedSecret";
 NSString * const settingsKeyAppName = @"applicationName";
 NSString * const settingsKeyAppImageURL = @"applicationImageURL";
 NSString * const settingsKeyAppURL = @"applicationURL";
-NSString * const settingsKeyAPNS = @"APNS-UrbanAirShip";
+NSString * const settingsKeyAPNSUrbanAirShip = @"APNS-UrbanAirShip";
+NSString * const settingsKeyAPNSParse = @"APNS-Parse";
 NSString * const settingsKeyTelnetLogger = @"localTelnetLoggerPort";
 NSString * const settingsKeyOutgoingTelnetLogger = @"defaultOutgoingTelnetServer";
 NSString * const settingsKeyStdOutLogger = @"archiveStdOutLogger";
@@ -80,6 +81,7 @@ NSString * const settingsKeyDefaultLogLevel = @"logLevelForServicesHttp";
 NSString * const settingsKeyRedirectAfterLoginCompleteURL = @"redirectAfterLoginCompleteURL";
 NSString * const settingsDeviceTokenDownloadURL = @"deviceTokenDownloadURL";
 NSString * const settingsDeviceTokenUploadURL = @"deviceTokenUploadURL";
+NSString * const settingsKeyDefaultConversationType = @"applicationConversationType";
 
 NSString * const archiveEnabled = @"enabled";
 NSString * const archiveServer = @"Server";
@@ -95,6 +97,13 @@ NSString* const settingsKeyUrbanAirShipDevelopmentAppSecret = @"developmentAppSe
 NSString* const settingsKeyUrbanAirShipProductionAppKey = @"productionAppKey";
 NSString* const settingsKeyUrbanAirShipProductionAppSecret = @"productionAppSecret";
 NSString* const settingsKeyUrbanAirShipAPIPushURL = @"apiPushURL";
+
+NSString* const settingsKeyParseDevelopmentAppID = @"developmentAppID";
+NSString* const settingsKeyParseDevelopmentClientKey = @"developmentClientKey";
+NSString* const settingsKeyParseProductionAppID = @"productionAppID";
+NSString* const settingsKeyParseProductionClientKey = @"productionClientKey";
+
+NSString* const settingsKeyDefaultAPNSProvider = @"applicationDefaultAPNSProvider";
 
 NSString* const settingsKeyAPNSTimeOut = @"applicationTimeBetweenTwoPushes";
 #endif
@@ -128,6 +137,7 @@ NSString * const notifictionAppReturnedFromBackground = @"notifictionAppReturned
 NSString * const notificationRemoteSessionModeChanged = @"notificationRemoteSessionModeChanged";
 NSString * const notificationCrashReportSent = @"notificationCrashReportSent";
 NSString * const notificationComposingStatusChanged = @"notificationComposingStatusChanged";
+NSString * const notificationMessagesRead = @"notificationMessagesRead";
 
 NSString * const notificationTypeApple = @"apns";
 NSString * const notificationTypeAndroid = @"apid";

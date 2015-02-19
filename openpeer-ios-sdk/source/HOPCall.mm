@@ -38,14 +38,15 @@
 #import "HOPCall_Internal.h"
 #import "OpenPeerUtility.h"
 #import "HOPConversationThread_Internal.h"
-#import "HOPContact_Internal.h"
-#import "HOPRolodexContact_Internal.h"
+#import "HOPConversation_Internal.h"
+#import "HOPCoreContact_Internal.h"
+#import "HOPIdentity_Internal.h"
 #import "OpenPeerStorageManager.h"
-#import "HOPOpenPeerContact+External.h"
+#import "HOPContact_Internal.h"
 
 #import "HOPCall.h"
-#import "HOPContact.h"
-#import "HOPModelManager.h"
+#import "HOPCoreContact.h"
+#import "HOPModelManager_Internal.h"
 
 ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
@@ -70,12 +71,67 @@ using namespace openpeer::core;
     HOPCall* ret = nil;
     if (conversationThread != nil)
     {
-        HOPContact* toContact = nil;
-        if ([[conversationThread getContacts] count] > 0)
+        HOPCoreContact* toContact = nil;
+        if (conversationThread.participants.count > 0)
         {
-            toContact = [((HOPOpenPeerContact*)[[conversationThread getContacts] objectAtIndex:0]) getCoreContact];
+            toContact = [((HOPContact*)[conversationThread.participants objectAtIndex:0]) getCoreContact];
             //Create the core call object and start placing call procedure
             ICallPtr tempCallPtr = ICall::placeCall([conversationThread getConversationThreadPtr], [toContact getContactPtr], includeAudio, includeVideo);
+            
+            if (tempCallPtr)
+            {
+                //If core call object is create, create HOPCall object
+                ret = [[self alloc] initWithCallPtr:tempCallPtr];
+                [[OpenPeerStorageManager sharedStorageManager] setCall:ret forId:[NSString stringWithUTF8String:tempCallPtr->getCallID()]];
+            }
+            else
+            {
+                ZS_LOG_ERROR(Debug, "Call object is not created!");
+            }
+        }
+    }
+    return ret;
+}
+
++ (id) placeCallForConversation:(HOPConversation*) conversation includeAudio:(BOOL) includeAudio includeVideo:(BOOL) includeVideo
+{
+    HOPCall* ret = nil;
+    if (conversation != nil)
+    {
+        HOPCoreContact* toContact = nil;
+        if (conversation.participants.count > 0)
+        {
+            toContact = [((HOPContact*)[conversation.participants objectAtIndex:0]) getCoreContact];
+            //Create the core call object and start placing call procedure
+            ICallPtr tempCallPtr = ICall::placeCall([conversation.thread getConversationThreadPtr], [toContact getContactPtr], includeAudio, includeVideo);
+            
+            if (tempCallPtr)
+            {
+                //If core call object is create, create HOPCall object
+                ret = [[self alloc] initWithCallPtr:tempCallPtr];
+                [[OpenPeerStorageManager sharedStorageManager] setCall:ret forId:[NSString stringWithUTF8String:tempCallPtr->getCallID()]];
+            }
+            else
+            {
+                ZS_LOG_ERROR(Debug, "Call object is not created!");
+            }
+        }
+    }
+    return ret;
+}
+
++ (id) placeCallForConversation:(HOPConversation*) conversation partcipants:(NSArray*) participants includeAudio:(BOOL) includeAudio includeVideo:(BOOL) includeVideo
+{
+    HOPCall* ret = nil;
+    if (conversation != nil)
+    {
+        NSArray* callees = participants.count > 0 ? participants : conversation.participants;
+        HOPCoreContact* toContact = nil;
+        if (callees.count > 0)
+        {
+            toContact = [((HOPContact*)[callees objectAtIndex:0]) getCoreContact];
+            //Create the core call object and start placing call procedure
+            ICallPtr tempCallPtr = ICall::placeCall([conversation.thread getConversationThreadPtr], [toContact getContactPtr], includeAudio, includeVideo);
             
             if (tempCallPtr)
             {
@@ -149,32 +205,28 @@ using namespace openpeer::core;
     return hopConversationThread;
 }
 
-- (HOPRolodexContact*) getCallerNew
+- (HOPConversation*) getConversation
 {
-    HOPRolodexContact* ret = nil;
+    HOPConversation* hopConversation = nil;
     if(callPtr)
     {
-        IContactPtr contactPtr = callPtr->getCaller();
-        if (contactPtr)
+        IConversationThreadPtr conversationThreaPtr = callPtr->getConversationThread();
+        if (conversationThreaPtr)
         {
-            NSString* peerURI = [NSString stringWithUTF8String:contactPtr->getPeerURI()];
-            //It needs to be checked if core contact is created, because it is mandatory to have
-            HOPContact* coreContact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:peerURI];
-            if (!coreContact)
-                coreContact = [[HOPContact alloc] initWithCoreContact:contactPtr];
-            ret = [[HOPModelManager sharedModelManager] getRolodexContactByPeerURI:peerURI];
+            hopConversation = [[OpenPeerStorageManager sharedStorageManager] getConversationForThreadID:[NSString stringWithUTF8String:conversationThreaPtr->getThreadID()]];
         }
         else
         {
-            ZS_LOG_ERROR(Debug, [self log:@"Invalid caller contact object!"]);
+            ZS_LOG_ERROR(Debug, [self log:@"Invalid conversation thread object!"]);
         }
     }
     else
     {
         ZS_LOG_ERROR(Debug, [self log:@"Invalid call object!"]);
-        [NSException raise:NSInvalidArgumentException format:@"Invalid call object!"];
+        [NSException raise:NSInvalidArgumentException format:@"Invalid call pointer!"];
     }
-    return ret;
+    
+    return hopConversation;
 }
 
 - (HOPContact*) getCaller
@@ -186,42 +238,15 @@ using namespace openpeer::core;
         if (contactPtr)
         {
             NSString* peerURI = [NSString stringWithUTF8String:contactPtr->getPeerURI()];
-            ret = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:peerURI];
-            if (!ret)
-                ret = [[HOPContact alloc] initWithCoreContact:contactPtr];
+            //It needs to be checked if core contact is created, because it is mandatory to have
+            HOPCoreContact* coreContact = [[OpenPeerStorageManager sharedStorageManager] getCoreContactForPeerURI:peerURI];
+            if (!coreContact)
+                coreContact = [[HOPCoreContact alloc] initWithCoreContact:contactPtr];
+            ret = [[HOPModelManager sharedModelManager] getContactForPeerURI:peerURI];
         }
         else
         {
             ZS_LOG_ERROR(Debug, [self log:@"Invalid caller contact object!"]);
-        }
-    }
-    else
-    {
-        ZS_LOG_ERROR(Debug, [self log:@"Invalid call object!"]);
-        [NSException raise:NSInvalidArgumentException format:@"Invalid call object!"];
-    }
-    return ret;
-}
-
-- (HOPRolodexContact*) getCalleeNew
-{
-    HOPRolodexContact* ret = nil;
-    if(callPtr)
-    {
-        IContactPtr contactPtr = callPtr->getCallee();
-        if (contactPtr)
-        {
-            NSString* peerURI = [NSString stringWithUTF8String:contactPtr->getPeerURI()];
-            //It needs to be checked if core contact is created, because it is mandatory to have
-            HOPContact* coreContact = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:peerURI];
-            if (!coreContact)
-                coreContact = [[HOPContact alloc] initWithCoreContact:contactPtr];
-            
-            ret = [[HOPModelManager sharedModelManager] getRolodexContactByPeerURI:peerURI];
-        }
-        else
-        {
-            ZS_LOG_ERROR(Debug, [self log:@"Invalid callee contact object!"]);
         }
     }
     else
@@ -241,9 +266,12 @@ using namespace openpeer::core;
         if (contactPtr)
         {
             NSString* peerURI = [NSString stringWithUTF8String:contactPtr->getPeerURI()];
-            ret = [[OpenPeerStorageManager sharedStorageManager] getContactForPeerURI:peerURI];
-            if (!ret)
-                ret = [[HOPContact alloc] initWithCoreContact:contactPtr];
+            //It needs to be checked if core contact is created, because it is mandatory to have
+            HOPCoreContact* coreContact = [[OpenPeerStorageManager sharedStorageManager] getCoreContactForPeerURI:peerURI];
+            if (!coreContact)
+                coreContact = [[HOPCoreContact alloc] initWithCoreContact:contactPtr];
+            
+            ret = [[HOPModelManager sharedModelManager] getContactForPeerURI:peerURI];
         }
         else
         {
@@ -443,6 +471,15 @@ using namespace openpeer::core;
         ZS_LOG_ERROR(Debug, [self log:@"Invalid call object!"]);
         [NSException raise:NSInvalidArgumentException format:@"Invalid call object!"];
     }
+}
+
+- (BOOL) isOutgoing
+{
+    BOOL ret = NO;
+    
+    ret = [HOPIdentity getSelf] == [self getCaller];
+    
+    return ret;
 }
 
 - (void) destroyCoreObject

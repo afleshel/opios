@@ -120,7 +120,8 @@
             // add gradient
             
             CGContextSaveGState(context);
-            CGContextClip(context);
+            if (!CGContextIsPathEmpty(context))
+                CGContextClip(context);
             CGGradientRef gradient = CGGradientCreateWithColors(colorspace, (CFArrayRef)self.badgeBackgroundColors, NULL);
             CGPoint startPoint = bounds.origin;
             CGPoint endPoint = CGPointMake(bounds.origin.x, bounds.origin.y + bounds.size.height);
@@ -134,7 +135,8 @@
             CGContextDrawPath(context, kCGPathFill);   
             
             CGContextSaveGState(context);
-            CGContextClip(context);
+            if (!CGContextIsPathEmpty(context))
+                CGContextClip(context);
         }
 
         

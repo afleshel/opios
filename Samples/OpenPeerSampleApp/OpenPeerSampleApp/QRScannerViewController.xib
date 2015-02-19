@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <deployment defaultVersion="1792" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="QRScannerViewController">
@@ -19,11 +19,9 @@
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="iPhone_background.png" translatesAutoresizingMaskIntoConstraints="NO" id="jcZ-PD-Nyo">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 </imageView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="OpenPeerLogo.png" translatesAutoresizingMaskIntoConstraints="NO" id="wYP-tb-xGL">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ApplicationLogo.png" translatesAutoresizingMaskIntoConstraints="NO" id="wYP-tb-xGL">
                     <rect key="frame" x="103" y="227" width="114" height="114"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="114" id="gHg-t5-gLh"/>
                         <constraint firstAttribute="width" constant="114" id="hAP-Cq-ifR"/>
@@ -31,7 +29,6 @@
                 </imageView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BBu-64-FyA">
                     <rect key="frame" x="87" y="371" width="145" height="45"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <constraints>
                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="45" id="CVj-md-Oci"/>
                         <constraint firstAttribute="width" constant="145" id="oMh-Ug-9Ag"/>
@@ -48,7 +45,6 @@
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YWp-Hl-K1F">
                     <rect key="frame" x="87" y="435" width="145" height="45"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="45" id="Ky1-gK-lGt"/>
                         <constraint firstAttribute="width" constant="145" id="mTf-Hp-cU8"/>
@@ -64,7 +60,6 @@
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4UM-hE-u9A">
                     <rect key="frame" x="250" y="20" width="50" height="50"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="50" id="EMk-wA-8r7"/>
                         <constraint firstAttribute="height" constant="50" id="jHE-yC-NNx"/>
@@ -77,7 +72,6 @@
                 </button>
                 <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sjc-Mu-Rj1">
                     <rect key="frame" x="20" y="20" width="60" height="30"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="1" green="0.033936653179999998" blue="0.1128735853" alpha="1" colorSpace="calibratedRGB"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <state key="normal" title="Cancel">
@@ -105,14 +99,17 @@
                 <constraint firstItem="4UM-hE-u9A" firstAttribute="top" secondItem="1" secondAttribute="top" constant="20" symbolic="YES" id="pTC-yI-H0g"/>
                 <constraint firstItem="jcZ-PD-Nyo" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="vT2-du-xjS"/>
             </constraints>
-            <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
-            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
     </objects>
     <resources>
-        <image name="OpenPeerLogo.png" width="114" height="114"/>
+        <image name="ApplicationLogo.png" width="114" height="114"/>
         <image name="audio_call_incoming_accept_button.png" width="129" height="34"/>
         <image name="iPhone_background.png" width="320" height="460"/>
         <image name="logger.png" width="64" height="64"/>
     </resources>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
 </document>

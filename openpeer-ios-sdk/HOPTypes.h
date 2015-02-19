@@ -110,7 +110,16 @@ typedef enum
     HOPComposingStateGone,      // contact is effectively gone from conversation
     HOPComposingStateComposing, // contact is composing a message
     HOPComposingStatePaused    // contact was composing a message but is no longer composing
-} HOPConversationThreadContactStatus;
+} HOPComposingState;
+
+typedef enum
+{
+    HOPConversationThreadTypeNone,
+    
+    HOPConversationThreadTypeContactBased,
+    HOPConversationThreadTypeThreadBased,
+    HOPConversationThreadTypeRoomBased
+} HOPConversationThreadType;
 
 typedef enum
 {
@@ -127,6 +136,8 @@ typedef enum
     HOPCallSystemMessageTypeCallPlaced,   // call was placed
     HOPCallSystemMessageTypeCallAnswered, // call was answered
     HOPCallSystemMessageTypeCallHungup,   // call was hung-up
+    
+    HOPCallSystemMessageTypeCallMissed = 1000,   // call was hung-up
 } HOPCallSystemMessageType;
 #pragma mark - Provisioning account for future use enum
 /**
@@ -145,7 +156,7 @@ typedef enum
     HOPAccountStateShutdown,
 } HOPAccountState;
 
-#pragma mark - HOPIdentity enums
+#pragma mark - HOPAccountIdentity enums
 /**
  *  Identity state.
  */
@@ -159,7 +170,7 @@ typedef enum
     HOPIdentityStateWaitingForBrowserWindowToClose,
     HOPIdentityStateReady,
     HOPIdentityStateShutdown
-} HOPIdentityState;
+} HOPAccountIdentityState;
 
 
 #pragma mark - HOPClientLog enums

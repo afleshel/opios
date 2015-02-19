@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2012, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -34,23 +34,22 @@
 #import "MainViewController.h"
 #import "MessageManager.h"
 #import "SessionViewController_iPhone.h"
+#import "ActiveSessionsViewController.h"
 #import "SoundsManager.h"
 #import "Utility.h"
-#import "Session.h"
 #import "OpenPeer.h"
 #import "AppConsts.h"
 
 #import <OpenpeerSDK/Openpeer.h>
-#import <OpenpeerSDK/HOPOpenPeerContact+External.h>
 #import "UIDevice+Networking.h"
-
+#import <OpenpeerSDK/HOPContact+External.h>
 @interface SessionManager()
 
-@property (nonatomic, assign) Session* sessionWithActiveCall;
+@property (nonatomic, assign) HOPConversation* conversationWithActiveCall;
 
 - (id) initSingleton;
-- (BOOL) setActiveCallSession:(Session*) inSession callActive:(BOOL) callActive;
-- (NSString*) getTitleForConversationThread:(HOPConversationThread*) conversationThread;
+- (BOOL) setActiveCallConversation:(HOPConversation*) inConversation callActive:(BOOL) callActive;
+
 @end
 
 @implementation SessionManager
@@ -78,223 +77,12 @@
     self = [super init];
     if (self)
     {
-        self.sessionsDictionary = [[NSMutableDictionary alloc] init];
-        self.sessionsDictionaryWithCBCID = [[NSMutableDictionary alloc] init];
+        //self.sessionsDictionary = [[NSMutableDictionary alloc] init];
+//        self.conversationsDictionaryForContacts = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
 
-- (HOPConversationRecord*) getConversationRecordForConversationThread:(HOPConversationThread*) conversationThread
-{
-    HOPConversationRecord* ret = nil;
-    if (conversationThread)
-    {
-        NSArray* results = nil;
-        
-        //NSString* cbcID = [HOPModelManager getCBCIDForContacts:[conversationThread getContacts]];
-        
-        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"lastActivity" ascending:NO];
-        
-//        results = [[HOPModelManager sharedModelManager] getResultsForEntity:@"HOPConversationRecord" withPredicateString:[NSString stringWithFormat:@"homeUser.stableId MATCHES '%@' AND ANY events.participants.cbcID MATCHES '%@'",[[HOPModelManager sharedModelManager] getLastLoggedInUser].stableId,cbcID] orderDescriptors:@[sortDescriptor]];
-        
-        results = [[HOPModelManager sharedModelManager] getResultsForEntity:@"HOPConversationRecord" withPredicateString:[NSString stringWithFormat:@"homeUser.stableId MATCHES '%@'",[[HOPModelManager sharedModelManager] getLastLoggedInUser].stableId] orderDescriptors:@[sortDescriptor]];
-        if ([results count] > 0)
-            ret = [results objectAtIndex:0];
-    }
-    return ret;
-}
-
-/**
- Creates a session for the selected contacts
- @param contact HOPContact Contact for which session will be created.
-*/
-- (Session*)createSessionForContacts:(NSArray*) contacts
-{
-    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Creating session for contacts: %@", contacts);
-    Session* ret = nil;
-    
-    if ([contacts count] == 0)
-        return ret;
-    
-    ret = [self getSessionForContacts:contacts];
-    
-    if (!ret)
-    {
-        NSString* cbcID = [HOPModelManager getCBCIDForContacts:contacts];
-        
-        if (![UIDevice isNetworkReachable])
-        {
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Network Error" message:[NSString stringWithFormat:@"Unable to make a session because of network issue. Please, check your internet connection."] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-            [alert show];
-            return ret;
-        }
-
-        HOPConversationThread* conversationThread = [HOPConversationThread conversationThreadWithIdentities:[[HOPAccount sharedAccount] getAssociatedIdentities]];
-        
-        NSString* title = nil;
-        if (conversationThread)
-        {
-            //NSMutableArray* participants = nil;
-            //Create a session with new conversation thread
-            ret = [[Session alloc] initWithContacts:contacts conversationThread:conversationThread];
-            
-            //Add list of all participants. Currently only one participant is added
-            if (ret)
-            {
-                if (contacts.count > 0)
-                {
-//                    participants = [[NSMutableArray alloc] init];
-//                    for (HOPOpenPeerContact* contact in contacts)
-//                    {
-//                        //if ([contact isOpenPeer])
-//                            [participants addObject:[contact getDefaultRolodexContact]];
-//                    }
-                    [conversationThread addContacts:contacts];
-                }
-
-                title = [self getTitleForConversationThread:conversationThread];
-                
-                OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Creating session record from conversation thread id: %@", [conversationThread getThreadId]);
-                
-                ret.sessionRecord = [[HOPModelManager sharedModelManager] getConversationRecordForConversationThread:conversationThread];
-                
-                if (!ret.sessionRecord)
-                    ret.sessionRecord = [[HOPModelManager sharedModelManager] createConversationRecordForConversationThread:conversationThread type:nil date:[NSDate date] name:title participants:contacts];
-                
-                
-                
-                ret.title = title;
-                
-                //Store session object in dictionary
-                [self.sessionsDictionary setObject:ret forKey:[conversationThread getThreadId]];
-                [self.sessionsDictionaryWithCBCID setObject:ret forKey:cbcID];
-                
-                ret.lastConversationEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"create" conversationRecord:ret.sessionRecord partcipants:contacts title:title];
-            }
-        }
-        else
-        {
-            OPLog(HOPLoggerSeverityError, HOPLoggerLevelTrace, @"Conversation thread is not created");
-        }
-    }
-    
-    return ret;
-}
-
-/**
- Creates an incoming session.
- @param contacts NSArray List of participants.
- @param inConversationThread HOPConversationThread Incoming conversation thread
-*/
-- (Session*) createSessionForConversationThread:(HOPConversationThread*) inConversationThread
-{
-    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Creating session for conversation thread id: %@", [inConversationThread getThreadId]);
-    Session* ret = nil;
-    
-    NSArray* contactAaray = [inConversationThread getRolodexContacts];
-    
-    if (contactAaray.count > 0)
-    {
-        NSString* cbcID = [HOPModelManager getCBCIDForContacts:contactAaray];
-        
-        ret = [[Session alloc] initWithContacts:contactAaray conversationThread:inConversationThread];
-        
-        if (ret)
-        {
-            NSString* title = [self getTitleForConversationThread:inConversationThread];
-            [self.sessionsDictionary setObject:ret forKey:[inConversationThread getThreadId]];
-            [self.sessionsDictionaryWithCBCID setObject:ret forKey:cbcID];
-            
-            OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Creating session record from conversation thread id: %@", [inConversationThread getThreadId]);
-            //ret.sessionRecord = [[HOPModelManager sharedModelManager] createConversationRecordForConversationThread:inConversationThread type:nil date:[NSDate date] name:title participants:contactAaray];
-            
-            ret.sessionRecord = [[HOPModelManager sharedModelManager] getConversationRecordForConversationThread:inConversationThread];
-            
-            if (!ret.sessionRecord)
-                ret.sessionRecord = [[HOPModelManager sharedModelManager] createConversationRecordForConversationThread:inConversationThread type:nil date:[NSDate date] name:title participants:contactAaray];
-            
-            ret.title = title;
-            ret.lastConversationEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"create" conversationRecord:ret.sessionRecord partcipants:contactAaray title:title];
-        }
-    }
-    return ret;
-}
-
-
-- (void)setValidSession:(Session *)inSession newSessionId:(NSString *)newSessionId oldSessionId:(NSString *)oldSessionId
-{
-    [self.sessionsDictionary setObject:inSession forKey:newSessionId];
-    
-    [[[OpenPeer sharedOpenPeer] mainViewController] updateSessionViewControllerId:oldSessionId newSesionId:newSessionId];
-}
-
-/**
- If exists it retrieves an old session for a contact for which new conversation thread is created. If the old session is found, old conversation thread object is replaced with a new one, session key in sessions dictionary is updated with a new conversation thread id.
- @param contact HOPRolodexContact participant of new conversation thread
- @param inConversationThread HOPConversationThread new conversation thread
- */
-- (Session*) proceedWithExistingSessionForContacts:(NSArray*) contacts newConversationThread:(HOPConversationThread*) inConversationThread
-{
-    //OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Get existing session for contact peer URI: %@", [contact getPeerURI]);
-    
-    Session* ret = nil;
-    if (contacts)
-        ret = [self getSessionForContacts:contacts];
-    
-    if (ret)
-    {
-        NSString* oldSessionId = [ret.conversationThread getThreadId];
-        NSString* newSessionId = [inConversationThread getThreadId];
-        
-        ret.conversationThread = inConversationThread;
-        [ret.sessionIdsHistory addObject:[inConversationThread getThreadId]];
-        
-        NSArray* contacts = [inConversationThread getContacts];
-        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Creating session record from conversation thread id: %@", [inConversationThread getThreadId]);
-        
-        [[HOPModelManager sharedModelManager] createConversationRecordForConversationThread:inConversationThread type:nil date:[NSDate date] name:nil participants:contacts];
-
-        [[HOPModelManager sharedModelManager] saveContext];
-        [self setValidSession:ret newSessionId:newSessionId oldSessionId:oldSessionId];
-    }
-    return ret;
-}
-/**
- Get active session for contact.
- @param contacts HOPRolodexContact One of the participants.
- @return session with participant
-*/
-- (Session*) getSessionForContacts:(NSArray*) contacts
-{
-    NSString* cbcID = [HOPModelManager getCBCIDForContacts:contacts];
-    if (cbcID.length > 0)
-        return [self.sessionsDictionaryWithCBCID objectForKey:cbcID];
-    
-//    for (Session* session in [self.sessionsDictionary allValues])
-//    {
-//        NSSet *set1 = [NSSet setWithArray:session.participantsArray];
-//        NSSet *set2 = [NSSet setWithArray:contacts];
-//        
-//        if ([set1 isEqualToSet:set2])
-//            return session;
-//    }
-    return nil;
-}
-
-- (Session*) getSessionForSessionId:(NSString*) sessionId
-{
-    return [self.sessionsDictionary objectForKey:sessionId];
-}
-
-- (Session*) getSessionForConversationEvent:(HOPConversationEvent*) event
-{
-    for (Session* session in [self.sessionsDictionary allValues])
-    {
-        if (session.lastConversationEvent == event)
-            return session;
-    }
-    return nil;
-}
 
 
 /**
@@ -303,24 +91,31 @@
  @param includeVideo BOOL If YES make video call
  @param isRedial BOOL If trying to reestablish call that was ended because of network problems 
  */
-- (void) makeCallForSession:(Session*) inSession includeVideo:(BOOL) includeVideo isRedial:(BOOL) isRedial
+- (void) makeCallForConversation:(HOPConversation*) inConversation includeVideo:(BOOL) includeVideo isRedial:(BOOL) isRedial;
 {
     if ([UIDevice isNetworkReachable])
     {
-        if (!inSession.currentCall)
+        if (![self isCallInProgress])
         {
-            OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Making a call for the session <%p>", inSession);
-            
-            [[MessageManager sharedMessageManager] sendCallSystemMessage:HOPCallSystemMessageTypeCallPlaced reasonCode:0 session:inSession];
-            
-            //Place a audio or video call for chosen contact
-            inSession.isRedial = isRedial;
-            inSession.currentCall = [HOPCall placeCall:inSession.conversationThread includeAudio:YES includeVideo:includeVideo];
-            [self setActiveCallSession:inSession callActive:YES];
+            if (!inConversation.currentCall)
+            {
+                OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Making a call for the session <%p>", inConversation);
+                
+                //Place a audio or video call for chosen contact
+                //inSession.isRedial = isRedial;
+                inConversation.currentCall = [HOPCall placeCallForConversation:inConversation includeAudio:YES includeVideo:includeVideo];
+                [self setActiveCallConversation:inConversation callActive:YES];
+                [[MessageManager sharedMessageManager] sendCallSystemMessage:HOPCallSystemMessageTypeCallPlaced reasonCode:0 forConversation:inConversation];
+            }
+            else
+            {
+                OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Call is already in a progress");
+            }
         }
         else
         {
-            OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Call is already in a progress");
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Call in progress" message:[NSString stringWithFormat:@"You are already have an active call."] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [alert show];
         }
     }
     else
@@ -334,24 +129,24 @@
  Answer an incoming call
  @param inSession Session session.
  */
-- (void) answerCallForSession:(Session*) inSession
+- (void) answerCallForConversation:(HOPConversation*) inConversation;
 {
-    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Answer a call for the session <%p>", inSession);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Answer a call for the session <%p>", inConversation);
     //Answer an incoming call
-    [[inSession currentCall] answer];
+    [inConversation.currentCall answer];
 }
 
 /**
  Ends current call for sesion.
  @param inSession Session session.
  */
-- (void) endCallForSession:(Session*) inSession
+- (void) endCallForConversation:(HOPConversation*) inConversation
 {
-    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"End the call for the session <%p>", inSession);
+    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"End the call for the session <%p>", inConversation);
     //Hangup current active call
-    [[inSession currentCall] hangup:HOPCallClosedReasonUser];
+    [inConversation.currentCall hangup:HOPCallClosedReasonUser];
     //Set flag that there is no active call
-    [self setActiveCallSession:inSession callActive:NO];
+    [self setActiveCallConversation:inConversation callActive:NO];
 }
 
 /**
@@ -360,36 +155,19 @@
  */
 - (void) onCallPreparing:(HOPCall*) call
 {
-    NSString* sessionId = [[call getConversationThread] getThreadId];
-    Session* session = [[[SessionManager sharedSessionManager] sessionsDictionary] objectForKey:sessionId];
+    // NSString* sessionId = [[call getConversationThread] getThreadId];
+    HOPConversation* conversation = [call getConversation];
+
+    SessionViewController_iPhone* sessionViewController = [[[[OpenPeer sharedOpenPeer] mainViewController] sessionViewControllersDictionary] objectForKey:[conversation getConversationID]];
     
-    if (!session)
+    if ([[call getCaller] isSelf])
     {
-        HOPOpenPeerContact* contact = [[HOPModelManager sharedModelManager] getOpenPeerContactForPeerURI:[[call getCaller] getPeerURI]];
-        session = [[SessionManager sharedSessionManager] getSessionForContacts:@[contact]];
-        if (session)
-        {
-            //[[SessionManager sharedSessionManager] setValidSession:session newSessionId:[session.conversationThread getThreadId]oldSessionId:sessionId];
-            OPLog(HOPLoggerSeverityError, HOPLoggerLevelDebug, @"%Session for id %@ not found, but it is found other with id %@",sessionId,[session.conversationThread getThreadId]);
-        }
+        if ([call hasVideo])
+            [sessionViewController showWaitingView:YES];
+        else
+            [sessionViewController showCallViewControllerWithVideo:NO];
     }
-    
-    if (session)
-    {
-        SessionViewController_iPhone* sessionViewController = [[[[OpenPeer sharedOpenPeer] mainViewController] sessionViewControllersDictionary] objectForKey:[session.conversationThread getThreadId]];
-        
-        if ([[call getCaller] isSelf])
-        {
-            if ([call hasVideo])
-                [sessionViewController showWaitingView:YES];
-            else
-                [sessionViewController showCallViewControllerWithVideo:NO];
-        }
-    }
-    else
-    {
-        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelBasic, @"Incomming call for unknown session id %@", sessionId);
-    }
+
     //Stop recording if it is placed and remove recording button
     //[sessionViewController stopVideoRecording:YES hideRecordButton:YES];
 }
@@ -402,10 +180,11 @@
 - (void) onCallIncoming:(HOPCall*) call
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Handle incoming call <%p>", call);
-    NSString* sessionId = [[call getConversationThread] getThreadId];
-    Session* session = [[[SessionManager sharedSessionManager] sessionsDictionary] objectForKey:sessionId];
-    
-    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Incoming a call for the session <%p>", session);
+    HOPConversation* conversation = [call getConversation];
+//    NSString* sessionId = [[call getConversationThread] getThreadId];
+//    Session* session = [[[SessionManager sharedSessionManager] sessionsDictionary] objectForKey:sessionId];
+//    
+//    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Incoming a call for the session <%p>", session);
     
     //Set current call
     //BOOL callFlagIsSet = [self setActiveCallSession:session callActive:YES];
@@ -413,41 +192,37 @@
     //If callFlagIsSet is YES, show incoming call view, and move call to ringing state
     if (![self isCallInProgress])
     {
-        session.currentCall = call;
+        conversation.currentCall = call;
         
-        if (!session.isRedial)
+        if (!conversation.redialCall)
         {
             //[[[OpenPeer sharedOpenPeer] mainViewController] showIncominCallForSession:session];
             //If it is an incomming call, get show session view controller
             if (![[call getCaller] isSelf])
             {
-                [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForSession:session forIncomingCall:YES forIncomingMessage:NO];
+                [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForConversation:conversation replaceConversation:nil incomingCall:YES incomingMessage:NO];
             }
             [call ring];
         }
         else
             [call answer];
         
-        [self setActiveCallSession:session callActive:YES];
+        [self setActiveCallConversation:conversation callActive:YES];
     }
     else //If callFlagIsSet is NO, hangup incoming call. 
     {
         [call hangup:HOPCallClosedReasonBusy];
-        [[[OpenPeer sharedOpenPeer] mainViewController] showNotification:[NSString stringWithFormat:@"%@ is busy.",[[[session participantsArray] objectAtIndex:0] name]]];
+        [[[OpenPeer sharedOpenPeer] mainViewController] showNotification:[NSString stringWithFormat:@"%@ is trying to reach you.",[[conversation.participants objectAtIndex:0] getFullName]]];
     }
 }
 
 - (void) onCallRinging:(HOPCall*) call
 {
-    NSString* sessionId = [[call getConversationThread] getThreadId];
-    if ([sessionId length] > 0)
+    HOPConversation* conversation = [call getConversation];
+    if (conversation)
     {
-        Session* session = [[[SessionManager sharedSessionManager] sessionsDictionary] objectForKey:sessionId];
-        if (session)
-        {
-            [[[OpenPeer sharedOpenPeer] mainViewController] showIncominCallForSession:session];
-            [[SoundManager sharedSoundsManager] playRingingSound];
-        }
+        [[[OpenPeer sharedOpenPeer] mainViewController] showIncominCallForConversation:conversation];
+        [[SoundManager sharedSoundsManager] playRingingSound];
     }
 }
 
@@ -458,14 +233,10 @@
  */
 - (void) onCallOpened:(HOPCall*) call
 {
-     SessionViewController_iPhone* sessionViewController = [[[[OpenPeer sharedOpenPeer] mainViewController] sessionViewControllersDictionary] objectForKey:[[call getConversationThread] getThreadId]];
+     SessionViewController_iPhone* sessionViewController = [[[[OpenPeer sharedOpenPeer] mainViewController] sessionViewControllersDictionary] objectForKey:[[call getConversation] getConversationID]];
     
     [sessionViewController showIncomingCall:NO];
     [sessionViewController showCallViewControllerWithVideo:[call hasVideo]];
-    //[sessionViewController prepareForCall:YES withVideo:[call hasVideo]];
-    
-    //At this moment it is possible to do recording, so show the recording button
-    //[sessionViewController stopVideoRecording:YES hideRecordButton:![call hasVideo]];
 }
 
 /**
@@ -474,12 +245,10 @@
  */
 - (void) onCallClosing:(HOPCall*) call
 {
-    NSString* sessionId = [[call getConversationThread] getThreadId];
-    Session* session = [[[SessionManager sharedSessionManager] sessionsDictionary] objectForKey:sessionId];
-    [[HOPMediaEngine sharedInstance] stopVideoCapture];
-    [[session currentCall] hangup:HOPCallClosedReasonNone];
+
+    [call hangup:HOPCallClosedReasonNone];
     //Set flag that there is no active call
-    [self setActiveCallSession:session callActive:NO];
+    [self setActiveCallConversation:[call getConversation] callActive:NO];
 }
 
 /**
@@ -488,21 +257,21 @@
  @param inSession Session session with call.
  @return YES if session with active call is set for active call, or when session is nilled for ending call. In all other cases it returns NO
  */
-- (BOOL) setActiveCallSession:(Session*) inSession callActive:(BOOL) callActive
+- (BOOL) setActiveCallConversation:(HOPConversation*) inConversation callActive:(BOOL) callActive
 {
     BOOL ret = NO;
     @synchronized(self)
     {
-        if (callActive && self.sessionWithActiveCall == nil)
+        if (callActive && self.conversationWithActiveCall == nil)
         {
             //If there is no session with active call, set it
-            self.sessionWithActiveCall = inSession;
+            self.conversationWithActiveCall = inConversation;
             ret = YES;
         }
-        else if (!callActive && self.sessionWithActiveCall == inSession)
+        else if (!callActive && self.conversationWithActiveCall == inConversation)
         {
             //If there is session with active call, set it to nil, because call is ended
-            self.sessionWithActiveCall = nil;
+            self.conversationWithActiveCall = nil;
             ret = YES;
         }
     }
@@ -514,14 +283,14 @@
  Redials for session.
  @param inSession Session session with failed call which needs to be redialed.
  */
-- (void) redialCallForSession:(Session*) inSession
+- (void) redialCallForConversation:(HOPConversation *)inConversation
 {
-    if (inSession == self.lastEndedCallSession )
+    if (inConversation == self.lastEndedCallConversation)
     {
         //Check interval since last attempt, and if last call is ended 10 seconds ago, or earlier try to redial.
-        NSTimeInterval timeInterval = [[inSession.currentCall getClosedTime] timeIntervalSinceDate:[NSDate date]];
+        NSTimeInterval timeInterval = [[inConversation.currentCall getClosedTime] timeIntervalSinceDate:[NSDate date]];
         if (timeInterval < 10)
-            [self makeCallForSession:inSession includeVideo:NO isRedial:YES];
+            [self makeCallForConversation:inConversation includeVideo:NO isRedial:YES];
     }
 }
 
@@ -531,26 +300,18 @@
  */
 - (void) onCallEnded:(HOPCall*) call
 {
-    //Get call session
-    NSString* sessionId = [[call getConversationThread] getThreadId];
-    Session* session = [[[SessionManager sharedSessionManager] sessionsDictionary] objectForKey:sessionId];
+    HOPConversation* conversation = [call getConversation];
     
     [[HOPMediaEngine sharedInstance] stopVideoCapture];
     //Get view controller for call session
-    SessionViewController_iPhone* sessionViewController = [[[[OpenPeer sharedOpenPeer] mainViewController] sessionViewControllersDictionary] objectForKey:[[session conversationThread] getThreadId]];
+    SessionViewController_iPhone* sessionViewController = [[[[OpenPeer sharedOpenPeer] mainViewController] sessionViewControllersDictionary] objectForKey:[conversation getConversationID]];
     
     if (sessionViewController)
     {
-        //[sessionViewController removeCallViews];
         [sessionViewController onCallEnded];
-        //Update view for case when call is not active
-        //[sessionViewController prepareForCall:NO withVideo:NO];
-        
-        //Enable video recording if face detection is on
-        //[sessionViewController stopVideoRecording:YES hideRecordButton:![[OpenPeer sharedOpenPeer] isFaceDetectionModeOn]];
     }
     
-    [self setLastEndedCallSession: session];
+    //[self setLastEndedCallConversation:<#(HOPConversation *)#>: session];
     //TODO: reimplement redial when call is ended because of weak network
     //If it is callee side, check the reasons why call is ended, and if it is not ended properly, try to redial
     if (![[call getCaller] isSelf] && ((OpenPeer*)[OpenPeer sharedOpenPeer]).isRedialModeOn)
@@ -558,36 +319,29 @@
         if ([call getClosedReason] == HOPCallClosedReasonNone || [call getClosedReason] == HOPCallClosedReasonRequestTerminated || [call getClosedReason] == HOPCallClosedReasonTemporarilyUnavailable)
         {
             //[[MessageManager sharedMessageManager] sendSystemMessageToCallAgainForSession:session];
-            session.isRedial = YES;
+            conversation.redialCall = YES;
         }
         else
         {
-            session.isRedial = NO;
+            conversation.redialCall = NO;
         }
     }
     else
     {
-        session.isRedial = NO;
+        conversation.redialCall = NO;
         //If call is droped because user is a busy at the moment, show notification to caller.
-        if ([session.currentCall getClosedReason] == HOPCallClosedReasonBusy)
+        if ([conversation.currentCall getClosedReason] == HOPCallClosedReasonBusy)
         {
-            HOPRolodexContact* contact = [session.participantsArray objectAtIndex:0];
-            NSString* contactName = contact.name;
+            HOPContact* contact = [conversation.participants objectAtIndex:0];
+            NSString* contactName = [contact getFullName];
             [[[OpenPeer sharedOpenPeer] mainViewController] showNotification:[NSString stringWithFormat:@"%@ is busy.",contactName]];
          }
     }
     
-    session.currentCall = nil;
-    [[SessionManager sharedSessionManager] setLastEndedCallSession: session];
+    conversation.currentCall = nil;
+    [[SessionManager sharedSessionManager] setLastEndedCallConversation: conversation];
 }
 
-/**
- Handle face detected event
- */
-- (void) onFaceDetected
-{
-    
-}
 
 /**
  Starts video recording.
@@ -623,7 +377,7 @@
     BOOL ret = NO;
     @synchronized(self)
     {
-        ret = self.sessionWithActiveCall != nil;
+        ret = self.conversationWithActiveCall != nil;
     }
     return ret;
 }
@@ -632,80 +386,40 @@
 - (void) recreateExistingSessions
 {
     OPLog(HOPLoggerSeverityError, HOPLoggerLevelTrace, @"Recreate existing sessions");
-    //for (Session* session in [self.sessionsDictionary allValues])
-    for ( NSString* key in [self.sessionsDictionary allKeys])
+    
+    for (HOPConversation* conversation in [HOPConversation getConversations])
     {
-        Session* session = [self.sessionsDictionary objectForKey:key];
-        if ([session.participantsArray count] > 0)
-        {
-            NSString* oldSessionId = [session.conversationThread getThreadId];
-            
-            HOPConversationThread* conversationThread = [HOPConversationThread conversationThreadWithIdentities:[[HOPAccount sharedAccount] getAssociatedIdentities]];
-            
-            session.conversationThread = nil;
-            
-            
-            //Add list of all participants. Currently only one participant is added
-            if (conversationThread)
-            {
-                //NSString* oldSessionId = [session.conversationThread getThreadId];
-                NSString* newSessionId = [conversationThread getThreadId];
-                
-                //Update the session with a new conversation thread
-                session.conversationThread = conversationThread;
-                [session.sessionIdsHistory addObject:[conversationThread getThreadId]];
-                
-                NSMutableArray* participants = [[NSMutableArray alloc] init];
-                for (HOPRolodexContact* rolodexContact in session.participantsArray)
-                {
-                    [participants addObject:rolodexContact];
-                }
-                [conversationThread addContacts:participants];
-                NSArray* contactsArray = [[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:[[participants objectAtIndex:0] getPeerURI]];
-                if (contactsArray)
-                {
-                    [[HOPModelManager sharedModelManager] createConversationRecordForConversationThread:conversationThread type:nil date:[NSDate date] name:nil participants:contactsArray];
-                
-                    [self setValidSession:session newSessionId:newSessionId oldSessionId:oldSessionId];
-                }
-            }
-        }
-        else
-        {
-            [self.sessionsDictionary removeObjectForKey:key];
-        }
+        [conversation refresh];
     }
 }
 
 
 - (void) stopAnyActiveCall
 {
-    if (self.sessionWithActiveCall)
-        [self.sessionWithActiveCall.currentCall hangup:HOPCallClosedReasonNone];
+    if ([self isCallInProgress])
+    {
+        @synchronized(self)
+        {
+            [self.conversationWithActiveCall.currentCall hangup:HOPCallClosedReasonNone];
+        }
+    }
 }
 
 - (void) clearAllSessions
 {
     [self stopAnyActiveCall];
-    for (Session* session in [self.sessionsDictionary allValues])
+    for (HOPConversation* conversation in [HOPConversation getConversations])
     {
-        [session.conversationThread destroyCoreObject];
+        [conversation clear];
     }
-    [self.sessionsDictionary removeAllObjects];
-}
-
-- (void) setLatestValidConversationThread:(HOPConversationThread*) inConversationThread
-{
-    Session* session = [self.sessionsDictionary objectForKey:[inConversationThread getThreadId]];
-    session.conversationThread = inConversationThread;
 }
 
 - (int) totalNumberOfUnreadMessages
 {
     int ret = 0;
-    for (Session* session in [self.sessionsDictionary allValues])
+    for (HOPConversation* conversation in [HOPConversation getConversations])
     {
-        ret += [session.unreadMessageArray count];
+        ret += conversation.numberOfUnreadMessages;
     }
     return ret;
 }
@@ -732,163 +446,61 @@
 - (NSString*) getLastTextMessageForConversationRecord:(HOPConversationRecord*) record
 {
     NSString* ret = nil;
-    NSSortDescriptor* sort = [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO];
-    NSArray* sorted = [record.messages.allObjects sortedArrayUsingDescriptors:@[sort]];
-    HOPMessageRecord* messageRecord = sorted.count > 0 ? sorted[0] : nil;//[[HOPModelManager sharedModelManager] getLastMessageRecordForConversationEvent:event];
+    HOPMessageRecord* messageRecord = [record getLastMessage];
     if (messageRecord)
     {
         if (![messageRecord.type isEqualToString:[HOPSystemMessage getMessageType]])
             ret = messageRecord.text;
         else
-        {
-            ret = [self getSystemMessage:messageRecord];
-        }
+            ret = [[SessionManager sharedSessionManager] getSystemMessage:messageRecord];
     }
+
     return ret;
 }
 
 
-- (void) addParticipants:(NSArray*) participants toSession:(Session*) inSession
+- (void) onParticipantsInConversationUpdate:(HOPConversation*) conversation
 {
-    if (participants.count > 0)
-    {
-        NSArray* array = [inSession.participantsArray arrayByAddingObjectsFromArray:participants];
-        
-        Session* session = [self createSessionForContacts:array];
-        
-        if (session)
-        {
-            [[[OpenPeer sharedOpenPeer] mainViewController] popLastSessionViewController];
-            [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForSession:session forIncomingCall:NO forIncomingMessage:NO];
-        }
-    }
-    
-//    if (session && participants.count > 0)
-//    {
-//        [session.conversationThread addContacts:participants];
-//    }
-}
-
-- (void) removeParticipants:(NSArray*) participants toSession:(Session*) inSession
-{
-    if (participants.count > 0)
-    {
-        NSMutableArray* array = [NSMutableArray arrayWithArray:inSession.participantsArray];
-        //NSArray* openPeerContactsToRemove  = [self getOpenPeerContactsFromRolodexContactsArray:participants];
-        [array removeObjectsInArray:participants];
-        
-        Session* session = [self createSessionForContacts:array];
-        
-        if (session)
-        {
-            [[[OpenPeer sharedOpenPeer] mainViewController] popLastSessionViewController];
-            [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForSession:session forIncomingCall:NO forIncomingMessage:NO];
-        }
-    }
-    
-//    if (session && participants.count > 0)
-//    {
-//        //NSMutableArray* contacts = [NSMutableArray new];
-//        
-//        /*for (HOPRolodexContact* contact in participants)
-//        {
-//            HOPContact* hopContact = [contact getCoreContact];
-//            if (hopContact)
-//                [contacts addObject:hopContact];
-//        }*/
-//        
-//        //if (contacts.count > 0)
-//        [session.conversationThread removeContacts:participants];
-//    }
-}
-
-- (NSString*) getTitleForConversationThread:(HOPConversationThread*) conversationThread
-{
-    NSString* ret = @"";
-    
-    NSArray* participants = [conversationThread getRolodexContacts];
-    for (HOPRolodexContact* rolodexContact in participants)
-    {
-        //HOPRolodexContact* rolodexContact = [contact getDefaultRolodexContact];
-        
-        if (rolodexContact)
-        {
-            if (ret.length == 0)
-                ret = rolodexContact.name;
-            else
-            {
-                ret = [ret stringByAppendingString:@", "];
-                ret = [ret stringByAppendingString:rolodexContact.name];
-            }
-        }
-    }
-    return ret;
-}
-
-- (void) updateParticipantsInConversationThread:(HOPConversationThread*) conversationThread
-{
-    NSArray* openPeerContacts = [conversationThread getContacts];
-    
-    if (openPeerContacts.count == 0)
+    if (conversation.participants.count == 0 || conversation.updatedContacts.count == 0)
         return;
     
-    NSString* sessionId = [conversationThread getThreadId];
     
-    BOOL hasChanged = NO;
-    
-    Session* session = nil;
+    NSString* sessionId = [conversation getConversationID];
     if (sessionId.length > 0)
     {
-        session = [self getSessionForSessionId:sessionId];
-        if (session)
-        {
-            NSMutableArray *intermediate = [NSMutableArray arrayWithArray:openPeerContacts];
-
-            [intermediate removeObjectsInArray:session.lastConversationEvent.participants.participants.allObjects];
-            NSUInteger difference = [intermediate count];
-            
-            NSString* title = [self getTitleForConversationThread:conversationThread];
-            
-            if (difference > 0)
-            {
-                session.lastConversationEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"addedNewParticipant" conversationRecord:session.sessionRecord partcipants:openPeerContacts title:title];
-                
-                hasChanged = YES;
-            }
-            else
-            {
-                if (openPeerContacts.count != session.lastConversationEvent.participants.participants.allObjects.count)
-                {
-                    session.lastConversationEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"removedParticipant" conversationRecord:session.sessionRecord partcipants:openPeerContacts title:title];
-                    hasChanged = YES;
-                }
-            }
-            
-            if (hasChanged)
-            {
-                session.title = title;
-                [session.participantsArray removeAllObjects];
-                
-                for (HOPOpenPeerContact* contact in openPeerContacts)
-                {
-                    HOPRolodexContact* rolodex = [contact getDefaultRolodexContact];
-                    if (rolodex)
-                        [session.participantsArray addObject:rolodex];
-                }
-                //[session.participantsArray addObjectsFromArray:openPeerContacts];
+        conversation.name = [conversation getDefaultTitle];
+        SessionViewController_iPhone* sessionViewController = [[[[OpenPeer sharedOpenPeer] mainViewController] sessionViewControllersDictionary] objectForKey:sessionId];
         
-                [session.sessionRecord setParticipantsWithArray:openPeerContacts];
-                
-                SessionViewController_iPhone* sessionViewController = [[[[OpenPeer sharedOpenPeer] mainViewController] sessionViewControllersDictionary] objectForKey:sessionId];
-                
-                [sessionViewController updateOnParticipantChange];
-            }
-        }
-        
-        
+        [sessionViewController updateOnParticipantChange];
     }
-    
-    
 }
 
+
+/*- (void) removeSelfFromConversation:(HOPConversation*) conversation
+{
+    if ([conversation quit])
+    {
+        [[[OpenPeer sharedOpenPeer] mainViewController] removeSessionViewControllerForSession:[conversation getConversationID]];
+        [[[[OpenPeer sharedOpenPeer] mainViewController] activeSessionsViewController] reloadData];
+        [[[OpenPeer sharedOpenPeer] mainViewController] popLastConversationViewController];
+        
+    }
+}*/
+
+
+
+- (NSString*) getNavigationTitleForConversation:(HOPConversation*) conversation
+{
+    NSString* ret = nil;
+    
+    if (conversation.name)
+        ret = conversation.name;
+    else
+    {
+        ret = [HOPUtility getDefaultTitleForParticipants:conversation.participants];
+        conversation.name = ret;
+    }
+    
+    return ret;
+}
 @end

@@ -33,13 +33,13 @@
 #import "HOPConversationEvent.h"
 #import "HOPConversationRecord.h"
 #import "HOPMessageEvent.h"
-#import "HOPOpenPeerContact.h"
+#import "HOPContact.h"
 
 
 @implementation HOPMessageRecord
 
 @dynamic date;
-@dynamic deleted;
+@dynamic removed;
 @dynamic edited;
 @dynamic image;
 @dynamic incomingMessageStatus;
@@ -50,9 +50,11 @@
 @dynamic text;
 @dynamic type;
 @dynamic visible;
+@dynamic validated;
+@dynamic replacedMessageID;
 @dynamic conversationEvent;
 @dynamic messageEvent;
-@dynamic senderOpenPeer;
+@dynamic sender;
 @dynamic session;
 
 @end

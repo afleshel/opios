@@ -30,12 +30,10 @@
  */
 
 #import "ActiveSessionsViewController.h"
-#import <OpenPeerSDK/HOPConversationRecord+External.h>
 #import <OpenPeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPAccount.h>
-//#import <OpenPeerSDK/HOPOpenPeerContact.h>
-#import <OpenPeerSDK/HOPParticipants.h>
-#import <OpenPeerSDK/HOPConversationEvent+External.h>
+#import <OpenPeerSDK/HOPConversationRecord+External.h>
+#import <OpenPeerSDK/HOPConversation.h>
 #import <OpenPeerSDK/HOPUtility.h>
 #import "SessionManager.h"
 #import "OpenPeer.h"
@@ -49,6 +47,8 @@
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, strong) NSDate *lastRefresh;
 @property (nonatomic, strong) NSTimer *refreshTimer;
+
+- (void) updateCellForConversation:(HOPConversation*) conversation;
 @end
 
 @implementation ActiveSessionsViewController
@@ -79,6 +79,7 @@
     
     [self fetchData];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadData) name:notifictionAppReturnedFromBackground object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCellForConversation:) name:notificationMessagesRead object:nil];
 }
 
 - (void)fetchData
@@ -111,13 +112,14 @@
         NSInteger currentSeconds = [[NSCalendar currentCalendar] ordinalityOfUnit:NSSecondCalendarUnit inUnit:NSDayCalendarUnit forDate:[NSDate date]];
         NSInteger secondsForTimer = 24 * 60 * 60 - currentSeconds;
         self.refreshTimer = [NSTimer scheduledTimerWithTimeInterval:secondsForTimer target:self selector:@selector(reloadData) userInfo:nil repeats:NO];
-        [self.tableViewSessions reloadRowsAtIndexPaths:[self.tableViewSessions indexPathsForVisibleRows] withRowAnimation:UITableViewRowAnimationNone];
+        //[self.tableViewSessions reloadRowsAtIndexPaths:[self.tableViewSessions indexPathsForVisibleRows] withRowAnimation:UITableViewRowAnimationNone];
     }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    
     [self.refreshTimer invalidate];
     self.refreshTimer = nil;
 }
@@ -147,16 +149,17 @@
     {
         NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"ActiveSessionTableViewCell" owner:self options:nil];
         cell = [topLevelObjects objectAtIndex:0];
-        [cell setBackground];
+        
+        cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"tableViewCell.png"] stretchableImageWithLeftCapWidth:0.0 topCapHeight:5.0]];
+        cell.selectedBackgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"tableViewCell_selected.png"] stretchableImageWithLeftCapWidth:0.0 topCapHeight:5.0]];
+        
+        //[cell setBackground];
     }
     
-    cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"tableViewCell.png"] stretchableImageWithLeftCapWidth:0.0 topCapHeight:5.0]];
-    cell.selectedBackgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"tableViewCell_selected.png"] stretchableImageWithLeftCapWidth:0.0 topCapHeight:5.0]];
-    HOPConversationEvent* event = [self.fetchedResultsController objectAtIndexPath:indexPath];//((HOPParticipants*) [self.fetchedResultsController objectAtIndexPath:indexPath]).lastEvent;
-    //HOPConversationRecord* record = event.session;//[self.fetchedResultsController objectAtIndexPath:indexPath];
+    HOPConversationRecord* record = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
-    if (event)
-        [cell setConversationEvent:event];
+    if (record)
+        [cell setRecord:record];
     
     return cell;
 }
@@ -171,10 +174,6 @@
     return 40;
 }
 
-//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-//{
-//    return 3;
-//}
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
@@ -218,19 +217,26 @@
     HOPConversationRecord* record = [self.fetchedResultsController objectAtIndexPath:indexPath];
     if (record)
     {
-        Session* session = [[SessionManager sharedSessionManager] getSessionForContacts:record.participants.allObjects];
-        if (!session)
+        HOPConversation* conversation = [record getConversation];
+        if (!conversation)
         {
-            // NSMutableArray* listOfRolodexContacts = [[NSMutableArray alloc] init];
-
-            if([record.participants count] > 0)
+            if(record.participants.count > 0)
             {
-                session = [[SessionManager sharedSessionManager] createSessionForContacts:[record getContacts]];
+                conversation = [HOPConversation conversationForRecord:record];
+                //session = [[SessionManager sharedSessionManager] createSessionForContacts:[record getContacts]];
             }
         }
         
-        if (session)
-            [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForSession:session forIncomingCall:NO forIncomingMessage:NO];
+        if (conversation)
+        {
+            ActiveSessionTableViewCell *cell = (ActiveSessionTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
+            if (cell)
+            {
+                conversation.numberOfUnreadMessages = 0;
+                [cell updateBadge:conversation];
+            }
+            [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForConversation:conversation replaceConversation:nil incomingCall:NO incomingMessage:NO];
+        }
     }
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
@@ -278,7 +284,7 @@
     
     [fetchRequest setEntity:entity];
 
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(homeUser.stableId MATCHES '%@')",[[HOPAccount sharedAccount] getStableID]]];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(homeUser.stableId MATCHES '%@' AND selfRemoved = NO)",[[HOPAccount sharedAccount] getStableID]]];
     [fetchRequest setPredicate:predicate];
     
     [fetchRequest setFetchBatchSize:20];
@@ -314,7 +320,7 @@
 			break;
 		case NSFetchedResultsChangeUpdate:
             [((ActiveSessionTableViewCell*) [self.tableViewSessions cellForRowAtIndexPath:indexPath]) updateActivity];
-//			[[self.tableViewSessions cellForRowAtIndexPath:indexPath].textLabel setText:((HOPRolodexContact*)[[[self.fetchedResultsController sections] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]).name];
+//			[[self.tableViewSessions cellForRowAtIndexPath:indexPath].textLabel setText:((HOPIdentity*)[[[self.fetchedResultsController sections] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]).name];
 			break;
 		case NSFetchedResultsChangeDelete:
 			[self.tableViewSessions  deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
@@ -341,6 +347,21 @@
             
             default:
             break;
+    }
+}
+
+- (void) updateCellForConversation:(NSNotification *)notification
+{
+    HOPConversation* conversation = notification.object;
+    if (conversation)
+    {
+        NSIndexPath *indexPath = [self.fetchedResultsController indexPathForObject:conversation];
+        if (indexPath)
+        {
+            ActiveSessionTableViewCell *cell = (ActiveSessionTableViewCell *)[self.tableViewSessions cellForRowAtIndexPath:indexPath];
+            if (cell)
+                [cell updateBadge:conversation];
+        }
     }
 }
 @end

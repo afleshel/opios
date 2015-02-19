@@ -42,8 +42,12 @@ using namespace openpeer::core;
     IConversationThreadPtr conversationThreadPtr;
 }
 
+@property (nonatomic, strong) NSMutableArray* participants;
+
 - (id) initWithConversationThread:(IConversationThreadPtr) inConversationThreadPtr;
 - (IConversationThreadPtr) getConversationThreadPtr;
+
+- (void) refreshParticipants;
 
 - (String) log:(NSString*) message;
 @end

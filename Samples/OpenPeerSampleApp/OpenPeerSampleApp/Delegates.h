@@ -74,3 +74,15 @@
 //- (void) onSettingsDownloadFailure;
 
 @end
+
+@protocol SessionViewControllerDelegate <NSObject>
+
+- (void) updateOnParticipantChange;
+
+@end
+
+@protocol PushNotificationSenderDelegate <NSObject>
+
+- (void) onDeviceTokenReceivedForPeerURI:(NSString*) peerURI;
+
+@end

@@ -31,12 +31,14 @@
 
 #import <UIKit/UIKit.h>
 
-@class HOPConversationEvent;
+@class HOPConversationRecord;
 
 @interface ActiveSessionTableViewCell : UITableViewCell
 
-- (void) setConversationEvent:(HOPConversationEvent *)event;
+@property (nonatomic, weak) HOPConversationRecord* conversationRecord;
+
+- (void) setRecord:(HOPConversationRecord *)conversationRecord;
 - (void) updateActivity;
 - (void) setBackground;
-
+- (void) updateBadge:(HOPConversation *)conversation;
 @end

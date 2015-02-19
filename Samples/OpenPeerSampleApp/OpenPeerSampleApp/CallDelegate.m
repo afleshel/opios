@@ -33,27 +33,29 @@
 #import "OpenPeer.h"
 #import <OpenpeerSDK/HOPCall.h>
 #import <OpenpeerSDK/HOPTypes.h>
-#import <OpenpeerSDK/HOPConversationThread.h>
-#import <OpenpeerSDK/HOPRolodexContact+External.h>
+//#import <OpenpeerSDK/HOPConversationThread.h>
+#import <OpenpeerSDK/HOPIdentity+External.h>
 #import "SessionManager.h"
 #import "MessageManager.h"
 #import "SoundsManager.h"
 
-#import "Session.h"
+//#import "Session.h"
 #import "MainViewController.h"
 #import "SessionViewController_iPhone.h"
 #import "Utility.h"
 #import <OpenpeerSDK/HOPMediaEngine.h>
+#import <OpenpeerSDK/HOPConversation.h>
+#import <OpenpeerSDK/HOPContact+External.h>
 @implementation CallDelegate
 
 - (void) onCallStateChanged:(HOPCall*) call callState:(HOPCallState) callState
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Call state: %@", [Utility getCallStateAsString:[call getState]]);
-    [[SessionManager sharedSessionManager] setLatestValidConversationThread:[call getConversationThread]];
-    NSString* sessionId = [[call getConversationThread] getThreadId];
+    //[[SessionManager sharedSessionManager] setLatestValidConversation:[call getConversation]];
+    HOPConversation* conversation = [call getConversation];
     dispatch_async(dispatch_get_main_queue(), ^{
 
-        SessionViewController_iPhone* sessionViewController = [[[[OpenPeer sharedOpenPeer] mainViewController] sessionViewControllersDictionary] objectForKey:sessionId];
+        SessionViewController_iPhone* sessionViewController = [[[[OpenPeer sharedOpenPeer] mainViewController] sessionViewControllersDictionary] objectForKey:[conversation getConversationID]];
         
         [sessionViewController updateCallState];
         
@@ -87,8 +89,8 @@
                 [[SoundManager sharedSoundsManager] stopRingingSound];
                 [[SessionManager sharedSessionManager] onCallOpened:call];
                 
-                if ([[call getCallerNew] isSelf])
-                    [[MessageManager sharedMessageManager] sendCallSystemMessage:HOPCallSystemMessageTypeCallAnswered reasonCode:0 session:[[[SessionManager sharedSessionManager] sessionsDictionary] objectForKey:sessionId]];
+                if ([[call getCaller] isSelf])
+                    [[MessageManager sharedMessageManager] sendCallSystemMessage:HOPCallSystemMessageTypeCallAnswered reasonCode:0 forConversation:conversation];
                 
                 [sessionViewController startTimer];
                 break;
@@ -112,7 +114,7 @@
                 [[SoundManager sharedSoundsManager] stopRingingSound];
                 [sessionViewController stopTimer];
                 
-                if ([[call getCallerNew] isSelf])
+                if ([[call getCaller] isSelf])
                 {
                     int reasonCode = 0;
                     
@@ -124,7 +126,7 @@
                     {
                         reasonCode = 404;
                     }
-                    [[MessageManager sharedMessageManager] sendCallSystemMessage:HOPCallSystemMessageTypeCallHungup reasonCode:reasonCode session:[[[SessionManager sharedSessionManager] sessionsDictionary] objectForKey:sessionId]];
+                    [[MessageManager sharedMessageManager] sendCallSystemMessage:HOPCallSystemMessageTypeCallHungup reasonCode:reasonCode forConversation:conversation];
                 }
                 break;
                 

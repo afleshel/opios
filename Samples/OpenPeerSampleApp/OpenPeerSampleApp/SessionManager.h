@@ -32,38 +32,24 @@
 #import <Foundation/Foundation.h>
 #import <OpenpeerSDK/HOPProtocols.h>
 
-@class Session;
-@class HOPConversationThread;
-@class HOPMessage;
-@class HOPContact;
-@class HOPRolodexContact;
+@class HOPIdentity;
 @class HOPConversationRecord;
 @class HOPMessageRecord;
 @class HOPConversationEvent;
+@class HOPConversation;
 
 @interface SessionManager : NSObject
 
-@property (strong) NSMutableDictionary* sessionsDictionary;
-@property (strong) NSMutableDictionary* sessionsDictionaryWithCBCID;
-@property (assign) Session* lastEndedCallSession;
-@property (nonatomic, assign) Session* sessionWithFaceDetectionOn;
+//@property (strong) NSMutableDictionary* sessionsDictionary;
+//@property (strong) NSMutableDictionary* conversationsDictionaryForContacts;
+@property (assign) HOPConversation* lastEndedCallConversation;
 
 + (id) sharedSessionManager;
 
-- (Session*) createSessionForContacts:(NSArray*) contacts;
-- (Session*) createSessionForConversationThread:(HOPConversationThread*) inConversationThread;
-//- (Session*) createSessionInitiatedFromSession:(Session*) inSession forContactPeerURIs:(NSString*) peerURIs;
-//- (Session*) createRemoteSessionForContacts:(NSArray*) participants;
-- (Session*) proceedWithExistingSessionForContacts:(NSArray*) contacts newConversationThread:(HOPConversationThread*) inConversationThread;
-- (Session*) getSessionForContacts:(NSArray*) contacts;
-- (Session*) getSessionForSessionId:(NSString*) sessionId;
-- (Session*) getSessionForConversationEvent:(HOPConversationEvent*) event;
 
-- (void)setValidSession:(Session *)inSession newSessionId:(NSString *)newSessionId oldSessionId:(NSString *)oldSessionId;
-
-- (void) makeCallForSession:(Session*) inSession includeVideo:(BOOL) includeVideo isRedial:(BOOL) isRedial;
-- (void) answerCallForSession:(Session*) inSession;
-- (void) endCallForSession:(Session*) inSession;
+- (void) makeCallForConversation:(HOPConversation*) inConversation includeVideo:(BOOL) includeVideo isRedial:(BOOL) isRedial;
+- (void) answerCallForConversation:(HOPConversation*) inConversation;
+- (void) endCallForConversation:(HOPConversation*) inConversation;
 
 - (void) onCallPreparing:(HOPCall*) call;
 - (void) onCallIncoming:(HOPCall*) call;
@@ -71,10 +57,9 @@
 - (void) onCallOpened:(HOPCall*) call;
 - (void) onCallClosing:(HOPCall*) call;
 
-- (void) redialCallForSession:(Session*) inSession;
+- (void) redialCallForConversation:(HOPConversation*) inConversation;
 
 - (void) onCallEnded:(HOPCall*) call;
-- (void) onFaceDetected;
 
 - (void) startVideoRecording;
 - (void) stopVideoRecording;
@@ -85,14 +70,13 @@
 - (void) stopAnyActiveCall;
 - (void) clearAllSessions;
 
-- (void) setLatestValidConversationThread:(HOPConversationThread*) inConversationThread;
-
 - (int) totalNumberOfUnreadMessages;
 - (NSString* )getSystemMessage:(HOPMessageRecord *)messageRecord;
 - (NSString*) getLastTextMessageForConversationRecord:(HOPConversationRecord*) record;
 
-- (void) addParticipants:(NSArray*) participants toSession:(Session*) session;
-- (void) removeParticipants:(NSArray*) participants toSession:(Session*) session;
+- (void) onParticipantsInConversationUpdate:(HOPConversation*) conversation;
 
-- (void) updateParticipantsInConversationThread:(HOPConversationThread*) conversationThread;
+- (void) removeSelfFromConversation:(HOPConversation*) conversation;
+
+- (NSString*) getNavigationTitleForConversation:(HOPConversation*) conversation;
 @end

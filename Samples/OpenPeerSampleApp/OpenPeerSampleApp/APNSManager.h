@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -31,27 +31,32 @@
 
 #import <Foundation/Foundation.h>
 
-@class HOPRolodexContact;
-@class HOPContact;
-@class HOPMessage;
+@class HOPIdentity;
+@class HOPMessageRecord;
 @class HTTPDownloaderDelegate;
+@class HOPSystemMessage;
 
-@interface APNSManager : NSObject<NSURLSessionDelegate, NSURLSessionTaskDelegate,HTTPDownloaderDelegate>
+@interface APNSManager : NSObject
 
-@property (nonatomic, strong) NSString* deviceToken;
+@property (nonatomic, strong) NSData* deviceToken;
 @property  (nonatomic) int pushesToSend;
-@property   (nonatomic) BOOL goingToBackground;
+
+@property (nonatomic, copy) NSString* pushProvider;
 
 + (id) sharedAPNSManager;
-- (void) prepareUrbanAirShip;
-//- (void) sendPushNotificationForDeviceToken:(NSString*) deviceToken message:(NSString*) message;
+
+- (void) prepare;
 - (void) registerDeviceToken:(NSData*) devToken;
 
-- (void) sendPushNotificationForContact:(HOPRolodexContact*) contact message:(NSString*) message missedCall:(BOOL) missedCall;
-//- (void) sendRichPushNotificationForContact:(HOPContact*) contact message:(HOPMessage*) message missedCall:(BOOL) missedCall;
-- (void) sendRichPushNotificationForMessage:(HOPMessage*) message missedCall:(BOOL) missedCall participantsPeerURIs:(NSArray*) participantsPeerURIs;
+- (void) getAllMessages;
+- (void) handleExistingMessages;
+- (void) handleAPNS:(NSDictionary *)apnsInfo;
+- (void) setBadgeNumber:(NSInteger) numberOfUnreadMessages;
+- (void) sendPushNotificationMessage:(NSString*) message outgoingCall:(BOOL) outgoingCall recipients:(NSArray*) recipients;
+- (void) sendRichPushNotificationForMessage:(HOPMessageRecord*) message conversation:(HOPConversation*) conversation participants:(NSArray*) participants;
 - (BOOL) areTherePushesForSending;
 
-- (void) requestDeviceTokenForPeerURI:(NSString*) peerURI;
-- (void) registerDeviceToken;
+- (void) registerDeviceTokenWithOpenPeer;
+
+- (NSString*) getSelfDeviceToken;
 @end

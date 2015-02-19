@@ -30,7 +30,6 @@
  */
 
 #import "SessionViewController_iPhone.h"
-#import "Session.h"
 #import "SessionManager.h"
 #import "ChatViewController.h"
 #import "AudioCallViewController.h"
@@ -41,17 +40,17 @@
 #import "AddParticipantsViewController.h"
 #import "InfoViewController.h"
 #import <OpenPeerSDK/HOPCall.h>
-#import <OpenPeerSDK/HOPConversationEvent+External.h>
-#import <OpenPeerSDK/HOPConversationRecord+External.h>
-#import <OpenPeerSDK/HOPParticipants.h>
-
+//#import <OpenPeerSDK/HOPConversationEvent+External.h>
+#import <OpenPeerSDK/HOPConversation.h>
+#import <OpenPeerSDK/HOPContact+External.h>
 
 #define ACTION_AUDIO_CALL           1
 #define ACTION_VIDEO_CALL           2
 #define ACTION_ADD_CONTACT          3
 #define ACTION_REMOVE_CONTACT       4
-#define ACTION_SHOW_CONTACT_INFO    5
-#define ACTION_CANCEL               6
+#define ACTION_REMOVE_SELF          5
+#define ACTION_SHOW_CONTACT_INFO    6
+#define ACTION_CANCEL               7
 
 
 @interface SessionViewController_iPhone ()
@@ -101,12 +100,12 @@
     return self;
 }
 
-- (id) initWithSession:(Session*) inSession
+- (id) initWithConversation:(HOPConversation*) inConversation
 {
     self = [self initWithNibName:@"SessionViewController_iPhone" bundle:nil];
     if (self)
     {
-        self.session = inSession;
+        self.conversation = inConversation;
     }
     return self;
 }
@@ -119,7 +118,7 @@
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
         self.edgesForExtendedLayout = UIRectEdgeNone;
     
-    self.chatViewController = [[ChatViewController alloc] initWithSession:self.session];
+    self.chatViewController = [[ChatViewController alloc] initWithConversation:self.conversation];
     self.chatViewController.delegate = self;
     
     [self.chatViewController.view setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -147,7 +146,7 @@
     titleView.backgroundColor = [UIColor clearColor];
     
     self.labelTitle = [[UILabel alloc] initWithFrame:CGRectMake(15.0, 3.0, 170.0, 24.0)];
-    self.labelTitle.text = self.session.title;//[[[self.session participantsArray]objectAtIndex:0] name];
+    self.labelTitle.text = [[SessionManager sharedSessionManager] getNavigationTitleForConversation:self.conversation];
     [self.labelTitle setFont:[UIFont fontWithName:@"Helvetica-Bold" size:20.0]];
     self.labelTitle.textColor = [UIColor whiteColor];
     self.labelTitle.adjustsFontSizeToFitWidth = YES;
@@ -166,7 +165,7 @@
     
     [self.navigationItem setTitleView:titleView];
     
-    self.videoCallViewController = [[VideoCallViewController alloc] initWithSession:self.session];
+    self.videoCallViewController = [[VideoCallViewController alloc] initWithConversation:self.conversation];
     self.videoCallViewController.delegate = self;
     self.videoCallViewController.view.frame = self.chatViewController.view.frame;
     [self.containerView addSubview:self.videoCallViewController.view];
@@ -179,11 +178,15 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
     if (self.containerView == self.chatViewController.view.superview)
         [self.chatViewController viewWillAppear:animated];
+    
+    if (self.conversation.numberOfUnreadMessages > 0)
+    {
+        self.conversation.numberOfUnreadMessages = 0;
+        [[NSNotificationCenter defaultCenter] postNotificationName:notificationMessagesRead object:self.conversation];
+    }
 }
-
 
 - (void)didReceiveMemoryWarning
 {
@@ -244,8 +247,9 @@
             
             //int i = 0;
             
+            //NSArray* participants = [self.session.lastConversationEvent getContacts];
             [self.availableActions removeAllObjects];
-            if (self.session.lastConversationEvent.participants.participants.count == 1)
+            if (self.conversation.participants.count == 1)
             {
                 [buttonTitles addObject:NSLocalizedString(@"Audio Call", @"")];
                 [self.availableActions addObject:[NSNumber numberWithInt:ACTION_AUDIO_CALL]];
@@ -258,13 +262,16 @@
             //[buttonTitles addObject:NSLocalizedString(@"Close session", @"")];
             [buttonTitles addObject:NSLocalizedString(@"Add Contact", @"")];
             [self.availableActions addObject:[NSNumber numberWithInt:ACTION_ADD_CONTACT]];
-            if (self.session.lastConversationEvent.session.participants.count > 1)
+            /*if (self.conversation.participants.count > 1)
             {
                 [buttonTitles addObject:NSLocalizedString(@"Remove Contact", @"")];
                 [self.availableActions addObject:[NSNumber numberWithInt:ACTION_REMOVE_CONTACT]];
-            }
+                
+                [buttonTitles addObject:NSLocalizedString(@"Remove self", @"")];
+                [self.availableActions addObject:[NSNumber numberWithInt:ACTION_REMOVE_SELF]];
+            }*/
             
-            if (self.session.lastConversationEvent.session.participants.count == 1)
+            if (self.conversation.participants.count == 1)
             {
                 [buttonTitles addObject:NSLocalizedString(@"Show contact info", @"")];
                 [self.availableActions addObject:[NSNumber numberWithInt:ACTION_SHOW_CONTACT_INFO]];
@@ -289,16 +296,17 @@
 
 - (void) showContactsChooserForAddingContacts:(BOOL) addingContacts
 {
-    self.addParticipantsViewController = [[AddParticipantsViewController alloc] initWithSession:self.session addingContacts:addingContacts];
+    self.addParticipantsViewController = [[AddParticipantsViewController alloc] initWithConversation:self.conversation addingContacts:addingContacts];
+    self.addParticipantsViewController.delegate = self;
     [self.navigationController pushViewController:self.addParticipantsViewController animated:YES];
 }
 
 - (void) showContactInfo
 {
-    NSArray* contacts = [self.session.lastConversationEvent getContacts];
-    if (contacts.count == 1)
+    //NSArray* contacts = [self.session.lastConversationEvent getContacts];
+    if (self.conversation.participants.count == 1)
     {
-        InfoViewController* infoViewController = [[InfoViewController alloc] initWithContact:contacts[0] style:UITableViewStyleGrouped];
+        InfoViewController* infoViewController = [[InfoViewController alloc] initWithContact:[((HOPContact*)self.conversation.participants[0]) getDefaultIdentity] style:UITableViewStyleGrouped];
         infoViewController.title = @"User Info";
         [self.navigationController pushViewController:infoViewController animated:YES];
     }
@@ -311,11 +319,11 @@
     switch (selectedAction)
     {
         case ACTION_AUDIO_CALL:
-            [[SessionManager sharedSessionManager] makeCallForSession:self.session includeVideo:NO isRedial:NO];
+            [[SessionManager sharedSessionManager] makeCallForConversation:self.conversation includeVideo:NO isRedial:NO];
             break;
         case ACTION_VIDEO_CALL:
             if ([Utility hasCamera])
-                [[SessionManager sharedSessionManager] makeCallForSession:self.session includeVideo:YES isRedial:NO];
+                [[SessionManager sharedSessionManager] makeCallForConversation:self.conversation includeVideo:YES isRedial:NO];
             break;
         case ACTION_ADD_CONTACT:
             [self showContactsChooserForAddingContacts:YES];
@@ -323,6 +331,10 @@
             break;
         case ACTION_REMOVE_CONTACT:
             [self showContactsChooserForAddingContacts:NO];
+            //[self closeSession:nil];
+            break;
+        case ACTION_REMOVE_SELF:
+            [[SessionManager sharedSessionManager] removeSelfFromConversation:self.conversation];
             //[self closeSession:nil];
             break;
         case ACTION_SHOW_CONTACT_INFO:
@@ -337,7 +349,7 @@
 {
     [self.chatViewController hideKeyboard];
     
-    self.waitingVideoViewController = [[WaitingVideoViewController alloc] initWithSession:self.session];
+    self.waitingVideoViewController = [[WaitingVideoViewController alloc] initWithConversation:self.conversation];
     [self.waitingVideoViewController.view setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.containerView addSubview:self.waitingVideoViewController.view];
     
@@ -362,13 +374,13 @@
     {
         if (videoCall)
         {
-            self.videoCallViewController = [[VideoCallViewController alloc] initWithSession:self.session];
+            self.videoCallViewController = [[VideoCallViewController alloc] initWithConversation:self.conversation];
             callViewController = self.videoCallViewController;
             self.videoCallViewController.delegate = self;
         }
         else
         {
-            self.audioCallViewController = [[AudioCallViewController alloc] initWithSession:self.session];
+            self.audioCallViewController = [[AudioCallViewController alloc] initWithConversation:self.conversation];
             callViewController = self.audioCallViewController;
         }
         
@@ -382,7 +394,7 @@
         if (videoCall)
             [self.containerView addConstraint:[NSLayoutConstraint constraintWithItem:callViewController.view attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.containerView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
         else
-            [self.containerView addConstraint:[NSLayoutConstraint constraintWithItem:callViewController.view attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.containerView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:-self.chatViewController.typingMessageView.frame.size.height]];
+            [self.containerView addConstraint:[NSLayoutConstraint constraintWithItem:callViewController.view attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.containerView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:(0-[self.chatViewController getTextFieldHeight])]];
         
         [self.containerView addConstraint:[NSLayoutConstraint constraintWithItem:callViewController.view attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:self.containerView attribute:NSLayoutAttributeTrailing multiplier:1.0 constant:0]];
     }
@@ -405,13 +417,13 @@
         
         [self setRightBarButtonWithEndCall:YES forWaitingView:NO];
     }
-    [[SessionManager sharedSessionManager] makeCallForSession:self.session includeVideo:videoCall isRedial:NO];
+    //[[SessionManager sharedSessionManager] makeCallForConversation:self.conversation includeVideo:videoCall isRedial:NO];
 }
 
 
 - (void) updateCallState
 {
-    NSString *stateStr = [Utility getCallStateAsString:[self.session.currentCall getState]];
+    NSString *stateStr = [Utility getCallStateAsString:[self.conversation.currentCall getState]];
     if ([stateStr length] > 0)
         [self.labelDuration setText:stateStr];
 }
@@ -421,7 +433,7 @@
     if (show)
     {
         [self.chatViewController hideKeyboard];
-        self.incomingCallViewController = [[IncomingCallViewController alloc] initWithSession:self.session];
+        self.incomingCallViewController = [[IncomingCallViewController alloc] initWithConversation:self.conversation];
         [self.incomingCallViewController.view setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self.containerView addSubview:self.incomingCallViewController.view];
         
@@ -558,7 +570,7 @@
 
 - (void) updateOnParticipantChange
 {
-    self.labelTitle.text = self.session.title;
+    self.labelTitle.text = [[SessionManager sharedSessionManager] getNavigationTitleForConversation:self.conversation];
     
     [self.chatViewController refreshMessages];
 }

@@ -32,12 +32,12 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class HOPConversationEvent, HOPConversationRecord, HOPMessageEvent, HOPOpenPeerContact;
+@class HOPConversationEvent, HOPConversationRecord, HOPMessageEvent, HOPContact;
 
 @interface HOPMessageRecord : NSManagedObject
 
 @property (nonatomic, retain) NSDate * date;
-@property (nonatomic, retain) NSNumber * deleted;
+@property (nonatomic, retain) NSNumber * removed;
 @property (nonatomic, retain) NSNumber * edited;
 @property (nonatomic, retain) NSData * image;
 @property (nonatomic, retain) NSNumber * incomingMessageStatus;
@@ -48,9 +48,11 @@
 @property (nonatomic, retain) NSString * text;
 @property (nonatomic, retain) NSString * type;
 @property (nonatomic, retain) NSNumber * visible;
+@property (nonatomic, retain) NSNumber * validated;
+@property (nonatomic, retain) NSString * replacedMessageID;
 @property (nonatomic, retain) HOPConversationEvent *conversationEvent;
 @property (nonatomic, retain) NSSet *messageEvent;
-@property (nonatomic, retain) HOPOpenPeerContact *senderOpenPeer;///TODO: change in model
+@property (nonatomic, retain) HOPContact *sender;
 @property (nonatomic, retain) HOPConversationRecord *session;
 @end
 

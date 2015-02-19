@@ -31,18 +31,11 @@
 
 #import "ActiveSessionTableViewCell.h"
 #import "UIBadgeView.h"
-#import <OpenPeerSDK/HOPConversationEvent+External.h>
-#import <OpenPeerSDK/HOPConversationRecord+External.h>
-#import <OpenPeerSDK/HOPMessageRecord.h>
-#import <OpenPeerSDK/HOPModelManager.h>
-//#import <OpenPeerSDK/HOPRolodexContact.h>
+//#import <OpenPeerSDK/HOPConversationEvent+External.h>
 #import <OpenPeerSDK/HOPAvatar.h>
-#import <OpenPeerSDK/HOPSystemMessage.h>
-#import <OpenPeerSDK/HOPCallSystemMessage.h>
-//#import <OpenPeerSDK/HOPOpenPeerContact+External.h>
-#import <OpenPeerSDK/HOPParticipants.h>
+#import <OpenPeerSDK/HOPConversationRecord+External.h>
+#import <OpenPeerSDK/HOPConversation.h>
 #import "ImageManager.h"
-#import "Session.h"
 #import "SessionManager.h"
 #import "Utility.h"
 
@@ -56,8 +49,8 @@
 @property (nonatomic, weak) IBOutlet UILabel *labelLastMessage;
 @property (nonatomic, weak) IBOutlet UIView *messageView;
 
-//@property (nonatomic, weak) HOPConversationEvent* event;
-@property (nonatomic, weak) HOPConversationRecord* record;
+
+
 @end
 @implementation ActiveSessionTableViewCell
 
@@ -75,60 +68,16 @@
 
 - (void)setLastMessage
 {
-    self.labelLastMessage.text = [[SessionManager sharedSessionManager] getLastTextMessageForConversationRecord:self.record];
+    self.labelLastMessage.text = [[SessionManager sharedSessionManager] getLastTextMessageForConversationRecord:self.conversationRecord];
     
     self.labelLastMessage.hidden = [self.labelLastMessage.text length] == 0;
 }
 
-- (void) setConversationEvent:(HOPConversationRecord *)record
+- (void)updateBadge:(HOPConversation *)conversation
 {
-    if (self.displayImage)
-        [self.displayImage stopAnimating];
-    
-    self.record = record;
-    self.displayName.text = record.name;//self.event.name;
-    
-//    HOPOpenPeerContact* contact = [[self.sessionRecord.participants allObjects] objectAtIndex:0];
-//    
-//    HOPRolodexContact* participant = [[[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:contact.publicPeerFile.peerURI] objectAtIndex:0];
-//    
-//    UIImage* img = [[ImageManager sharedImageManager] getAvatarImageForRolodexContact:participant];
-//    if (img)
-//        self.displayImage.image = img;
-    
-    if (record.participants.count > 1)
+    if (conversation.numberOfUnreadMessages > 0)
     {
-        NSMutableArray* avatars = [[NSMutableArray alloc] init];
-        for (HOPRolodexContact* contact in [record getContacts])
-        {
-            UIImage* img = [[ImageManager sharedImageManager] getAvatarImageForRolodexContact:contact];
-            if (img)
-                [avatars addObject:img];
-        }
-        
-        UIImage* avatarsImage = [Utility createImageFromImages:avatars inFrame:self.displayImage.frame];
-        if (avatarsImage)
-            self.displayImage.image = avatarsImage;
-//        self.displayImage.animationImages = [NSArray arrayWithArray:avatars];
-//        self.displayImage.animationDuration = 1.5;
-//        [self.displayImage startAnimating];
-
-    }
-    else
-    {
-        HOPRolodexContact* contact = [[record getContacts] objectAtIndex:0];
-        UIImage* img = [[ImageManager sharedImageManager] getAvatarImageForRolodexContact:contact];
-        if (img)
-            self.displayImage.image = img;
-    }
-    self.displayImage.layer.cornerRadius = 5.0;
-    self.displayImage.layer.borderWidth = 1.0;
-    self.displayImage.layer.borderColor = [[UIColor whiteColor] CGColor];
-    
-    Session* session = [[SessionManager sharedSessionManager] getSessionForContacts:[self.record getContacts]];
-    if ([session.unreadMessageArray count] > 0)
-    {
-        NSString* numberToDisplay = [NSString stringWithFormat:@"%d",[session.unreadMessageArray count]];
+        NSString* numberToDisplay = [NSString stringWithFormat:@"%d",conversation.numberOfUnreadMessages];
         self.badgeView.hidden = NO;
         self.badgeView.badgeText = numberToDisplay;
     }
@@ -136,11 +85,59 @@
     {
         self.badgeView.hidden = YES;
     }
+}
+
+- (void)updateIcon:(HOPConversationRecord *)record
+{
+    NSArray* participants = [record getContacts];
+    if (participants.count > 1)
+    {
+        NSMutableArray* avatars = [[NSMutableArray alloc] init];
+        for (HOPIdentity* identity in participants)
+        {
+            UIImage* img = [[ImageManager sharedImageManager] getAvatarImageForIdentity:identity];
+            if (img)
+                [avatars addObject:img];
+            else
+                [avatars addObject:[UIImage imageNamed:@"avatar.png"]];
+        }
+        
+        UIImage* avatarsImage = [Utility createImageFromImages:avatars inFrame:self.displayImage.frame];
+        if (avatarsImage)
+            self.displayImage.image = avatarsImage;
+    }
+    else if (participants.count == 1)
+    {
+        HOPIdentity* identity = [participants objectAtIndex:0];
+        UIImage* img = [[ImageManager sharedImageManager] getAvatarImageForIdentity:identity];
+        if (img)
+            self.displayImage.image = img;
+    }
+    else
+        return;
     
-    self.labelCreationDate.text = [Utility stringFromDate:self.record.creationTime];
+    self.displayImage.layer.cornerRadius = 5.0;
+    self.displayImage.layer.borderWidth = 1.0;
+    self.displayImage.layer.borderColor = [[UIColor whiteColor] CGColor];
+}
+
+- (void) setRecord:(HOPConversationRecord *)record
+{
+    HOPConversation* conversation = [record getConversation];
+    
+    if (self.displayImage)
+        [self.displayImage stopAnimating];
+    
+    _conversationRecord = record;
+    //self.event = event;
+    self.displayName.text = record.name.length > 0 ? record.name : [conversation getDefaultTitle];
+    
+    [self updateIcon:record];
+    
+    [self updateBadge:conversation];
+    
+    self.labelCreationDate.text = [Utility stringFromDate:self.conversationRecord.lastActivity];
     [self setLastMessage];
-    //[self drawInnerShadowOnView:self.messageView];
-    //[self drawBackground];
 }
 
 -(void)drawInnerShadowOnView:(UIView *)view
@@ -178,19 +175,15 @@
     [self setBackgroundView:[[UIView alloc] init]];
     [self.backgroundView.layer insertSublayer:grad atIndex:0];
     
-    /*CAGradientLayer *selectedGrad = [CAGradientLayer layer];
-    selectedGrad.frame = self.bounds;
-    selectedGrad.colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithRed:237.0/255.0 green:237.0/255.0 blue:237.0/255.0 alpha:1] CGColor], (id)[[UIColor whiteColor] CGColor], nil];
-    
-    [self setSelectedBackgroundView:[[UIView alloc] init]];
-    [self.selectedBackgroundView.layer insertSublayer:selectedGrad atIndex:0];*/
-    
     self.selectedBackgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"tableViewCell_selected.png"] stretchableImageWithLeftCapWidth:0.0 topCapHeight:5.0]];
 }
 
 - (void) updateActivity
 {
-    self.labelCreationDate.text = [Utility stringFromDate:self.record.lastActivity];
+    self.labelCreationDate.text = [Utility stringFromDate:self.conversationRecord.lastActivity];
     [self setLastMessage];
+    self.displayName.text = self.conversationRecord.name;
+    [self updateIcon:self.conversationRecord];
+    [self updateBadge:[self.conversationRecord getConversation]];
 }
 @end

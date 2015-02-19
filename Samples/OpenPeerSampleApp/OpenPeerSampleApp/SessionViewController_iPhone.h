@@ -32,21 +32,21 @@
 #import <UIKit/UIKit.h>
 #import "Delegates.h"
 
-@class Session;
+@class HOPConversation;
 @class ChatViewController;
 @class AudioCallViewController;
 @class VideoCallViewController;
 @class WaitingVideoViewController;
 
-@interface SessionViewController_iPhone : UIViewController<UINavigationControllerDelegate,ChatViewControllerDelegate,VideoCallViewControllerDelegate,UIActionSheetDelegate>
+@interface SessionViewController_iPhone : UIViewController<UINavigationControllerDelegate,ChatViewControllerDelegate,VideoCallViewControllerDelegate,UIActionSheetDelegate,SessionViewControllerDelegate>
 
-@property (nonatomic, strong) Session* session;
+@property (nonatomic, strong) HOPConversation* conversation;
 @property (nonatomic, strong) ChatViewController* chatViewController;
 @property (nonatomic, strong) AudioCallViewController* audioCallViewController;
 @property (nonatomic, strong) VideoCallViewController* videoCallViewController;
 @property (nonatomic, strong) WaitingVideoViewController* waitingVideoViewController;
 
-- (id) initWithSession:(Session*) inSession;
+- (id) initWithConversation:(HOPConversation*) inConversation;
 - (void) updateCallState;
 - (void) showIncomingCall:(BOOL) show;
 - (void) showCallViewControllerWithVideo:(BOOL) videoCall;
@@ -56,7 +56,7 @@
 - (void) onCallEnded;
 - (void) showWaitingView:(BOOL) show;
 
-- (void) updateOnParticipantChange;
+//- (void) updateOnParticipantChange;
 @end
 
 

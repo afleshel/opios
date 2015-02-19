@@ -35,7 +35,7 @@
 #import "ActivityIndicatorViewController.h"
 #import "AppConsts.h"
 #import "Utility.h"
-#import <OpenpeerSDK/HOPIdentity.h>
+#import <OpenpeerSDK/HOPAccountIdentity.h>
 #import <OpenpeerSDK/HOPAccount.h>
 
 
@@ -99,9 +99,9 @@
 {
     NSString *requestString = [[request URL] absoluteString];
     
-    if ([self.coreObject isKindOfClass:[HOPIdentity class]])
+    if ([self.coreObject isKindOfClass:[HOPAccountIdentity class]])
     {
-        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"<%p> WebLoginViewController\n Identity web request for URI: %@", self,[((HOPIdentity*) self.coreObject) getIdentityURI]);
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"<%p> WebLoginViewController\n Identity web request for URI: %@", self,[((HOPAccountIdentity*) self.coreObject) getIdentityURI]);
     }
     else
     {
@@ -171,9 +171,9 @@
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"<%p> WebLoginViewController\n\n\n Message from JS: \n %@ \n\n",self,message);
     
-    if ([self.coreObject isKindOfClass:[HOPIdentity class]])
+    if ([self.coreObject isKindOfClass:[HOPAccountIdentity class]])
     {
-        [(HOPIdentity*)self.coreObject handleMessageFromInnerBrowserWindowFrame:message];
+        [(HOPAccountIdentity*)self.coreObject handleMessageFromInnerBrowserWindowFrame:message];
     }
     else if ([self.coreObject isKindOfClass:[HOPAccount class]])
     {
@@ -185,9 +185,9 @@
 {
     NSString* jsMethod = nil;
     
-    if ([self.coreObject isKindOfClass:[HOPIdentity class]])
+    if ([self.coreObject isKindOfClass:[HOPAccountIdentity class]])
     {
-        jsMethod = [NSString stringWithFormat:@"initInnerFrame(\'%@\')",[(HOPIdentity*)self.coreObject getInnerBrowserWindowFrameURL]];
+        jsMethod = [NSString stringWithFormat:@"initInnerFrame(\'%@\')",[(HOPAccountIdentity*)self.coreObject getInnerBrowserWindowFrameURL]];
     }
     else if ([self.coreObject isKindOfClass:[HOPAccount class]])
     {

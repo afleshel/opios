@@ -34,7 +34,7 @@
 #import <CoreData/CoreData.h>
 #import "TTTAttributedLabel.h"
 
-@class Session;
+@class HOPConversation;
 @class HOPConversationEvent;
 
 @interface ChatViewController : UIViewController <UITextViewDelegate,UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate,TTTAttributedLabelDelegate>
@@ -44,11 +44,11 @@
 @property (strong, nonatomic) IBOutlet UIView *containerView;
 @property (weak, nonatomic) id<ChatViewControllerDelegate> delegate;
 @property (weak, nonatomic) IBOutlet UIView *typingMessageView;
-- (id) initWithSession:(Session*)inSession;
+- (id) initWithConversation:(HOPConversation*)inConversation;
 - (void) refreshViewWithData;
 - (void) hideKeyboard;
 - (void) updateFetchControllerForSession:(NSString*) sessionID;
 - (void) refreshMessages;
-//- (float) getHeaderHeight:(float)tableViewHeight;
+- (float) getTextFieldHeight;
 //- (void) setFooterMessage:(NSString*) message;
 @end

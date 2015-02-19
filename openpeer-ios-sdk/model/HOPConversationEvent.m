@@ -33,22 +33,17 @@
 #import "HOPConversationRecord.h"
 #import "HOPMessageRecord.h"
 #import "HOPParticipants.h"
-#import "HOPUtility.h"
 
 
 @implementation HOPConversationEvent
 
 @dynamic eventType;
 @dynamic name;
-@dynamic time;
 @dynamic showEvent;
+@dynamic time;
+@dynamic eventID;
 @dynamic messages;
 @dynamic participants;
 @dynamic session;
-
-- (NSString *)sectionIdentifier
-{
-    return [HOPUtility getTimeSectionForDate:self.time];
-}
 
 @end
