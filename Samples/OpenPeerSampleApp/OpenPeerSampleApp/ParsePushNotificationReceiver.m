@@ -39,7 +39,8 @@
 - (void)downloadAllMessages
 {
     [super downloadAllMessages];
-    PFQuery* parseQuery = [PFQuery queryWithClassName:@"OPPushMessage"];    [parseQuery whereKey:@"to" equalTo:[[HOPAccount sharedAccount] getPeerURI]];
+    PFQuery* parseQuery = [PFQuery queryWithClassName:@"OPPushMessage"];
+    [parseQuery whereKey:@"to" equalTo:[[HOPAccount sharedAccount] getPeerURI]];
     [parseQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
      {
          if (error)

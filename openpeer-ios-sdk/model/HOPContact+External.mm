@@ -37,10 +37,25 @@
 #import "HOPAPNSData.h"
 #import "HOPAccount_Internal.h"
 #import "HOPOpenPeerAccount.h"
+#import "HOPModelManager.h"
+#import "HOPAccountIdentity_Internal.h"
 
 @implementation HOPContact (External)
 
 
+/*+ (HOPContact*) contactForAccount:(HOPAccount*) account
+{
+    HOPContact* ret = (HOPContact*)[[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPContact"];
+    
+    NSArray* identities = [account getAssociatedIdentities];
+    
+    for (HOPAccountIdentity* identity in identities)
+    {
+        [identity get]
+    }
+    
+    return ret;
+}*/
 
 - (HOPIdentity*) getDefaultIdentity
 {

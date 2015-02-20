@@ -92,8 +92,6 @@
                 HOPContact* contact = [[HOPModelManager sharedModelManager] getContactByPeerURI:peerURI];
                 if (contact)
                     [participants addObject:contact];
-                else
-                    return;
             }
             HOPConversation *conversation = [HOPConversation conversationForID:conversationID threadType:threadType participants:participants];
             

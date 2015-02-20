@@ -282,11 +282,15 @@
 - (void) pushSessionViewController:(SessionViewController_iPhone*) sessionViewController navigationController:(UINavigationController*) navigationController
 {
     self.currentlyVisibleViewController = sessionViewController;
+//    [[NSNotificationCenter defaultCenter] addObserver:self.currentlyVisibleViewController selector:@selector(onConversationViewShown) name:UIApplicationWillEnterForegroundNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self.currentlyVisibleViewController selector:@selector(onConversationViewHidden) name:UIApplicationWillResignActiveNotification object:nil];
     [navigationController pushViewController:sessionViewController animated:YES];
 }
 
 - (void) popSessionViewControllerForNavigationController:(UINavigationController*) navigationController
 {
+//    [[NSNotificationCenter defaultCenter] removeObserver:self.currentlyVisibleViewController name:UIApplicationWillEnterForegroundNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self.currentlyVisibleViewController name:UIApplicationWillResignActiveNotification object:nil];
     self.currentlyVisibleViewController = nil;
     [navigationController popToRootViewControllerAnimated:NO];
 }
@@ -298,10 +302,11 @@
  @param incomingCall BOOL - Yes if it is session with incoming call, otherwise NO
  @param incomingMessage BOOL - Yes if it is session with incoming message, otherwise NO
  */
-- (void) showSessionViewControllerForConversation:(HOPConversation*) conversation replaceConversation:(HOPConversation*) replaceConversation incomingCall:(BOOL) incomingCall incomingMessage:(BOOL) incomingMessage
+- (BOOL) showSessionViewControllerForConversation:(HOPConversation*) conversation replaceConversation:(HOPConversation*) replaceConversation incomingCall:(BOOL) incomingCall incomingMessage:(BOOL) incomingMessage
 {
+    BOOL ret = NO;
     if (!conversation)
-        return;
+        return ret;
     
     SessionViewController_iPhone* sessionViewContorller = nil;
     NSString* conversationID = conversation.conversationID.length > 0 ? conversation.conversationID : @"";
@@ -323,10 +328,8 @@
         case NEW_SESSION:
         case NEW_SESSION_SWITCH:
         {
-//            [navigationController popToRootViewControllerAnimated:NO];
             [self popSessionViewControllerForNavigationController:navigationController];
         }
-//        case NEW_SESSION:
         case NEW_SESSION_WITH_CHAT:
         {
             sessionViewContorller = [[SessionViewController_iPhone alloc] initWithConversation:conversation];
@@ -334,6 +337,7 @@
             [self.sessionViewControllersDictionary setObject:sessionViewContorller forKey:conversationID];
             [self pushSessionViewController:sessionViewContorller navigationController:navigationController];
             sessionViewContorller.chatViewController.title = [[SessionManager sharedSessionManager] getNavigationTitleForConversation:conversation];
+            ret = YES;
         }
             break;
             
@@ -343,6 +347,7 @@
             [self.sessionViewControllersDictionary setObject:sessionViewContorller forKey:conversationID];
             [self pushSessionViewController:sessionViewContorller navigationController:navigationController];
             sessionViewContorller.chatViewController.title = [[SessionManager sharedSessionManager] getNavigationTitleForConversation:conversation];
+            ret = YES;
             break;
             
         case NEW_SESSION_REFRESH_CHAT:
@@ -359,28 +364,26 @@
             sessionViewContorller.hidesBottomBarWhenPushed = YES;
             [self popSessionViewControllerForNavigationController:navigationController];
             [self pushSessionViewController:sessionViewContorller navigationController:navigationController];
-            sessionViewContorller.chatViewController.title = [[SessionManager sharedSessionManager] getNavigationTitleForConversation:conversation];            break;
+            sessionViewContorller.chatViewController.title = [[SessionManager sharedSessionManager] getNavigationTitleForConversation:conversation];
+            ret = YES;
+            break;
             
         case EXISTING_SESSION_REFRESH_NOT_VISIBLE_CHAT:
             [self showNotification:[NSString stringWithFormat:@"New message from %@",[[SessionManager sharedSessionManager] getNavigationTitleForConversation:conversation]]];
             break;
             
         case EXISTING_SESSION_REFRESH_CHAT:
-            //sessionViewContorller = [self.sessionViewControllersDictionary objectForKey:conversationID];
-            //[sessionViewContorller.chatViewController refreshViewWithData];
+            ret = YES;
             break;
             
         case EXISTIG_SESSION_SHOW_CHAT:
             sessionViewContorller = [self.sessionViewControllersDictionary objectForKey:conversationID];
-            //[sessionViewContorller.chatViewController refreshViewWithData];
-//            if (navigationController.visibleViewController != sessionViewContorller)
             if (self.currentlyVisibleViewController != sessionViewContorller)
             {
-//                [navigationController popToRootViewControllerAnimated:NO];
                 [self popSessionViewControllerForNavigationController:navigationController];
             }
-            //[navigationController pushViewController:sessionViewContorller animated:YES];
             [self pushSessionViewController:sessionViewContorller navigationController:navigationController];
+            ret = YES;
             break;
             
         case INCOMING_CALL_WHILE_OTHER_INPROGRESS:
@@ -395,17 +398,18 @@
                 [self.sessionViewControllersDictionary setObject:sessionViewContorller forKey:conversationID];
             }
             sessionViewContorller.hidesBottomBarWhenPushed = YES;
-//            [navigationController popToRootViewControllerAnimated:NO];
             [self popSessionViewControllerForNavigationController:navigationController];
-            //[navigationController pushViewController:sessionViewContorller animated:YES];
             [self pushSessionViewController:sessionViewContorller navigationController:navigationController];
             sessionViewContorller.chatViewController.title = [[SessionManager sharedSessionManager] getNavigationTitleForConversation:conversation];
+            ret = YES;
             break;
             
         case EXISTING_SESSION:
         default:
             break;
     }
+    
+    return ret;
 }
 
 - (SessionTransitionStates) determineViewControllerTransitionStateForConversationID:(NSString*) conversationID replaceConversationID:(NSString*) replaceConversationID incomingCall:(BOOL) incomingCall incomingMessage:(BOOL) incomingMessage
@@ -426,7 +430,6 @@
                 return INCOMING_CALL_WHILE_OTHER_INPROGRESS; //Cannot have two active calls at once
             else
             {
-//                if (navigationController.visibleViewController && ![navigationController.visibleViewController isKindOfClass:[ContactsViewController class]])
                 if (self.currentlyVisibleViewController)
                     return NEW_SESSION_SWITCH; //Incoming call has priority over chat session, so switch from currently active session to new with incoming call
                 else
@@ -436,7 +439,6 @@
         }
         else if (incomingMessage)
         {
-            //if (navigationController.visibleViewController && ![navigationController.visibleViewController isKindOfClass:[ContactsViewController class]] && ![navigationController.visibleViewController isKindOfClass:[ActiveSessionsViewController class]])
             if (self.currentlyVisibleViewController)
                 return NEW_SESSION_REFRESH_CHAT; //Create a new session and update chat, but don't switch from existing session
             else
@@ -459,7 +461,6 @@
                 return ERROR_CALL_ALREADY_IN_PROGRESS; //Cannot have two active calls at once
             else
             {
-                //if (navigationController.visibleViewController == sessionViewContorller)
                 if (self.currentlyVisibleViewController == sessionViewContorller)
                     return EXISTING_SESSION; //Incoming call for currenlty displayed session so don't change anything
                 else
@@ -468,20 +469,16 @@
         }
         else if (incomingMessage)
         {
-            //if (navigationController.visibleViewController == sessionViewContorller)
             if (self.currentlyVisibleViewController == sessionViewContorller)
             {
                 if ([[SessionManager sharedSessionManager] isCallInProgress])
                     return EXISTING_SESSION_REFRESH_CHAT; //Incoming message for session with active call. Just refresh list of messages but don't display chat view
                 else
                     return EXISTING_SESSION_REFRESH_CHAT;
-                //return EXISTIG_SESSION_SHOW_CHAT; //Show chat for currently displayed session
+
             }
-//            else if (navigationController.visibleViewController == sessionViewContorller.chatViewController)
-//            {
-//                return EXISTING_SESSION_REFRESH_CHAT; //Already displayed chat view, so just refresh messages
-//            }
-            else if (!self.currentlyVisibleViewController)//([navigationController.visibleViewController isKindOfClass:[ContactsViewController class]] || [navigationController.visibleViewController isKindOfClass:[ActiveSessionsViewController class]])
+
+            else if (!self.currentlyVisibleViewController)
             {
                 return EXISITNG_SESSION_SWITCH; //Move from the contacts list to the chat view for session
             }

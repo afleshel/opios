@@ -119,26 +119,23 @@ void OpenPeerConversationThreadDelegate::onConversationThreadNew(IConversationTh
             
             if (!hopConversation)
             {
-                hopConversation.unknownContacts = nil;
-                hopConversation.updatedContacts = nil;
-                if (updatedContacts.count > 0)
-                {
-                    hopConversation.updatedContacts = [NSArray arrayWithArray:updatedContacts];
-                    hopConversation.unknownContacts = [NSArray arrayWithArray:updatedContacts];
-                }
-                
-                hopConversation = [[OpenPeerStorageManager sharedStorageManager] getConversationForThreadID:[hopConversationThread getThreadId]];
-                if (!hopConversation)
-                    hopConversation = [HOPConversation conversationWithThread:hopConversationThread];
-                else
-                {
-                    hopConversation.thread = hopConversationThread;
-                    [[OpenPeerStorageManager sharedStorageManager] setConversation:hopConversation threadID:[hopConversationThread getThreadId]];
-                }
-                
-                if (conversationDelegate)
-                    [conversationDelegate onConversationNew:hopConversation];
+                hopConversation = [HOPConversation conversationWithThread:hopConversationThread];
             }
+            else
+            {
+                hopConversation.thread = hopConversationThread;
+                [[OpenPeerStorageManager sharedStorageManager] setConversation:hopConversation threadID:[hopConversationThread getThreadId]];
+            }
+            
+            hopConversation.unknownContacts = nil;
+            hopConversation.updatedContacts = nil;
+            if (updatedContacts.count > 0)
+            {
+                hopConversation.updatedContacts = [NSArray arrayWithArray:updatedContacts];
+                hopConversation.unknownContacts = [NSArray arrayWithArray:updatedContacts];
+            }
+            
+            [conversationDelegate onConversationNew:hopConversation];
         }
     }
 }

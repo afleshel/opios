@@ -55,7 +55,8 @@
 - (void) stopTimer;
 - (void) onCallEnded;
 - (void) showWaitingView:(BOOL) show;
-
+- (void) onConversationViewShown;
+- (void) onConversationViewHidden;
 //- (void) updateOnParticipantChange;
 @end
 

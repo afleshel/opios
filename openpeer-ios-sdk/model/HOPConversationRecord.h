@@ -49,6 +49,7 @@
 @property (nonatomic, retain) HOPOpenPeerAccount *homeUser;
 @property (nonatomic, retain) NSSet *messages;
 @property (nonatomic, retain) NSSet *participants;
+@property (nonatomic, retain) NSString * cbcID;
 @end
 
 @interface HOPConversationRecord (CoreDataGeneratedAccessors)

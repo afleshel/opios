@@ -65,10 +65,13 @@
     if (self.applicationID.length > 0 && self.clientKey.length > 0)
         [Parse setApplicationId:self.applicationID clientKey:self.clientKey];
     
-    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
-    [currentInstallation setDeviceTokenFromData:inDeviceToken];
-    currentInstallation[@"peerUri"] = inPeerURI;
-    [currentInstallation saveInBackground];
+    if (inPeerURI.length > 0)
+    {
+        PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+        [currentInstallation setDeviceTokenFromData:inDeviceToken];
+        currentInstallation[@"peerUri"] = inPeerURI;
+        [currentInstallation saveInBackground];
+    }
 }
 
 - (void) sendPushNotificationMessage:(NSString*) message outgoingCall:(BOOL) outgoingCall recipients:(NSArray*) recipients

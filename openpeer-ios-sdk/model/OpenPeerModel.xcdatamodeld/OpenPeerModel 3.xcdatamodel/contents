@@ -46,6 +46,7 @@
         <relationship name="session" maxCount="1" deletionRule="Nullify" destinationEntity="HOPConversationRecord" inverseName="events" inverseEntity="HOPConversationRecord" syncable="YES"/>
     </entity>
     <entity name="HOPConversationRecord" representedClassName="HOPConversationRecord" syncable="YES">
+        <attribute name="cbcID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="creationTime" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="lastActivity" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -163,7 +164,7 @@
         <element name="HOPCacheData" positionX="612" positionY="-519" width="128" height="105"/>
         <element name="HOPContact" positionX="-110" positionY="-769" width="128" height="148"/>
         <element name="HOPConversationEvent" positionX="-117" positionY="-243" width="128" height="163"/>
-        <element name="HOPConversationRecord" positionX="72" positionY="-423" width="128" height="238"/>
+        <element name="HOPConversationRecord" positionX="72" positionY="-423" width="128" height="253"/>
         <element name="HOPConversationThreadRecord" positionX="261" positionY="-351" width="128" height="103"/>
         <element name="HOPIdentity" positionX="277" positionY="-846" width="128" height="253"/>
         <element name="HOPIdentityProvider" positionX="459" positionY="-513" width="128" height="88"/>

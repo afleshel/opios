@@ -174,12 +174,8 @@
     
 }
 
-
-- (void)viewWillAppear:(BOOL)animated
+- (void) onConversationViewShown
 {
-    [super viewWillAppear:animated];
-    if (self.containerView == self.chatViewController.view.superview)
-        [self.chatViewController viewWillAppear:animated];
     
     if (self.conversation.numberOfUnreadMessages > 0)
     {
@@ -188,12 +184,42 @@
     }
 }
 
+- (void) onConversationViewHidden
+{
+    if (self.conversation.numberOfUnreadMessages > 0)
+    {
+        self.conversation.numberOfUnreadMessages = 0;
+        //[[NSNotificationCenter defaultCenter] postNotificationName:notificationMessagesRead object:self.conversation];
+    }
+}
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    if (self.containerView == self.chatViewController.view.superview)
+        [self.chatViewController viewWillAppear:animated];
+    
+    [self onConversationViewShown];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onConversationViewShown) name:UIApplicationWillEnterForegroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onConversationViewHidden) name:UIApplicationWillResignActiveNotification object:nil];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillEnterForegroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    
+}
 #pragma mark - ChatViewControllerDelegate
 
 - (void) prepareForKeyboard:(NSDictionary*) userInfo showKeyboard:(BOOL) showKeyboard

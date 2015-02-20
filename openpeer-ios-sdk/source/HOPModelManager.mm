@@ -898,6 +898,26 @@ using namespace openpeer::core;
     return ret;
 }
 
+- (HOPConversationRecord*) getConversationRecordForParticipants:(NSArray*) participants type:(NSString*) type
+{
+    HOPConversationRecord* ret = nil;
+    if (participants.count > 0)
+    {
+        NSString* cbcID = [HOPUtility getCBCIDForContacts:participants];
+        
+        NSArray* results = nil;
+        
+        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"lastActivity" ascending:NO];
+        
+        results = [self getResultsForEntity:@"HOPConversationRecord" withPredicateString:[NSString stringWithFormat:@"homeUser.stableId MATCHES '%@' AND cbcID MATCHES '%@' AND type MATCHES '%@'",[self getLoggedInAccount].stableId,cbcID,type] orderDescriptors:@[sortDescriptor]];
+        
+        
+        if ([results count] > 0)
+            ret = [results objectAtIndex:0];
+    }
+    return ret;
+}
+
 - (HOPConversationRecord*) getConversationRecordForConversationThread:(HOPConversationThread*) conversationThread
 {
     HOPConversationRecord* ret = nil;
@@ -978,6 +998,7 @@ using namespace openpeer::core;
                 ret.type = type;
                 ret.topic = topic;
                 ret.name = name;
+                ret.cbcID = [HOPUtility getCBCIDForContacts:participants];
             }
         
             ret.lastActivity = date;

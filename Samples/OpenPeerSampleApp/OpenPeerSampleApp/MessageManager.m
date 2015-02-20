@@ -315,11 +315,12 @@ typedef enum
         }
         else
         {
-            conversation.numberOfUnreadMessages++;
-
             //If session view controller with message sender is not yet shown, show it
-            [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForConversation:conversation replaceConversation:nil incomingCall:NO incomingMessage:YES];
-
+            BOOL isShown = [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForConversation:conversation replaceConversation:nil incomingCall:NO incomingMessage:YES];
+            
+            if (!isShown)
+                conversation.numberOfUnreadMessages++;
+            
             if ([[OpenPeer sharedOpenPeer] appEnteredBackground])
             {
                 NSMutableDictionary* dict = [[NSMutableDictionary alloc] init];

@@ -183,4 +183,6 @@ using namespace openpeer::core;
 - (HOPIdentity*) createIdentityForCoreIdentity:(IdentityContact) identityContact isSelf:(BOOL) isSelf;
 
 - (NSArray*) getAllContactsForLoggedInAccount;
+
+- (HOPConversationRecord*) getConversationRecordForParticipants:(NSArray*) participants type:(NSString*) type;
 @end

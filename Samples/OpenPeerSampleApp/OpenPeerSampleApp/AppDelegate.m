@@ -34,6 +34,7 @@
 #import "MainViewController.h"
 #import <OpenPeerSDK/HOPBackgrounding.h>
 #import <OpenPeerSDK/HOPStack.h>
+#import <OpenPeerSDK/HOPAccount.h>
 #import "BackgroundingDelegate.h"
 #import "SessionManager.h"
 #import "OfflineManager.h"
@@ -116,7 +117,8 @@
             [[HOPBackgrounding sharedBackgrounding]notifyReturningFromBackground];
         }
 #ifdef APNS_ENABLED
-        [[APNSManager sharedAPNSManager] getAllMessages];
+        if ([[HOPAccount sharedAccount] getState].state == HOPAccountStateReady)
+            [[APNSManager sharedAPNSManager] getAllMessages];
 #endif
     }
 }
@@ -186,7 +188,8 @@
     {
         [[APNSManager sharedAPNSManager] handleAPNS:userInfo];
     }
-    [[APNSManager sharedAPNSManager] getAllMessages];
+    if ([[HOPAccount sharedAccount] getState].state == HOPAccountStateReady)
+        [[APNSManager sharedAPNSManager] getAllMessages];
 }
 
 - (void)handleNotification:(NSDictionary *)notification applicationState:(UIApplicationState)state
