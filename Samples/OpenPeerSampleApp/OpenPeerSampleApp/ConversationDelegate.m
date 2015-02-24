@@ -85,10 +85,8 @@
     NSArray* identities = [self getIdentitiesForContacts:conversation.unknownContacts];
     if (identities.count > 0)
     [[ContactsManager sharedContactsManager] identityLookupForContacts:identities];
-    dispatch_async(dispatch_get_main_queue(), ^
-   {
-       [[SessionManager sharedSessionManager] onParticipantsInConversationUpdate:conversation];
-   });
+
+    [[SessionManager sharedSessionManager] onParticipantsInConversationUpdate:conversation];
 }
 
 - (void) onConversationContactConnectionStateChanged:(HOPConversation*) conversation contact:(HOPContact*) contact contactConnectionState:(HOPConversationThreadContactConnectionState) contactConnectionState
@@ -100,34 +98,26 @@
 {
     HOPComposingState contactState = [conversation getComposingStateForContact:contact];
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread id: <%@> - contact peer URI: <%@> state: %d",[conversation getConversationID], [contact getPeerURI],contactState);
-    dispatch_async(dispatch_get_main_queue(), ^
-    {
-       NSDictionary* dict = @{@"thread":conversation, @"contact":contact, @"status":@(contactState)};
-       [[NSNotificationCenter defaultCenter] postNotificationName:notificationComposingStatusChanged object:dict];
-    });
+
+    NSDictionary* dict = @{@"thread":conversation, @"contact":contact, @"status":@(contactState)};
+    [[NSNotificationCenter defaultCenter] postNotificationName:notificationComposingStatusChanged object:dict];
 }
 
 - (void) onConversationContactComposingStateChanged:(HOPConversation*) conversation state:(HOPComposingState)state contact:(HOPContact*) contact
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread id: <%@> - contact peer URI: <%@> state: %d",[conversation getConversationID], [contact getPeerURI],state);
-    dispatch_async(dispatch_get_main_queue(), ^
-   {
-       NSDictionary* dict = @{@"thread":conversation, @"contact":contact, @"status":@(state)};
-       [[NSNotificationCenter defaultCenter] postNotificationName:notificationComposingStatusChanged object:dict];
-   });
+    NSDictionary* dict = @{@"thread":conversation, @"contact":contact, @"status":@(state)};
+    [[NSNotificationCenter defaultCenter] postNotificationName:notificationComposingStatusChanged object:dict];
 }
 
 - (void) onConversationMessage:(HOPConversation*) conversation messageID:(NSString*) messageID
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Handling a new message with id %@ for conversation thread.",messageID);
-    dispatch_async(dispatch_get_main_queue(), ^
+    HOPMessageRecord* message = [conversation getMessageForID:messageID];
+    if (message)
     {
-        HOPMessageRecord* message = [conversation getMessageForID:messageID];
-        if (message)
-        {
-            [[MessageManager sharedMessageManager] onMessageReceived:message forConversation:conversation];
-        }
-    });
+        [[MessageManager sharedMessageManager] onMessageReceived:message forConversation:conversation];
+    }
 }
 
 - (void) onConversationMessageDeliveryStateChanged:(HOPConversation*) conversation messageID:(NSString*) messageID messageDeliveryStates:(HOPConversationThreadMessageDeliveryState) messageDeliveryStates

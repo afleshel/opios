@@ -1423,7 +1423,7 @@ using namespace openpeer::core;
                     if (!ret)
                         ret = [NSMutableArray new];
                     
-                    [ret addObject:identity];
+                    [ret addObject:hopOpenPeerContact];
                 }
             }
         }

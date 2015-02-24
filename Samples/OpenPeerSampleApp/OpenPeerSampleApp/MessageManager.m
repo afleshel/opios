@@ -236,6 +236,7 @@ typedef enum
     BOOL edited = NO;
     BOOL deleted = NO;
     HOPMessageRecord* messageRecord = nil;
+    NSDate* date = [NSDate date];
     
     if ([replacesMessageID length] > 0)
     {
@@ -246,6 +247,7 @@ typedef enum
             messageRecordOld.removed = [NSNumber numberWithBool:([message length] == 0)];
             messageRecordOld.replacedMessageID = replacesMessageID;
             //messageRecord = messageRecordOld;
+            date = messageRecordOld.date;
             message = @" ";
             deleted = YES;
         }
@@ -254,7 +256,7 @@ typedef enum
     }
 
     if (!messageRecord)
-        messageRecord = [HOPMessageRecord createMessage:message type:messageTypeText date:[NSDate date] visible:YES conversation:conversation sender:[HOPContact getSelf] messageId:[HOPUtility getGUIDstring] validated:NO messageIDToReplace:replacesMessageID];
+        messageRecord = [HOPMessageRecord createMessage:message type:messageTypeText date:date visible:YES conversation:conversation sender:[HOPContact getSelf] messageId:[HOPUtility getGUIDstring] validated:NO messageIDToReplace:replacesMessageID];
 
     messageRecord.edited = [NSNumber numberWithBool:edited];
     messageRecord.removed = [NSNumber numberWithBool:deleted];

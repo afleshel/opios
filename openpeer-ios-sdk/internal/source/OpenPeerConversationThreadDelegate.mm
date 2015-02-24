@@ -250,8 +250,8 @@ void OpenPeerConversationThreadDelegate::onConversationThreadMessage(IConversati
         else if (conversationDelegate)
         {
             HOPConversation * hopConversation = this->getOpenPeerConversation(conversationThread);
-            
-            if (hopConversation)
+            HOPMessageRecord* message = [[HOPModelManager sharedModelManager] getMessageRecordByID:messageId];
+            if (hopConversation && !message)
             {
                 [conversationDelegate onConversationMessage:hopConversation messageID:messageId];
             }
