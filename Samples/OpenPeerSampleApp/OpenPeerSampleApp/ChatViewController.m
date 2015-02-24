@@ -646,8 +646,11 @@
 		case NSFetchedResultsChangeUpdate:
         {
             ChatMessageCell *cellForUpdate  = (ChatMessageCell*)[self.chatTableView cellForRowAtIndexPath:indexPath];
-            HOPMessageRecord* message = [self.fetchedResultsController objectAtIndexPath:indexPath];
-            [cellForUpdate setMessage:message];
+            if (cellForUpdate)
+            {
+                HOPMessageRecord* message = [self.fetchedResultsController objectAtIndexPath:indexPath];
+                [cellForUpdate setMessage:message];
+            }
         }
 			break;
 		case NSFetchedResultsChangeDelete:

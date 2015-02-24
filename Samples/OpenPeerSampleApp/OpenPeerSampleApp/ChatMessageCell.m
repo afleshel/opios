@@ -462,7 +462,7 @@
         self.messageLabel.textColor = [UIColor grayColor];
     }
     
-    if ([self.message.sender isSelf])
+    if ([self.message.sender isSelf] && !self.message.removed.boolValue)
         [self setMessageStatus];
 }
 

@@ -416,6 +416,7 @@
 {
     //If session view controller is laredy created for this session get it from dictionary
     SessionViewController_iPhone* sessionViewContorller = [self.sessionViewControllersDictionary objectForKey:conversationID];
+    SessionViewController_iPhone* sessionViewContorllerToReplace = replaceConversationID.length > 0 ? [self.sessionViewControllersDictionary objectForKey:replaceConversationID] : nil;
     UINavigationController* navigationController = nil;
 
     int tabIndex = [self.tabBarController selectedIndex] < 3 ? [self.tabBarController selectedIndex] : 2;
@@ -446,8 +447,9 @@
         }
         else
         {
-            if (replaceConversationID.length > 0)
-                return REPLACE_EXISTING_SESSION;
+            if (sessionViewContorllerToReplace && sessionViewContorllerToReplace == self.currentlyVisibleViewController)                return REPLACE_EXISTING_SESSION;
+            else if (sessionViewContorllerToReplace && sessionViewContorllerToReplace != self.currentlyVisibleViewController)
+                return EXISTING_SESSION; //Incoming call for currenlty displayed session so don't change anything
             else
                 return NEW_SESSION; //Create and show a new session
         }

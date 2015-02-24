@@ -55,15 +55,15 @@
     self.applicationID = [[NSUserDefaults standardUserDefaults] stringForKey: settingsKeyParseProductionAppID];
     self.clientKey = [[NSUserDefaults standardUserDefaults] stringForKey: settingsKeyParseProductionClientKey];
 #endif
+    
+    if (self.applicationID.length > 0 && self.clientKey.length > 0)
+        [Parse setApplicationId:self.applicationID clientKey:self.clientKey];
 }
 
 
 - (void) registerDeviceToken:(NSData*) inDeviceToken peerURI:(NSString*) inPeerURI
 {
     [super registerDeviceToken:inDeviceToken peerURI:inPeerURI];
-    
-    if (self.applicationID.length > 0 && self.clientKey.length > 0)
-        [Parse setApplicationId:self.applicationID clientKey:self.clientKey];
     
     if (inPeerURI.length > 0)
     {
