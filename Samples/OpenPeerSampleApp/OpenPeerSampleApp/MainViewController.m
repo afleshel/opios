@@ -743,4 +743,17 @@
     else if ([viewController isKindOfClass:[SessionViewController_iPhone class]])
         self.currentlyVisibleViewController = (SessionViewController_iPhone*)viewController;
 }
+
+- (void) changeKeyForViewController:(NSString*) oldKey newKey:(NSString*) newKey
+{
+    if (oldKey.length > 0 && newKey.length > 0)
+    {
+        SessionViewController_iPhone* controller = [self.sessionViewControllersDictionary objectForKey:oldKey];
+        if (controller)
+        {
+            [self.sessionViewControllersDictionary setObject:controller forKey:newKey];
+            [controller.chatViewController refreshMessages];
+        }
+    }
+}
 @end

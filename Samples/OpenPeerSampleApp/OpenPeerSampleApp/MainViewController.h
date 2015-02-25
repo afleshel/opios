@@ -102,4 +102,5 @@ typedef  enum
 - (void) showQRScanner;
 - (void) showSplashScreen;
 - (void) waitForUserGesture;
+- (void) changeKeyForViewController:(NSString*) oldKey newKey:(NSString*) newKey;
 @end
