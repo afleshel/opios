@@ -114,7 +114,7 @@
     
     self.labelCallType.text = [self.conversation.currentCall hasVideo] ? NSLocalizedString(@"Video call from", nil) : NSLocalizedString(@"Audio call from", nil);
     
-    self.buttonAccept.imageView.image = [self.conversation.currentCall hasVideo] ? [UIImage imageNamed:@"video_indicator_white_big.png"] : [UIImage imageNamed:@"handset_accept_icon.png"];
+    //self.buttonAccept.imageView.image = [self.conversation.currentCall hasVideo] ? [UIImage imageNamed:@"video_indicator_white_big.png"] : [UIImage imageNamed:@"handset_accept_icon.png"];
     
     self.labelCaller.text = identity.name;
     
@@ -142,6 +142,13 @@
                          self.imageViewLogo.alpha = 0.1;
                      }
                      completion:NULL];
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    UIImage* img = [self.conversation.currentCall hasVideo] ? [UIImage imageNamed:@"video_indicator_white_big.png"] : [UIImage imageNamed:@"handset_accept_icon.png"];
+    if (img)
+        [self.buttonAccept setImage:img forState:UIControlStateNormal];
 }
 
 - (void)viewDidUnload

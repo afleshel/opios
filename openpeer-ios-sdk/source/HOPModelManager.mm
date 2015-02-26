@@ -1318,16 +1318,13 @@ using namespace openpeer::core;
                 
                 if (!identity || !identity.contact)
                 {
-                    NSArray* identities = [self createIdentitiesForCoreContact:contactPtr fromConversation:[thread getConversationThreadPtr]];
-                    if (identities.count > 0)
-                        identity = identities[0];
-                    
-                    if (identity && identity.contact)
+                    NSArray* contacts = [self createIdentitiesForCoreContact:contactPtr fromConversation:[thread getConversationThreadPtr]];
+                    if (contacts.count > 0)
                     {
                         if (!ret)
-                            ret = [NSMutableArray arrayWithObject:identity.contact];
+                            ret = [NSMutableArray arrayWithObject:contacts[0]];
                         else
-                            [ret addObject:identity.contact];
+                            [ret addObject:contacts[0]];
                     }
                 }
             }
