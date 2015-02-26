@@ -1315,15 +1315,19 @@ using namespace openpeer::core;
             if (!contactPtr->isSelf())
             {
                 HOPIdentity* identity = [self getIdentityByPeerURI:[NSString stringWithUTF8String:contactPtr->getPeerURI()]];
+                
                 if (!identity || !identity.contact)
                 {
                     NSArray* identities = [self createIdentitiesForCoreContact:contactPtr fromConversation:[thread getConversationThreadPtr]];
                     if (identities.count > 0)
+                        identity = identities[0];
+                    
+                    if (identity && identity.contact)
                     {
                         if (!ret)
-                            ret = [NSMutableArray arrayWithArray:identities];
+                            ret = [NSMutableArray arrayWithObject:identity.contact];
                         else
-                            [ret addObjectsFromArray:identities];
+                            [ret addObject:identity.contact];
                     }
                 }
             }

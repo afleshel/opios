@@ -77,6 +77,11 @@
     NSArray* identities = [self getIdentitiesForContacts:conversation.unknownContacts];
     if (identities.count > 0)
         [[ContactsManager sharedContactsManager] identityLookupForContacts:identities];
+    if (conversation.oldConversationID.length > 0)
+    {
+        [[[OpenPeer sharedOpenPeer]mainViewController] changeKeyForViewController:conversation.oldConversationID newKey:conversation.conversationID];
+        conversation.oldConversationID = nil;
+    }
 }
 
 - (void) onConversationContactsChanged:(HOPConversation*) conversation

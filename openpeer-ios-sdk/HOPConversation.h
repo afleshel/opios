@@ -44,6 +44,7 @@
 @property (nonatomic, getter=getTopic, setter=setTopic:) NSString* topic;
 @property (nonatomic, getter=getName, setter=setName:) NSString* name;
 @property (nonatomic, copy) NSString* conversationID;
+@property (nonatomic, copy) NSString* oldConversationID;
 @property (nonatomic, getter=getParticipants) NSArray* participants;
 @property (nonatomic, strong) NSArray* updatedContacts;
 @property (nonatomic, strong) NSArray* unknownContacts;

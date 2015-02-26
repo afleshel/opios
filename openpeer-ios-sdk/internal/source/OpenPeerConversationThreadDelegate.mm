@@ -115,7 +115,8 @@ void OpenPeerConversationThreadDelegate::onConversationThreadNew(IConversationTh
         }
         else if (conversationDelegate)
         {
-            HOPConversation * hopConversation = this->getOpenPeerConversation(conversationThread);
+            HOPConversation* hopConversation = [HOPConversation conversationWithThread:hopConversationThread];
+            /*HOPConversation * hopConversation = this->getOpenPeerConversation(conversationThread);
             
             if (!hopConversation)
             {
@@ -125,7 +126,7 @@ void OpenPeerConversationThreadDelegate::onConversationThreadNew(IConversationTh
             {
                 hopConversation.thread = hopConversationThread;
                 [[OpenPeerStorageManager sharedStorageManager] setConversation:hopConversation threadID:[hopConversationThread getThreadId]];
-            }
+            }*/
             
             hopConversation.unknownContacts = nil;
             hopConversation.updatedContacts = nil;

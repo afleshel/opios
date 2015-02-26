@@ -179,10 +179,30 @@ using namespace openpeer::core;
 
 + (HOPConversation*) conversationWithThread:(HOPConversationThread*) inConversationThread
 {
-    HOPConversation* ret = [HOPConversation new];
+    HOPConversation* ret = [[OpenPeerStorageManager sharedStorageManager] getConversationForThreadID:[inConversationThread getThreadId]];
+    
+    if (!ret)
+    {
+        NSString* cbcID = [HOPUtility getCBCIDForContacts:inConversationThread.participants];
+        ret = [[OpenPeerStorageManager sharedStorageManager] getConversationForCBCID:cbcID];
+    }
     
     if (ret)
     {
+        ret.thread = inConversationThread;
+        if (![ret.conversationID isEqualToString:[inConversationThread getThreadId]])
+        {
+            ret.oldConversationID = ret.conversationID;
+            ret.conversationID = [inConversationThread getThreadId];
+            ret.record.sessionID = ret.conversationID;
+            [[OpenPeerStorageManager sharedStorageManager] setConversation:ret threadID:ret.conversationID];
+            [[HOPModelManager sharedModelManager] saveContext];
+        }
+    }
+    if (!ret)
+    {
+        ret = [HOPConversation new];
+        
         ret.thread = inConversationThread;
         ret.conversationType = inConversationThread.conversationType;
         if (ret.thread)
@@ -194,6 +214,11 @@ using namespace openpeer::core;
             if (!ret.record)
                 ret.record = [[HOPModelManager sharedModelManager] createConversationRecordForConversationThread:ret.thread type:[HOPConversationType stringForConversationThreadType: ret.thread.conversationType] date:[NSDate date] topic:nil name:[ret getDefaultTitle] participants:participants];
 
+            if (![ret.record.sessionID isEqualToString:[inConversationThread getThreadId]])
+            {
+                ret.record.sessionID = [inConversationThread getThreadId];
+                [[HOPModelManager sharedModelManager] saveContext];
+            }
             ret.conversationID = ret.record.sessionID;
             ret.lastEvent = [[HOPModelManager sharedModelManager] addConversationEvent:@"create" conversationRecord:ret.record partcipants:participants title:ret.name];
             
