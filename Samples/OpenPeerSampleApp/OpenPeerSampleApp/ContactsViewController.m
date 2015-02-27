@@ -347,6 +347,8 @@
     
     NSString *cacheName = nil;
     
+    [NSFetchedResultsController deleteCacheWithName:nil];
+    
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPIdentity" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];
     [fetchRequest setEntity:entity];

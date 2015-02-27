@@ -508,6 +508,11 @@
 
 - (void) removeAllSessionViewControllers
 {
+    for (SessionViewController_iPhone* controller in self.sessionViewControllersDictionary.allValues)
+    {
+        [controller.chatViewController killTimers];
+    }
+    
     [self.sessionViewControllersDictionary removeAllObjects];
 }
 

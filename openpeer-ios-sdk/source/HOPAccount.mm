@@ -497,7 +497,10 @@ using namespace openpeer::core;
 {
     if (!_openPeerAccount)
     {
-        _openPeerAccount = [[HOPModelManager sharedModelManager] getLoggedInAccount];//[[HOPModelManager sharedModelManager] getAccountForStableID:[[HOPAccount sharedAccount] getStableID]];
+        _openPeerAccount = [[HOPModelManager sharedModelManager] getLoggedInAccount];
+        
+        if (!_openPeerAccount)
+            _openPeerAccount = [[HOPModelManager sharedModelManager] getAccountForStableID:[[HOPAccount sharedAccount] getStableID]];
         
         if (!_openPeerAccount && accountPtr && [self getStableID].length > 0)
         {
