@@ -423,7 +423,6 @@
     [self.conversation setComposingState:HOPComposingStateInactive];
     [self.pauseTimer invalidate];
     self.pauseTimer = nil;
-    //self.pauseTimer = [NSTimer scheduledTimerWithTimeInterval:600 target:self selector:@selector(setStatusToGone) userInfo:nil repeats:NO];
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView
@@ -733,6 +732,12 @@
 - (float) getTextFieldHeight
 {
     return self.typingMessageView.frame.size.height - self.labelComposingStatus.frame.size.height;
+}
+
+-(void)killTimers
+{
+    [self.pauseTimer invalidate];
+    self.pauseTimer = nil;
 }
 @end
 

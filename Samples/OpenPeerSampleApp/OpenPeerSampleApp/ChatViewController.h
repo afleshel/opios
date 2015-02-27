@@ -50,5 +50,5 @@
 - (void) updateFetchControllerForSession:(NSString*) sessionID;
 - (void) refreshMessages;
 - (float) getTextFieldHeight;
-//- (void) setFooterMessage:(NSString*) message;
+- (void) killTimers;
 @end
