@@ -666,6 +666,21 @@ using namespace openpeer::core;
     }
 }
 
+- (NSString *)getCurrentCBCID
+{
+    return self.record.cbcID;
+}
+
+
+- (void)setCBCID:(NSString *)cbcID
+{
+    if (cbcID.length > 0)
+    {
+        self.record.cbcID = cbcID;
+        [[HOPModelManager sharedModelManager] saveContext];
+    }
+}
+
 - (void) setDisabled:(BOOL) disabled
 {
     self.record.removed = [NSNumber numberWithBool:disabled];

@@ -43,6 +43,7 @@
 
 @property (nonatomic, getter=getTopic, setter=setTopic:) NSString* topic;
 @property (nonatomic, getter=getName, setter=setName:) NSString* name;
+@property (nonatomic, getter=getCurrentCBCID, setter=setCBCID:) NSString* cbcID;
 @property (nonatomic, copy) NSString* conversationID;
 @property (nonatomic, copy) NSString* oldConversationID;
 @property (nonatomic, getter=getParticipants) NSArray* participants;
@@ -90,9 +91,6 @@
 
 + (HOPConversation*) conversationOnParticipantsAdded:(NSArray*) addedParticipants conversation:(HOPConversation*) conversation;
 + (HOPConversation*) conversationOnParticipantsRemoved:(NSArray*) removedParticipants conversation:(HOPConversation*) conversation;
-
-
-+ (NSString*) getDefaultTitleForParticipants:(NSArray*) inParticipants;
 
 - (void) setDisabled:(BOOL) disabled;
 //NOT YET SUPPORTED SELF REMOVAL FROM CONVERSATION
