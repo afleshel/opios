@@ -103,6 +103,8 @@
 		87272850166CC1810089CBB6 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8727284E166CC1810089CBB6 /* MainViewController.m */; };
 		87272851166CC1810089CBB6 /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8727284F166CC1810089CBB6 /* MainViewController.xib */; };
 		87272859166CC45B0089CBB6 /* LoginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87272858166CC45B0089CBB6 /* LoginManager.m */; };
+		87282CA31AA4814800F9192B /* iPhone_tabBar_3_bkgd.png in Resources */ = {isa = PBXBuildFile; fileRef = 8761FB6F1AA476AF00B643B1 /* iPhone_tabBar_3_bkgd.png */; };
+		87282CA41AA4814800F9192B /* iPhone_tabBar_3_bkgd@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8761FB701AA476AF00B643B1 /* iPhone_tabBar_3_bkgd@2x.png */; };
 		872B1EBC191A1C47000E21C9 /* OfflineManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 872B1EBB191A1C47000E21C9 /* OfflineManager.m */; };
 		872B1EBD191A1C47000E21C9 /* OfflineManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 872B1EBB191A1C47000E21C9 /* OfflineManager.m */; };
 		872D7E9E1897E19A005D8335 /* QRScannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D7E9C1897E19A005D8335 /* QRScannerViewController.m */; };
@@ -222,6 +224,8 @@
 		875A68C01A2E0CDC0041F650 /* ConversationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 875A68BF1A2E0CDC0041F650 /* ConversationDelegate.m */; };
 		875A68C11A2E0CDC0041F650 /* ConversationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 875A68BF1A2E0CDC0041F650 /* ConversationDelegate.m */; };
 		875CD7E2167A14810037396B /* SessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 875CD7E1167A14810037396B /* SessionManager.m */; };
+		8761FB711AA476AF00B643B1 /* iPhone_tabBar_3_bkgd.png in Resources */ = {isa = PBXBuildFile; fileRef = 8761FB6F1AA476AF00B643B1 /* iPhone_tabBar_3_bkgd.png */; };
+		8761FB721AA476AF00B643B1 /* iPhone_tabBar_3_bkgd@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8761FB701AA476AF00B643B1 /* iPhone_tabBar_3_bkgd@2x.png */; };
 		8766359B1A6D2A4D001A98BC /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 876635921A6D0BE6001A98BC /* Parse.framework */; };
 		8766359C1A6D2A82001A98BC /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 876635911A6D0BE6001A98BC /* Bolts.framework */; };
 		8766359D1A6D2A82001A98BC /* ParseCrashReporting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 876635931A6D0BE6001A98BC /* ParseCrashReporting.framework */; };
@@ -859,6 +863,8 @@
 		875A68BF1A2E0CDC0041F650 /* ConversationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConversationDelegate.m; sourceTree = "<group>"; };
 		875CD7E0167A14810037396B /* SessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SessionManager.h; sourceTree = "<group>"; };
 		875CD7E1167A14810037396B /* SessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionManager.m; sourceTree = "<group>"; };
+		8761FB6F1AA476AF00B643B1 /* iPhone_tabBar_3_bkgd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPhone_tabBar_3_bkgd.png; sourceTree = "<group>"; };
+		8761FB701AA476AF00B643B1 /* iPhone_tabBar_3_bkgd@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone_tabBar_3_bkgd@2x.png"; sourceTree = "<group>"; };
 		876635911A6D0BE6001A98BC /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
 		876635921A6D0BE6001A98BC /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 		876635931A6D0BE6001A98BC /* ParseCrashReporting.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseCrashReporting.framework; sourceTree = "<group>"; };
@@ -1326,6 +1332,8 @@
 		8713363517CCBD6F008C91F7 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				8761FB6F1AA476AF00B643B1 /* iPhone_tabBar_3_bkgd.png */,
+				8761FB701AA476AF00B643B1 /* iPhone_tabBar_3_bkgd@2x.png */,
 				87FBC7D419BE00AB000C4768 /* chat_edited_message_icon.png */,
 				87FBC7D519BE00AB000C4768 /* chat_edited_message_icon@2x.png */,
 				87E0354919AF4ABC008A195C /* message_indicator_call_ended.png */,
@@ -2224,6 +2232,7 @@
 				8719AB0817CE0710007E991B /* tableViewCell_selected.png in Resources */,
 				8730D75C183398A5008D1D37 /* iPhone_Button-end-baritem.png in Resources */,
 				87E0355219AF4ABC008A195C /* message_indicator_call_started.png in Resources */,
+				8761FB721AA476AF00B643B1 /* iPhone_tabBar_3_bkgd@2x.png in Resources */,
 				87E4D99F180BE07F002CA2D4 /* ApplicationLogo57.png in Resources */,
 				87E4DA0E180D5082002CA2D4 /* calling.wav in Resources */,
 				871C7B8E17FEBED200BE641B /* SplashViewController.xib in Resources */,
@@ -2277,6 +2286,7 @@
 				8712BE7517D8CC7C00665F42 /* iPhone_top_bar_background@2x.png in Resources */,
 				8730D7BE1833A63D008D1D37 /* iPhone_loader_00009@2x.png in Resources */,
 				87224760182D165A0027DA50 /* iPhone_audio_camera.png in Resources */,
+				8761FB711AA476AF00B643B1 /* iPhone_tabBar_3_bkgd.png in Resources */,
 				877038E618A24774000B7AA1 /* DefaultSettings.plist in Resources */,
 				8730D7C21833A63D008D1D37 /* iPhone_loader_00011@2x.png in Resources */,
 				87238719194705EE002643D6 /* session_chat.png in Resources */,
@@ -2390,6 +2400,8 @@
 				87D4BD3018675368008C2D30 /* IncomingCallView_iPhone.xib in Resources */,
 				87D4BD3118675368008C2D30 /* ApplicationLogo.png in Resources */,
 				87D4BD3218675368008C2D30 /* MainViewController.xib in Resources */,
+				87282CA31AA4814800F9192B /* iPhone_tabBar_3_bkgd.png in Resources */,
+				87282CA41AA4814800F9192B /* iPhone_tabBar_3_bkgd@2x.png in Resources */,
 				87D4BD3318675368008C2D30 /* iPhone_loader_00024.png in Resources */,
 				87D7EF5719785CD8003B1746 /* iPhone_tabBar_favorites_active@2x.png in Resources */,
 				87CD91F318C7BF900070F42A /* CustomerSpecific_Release.plist in Resources */,

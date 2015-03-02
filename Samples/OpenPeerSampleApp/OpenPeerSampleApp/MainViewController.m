@@ -152,7 +152,7 @@
         self.contactsTableViewController = nil;
         
         //Contacts tab
-        self.contactsTableViewController = [[ContactsViewController alloc] initWithNibName:@"ContactsViewController" bundle:nil];
+        /*self.contactsTableViewController = [[ContactsViewController alloc] initWithNibName:@"ContactsViewController" bundle:nil];
         self.contactsTableViewController.title = @"Contacts";
         self.tabBarItem.title = @"CONTACTS";
         
@@ -165,17 +165,19 @@
          
         UINavigationController *contactsNavigationController = [[UINavigationController alloc] initWithRootViewController:self.contactsTableViewController];
         contactsNavigationController.navigationBar.translucent = NO;
-        contactsNavigationController.delegate = self;
+        contactsNavigationController.delegate = self;*/
         
         //Favorites tab
 //        self.favoritesTableViewController = [[ContactsViewController alloc] initInFavoritesMode:YES allowMultipleSelection:NO];
         self.favoritesTableViewController = [[ContactsViewController alloc] initInMode:CONTACTS_TABLE_MODE_FAVORITES allowMultipleSelection:NO filterContacts:nil];
-        self.favoritesTableViewController.title = @"Favorites";
-        self.tabBarItem.title = @"FAVORITES";
+        self.favoritesTableViewController.title = @"Friends";
+        self.tabBarItem.title = @"FRIENDS";
         
-        [self.favoritesTableViewController.tabBarItem setImage:[[UIImage imageNamed:@"iPhone_tabBar_favorites_inactive.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-        [self.favoritesTableViewController.tabBarItem setSelectedImage:[[UIImage imageNamed:@"iPhone_tabBar_favorites_active.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+//        [self.favoritesTableViewController.tabBarItem setImage:[[UIImage imageNamed:@"iPhone_tabBar_favorites_inactive.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+//        [self.favoritesTableViewController.tabBarItem setSelectedImage:[[UIImage imageNamed:@"iPhone_tabBar_favorites_active.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
         
+        [self.favoritesTableViewController.tabBarItem setImage:[[UIImage imageNamed:@"iPhone_tabBar_contacts_inactive.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+        [self.favoritesTableViewController.tabBarItem setSelectedImage:[[UIImage imageNamed:@"iPhone_tabBar_contacts_active.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
         
         UINavigationController *favoritesNavigationController = [[UINavigationController alloc] initWithRootViewController:self.favoritesTableViewController];
         favoritesNavigationController.navigationBar.translucent = NO;
@@ -213,10 +215,11 @@
         //Tab
         self.tabBarController = [[UITabBarController alloc] init];
         self.tabBarController.delegate = self;
-        self.tabBarController.viewControllers = [NSArray arrayWithObjects:contactsNavigationController, favoritesNavigationController, activeSessionsNavigationController,settingsNavigationController, nil];
+        self.tabBarController.viewControllers = [NSArray arrayWithObjects:/*contactsNavigationController,*/ favoritesNavigationController, activeSessionsNavigationController,settingsNavigationController, nil];
         
         self.tabBarController.view.frame = self.view.bounds;
-        [self.tabBarController.tabBar setBackgroundImage:[UIImage imageNamed:@"iPhone_tabBar_bkgd.png"]];
+
+        [self.tabBarController.tabBar setBackgroundImage:[UIImage imageNamed:@"iPhone_tabBar_3_bkgd.png"]];
     }
     
     self.tabBarController.view.alpha = 0.0;
