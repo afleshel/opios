@@ -221,18 +221,6 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (NSString*) getConversationThreadID
-{
-    NSString* ret = nil;
-    
-    String threadID = conversationThreadPtr->getThreadID();
-    
-    if (threadID)
-        ret = [NSString stringWithUTF8String:threadID];
-    
-    return ret;
-}
-
 + (NSString*) stringForMessageDeliveryState:(HOPConversationThreadMessageDeliveryState) state
 {
     return [NSString stringWithUTF8String: IConversationThread::toString((IConversationThread::MessageDeliveryStates) state)];
@@ -261,7 +249,18 @@ using namespace openpeer::core;
 
 - (NSString*) getThreadId
 {
-    NSString* threadId = nil;
+    NSString* ret = nil;
+    
+    if (conversationThreadPtr)
+    {
+        String threadID = conversationThreadPtr->getThreadID();
+        
+        if (threadID)
+            ret = [NSString stringWithUTF8String:threadID];
+    }
+    
+    return ret;
+   /* NSString* threadId = nil;
     
     if(conversationThreadPtr)
     {
@@ -272,7 +271,7 @@ using namespace openpeer::core;
         ZS_LOG_ERROR(Debug, [self log:@"Invalid conversation thread object!"]);
         [NSException raise:NSInvalidArgumentException format:@"Invalid conversation thread object!"];
     }
-    return threadId;
+    return threadId;*/
 }
 
 - (BOOL) amIHost

@@ -154,7 +154,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.navigationItem.title = self.isInFavoritesMode ? @"Favorites" : @"Contacts";
+    self.navigationItem.title = @"Friends";//self.isInFavoritesMode ? @"Favorites" : @"Contacts";
     [self.contactsTableView reloadRowsAtIndexPaths:[self.contactsTableView indexPathsForVisibleRows]
                      withRowAnimation:UITableViewRowAnimationNone];
 }

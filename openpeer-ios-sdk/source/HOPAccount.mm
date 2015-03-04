@@ -364,6 +364,7 @@ using namespace openpeer::core;
                 if ([accountIdentity getIdentityPtr])
                 {
                     identitiesToRemove.push_back([accountIdentity getIdentityPtr]);
+                    [[HOPModelManager sharedModelManager] deleteObject:[accountIdentity getSelfIdentity].associatedIdentityForHomeUser];
                 }
             }
             accountPtr->removeIdentities(identitiesToRemove);
@@ -447,7 +448,7 @@ using namespace openpeer::core;
     }
 }
 
-- (BOOL) isCoreAccountCreated
+- (BOOL) isAccountReady
 {
     return accountPtr ? YES : NO;
 }
@@ -573,9 +574,9 @@ using namespace openpeer::core;
 {
     return self.openPeerAccount.contact.publicPeerFile.peerURI;
 }
-- (NSString*) getFullName
+- (NSString*) getName
 {
-    return [self.openPeerAccount.contact getDefaultIdentity].name;
+    return [self.openPeerAccount.contact getPreferredIdentity].name;
 }
 
 + (BOOL)isReloginPossible
@@ -597,4 +598,16 @@ using namespace openpeer::core;
     return [[HOPModelManager sharedModelManager] getAllContactsForLoggedInAccount];
 }
 
+- (HOPContact*) getSelfContact
+{
+    return self.openPeerAccount.contact;
+}
+/*
+- (void) refreshAllIdentities
+{
+    for (HOPAccountIdentity* identity in [self getAssociatedIdentities])
+    {
+        [identity refreshIdentities];
+    }
+}*/
 @end

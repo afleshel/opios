@@ -152,7 +152,7 @@ typedef enum
         case USER_INFO_NAME:
             cell.textLabel.lineBreakMode = NSLineBreakByCharWrapping;
             cell.textLabel.numberOfLines = 0;
-            cell.textLabel.text = self.showContactInfo ? self.contact.name : [[HOPAccount sharedAccount] getFullName];
+            cell.textLabel.text = self.showContactInfo ? self.contact.name : [[HOPAccount sharedAccount] getName];
             break;
             
         case USER_INFO_STABLE_ID:
@@ -212,7 +212,7 @@ typedef enum
     {
         case USER_INFO_NAME:
         {
-            NSString* value = self.showContactInfo ? self.contact.name : [[HOPAccount sharedAccount] getFullName];
+            NSString* value = self.showContactInfo ? self.contact.name : [[HOPAccount sharedAccount] getName];
             UIFont* cellFont = [UIFont boldSystemFontOfSize:17.0];
             CGSize labelSize = [value boundingRectWithSize: constraintSize options: NSStringDrawingUsesLineFragmentOrigin attributes: @{ NSFontAttributeName: cellFont } context: nil].size;
             ret = (labelSize.height) > cellDefaultHeight ? labelSize.height : cellDefaultHeight;

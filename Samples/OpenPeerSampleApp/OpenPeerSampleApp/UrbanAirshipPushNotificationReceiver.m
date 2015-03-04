@@ -150,7 +150,7 @@
 - (void)richPushMessageAvailable:(UAInboxMessage *)richPushMessage
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Rich push message is available id:%@",richPushMessage.messageID);
-    if ([[HOPAccount sharedAccount] isCoreAccountCreated] && [[HOPAccount sharedAccount] getState].state == HOPAccountStateReady)
+    if ([[HOPAccount sharedAccount] isAccountReady] && [[HOPAccount sharedAccount] getState].state == HOPAccountStateReady)
         [self loadMessage:richPushMessage];
     else
         [self.arrayRichPushMessages addObject:richPushMessage];

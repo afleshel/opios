@@ -264,7 +264,7 @@ typedef enum
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Sending message: %@ - message id: %@ - for session with id: %@",message,messageRecord.messageID,[conversation getConversationID]);
     
     
-    if ([UIDevice isNetworkReachable] && [[HOPAccount sharedAccount] isCoreAccountCreated] && ([[HOPAccount sharedAccount] getState].state == HOPAccountStateReady))
+    if ([UIDevice isNetworkReachable] && [[HOPAccount sharedAccount] isAccountReady] && ([[HOPAccount sharedAccount] getState].state == HOPAccountStateReady))
     {
         //Send message
         [conversation sendMessage:messageRecord];
@@ -374,7 +374,7 @@ typedef enum
     message.messageID = [HOPUtility getGUIDstring];
     message.showStatus = [NSNumber numberWithBool:NO];
     [[HOPModelManager sharedModelManager] saveContext];
-    if ([UIDevice isNetworkReachable] && [[HOPAccount sharedAccount] isCoreAccountCreated] && ([[HOPAccount sharedAccount] getState].state == HOPAccountStateReady))
+    if ([UIDevice isNetworkReachable] && [[HOPAccount sharedAccount] isAccountReady] && ([[HOPAccount sharedAccount] getState].state == HOPAccountStateReady))
     {
         //Send message
         [conversation sendMessage:message];

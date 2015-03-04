@@ -33,7 +33,7 @@
 #import "HOPCoreContact.h"
 #import "OpenPeerStorageManager.h"
 #import "HOPPublicPeerFile.h"
-#import "HOPIdentity.h"
+#import "HOPIdentity+External.h"
 #import "HOPAPNSData.h"
 #import "HOPAccount_Internal.h"
 #import "HOPOpenPeerAccount.h"
@@ -57,7 +57,7 @@
     return ret;
 }*/
 
-- (HOPIdentity*) getDefaultIdentity
+- (HOPIdentity*) getPreferredIdentity
 {
     HOPIdentity* ret = nil;
     
@@ -71,9 +71,14 @@
     
     return ret;
 }
-- (NSString*) getFullName
+- (NSString*) getName
 {
-    return [self getDefaultIdentity].name;
+    return [self getPreferredIdentity].name;
+}
+
+- (NSString*) getPeerFilePublic
+{
+    return self.publicPeerFile.peerFile;
 }
 
 - (NSString*) getPeerURI
@@ -110,5 +115,44 @@
 {
     HOPContact* ret = [HOPAccount sharedAccount].openPeerAccount.contact;
     return ret;
+}
+
+- (BOOL) isSame:(HOPContact*) contact
+{
+    BOOL ret = NO;
+    
+    if (contact && contact.stableID.length > 0)
+        ret = [self.stableID isEqualToString:contact.stableID];
+    
+    return ret;
+}
+- (HOPAvatar*) getAvatar
+{
+    HOPAvatar* ret = nil;
+    HOPIdentity* preferedIDentity = [self getPreferredIdentity];
+    if (preferedIDentity && preferedIDentity.avatars.count > 0)
+        ret = preferedIDentity.avatars.allObjects[0];
+    
+    return ret;
+}
+
+- (BOOL) isKnown
+{
+    for (HOPIdentity* identity in self.identities)
+    {
+        if ([identity isKnown])
+            return YES;
+    }
+    
+    return NO;
+}
+
+- (void) hintAboutLocation:(NSString*) locationID
+{
+    if (locationID.length > 0)
+    {
+
+        [[self getCoreContact] hintAboutLocation:locationID];
+    }
 }
 @end

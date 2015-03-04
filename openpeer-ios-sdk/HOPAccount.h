@@ -34,7 +34,7 @@
 #import "HOPProtocols.h"
 
 @class HOPAccountIdentity;
-
+@class HOPContact;
 @interface HOPAccState : NSObject
 
 @property (nonatomic, assign) HOPAccountState state;
@@ -217,7 +217,7 @@ Singleton class that represents the logged in OpenPeer user.
  *
  *  @return YES, if it is created, otherwise NO
  */
-- (BOOL) isCoreAccountCreated;
+- (BOOL) isAccountReady;
 
 /**
  *  Destroys account core object.
@@ -253,7 +253,7 @@ Singleton class that represents the logged in OpenPeer user.
  *
  *  @return User name
  */
-- (NSString*) getFullName;
+- (NSString*) getName;
 
 /**
  *  Store information about associated identituy
@@ -276,4 +276,6 @@ Singleton class that represents the logged in OpenPeer user.
  *  @return List of identities
  */
 - (NSArray*) getIdentities;
+
+- (HOPContact*) getSelfContact;
 @end

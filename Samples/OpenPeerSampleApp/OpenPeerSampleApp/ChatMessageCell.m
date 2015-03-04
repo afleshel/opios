@@ -287,7 +287,7 @@
             [self setUnicodeChars:self.message.text];
             
 
-            messageSenderName = [self.message.sender getDefaultIdentity].name;
+            messageSenderName = [self.message.sender getPreferredIdentity].name;
             
             UIColor* textColor;
             

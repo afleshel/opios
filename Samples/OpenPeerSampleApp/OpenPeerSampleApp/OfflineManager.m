@@ -176,7 +176,7 @@ typedef enum
             break;
             
         case LOGGEDIN_STATE:
-            if (![[HOPAccount sharedAccount] isCoreAccountCreated] || [[HOPAccount sharedAccount] getState].state != HOPAccountStateReady)
+            if (![[HOPAccount sharedAccount] isAccountReady] || [[HOPAccount sharedAccount] getState].state != HOPAccountStateReady)
             {
                 [[LoginManager sharedLoginManager] setIsRecovering:YES];
                 [[LoginManager sharedLoginManager] login];
@@ -187,7 +187,7 @@ typedef enum
         case LOGGEDIN_ACTIVE_SESSION:
         case LOGGEDIN_ACTIVE_CALL:
         {
-            if (![[HOPAccount sharedAccount] isCoreAccountCreated] || [[HOPAccount sharedAccount] getState].state != HOPAccountStateReady)
+            if (![[HOPAccount sharedAccount] isAccountReady] || [[HOPAccount sharedAccount] getState].state != HOPAccountStateReady)
             {
                 [[LoginManager sharedLoginManager] setIsRecovering:YES];
                 [[LoginManager sharedLoginManager] login];

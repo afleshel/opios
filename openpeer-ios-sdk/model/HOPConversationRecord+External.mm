@@ -88,7 +88,7 @@
     NSMutableArray* ret = self.participants.count == 0 ? nil : [NSMutableArray new];
     for (HOPContact* contact in self.participants)
     {
-        [ret addObject:[contact getDefaultIdentity]];
+        [ret addObject:[contact getPreferredIdentity]];
     }
     return ret;
 }

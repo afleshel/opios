@@ -136,7 +136,7 @@
     [dict setObject:message.type forKey:@"messageType"];
     [dict setObject:self.peerURI forKey:@"peerURI"];
     [dict setObject:peerURIs forKey:@"peerURIs"];
-    [dict setObject:[[HOPAccount sharedAccount] getFullName] forKey:@"senderName"];
+    [dict setObject:[[HOPAccount sharedAccount] getName] forKey:@"senderName"];
     [dict setObject:[recipient getPeerURI] forKey:@"to"];
     
     if ([message.type isEqualToString:[HOPSystemMessage getMessageType]])

@@ -96,7 +96,7 @@
     if (inPeerURI.length > 0)
         self.peerURI = inPeerURI;
     
-    self.location = [[HOPAccount sharedAccount] isCoreAccountCreated] && ([[HOPAccount sharedAccount] getState].state == HOPAccountStateReady) ? [[HOPAccount sharedAccount] getLocationID] : @"";
+    self.location = [[HOPAccount sharedAccount] isAccountReady] && ([[HOPAccount sharedAccount] getState].state == HOPAccountStateReady) ? [[HOPAccount sharedAccount] getLocationID] : @"";
 }
 
 - (NSDictionary*) createPushMessage:(NSString*) message incomingCall:(BOOL) incomingCall recipients:(NSArray*) recipients
@@ -126,7 +126,7 @@
     if (_location.length > 0)
         return _location;
     
-    _location = [[HOPAccount sharedAccount] isCoreAccountCreated] && ([[HOPAccount sharedAccount] getState].state == HOPAccountStateReady) ? [[HOPAccount sharedAccount] getLocationID] : @"";
+    _location = [[HOPAccount sharedAccount] isAccountReady] && ([[HOPAccount sharedAccount] getState].state == HOPAccountStateReady) ? [[HOPAccount sharedAccount] getLocationID] : @"";
     
     return _location;
 }

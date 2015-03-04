@@ -78,7 +78,7 @@
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Returning from the background.");
     [self.backgroundingNotifier destroy];
     self.backgroundingNotifier = nil;
-    if (![[HOPAccount sharedAccount] isCoreAccountCreated] || [[HOPAccount sharedAccount] getState].state != HOPAccountStateReady)
+    if (![[HOPAccount sharedAccount] isAccountReady] || [[HOPAccount sharedAccount] getState].state != HOPAccountStateReady)
     {
         [[LoginManager sharedLoginManager] setIsRecovering:YES];
     }

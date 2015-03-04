@@ -34,16 +34,86 @@
 @class HOPCoreContact;
 @class HOPIdentity;
 @class HOPContact;
+@class HOPAvatar;
 
 @interface HOPContact(External)
 
 
 - (BOOL) isSelf;
-- (HOPIdentity*) getDefaultIdentity;
-- (NSString*) getFullName;
+
+/**
+ *  Returns preferred identity contact based on priority and weight
+ *
+ *  @return prefered identity object
+ */
+- (HOPIdentity*) getPreferredIdentity;
+
+/**
+ *  Returns the name of the preferred identity
+ *
+ *  @return contact name
+ */
+- (NSString*) getName;
+
+/**
+ *  Returns the public peer file
+ *
+ *  @return public peer file
+ */
+- (NSString*) getPeerFilePublic;
+
+/**
+ *  Returns contact peer URI
+ *
+ *  @return peer URI
+ */
 - (NSString*) getPeerURI;
+
+/**
+ *  Returns the avatar of the preferred identity
+ *
+ *  @return HOPAvatar object
+ */
+- (HOPAvatar*) getAvatar;
+
+/**
+ *  Return YES if contact is a friend from some of associated identities, or it is unknown contact
+ *
+ *  @return YES, if it is known
+ */
+- (BOOL) isKnown;
+
 - (NSString*) getPushNotificationDeviceToken;
 - (NSString*) getPushNotificationType;
+
+/**
+ *  Returns list of contact associated identity URIs
+ *
+ *  @return list of identity URIs
+ */
 - (NSArray*) getIdentityURIs;
+
+/**
+ *  Returns contact object for logged in account
+ *
+ *  @return self contact object
+ */
 + (HOPContact*) getSelf;
+
+
+/**
+ *  Compare two contact objects
+ *
+ *  @param cotnact contact object to compare
+ *
+ *  @return YES if same
+ */
+- (BOOL) isSame:(HOPContact*) cotnact;
+
+/**
+ *  Give a hint abput location for contact
+ *
+ *  @param locationID
+ */
+- (void) hintAboutLocation:(NSString*) locationID;
 @end

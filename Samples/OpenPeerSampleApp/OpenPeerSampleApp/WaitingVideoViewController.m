@@ -95,9 +95,9 @@ const int CONNECTING_ANIMATION_DURATION = 2;
     
     self.statusLabel.text = self.statusText;
     
-    HOPIdentity* contact = [((HOPContact*)[self.conversation getParticipants][0]) getDefaultIdentity];
+    HOPIdentity* contact = [((HOPContact*)[self.conversation getParticipants][0]) getPreferredIdentity];
     self.participantName.text = contact.name;
-    self.callerName.text = [[HOPAccount sharedAccount] getFullName];
+    self.callerName.text = [[HOPAccount sharedAccount] getName];
     
     HOPAvatar* avatar = [contact getAvatarForWidth:[NSNumber numberWithFloat:self.calleeImage.frame.size.width] height:[NSNumber numberWithFloat:self.calleeImage.frame.size.height]];
     

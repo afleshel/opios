@@ -1285,7 +1285,7 @@ using namespace openpeer::core;
     HOPIdentity* ret = nil;
     HOPOpenPeerAccount* account = [self getLoggedInAccount];
     if (account && account.stableId.length > 0)
-        ret = [[self getOpenPeerContactForStableID:account.stableId] getDefaultIdentity];
+        ret = [[self getOpenPeerContactForStableID:account.stableId] getPreferredIdentity];
     return ret;
 }
 

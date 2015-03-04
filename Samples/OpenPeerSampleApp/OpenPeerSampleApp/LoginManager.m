@@ -141,7 +141,7 @@
 
 - (void)clearIdentities
 {
-    if ([[HOPAccount sharedAccount] isCoreAccountCreated])
+    if ([[HOPAccount sharedAccount] isAccountReady])
     {
         NSArray* associatedIdentities = [[HOPAccount sharedAccount] getAssociatedIdentities];
         for (HOPAccountIdentity* accountIdentity in associatedIdentities)
@@ -233,7 +233,7 @@
         
         NSString* redirectAfterLoginCompleteURL = [Settings getRedirectURLAfterLoginComplete];
 
-        if (![[HOPAccount sharedAccount] isCoreAccountCreated] || [[HOPAccount sharedAccount] getState].state == HOPAccountStateShutdown)
+        if (![[HOPAccount sharedAccount] isAccountReady] || [[HOPAccount sharedAccount] getState].state == HOPAccountStateShutdown)
             [self startAccount];
         
         //For identity login it is required to pass identity delegate, URL that will be requested upon successful login, identity URI and identity provider domain. This is 
@@ -465,7 +465,7 @@
     if ([UIDevice isNetworkReachable])
     {
         OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Network connection is established again");
-        if (![[HOPAccount sharedAccount] isCoreAccountCreated] || [[HOPAccount sharedAccount] getState].state != HOPAccountStateReady)
+        if (![[HOPAccount sharedAccount] isAccountReady] || [[HOPAccount sharedAccount] getState].state != HOPAccountStateReady)
         {
             self.isRecovering = YES;
             //If peer file doesn't exists, show login view, otherwise start relogin

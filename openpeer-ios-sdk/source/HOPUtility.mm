@@ -228,11 +228,11 @@
         if (contact)
         {
             if (ret.length == 0)
-                ret = [contact getFullName];
+                ret = [contact getName];
             else
             {
                 ret = [ret stringByAppendingString:@", "];
-                ret = [ret stringByAppendingString:[contact getFullName]];
+                ret = [ret stringByAppendingString:[contact getName]];
             }
         }
     }

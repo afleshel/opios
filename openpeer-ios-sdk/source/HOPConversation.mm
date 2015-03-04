@@ -350,6 +350,7 @@ using namespace openpeer::core;
     if (self.thread)
         [self.thread markAllMessagesRead];
 }
+
 - (NSString*) getConversationID
 {
     return _conversationID;

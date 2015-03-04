@@ -110,7 +110,7 @@
     [super viewDidLoad];
 
     HOPContact* contact = [self.conversation getParticipants][0];
-    HOPIdentity* identity = [contact getDefaultIdentity];
+    HOPIdentity* identity = [contact getPreferredIdentity];
     
     self.labelCallType.text = [self.conversation.currentCall hasVideo] ? NSLocalizedString(@"Video call from", nil) : NSLocalizedString(@"Audio call from", nil);
     

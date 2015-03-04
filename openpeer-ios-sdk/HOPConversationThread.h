@@ -105,8 +105,6 @@
  */
 - (NSString*) getThreadId;
 
-- (NSString*) getConversationThreadID;
-
 /**
  Checks if self is host of the conversation thread.
  @return YES if self is host, NO if not

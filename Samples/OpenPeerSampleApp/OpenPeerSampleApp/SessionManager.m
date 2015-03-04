@@ -155,7 +155,6 @@
  */
 - (void) onCallPreparing:(HOPCall*) call
 {
-    // NSString* sessionId = [[call getConversationThread] getThreadId];
     HOPConversation* conversation = [call getConversation];
 
     SessionViewController_iPhone* sessionViewController = [[[[OpenPeer sharedOpenPeer] mainViewController] sessionViewControllersDictionary] objectForKey:[conversation getConversationID]];
@@ -181,9 +180,7 @@
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Handle incoming call <%p>", call);
     HOPConversation* conversation = [call getConversation];
-//    NSString* sessionId = [[call getConversationThread] getThreadId];
-//    Session* session = [[[SessionManager sharedSessionManager] sessionsDictionary] objectForKey:sessionId];
-//    
+
 //    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Incoming a call for the session <%p>", session);
     
     //Set current call
@@ -212,7 +209,7 @@
     else //If callFlagIsSet is NO, hangup incoming call. 
     {
         [call hangup:HOPCallClosedReasonBusy];
-        [[[OpenPeer sharedOpenPeer] mainViewController] showNotification:[NSString stringWithFormat:@"%@ is trying to reach you.",[[conversation.participants objectAtIndex:0] getFullName]]];
+        [[[OpenPeer sharedOpenPeer] mainViewController] showNotification:[NSString stringWithFormat:@"%@ is trying to reach you.",[[conversation.participants objectAtIndex:0] getName]]];
     }
 }
 
@@ -333,7 +330,7 @@
         if ([conversation.currentCall getClosedReason] == HOPCallClosedReasonBusy)
         {
             HOPContact* contact = [conversation.participants objectAtIndex:0];
-            NSString* contactName = [contact getFullName];
+            NSString* contactName = [contact getName];
             [[[OpenPeer sharedOpenPeer] mainViewController] showNotification:[NSString stringWithFormat:@"%@ is busy.",contactName]];
          }
     }

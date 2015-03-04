@@ -332,7 +332,7 @@
     //NSArray* contacts = [self.session.lastConversationEvent getContacts];
     if (self.conversation.participants.count == 1)
     {
-        InfoViewController* infoViewController = [[InfoViewController alloc] initWithContact:[((HOPContact*)self.conversation.participants[0]) getDefaultIdentity] style:UITableViewStyleGrouped];
+        InfoViewController* infoViewController = [[InfoViewController alloc] initWithContact:[((HOPContact*)self.conversation.participants[0]) getPreferredIdentity] style:UITableViewStyleGrouped];
         infoViewController.title = @"User Info";
         [self.navigationController pushViewController:infoViewController animated:YES];
     }
