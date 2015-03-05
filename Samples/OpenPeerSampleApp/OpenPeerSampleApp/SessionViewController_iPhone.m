@@ -245,11 +245,9 @@
 
 - (void) actionCallMenu
 {
-    if(self.audioCallViewController != nil && self.audioCallViewController.view.hidden)//&& self.audioCallViewController.isViewLoaded && self.audioCallViewController.view.window)
-    {
+    if(self.audioCallViewController != nil && self.audioCallViewController.view.hidden)    {
         [self.chatViewController.messageTextbox resignFirstResponder];
         self.audioCallViewController.view.hidden = NO;
-        //[self.audioCallViewController.view removeFromSuperview];
         
     }
     else if(self.videoCallViewController != nil && self.videoCallViewController.view.hidden && self.callTimer != nil)
@@ -285,7 +283,6 @@
                     [self.availableActions addObject:[NSNumber numberWithInt:ACTION_VIDEO_CALL]];
                 }
             }
-            //[buttonTitles addObject:NSLocalizedString(@"Close session", @"")];
             [buttonTitles addObject:NSLocalizedString(@"Add Contact", @"")];
             [self.availableActions addObject:[NSNumber numberWithInt:ACTION_ADD_CONTACT]];
             /*if (self.conversation.participants.count > 1)

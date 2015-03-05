@@ -230,18 +230,6 @@
 - (HOPConversationRecord*) getConversationRecordForParticipants:(NSArray*) participants;
 
 
-
-/**
- Creates a HOPConversationRecord object.
- @param conversationThread Conversation thread object
- @param type Conversation type
- @param date Time of creation
- @param name Conversation name
- @param participants List of HOPIdentity objects
- @return HOPConversationRecord  object
- */
-- (HOPConversationRecord*) createConversationRecordForConversationThread:(HOPConversationThread*) conversationThread type:(NSString*) type date:(NSDate*) date topic:(NSString*) topic  name:(NSString*) name participants:(NSArray*) participants;
-
 /**
  Replaces old message text with a new one.
  @param replacesMessageID Message ID of the message that will be replaced
@@ -274,11 +262,7 @@
 - (NSFetchRequest*) getMessagesFetchRequestForConversation:(HOPConversation*) conversation sortAscending:(BOOL) ascending;
 
 
-/**
- Returns HOPIdentity object for logged in user.
- @return HOPIdentity object
- */
-- (HOPIdentity*) getIdentityForAccount;
+
 
 
 @end

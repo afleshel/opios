@@ -48,13 +48,33 @@
  */
 + (id) placeCall:(HOPConversationThread*) conversationThread includeAudio:(BOOL) includeAudio includeVideo:(BOOL) includeVideo;
 
+/**
+ *  Creates outgoing call.
+ *
+ *  @param conversation Conversation which will own the call
+ *  @param includeAudio YES if call should include audio
+ *  @param includeVideo YES if call should include video
+ *
+ *  @return HOPCall object
+ */
 + (id) placeCallForConversation:(HOPConversation*) conversation includeAudio:(BOOL) includeAudio includeVideo:(BOOL) includeVideo;
+
+/**
+ *  Creates outgoing call.
+ *
+ *  @param conversation Conversation which will own the call
+ *  @param participants List of callees
+ *  @param includeAudio YES if call should include audio
+ *  @param includeVideo YES if call should include video
+ *
+ *  @return HOPCall object
+ */
 + (id) placeCallForConversation:(HOPConversation*) conversation partcipants:(NSArray*) participants includeAudio:(BOOL) includeAudio includeVideo:(BOOL) includeVideo;
 /**
  *  This init method is not available. You need to use class method placeCall:toContact:includeAudio:includeVideo.
  *
  */
-- (id) init __attribute__((unavailable("Use static placeCall:toContact:includeAudio:includeVideo method to create a call object.")));
+- (id) init __attribute__((unavailable("Use static placeCallForConversation:includeAudio:includeVideo method to create a call object.")));
 
 /**
  Converts call state enum to string.
@@ -107,13 +127,13 @@
 
 /**
  Returns caller contact.
- @return Pointer to the caller HOPIdentity object
+ @return Pointer to the caller HOPContact object
  */
 - (HOPContact*) getCaller;
 
 /**
  Returns callee contact.
- @return Pointer to the callee HOPIdentity object
+ @return Pointer to the callee HOPContact object
  */
 - (HOPContact*) getCallee;
 
@@ -192,5 +212,11 @@
  */
 - (void) destroyCoreObject;
 
+
+/**
+ *  Gives information if call is outgoing
+ *
+ *  @return YES, if call is outgoing
+ */
 - (BOOL) isOutgoing;
 @end
