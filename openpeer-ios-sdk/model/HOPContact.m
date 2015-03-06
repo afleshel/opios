@@ -34,7 +34,7 @@
 #import "HOPConversationRecord.h"
 #import "HOPIdentity.h"
 #import "HOPOpenPeerAccount.h"
-#import "HOPParticipants.h"
+#import "HOPParticipantInfo.h"
 #import "HOPPublicPeerFile.h"
 
 

@@ -41,7 +41,7 @@
 #import "HOPConversationThread_Internal.h"
 #import "HOPCoreContact_Internal.h"
 #import "HOPAccount_Internal.h"
-#import "HOPMessageRecord+External.h"
+#import "HOPMessage+External.h"
 #import "HOPModelManager_Internal.h"
 #import "HOPContact_Internal.h"
 #import "HOPIdentity_Internal.h"
@@ -516,7 +516,7 @@ using namespace openpeer::core;
 }
 
 
-- (void) sendMessage: (HOPMessageRecord*) message
+- (void) sendMessage: (HOPMessage*) message
 {
     if(conversationThreadPtr)
     {
@@ -532,9 +532,9 @@ using namespace openpeer::core;
     }
 }
 
-- (HOPMessageRecord*) getMessageForID: (NSString*) messageID
+- (HOPMessage*) getMessageForID: (NSString*) messageID
 {
-    HOPMessageRecord* ret = [[HOPModelManager sharedModelManager] getMessageRecordByID:messageID];
+    HOPMessage* ret = [[HOPModelManager sharedModelManager] getMessageRecordByID:messageID];
 
     if (!ret)
     {
@@ -554,7 +554,7 @@ using namespace openpeer::core;
                 NSString* peerURI = [NSString stringWithUTF8String:fromContact->getPeerURI()];
                 if (peerURI.length > 0)
                 {
-                    ret = [HOPMessageRecord createMessage:[NSString stringWithUTF8String:message] type:[NSString stringWithUTF8String:messageType] date:[OpenPeerUtility convertPosixTimeToDate:messageTime] visible:YES conversation:[[OpenPeerStorageManager sharedStorageManager] getConversationForThreadID:[self getThreadId]] sender:[[HOPModelManager sharedModelManager] getContactByPeerURI:peerURI] messageId:messageID validated:validated messageIDToReplace:[NSString stringWithUTF8String:replacesMessageID]];
+                    ret = [HOPMessage createMessage:[NSString stringWithUTF8String:message] type:[NSString stringWithUTF8String:messageType] date:[OpenPeerUtility convertPosixTimeToDate:messageTime] visible:YES conversation:[[OpenPeerStorageManager sharedStorageManager] getConversationForThreadID:[self getThreadId]] sender:[[HOPModelManager sharedModelManager] getContactByPeerURI:peerURI] messageId:messageID validated:validated messageIDToReplace:[NSString stringWithUTF8String:replacesMessageID]];
                 }
             }
         }

@@ -31,7 +31,7 @@
 
 #import "SystemMessageCell.h"
 #import <OpenPeerSDK/HOPCallSystemMessage.h>
-#import <OpenPeerSDK/HOPMessageRecord.h>
+#import <OpenPeerSDK/HOPMessage.h>
 #import "TTTAttributedLabel.h"
 #import "Utility.h"
 #import "SessionManager.h"
@@ -65,7 +65,7 @@
 }
 
 
-- (void) setMessage:(HOPMessageRecord*) inMessage
+- (void) setMessage:(HOPMessage*) inMessage
 {
     message = inMessage;
     

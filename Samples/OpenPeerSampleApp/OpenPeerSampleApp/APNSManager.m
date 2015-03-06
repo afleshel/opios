@@ -137,7 +137,7 @@
     [self.pushNotificationSender sendPushNotificationMessage:message outgoingCall:outgoingCall recipients:recipients];
 }
 
-- (void) sendRichPushNotificationForMessage:(HOPMessageRecord*) message conversation:(HOPConversation*) conversation participants:(NSArray*) participants
+- (void) sendRichPushNotificationForMessage:(HOPMessage*) message conversation:(HOPConversation*) conversation participants:(NSArray*) participants
 {
     [self.pushNotificationSender sendRichPushNotificationMessage:message conversation:conversation recipients:participants];
 }

@@ -116,7 +116,7 @@
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Sending push notification, \"%@\"",message);
 }
 
-- (void) sendRichPushNotificationMessage:(HOPMessageRecord*) message conversation:(HOPConversation*) conversation recipients:(NSArray*) recipients
+- (void) sendRichPushNotificationMessage:(HOPMessage*) message conversation:(HOPConversation*) conversation recipients:(NSArray*) recipients
 {
     self.pushesToSend++;
 }
@@ -144,7 +144,7 @@
     return peerURIs;
 }
 
-- (NSDictionary*) createRichPushMessage:(HOPMessageRecord*) message conversation:(HOPConversation*) conversation recipient:(HOPContact*) recipient participants:(NSArray*) participants
+- (NSDictionary*) createRichPushMessage:(HOPMessage*) message conversation:(HOPConversation*) conversation recipient:(HOPContact*) recipient participants:(NSArray*) participants
 {
     return nil;
 }

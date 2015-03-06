@@ -29,39 +29,32 @@
  
  */
 
-#import "HOPParticipants.h"
-#import "HOPConversationEvent.h"
+#import "HOPMessage.h"
 #import "HOPContact.h"
-#import "HOPUtility.h"
+#import "HOPConversationEvent.h"
+#import "HOPConversationRecord.h"
+#import "HOPMessageEvent.h"
 
-@implementation HOPParticipants
 
-@dynamic cbcID;
-@dynamic events;
-@dynamic participants;
+@implementation HOPMessage
 
-- (NSString *)sectionIdentifier
-{
-    NSString* ret = nil;
-    NSArray* sorted = [self.events.allObjects sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"time" ascending:NO]]];
-    if (sorted.count > 0)
-        ret = [HOPUtility getTimeSectionForDate:((HOPConversationEvent*) sorted[0]).time];
-    return ret;
-}
+@dynamic date;
+@dynamic edited;
+@dynamic image;
+@dynamic incomingMessageStatus;
+@dynamic messageID;
+@dynamic outMessageStatus;
+@dynamic read;
+@dynamic removed;
+@dynamic replacedMessageID;
+@dynamic showStatus;
+@dynamic text;
+@dynamic type;
+@dynamic validated;
+@dynamic visible;
+@dynamic conversationEvent;
+@dynamic messageEvent;
+@dynamic sender;
+@dynamic session;
 
-- (HOPConversationEvent*) lastEvent
-{
-    NSArray* sorted = [self.events.allObjects sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"time" ascending:NO]]];
-    return sorted[0];
-}
-
-- (NSDate*) getDateOfLastEvent
-{
-    NSDate* ret = nil;
-    NSArray* sorted = [self.events.allObjects sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"time" ascending:NO]]];
-    if (sorted.count > 0)
-        ret = ((HOPConversationEvent*) sorted[0]).time;
-    
-    return ret;
-}
 @end

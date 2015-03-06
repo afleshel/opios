@@ -31,8 +31,8 @@
 
 #import "HOPConversationEvent.h"
 #import "HOPConversationRecord.h"
-#import "HOPMessageRecord.h"
-#import "HOPParticipants.h"
+#import "HOPMessage.h"
+#import "HOPParticipantInfo.h"
 
 
 @implementation HOPConversationEvent

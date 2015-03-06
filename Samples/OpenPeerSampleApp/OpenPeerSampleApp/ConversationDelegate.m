@@ -42,7 +42,7 @@
 #import <OpenpeerSDK/HOPConversation.h>
 //#import <OpenpeerSDK/HOPConversationThread.h>
 #import <OpenpeerSDK/HOPIdentity+External.h>
-#import <OpenpeerSDK/HOPMessageRecord+External.h>
+#import <OpenpeerSDK/HOPMessage+External.h>
 #import <OpenpeerSDK/HOPModelManager.h>
 #import <OpenpeerSDK/HOPSystemMessage.h>
 #import <OpenpeerSDK/HOPCallSystemMessage.h>
@@ -118,7 +118,7 @@
 - (void) onConversationMessage:(HOPConversation*) conversation messageID:(NSString*) messageID
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelTrace, @"Handling a new message with id %@ for conversation thread.",messageID);
-    HOPMessageRecord* message = [conversation getMessageForID:messageID];
+    HOPMessage* message = [conversation getMessageForID:messageID];
     if (message)
     {
         [[MessageManager sharedMessageManager] onMessageReceived:message forConversation:conversation];
@@ -137,7 +137,7 @@
 #ifdef APNS_ENABLED
     if (contact)
     {
-        HOPMessageRecord* message = [conversationThread getMessageForID:messageID];
+        HOPMessage* message = [conversationThread getMessageForID:messageID];
         
         if (message)
         {
@@ -147,7 +147,7 @@
 #endif
 }
 
-- (void) onConversationPushMessageRequired:(HOPConversation*) conversation message:(HOPMessageRecord*) message recipient:(HOPContact*) recipient
+- (void) onConversationPushMessageRequired:(HOPConversation*) conversation message:(HOPMessage*) message recipient:(HOPContact*) recipient
 {
 #ifdef APNS_ENABLED
     if (recipient && message)

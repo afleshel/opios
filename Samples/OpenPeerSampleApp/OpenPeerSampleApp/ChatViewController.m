@@ -35,7 +35,7 @@
 #import "MessageManager.h"
 #import "ChatMessageCell.h"
 #import <OpenPeerSDK/HOPModelManager.h>
-#import <OpenPeerSDK/HOPMessageRecord+External.h>
+#import <OpenPeerSDK/HOPMessage+External.h>
 #import <OpenPeerSDK/HOPConversation.h>
 #import <OpenPeerSDK/HOPCallSystemMessage.h>
 #import <OpenPeerSDK/HOPIdentity+External.h>
@@ -66,7 +66,7 @@
 
 @property (nonatomic,weak) IBOutlet UILabel *labelComposingStatus;
 
-@property (nonatomic, weak) HOPMessageRecord* messageToEdit;
+@property (nonatomic, weak) HOPMessage* messageToEdit;
 
 - (void) registerForNotifications:(BOOL)registerForNotifications;
 
@@ -448,7 +448,7 @@
 - (void) updateFetchControllerForSession:(NSString*) sessionID
 {
     NSFetchRequest *fetchRequest = [[self fetchedResultsController] fetchRequest];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPMessageRecord" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPMessage" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];
     [fetchRequest setEntity:entity];
     
     NSPredicate* predicate1 = [fetchRequest predicate];
@@ -506,7 +506,7 @@
 {
     //ChatCell* msgCell = nil;
     UITableViewCell* msgCell = nil;
-    HOPMessageRecord* message = nil;
+    HOPMessage* message = nil;
     
     message = [self.fetchedResultsController objectAtIndexPath:indexPath];
 
@@ -562,7 +562,7 @@
     
     float res = 0.0;
 
-    HOPMessageRecord* message = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    HOPMessage* message = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
     CGSize textSize;
     if ([message.type isEqualToString:[HOPSystemMessage getMessageType]])
@@ -647,7 +647,7 @@
             ChatMessageCell *cellForUpdate  = (ChatMessageCell*)[self.chatTableView cellForRowAtIndexPath:indexPath];
             if (cellForUpdate)
             {
-                HOPMessageRecord* message = [self.fetchedResultsController objectAtIndexPath:indexPath];
+                HOPMessage* message = [self.fetchedResultsController objectAtIndexPath:indexPath];
                 [cellForUpdate setMessage:message];
             }
         }

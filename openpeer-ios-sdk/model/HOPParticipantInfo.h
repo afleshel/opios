@@ -29,16 +29,28 @@
  
  */
 
-#import "HOPMessageRecord.h"
-#import "HOPTypes.h"
+#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
-@class HOPIdentity;
-@class HOPConversation;
-@class HOPContact;
+@class HOPContact, HOPConversationEvent;
 
-@interface HOPMessageRecord (External)
+@interface HOPParticipantInfo : NSManagedObject
 
-@property (nonatomic, getter = getOutgoingMessageStatus, setter = setOutgoingMessageStatus:) HOPConversationThreadMessageDeliveryState outgoingMessageStatus;
+@property (nonatomic, retain) NSString * cbcID;
+@property (nonatomic, retain) NSSet *events;
+@property (nonatomic, retain) NSSet *participants;
+@end
 
-+ (HOPMessageRecord*) createMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  conversation:(HOPConversation*) conversation sender:(HOPContact*) sender messageId:(NSString*)messageId validated:(BOOL) validated messageIDToReplace:(NSString*) messageIDToReplace;
+@interface HOPParticipantInfo (CoreDataGeneratedAccessors)
+
+- (void)addEventsObject:(HOPConversationEvent *)value;
+- (void)removeEventsObject:(HOPConversationEvent *)value;
+- (void)addEvents:(NSSet *)values;
+- (void)removeEvents:(NSSet *)values;
+
+- (void)addParticipantsObject:(HOPContact *)value;
+- (void)removeParticipantsObject:(HOPContact *)value;
+- (void)addParticipants:(NSSet *)values;
+- (void)removeParticipants:(NSSet *)values;
+
 @end

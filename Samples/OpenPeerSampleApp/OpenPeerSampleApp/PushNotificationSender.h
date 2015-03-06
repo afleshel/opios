@@ -32,7 +32,7 @@
 #import <Foundation/Foundation.h>
 #import "Delegates.h"
 
-@class HOPMessageRecord;
+@class HOPMessage;
 @class HOPConversation;
 
 @interface PushNotificationSender : NSObject<HTTPDownloaderDelegate>
@@ -46,11 +46,11 @@
 - (void) registerDeviceToken:(NSData*) inDeviceToken peerURI:(NSString*) inPeerURI;
 
 - (void) sendPushNotificationMessage:(NSString*) message outgoingCall:(BOOL) outgoingCall recipients:(NSArray*) recipients;
-- (void) sendRichPushNotificationMessage:(HOPMessageRecord*) message conversation:(HOPConversation*) conversation recipients:(NSArray*) recipients;
+- (void) sendRichPushNotificationMessage:(HOPMessage*) message conversation:(HOPConversation*) conversation recipients:(NSArray*) recipients;
 
 - (NSString*) getListOfRecipientsFromPeerURIsArray:(NSArray*) array;
 - (NSDictionary*) createPushMessage:(NSString*) message missedCall:(BOOL) missedCall recipients:(NSArray*) recipients;
-- (NSDictionary*) createRichPushMessage:(HOPMessageRecord*) message conversation:(HOPConversation*) conversation recipient:(HOPContact*) recipient participants:(NSArray*) participants;
+- (NSDictionary*) createRichPushMessage:(HOPMessage*) message conversation:(HOPConversation*) conversation recipient:(HOPContact*) recipient participants:(NSArray*) participants;
 
 - (NSArray*) getDeviceTokensForContact:(HOPContact*) contact;
 - (void) requestDeviceTokenForPeerURI:(NSString*) peerURI;

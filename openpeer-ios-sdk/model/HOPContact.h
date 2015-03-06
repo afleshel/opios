@@ -32,7 +32,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class HOPAPNSData, HOPConversationRecord, HOPIdentity, HOPOpenPeerAccount, HOPParticipants, HOPPublicPeerFile;
+@class HOPAPNSData, HOPConversationRecord, HOPIdentity, HOPOpenPeerAccount, HOPParticipantInfo, HOPPublicPeerFile;
 
 @interface HOPContact : NSManagedObject
 
@@ -47,8 +47,8 @@
 
 @interface HOPContact (CoreDataGeneratedAccessors)
 
-- (void)addParticipantsObject:(HOPParticipants *)value;
-- (void)removeParticipantsObject:(HOPParticipants *)value;
+- (void)addParticipantsObject:(HOPParticipantInfo *)value;
+- (void)removeParticipantsObject:(HOPParticipantInfo *)value;
 - (void)addParticipants:(NSSet *)values;
 - (void)removeParticipants:(NSSet *)values;
 

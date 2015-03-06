@@ -328,7 +328,7 @@
 
 
 @class HOPConversation;
-@class HOPMessageRecord;
+@class HOPMessage;
 
 
 /**
@@ -373,7 +373,7 @@
  *  @param messageID          A message ID. This ID will be used for retrieving message from the conversation thread.
  */
 - (void) onConversationMessage:(HOPConversation*) conversation messageID:(NSString*) messageID;
-- (void) onConversationNewMessage:(HOPConversation*) conversation message:(HOPMessageRecord*) message;
+- (void) onConversationNewMessage:(HOPConversation*) conversation message:(HOPMessage*) message;
 - (void) onConversationCallSystemMessageReceived:(HOPConversation*) conversation jsonMessage:(NSString*) jsonMessage;
 - (void) onConversationSwitch:(HOPConversation*) conversation fromConversationId:(NSString*)fromConversationId toConversationId:(NSString*)toConversationId;
 
@@ -394,7 +394,7 @@
  *  @param contact            A message recepient.
  */
 - (void) onConversationPushMessage:(HOPConversation*) conversation messageID:(NSString*) messageID contact:(HOPContact*) contact;
-- (void) onConversationPushMessageRequired:(HOPConversation*) conversation message:(HOPMessageRecord*) message recipient:(HOPContact*) recipient;
+- (void) onConversationPushMessageRequired:(HOPConversation*) conversation message:(HOPMessage*) message recipient:(HOPContact*) recipient;
 
 //- (void) onConversationTopicChanged:(HOPConversation*) conversation newTopic:(NSString*) newTopic;
 

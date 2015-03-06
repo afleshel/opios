@@ -76,11 +76,11 @@ using namespace openpeer::core;
 - (NSArray *) getOpenPeerContactsByPeerURIs:(NSArray*) peerURIs;
 
 /**
- Returns HOPParticipants object for list of contacts
+ Returns HOPParticipantInfo object for list of contacts
  @param contacts List of HOPContact objects
- @return HOPParticipants object
+ @return HOPParticipantInfo object
  */
-- (HOPParticipants*) getParticiapantsForListOfContacts:(NSArray*) contacts;
+- (HOPParticipantInfo*) getParticiapantsForListOfContacts:(NSArray*) contacts;
 
 /**
  Creates a HOPConversationThreadRecord object for conversation thread and conversation record.

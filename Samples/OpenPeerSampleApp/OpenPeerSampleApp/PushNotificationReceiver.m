@@ -36,7 +36,7 @@
 #import <OpenPeerSDK/HOPUtility.h>
 #import <OpenPeerSDK/HOPConversation.h>
 #import <OpenPeerSDK/HOPSystemMessage.h>
-#import <OpenPeerSDK/HOPMessageRecord+External.h>
+#import <OpenPeerSDK/HOPMessage+External.h>
 #import "OpenPeer.h"
 #import "MainViewController.h"
 #import "Utility.h"
@@ -137,7 +137,7 @@
                     }
                     else
                     {
-                        HOPMessageRecord* messageObj = [HOPMessageRecord createMessage:messageText type:messageType date:date visible:YES conversation:conversation sender:sender messageId:messageID validated:NO messageIDToReplace:nil];
+                        HOPMessage* messageObj = [HOPMessage createMessage:messageText type:messageType date:date visible:YES conversation:conversation sender:sender messageId:messageID validated:NO messageIDToReplace:nil];
                         
                         if (messageObj)
                         {

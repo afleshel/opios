@@ -421,7 +421,7 @@
     return ret;
 }
 
-- (NSString* )getSystemMessage:(HOPMessageRecord *)messageRecord
+- (NSString* )getSystemMessage:(HOPMessage *)messageRecord
 {
     NSString* ret = nil;
     HOPCallSystemMessage* callSystemMessage = [HOPCallSystemMessage callSystemMessageFromJSON:messageRecord.text];
@@ -443,7 +443,7 @@
 - (NSString*) getLastTextMessageForConversationRecord:(HOPConversationRecord*) record
 {
     NSString* ret = nil;
-    HOPMessageRecord* messageRecord = [record getLastMessage];
+    HOPMessage* messageRecord = [record getLastMessage];
     if (messageRecord)
     {
         if (![messageRecord.type isEqualToString:[HOPSystemMessage getMessageType]])

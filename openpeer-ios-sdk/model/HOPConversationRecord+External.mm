@@ -34,7 +34,7 @@
 #import "HOPIdentity.h"
 #import "HOPContact+External.h"
 #import "OpenPeerStorageManager.h"
-#import "HOPMessageRecord+External.h"
+#import "HOPMessage+External.h"
 
 //
 //@interface HOPConversationRecord ()
@@ -93,9 +93,9 @@
     return ret;
 }
 
-- (HOPMessageRecord*) getLastMessage
+- (HOPMessage*) getLastMessage
 {
-    HOPMessageRecord* ret = nil;
+    HOPMessage* ret = nil;
     NSSortDescriptor* sortMessages = [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO];
     NSArray* sortedMessages = [self.messages.allObjects sortedArrayUsingDescriptors:@[sortMessages]];
     if (sortedMessages.count > 0)

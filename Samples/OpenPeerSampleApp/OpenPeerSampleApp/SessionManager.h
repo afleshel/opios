@@ -34,7 +34,7 @@
 
 @class HOPIdentity;
 @class HOPConversationRecord;
-@class HOPMessageRecord;
+@class HOPMessage;
 @class HOPConversationEvent;
 @class HOPConversation;
 
@@ -71,7 +71,7 @@
 - (void) clearAllSessions;
 
 - (int) totalNumberOfUnreadMessages;
-- (NSString* )getSystemMessage:(HOPMessageRecord *)messageRecord;
+- (NSString* )getSystemMessage:(HOPMessage *)messageRecord;
 - (NSString*) getLastTextMessageForConversationRecord:(HOPConversationRecord*) record;
 
 - (void) onParticipantsInConversationUpdate:(HOPConversation*) conversation;

@@ -34,7 +34,7 @@
 #import "Utility.h"
 
 #import <OpenpeerSDK/HOPIdentity+External.h>
-#import <OpenpeerSDK/HOPMessageRecord+External.h>
+#import <OpenpeerSDK/HOPMessage+External.h>
 #import <OpenpeerSDK/HOPConversation.h>
 #import <OpenPeerSDK/HOPContact+External.h>
 
@@ -449,7 +449,7 @@
     }
 }
 
-- (void) setMessage:(HOPMessageRecord*) inMessage
+- (void) setMessage:(HOPMessage*) inMessage
 {
     message = inMessage;
     

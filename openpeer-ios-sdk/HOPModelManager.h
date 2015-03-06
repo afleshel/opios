@@ -45,12 +45,12 @@
 @class HOPOpenPeerAccount;
 @class HOPAvatar;
 @class HOPConversationRecord;
-@class HOPMessageRecord;
+@class HOPMessage;
 @class HOPConversationThreadRecord;
 @class HOPConversationThread;
 @class HOPContact;
 @class HOPConversationEvent;
-@class HOPParticipants;
+@class HOPParticipantInfo;
 @class HOPConversation;
 /**
  *  This is the singleton class and it is used for manipulation with core data.
@@ -220,11 +220,11 @@
 - (HOPConversationRecord *) getConversationRecordByID:(NSString*) conversationID;
 
 /**
- Returns a HOPMessageRecord object for message ID.
+ Returns a HOPMessage object for message ID.
  @param messageID Message ID
- @return HOPMessageRecord Message record object
+ @return HOPMessage Message record object
  */
-- (HOPMessageRecord *) getMessageRecordByID:(NSString*) messageID;
+- (HOPMessage *) getMessageRecordByID:(NSString*) messageID;
 
 
 - (HOPConversationRecord*) getConversationRecordForParticipants:(NSArray*) participants;

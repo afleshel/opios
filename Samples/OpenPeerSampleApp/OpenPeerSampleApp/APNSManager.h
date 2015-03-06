@@ -32,7 +32,7 @@
 #import <Foundation/Foundation.h>
 
 @class HOPIdentity;
-@class HOPMessageRecord;
+@class HOPMessage;
 @class HTTPDownloaderDelegate;
 @class HOPSystemMessage;
 
@@ -53,7 +53,7 @@
 - (void) handleAPNS:(NSDictionary *)apnsInfo;
 - (void) setBadgeNumber:(NSInteger) numberOfUnreadMessages;
 - (void) sendPushNotificationMessage:(NSString*) message outgoingCall:(BOOL) outgoingCall recipients:(NSArray*) recipients;
-- (void) sendRichPushNotificationForMessage:(HOPMessageRecord*) message conversation:(HOPConversation*) conversation participants:(NSArray*) participants;
+- (void) sendRichPushNotificationForMessage:(HOPMessage*) message conversation:(HOPConversation*) conversation participants:(NSArray*) participants;
 - (BOOL) areTherePushesForSending;
 
 - (void) registerDeviceTokenWithOpenPeer;

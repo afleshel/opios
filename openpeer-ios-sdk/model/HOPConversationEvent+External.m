@@ -30,7 +30,7 @@
  */
 
 #import "HOPConversationEvent+External.h"
-#import "HOPParticipants.h"
+#import "HOPParticipantInfo.h"
 #import "HOPContact+External.h"
 
 @implementation HOPConversationEvent (External)

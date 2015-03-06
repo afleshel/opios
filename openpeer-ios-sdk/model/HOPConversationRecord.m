@@ -32,7 +32,7 @@
 #import "HOPConversationRecord.h"
 #import "HOPConversationEvent.h"
 #import "HOPConversationThreadRecord.h"
-#import "HOPMessageRecord.h"
+#import "HOPMessage.h"
 #import "HOPOpenPeerAccount.h"
 #import "HOPContact.h"
 

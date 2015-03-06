@@ -34,7 +34,7 @@
 
 @class HOPCoreContact;
 @class HOPIdentity;
-@class HOPMessageRecord;
+@class HOPMessage;
 @class HOPAccount;
 @class HOPAccountIdentity;
 @class HOPContact;
@@ -179,15 +179,15 @@
  Sends message to all contacts in the conversation thread.
  @param message Message object
  */
-- (void) sendMessage: (HOPMessageRecord*) message;
+- (void) sendMessage: (HOPMessage*) message;
 
 
 /**
  Returns message for specified message ID.
  @param messageID  A received message ID
- @return HOPMessageRecord object
+ @return HOPMessage object
  */
-- (HOPMessageRecord*) getMessageForID: (NSString*) messageID;
+- (HOPMessage*) getMessageForID: (NSString*) messageID;
 
 /**
  Retrieves delivery state of the message.

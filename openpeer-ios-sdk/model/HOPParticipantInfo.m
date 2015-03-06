@@ -29,32 +29,15 @@
  
  */
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+#import "HOPParticipantInfo.h"
+#import "HOPContact.h"
+#import "HOPConversationEvent.h"
 
-@class HOPConversationEvent, HOPContact;
 
-@interface HOPParticipants : NSManagedObject
+@implementation HOPParticipantInfo
 
-@property (nonatomic, retain) NSString * cbcID;
-@property (nonatomic, retain) NSSet *events;
-@property (nonatomic, retain) NSSet *participants;
-@end
-
-@interface HOPParticipants (CoreDataGeneratedAccessors)
-
-- (NSString *)sectionIdentifier;
-- (HOPConversationEvent*) lastEvent;
-- (NSDate*) getDateOfLastEvent;
-
-- (void)addEventsObject:(HOPConversationEvent *)value;
-- (void)removeEventsObject:(HOPConversationEvent *)value;
-- (void)addEvents:(NSSet *)values;
-- (void)removeEvents:(NSSet *)values;
-
-- (void)addParticipantsObject:(HOPContact *)value;
-- (void)removeParticipantsObject:(HOPContact *)value;
-- (void)addParticipants:(NSSet *)values;
-- (void)removeParticipants:(NSSet *)values;
+@dynamic cbcID;
+@dynamic events;
+@dynamic participants;
 
 @end

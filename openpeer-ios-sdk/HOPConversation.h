@@ -34,7 +34,7 @@
 
 @class HOPCall;
 @class HOPConversationThread;
-@class HOPMessageRecord;
+@class HOPMessage;
 @class HOPContact;
 @class HOPConversationRecord;
 @class HOPConversationEvent;
@@ -150,7 +150,7 @@
  *
  *  @return message record object
  */
-- (HOPMessageRecord*) getMessageForID: (NSString*) messageID;
+- (HOPMessage*) getMessageForID: (NSString*) messageID;
 
 /**
  *  Marks all messages in the conversation read.
@@ -168,11 +168,11 @@
 - (void) clear;
 
 /**
- *  Sends message packed in HOPMessageRecord object
+ *  Sends message packed in HOPMessage object
  *
  *  @param message message object
  */
-- (void) sendMessage: (HOPMessageRecord*) message;
+- (void) sendMessage: (HOPMessage*) message;
 
 /**
  *  Create a call with given list of participants (currently it is supported only call one to one)

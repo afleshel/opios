@@ -29,7 +29,7 @@
  
  */
 
-#import "HOPMessageRecord+External.h"
+#import "HOPMessage+External.h"
 #import <openpeer/core/IHelper.h>
 #import <openpeer/core/types.h>
 //#import <openpeer/core/IConversationThread.h>
@@ -47,19 +47,19 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 using namespace openpeer;
 using namespace openpeer::core;
 
-@implementation HOPMessageRecord (External)
+@implementation HOPMessage (External)
 
 
-+ (HOPMessageRecord*) createMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  conversation:(HOPConversation*) conversation sender:(HOPContact*) sender messageId:(NSString*)messageId validated:(BOOL) validated messageIDToReplace:(NSString*) messageIDToReplace
++ (HOPMessage*) createMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  conversation:(HOPConversation*) conversation sender:(HOPContact*) sender messageId:(NSString*)messageId validated:(BOOL) validated messageIDToReplace:(NSString*) messageIDToReplace
 {
-    HOPMessageRecord* ret = nil;
+    HOPMessage* ret = nil;
     
     if ([messageText length] > 0 && [type length] > 0 && date != nil && conversation != nil && [messageId length] > 0)
     {
         ret = [[HOPModelManager sharedModelManager] getMessageRecordByID:messageId];
         if ( ret == nil)
         {
-            ret = (HOPMessageRecord*)[[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPMessageRecord"];
+            ret = (HOPMessage*)[[HOPModelManager sharedModelManager] createObjectForEntity:@"HOPMessage"];
             ret.text = messageText;
             ret.date = date;
             ret.visible = [NSNumber numberWithBool:visible];

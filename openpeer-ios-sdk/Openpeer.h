@@ -65,7 +65,7 @@
 #import "HOPIdentityProvider.h"
 #import "HOPImage.h"
 #import "HOPMessageEvent.h"
-#import "HOPMessageRecord+External.h"
+#import "HOPMessage+External.h"
 #import "HOPIdentity+External.h"
 
 

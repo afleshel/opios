@@ -34,7 +34,7 @@
 #import "OpenPeerStorageManager.h"
 #import "HOPConversationThread_Internal.h"
 #import "HOPModelManager_Internal.h"
-#import "HOPMessageRecord+External.h"
+#import "HOPMessage+External.h"
 #import "HOPConversation_Internal.h"
 #import "HOPConversationEvent+External.h"
 #import "HOPConversationRecord+External.h"
@@ -251,7 +251,7 @@ void OpenPeerConversationThreadDelegate::onConversationThreadMessage(IConversati
         else if (conversationDelegate)
         {
             HOPConversation * hopConversation = this->getOpenPeerConversation(conversationThread);
-            HOPMessageRecord* message = [[HOPModelManager sharedModelManager] getMessageRecordByID:messageId];
+            HOPMessage* message = [[HOPModelManager sharedModelManager] getMessageRecordByID:messageId];
             if (hopConversation && !message)
             {
                 [conversationDelegate onConversationMessage:hopConversation messageID:messageId];
@@ -261,7 +261,7 @@ void OpenPeerConversationThreadDelegate::onConversationThreadMessage(IConversati
 }
 void OpenPeerConversationThreadDelegate::callProperConversationDelegate(HOPConversation * conversation, NSString* messageID)
 {
-    HOPMessageRecord* message = [conversation getMessageForID:messageID];
+    HOPMessage* message = [conversation getMessageForID:messageID];
     BOOL isSystemMessage = [message.type isEqualToString:[HOPSystemMessage getMessageType]];
     
     if (!isSystemMessage)
@@ -285,7 +285,7 @@ void OpenPeerConversationThreadDelegate::onConversationThreadMessageDeliveryStat
     
     if ([messageId length] > 0)
     {
-        HOPMessageRecord* messageRecord = [[HOPModelManager sharedModelManager] getMessageRecordByID:messageId];
+        HOPMessage* messageRecord = [[HOPModelManager sharedModelManager] getMessageRecordByID:messageId];
         if (messageRecord)
         {
             messageRecord.outgoingMessageStatus = (HOPConversationThreadMessageDeliveryState)state;

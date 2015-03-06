@@ -44,7 +44,7 @@
 #import "HOPConversationType.h"
 
 #import "HOPIdentity+External.h"
-#import "HOPMessageRecord+External.h"
+#import "HOPMessage+External.h"
 #import "HOPModelManager_Internal.h"
 #import "HOPUtility.h"
 #import "HOPAccount.h"
@@ -323,9 +323,9 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (HOPMessageRecord*) getMessageForID: (NSString*) messageID
+- (HOPMessage*) getMessageForID: (NSString*) messageID
 {
-    HOPMessageRecord* ret = nil;
+    HOPMessage* ret = nil;
     
     if (self.thread && messageID.length > 0)
         ret = [self.thread getMessageForID:messageID];
@@ -333,7 +333,7 @@ using namespace openpeer::core;
     return ret;
 }
 
-- (void) sendMessage: (HOPMessageRecord*) message
+- (void) sendMessage: (HOPMessage*) message
 {
     if (self.thread && message)
         [self.thread sendMessage:message];

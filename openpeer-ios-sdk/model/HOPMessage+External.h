@@ -29,32 +29,16 @@
  
  */
 
-#import "HOPMessageRecord.h"
-#import "HOPConversationEvent.h"
-#import "HOPConversationRecord.h"
-#import "HOPMessageEvent.h"
-#import "HOPContact.h"
+#import "HOPMessage.h"
+#import "HOPTypes.h"
 
+@class HOPIdentity;
+@class HOPConversation;
+@class HOPContact;
 
-@implementation HOPMessageRecord
+@interface HOPMessage (External)
 
-@dynamic date;
-@dynamic removed;
-@dynamic edited;
-@dynamic image;
-@dynamic incomingMessageStatus;
-@dynamic messageID;
-@dynamic outMessageStatus;
-@dynamic read;
-@dynamic showStatus;
-@dynamic text;
-@dynamic type;
-@dynamic visible;
-@dynamic validated;
-@dynamic replacedMessageID;
-@dynamic conversationEvent;
-@dynamic messageEvent;
-@dynamic sender;
-@dynamic session;
+@property (nonatomic, getter = getOutgoingMessageStatus, setter = setOutgoingMessageStatus:) HOPConversationThreadMessageDeliveryState outgoingMessageStatus;
 
++ (HOPMessage*) createMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  conversation:(HOPConversation*) conversation sender:(HOPContact*) sender messageId:(NSString*)messageId validated:(BOOL) validated messageIDToReplace:(NSString*) messageIDToReplace;
 @end

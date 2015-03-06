@@ -32,7 +32,7 @@
 #import <Foundation/Foundation.h>
 
 @class HOPConversation;
-@class HOPMessageRecord;
+@class HOPMessage;
 @class HOPContact;
 
 typedef enum
@@ -53,18 +53,18 @@ typedef enum
 
 + (id) sharedMessageManager;
 
-- (HOPMessageRecord*) createSystemMessageWithType:(HOPSystemMessageType) type messageType:(int) messageType reasonCode:(int)reasonCode andRecipient:(HOPContact*) contact conversation:(HOPConversation*) conversation;
+- (HOPMessage*) createSystemMessageWithType:(HOPSystemMessageType) type messageType:(int) messageType reasonCode:(int)reasonCode andRecipient:(HOPContact*) contact conversation:(HOPConversation*) conversation;
 
 - (void) sendCallSystemMessage:(HOPCallSystemMessageType) callSystemMessage reasonCode:(int) reasonCode forConversation:(HOPConversation*) conversation;
 - (void) sendSystemForSwitchFromConversation:(HOPConversation*) conversation toConversation:(HOPConversation*) toConversation;
 
-- (void) parseSystemMessage:(HOPMessageRecord*) inMessage forConversation:(HOPConversation*) conversation;
+- (void) parseSystemMessage:(HOPMessage*) inMessage forConversation:(HOPConversation*) conversation;
 - (void) sendMessage:(NSString*) message replacesMessageID:(NSString*) replacesMessageID forConversation:(HOPConversation*) conversation;
-- (void) onMessageReceived:(HOPMessageRecord*) message forConversation:(HOPConversation*) conversation;
+- (void) onMessageReceived:(HOPMessage*) message forConversation:(HOPConversation*) conversation;
 
 
 - (void) resendMessages;
-- (void) resendMessage:(HOPMessageRecord*) message conversation:(HOPConversation*) conversation;
+- (void) resendMessage:(HOPMessage*) message conversation:(HOPConversation*) conversation;
 
-- (void)updateMessageStatus:(HOPMessageRecord *)messageRecord;
+- (void)updateMessageStatus:(HOPMessage *)messageRecord;
 @end

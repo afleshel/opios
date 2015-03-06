@@ -32,7 +32,7 @@
 #import "HOPConversationRecord.h"
 
 @class HOPConversation;
-@class HOPMessageRecord;
+@class HOPMessage;
 
 @interface HOPConversationRecord (External)
 
@@ -42,5 +42,5 @@
 - (HOPConversation*) getConversation;
 - (NSArray*) getContacts;
 
-- (HOPMessageRecord*) getLastMessage;
+- (HOPMessage*) getLastMessage;
 @end

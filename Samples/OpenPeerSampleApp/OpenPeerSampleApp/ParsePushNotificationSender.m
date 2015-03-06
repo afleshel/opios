@@ -30,7 +30,7 @@
  */
 
 #import "ParsePushNotificationSender.h"
-#import <OpenPeerSDK/HOPMessageRecord+External.h>
+#import <OpenPeerSDK/HOPMessage+External.h>
 #import <OpenPeerSDK/HOPConversationRecord+External.h>
 #import <OpenPeerSDK/HOPContact+External.h>
 #import <OpenPeerSDK/HOPIdentity+External.h>
@@ -92,7 +92,7 @@
     }
 }
 
-- (void) sendRichPushNotificationMessage:(HOPMessageRecord*) message conversation:(HOPConversation*) conversation recipients:(NSArray*) recipients
+- (void) sendRichPushNotificationMessage:(HOPMessage*) message conversation:(HOPConversation*) conversation recipients:(NSArray*) recipients
 {
     [super sendRichPushNotificationMessage:message conversation:conversation recipients:recipients];
     
@@ -120,7 +120,7 @@
 }
 
 
-- (NSDictionary*) createRichPushMessage:(HOPMessageRecord*) message conversation:(HOPConversation*) conversation recipient:(HOPContact*) recipient participants:(NSArray*) participants
+- (NSDictionary*) createRichPushMessage:(HOPMessage*) message conversation:(HOPConversation*) conversation recipient:(HOPContact*) recipient participants:(NSArray*) participants
 {
     NSMutableDictionary* dict = [NSMutableDictionary new];
     

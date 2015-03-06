@@ -32,31 +32,31 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class HOPConversationEvent, HOPConversationRecord, HOPMessageEvent, HOPContact;
+@class HOPContact, HOPConversationEvent, HOPConversationRecord, HOPMessageEvent;
 
-@interface HOPMessageRecord : NSManagedObject
+@interface HOPMessage : NSManagedObject
 
 @property (nonatomic, retain) NSDate * date;
-@property (nonatomic, retain) NSNumber * removed;
 @property (nonatomic, retain) NSNumber * edited;
 @property (nonatomic, retain) NSData * image;
 @property (nonatomic, retain) NSNumber * incomingMessageStatus;
 @property (nonatomic, retain) NSString * messageID;
 @property (nonatomic, retain) NSString * outMessageStatus;
 @property (nonatomic, retain) NSNumber * read;
+@property (nonatomic, retain) NSNumber * removed;
+@property (nonatomic, retain) NSString * replacedMessageID;
 @property (nonatomic, retain) NSNumber * showStatus;
 @property (nonatomic, retain) NSString * text;
 @property (nonatomic, retain) NSString * type;
-@property (nonatomic, retain) NSNumber * visible;
 @property (nonatomic, retain) NSNumber * validated;
-@property (nonatomic, retain) NSString * replacedMessageID;
+@property (nonatomic, retain) NSNumber * visible;
 @property (nonatomic, retain) HOPConversationEvent *conversationEvent;
 @property (nonatomic, retain) NSSet *messageEvent;
 @property (nonatomic, retain) HOPContact *sender;
 @property (nonatomic, retain) HOPConversationRecord *session;
 @end
 
-@interface HOPMessageRecord (CoreDataGeneratedAccessors)
+@interface HOPMessage (CoreDataGeneratedAccessors)
 
 - (void)addMessageEventObject:(HOPMessageEvent *)value;
 - (void)removeMessageEventObject:(HOPMessageEvent *)value;
