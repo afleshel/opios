@@ -1,6 +1,0 @@
-[submodule "libs/op"]
-	path = libs/op
-	url = https://github.com/openpeer/op.git
-[submodule "libs/ZXingObjC"]
-	path = libs/ZXingObjC
-	url = https://github.com/openpeer/ZXingObjC
