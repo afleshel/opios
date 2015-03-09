@@ -1,3 +1,238 @@
+Changes in OpenPeerSDK 1.2
+
+==========================================================================================
+
+Changes in HOPAccount class
+
+Added methods:
+
++ (BOOL) isReloginPossible - Check if there is already logged in account with valid relogin information
+- (NSArray*) getSelfIdentities - Returns list of associated social identities for logged in account
+- (NSArray*) getIdentities Returns all connected social identities for logged in account
+- (void) resetLoggedInAccount - Mark that last logged in user is logged out
+- (void) updateLoggedInAccount - If new user is logged in, updates account data
+- (NSString*) getPeerURI - Gets logged in user peer URI
+- (NSString*) getName - Gets logged in user  name
+- (HOPContact*) getSelfContact  - Returns logged in contact object
+
+
+Replaced methods
+- (BOOL) loginWithAccountDelegate:conversationThreadDelegate:callDelegate:namespaceGrantOuterFrameURLUponReload:lockboxServiceDomain:forceCreateNewLockboxAccount:
+is replaced with 
+- (BOOL) loginWithAccountDelegate:conversationDelegate:callDelegate:namespaceGrantOuterFrameURLUponReload:lockboxServiceDomain:forceCreateNewLockboxAccount:
+
+- (BOOL)reloginWithAccountDelegate:conversationThreadDelegate:callDelegate:lockboxOuterFrameURLUponReload:
+is replaced with 
+- (BOOL)reloginWithAccountDelegate:conversationDelegate:callDelegate:lockboxOuterFrameURLUponReload:
+
+- (void) addIdentity:(HOPIdentity*) identity;
+is replaced with 
+- (void) addAccountIdentity:(HOPAccountIdentity*) accountIdentity
+
+- (BOOL) isCoreAccountCreated 
+is replaced with 
+- (BOOL) isAccountReady
+
+==========================================================================================
+
+Changes in HOPCall class
+
+Added methods
+
++ (id) placeCallForConversation:(HOPConversation*) conversation partcipants:(NSArray*) participants includeAudio:(BOOL) includeAudio includeVideo:(BOOL) includeVideo
++ (id) placeCallForConversation:(HOPConversation*) conversation includeAudio:(BOOL) includeAudio includeVideo:(BOOL) includeVideo
+- (BOOL) isOutgoing - Gives information if call is outgoing
+- (HOPConversation*) getConversation - Returns conversation which owns the call
+
+==========================================================================================
+
+Changes in HOPCallSystemMessage class
+
+Type of callee object is changed from HOPCoreContact to HOPContact
+Added two new properties mediaType and callID.
+Added new initiate method
+ - (id) initWithMessageType:(HOPCallSystemMessageType) inType mediaType:(NSString*) mediaType callID:(NSString*) callID callee:(HOPIdentity*) inCallee errorCode:(unsigned short) inErrorCode;
+
+==========================================================================================
+
+Class HOPContact is renamed to HOPCoreContact, and it shouldn't be used by devs. Instead of that class it should be used new HOPContact (earlier called HOPOpenPeerContact)
+
+==========================================================================================
+
+HOPIdentity class is renamed to HOPAccountIdentity
+
+==========================================================================================
+
+Old HOPMessage class is replaced with HOPMessage entity
+
+==========================================================================================
+
+HOPProtocols
+
+HOPIdentityDelegate is replaced with HOPAccountIdentityDelegate
+Added HOPConversationDelegate that should be used instead of HOPConversationThreadDelegate
+
+==========================================================================================
+
+HOPSettings
+
+Added methods
+- (NSString*) getDefaultCovnersationTypeStr
+- (HOPConversationThreadType) getDefaultCovnersationType
+
+==========================================================================================
+
+HOPConversationThreadContactStatus is renamed to HOPComposingState
+HOPIdentityState is renamed to  HOPAccountIdentityState
+HOPConversationThreadType added
+
+==========================================================================================
+
+HOPOpenPeerContact is renamed to HOPContact
+
+==========================================================================================
+
+HOPAssociatedIdentity
+
+rolodexContacts list replaced with identities
+selfRolodexContact replaced with selfIdentity
+
+addRolodexContactsObject replaced with addIdentitiesObject
+removeRolodexContactsObject replaced with removeIdentitiesObject
+addRolodexContacts replaced with addIdentities
+removeRolodexContacts replaced with removeIdentities
+
+==========================================================================================
+
+HOPConversation class is used now instead of HOPConversationThread
+
+==========================================================================================
+
+HOPIdentity - renamed to HOPAccountIdentity
+
+HOPIdentityState renamed to HOPAccountIdentityState
+HOPIdentityDelegate renamed to HOPAccountIdentityDelegate
+
++ (id) loginWithDelegate:(id<HOPIdentityDelegate>) inIdentityDelegate identityProviderDomain:(NSString*) identityProviderDomain  identityURIOridentityBaseURI:(NSString*) identityURIOridentityBaseURI outerFrameURLUponReload:(NSString*) outerFrameURLUponReload;
+ is replaced with 
++ (id) loginWithDelegate:(id<HOPAccountIdentityDelegate>) inIdentityDelegate identityProviderDomain:(NSString*) identityProviderDomain  identityURIOridentityBaseURI:(NSString*) identityURIOridentityBaseURI outerFrameURLUponReload:(NSString*) outerFrameURLUponReload;
+
++ (id) loginWithDelegate:(id<HOPIdentityDelegate>) inIdentityDelegate identityProviderDomain:(NSString*) identityProviderDomain identityPreauthorizedURI:(NSString*) identityURI identityAccessToken:(NSString*) identityAccessToken identityAccessSecret:(NSString*) identityAccessSecret identityAccessSecretExpires:(NSDate*) identityAccessSecretExpires;
+ is replaced with 
++ (id) loginWithDelegate:(id<HOPAccountIdentityDelegate>) inIdentityDelegate identityProviderDomain:(NSString*) identityProviderDomain identityPreauthorizedURI:(NSString*) identityURI identityAccessToken:(NSString*) identityAccessToken identityAccessSecret:(NSString*) identityAccessSecret identityAccessSecretExpires:(NSDate*) identityAccessSecretExpires;
+
+- (void) attachDelegate:(id<HOPIdentityDelegate>) inIdentityDelegate redirectionURL:(NSString*) redirectionURL;
+is replaced with 
+- (void) attachDelegate:(id<HOPAccountIdentityDelegate>) inIdentityDelegate redirectionURL:(NSString*) redirectionURL;
+
+- (void) attachDelegateAndPreauthorizedLogin:(id<HOPIdentityDelegate>) inIdentityDelegate identityAccessToken:(NSString*) identityAccessToken identityAccessSecret:(NSString*) identityAccessSecret identityAccessSecretExpires:(NSDate*) identityAccessSecretExpires;
+ is replaced with 
+ - (void) attachDelegateAndPreauthorizedLogin:(id<HOPAccountIdentityDelegate>) inIdentityDelegate identityAccessToken:(NSString*) identityAccessToken identityAccessSecret:(NSString*) identityAccessSecret identityAccessSecretExpires:(NSDate*) identityAccessSecretExpires;
+
+- (HOPIdentityContact*) getSelfIdentityContact 
+is replaced with 
+- (HOPIdentity*) getSelfIdentity
+
+- (void) startRolodexDownload:(NSString*) lastDownloadedVersion
+is renamed to 
+- (void) startIdentitiesDownload:(NSString*) lastDownloadedVersion;
+
+- (void) startRolodexDownload:(NSString*) lastDownloadedVersion 
+is renamed to 
+- (void) startIdentitiesDownload:(NSString*) lastDownloadedVersion
+
+- (void) refreshRolodexContacts 
+is renamed to 
+- (void) refreshIdentities
+
+- (BOOL) getDownloadedRolodexContacts:(BOOL*) outFlushAllRolodexContacts outVersionDownloaded:(NSString**) outVersionDownloaded outRolodexContacts:(NSArray**) outRolodexContacts;
+ is renamed to 
+ - (BOOL) getDownloadedIdentities:(BOOL*) outFlushAllIdentities outVersionDownloaded:(NSString**) outVersionDownloaded outIdentities:(NSArray**) outIdentities;
+
+Added methods
+- (BOOL) isValid - check if HOPAccountIdentity object is valid
+
+================================================
+
+HOPModelManager
+
+Replaced methods
+- (HOPRolodexContact*) getRolodexContactByIdentityURI:(NSString*) identityURI;
+ is replaced with 
+- (HOPIdentity*) getIdentityByIdentityURI:(NSString*) identityURI;
+
+- (NSArray*) getRolodexContactsByPeerURI:(NSString*) peerURI;
+is replaced with
+- (HOPIdentity *) getIdentityByPeerURI:(NSString*) peerURI;
+
+- (NSArray*) getAllRolodexContactForHomeUserIdentityURI:(NSString*) homeUserIdentityURI
+is replaced with
+ (NSArray*) getAllIdentitiesForHomeUserIdentityURI:(NSString*) homeUserIdentityURI;
+
+- (NSArray*) getRolodexContactsForHomeUserIdentityURI:(NSString*) homeUserIdentityURI openPeerContacts:(BOOL) openPeerContacts;
+is replaced with 
+- (NSArray*) getIdentitiesForAccountIdentityURI:(NSString*) homeUserIdentityURI openPeerContacts:(BOOL) openPeerContacts;
+
+- (HOPOpenPeerAccount*) getLastLoggedInUser;
+is replaced with
+- (HOPOpenPeerAccount*) getLoggedInAccount;
+
+- (void) deleteAllMarkedRolodexContactsForHomeUserIdentityURI:(NSString*) homeUserIdentityURI;
+is replaced with
+- (void) deleteAllMarkedIdentitiesForHomeUserIdentityURI:(NSString*) homeUserIdentityURI;
+
+- (NSArray*) getAllRolodexContactsMarkedForDeletionForHomeUserIdentityURI:(NSString*) homeUserIdentityURI;
+is replaced with
+- (NSArray*) getAllIdentitiesMarkedForDeletionForHomeUserIdentityURI:(NSString*) homeUserIdentityURI;
+
+- (NSArray*) getRolodexContactsForRefreshByHomeUserIdentityURI:(NSString*) homeUserIdentityURI lastRefreshTime:(NSDate*) lastRefreshTime;
+is replaced with 
+- (NSArray*) getIdentitiesForRefreshByHomeUserIdentityURI:(NSString*) homeUserIdentityURI lastRefreshTime:(NSDate*) lastRefreshTime;
+
+- (void) updateMessageStateForConversation:(HOPConversationRecord*) conversationRecord lastDeliveryState:(HOPConversationThreadMessageDeliveryState) messageDeliveryState;
+is replaced with
+- (void) updateMessageStateForConversation:(HOPConversation*) conversation lastDeliveryState:(HOPConversationThreadMessageDeliveryState) messageDeliveryState;
+
+Removed methods
+- (HOPPublicPeerFile*) getPublicPeerFileForPeerURI:(NSString*) peerURI;
+- (HOPAssociatedIdentity*) addAssociatedIdentityForBaseIdentityURI:(NSString*) baseIdentityURI domain:(NSString*) domain name:(NSString*) name account:(HOPOpenPeerAccount*) account selfRolodexProfileProfile:(HOPRolodexContact*) rolodexContact;
+- (HOPAssociatedIdentity*) getAssociatedIdentityByDomain:(NSString*) identityProviderDomain identityName:(NSString*) identityName homeUserIdentityURI:(NSString*) homeUserIdentityURI;
+- (HOPAvatar*) getAvatarByURL:(NSString*) url;
+- (HOPOpenPeerAccount*) getAccountForStableID:(NSString*) stableID
+- (NSArray*) getPushNotificationDataForPeerURI:(NSString*) peerURI;
+- (NSString*) getCookieWithPath:(NSString*) path;
+- (void) setCookie:(NSString*) data withPath:(NSString*) path expires:(NSDate*) expires;
+- (void) removeExpiredCookies;
+- (void) removeCookieForPath:(NSString*) path;
+- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date conversationThreadID:(NSString*) conversationThreadID openPeerContact:(HOPOpenPeerContact*) openPeerContact messageId:(NSString*)messageId conversationEvent:(HOPConversationEvent*) conversationEvent;
+- (HOPMessageRecord*) addMessage:(NSString*) messageText type:(NSString*) type date:(NSDate*) date  visible:(BOOL) visible  conversationThreadID:(NSString*) conversationThreadID openPeerContact:(HOPOpenPeerContact*) openPeerContact messageId:(NSString*)messageId conversationEvent:(HOPConversationEvent*) conversationEvent;
+- (NSString*) getPeerURIForHomeUser;
+- (HOPConversationRecord*) getConversationRecordForConversationThread:(HOPConversationThread*) conversationThread;
+- (HOPConversationThreadRecord*) getConversationThreadRecordForThreadID:(NSString*) threadID;
+- (NSArray*) getConversationRecordsForThreadID:(NSString*) threadID;
+- (NSFetchRequest*) getMessagesFetchRequestForConversationID:(NSString*) conversationID sortAscending:(BOOL) ascending;
+- (HOPOpenPeerContact*) getOpenPeerContactForPeerURI:(NSString*) peerURI;
+- (HOPOpenPeerContact*) getOpenPeerContactForStableID:(NSString*) stableID;
+- (HOPOpenPeerContact*) getOpenPeerContactForIdentityURI:(NSString*) identityURI;
+- (NSArray *) getOpenPeerContactsByPeerURIs:(NSArray*) peerURIs;
+- (HOPParticipants*) getParticiapantsForListOfContacts:(NSArray*) contacts;
+- (NSFetchRequest*) getMessagesFetchRequestForParticipants:(HOPParticipants*) participants sortAscending:(BOOL) ascending;
+- (HOPOpenPeerContact*) getOpenPeerContactForAccount;
+- (HOPPublicPeerFile*) createPublicPeerFileForPeerURI:(NSString*) peerURI peerFile:(NSString*) peerFile;
+
+Added methods
+- (HOPContact *) getContactByPeerURI:(NSString*) peerURI;
+- (NSArray*) getIdentitiesByPeerURI:(NSString*) peerURI;
+- (HOPConversationRecord*) getConversationRecordForParticipants:(NSArray*) participants;
+- (NSFetchRequest*) getMessagesFetchRequestForConversation:(HOPConversation*) conversation sortAscending:(BOOL) ascending;
+
+==========================================================================================
+==========================================================================================
+==========================================================================================
+==========================================================================================
+==========================================================================================
+
+
 Changes in OpenPeedSDK 1.1
 
 New framework brings a group chat feature, but also it introduces changes in API, and the way how it is used in the application. Changes are made so Android and iOS frameworks get more similar one to another. 

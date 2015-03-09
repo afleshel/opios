@@ -105,6 +105,12 @@
 		87272859166CC45B0089CBB6 /* LoginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87272858166CC45B0089CBB6 /* LoginManager.m */; };
 		87282CA31AA4814800F9192B /* iPhone_tabBar_3_bkgd.png in Resources */ = {isa = PBXBuildFile; fileRef = 8761FB6F1AA476AF00B643B1 /* iPhone_tabBar_3_bkgd.png */; };
 		87282CA41AA4814800F9192B /* iPhone_tabBar_3_bkgd@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8761FB701AA476AF00B643B1 /* iPhone_tabBar_3_bkgd@2x.png */; };
+		87282DC91AADD16400F9192B /* boost.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87282DC71AADD16400F9192B /* boost.a */; };
+		87282DCA1AADD16400F9192B /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87282DC81AADD16400F9192B /* libcurl.a */; };
+		87282DCB1AADD1FF00F9192B /* boost.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87282DC71AADD16400F9192B /* boost.a */; };
+		87282DCC1AADD1FF00F9192B /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87282DC81AADD16400F9192B /* libcurl.a */; };
+		87282DCE1AADD25500F9192B /* OpenpeerDataModel.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 87282DCD1AADD25500F9192B /* OpenpeerDataModel.bundle */; };
+		87282DD01AADDB2D00F9192B /* OpenpeerDataModel.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 87282DCD1AADD25500F9192B /* OpenpeerDataModel.bundle */; };
 		872B1EBC191A1C47000E21C9 /* OfflineManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 872B1EBB191A1C47000E21C9 /* OfflineManager.m */; };
 		872B1EBD191A1C47000E21C9 /* OfflineManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 872B1EBB191A1C47000E21C9 /* OfflineManager.m */; };
 		872D7E9E1897E19A005D8335 /* QRScannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 872D7E9C1897E19A005D8335 /* QRScannerViewController.m */; };
@@ -233,12 +239,6 @@
 		876635A11A6D2BAB001A98BC /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 876635A01A6D2BAB001A98BC /* StoreKit.framework */; };
 		876635A31A6D2C49001A98BC /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 876635A21A6D2C49001A98BC /* Social.framework */; };
 		876635A51A6D2C98001A98BC /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 876635A41A6D2C98001A98BC /* Accounts.framework */; };
-		8766E8C21A07F6D1007384C5 /* boost.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8766E8C01A07F6D1007384C5 /* boost.a */; };
-		8766E8C31A07F6D1007384C5 /* boost.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8766E8C01A07F6D1007384C5 /* boost.a */; };
-		8766E8C41A07F6D1007384C5 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8766E8C11A07F6D1007384C5 /* libcurl.a */; };
-		8766E8C51A07F6D1007384C5 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8766E8C11A07F6D1007384C5 /* libcurl.a */; };
-		8766E8C71A07F6ED007384C5 /* OpenpeerDataModel.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8766E8C61A07F6ED007384C5 /* OpenpeerDataModel.bundle */; };
-		8766E8C81A07F6ED007384C5 /* OpenpeerDataModel.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8766E8C61A07F6ED007384C5 /* OpenpeerDataModel.bundle */; };
 		876CBCBB16F20A88004D542B /* IdentityDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 876CBCBA16F20A88004D542B /* IdentityDelegate.m */; };
 		876CD4C918A38B370069C296 /* CustomerSpecific.plist in Resources */ = {isa = PBXBuildFile; fileRef = 876CD4C818A38B370069C296 /* CustomerSpecific.plist */; };
 		876CD4CA18A3BAFA0069C296 /* DefaultSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 877038E518A24774000B7AA1 /* DefaultSettings.plist */; };
@@ -726,6 +726,9 @@
 		8727284F166CC1810089CBB6 /* MainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainViewController.xib; sourceTree = "<group>"; };
 		87272857166CC45A0089CBB6 /* LoginManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginManager.h; sourceTree = "<group>"; };
 		87272858166CC45B0089CBB6 /* LoginManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginManager.m; sourceTree = "<group>"; };
+		87282DC71AADD16400F9192B /* boost.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = boost.a; path = ../../OpenPeerSDK.framework/Versions/E/Libraries/boost.a; sourceTree = SOURCE_ROOT; };
+		87282DC81AADD16400F9192B /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = ../../OpenPeerSDK.framework/Versions/E/Libraries/libcurl.a; sourceTree = "<group>"; };
+		87282DCD1AADD25500F9192B /* OpenpeerDataModel.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = OpenpeerDataModel.bundle; path = ../../../OpenPeerSDK.framework/Versions/E/Resources/OpenpeerDataModel.bundle; sourceTree = "<group>"; };
 		872B1EB01918F7AD000E21C9 /* OpenPeerSampleApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = OpenPeerSampleApp.entitlements; sourceTree = "<group>"; };
 		872B1EBA191A1C47000E21C9 /* OfflineManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OfflineManager.h; sourceTree = "<group>"; };
 		872B1EBB191A1C47000E21C9 /* OfflineManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OfflineManager.m; sourceTree = "<group>"; };
@@ -873,9 +876,6 @@
 		876635A01A6D2BAB001A98BC /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		876635A21A6D2C49001A98BC /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		876635A41A6D2C98001A98BC /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
-		8766E8C01A07F6D1007384C5 /* boost.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = boost.a; path = ../../OpenPeerSDK.framework/Versions/D/Libraries/boost.a; sourceTree = SOURCE_ROOT; };
-		8766E8C11A07F6D1007384C5 /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = ../../OpenPeerSDK.framework/Versions/D/Libraries/libcurl.a; sourceTree = SOURCE_ROOT; };
-		8766E8C61A07F6ED007384C5 /* OpenpeerDataModel.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = OpenpeerDataModel.bundle; path = ../../OpenPeerSDK.framework/Versions/D/Resources/OpenpeerDataModel.bundle; sourceTree = SOURCE_ROOT; };
 		876CBCB916F20A88004D542B /* IdentityDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdentityDelegate.h; sourceTree = "<group>"; };
 		876CBCBA16F20A88004D542B /* IdentityDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdentityDelegate.m; sourceTree = "<group>"; };
 		876CD4C818A38B370069C296 /* CustomerSpecific.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CustomerSpecific.plist; sourceTree = "<group>"; };
@@ -1161,7 +1161,7 @@
 				0012C552177D11DB0017FF5E /* libz.dylib in Frameworks */,
 				87FF9862170EDAF10017C627 /* libxml2.dylib in Frameworks */,
 				87EE5FE9166E917B002C5FA3 /* libresolv.dylib in Frameworks */,
-				8766E8C41A07F6D1007384C5 /* libcurl.a in Frameworks */,
+				87282DCA1AADD16400F9192B /* libcurl.a in Frameworks */,
 				87A1F58519A26C130054A6B8 /* OpenPeerSDK.framework in Frameworks */,
 				87E0FFB417BB8ADD00F30484 /* AddressBook.framework in Frameworks */,
 				87FF988E170EDB5D0017C627 /* AssetsLibrary.framework in Frameworks */,
@@ -1178,7 +1178,7 @@
 				8727282F166CBF9B0089CBB6 /* Foundation.framework in Frameworks */,
 				87FF9890170EDB6D0017C627 /* MobileCoreServices.framework in Frameworks */,
 				87448B0517905FFC00E374EE /* QuartzCore.framework in Frameworks */,
-				8766E8C21A07F6D1007384C5 /* boost.a in Frameworks */,
+				87282DC91AADD16400F9192B /* boost.a in Frameworks */,
 				0024393C178F55BF00B79368 /* Security.framework in Frameworks */,
 				8727282D166CBF9B0089CBB6 /* UIKit.framework in Frameworks */,
 			);
@@ -1196,7 +1196,6 @@
 				87D4BDFC18683B65008C2D30 /* CoreLocation.framework in Frameworks */,
 				87D4BDFA18683B59008C2D30 /* CoreTelephony.framework in Frameworks */,
 				87D4BDF818683B4C008C2D30 /* libsqlite3.dylib in Frameworks */,
-				8766E8C51A07F6D1007384C5 /* libcurl.a in Frameworks */,
 				87D4BDF618683B39008C2D30 /* SystemConfiguration.framework in Frameworks */,
 				8780DB9D19E7F72D00AB196C /* libUAirship-5.0.2.a in Frameworks */,
 				87D4BDF418683B16008C2D30 /* CFNetwork.framework in Frameworks */,
@@ -1211,6 +1210,8 @@
 				87D4BD1F18675368008C2D30 /* CoreData.framework in Frameworks */,
 				87D4BD2018675368008C2D30 /* CoreGraphics.framework in Frameworks */,
 				87D4BD2118675368008C2D30 /* CoreImage.framework in Frameworks */,
+				87282DCB1AADD1FF00F9192B /* boost.a in Frameworks */,
+				87282DCC1AADD1FF00F9192B /* libcurl.a in Frameworks */,
 				8766359C1A6D2A82001A98BC /* Bolts.framework in Frameworks */,
 				8766359D1A6D2A82001A98BC /* ParseCrashReporting.framework in Frameworks */,
 				8766359F1A6D2A82001A98BC /* ParseUI.framework in Frameworks */,
@@ -1224,7 +1225,6 @@
 				87D4BD2818675368008C2D30 /* QuartzCore.framework in Frameworks */,
 				87D4BD2918675368008C2D30 /* Security.framework in Frameworks */,
 				87D4BD2A18675368008C2D30 /* UIKit.framework in Frameworks */,
-				8766E8C31A07F6D1007384C5 /* boost.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1524,38 +1524,38 @@
 			isa = PBXGroup;
 			children = (
 				876635A41A6D2C98001A98BC /* Accounts.framework */,
-				876635A21A6D2C49001A98BC /* Social.framework */,
-				876635A01A6D2BAB001A98BC /* StoreKit.framework */,
-				876635901A6D0BE6001A98BC /* parse-library */,
-				8766E8C01A07F6D1007384C5 /* boost.a */,
-				8766E8C11A07F6D1007384C5 /* libcurl.a */,
-				87A1F58419A26C130054A6B8 /* OpenPeerSDK.framework */,
-				874B135B1935F96800993F8D /* AudioToolbox.framework */,
-				8770C34218BB7ABB006F28F0 /* libstdc++.6.0.9.dylib */,
-				8774AC4A1897E2F2006B91FA /* ImageIO.framework */,
-				87D4BDFB18683B65008C2D30 /* CoreLocation.framework */,
-				87D4BDF918683B59008C2D30 /* CoreTelephony.framework */,
-				87D4BDF718683B4C008C2D30 /* libsqlite3.dylib */,
-				87D4BDF518683B38008C2D30 /* SystemConfiguration.framework */,
-				87D4BDF318683B16008C2D30 /* CFNetwork.framework */,
-				87005A091851C82C00B6B826 /* libsystem_pthread.dylib */,
-				0012C551177D11DB0017FF5E /* libz.dylib */,
-				87FF9861170EDAF00017C627 /* libxml2.dylib */,
-				87EE5FE8166E917B002C5FA3 /* libresolv.dylib */,
 				87E0FFB317BB8ADD00F30484 /* AddressBook.framework */,
 				87FF988D170EDB5C0017C627 /* AssetsLibrary.framework */,
+				874B135B1935F96800993F8D /* AudioToolbox.framework */,
 				874ADDB8166E13970095FE33 /* AVFoundation.framework */,
+				87282DC71AADD16400F9192B /* boost.a */,
+				87D4BDF318683B16008C2D30 /* CFNetwork.framework */,
 				874ADDB4166E138A0095FE33 /* CoreAudio.framework */,
 				871BC9A6179EECC400AEA4A6 /* CoreData.framework */,
 				87272830166CBF9B0089CBB6 /* CoreGraphics.framework */,
+				87FF9891170EDB7D0017C627 /* CoreImage.framework */,
+				87D4BDFB18683B65008C2D30 /* CoreLocation.framework */,
 				874ADDBC166E14440095FE33 /* CoreMedia.framework */,
+				87D4BDF918683B59008C2D30 /* CoreTelephony.framework */,
 				8757E1CD1827ED5600D7BDA1 /* CoreText.framework */,
 				874ADDB6166E13910095FE33 /* CoreVideo.framework */,
-				87FF9891170EDB7D0017C627 /* CoreImage.framework */,
 				8727282E166CBF9B0089CBB6 /* Foundation.framework */,
+				8774AC4A1897E2F2006B91FA /* ImageIO.framework */,
+				87282DC81AADD16400F9192B /* libcurl.a */,
+				87EE5FE8166E917B002C5FA3 /* libresolv.dylib */,
+				87D4BDF718683B4C008C2D30 /* libsqlite3.dylib */,
+				8770C34218BB7ABB006F28F0 /* libstdc++.6.0.9.dylib */,
+				87005A091851C82C00B6B826 /* libsystem_pthread.dylib */,
+				87FF9861170EDAF00017C627 /* libxml2.dylib */,
+				0012C551177D11DB0017FF5E /* libz.dylib */,
 				87FF988F170EDB6C0017C627 /* MobileCoreServices.framework */,
+				87A1F58419A26C130054A6B8 /* OpenPeerSDK.framework */,
+				876635901A6D0BE6001A98BC /* parse-library */,
 				87448B0417905FFC00E374EE /* QuartzCore.framework */,
 				0024393B178F55BF00B79368 /* Security.framework */,
+				876635A21A6D2C49001A98BC /* Social.framework */,
+				876635A01A6D2BAB001A98BC /* StoreKit.framework */,
+				87D4BDF518683B38008C2D30 /* SystemConfiguration.framework */,
 				8727282C166CBF9B0089CBB6 /* UIKit.framework */,
 			);
 			name = Frameworks;
@@ -1590,7 +1590,7 @@
 				8713363517CCBD6F008C91F7 /* Images */,
 				87272835166CBF9B0089CBB6 /* InfoPlist.strings */,
 				87272838166CBF9B0089CBB6 /* main.m */,
-				8766E8C61A07F6ED007384C5 /* OpenpeerDataModel.bundle */,
+				87282DCD1AADD25500F9192B /* OpenpeerDataModel.bundle */,
 				878E880B19105076000DAA8A /* OpenPeerSampleAPNSApp-Info.plist */,
 				87272834166CBF9B0089CBB6 /* OpenPeerSampleApp-Info.plist */,
 				8727283A166CBF9B0089CBB6 /* OpenPeerSampleApp-Prefix.pch */,
@@ -2317,6 +2317,7 @@
 				8712BE7B17D8CC7C00665F42 /* iPhone_tabBar_contacts_inactive@2x.png in Resources */,
 				87E4DA14180D5082002CA2D4 /* ringing.caf in Resources */,
 				87E0354E19AF4ABC008A195C /* message_indicator_call_ended.png in Resources */,
+				87282DCE1AADD25500F9192B /* OpenpeerDataModel.bundle in Resources */,
 				87E4D9A1180BE07F002CA2D4 /* ApplicationLogo120.png in Resources */,
 				876CD4C918A38B370069C296 /* CustomerSpecific.plist in Resources */,
 				8758C5F11978454800CB8099 /* iPhone_tabBar_favorites_active@2x.png in Resources */,
@@ -2366,7 +2367,6 @@
 				8730D7D11833A63D008D1D37 /* iPhone_loader_00019.png in Resources */,
 				87224759182D165A0027DA50 /* audio-call-mic-active@2x.png in Resources */,
 				8780DB7919E7F25C00AB196C /* UAInboxMessageListCell.xib in Resources */,
-				8766E8C71A07F6ED007384C5 /* OpenpeerDataModel.bundle in Resources */,
 				8730D7C81833A63D008D1D37 /* iPhone_loader_00014@2x.png in Resources */,
 				8780DB8919E7F25C00AB196C /* UAPushUI.strings in Resources */,
 				8754280918C7A2FD007F626F /* CustomerSpecific_Release.plist in Resources */,
@@ -2391,10 +2391,10 @@
 			files = (
 				875A2BC91A727D4100AAEE5E /* push_incoming_call.wav in Resources */,
 				87D4BD2C18675368008C2D30 /* iPhone_loader_00015.png in Resources */,
+				87282DD01AADDB2D00F9192B /* OpenpeerDataModel.bundle in Resources */,
 				87D4BD2D18675368008C2D30 /* iPhone_loader_00007@2x.png in Resources */,
 				8723871119465A57002643D6 /* ActiveSessionTableViewCell.xib in Resources */,
 				87D4BD2E18675368008C2D30 /* VideoCallViewController.xib in Resources */,
-				8766E8C81A07F6ED007384C5 /* OpenpeerDataModel.bundle in Resources */,
 				8781C575196C86740030E113 /* table_cell_background@2x.png in Resources */,
 				87D4BD2F18675368008C2D30 /* InfoPlist.strings in Resources */,
 				87D4BD3018675368008C2D30 /* IncomingCallView_iPhone.xib in Resources */,
