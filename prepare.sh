@@ -1,8 +1,5 @@
 #!/bin/bash
 
-: ${CURL_SCRIPT_PATH:=./libs/op/libs/ortc-lib/libs/curl-build-scripts}
-: ${SQLITE_SCRIPT_PATH:=./libs/op/libs/sqlite}
-: ${EASYSQLITE_SCRIPT_PATH:=./libs/op/libs/easysqlite}
 : ${TEMPLATES_PATH:=./templates}
 : ${DESTINATION_PATH:=./Samples/OpenPeerSampleApp/OpenPeerSampleApp}
 
@@ -90,60 +87,6 @@ sdkpath() {
     echo Found SDK in location "${root}/SDKs/${platform}${value}.sdk"
 }
 
-buildcurl() {
-
-	#Runs curl build script
-	if [ -f "$CURL_SCRIPT_PATH/build_curl" ]; then
-		pushd $CURL_SCRIPT_PATH
-			echo Building curl ...
-			chmod a+x build_curl
-			./build_curl --sdk-version ${SDK} --libcurl-version 7.38.0 --log info
-			status=$?
-			if [ $status != 0 ]; then
-				echo $status
-				echo "Curl build failed!"
-				exit 1
-			else
-				if [ ! -f "curl/curl" ]; then
-					ln -s ios-appstore/include curl/curl
-					ln -s ios-appstore/lib curl/lib
-				fi
-				echo "Curl build succeeded!"
-			fi
-		popd
-	else
-		echo ERROR. Curl build failed. No such a file or directory.
-	fi
-
-}
-
-buildsqlite() {
-	if [ -f "$SQLITE_SCRIPT_PATH/sqlite.sh" ]; then
-		pushd $SQLITE_SCRIPT_PATH
-			echo Building sqlite ...
-			chmod a+x sqlite.sh
-			sh sqlite.sh
-			status=$?
-			if [ $status != 0 ]; then
-				echo $status
-				echo "Sqlite build failed!"
-				exit 1
-			else
-				echo "Sqlite build succeeded!"
-			fi
-		popd
-	fi
-	if [ -f "$SQLITE_SCRIPT_PATH/build/sqlite3.c" ]; then
-		if [ ! -f "$EASYSQLITE_SCRIPT_PATH/build/sqlite3.c" ]; then
-			if [ ! -d "$EASYSQLITE_SCRIPT_PATH/sqlite" ]; then
-				mkdir "$EASYSQLITE_SCRIPT_PATH/sqlite"
-			fi
-			cp "$SQLITE_SCRIPT_PATH/build/sqlite3.c" "$EASYSQLITE_SCRIPT_PATH/sqlite/sqlite3.c"
-			cp "$SQLITE_SCRIPT_PATH/build/sqlite3.h" "$EASYSQLITE_SCRIPT_PATH/sqlite/sqlite3.h"
-		fi
-	fi
-}
-
 customertemplates() {
 	#Checks if common settings file already exists in the destination folder. If doesn't exist, copies the template cource in the destiantion folder, renames it and update name of the imported header.
 	if [ ! -f "$DESTINATION_PATH/$CUSTOMER_SPECIFIC" ]; then
@@ -179,6 +122,4 @@ customertemplates() {
 }
 
 sdkpath iPhoneOS
-buildcurl
-buildsqlite
 customertemplates

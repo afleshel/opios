@@ -24,15 +24,16 @@
 
 /* Begin PBXBuildFile section */
 		0024393A178F52D300B79368 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00243939178F52D300B79368 /* Security.framework */; };
-		004A55C41839DAF200AEF378 /* libortclib_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 004A55C11839DA9E00AEF378 /* libortclib_ios.a */; };
-		00CF4C5E1A15C79E00573A34 /* libidnkit_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00CF4C5B1A15C78900573A34 /* libidnkit_ios.a */; };
-		00CF4DE21A15D36300573A34 /* libeasysqlite_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 004B22371A10798A00239AAC /* libeasysqlite_ios.a */; };
-		00EB8DC3177D15BD00FFD40F /* libcryptopp_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0012C535177D10C80017FF5E /* libcryptopp_ios.a */; };
-		00EB8DC4177D15BD00FFD40F /* libhfservices_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0012C530177D10A80017FF5E /* libhfservices_ios.a */; };
-		00EB8DC6177D15BD00FFD40F /* libudns_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0012C53A177D10F70017FF5E /* libudns_ios.a */; };
-		00EB8DC7177D15BD00FFD40F /* libzsLib_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00EB8DB1177D14DA00FFD40F /* libzsLib_ios.a */; };
-		00EB8DCF177D1C1600FFD40F /* libhfcore_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00EB8DCE177D1BE600FFD40F /* libhfcore_ios.a */; };
-		00EB8DD0177D1C1600FFD40F /* libhfstack_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00EB8DB6177D14DB00FFD40F /* libhfstack_ios.a */; };
+		00A06F0C1AAD61EE00878B94 /* libresolv.9.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 00A06F0B1AAD61EE00878B94 /* libresolv.9.dylib */; };
+		00A06F101AAD620200878B94 /* libcryptopp_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00A06EC61AAD60C900878B94 /* libcryptopp_ios.a */; };
+		00A06F111AAD620200878B94 /* libeasysqlite_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00A06ED51AAD610600878B94 /* libeasysqlite_ios.a */; };
+		00A06F121AAD620200878B94 /* libhfcore_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00A06EDF1AAD615800878B94 /* libhfcore_ios.a */; };
+		00A06F131AAD620200878B94 /* libhfservices_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00A06ECB1AAD60DC00878B94 /* libhfservices_ios.a */; };
+		00A06F141AAD620200878B94 /* libhfstack_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00A06EDA1AAD614400878B94 /* libhfstack_ios.a */; };
+		00A06F151AAD620200878B94 /* libidnkit_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00A06EC11AAD60AE00878B94 /* libidnkit_ios.a */; };
+		00A06F161AAD620200878B94 /* libortclib_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00A06ED01AAD60F200878B94 /* libortclib_ios.a */; };
+		00A06F171AAD620200878B94 /* libudns_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00A06EBC1AAD609A00878B94 /* libudns_ios.a */; };
+		00A06F181AAD620200878B94 /* libzsLib_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00A06EB71AAD608B00878B94 /* libzsLib_ios.a */; };
 		870059F81850BC6400B6B826 /* HOPCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 872DA9E7175CECB1000CCA76 /* HOPCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		87098FCA17C20739007C9093 /* OpenPeerModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8702E53B17997568003287D5 /* OpenPeerModel.xcdatamodeld */; };
 		871BC9A5179EEB4000AEA4A6 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 871BC9A4179EEB3F00AEA4A6 /* CoreData.framework */; };
@@ -209,138 +210,144 @@
 		E23390FD1934EAAF004A62FD /* libwebrtc_video_coding.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E23390D71934EAAF004A62FD /* libwebrtc_video_coding.a */; };
 		E23390FE1934EAAF004A62FD /* libwebrtc_vp8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E23390D81934EAAF004A62FD /* libwebrtc_vp8.a */; };
 		E23390FF1934EAAF004A62FD /* libyuv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E23390D91934EAAF004A62FD /* libyuv.a */; };
-		E236EC42193012DF009FC1E6 /* libwebrtc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E236EC3F1930100E009FC1E6 /* libwebrtc.a */; };
 		E236EC48193012E0009FC1E6 /* libacm2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E236EC44193012DF009FC1E6 /* libacm2.a */; };
 		E236EC49193012E0009FC1E6 /* librbe_components.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E236EC45193012DF009FC1E6 /* librbe_components.a */; };
 		E236EC4A193012E0009FC1E6 /* libyuv_neon.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E236EC46193012DF009FC1E6 /* libyuv_neon.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		0012C52F177D10A80017FF5E /* PBXContainerItemProxy */ = {
+		00A06EB11AAD607C00878B94 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 8792E9211651A0D000DEAC58 /* hfservices_ios.xcodeproj */;
+			containerPortal = E236EC291930100B009FC1E6 /* webrtc_ios.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 0095DC1516CA8802005F53D3;
-			remoteInfo = hfservices_ios;
+			remoteGlobalIDString = D9F32959024A3DE38441E273;
+			remoteInfo = webrtc;
 		};
-		0012C534177D10C80017FF5E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8792E9AA1651A12B00DEAC58 /* cryptopp_ios.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 0066863A16C9F58000259F81;
-			remoteInfo = cryptopp_ios;
-		};
-		0012C539177D10F70017FF5E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8792E8FD1651A08F00DEAC58 /* udns_ios.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 0066824F16C9DA9200259F81;
-			remoteInfo = udns_ios;
-		};
-		004A55C01839DA9E00AEF378 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 004A55BC1839DA9E00AEF378 /* ortclib_ios.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = E2260E731821628E0084E4A4;
-			remoteInfo = ortclib_ios;
-		};
-		004A55C21839DACA00AEF378 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 004A55BC1839DA9E00AEF378 /* ortclib_ios.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = E2260E721821628E0084E4A4;
-			remoteInfo = ortclib_ios;
-		};
-		004B22361A10798A00239AAC /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 004B22311A10798A00239AAC /* easysqlite_ios.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 004B220C1A10793F00239AAC;
-			remoteInfo = easysqlite;
-		};
-		00CF4C5A1A15C78900573A34 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 00CF4C551A15C78800573A34 /* idnkit_ios.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 00AA6DB11A15220000815878;
-			remoteInfo = idnkit_ios;
-		};
-		00CF4C5F1A15C7C600573A34 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 004B22311A10798A00239AAC /* easysqlite_ios.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 004B220B1A10793F00239AAC;
-			remoteInfo = easysqlite_ios;
-		};
-		00CF4C611A15C7C600573A34 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 00CF4C551A15C78800573A34 /* idnkit_ios.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 00AA6DB01A15220000815878;
-			remoteInfo = idnkit_ios;
-		};
-		00EB8DB0177D14DA00FFD40F /* PBXContainerItemProxy */ = {
+		00A06EB61AAD608B00878B94 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8792E8F41651A04800DEAC58 /* zsLib_ios.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 0066818216C9D64000259F81;
 			remoteInfo = zsLib_ios;
 		};
-		00EB8DB5177D14DB00FFD40F /* PBXContainerItemProxy */ = {
+		00A06EBB1AAD609A00878B94 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8792E8FD1651A08F00DEAC58 /* udns_ios.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0066824F16C9DA9200259F81;
+			remoteInfo = udns_ios;
+		};
+		00A06EC01AAD60AE00878B94 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 00CF4C551A15C78800573A34 /* idnkit_ios.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 00AA6DB11A15220000815878;
+			remoteInfo = idnkit_ios;
+		};
+		00A06EC51AAD60C900878B94 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8792E9AA1651A12B00DEAC58 /* cryptopp_ios.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0066863A16C9F58000259F81;
+			remoteInfo = cryptopp_ios;
+		};
+		00A06ECA1AAD60DC00878B94 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8792E9211651A0D000DEAC58 /* hfservices_ios.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0095DC1516CA8802005F53D3;
+			remoteInfo = hfservices_ios;
+		};
+		00A06ECF1AAD60F200878B94 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 004A55BC1839DA9E00AEF378 /* ortclib_ios.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E2260E731821628E0084E4A4;
+			remoteInfo = ortclib_ios;
+		};
+		00A06ED41AAD610600878B94 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 004B22311A10798A00239AAC /* easysqlite_ios.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 004B220C1A10793F00239AAC;
+			remoteInfo = easysqlite_ios;
+		};
+		00A06ED91AAD614400878B94 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8792E9091651A0A600DEAC58 /* hfstack_ios.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 0063B94916CA91F000E6DB4D;
 			remoteInfo = hfstack_ios;
 		};
-		00EB8DB7177D158100FFD40F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8792E9211651A0D000DEAC58 /* hfservices_ios.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 0095DC1416CA8802005F53D3;
-			remoteInfo = hfservices_ios;
-		};
-		00EB8DBD177D158100FFD40F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8792E8FD1651A08F00DEAC58 /* udns_ios.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 0066824E16C9DA9200259F81;
-			remoteInfo = udns_ios;
-		};
-		00EB8DBF177D158100FFD40F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8792E9AA1651A12B00DEAC58 /* cryptopp_ios.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 0066863916C9F58000259F81;
-			remoteInfo = cryptopp_ios;
-		};
-		00EB8DC1177D158100FFD40F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8792E8F41651A04800DEAC58 /* zsLib_ios.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 0066818116C9D64000259F81;
-			remoteInfo = zsLib_ios;
-		};
-		00EB8DCD177D1BE600FFD40F /* PBXContainerItemProxy */ = {
+		00A06EDE1AAD615800878B94 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8792E9151651A0BB00DEAC58 /* hfcore_ios.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 0063BF4216CA9B2F00E6DB4D;
 			remoteInfo = hfcore_ios;
 		};
-		00EB8DD1177D1C2400FFD40F /* PBXContainerItemProxy */ = {
+		00A06EE01AAD619000878B94 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8792E9151651A0BB00DEAC58 /* hfcore_ios.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 0063BF4116CA9B2F00E6DB4D;
 			remoteInfo = hfcore_ios;
 		};
-		00EB8DD3177D1C2400FFD40F /* PBXContainerItemProxy */ = {
+		00A06EE21AAD619000878B94 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8792E9091651A0A600DEAC58 /* hfstack_ios.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 0063B94816CA91F000E6DB4D;
 			remoteInfo = hfstack_ios;
+		};
+		00A06EE41AAD619000878B94 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 004B22311A10798A00239AAC /* easysqlite_ios.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 004B220B1A10793F00239AAC;
+			remoteInfo = easysqlite_ios;
+		};
+		00A06EE61AAD619000878B94 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 004A55BC1839DA9E00AEF378 /* ortclib_ios.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = E2260E721821628E0084E4A4;
+			remoteInfo = ortclib_ios;
+		};
+		00A06EE81AAD619000878B94 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8792E9211651A0D000DEAC58 /* hfservices_ios.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 0095DC1416CA8802005F53D3;
+			remoteInfo = hfservices_ios;
+		};
+		00A06EEA1AAD619000878B94 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8792E9AA1651A12B00DEAC58 /* cryptopp_ios.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 0066863916C9F58000259F81;
+			remoteInfo = cryptopp_ios;
+		};
+		00A06EEC1AAD619000878B94 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 00CF4C551A15C78800573A34 /* idnkit_ios.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 00AA6DB01A15220000815878;
+			remoteInfo = idnkit_ios;
+		};
+		00A06EEE1AAD619000878B94 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8792E8FD1651A08F00DEAC58 /* udns_ios.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 0066824E16C9DA9200259F81;
+			remoteInfo = udns_ios;
+		};
+		00A06EF01AAD619000878B94 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8792E8F41651A04800DEAC58 /* zsLib_ios.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 0066818116C9D64000259F81;
+			remoteInfo = zsLib_ios;
 		};
 		87C16C3E1979A9B00054A29C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -363,28 +370,15 @@
 			remoteGlobalIDString = 87C981F817BE37CE002B947B;
 			remoteInfo = OpenPeerDataModel;
 		};
-		E236EC3E1930100E009FC1E6 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E236EC291930100B009FC1E6 /* webrtc_ios.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D9F32959024A3DE38441E273;
-			remoteInfo = webrtc;
-		};
-		E236EC401930106F009FC1E6 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E236EC291930100B009FC1E6 /* webrtc_ios.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 307C243DFDDBFD9EF8440480;
-			remoteInfo = All;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		00243939178F52D300B79368 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		004A55BC1839DA9E00AEF378 /* ortclib_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ortclib_ios.xcodeproj; path = "libs/op/libs/ortc-lib/projects/xcode/ortclib_ios/ortclib_ios.xcodeproj"; sourceTree = SOURCE_ROOT; };
-		004B22311A10798A00239AAC /* easysqlite_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = easysqlite_ios.xcodeproj; path = libs/op/libs/easysqlite/projects/xcode/easysqlite_ios.xcodeproj; sourceTree = SOURCE_ROOT; };
-		009A268519EDC50E00F277DB /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = "libs/op/libs/ortc-lib/libs/curl-build-scripts/curl/lib/libcurl.a"; sourceTree = "<group>"; };
-		00CF4C551A15C78800573A34 /* idnkit_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = idnkit_ios.xcodeproj; path = "libs/op/libs/ortc-lib/libs/idnkit/projects/xcode/idnkit_ios.xcodeproj"; sourceTree = SOURCE_ROOT; };
+		004A55BC1839DA9E00AEF378 /* ortclib_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ortclib_ios.xcodeproj; path = "../libs/ortc-lib/projects/xcode/ortclib_ios/ortclib_ios.xcodeproj"; sourceTree = SOURCE_ROOT; };
+		004B22311A10798A00239AAC /* easysqlite_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = easysqlite_ios.xcodeproj; path = ../libs/easysqlite/projects/xcode/easysqlite_ios.xcodeproj; sourceTree = SOURCE_ROOT; };
+		009A268519EDC50E00F277DB /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = "../libs/curl/curl/ios-appstore/lib/libcurl.a"; sourceTree = "<group>"; };
+		00A06F0B1AAD61EE00878B94 /* libresolv.9.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libresolv.9.dylib; path = usr/lib/libresolv.9.dylib; sourceTree = SDKROOT; };
+		00CF4C551A15C78800573A34 /* idnkit_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = idnkit_ios.xcodeproj; path = ../libs/idnkit/projects/xcode/idnkit_ios.xcodeproj; sourceTree = SOURCE_ROOT; };
 		8702E53C17997568003287D5 /* OpenPeerModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = OpenPeerModel.xcdatamodel; sourceTree = "<group>"; };
 		871BC9A4179EEB3F00AEA4A6 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		871BC9C317A1233500AEA4A6 /* HOPIdentityContact_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HOPIdentityContact_Internal.h; sourceTree = "<group>"; };
@@ -421,12 +415,12 @@
 		8792E86816519CFF00DEAC58 /* libOpenPeerSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libOpenPeerSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8792E86B16519CFF00DEAC58 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		8792E86F16519CFF00DEAC58 /* openpeer-ios-sdk-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "openpeer-ios-sdk-Prefix.pch"; sourceTree = "<group>"; };
-		8792E8F41651A04800DEAC58 /* zsLib_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = zsLib_ios.xcodeproj; path = "libs/op/libs/ortc-lib/libs/zsLib/projects/xcode/zsLib_ios/zsLib_ios.xcodeproj"; sourceTree = SOURCE_ROOT; };
-		8792E8FD1651A08F00DEAC58 /* udns_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = udns_ios.xcodeproj; path = "libs/op/libs/ortc-lib/libs/udns/projects/xcode/udns_ios/udns_ios.xcodeproj"; sourceTree = SOURCE_ROOT; };
-		8792E9091651A0A600DEAC58 /* hfstack_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = hfstack_ios.xcodeproj; path = "libs/op/libs/op-stack-cpp/projects/xcode/hfstack_ios/hfstack_ios.xcodeproj"; sourceTree = SOURCE_ROOT; };
-		8792E9151651A0BB00DEAC58 /* hfcore_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = hfcore_ios.xcodeproj; path = "libs/op/libs/op-core-cpp/projects/xcode/hfcore_ios/hfcore_ios.xcodeproj"; sourceTree = SOURCE_ROOT; };
-		8792E9211651A0D000DEAC58 /* hfservices_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = hfservices_ios.xcodeproj; path = "libs/op/libs/ortc-lib/libs/op-services-cpp/projects/xcode/hfservices_ios/hfservices_ios.xcodeproj"; sourceTree = SOURCE_ROOT; };
-		8792E9AA1651A12B00DEAC58 /* cryptopp_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cryptopp_ios.xcodeproj; path = "libs/op/libs/ortc-lib/libs/cryptopp/projects/xcode/cryptopp_ios/cryptopp_ios.xcodeproj"; sourceTree = SOURCE_ROOT; };
+		8792E8F41651A04800DEAC58 /* zsLib_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = zsLib_ios.xcodeproj; path = ../libs/zsLib/projects/xcode/zsLib_ios/zsLib_ios.xcodeproj; sourceTree = SOURCE_ROOT; };
+		8792E8FD1651A08F00DEAC58 /* udns_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = udns_ios.xcodeproj; path = ../libs/udns/projects/xcode/udns_ios/udns_ios.xcodeproj; sourceTree = SOURCE_ROOT; };
+		8792E9091651A0A600DEAC58 /* hfstack_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = hfstack_ios.xcodeproj; path = "../libs/op-stack-cpp/projects/xcode/hfstack_ios/hfstack_ios.xcodeproj"; sourceTree = SOURCE_ROOT; };
+		8792E9151651A0BB00DEAC58 /* hfcore_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = hfcore_ios.xcodeproj; path = "../libs/op-core-cpp/projects/xcode/hfcore_ios/hfcore_ios.xcodeproj"; sourceTree = SOURCE_ROOT; };
+		8792E9211651A0D000DEAC58 /* hfservices_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = hfservices_ios.xcodeproj; path = "../libs/op-services-cpp/projects/xcode/hfservices_ios/hfservices_ios.xcodeproj"; sourceTree = SOURCE_ROOT; };
+		8792E9AA1651A12B00DEAC58 /* cryptopp_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cryptopp_ios.xcodeproj; path = ../libs/cryptopp/projects/xcode/cryptopp_ios/cryptopp_ios.xcodeproj; sourceTree = SOURCE_ROOT; };
 		8792E9BE1651A43E00DEAC58 /* HOPStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HOPStack.h; sourceTree = "<group>"; };
 		8792E9CC1651B21F00DEAC58 /* HOPContact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HOPContact.h; sourceTree = "<group>"; };
 		87A5B18C16EDE5EB007E825A /* HOPAccount.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HOPAccount.mm; sourceTree = "<group>"; };
@@ -584,7 +578,7 @@
 		E23390D71934EAAF004A62FD /* libwebrtc_video_coding.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libwebrtc_video_coding.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E23390D81934EAAF004A62FD /* libwebrtc_vp8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libwebrtc_vp8.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E23390D91934EAAF004A62FD /* libyuv.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libyuv.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		E236EC291930100B009FC1E6 /* webrtc_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = webrtc_ios.xcodeproj; path = "libs/op/libs/ortc-lib/libs/webrtc/webrtc/webrtc_ios.xcodeproj"; sourceTree = SOURCE_ROOT; };
+		E236EC291930100B009FC1E6 /* webrtc_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = webrtc_ios.xcodeproj; path = ../libs/webrtc/webrtc/webrtc_ios.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E236EC44193012DF009FC1E6 /* libacm2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libacm2.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E236EC45193012DF009FC1E6 /* librbe_components.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = librbe_components.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E236EC46193012DF009FC1E6 /* libyuv_neon.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libyuv_neon.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -595,6 +589,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00A06F101AAD620200878B94 /* libcryptopp_ios.a in Frameworks */,
+				00A06F111AAD620200878B94 /* libeasysqlite_ios.a in Frameworks */,
+				00A06F121AAD620200878B94 /* libhfcore_ios.a in Frameworks */,
+				00A06F131AAD620200878B94 /* libhfservices_ios.a in Frameworks */,
+				00A06F141AAD620200878B94 /* libhfstack_ios.a in Frameworks */,
+				00A06F151AAD620200878B94 /* libidnkit_ios.a in Frameworks */,
+				00A06F161AAD620200878B94 /* libortclib_ios.a in Frameworks */,
+				00A06F171AAD620200878B94 /* libudns_ios.a in Frameworks */,
+				00A06F181AAD620200878B94 /* libzsLib_ios.a in Frameworks */,
+				00A06F0C1AAD61EE00878B94 /* libresolv.9.dylib in Frameworks */,
 				87F9A03D1A010FB2005351B1 /* libcurl.a in Frameworks */,
 				E23390DA1934EAAF004A62FD /* libaudio_coding_module.a in Frameworks */,
 				E23390DB1934EAAF004A62FD /* libaudio_conference_mixer.a in Frameworks */,
@@ -637,16 +641,6 @@
 				E236EC48193012E0009FC1E6 /* libacm2.a in Frameworks */,
 				E236EC49193012E0009FC1E6 /* librbe_components.a in Frameworks */,
 				E236EC4A193012E0009FC1E6 /* libyuv_neon.a in Frameworks */,
-				E236EC42193012DF009FC1E6 /* libwebrtc.a in Frameworks */,
-				00EB8DCF177D1C1600FFD40F /* libhfcore_ios.a in Frameworks */,
-				00EB8DD0177D1C1600FFD40F /* libhfstack_ios.a in Frameworks */,
-				00CF4DE21A15D36300573A34 /* libeasysqlite_ios.a in Frameworks */,
-				004A55C41839DAF200AEF378 /* libortclib_ios.a in Frameworks */,
-				00EB8DC4177D15BD00FFD40F /* libhfservices_ios.a in Frameworks */,
-				00EB8DC3177D15BD00FFD40F /* libcryptopp_ios.a in Frameworks */,
-				00CF4C5E1A15C79E00573A34 /* libidnkit_ios.a in Frameworks */,
-				00EB8DC6177D15BD00FFD40F /* libudns_ios.a in Frameworks */,
-				00EB8DC7177D15BD00FFD40F /* libzsLib_ios.a in Frameworks */,
 				871BC9A5179EEB4000AEA4A6 /* CoreData.framework in Frameworks */,
 				8792E86C16519CFF00DEAC58 /* Foundation.framework in Frameworks */,
 				0024393A178F52D300B79368 /* Security.framework in Frameworks */,
@@ -673,74 +667,82 @@
 			name = Libraries;
 			sourceTree = "<group>";
 		};
-		0012C52C177D10A80017FF5E /* Products */ = {
+		00A06EAC1AAD607B00878B94 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				0012C530177D10A80017FF5E /* libhfservices_ios.a */,
+				00A06EB21AAD607C00878B94 /* libwebrtc.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		0012C531177D10C80017FF5E /* Products */ = {
+		00A06EB31AAD608B00878B94 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				0012C535177D10C80017FF5E /* libcryptopp_ios.a */,
+				00A06EB71AAD608B00878B94 /* libzsLib_ios.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		0012C536177D10F70017FF5E /* Products */ = {
+		00A06EB81AAD609A00878B94 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				0012C53A177D10F70017FF5E /* libudns_ios.a */,
+				00A06EBC1AAD609A00878B94 /* libudns_ios.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		004A55BD1839DA9E00AEF378 /* Products */ = {
+		00A06EBD1AAD60AE00878B94 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				004A55C11839DA9E00AEF378 /* libortclib_ios.a */,
+				00A06EC11AAD60AE00878B94 /* libidnkit_ios.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		004B22321A10798A00239AAC /* Products */ = {
+		00A06EC21AAD60C900878B94 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				004B22371A10798A00239AAC /* libeasysqlite_ios.a */,
+				00A06EC61AAD60C900878B94 /* libcryptopp_ios.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		00CF4C561A15C78800573A34 /* Products */ = {
+		00A06EC71AAD60DB00878B94 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				00CF4C5B1A15C78900573A34 /* libidnkit_ios.a */,
+				00A06ECB1AAD60DC00878B94 /* libhfservices_ios.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		00EB8DA8177D14DA00FFD40F /* Products */ = {
+		00A06ECC1AAD60F200878B94 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				00EB8DB1177D14DA00FFD40F /* libzsLib_ios.a */,
+				00A06ED01AAD60F200878B94 /* libortclib_ios.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		00EB8DB2177D14DB00FFD40F /* Products */ = {
+		00A06ED11AAD610600878B94 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				00EB8DB6177D14DB00FFD40F /* libhfstack_ios.a */,
+				00A06ED51AAD610600878B94 /* libeasysqlite_ios.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		00EB8DCA177D1BE600FFD40F /* Products */ = {
+		00A06ED61AAD614300878B94 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				00EB8DCE177D1BE600FFD40F /* libhfcore_ios.a */,
+				00A06EDA1AAD614400878B94 /* libhfstack_ios.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		00A06EDB1AAD615800878B94 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				00A06EDF1AAD615800878B94 /* libhfcore_ios.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -832,6 +834,7 @@
 		8792E86A16519CFF00DEAC58 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				00A06F0B1AAD61EE00878B94 /* libresolv.9.dylib */,
 				E23390B41934EAA8004A62FD /* libaudio_coding_module.a */,
 				E23390B51934EAA8004A62FD /* libaudio_conference_mixer.a */,
 				E23390B61934EAA8004A62FD /* libaudio_device.a */,
@@ -1047,14 +1050,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		E236EC2A1930100B009FC1E6 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				E236EC3F1930100E009FC1E6 /* libwebrtc.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1147,17 +1142,16 @@
 			buildRules = (
 			);
 			dependencies = (
-				00EB8DD2177D1C2400FFD40F /* PBXTargetDependency */,
-				00EB8DD4177D1C2400FFD40F /* PBXTargetDependency */,
-				00CF4C601A15C7C600573A34 /* PBXTargetDependency */,
-				004A55C31839DACA00AEF378 /* PBXTargetDependency */,
-				00EB8DB8177D158100FFD40F /* PBXTargetDependency */,
-				00EB8DC0177D158100FFD40F /* PBXTargetDependency */,
-				00CF4C621A15C7C600573A34 /* PBXTargetDependency */,
-				00EB8DBE177D158100FFD40F /* PBXTargetDependency */,
-				00EB8DC2177D158100FFD40F /* PBXTargetDependency */,
+				00A06EE11AAD619000878B94 /* PBXTargetDependency */,
+				00A06EE31AAD619000878B94 /* PBXTargetDependency */,
+				00A06EE51AAD619000878B94 /* PBXTargetDependency */,
+				00A06EE71AAD619000878B94 /* PBXTargetDependency */,
+				00A06EE91AAD619000878B94 /* PBXTargetDependency */,
+				00A06EEB1AAD619000878B94 /* PBXTargetDependency */,
+				00A06EED1AAD619000878B94 /* PBXTargetDependency */,
+				00A06EEF1AAD619000878B94 /* PBXTargetDependency */,
+				00A06EF11AAD619000878B94 /* PBXTargetDependency */,
 				87C16C3F1979A9B00054A29C /* PBXTargetDependency */,
-				E236EC411930106F009FC1E6 /* PBXTargetDependency */,
 			);
 			name = OpenPeerSDK;
 			productName = "openpeer-ios-sdk";
@@ -1202,43 +1196,43 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 0012C531177D10C80017FF5E /* Products */;
+					ProductGroup = 00A06EC21AAD60C900878B94 /* Products */;
 					ProjectRef = 8792E9AA1651A12B00DEAC58 /* cryptopp_ios.xcodeproj */;
 				},
 				{
-					ProductGroup = 004B22321A10798A00239AAC /* Products */;
+					ProductGroup = 00A06ED11AAD610600878B94 /* Products */;
 					ProjectRef = 004B22311A10798A00239AAC /* easysqlite_ios.xcodeproj */;
 				},
 				{
-					ProductGroup = 00EB8DCA177D1BE600FFD40F /* Products */;
+					ProductGroup = 00A06EDB1AAD615800878B94 /* Products */;
 					ProjectRef = 8792E9151651A0BB00DEAC58 /* hfcore_ios.xcodeproj */;
 				},
 				{
-					ProductGroup = 0012C52C177D10A80017FF5E /* Products */;
+					ProductGroup = 00A06EC71AAD60DB00878B94 /* Products */;
 					ProjectRef = 8792E9211651A0D000DEAC58 /* hfservices_ios.xcodeproj */;
 				},
 				{
-					ProductGroup = 00EB8DB2177D14DB00FFD40F /* Products */;
+					ProductGroup = 00A06ED61AAD614300878B94 /* Products */;
 					ProjectRef = 8792E9091651A0A600DEAC58 /* hfstack_ios.xcodeproj */;
 				},
 				{
-					ProductGroup = 00CF4C561A15C78800573A34 /* Products */;
+					ProductGroup = 00A06EBD1AAD60AE00878B94 /* Products */;
 					ProjectRef = 00CF4C551A15C78800573A34 /* idnkit_ios.xcodeproj */;
 				},
 				{
-					ProductGroup = 004A55BD1839DA9E00AEF378 /* Products */;
+					ProductGroup = 00A06ECC1AAD60F200878B94 /* Products */;
 					ProjectRef = 004A55BC1839DA9E00AEF378 /* ortclib_ios.xcodeproj */;
 				},
 				{
-					ProductGroup = 0012C536177D10F70017FF5E /* Products */;
+					ProductGroup = 00A06EB81AAD609A00878B94 /* Products */;
 					ProjectRef = 8792E8FD1651A08F00DEAC58 /* udns_ios.xcodeproj */;
 				},
 				{
-					ProductGroup = E236EC2A1930100B009FC1E6 /* Products */;
+					ProductGroup = 00A06EAC1AAD607B00878B94 /* Products */;
 					ProjectRef = E236EC291930100B009FC1E6 /* webrtc_ios.xcodeproj */;
 				},
 				{
-					ProductGroup = 00EB8DA8177D14DA00FFD40F /* Products */;
+					ProductGroup = 00A06EB31AAD608B00878B94 /* Products */;
 					ProjectRef = 8792E8F41651A04800DEAC58 /* zsLib_ios.xcodeproj */;
 				},
 			);
@@ -1252,74 +1246,74 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		0012C530177D10A80017FF5E /* libhfservices_ios.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libhfservices_ios.a;
-			remoteRef = 0012C52F177D10A80017FF5E /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		0012C535177D10C80017FF5E /* libcryptopp_ios.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libcryptopp_ios.a;
-			remoteRef = 0012C534177D10C80017FF5E /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		0012C53A177D10F70017FF5E /* libudns_ios.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libudns_ios.a;
-			remoteRef = 0012C539177D10F70017FF5E /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		004A55C11839DA9E00AEF378 /* libortclib_ios.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libortclib_ios.a;
-			remoteRef = 004A55C01839DA9E00AEF378 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		004B22371A10798A00239AAC /* libeasysqlite_ios.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libeasysqlite_ios.a;
-			remoteRef = 004B22361A10798A00239AAC /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		00CF4C5B1A15C78900573A34 /* libidnkit_ios.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libidnkit_ios.a;
-			remoteRef = 00CF4C5A1A15C78900573A34 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		00EB8DB1177D14DA00FFD40F /* libzsLib_ios.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libzsLib_ios.a;
-			remoteRef = 00EB8DB0177D14DA00FFD40F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		00EB8DB6177D14DB00FFD40F /* libhfstack_ios.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libhfstack_ios.a;
-			remoteRef = 00EB8DB5177D14DB00FFD40F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		00EB8DCE177D1BE600FFD40F /* libhfcore_ios.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libhfcore_ios.a;
-			remoteRef = 00EB8DCD177D1BE600FFD40F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		E236EC3F1930100E009FC1E6 /* libwebrtc.a */ = {
+		00A06EB21AAD607C00878B94 /* libwebrtc.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libwebrtc.a;
-			remoteRef = E236EC3E1930100E009FC1E6 /* PBXContainerItemProxy */;
+			remoteRef = 00A06EB11AAD607C00878B94 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		00A06EB71AAD608B00878B94 /* libzsLib_ios.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libzsLib_ios.a;
+			remoteRef = 00A06EB61AAD608B00878B94 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		00A06EBC1AAD609A00878B94 /* libudns_ios.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libudns_ios.a;
+			remoteRef = 00A06EBB1AAD609A00878B94 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		00A06EC11AAD60AE00878B94 /* libidnkit_ios.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libidnkit_ios.a;
+			remoteRef = 00A06EC01AAD60AE00878B94 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		00A06EC61AAD60C900878B94 /* libcryptopp_ios.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libcryptopp_ios.a;
+			remoteRef = 00A06EC51AAD60C900878B94 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		00A06ECB1AAD60DC00878B94 /* libhfservices_ios.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libhfservices_ios.a;
+			remoteRef = 00A06ECA1AAD60DC00878B94 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		00A06ED01AAD60F200878B94 /* libortclib_ios.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libortclib_ios.a;
+			remoteRef = 00A06ECF1AAD60F200878B94 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		00A06ED51AAD610600878B94 /* libeasysqlite_ios.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libeasysqlite_ios.a;
+			remoteRef = 00A06ED41AAD610600878B94 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		00A06EDA1AAD614400878B94 /* libhfstack_ios.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libhfstack_ios.a;
+			remoteRef = 00A06ED91AAD614400878B94 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		00A06EDF1AAD615800878B94 /* libhfcore_ios.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libhfcore_ios.a;
+			remoteRef = 00A06EDE1AAD615800878B94 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -1447,50 +1441,50 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		004A55C31839DACA00AEF378 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = ortclib_ios;
-			targetProxy = 004A55C21839DACA00AEF378 /* PBXContainerItemProxy */;
-		};
-		00CF4C601A15C7C600573A34 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = easysqlite_ios;
-			targetProxy = 00CF4C5F1A15C7C600573A34 /* PBXContainerItemProxy */;
-		};
-		00CF4C621A15C7C600573A34 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = idnkit_ios;
-			targetProxy = 00CF4C611A15C7C600573A34 /* PBXContainerItemProxy */;
-		};
-		00EB8DB8177D158100FFD40F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = hfservices_ios;
-			targetProxy = 00EB8DB7177D158100FFD40F /* PBXContainerItemProxy */;
-		};
-		00EB8DBE177D158100FFD40F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = udns_ios;
-			targetProxy = 00EB8DBD177D158100FFD40F /* PBXContainerItemProxy */;
-		};
-		00EB8DC0177D158100FFD40F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = cryptopp_ios;
-			targetProxy = 00EB8DBF177D158100FFD40F /* PBXContainerItemProxy */;
-		};
-		00EB8DC2177D158100FFD40F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = zsLib_ios;
-			targetProxy = 00EB8DC1177D158100FFD40F /* PBXContainerItemProxy */;
-		};
-		00EB8DD2177D1C2400FFD40F /* PBXTargetDependency */ = {
+		00A06EE11AAD619000878B94 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = hfcore_ios;
-			targetProxy = 00EB8DD1177D1C2400FFD40F /* PBXContainerItemProxy */;
+			targetProxy = 00A06EE01AAD619000878B94 /* PBXContainerItemProxy */;
 		};
-		00EB8DD4177D1C2400FFD40F /* PBXTargetDependency */ = {
+		00A06EE31AAD619000878B94 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = hfstack_ios;
-			targetProxy = 00EB8DD3177D1C2400FFD40F /* PBXContainerItemProxy */;
+			targetProxy = 00A06EE21AAD619000878B94 /* PBXContainerItemProxy */;
+		};
+		00A06EE51AAD619000878B94 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = easysqlite_ios;
+			targetProxy = 00A06EE41AAD619000878B94 /* PBXContainerItemProxy */;
+		};
+		00A06EE71AAD619000878B94 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = ortclib_ios;
+			targetProxy = 00A06EE61AAD619000878B94 /* PBXContainerItemProxy */;
+		};
+		00A06EE91AAD619000878B94 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = hfservices_ios;
+			targetProxy = 00A06EE81AAD619000878B94 /* PBXContainerItemProxy */;
+		};
+		00A06EEB1AAD619000878B94 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = cryptopp_ios;
+			targetProxy = 00A06EEA1AAD619000878B94 /* PBXContainerItemProxy */;
+		};
+		00A06EED1AAD619000878B94 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = idnkit_ios;
+			targetProxy = 00A06EEC1AAD619000878B94 /* PBXContainerItemProxy */;
+		};
+		00A06EEF1AAD619000878B94 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = udns_ios;
+			targetProxy = 00A06EEE1AAD619000878B94 /* PBXContainerItemProxy */;
+		};
+		00A06EF11AAD619000878B94 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = zsLib_ios;
+			targetProxy = 00A06EF01AAD619000878B94 /* PBXContainerItemProxy */;
 		};
 		87C16C3F1979A9B00054A29C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1506,11 +1500,6 @@
 			isa = PBXTargetDependency;
 			target = 87C981F817BE37CE002B947B /* OpenpeerDataModel */;
 			targetProxy = 87C9820D17BE38B1002B947B /* PBXContainerItemProxy */;
-		};
-		E236EC411930106F009FC1E6 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = All;
-			targetProxy = E236EC401930106F009FC1E6 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1551,27 +1540,27 @@
 				HEADER_SEARCH_PATHS = (
 					.,
 					..,
-					"libs/op/libs/op-core-cpp",
-					"libs/op/libs/op-stack-cpp",
-					"libs/op/libs/ortc-lib",
-					"libs/op/libs/ortc-lib/libs",
-					"libs/op/libs/ortc-lib/libs/op-services-cpp",
-					"libs/op/libs/ortc-lib/libs/curl-build-scripts/curl",
-					"libs/op/libs/ortc-lib/libs/zsLib",
-					"libs/op/libs/ortc-lib/libs/webRTC/webrtc",
-					"libs/op/libs/ortc-lib/libs/webRTC/webrtc/common_video/interface/",
-					"libs/op/libs/ortc-lib/libs/webRTC/webrtc/modules/interface",
-					"libs/op/libs/ortc-lib/libs/webRTC/webrtc/modules/video_capture/main/interface",
-					"libs/op/libs/ortc-lib/libs/webRTC/webrtc/modules/video_coding/codecs/interface/",
-					"libs/op/libs/ortc-lib/libs/webRTC/webrtc/modules/video_processing/main/interface",
-					"libs/op/libs/ortc-lib/libs/webRTC/webrtc/modules/video_render/main/interface",
-					"libs/op/libs/ortc-lib/libs/webRTC/webrtc/modules/video_render/main/source/iPhone",
-					"libs/op/libs/ortc-lib/libs/webRTC/webrtc/system_wrappers/interface",
-					"libs/op/libs/ortc-lib/libs/webRTC/webrtc/video_engine/include",
-					"libs/op/libs/ortc-lib/libs/webRTC/webrtc/voice_engine/main/interface",
+					"../libs/op-core-cpp",
+					"../libs/op-stack-cpp",
+					"../libs/ortc-lib",
+					../libs,
+					"../libs/op-services-cpp",
+					../libs/curl/curl,
+					../libs/zsLib,
+					../libs/webRTC/webrtc,
+					../libs/webRTC/webrtc/common_video/interface/,
+					../libs/webRTC/webrtc/modules/interface,
+					../libs/webRTC/webrtc/modules/video_capture/main/interface,
+					../libs/webRTC/webrtc/modules/video_coding/codecs/interface/,
+					../libs/webRTC/webrtc/modules/video_processing/main/interface,
+					../libs/webRTC/webrtc/modules/video_render/main/interface,
+					../libs/webRTC/webrtc/modules/video_render/main/source/iPhone,
+					../libs/webRTC/webrtc/system_wrappers/interface,
+					../libs/webRTC/webrtc/video_engine/include,
+					../libs/webRTC/webrtc/voice_engine/main/interface,
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = "libs/op/libs/ortc-lib/libs/curl-build-scripts/curl/lib";
+				LIBRARY_SEARCH_PATHS = "../libs/curl/curl/ios-appstore/lib";
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -1597,27 +1586,27 @@
 				HEADER_SEARCH_PATHS = (
 					.,
 					..,
-					"libs/op/libs/op-core-cpp",
-					"libs/op/libs/op-stack-cpp",
-					"libs/op/libs/ortc-lib",
-					"libs/op/libs/ortc-lib/libs",
-					"libs/op/libs/ortc-lib/libs/op-services-cpp",
-					"libs/op/libs/ortc-lib/libs/curl-build-scripts/curl",
-					"libs/op/libs/ortc-lib/libs/zsLib",
-					"libs/op/libs/ortc-lib/libs/webRTC/webrtc",
-					"libs/op/libs/ortc-lib/libs/webRTC/webrtc/common_video/interface/",
-					"libs/op/libs/ortc-lib/libs/webRTC/webrtc/modules/interface",
-					"libs/op/libs/ortc-lib/libs/webRTC/webrtc/modules/video_capture/main/interface",
-					"libs/op/libs/ortc-lib/libs/webRTC/webrtc/modules/video_coding/codecs/interface/",
-					"libs/op/libs/ortc-lib/libs/webRTC/webrtc/modules/video_processing/main/interface",
-					"libs/op/libs/ortc-lib/libs/webRTC/webrtc/modules/video_render/main/interface",
-					"libs/op/libs/ortc-lib/libs/webRTC/webrtc/modules/video_render/main/source/iPhone",
-					"libs/op/libs/ortc-lib/libs/webRTC/webrtc/system_wrappers/interface",
-					"libs/op/libs/ortc-lib/libs/webRTC/webrtc/video_engine/include",
-					"libs/op/libs/ortc-lib/libs/webRTC/webrtc/voice_engine/main/interface",
+					"../libs/op-core-cpp",
+					"../libs/op-stack-cpp",
+					"../libs/ortc-lib",
+					../libs,
+					"../libs/op-services-cpp",
+					../libs/curl/curl,
+					../libs/zsLib,
+					../libs/webRTC/webrtc,
+					../libs/webRTC/webrtc/common_video/interface/,
+					../libs/webRTC/webrtc/modules/interface,
+					../libs/webRTC/webrtc/modules/video_capture/main/interface,
+					../libs/webRTC/webrtc/modules/video_coding/codecs/interface/,
+					../libs/webRTC/webrtc/modules/video_processing/main/interface,
+					../libs/webRTC/webrtc/modules/video_render/main/interface,
+					../libs/webRTC/webrtc/modules/video_render/main/source/iPhone,
+					../libs/webRTC/webrtc/system_wrappers/interface,
+					../libs/webRTC/webrtc/video_engine/include,
+					../libs/webRTC/webrtc/voice_engine/main/interface,
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = "libs/op/libs/ortc-lib/libs/curl-build-scripts/curl/lib";
+				LIBRARY_SEARCH_PATHS = "../libs/curl/curl/ios-appstore/lib";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				VALIDATE_PRODUCT = YES;
@@ -1641,10 +1630,6 @@
 					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts\"",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/libs/op/libs/ortc-lib/libs/curl-build-scripts/curl/ios-appstore/lib",
-				);
 				MACH_O_TYPE = staticlib;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CPLUSPLUSFLAGS = (
@@ -1680,10 +1665,6 @@
 					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts\"",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/libs/op/libs/ortc-lib/libs/curl-build-scripts/curl/ios-appstore/lib",
-				);
 				MACH_O_TYPE = staticlib;
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
