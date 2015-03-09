@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2012-2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -34,7 +34,7 @@
 #import <CoreData/CoreData.h>
 #import "TTTAttributedLabel.h"
 
-@class Session;
+@class HOPConversation;
 @class HOPConversationEvent;
 
 @interface ChatViewController : UIViewController <UITextViewDelegate,UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate,TTTAttributedLabelDelegate>
@@ -44,11 +44,11 @@
 @property (strong, nonatomic) IBOutlet UIView *containerView;
 @property (weak, nonatomic) id<ChatViewControllerDelegate> delegate;
 @property (weak, nonatomic) IBOutlet UIView *typingMessageView;
-- (id) initWithSession:(Session*)inSession;
+- (id) initWithConversation:(HOPConversation*)inConversation;
 - (void) refreshViewWithData;
 - (void) hideKeyboard;
 - (void) updateFetchControllerForSession:(NSString*) sessionID;
 - (void) refreshMessages;
-//- (float) getHeaderHeight:(float)tableViewHeight;
-//- (void) setFooterMessage:(NSString*) message;
+- (float) getTextFieldHeight;
+- (void) killTimers;
 @end

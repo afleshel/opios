@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2012, SMB Phone Inc.
+ Copyright (c) 2012-2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -50,14 +50,20 @@ class OpenPeerConversationThreadDelegate : public IConversationThreadDelegate
 {
 protected:
     id<HOPConversationThreadDelegate> conversationThreadDelegate;
+    id<HOPConversationDelegate> conversationDelegate;
     OpenPeerConversationThreadDelegate(id<HOPConversationThreadDelegate> inConversationThreadDelegate);
+    OpenPeerConversationThreadDelegate(id<HOPConversationDelegate> inConversationDelegate);
     HOPConversationThread* getOpenPeerConversationThread(IConversationThreadPtr conversationThread);
+    HOPConversation* getOpenPeerConversation(IConversationThreadPtr conversationThread);
 
+    BOOL checkParticipants;
 public:
     
     ~OpenPeerConversationThreadDelegate();
     
     static OpenPeerConversationThreadDelegatePtr create(id<HOPConversationThreadDelegate> inConversationThreadDelegate);
+    
+    static OpenPeerConversationThreadDelegatePtr create(id<HOPConversationDelegate> inConversationDelegate);
     
     virtual void onConversationThreadNew(IConversationThreadPtr conversationThread);
     
@@ -73,4 +79,6 @@ public:
 
     virtual void onConversationThreadContactStatusChanged(IConversationThreadPtr conversationThread,IContactPtr contact);
 
+    void addTimerForConversation(HOPConversation* conversation, NSSet* participants);
+    void callProperConversationDelegate(HOPConversation * conversation, NSString* messageID);
 };

@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2012-2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -32,13 +32,13 @@
 #import <UIKit/UIKit.h>
 
 
-@class Session;
+@class HOPConversation;
 
 @interface IncomingCallViewController : UIViewController <UIWebViewDelegate>
 
-@property (nonatomic, weak) Session* session;
+@property (nonatomic, weak) HOPConversation* conversation;
 
-- (id)initWithSession:(Session*) inSession;
+- (id)initWithConversation:(HOPConversation*) inConversation;
 
 - (IBAction)acceptCall:(id)sender;
 - (IBAction)declineCall:(id)sender;

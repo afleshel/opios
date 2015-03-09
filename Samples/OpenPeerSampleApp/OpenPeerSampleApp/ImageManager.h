@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2012-2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,7 @@
 
 @class HOPAvatar;
 @class HOPImage;
-@class HOPRolodexContact;
+@class HOPIdentity;
 
 @interface ImageManager : NSObject
 
@@ -46,5 +46,5 @@
 
 - (void) donwloadImageForAvatar:(HOPAvatar*) avatar tableView:(UITableView*) inTableView indexPath:(NSIndexPath*) inIndexPath;
 
-- (UIImage*) getAvatarImageForRolodexContact:(HOPRolodexContact*) inRolodexContact;
+- (UIImage*) getAvatarImageForIdentity:(HOPIdentity*) identity;
 @end

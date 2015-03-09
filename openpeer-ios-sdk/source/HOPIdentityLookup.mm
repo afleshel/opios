@@ -1,7 +1,7 @@
 
 /*
  
- Copyright (c) 2012, SMB Phone Inc.
+ Copyright (c) 2012-2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -37,8 +37,7 @@
 #import <openpeer/core/IHelper.h>
 #import "OpenPeerStorageManager.h"
 #import "HOPAccount_Internal.h"
-#import "HOPRolodexContact.h"
-#import "HOPIdentityContact_Internal.h"
+#import "HOPIdentity.h"
 #import "HOPModelManager.h"
 
 ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
@@ -56,13 +55,20 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
         if (self = [super init])
         {
             IIdentityLookup::IdentityLookupInfoList identityLookupInfoList;
-            for (HOPRolodexContact* contact in identityLookupInfos)
+            
+            for (HOPIdentity* contact in identityLookupInfos)
             {
-                IIdentityLookup::IdentityLookupInfo lookupInfo;
-                lookupInfo.mIdentityURI = [contact.identityURI UTF8String];
-                lookupInfo.mLastUpdated = [contact isKindOfClass:[HOPIdentityContact class]] ? zsLib::timeSinceEpoch(zsLib::Seconds(static_cast<zsLib::Seconds::rep>([[(HOPIdentityContact*)contact lastUpdated] timeIntervalSince1970]))) : Time();
-
-                identityLookupInfoList.push_back(lookupInfo);
+                if (contact.identityURI.length > 0)
+                {
+                    IIdentityLookup::IdentityLookupInfo lookupInfo;
+                    lookupInfo.mIdentityURI = [contact.identityURI UTF8String];
+                    if (contact.lastUpdated)
+                        lookupInfo.mLastUpdated =  zsLib::timeSinceEpoch(zsLib::Seconds(static_cast<zsLib::Seconds::rep>([contact.lastUpdated timeIntervalSince1970])));
+                    else
+                        lookupInfo.mLastUpdated = Time();
+                    
+                    identityLookupInfoList.push_back(lookupInfo);
+                }
             }
             [self setLocalDelegates:inDelegate];
             

@@ -30,17 +30,17 @@
  */
 
 #import "HOPAssociatedIdentity.h"
+#import "HOPIdentity.h"
 #import "HOPIdentityProvider.h"
 #import "HOPOpenPeerAccount.h"
-#import "HOPRolodexContact.h"
 
 
 @implementation HOPAssociatedIdentity
 
 @dynamic downloadedVersion;
 @dynamic account;
-@dynamic selfRolodexContact;
-@dynamic rolodexContacts;
 @dynamic identityProvider;
+@dynamic identities;
+@dynamic selfIdentity;
 
 @end

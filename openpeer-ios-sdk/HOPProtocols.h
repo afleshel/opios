@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2012, SMB Phone Inc.
+ Copyright (c) 2012-2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -189,11 +189,11 @@
 
 
 
-@class HOPIdentity;
+@class HOPAccountIdentity;
 /**
  *  SDK uses methods in this protocol to notify application about identity events.
  */
-@protocol HOPIdentityDelegate <NSObject>
+@protocol HOPAccountIdentityDelegate <NSObject>
 @required
 /**
  *  Notifies the receiver about identity object state change.
@@ -201,28 +201,28 @@
  *  @param account      Identity object whose state is changed.
  *  @param accountState A new identity object state
  */
-- (void) identity:(HOPIdentity*) identity stateChanged:(HOPIdentityState) state;
+- (void) identity:(HOPAccountIdentity*) accountIdentity stateChanged:(HOPAccountIdentityState) state;
 
 /**
  *  Notifies the receiver about core message for inner browser frame.
  *
- *  @param identity HOPIdentity object.
+ *  @param identity HOPAccountIdentity object.
  */
-- (void) onIdentityPendingMessageForInnerBrowserWindowFrame:(HOPIdentity*) identity;
+- (void) onIdentityPendingMessageForInnerBrowserWindowFrame:(HOPAccountIdentity*) accountIdentity;
 
 /**
- *  Notifies the receiver that rolodex contacts has been downloaded.
+ *  Notifies the receiver that identitues has been downloaded.
  *
- *  @param identity HOPIdentity object.
+ *  @param identity HOPAccountIdentity object.
  */
-- (void) onIdentityRolodexContactsDownloaded:(HOPIdentity*) identity;
+- (void) onIdentityContactsDownloaded:(HOPAccountIdentity*) accountIdentity;
 
 /**
- *  Notifies the receiver that rolodex contacts has been downloaded.
+ *  Notifies the receiver that identity has been downloaded.
  *
- *  @param identity New HOPIdentity object.
+ *  @param identity New HOPAccountIdentity object.
  */
-- (void) onNewIdentity:(HOPIdentity*) identity;
+- (void) onNewIdentity:(HOPAccountIdentity*) accountIdentity;
 @end
 
 @class HOPIdentityLookup;
@@ -322,5 +322,80 @@
  *  @param subscription HOPBackgroundingNotifier object
  */
 - (void) onBackgroundingApplicationWillQuit:(HOPBackgroundingSubscription*) subscription;
+
+
+@end
+
+
+@class HOPConversation;
+@class HOPMessage;
+
+
+/**
+ *  SDK uses methods in this protocol to notify application about conversation thread events.
+ */
+@protocol HOPConversationDelegate <NSObject>
+
+@required
+/**
+ *  Notifies the receiver that new conversation thread is created.
+ *
+ *  @param conversationThread Created conversation thread object.
+ */
+- (void) onConversationNew:(HOPConversation*) conversation;
+
+/**
+ *  Notifies the receiver about change in list of participants.
+ *
+ *  @param conversationThread Conversation thread object.
+ */
+- (void) onConversationContactsChanged:(HOPConversation*) conversation;
+/**
+ *  Notifies the receiver about conversation thread participant connection state.
+ *
+ *  @param conversationThread     Conversation thread object.
+ *  @param contact                Participant whose state in conversation thredad has changed.
+ *  @param contactConnectionState A new participant state
+ */
+- (void) onConversationContactConnectionStateChanged:(HOPConversation*) conversation contact:(HOPContact*) contact contactConnectionState:(HOPConversationThreadContactConnectionState) contactConnectionState;
+/**
+ *  Notifies the receiver about conversation thread participant status.
+ *
+ *  @param conversationThread     Conversation thread object.
+ *  @param contact                Participant whose status in conversation thredad has changed.
+ */
+- (void) onConversationContactStatusChanged:(HOPConversation*) conversation contact:(HOPContact*) contact;
+- (void) onConversationContactComposingStateChanged:(HOPConversation*) conversation state:(HOPComposingState)state contact:(HOPContact*) contact;
+/**
+ *  Notifies the receiver about new message for conversation.
+ *
+ *  @param conversationThread Conversation thread object.
+ *  @param messageID          A message ID. This ID will be used for retrieving message from the conversation thread.
+ */
+- (void) onConversationMessage:(HOPConversation*) conversation messageID:(NSString*) messageID;
+- (void) onConversationNewMessage:(HOPConversation*) conversation message:(HOPMessage*) message;
+- (void) onConversationCallSystemMessageReceived:(HOPConversation*) conversation jsonMessage:(NSString*) jsonMessage;
+- (void) onConversationSwitch:(HOPConversation*) conversation fromConversationId:(NSString*)fromConversationId toConversationId:(NSString*)toConversationId;
+
+
+/**
+ *  Notifies the receiver about change in message delivery state.
+ *
+ *  @param conversationThread    Conversation thread object.
+ *  @param messageID             An ID of message whose delivery state has changed.
+ *  @param messageDeliveryStates A new message delivery state.
+ */
+- (void) onConversationMessageDeliveryStateChanged:(HOPConversation*) conversation messageID:(NSString*) messageID messageDeliveryStates:(HOPConversationThreadMessageDeliveryState) messageDeliveryStates;
+/**
+ *  Notifies the receiver that message is not delivered and it is good time to send a push notification if application supports it.
+ *
+ *  @param conversationThread Conversation thread object.
+ *  @param messageID          An ID of undelivered message.
+ *  @param contact            A message recepient.
+ */
+- (void) onConversationPushMessage:(HOPConversation*) conversation messageID:(NSString*) messageID contact:(HOPContact*) contact;
+- (void) onConversationPushMessageRequired:(HOPConversation*) conversation message:(HOPMessage*) message recipient:(HOPContact*) recipient;
+
+//- (void) onConversationTopicChanged:(HOPConversation*) conversation newTopic:(NSString*) newTopic;
 
 @end

@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2012-2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -34,7 +34,7 @@
 #import "WebLoginViewController.h"
 #import "Delegates.h"
 
-@interface IdentityDelegate : NSObject<HOPIdentityDelegate>
+@interface IdentityDelegate : NSObject<HOPAccountIdentityDelegate>
 
 @property (nonatomic, weak) id<LoginEventsDelegate> loginDelegate;
 

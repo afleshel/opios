@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2012, SMB Phone Inc.
+ Copyright (c) 2012-2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -33,8 +33,8 @@
 #import "HOPTypes.h"
 
 @class HOPConversationThread;
+@class HOPConversation;
 @class HOPContact;
-@class HOPRolodexContact;
 
 
 @interface HOPCall : NSObject
@@ -49,10 +49,32 @@
 + (id) placeCall:(HOPConversationThread*) conversationThread includeAudio:(BOOL) includeAudio includeVideo:(BOOL) includeVideo;
 
 /**
+ *  Creates outgoing call.
+ *
+ *  @param conversation Conversation which will own the call
+ *  @param includeAudio YES if call should include audio
+ *  @param includeVideo YES if call should include video
+ *
+ *  @return HOPCall object
+ */
++ (id) placeCallForConversation:(HOPConversation*) conversation includeAudio:(BOOL) includeAudio includeVideo:(BOOL) includeVideo;
+
+/**
+ *  Creates outgoing call.
+ *
+ *  @param conversation Conversation which will own the call
+ *  @param participants List of callees
+ *  @param includeAudio YES if call should include audio
+ *  @param includeVideo YES if call should include video
+ *
+ *  @return HOPCall object
+ */
++ (id) placeCallForConversation:(HOPConversation*) conversation partcipants:(NSArray*) participants includeAudio:(BOOL) includeAudio includeVideo:(BOOL) includeVideo;
+/**
  *  This init method is not available. You need to use class method placeCall:toContact:includeAudio:includeVideo.
  *
  */
-- (id) init __attribute__((unavailable("Use static placeCall:toContact:includeAudio:includeVideo method to create a call object.")));
+- (id) init __attribute__((unavailable("Use static placeCallForConversation:includeAudio:includeVideo method to create a call object.")));
 
 /**
  Converts call state enum to string.
@@ -95,6 +117,13 @@
  @return Pointer to the conversation thread object
  */
 - (HOPConversationThread*) getConversationThread;
+
+/**
+ *  Returns conversation which owns the call
+ *
+ *  @return Conversation thread object
+ */
+- (HOPConversation*) getConversation;
 
 /**
  Returns caller contact.
@@ -182,4 +211,12 @@
  Destroya call core object.
  */
 - (void) destroyCoreObject;
+
+
+/**
+ *  Gives information if call is outgoing
+ *
+ *  @return YES, if call is outgoing
+ */
+- (BOOL) isOutgoing;
 @end

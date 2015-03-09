@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2012, SMB Phone Inc.
+ Copyright (c) 2012-2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -32,10 +32,12 @@
 
 #import "OpenPeerStorageManager.h"
 #import "HOPCall.h"
-#import "HOPContact.h"
+#import "HOPCoreContact.h"
 #import "HOPConversationThread.h"
-#import "HOPIdentity.h"
+#import "HOPAccountIdentity.h"
 #import "HOPIdentityLookup.h"
+#import "HOPConversation_Internal.h"
+#import "HOPUtility.h"
 
 @interface OpenPeerStorageManager()
 
@@ -62,6 +64,9 @@
     _dictionaryContacts = [[NSMutableDictionary alloc] init];
 //    _dictionaryContactsWithUserId = [[NSMutableDictionary alloc] init];
     _dictionaryConversationThreads = [[NSMutableDictionary alloc] init];
+    _dictionaryConversations = [[NSMutableDictionary alloc] init];
+    _dictionaryConversationsWithThreadID = [[NSMutableDictionary alloc] init];
+    _dictionaryConversationsWithCBCID = [[NSMutableDictionary alloc] init];
     _dictionaryIdentities = [[NSMutableDictionary alloc] init];
     _dictionaryIdentityLookups = [[NSMutableDictionary alloc] init];
 //    _dictionaryContactPeerFilePublicLookup = [[NSMutableDictionary alloc] init];
@@ -100,15 +105,67 @@
     [_dictionaryConversationThreads setObject:conversationThread forKey:threadId];
 }
 
-- (HOPContact*) getContactForPeerURI:(NSString*) peerURI
+- (HOPConversation*) getConversationForID:(NSString*) conversationID
 {
-    HOPContact* contact = nil;
+    if (conversationID.length > 0)
+        return [_dictionaryConversations objectForKey:conversationID];
+    else
+        return nil;
+}
+- (HOPConversation*) getConversationForThreadID:(NSString*) threadID
+{
+    if (threadID.length > 0)
+        return [_dictionaryConversationsWithThreadID objectForKey:threadID];
+    else
+        return nil;
+}
+- (HOPConversation*) getConversationForCBCID:(NSString*) cbcID
+{
+    if (cbcID.length > 0)
+        return [_dictionaryConversationsWithCBCID objectForKey:cbcID];
+    else
+        return nil;
+}
+- (NSArray*) getConversations
+{
+    return _dictionaryConversations.allValues;
+}
+
+- (void) setConversation:(HOPConversation*) conversation conversationID:(NSString*) conversationID
+{
+    if (conversation && conversationID.length > 0)
+        [_dictionaryConversations setObject:conversation forKey:conversationID];
+}
+- (void) setConversation:(HOPConversation*) conversation threadID:(NSString*) threadID
+{
+    if (conversation && threadID.length > 0)
+        [_dictionaryConversationsWithThreadID setObject:conversation forKey:threadID];
+}
+- (void) setConversation:(HOPConversation*) conversation cbcID:(NSString*) cbcID
+{
+    if (conversation && cbcID.length > 0)
+        [_dictionaryConversationsWithCBCID setObject:conversation forKey:cbcID];
+}
+
+- (void) removeConversation:(HOPConversation*) conversation
+{
+    [_dictionaryConversations removeObjectForKey:conversation.conversationID];
+    if (conversation.thread && [conversation.thread getThreadId].length > 0)
+        [_dictionaryConversationsWithThreadID removeObjectForKey:[conversation.thread getThreadId]];
+    if (conversation.conversationType == HOPConversationThreadTypeContactBased)
+        [_dictionaryConversationsWithCBCID removeObjectForKey:[HOPUtility getCBCIDForContacts:conversation.participants]];
+}
+
+
+- (HOPCoreContact*) getCoreContactForPeerURI:(NSString*) peerURI
+{
+    HOPCoreContact* contact = nil;
     
     contact = [_dictionaryContacts objectForKey:peerURI];
     
     return contact;
 }
-- (void) setContact:(HOPContact*) contact forPeerURI:(NSString*) peerURI
+- (void) setContact:(HOPCoreContact*) contact forPeerURI:(NSString*) peerURI
 {
     [_dictionaryContacts setObject:contact forKey:peerURI];
 }
@@ -128,33 +185,33 @@
     [_dictionaryProvisioningAccount setObject:account forKey:userId];
 }*/
 
-- (HOPIdentity*) getIdentityForId:(NSString*) identityId
+- (HOPAccountIdentity*) getIdentityForId:(NSString*) identityId
 {
-    HOPIdentity* identity = nil;
+    HOPAccountIdentity* ret = nil;
     
-    identity = [_dictionaryIdentities objectForKey:identityId];
+    ret = [_dictionaryIdentities objectForKey:identityId];
     
-    return identity;
+    return ret;
 }
 - (NSArray*) getIdentities
 {
     return [_dictionaryIdentities allValues];
 }
 
-- (void) setIdentity:(HOPIdentity*) identity forId:(NSString*) identityId
+- (void) setIdentity:(HOPAccountIdentity*) accountIdentity forId:(NSString*) identityId
 {
-    [_dictionaryIdentities setObject:identity forKey:identityId];
+    [_dictionaryIdentities setObject:accountIdentity forKey:identityId];
 }
 
-- (void) setIdentity:(HOPIdentity*) identity forPUID:(PUID) puid
+- (void) setIdentity:(HOPAccountIdentity*) accountIdentity forPUID:(PUID) puid
 {
-    [_dictionaryIdentities setObject:identity forKey:[NSNumber numberWithInt:puid]];
+    [_dictionaryIdentities setObject:accountIdentity forKey:[NSNumber numberWithInt:puid]];
 }
 - (void) removeIdentityWithPUID:(PUID) puid
 {
     [_dictionaryIdentities removeObjectForKey:[NSNumber numberWithInt:puid]];
 }
-- (HOPIdentity*) getIdentityForPUID:(PUID) puid
+- (HOPAccountIdentity*) getIdentityForPUID:(PUID) puid
 {
     return [_dictionaryIdentities objectForKey:[NSNumber numberWithInt:puid]];
 }
@@ -183,13 +240,13 @@
     }
     [_dictionaryConversationThreads removeAllObjects];
     
-//    for (HOPIdentity* object in [_dictionaryIdentities allValues])
+//    for (HOPAccountIdentity* object in [_dictionaryIdentities allValues])
 //    {
 //        [object destroyCoreObject];
 //    }
 //    [_dictionaryIdentities removeAllObjects];
     
-    for (HOPContact* object in [_dictionaryContacts allValues])
+    for (HOPCoreContact* object in [_dictionaryContacts allValues])
     {
         [object destroyCoreObject];
     }

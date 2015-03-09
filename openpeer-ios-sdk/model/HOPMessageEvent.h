@@ -32,13 +32,13 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class HOPMessageRecord;
+@class HOPMessage;
 
 @interface HOPMessageEvent : NSManagedObject
 
 @property (nonatomic, retain) NSNumber * event;
 @property (nonatomic, retain) NSString * originalMessageText;
 @property (nonatomic, retain) NSNumber * originalOutgoingStatus;
-@property (nonatomic, retain) HOPMessageRecord *message;
+@property (nonatomic, retain) HOPMessage *message;
 
 @end

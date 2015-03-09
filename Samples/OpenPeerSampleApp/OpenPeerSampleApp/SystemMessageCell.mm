@@ -31,7 +31,7 @@
 
 #import "SystemMessageCell.h"
 #import <OpenPeerSDK/HOPCallSystemMessage.h>
-#import <OpenPeerSDK/HOPMessageRecord.h>
+#import <OpenPeerSDK/HOPMessage.h>
 #import "TTTAttributedLabel.h"
 #import "Utility.h"
 #import "SessionManager.h"
@@ -65,7 +65,7 @@
 }
 
 
-- (void) setMessage:(HOPMessageRecord*) inMessage
+- (void) setMessage:(HOPMessage*) inMessage
 {
     message = inMessage;
     
@@ -87,7 +87,7 @@
     }
 
     // add message
-    CGSize sizeOfTheMessage = [self.messageText sizeWithFont:[UIFont fontWithName:SYSTEM_MESSAGE_FONT_TYPE size:SYSTEM_MESSAGE_FONT_SIZE]];
+    CGSize sizeOfTheMessage = [self.messageText sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:SYSTEM_MESSAGE_FONT_TYPE size:SYSTEM_MESSAGE_FONT_SIZE]}];
 //
 //    UILabel *lblSystemMessage = [[UILabel alloc] initWithFrame:CGRectMake(5, 10, sizeOfTheMessage.width + 2, sizeOfTheMessage.height + 2)];         
 //    lblSystemMessage.backgroundColor = [UIColor clearColor];

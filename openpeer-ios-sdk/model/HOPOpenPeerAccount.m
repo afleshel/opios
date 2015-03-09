@@ -32,6 +32,7 @@
 #import "HOPOpenPeerAccount.h"
 #import "HOPAssociatedIdentity.h"
 #import "HOPConversationRecord.h"
+#import "HOPContact.h"
 
 
 @implementation HOPOpenPeerAccount
@@ -41,5 +42,6 @@
 @dynamic stableId;
 @dynamic associatedIdentities;
 @dynamic sessionRecords;
+@dynamic contact;
 
 @end

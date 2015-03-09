@@ -37,11 +37,10 @@
 #import "Utility.h"
 
 #import <OpenpeerSDK/HOPConversationThread.h>
-#import <OpenpeerSDK/HOPContact.h>
-#import <OpenpeerSDK/HOPOpenPeerAccount+External.h>
-#import <OpenpeerSDK/HOPRolodexContact.h>
+#import <OpenpeerSDK/HOPRolodexContact+External.h>
 #import <OpenpeerSDK/HOPMessage.h>
 #import <OpenpeerSDK/HOPModelManager.h>
+#import <OpenPeerSDK/HOPAccount.h>
 
 #ifdef APNS_ENABLED
 #import "APNSManager.h"
@@ -81,7 +80,7 @@
     });
 }
 
-- (void) onConversationThreadContactConnectionStateChanged:(HOPConversationThread*) conversationThread contact:(HOPContact*) contact contactConnectionState:(HOPConversationThreadContactConnectionState) contactConnectionState
+- (void) onConversationThreadContactConnectionStateChanged:(HOPConversationThread*) conversationThread contact:(HOPRolodexContact*) contact contactConnectionState:(HOPConversationThreadContactConnectionState) contactConnectionState
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread id: <%@> contact peer URI:<%@> state: %@",[conversationThread getThreadId], [contact getPeerURI],[HOPConversationThread stringForContactConnectionState:contactConnectionState]);
     
@@ -90,13 +89,13 @@
     });
 }
 
-- (void) onConversationThreadContactStatusChanged:(HOPConversationThread*) conversationThread contact:(HOPContact*) contact
+- (void) onConversationThreadContactStatusChanged:(HOPConversationThread*) conversationThread contact:(HOPRolodexContact*) contact
 {
-    HOPConversationThreadContactStatus contactState = [conversationThread getContactStatus:contact];
+    HOPConversationThreadContactStatus contactState = [conversationThread getContactStatus:[contact getCoreContact]];
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Conversation thread id: <%@> - contact peer URI: <%@> state: %d",[conversationThread getThreadId], [contact getPeerURI],contactState);
     dispatch_async(dispatch_get_main_queue(), ^
     {
-         NSDictionary* dict = @{@"thread":conversationThread, @"contact":contact};
+         NSDictionary* dict = @{@"thread":conversationThread, @"contact":contact, @"status":@(contactState)};
          [[NSNotificationCenter defaultCenter] postNotificationName:notificationComposingStatusChanged object:dict];
     });
 }
@@ -121,7 +120,7 @@
     [[HOPModelManager sharedModelManager] updateMessageStateForConversation:[[HOPModelManager sharedModelManager] getConversationRecordForConversationThread:conversationThread] lastDeliveryState:messageDeliveryStates];
 }
 
-- (void) onConversationThreadPushMessage:(HOPConversationThread*) conversationThread messageID:(NSString*) messageID contact:(HOPContact*) coreContact
+- (void) onConversationThreadPushMessage:(HOPConversationThread*) conversationThread messageID:(NSString*) messageID contact:(HOPRolodexContact*) coreContact
 {
 #ifdef APNS_ENABLED
     if (coreContact)
@@ -140,13 +139,15 @@
 
                 if ([[MessageManager sharedMessageManager] getTypeForSystemMessage:message] == SystemMessage_CheckAvailability)
                 {
-                    messageText  = [NSString stringWithFormat:@"%@  %@",[[[HOPModelManager sharedModelManager] getLastLoggedInUser] getFullName],@"Missed call"];
+                    messageText  = [NSString stringWithFormat:@"%@  %@",[[HOPAccount sharedAccount] getFullName],@"Missed call"];
                     missedCall = YES;
                     [[APNSManager sharedAPNSManager] sendPushNotificationForContact:coreContact message:messageText missedCall:missedCall];
                 }
                 else if (![message.type isEqualToString:messageTypeSystem])
                 {
-                    [[APNSManager sharedAPNSManager]sendRichPushNotificationForMessage:message missedCall:NO];
+                    //NSArray *peerURIs = [[conversationThread getContacts] valueForKeyPath:@"openPeerContact.publicPeerFile.peerURI"];
+                    NSArray *peerURIs = [[conversationThread getContacts] valueForKeyPath:@"publicPeerFile.peerURI"];
+                    [[APNSManager sharedAPNSManager]sendRichPushNotificationForMessage:message missedCall:NO  participantsPeerURIs:peerURIs];
                 }
             }
         }

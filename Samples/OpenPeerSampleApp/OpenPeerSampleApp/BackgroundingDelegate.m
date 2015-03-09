@@ -1,7 +1,6 @@
-
 /*
  
- Copyright (c) 2014, SMB Phone Inc.
+ Copyright (c) 2012-2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -59,11 +58,7 @@
     self.backgroundingNotifier = notifier;
     self.backgroundingSubscription = subscription;
 #ifdef APNS_ENABLED
-    if ([[APNSManager sharedAPNSManager] areTherePushesForSending])
-    {
-        [[APNSManager sharedAPNSManager]  setGoingToBackground:YES];
-    }
-    else
+    if (![[APNSManager sharedAPNSManager] areTherePushesForSending])
 #endif
     {
         [self.backgroundingNotifier destroy];
@@ -83,7 +78,7 @@
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Returning from the background.");
     [self.backgroundingNotifier destroy];
     self.backgroundingNotifier = nil;
-    if (![[HOPAccount sharedAccount] isCoreAccountCreated] || [[HOPAccount sharedAccount] getState].state != HOPAccountStateReady)
+    if (![[HOPAccount sharedAccount] isAccountReady] || [[HOPAccount sharedAccount] getState].state != HOPAccountStateReady)
     {
         [[LoginManager sharedLoginManager] setIsRecovering:YES];
     }

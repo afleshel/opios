@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2012-2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -33,13 +33,8 @@
 #import "AppConsts.h"
 #import "OpenPeer.h"
 #import "Logger.h"
-#import "SBJsonParser.h"
 #import "Utility.h"
-#import <OpenPeerSDK/HOPSettings.h>
-#import <OpenPeerSDK/HOPUtility.h>
-#import <OpenPeerSDK/HOPCache.h>
-#import <OpenPeerSDK/HOPOpenPeerAccount.h>
-#import <OpenPeerSDK/HOPModelManager.h>
+#import <OpenPeerSDK/Openpeer.h>
 #import "HTTPDownloader.h"
 
 @interface Settings ()
@@ -672,8 +667,8 @@
 - (NSMutableDictionary*) dictionaryForJSONString:(NSString*) jsonString
 {
     NSMutableDictionary* ret = nil;
-    SBJsonParser* parser = [[SBJsonParser alloc] init];
-    NSDictionary* inputDictionary = [parser objectWithString: jsonString];
+    
+    NSDictionary* inputDictionary = [Utility dictionaryFromJSON:jsonString];
     
     //Check if downloaded JSON is having root object
     if ([inputDictionary count] > 0)
@@ -998,11 +993,10 @@
 - (BOOL) checkIfReloginInfoIsValid
 {
     BOOL ret = NO;
-    
-    HOPOpenPeerAccount* homeUser = [[HOPModelManager sharedModelManager] getLastLoggedInUser];
+
     NSString* domain = [[NSUserDefaults standardUserDefaults] objectForKey:settingsKeyIdentityProviderDomain];
     
-    ret = [homeUser.reloginInfo rangeOfString:domain].location != NSNotFound;
+    ret = [[[HOPAccount sharedAccount] getReloginInformation] rangeOfString:domain].location != NSNotFound;
     
     return ret;
 }

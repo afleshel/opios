@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2014, SMB Phone Inc.
+ Copyright (c) 2014, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -40,6 +40,7 @@
 
 #import <OpenPeerSDK/HOPAccount.h>
 #import <OpenpeerSDK/HOPModelManager.h>
+#import <OpenpeerSDK/HOPConversation.h>
 
 typedef enum
 {
@@ -101,7 +102,7 @@ typedef enum
     }
     else if ([[LoginManager sharedLoginManager] isLoggedin])
     {
-        if ([[[SessionManager sharedSessionManager] sessionsDictionary] count] > 0)
+        if ([HOPConversation getConversations].count > 0)
         {
             if ([[SessionManager sharedSessionManager] isCallInProgress])
                 ret = LOGGEDIN_ACTIVE_CALL;
@@ -175,7 +176,7 @@ typedef enum
             break;
             
         case LOGGEDIN_STATE:
-            if (![[HOPAccount sharedAccount] isCoreAccountCreated] || [[HOPAccount sharedAccount] getState].state != HOPAccountStateReady)
+            if (![[HOPAccount sharedAccount] isAccountReady] || [[HOPAccount sharedAccount] getState].state != HOPAccountStateReady)
             {
                 [[LoginManager sharedLoginManager] setIsRecovering:YES];
                 [[LoginManager sharedLoginManager] login];
@@ -186,7 +187,7 @@ typedef enum
         case LOGGEDIN_ACTIVE_SESSION:
         case LOGGEDIN_ACTIVE_CALL:
         {
-            if (![[HOPAccount sharedAccount] isCoreAccountCreated] || [[HOPAccount sharedAccount] getState].state != HOPAccountStateReady)
+            if (![[HOPAccount sharedAccount] isAccountReady] || [[HOPAccount sharedAccount] getState].state != HOPAccountStateReady)
             {
                 [[LoginManager sharedLoginManager] setIsRecovering:YES];
                 [[LoginManager sharedLoginManager] login];

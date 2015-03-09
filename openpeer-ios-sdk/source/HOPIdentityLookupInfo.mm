@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2012-2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -32,9 +32,8 @@
 #include "HOPIdentityLookupInfo_Internal.h"
 #include "OpenPeerUtility.h"
 #include "OpenPeerStorageManager.h"
-#include "HOPContact_Internal.h"
-#import "HOPIdentityContact.h"
-#import "HOPRolodexContact.h"
+#include "HOPCoreContact_Internal.h"
+#import "HOPIdentity.h"
 #import <openpeer/core/IContact.h>
 
 @implementation HOPIdentityLookupInfo
@@ -50,15 +49,10 @@
     return self;
 }
 
-- (id)initWithIdentityContact:(HOPIdentityContact *)inIdentityContact
-{
-    self = [self initWithIdentityURI:inIdentityContact.rolodexContact.identityURI dateOfLastUpdate:inIdentityContact.lastUpdated];
-    return self;
-}
 
-- (id)initWithRolodexContact:(HOPRolodexContact *)inRolodexContact
+- (id)initWithIdentity:(HOPIdentity *)inIdentity
 {
-    self = [self initWithIdentityURI:inRolodexContact.identityURI dateOfLastUpdate:nil];
+    self = [self initWithIdentityURI:inIdentity.identityURI dateOfLastUpdate:nil];
     return self;
 }
 

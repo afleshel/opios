@@ -32,25 +32,24 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class HOPConversationRecord, HOPMessageRecord, HOPParticipants;
+@class HOPConversationRecord, HOPMessage, HOPParticipantInfo;
 
 @interface HOPConversationEvent : NSManagedObject
 
 @property (nonatomic, retain) NSString * eventType;
 @property (nonatomic, retain) NSString * name;
-@property (nonatomic, retain) NSDate * time;
 @property (nonatomic, retain) NSNumber * showEvent;
+@property (nonatomic, retain) NSDate * time;
+@property (nonatomic, retain) NSString * eventID;
 @property (nonatomic, retain) NSSet *messages;
-@property (nonatomic, retain) HOPParticipants *participants;
+@property (nonatomic, retain) HOPParticipantInfo *participants;
 @property (nonatomic, retain) HOPConversationRecord *session;
 @end
 
 @interface HOPConversationEvent (CoreDataGeneratedAccessors)
 
-- (NSString *)sectionIdentifier;
-
-- (void)addMessagesObject:(HOPMessageRecord *)value;
-- (void)removeMessagesObject:(HOPMessageRecord *)value;
+- (void)addMessagesObject:(HOPMessage *)value;
+- (void)removeMessagesObject:(HOPMessage *)value;
 - (void)addMessages:(NSSet *)values;
 - (void)removeMessages:(NSSet *)values;
 

@@ -30,17 +30,175 @@
  */
 
 #import "HOPModelManager.h"
-
+#import <openpeer/core/types.h>
 
 using namespace openpeer;
 using namespace openpeer::core;
 
 @interface HOPModelManager()
 
+- (HOPContact*) getOpenPeerContactForIdentityContact:(IdentityContact) inIdentityContact;
+- (HOPPublicPeerFile*) savePublicPeerFile:(NSString*) publicPeerFile peerURI:(NSString*) peerURI contact:(HOPContact*) contact;
 
-- (HOPOpenPeerContact*) getOpenPeerContactForIdentityContact:(IdentityContact) inIdentityContact;
-- (HOPOpenPeerContact*) createOpenPeerContactForIdentityContact:(IdentityContact) inIdentityContact;
-- (HOPOpenPeerContact*) createOrUpdateOpenPeerContactForItentities:(NSArray*) identities coreContact:(IContactPtr) coreContact;
-- (void) updateOpenPeerContact:(HOPOpenPeerContact*) contact identityContact:(IdentityContact) inIdentityContact;
+/**
+ Creates a peer file object for the given peer URI and peer file
+ @param peerURI Peer URI
+ @param peerFile Peer file
+ @return HOPPublicPeerFile object
+ */
+- (HOPPublicPeerFile*) createPublicPeerFileForPeerURI:(NSString*) peerURI peerFile:(NSString*) peerFile;
+/**
+ Returns open peer contact for peer URI.
+ @param peerURI Peer URI
+ @return HOPContact object
+ */
+- (HOPContact*) getContactForPeerURI:(NSString*) peerURI;
 
+/**
+ Returns open peer contact for stable ID.
+ @param stableID Stable ID
+ @return HOPContact object
+ */
+- (HOPContact*) getOpenPeerContactForStableID:(NSString*) stableID;
+
+/**
+ Returns open peer contact for identity URI.
+ @param identityURI Identity URI
+ @return HOPContact object
+ */
+- (HOPContact*) getOpenPeerContactForIdentityURI:(NSString*) identityURI;
+
+/**
+ Returns list of open peer contacts for list of peer URIs.
+ @param peerURIs List of peer URIs
+ @return List of HOPContact objects
+ */
+- (NSArray *) getOpenPeerContactsByPeerURIs:(NSArray*) peerURIs;
+
+/**
+ Returns HOPParticipantInfo object for list of contacts
+ @param contacts List of HOPContact objects
+ @return HOPParticipantInfo object
+ */
+- (HOPParticipantInfo*) getParticiapantsForListOfContacts:(NSArray*) contacts;
+
+/**
+ Creates a HOPConversationThreadRecord object for conversation thread and conversation record.
+ @param conversationThread Conversation thread object (Holds information about core conversation thread object that is used for message exchange)
+ @param conversationRecord Conversation record object (Represent a logic unit, which can be linked to more than one conversation thread records)
+ @return HOPConversationRecord Conversation record object
+ */
+- (HOPConversationThreadRecord*) createRecordForConversationThread:(HOPConversationThread*) conversationThread conversationRecord:(HOPConversationRecord*) conversationRecord;
+
+/**
+ Returns a list of HOPConversationRecord objects for a conversation thread ID.
+ @param threadID Conversation thread ID
+ @return NSArray List of conversation record objects
+ */
+- (NSArray*) getConversationRecordsForThreadID:(NSString*) threadID;
+
+/**
+ Returns a HOPConversationThreadRecord object for conversation thread ID.
+ @param threadID Conversation thread ID
+ @return HOPConversationThreadRecord Conversation thread record object
+ */
+- (HOPConversationThreadRecord*) getConversationThreadRecordForThreadID:(NSString*) threadID;
+
+/**
+ Returns a HOPConversationRecord object for conversation thread.
+ @param conversationThread Conversation thread object
+ @return HOPConversationRecord Conversation record object
+ */
+- (HOPConversationRecord*) getConversationRecordForConversationThread:(HOPConversationThread*) conversationThread;
+
+/**
+ Gets cookie for path.
+ @param path NSString* cookie path
+ @return Cookie value
+ */
+- (NSString*) getCookieWithPath:(NSString*) path;
+
+/**
+ Sets cookie data.
+ @param data Cookie's data
+ @param path Cookie's path
+ @param expires Cookie's expire date
+ */
+- (void) setCookie:(NSString*) data withPath:(NSString*) path expires:(NSDate*) expires;
+
+/**
+ Removes all expired cookies.
+ */
+- (void) removeExpiredCookies;
+
+/**
+ Removes cookie with path.
+ @param path Cookie's path
+ */
+- (void) removeCookieForPath:(NSString*) path;
+
+/**
+ Returns home user with specified stable ID.
+ @param stableId Contact stable ID
+ @return HOPOpenPeerAccount object
+ */
+- (HOPOpenPeerAccount*) getAccountForStableID:(NSString*) stableID;
+
+/**
+ Returns an avatar object for the spcified url.
+ @param url Image url
+ @return HOPAvatar object
+ */
+- (HOPAvatar*) getAvatarByURL:(NSString*) url;
+
+/**
+ Returns a public peer file object for the spcified peer URI.
+ @param peerURI Peer URI
+ @return HOPPublicPeerFile object
+ */
+- (HOPPublicPeerFile*) getPublicPeerFileForPeerURI:(NSString*) peerURI;
+
+/**
+ Finalise identity association. Information about associated identity for active account is store in permanent storage
+ @param baseIdentityURI Base identity URI
+ @param domain Identity provider domain
+ @param name Identity name
+ @param account Open Peer account
+ @param identity Identity of associated identity
+ @return HOPAssociatedIdentity object
+ */
+- (HOPAssociatedIdentity*) addAssociatedIdentityForBaseIdentityURI:(NSString*) baseIdentityURI domain:(NSString*) domain name:(NSString*) name selfIdentityProfile:(HOPIdentity*) identity;
+
+/**
+ Returns an identity provider object for spcified identity provider domain, identity name and home user identity URI.
+ @param identityProviderDomain Identity provider domain
+ @param identityName Identity name (e.g. foo.com)
+ @param homeUserIdentityURI Home user identity URI
+ @return HOPAssociatedIdentity object
+ */
+- (HOPAssociatedIdentity*) getAssociatedIdentityByDomain:(NSString*) identityProviderDomain identityName:(NSString*) identityName homeUserIdentityURI:(NSString*) homeUserIdentityURI;
+
+- (NSArray*) addUnkownContactsFromConversationThread:(HOPConversationThread*) thread;
+
+- (HOPIdentity*) createIdentityForCoreIdentity:(IdentityContact) identityContact isSelf:(BOOL) isSelf;
+
+- (NSArray*) getAllContactsForLoggedInAccount;
+
+- (HOPConversationRecord*) getConversationRecordForParticipants:(NSArray*) participants type:(NSString*) type;
+
+/**
+ Creates a HOPConversationRecord object.
+ @param conversationThread Conversation thread object
+ @param type Conversation type
+ @param date Time of creation
+ @param name Conversation name
+ @param participants List of HOPIdentity objects
+ @return HOPConversationRecord  object
+ */
+- (HOPConversationRecord*) createConversationRecordForConversationThread:(HOPConversationThread*) conversationThread type:(NSString*) type date:(NSDate*) date topic:(NSString*) topic  name:(NSString*) name participants:(NSArray*) participants;
+/**
+ Returns HOPIdentity object for logged in user.
+ @return HOPIdentity object
+ */
+- (HOPIdentity*) getIdentityForAccount;
 @end

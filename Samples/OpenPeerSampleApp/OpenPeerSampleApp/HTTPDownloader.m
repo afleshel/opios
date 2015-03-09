@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2014, SMB Phone Inc.
+ Copyright (c) 2012-2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -84,9 +84,7 @@
 - (BOOL)startDownload
 {
     BOOL ret = YES;
-    NSMutableURLRequest *theRequest = nil; //[NSMutableURLRequest requestWithURL:[NSURL URLWithString:self.url]
-//                                                            cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
-//                                                        timeoutInterval:20.0];
+    NSMutableURLRequest *theRequest = nil; 
     
     self.receivedData = [NSMutableData dataWithCapacity: 0];
     

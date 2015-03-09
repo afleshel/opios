@@ -30,9 +30,13 @@
  */
 
 #import <UIKit/UIKit.h>
-@class Session;
+#import "Delegates.h"
+
+@class HOPConversation;
 
 @interface AddParticipantsViewController : UIViewController
 
-- (id) initWithSession:(Session*) inSession addingContacts:(BOOL) addingContacts;
+@property (nonatomic, weak) id<SessionViewControllerDelegate> delegate;
+
+- (id) initWithConversation:(HOPConversation*) inConversation addingContacts:(BOOL) addingContacts;
 @end

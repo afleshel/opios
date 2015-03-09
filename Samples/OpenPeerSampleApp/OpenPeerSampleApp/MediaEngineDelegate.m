@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2012, SMB Phone Inc.
+ Copyright (c) 2012-2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -45,7 +45,7 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^
    {
-       [[SessionManager sharedSessionManager] onFaceDetected];
+       
    });
 }
 

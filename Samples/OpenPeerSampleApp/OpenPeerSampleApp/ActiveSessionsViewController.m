@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2014, SMB Phone Inc.
+ Copyright (c) 2012-2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -30,13 +30,10 @@
  */
 
 #import "ActiveSessionsViewController.h"
-#import <OpenPeerSDK/HOPConversationRecord+External.h>
 #import <OpenPeerSDK/HOPModelManager.h>
-#import <OpenPeerSDK/HOPPublicPeerFile.h>
-#import <OpenPeerSDK/HOPOpenPeerAccount.h>
-#import <OpenPeerSDK/HOPOpenPeerContact.h>
-#import <OpenPeerSDK/HOPParticipants.h>
-#import <OpenPeerSDK/HOPConversationEvent.h>
+#import <OpenPeerSDK/HOPAccount.h>
+#import <OpenPeerSDK/HOPConversationRecord+External.h>
+#import <OpenPeerSDK/HOPConversation.h>
 #import <OpenPeerSDK/HOPUtility.h>
 #import "SessionManager.h"
 #import "OpenPeer.h"
@@ -50,6 +47,8 @@
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, strong) NSDate *lastRefresh;
 @property (nonatomic, strong) NSTimer *refreshTimer;
+
+- (void) updateCellForConversation:(HOPConversation*) conversation;
 @end
 
 @implementation ActiveSessionsViewController
@@ -80,6 +79,7 @@
     
     [self fetchData];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadData) name:notifictionAppReturnedFromBackground object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCellForConversation:) name:notificationMessagesRead object:nil];
 }
 
 - (void)fetchData
@@ -101,6 +101,8 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    
     if (![[HOPUtility getTimeSectionForDate:self.lastRefresh] isEqualToString:@"Today"])
     {
         [self reloadData];
@@ -110,12 +112,14 @@
         NSInteger currentSeconds = [[NSCalendar currentCalendar] ordinalityOfUnit:NSSecondCalendarUnit inUnit:NSDayCalendarUnit forDate:[NSDate date]];
         NSInteger secondsForTimer = 24 * 60 * 60 - currentSeconds;
         self.refreshTimer = [NSTimer scheduledTimerWithTimeInterval:secondsForTimer target:self selector:@selector(reloadData) userInfo:nil repeats:NO];
-        [self.tableViewSessions reloadRowsAtIndexPaths:[self.tableViewSessions indexPathsForVisibleRows] withRowAnimation:UITableViewRowAnimationNone];
+        //[self.tableViewSessions reloadRowsAtIndexPaths:[self.tableViewSessions indexPathsForVisibleRows] withRowAnimation:UITableViewRowAnimationNone];
     }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    [super viewWillDisappear:animated];
+    
     [self.refreshTimer invalidate];
     self.refreshTimer = nil;
 }
@@ -145,16 +149,17 @@
     {
         NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"ActiveSessionTableViewCell" owner:self options:nil];
         cell = [topLevelObjects objectAtIndex:0];
-        [cell setBackground];
+        
+        cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"tableViewCell.png"] stretchableImageWithLeftCapWidth:0.0 topCapHeight:5.0]];
+        cell.selectedBackgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"tableViewCell_selected.png"] stretchableImageWithLeftCapWidth:0.0 topCapHeight:5.0]];
+        
+        //[cell setBackground];
     }
     
-    cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"tableViewCell.png"] stretchableImageWithLeftCapWidth:0.0 topCapHeight:5.0]];
-    cell.selectedBackgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"tableViewCell_selected.png"] stretchableImageWithLeftCapWidth:0.0 topCapHeight:5.0]];
-    HOPConversationEvent* event = [self.fetchedResultsController objectAtIndexPath:indexPath];//((HOPParticipants*) [self.fetchedResultsController objectAtIndexPath:indexPath]).lastEvent;
-    //HOPConversationRecord* record = event.session;//[self.fetchedResultsController objectAtIndexPath:indexPath];
+    HOPConversationRecord* record = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
-    if (event)
-        [cell setConversationEvent:event];
+    if (record)
+        [cell setRecord:record];
     
     return cell;
 }
@@ -169,10 +174,6 @@
     return 40;
 }
 
-//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-//{
-//    return 3;
-//}
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
@@ -213,31 +214,28 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    HOPConversationEvent* record = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    HOPConversationRecord* record = [self.fetchedResultsController objectAtIndexPath:indexPath];
     if (record)
     {
-        Session* session = [[SessionManager sharedSessionManager] getSessionForConversationEvent:record];
-        if (!session)
+        HOPConversation* conversation = [record getConversation];
+        if (!conversation)
         {
-            NSMutableArray* listOfRolodexContacts = [[NSMutableArray alloc] init];
-            //for (HOPPublicPeerFile* publicPeerFile in record.participants)
-//            for (HOPOpenPeerContact* contact in record.participants.participants)
-//            {
-//                NSArray* rolodexContactsArray = [[HOPModelManager sharedModelManager] getRolodexContactsByPeerURI:contact.publicPeerFile.peerURI];
-//                HOPRolodexContact* rolodexContact = [rolodexContactsArray objectAtIndex:0];
-//                
-//                if (rolodexContact)
-//                    [listOfRolodexContacts addObject:rolodexContact];
-//            }
-            
-            if([record.participants.participants count] > 0)
+            if(record.participants.count > 0)
             {
-                session = [[SessionManager sharedSessionManager] createSessionForContacts:record.participants.participants.allObjects];
+                conversation = [HOPConversation conversationForRecord:record];
             }
         }
         
-        if (session)
-            [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForSession:session forIncomingCall:NO forIncomingMessage:NO];
+        if (conversation)
+        {
+            ActiveSessionTableViewCell *cell = (ActiveSessionTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
+            if (cell)
+            {
+                conversation.numberOfUnreadMessages = 0;
+                [cell updateBadge:conversation];
+            }
+            [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForConversation:conversation replaceConversation:nil incomingCall:NO incomingMessage:NO];
+        }
     }
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
@@ -281,16 +279,16 @@
     [NSFetchedResultsController deleteCacheWithName:@"SessionRecord"];
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPConversationEvent" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPConversationRecord" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];
     
     [fetchRequest setEntity:entity];
-    
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(showEvent = YES AND session.homeUser.stableId MATCHES '%@')",[[HOPModelManager sharedModelManager] getLastLoggedInUser].stableId]];
+
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(homeUser.stableId MATCHES '%@' AND selfRemoved = NO)",[[HOPAccount sharedAccount] getStableID]]];
     [fetchRequest setPredicate:predicate];
     
     [fetchRequest setFetchBatchSize:20];
     //
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"time" ascending:NO];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"lastActivity" ascending:NO];
     NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
     
     [fetchRequest setSortDescriptors:sortDescriptors];
@@ -301,63 +299,7 @@
     return _fetchedResultsController;
 }
 
-/*- (NSFetchedResultsController *)fetchedResultsController
-{
-    if (_fetchedResultsController != nil)
-    {
-        return _fetchedResultsController;
-    }
-    [NSFetchedResultsController deleteCacheWithName:@"SessionRecord"];
-    
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPParticipants" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];
-    
-    [fetchRequest setEntity:entity];
-    
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SUBQUERY(events, $t, $t.session.homeUser.stableId == %@).@count != 0", [[HOPModelManager sharedModelManager] getLastLoggedInUser].stableId];//[NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(ANY events.session.homeUser.stableId MATCHES '%@')",[[HOPModelManager sharedModelManager] getLastLoggedInUser].stableId]];
-    [fetchRequest setPredicate:predicate];
-    
-    [fetchRequest setFetchBatchSize:20];
-    //
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"getDateOfLastEvent" ascending:NO];
-    NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
-    
-    [fetchRequest setSortDescriptors:sortDescriptors];
-    
-    _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext] sectionNameKeyPath:@"sectionIdentifier" cacheName:@"SessionRecord"];
-    _fetchedResultsController.delegate = self;
-    
-    return _fetchedResultsController;
-}*/
 
-/*- (NSFetchedResultsController *)fetchedResultsController
-{
-    if (_fetchedResultsController != nil)
-    {
-        return _fetchedResultsController;
-    }
-    [NSFetchedResultsController deleteCacheWithName:@"SessionRecord"];
-    
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"HOPConversationRecord" inManagedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext]];
-    
-    [fetchRequest setEntity:entity];
-    
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"(homeUser.stableId MATCHES '%@')",[[HOPModelManager sharedModelManager] getLastLoggedInUser].stableId]];
-    [fetchRequest setPredicate:predicate];
-    
-	[fetchRequest setFetchBatchSize:20];
-//	
-	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"lastActivity" ascending:NO];
-	NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
-	
-	[fetchRequest setSortDescriptors:sortDescriptors];
-    
-	_fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[[HOPModelManager sharedModelManager] managedObjectContext] sectionNameKeyPath:@"sectionIdentifier" cacheName:@"SessionRecord"];
-    _fetchedResultsController.delegate = self;
-    
-	return _fetchedResultsController;
-}*/
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
     [self.tableViewSessions beginUpdates];
@@ -367,8 +309,8 @@
     [self.tableViewSessions endUpdates];
 }
 
-- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
-	
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath
+{	
 	switch (type)
     {
 		case NSFetchedResultsChangeInsert:
@@ -377,7 +319,7 @@
 			break;
 		case NSFetchedResultsChangeUpdate:
             [((ActiveSessionTableViewCell*) [self.tableViewSessions cellForRowAtIndexPath:indexPath]) updateActivity];
-//			[[self.tableViewSessions cellForRowAtIndexPath:indexPath].textLabel setText:((HOPRolodexContact*)[[[self.fetchedResultsController sections] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]).name];
+//			[[self.tableViewSessions cellForRowAtIndexPath:indexPath].textLabel setText:((HOPIdentity*)[[[self.fetchedResultsController sections] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]).name];
 			break;
 		case NSFetchedResultsChangeDelete:
 			[self.tableViewSessions  deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
@@ -401,6 +343,24 @@
         case NSFetchedResultsChangeDelete:
             [self.tableViewSessions deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
             break;
+            
+            default:
+            break;
+    }
+}
+
+- (void) updateCellForConversation:(NSNotification *)notification
+{
+    HOPConversation* conversation = notification.object;
+    if (conversation)
+    {
+        NSIndexPath *indexPath = [self.fetchedResultsController indexPathForObject:conversation];
+        if (indexPath)
+        {
+            ActiveSessionTableViewCell *cell = (ActiveSessionTableViewCell *)[self.tableViewSessions cellForRowAtIndexPath:indexPath];
+            if (cell)
+                [cell updateBadge:conversation];
+        }
     }
 }
 @end

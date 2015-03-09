@@ -32,20 +32,24 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class HOPConversationEvent, HOPConversationThreadRecord, HOPMessageRecord, HOPOpenPeerAccount, HOPOpenPeerContact;
+@class HOPConversationEvent, HOPConversationThreadRecord, HOPMessage, HOPOpenPeerAccount, HOPContact;
 
 @interface HOPConversationRecord : NSManagedObject
 
 @property (nonatomic, retain) NSDate * creationTime;
 @property (nonatomic, retain) NSDate * lastActivity;
+@property (nonatomic, retain) NSString * topic;
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSString * sessionID;
 @property (nonatomic, retain) NSString * type;
+@property (nonatomic, retain) NSNumber * removed;
+@property (nonatomic, retain) NSNumber * selfRemoved;
 @property (nonatomic, retain) NSSet *conversationThreadRecords;
 @property (nonatomic, retain) NSSet *events;
 @property (nonatomic, retain) HOPOpenPeerAccount *homeUser;
 @property (nonatomic, retain) NSSet *messages;
 @property (nonatomic, retain) NSSet *participants;
+@property (nonatomic, retain) NSString * cbcID;
 @end
 
 @interface HOPConversationRecord (CoreDataGeneratedAccessors)
@@ -60,13 +64,13 @@
 - (void)addEvents:(NSSet *)values;
 - (void)removeEvents:(NSSet *)values;
 
-- (void)addMessagesObject:(HOPMessageRecord *)value;
-- (void)removeMessagesObject:(HOPMessageRecord *)value;
+- (void)addMessagesObject:(HOPMessage *)value;
+- (void)removeMessagesObject:(HOPMessage *)value;
 - (void)addMessages:(NSSet *)values;
 - (void)removeMessages:(NSSet *)values;
 
-- (void)addParticipantsObject:(HOPOpenPeerContact *)value;
-- (void)removeParticipantsObject:(HOPOpenPeerContact *)value;
+- (void)addParticipantsObject:(HOPContact *)value;
+- (void)removeParticipantsObject:(HOPContact *)value;
 - (void)addParticipants:(NSSet *)values;
 - (void)removeParticipants:(NSSet *)values;
 

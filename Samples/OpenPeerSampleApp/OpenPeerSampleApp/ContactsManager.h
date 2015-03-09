@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2012, SMB Phone Inc.
+ Copyright (c) 2012-2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -33,8 +33,7 @@
 #import <OpenpeerSDK/HOPProtocols.h>
 
 @class HOPIdentityLookup;
-@class HOPRolodexContact;
-@class HOPIdentityContact;
+@class HOPIdentity;
 
 @interface ContactsManager : NSObject<UIWebViewDelegate>
 
@@ -43,17 +42,12 @@
 
 + (id) sharedContactsManager;
 
-- (void) loadAddressBookContacts;
-
 - (void) loadContacts;
 - (void) refreshExisitngContacts;
-- (void) refreshRolodexContacts;
+- (void) refreshIdentities;
 - (void) identityLookupForContacts:(NSArray *)contacts identityServiceDomain:(NSString*) identityServiceDomain;
+- (void) identityLookupForContacts:(NSArray *)contacts;
 - (void) updateContactsWithDataFromLookup:(HOPIdentityLookup*) identityLookup;
-- (BOOL) checkIsContactValid:(HOPContact*) contact;
-- (NSArray*) getBaseURIsForStableId:(NSString*) stableID;
-- (NSString*) createProfileBundleForCommunicationWithContact:(HOPRolodexContact*) targetContact;
-- (HOPRolodexContact*) getRolodexContactByProfileBundle:(NSString*) profileBundle coreContact:(HOPContact*) coreContact;
-//- (NSArray*) getIdentityContactsForHomeUser;
+
 - (void) removeAllContacts;
 @end

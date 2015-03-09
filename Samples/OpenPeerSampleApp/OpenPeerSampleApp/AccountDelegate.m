@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2012, SMB Phone Inc.
+ Copyright (c) 2012-2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -42,7 +42,7 @@
 #import "MessageManager.h"
 
 #ifdef APNS_ENABLED
-#import "APNSInboxManager.h"
+#import "APNSManager.h"
 #endif
 @interface AccountDelegate()
 @property (nonatomic, strong) WebLoginViewController* webLoginViewController;
@@ -70,8 +70,8 @@
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Account login state: %@", [HOPAccount stringForAccountState:accountState]);
     
-    dispatch_async(dispatch_get_main_queue(), ^
-    {
+    //dispatch_async(dispatch_get_main_queue(), ^
+    //{
         switch (accountState)
         {
             case HOPAccountStatePending:
@@ -126,7 +126,7 @@
             case HOPAccountStateReady:
                 [[LoginManager sharedLoginManager] onUserLoggedIn];
 #ifdef APNS_ENABLED
-                [[APNSInboxManager sharedAPNSInboxManager] handleNewMessages];
+                [[APNSManager sharedAPNSManager] handleExistingMessages];
 #endif
                 break;
                 
@@ -140,6 +140,9 @@
                 {
                     [[[OpenPeer sharedOpenPeer] mainViewController]  onAccountLoginError:accountState.errorReason];
                     [[HOPCache sharedCache] removeCookieWithNamePath:settingsKeySettingsDownloadURL];
+                    
+                    [[LoginManager sharedLoginManager] logout];
+                    [[LoginManager sharedLoginManager] onUserLogOut];
                 }
                 else
                 {
@@ -152,7 +155,7 @@
             default:
                 break;
         }
-    });
+        //});
 }
 
 - (void)onAccountAssociatedIdentitiesChanged:(HOPAccount *)account
@@ -161,9 +164,9 @@
     dispatch_async(dispatch_get_main_queue(), ^
     {
         NSArray* associatedIdentities = [account getAssociatedIdentities];
-        for (HOPIdentity* identity in associatedIdentities)
+        for (HOPAccountIdentity* accountIdentity in associatedIdentities)
         {
-            [[LoginManager sharedLoginManager] attachDelegateForIdentity:identity forceAttach:NO];
+            [[LoginManager sharedLoginManager] attachDelegateForIdentity:accountIdentity forceAttach:NO];
         }
     });
 }

@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2012-2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -30,7 +30,7 @@
  */
 
 #import "CallViewController.h"
-#import "Session.h"
+#import <OpenpeerSDK/HOPConversation.h>
 #import "SessionManager.h"
 #import <OpenpeerSDK/HOPMediaEngine.h>
 #import <QuartzCore/QuartzCore.h>
@@ -61,7 +61,7 @@
 }
 
 //Only execute this init method in child class
-- (id) initWithSession:(Session*) inSession
+- (id) initWithConversation:(HOPConversation*) inConversation
 {
     return nil;
 }
@@ -75,6 +75,7 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    [super viewDidAppear:animated];
     if (self.buttonWithAnimation)
         [self makePulsingAnimationForButton:self.buttonWithAnimation];
 }
@@ -107,7 +108,7 @@
 
 - (IBAction) callHangup:(id)sender
 {
-    [[SessionManager sharedSessionManager] endCallForSession:self.session];
+    [[SessionManager sharedSessionManager] endCallForConversation:self.conversation];
 }
 
 - (IBAction) pauseCall:(id)sender

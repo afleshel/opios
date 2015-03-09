@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <deployment defaultVersion="1792" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ChatViewController">
@@ -25,23 +25,27 @@
             <subviews>
                 <view contentMode="scaleToFill" placeholderIntrinsicWidth="320" placeholderIntrinsicHeight="341" translatesAutoresizingMaskIntoConstraints="NO" id="RCN-I5-Cvn">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="341"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" image="iPhone_background_navigation_mode.png" translatesAutoresizingMaskIntoConstraints="NO" id="59" userLabel="Background Image View - iPhone_background_navigation_mode.png">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="68" userLabel="Message Entry View">
+                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="13">
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="291"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <color key="separatorColor" red="0.75759631240000003" green="0.81539670289999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <outlet property="dataSource" destination="-1" id="26"/>
+                                <outlet property="delegate" destination="-1" id="27"/>
+                            </connections>
+                        </tableView>
+                        <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="68" userLabel="Message Entry View">
                             <rect key="frame" x="0.0" y="270" width="320" height="71"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                             <subviews>
                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="iPhone_chat_textfield_bkgd.png" translatesAutoresizingMaskIntoConstraints="NO" id="72">
                                     <rect key="frame" x="0.0" y="21" width="320" height="50"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 </imageView>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="71">
                                     <rect key="frame" x="237" y="26" width="80" height="40"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                     <state key="normal" title="Send" backgroundImage="iPhone_send_button.png">
                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -56,11 +60,9 @@
                                 </button>
                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="iPhone_chat_textfield.png" translatesAutoresizingMaskIntoConstraints="NO" id="69">
                                     <rect key="frame" x="7" y="28" width="223" height="36"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 </imageView>
                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="70">
                                     <rect key="frame" x="7" y="28" width="223" height="36"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -70,9 +72,11 @@
                                         <outlet property="delegate" destination="-1" id="260"/>
                                     </connections>
                                 </textView>
-                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m4V-nR-VhO">
-                                    <rect key="frame" x="15" y="0.0" width="300" height="21"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m4V-nR-VhO">
+                                    <rect key="frame" x="40" y="0.0" width="240" height="21"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="21" id="2lX-Bg-rae"/>
+                                    </constraints>
                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                     <color key="textColor" white="0.79998289233576647" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
@@ -84,33 +88,26 @@
                                 <constraint firstItem="69" firstAttribute="top" secondItem="70" secondAttribute="top" id="Fb2-Z6-tzS"/>
                                 <constraint firstAttribute="height" constant="71" id="Qjb-hb-MR0"/>
                                 <constraint firstItem="69" firstAttribute="bottom" secondItem="70" secondAttribute="bottom" id="TwD-sb-TZE"/>
+                                <constraint firstAttribute="trailing" secondItem="m4V-nR-VhO" secondAttribute="trailing" constant="40" id="UNq-Rq-nmK"/>
                                 <constraint firstItem="72" firstAttribute="centerY" secondItem="71" secondAttribute="centerY" id="WIl-L1-N5B"/>
                                 <constraint firstItem="72" firstAttribute="top" secondItem="68" secondAttribute="top" constant="21" id="Xe2-gn-WM9"/>
                                 <constraint firstItem="71" firstAttribute="leading" secondItem="70" secondAttribute="trailing" constant="7" id="XzQ-gC-d4y"/>
+                                <constraint firstItem="m4V-nR-VhO" firstAttribute="top" secondItem="68" secondAttribute="top" id="Ymw-PH-bYa"/>
                                 <constraint firstItem="71" firstAttribute="centerY" secondItem="69" secondAttribute="centerY" id="bP7-Y9-Ln6"/>
                                 <constraint firstItem="70" firstAttribute="trailing" secondItem="69" secondAttribute="trailing" id="eyI-D2-jJc"/>
+                                <constraint firstItem="m4V-nR-VhO" firstAttribute="leading" secondItem="68" secondAttribute="leading" constant="40" id="faB-UD-zev"/>
                                 <constraint firstAttribute="bottom" secondItem="72" secondAttribute="bottom" id="gDA-VR-mjB"/>
                                 <constraint firstItem="69" firstAttribute="leading" secondItem="68" secondAttribute="leading" constant="7" id="nri-rz-SmK"/>
                                 <constraint firstItem="72" firstAttribute="leading" secondItem="68" secondAttribute="leading" id="qdY-oO-PM6"/>
                             </constraints>
                         </view>
-                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="13">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="270"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            <color key="separatorColor" red="0.75759631240000003" green="0.81539670289999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                            <connections>
-                                <outlet property="dataSource" destination="-1" id="26"/>
-                                <outlet property="delegate" destination="-1" id="27"/>
-                            </connections>
-                        </tableView>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="13" secondAttribute="trailing" id="0KT-Qb-rja"/>
                         <constraint firstItem="13" firstAttribute="top" secondItem="RCN-I5-Cvn" secondAttribute="top" id="BrU-pr-VTZ"/>
                         <constraint firstAttribute="bottom" secondItem="68" secondAttribute="bottom" id="OG7-93-wgp"/>
-                        <constraint firstItem="68" firstAttribute="bottom" secondItem="13" secondAttribute="bottom" constant="71" id="VYt-rA-D4U"/>
+                        <constraint firstItem="68" firstAttribute="bottom" secondItem="13" secondAttribute="bottom" constant="50" id="VYt-rA-D4U"/>
                         <constraint firstAttribute="trailing" secondItem="68" secondAttribute="trailing" id="byM-kd-J1J"/>
                         <constraint firstItem="68" firstAttribute="leading" secondItem="RCN-I5-Cvn" secondAttribute="leading" id="jUI-j7-11U"/>
                         <constraint firstItem="13" firstAttribute="leading" secondItem="RCN-I5-Cvn" secondAttribute="leading" id="yf0-gE-GcU"/>
@@ -124,7 +121,6 @@
                 <constraint firstAttribute="bottom" secondItem="RCN-I5-Cvn" secondAttribute="bottom" id="orA-Kx-MkD"/>
                 <constraint firstItem="RCN-I5-Cvn" firstAttribute="top" secondItem="1" secondAttribute="top" id="tgc-of-4mH"/>
             </constraints>
-            <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
         </view>
     </objects>
@@ -134,4 +130,9 @@
         <image name="iPhone_chat_textfield_bkgd.png" width="320" height="45"/>
         <image name="iPhone_send_button.png" width="80" height="40"/>
     </resources>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
 </document>

@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2012-2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -32,8 +32,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class HOPRolodexContact;
-@class HOPIdentityContact;
+@class HOPIdentity;
 
 /**
  Wrapper for identiy lookup info
@@ -43,22 +42,15 @@
 @property (nonatomic, strong) NSString* identityURI;
 @property (nonatomic, strong) NSDate* lastUpdated;
 
-/**
- *  HOPIdentityLookupInfo initializer.
- *
- *  @param inIdentityContact HOPIdentityContact object
- *
- *  @return HOPIdentityLookupInfo object
- */
-- (id) initWithIdentityContact:(HOPIdentityContact*) inIdentityContact;
+
 
 /**
  *  HOPIdentityLookupInfo initializer.
  *
- *  @param inRolodexContact HOPRolodexContact object
+ *  @param inIdentity HOPIdentity object
  *
  *  @return HOPIdentityLookupInfo object
  */
-- (id) initWithRolodexContact:(HOPRolodexContact*) inRolodexContact;
+- (id) initWithRolodexContact:(HOPIdentity*) inIdentity;
 
 @end

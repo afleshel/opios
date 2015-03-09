@@ -30,7 +30,7 @@
  */
 
 #import "HOPMessageEvent.h"
-#import "HOPMessageRecord.h"
+#import "HOPMessage.h"
 
 
 @implementation HOPMessageEvent

@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2012, SMB Phone Inc.
+ Copyright (c) 2012-2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -37,7 +37,7 @@
 @class CallDelegate;
 @class StackDelegate;
 @class MediaEngineDelegate;
-@class ConversationThreadDelegate;
+@class ConversationDelegate;
 @class AccountDelegate;
 @class MainViewController;
 @class IdentityDelegate;
@@ -50,7 +50,7 @@
 @property (nonatomic,strong) CallDelegate *callDelegate;
 @property (nonatomic,strong) StackDelegate *stackDelegate;
 @property (nonatomic,strong) MediaEngineDelegate *mediaEngineDelegate;
-@property (nonatomic,strong) ConversationThreadDelegate *conversationThreadDelegate;
+@property (nonatomic,strong) ConversationDelegate *conversationDelegate;
 @property (nonatomic,strong) AccountDelegate *accountDelegate;
 @property (nonatomic,strong) MainViewController *mainViewController;
 @property (nonatomic,strong) IdentityDelegate *identityDelegate;
@@ -71,7 +71,7 @@
 @property (nonatomic) BOOL appEnteredForeground;
 
 @property (nonatomic, strong) NSString* deviceId;
-@property (nonatomic, strong) NSString* deviceToken;
+//@property (nonatomic, strong) NSString* deviceToken;
 
 @property UIBackgroundTaskIdentifier backgroundingTaskId;
 

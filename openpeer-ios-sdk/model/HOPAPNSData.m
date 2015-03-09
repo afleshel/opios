@@ -30,7 +30,7 @@
  */
 
 #import "HOPAPNSData.h"
-#import "HOPOpenPeerContact.h"
+#import "HOPContact.h"
 
 
 @implementation HOPAPNSData

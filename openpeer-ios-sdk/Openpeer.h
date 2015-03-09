@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2014, SMB Phone Inc.
+ Copyright (c) 2012-2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -34,15 +34,13 @@
 #import "HOPAccount.h"
 #import "HOPCache.h"
 #import "HOPCall.h"
-#import "HOPContact.h"
 #import "HOPConversationThread.h"
-#import "HOPIdentity.h"
+#import "HOPAccountIdentity.h"
 #import "HOPIdentityLookup.h"
 #import "HOPIdentityLookupInfo.h"
 #import "HOPLogger.h"
 #import "HOPMediaEngine.h"
 #import "HOPMediaEngineRtpRtcpStatistics.h"
-#import "HOPMessage.h"
 #import "HOPModelManager.h"
 #import "HOPProtocols.h"
 #import "HOPStack.h"
@@ -60,19 +58,15 @@
 #import "HOPAvatar+External.h"
 #import "HOPCacheData.h"
 #import "HOPConversationEvent.h"
+#import "HOPConversation.h"
 #import "HOPConversationRecord+External.h"
-#import "HOPConversationThreadRecord.h"
-#import "HOPOpenPeerAccount+External.h"
-#import "HOPOpenPeerContact+External.h"
-#import "HOPIdentityContact.h"
+//#import "HOPConversationThreadRecord.h"
+//#import "HOPOpenPeerAccount+External.h"
 #import "HOPIdentityProvider.h"
 #import "HOPImage.h"
 #import "HOPMessageEvent.h"
-#import "HOPMessageRecord+External.h"
-#import "HOPOpenPeerAccount+External.h"
-#import "HOPParticipants.h"
-#import "HOPPublicPeerFile.h"
-#import "HOPRolodexContact+External.h"
+#import "HOPMessage+External.h"
+#import "HOPIdentity+External.h"
 
 
 

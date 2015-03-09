@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2012, SMB Phone Inc.
+ Copyright (c) 2012-2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 #import <OpenpeerSDK/HOPTypes.h>
 
 @class WebLoginViewController;
-@class HOPIdentity;
+@class HOPAccountIdentity;
 
 @interface LoginManager : NSObject
 
@@ -52,8 +52,8 @@
 - (void) login;
 - (void) logout;
 
-- (void) onIdentityAssociationFinished:(HOPIdentity*) identity;
-- (void) attachDelegateForIdentity:(HOPIdentity*) identity forceAttach:(BOOL) forceAttach;
+- (void) onIdentityAssociationFinished:(HOPAccountIdentity*) accountIdentity;
+- (void) attachDelegateForIdentity:(HOPAccountIdentity*) accountIdentity forceAttach:(BOOL) forceAttach;
 
 - (void) onUserLoggedIn;
 - (void) onUserLogOut;

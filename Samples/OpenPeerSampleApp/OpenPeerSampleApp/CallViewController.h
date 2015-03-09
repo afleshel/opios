@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2012-2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -30,7 +30,7 @@
  */
 #import <UIKit/UIKit.h>
 
-@class Session;
+@class HOPConversation;
 
 @interface CallViewController : UIViewController
 
@@ -38,9 +38,9 @@
 @property (weak, nonatomic) IBOutlet UIButton *videoButton;
 @property (weak, nonatomic) IBOutlet UIButton *speakerButton;
 
-@property (weak,nonatomic) Session *session;
+@property (weak,nonatomic) HOPConversation *conversation;
 
-- (id) initWithSession:(Session*) inSession;
+- (id) initWithConversation:(HOPConversation*) inConversation;
 
 - (IBAction) callHangup:(id)sender;
 - (IBAction) muteCall:(id)sender;

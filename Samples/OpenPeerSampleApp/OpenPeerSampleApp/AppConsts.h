@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2012-2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -40,7 +40,8 @@ extern NSString * const settingsKeyAppIdSharedSecret;
 extern NSString * const settingsKeyAppName;
 extern NSString * const settingsKeyAppImageURL;
 extern NSString * const settingsKeyAppURL;
-extern NSString * const settingsKeyAPNS;
+extern NSString * const settingsKeyAPNSUrbanAirShip;
+extern NSString * const settingsKeyAPNSParse;
 extern NSString * const settingsKeyTelnetLogger;
 extern NSString * const settingsKeyOutgoingTelnetLogger;
 extern NSString * const settingsKeyStdOutLogger;
@@ -62,6 +63,7 @@ extern NSString * const settingsKeyDefaultLogLevel;
 extern NSString * const settingsKeyRedirectAfterLoginCompleteURL;
 extern NSString * const settingsDeviceTokenDownloadURL;
 extern NSString * const settingsDeviceTokenUploadURL;
+extern NSString * const settingsKeyDefaultConversationType;
 
 extern NSString * const archiveEnabled;
 extern NSString * const archiveServer;
@@ -96,6 +98,12 @@ extern NSString* const settingsKeyUrbanAirShipProductionAppKey;
 extern NSString* const settingsKeyUrbanAirShipProductionAppSecret;
 extern NSString* const settingsKeyUrbanAirShipAPIPushURL;
 
+extern NSString* const settingsKeyParseDevelopmentAppID;
+extern NSString* const settingsKeyParseDevelopmentClientKey;
+extern NSString* const settingsKeyParseProductionAppID;
+extern NSString* const settingsKeyParseProductionClientKey;
+
+extern NSString* const settingsKeyDefaultAPNSProvider;
 extern NSString* const settingsKeyAPNSTimeOut;
 #endif
 
@@ -129,6 +137,7 @@ extern NSString * const notificationRemoteSessionModeChanged;
 extern NSString * const notifictionAppReturnedFromBackground;
 extern NSString * const notificationCrashReportSent;
 extern NSString * const notificationComposingStatusChanged;
+extern NSString * const notificationMessagesRead;
 
 extern NSString * const notificationTypeApple;
 extern NSString * const notificationTypeAndroid;

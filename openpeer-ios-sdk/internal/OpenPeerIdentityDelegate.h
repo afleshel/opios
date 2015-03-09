@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2012, SMB Phone Inc.
+ Copyright (c) 2012-2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -40,7 +40,7 @@
 using namespace openpeer;
 using namespace openpeer::core;
 
-@class HOPIdentity;
+@class HOPAccountIdentity;
 
 ZS_DECLARE_CLASS_PTR(OpenPeerIdentityDelegate)
 
@@ -50,9 +50,9 @@ ZS_DECLARE_CLASS_PTR(OpenPeerIdentityDelegate)
 class OpenPeerIdentityDelegate : public IIdentityDelegate
 {
 protected:
-    id<HOPIdentityDelegate> identityDelegate;
+    id<HOPAccountIdentityDelegate> identityDelegate;
     
-    OpenPeerIdentityDelegate(id<HOPIdentityDelegate> inIdentityDelegate);
+    OpenPeerIdentityDelegate(id<HOPAccountIdentityDelegate> inIdentityDelegate);
 
 public:
     ~OpenPeerIdentityDelegate();
@@ -60,14 +60,14 @@ public:
      Create OpenPeerIdentityDelegate object packed in boost shared pointer.
      @returns OpenPeerIdentityDelegate object boost shared object
      */
-    static OpenPeerIdentityDelegatePtr create(id<HOPIdentityDelegate> inIdentityDelegate);
+    static OpenPeerIdentityDelegatePtr create(id<HOPAccountIdentityDelegate> inIdentityDelegate);
     
     virtual void onIdentityStateChanged(IIdentityPtr identity,IdentityStates state);
     virtual void onIdentityPendingMessageForInnerBrowserWindowFrame(IIdentityPtr identity);
     virtual void onIdentityRolodexContactsDownloaded(IIdentityPtr identity);
     
 private:
-    HOPIdentity* getHOPIdentity(IIdentityPtr identity);
-    HOPIdentity* getHOPIdentity(IIdentityPtr identity, BOOL createNewIfMissing);
+    HOPAccountIdentity* getHOPAccountIdentity(IIdentityPtr identity);
+    HOPAccountIdentity* getHOPAccountIdentity(IIdentityPtr identity, BOOL createNewIfMissing);
     void storeDownloadedContactsForIdentity(IIdentityPtr identity);
 };

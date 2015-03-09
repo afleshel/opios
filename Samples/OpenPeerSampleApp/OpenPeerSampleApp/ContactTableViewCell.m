@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2012-2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -30,16 +30,16 @@
  */
 
 #import "ContactTableViewCell.h"
-#import <OpenpeerSDK/HOPRolodexContact+External.h>
+#import <OpenpeerSDK/HOPIdentity+External.h>
 #import <OpenpeerSDK/HOPAssociatedIdentity.h>
 #import <OpenpeerSDK/HOPIdentityProvider.h>
 #import <OpenpeerSDK/HOPAvatar+External.h>
-#import <OpenpeerSDK/HOPOpenPeerContact.h>
+#import <OpenpeerSDK/HOPConversation.h>
 #import <OpenpeerSDK/HOPModelManager.h>
 #import "AppConsts.h"
 #import "ImageManager.h"
 #import "SessionManager.h"
-#import "Session.h"
+//#import "Session.h"
 #import "UIBadgeView.h"
 
 
@@ -49,8 +49,11 @@
 
 @implementation ContactTableViewCell
 
-- (void) setContact:(HOPRolodexContact *)inContact inTable:(UITableView*) table atIndexPath:(NSIndexPath *)indexPath
+- (void) setContact:(HOPIdentity *)inContact inTable:(UITableView*) table atIndexPath:(NSIndexPath *)indexPath
 {
+    if (!inContact || !table)
+        return;
+    
     self.contact = inContact;
     
     self.displayName.text = [self.contact name];
@@ -83,7 +86,7 @@
         [self.displayImage addSubview:facebookTag];
     }
     
-    if (inContact.identityContact)
+    if (inContact.contact)
     {
         self.userInteractionEnabled = YES;
         self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -99,27 +102,6 @@
         self.displayName.font = [UIFont fontWithName:@"Helvetica-Bold" size:15];
         self.displayName.textColor = [UIColor blackColor];
     }
-    /*else
-     {
-     self.displayName.font = [UIFont fontWithName:@"Helvetica-Bold" size:15];
-     self.displayName.textColor = [UIColor colorWithRed:112.0/255.0 green:116.0/255.0 blue:119.0/255.0 alpha:1.0];
-     //[self.displayImage setAlpha:0.8];
-     [_displayChatImage setAlpha:0.4];
-     [_displayVoiceImage setAlpha:0.4];
-     [_displayVideoImage setAlpha:0.4];
-     }*/
-    
-    HOPOpenPeerContact* openPeerContact = [[HOPModelManager sharedModelManager] getOpenPeerContactForIdentityURI:inContact.identityURI];
-    
-    if (openPeerContact)
-    {
-        Session* session = [[SessionManager sharedSessionManager] getSessionForContacts:@[openPeerContact]];
-        if ([session.unreadMessageArray count] > 0)
-        {
-            NSString* numberToDisplay = [NSString stringWithFormat:@"%d",[session.unreadMessageArray count]];
-            self.badgeView.hidden = NO;
-            self.badgeView.badgeText = numberToDisplay;
-        }
-    }
+
 }
 @end

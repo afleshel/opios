@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2014, SMB Phone Inc.
+ Copyright (c) 2012-2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -34,6 +34,7 @@
 #import "OpenPeerSettingsDelegate.h"
 #import <zsLib/Log.h>
 #import <openpeer/stack/types.h>
+#import "HOPConversationType.h"
 
 ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 
@@ -91,11 +92,7 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
     }
     return self;
 }
-/*- (void) setupWithDelegate:(id<HOPSettingsDelegate>) inDelegate
-{
-    openPeerSettingsDelegatePtr = OpenPeerSettingsDelegate::create(inDelegate);
-    ISettings::setup(openPeerSettingsDelegatePtr);
-}*/
+
 
 - (void) setup
 {
@@ -222,5 +219,18 @@ ZS_DECLARE_SUBSYSTEM(openpeer_sdk)
 - (NSDictionary*) getCurrentSettingsDictionary
 {
     return ((OpenPeerSettingsDelegate*)openPeerSettingsDelegatePtr.get())->getCurrentSettingsDictionary();
+}
+
+- (NSString*) getDefaultCovnersationTypeStr
+{
+    NSString* ret = [[NSUserDefaults standardUserDefaults] objectForKey:OPENPEER_SDK_SETTING_CONVERSATION_TYPE];
+    
+    return ret;
+}
+
+- (HOPConversationThreadType) getDefaultCovnersationType
+{
+    HOPConversationThreadType ret = [HOPConversationType conversationThreadTypeForString:[self getDefaultCovnersationTypeStr]];
+    return ret;
 }
 @end

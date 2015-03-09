@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2012-2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -31,7 +31,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class HOPRolodexContact;
+@class HOPIdentity;
 @class UIBadgeView;
 
 @interface ContactTableViewCell : UITableViewCell 
@@ -46,9 +46,9 @@
 @property (nonatomic, weak) IBOutlet UIImageView* displayVideoImage;
 @property (nonatomic, weak) IBOutlet UIBadgeView* badgeView;
 
- @property (weak,nonatomic) HOPRolodexContact* contact;
+ @property (weak,nonatomic) HOPIdentity* contact;
 
-- (void) setContact:(HOPRolodexContact *)inContact inTable:(UITableView*) table atIndexPath:(NSIndexPath *)indexPath;
+- (void) setContact:(HOPIdentity *)inContact inTable:(UITableView*) table atIndexPath:(NSIndexPath *)indexPath;
 
 
 @end

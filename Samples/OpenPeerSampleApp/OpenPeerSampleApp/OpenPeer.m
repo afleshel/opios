@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2012, SMB Phone Inc.
+ Copyright (c) 2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -50,7 +50,7 @@
 //Delegates
 #import "StackDelegate.h"
 #import "MediaEngineDelegate.h"
-#import "ConversationThreadDelegate.h"
+#import "ConversationDelegate.h"
 #import "CallDelegate.h"
 #import "AccountDelegate.h"
 #import "IdentityDelegate.h"
@@ -109,6 +109,7 @@
 - (void) preSetup
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Pre setup");
+    
     //Create all delegates required for communication with core
     [self createDelegates];
     
@@ -121,28 +122,24 @@
     
     if ([UIDevice isNetworkReachable])
     {
-        //Set persistent stores
-        NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
-        NSString *dataPathDirectory = [libraryPath stringByAppendingPathComponent:@"db"];
-        [[HOPModelManager sharedModelManager] setDataPath:dataPathDirectory backupData:NO];
-     
         //Set settigns delegate
         [[HOPSettings sharedSettings] setup];
+        
         if ([Utility isRuningForTheFirstTime])
             [[HOPSettings sharedSettings] applyDefaults];
         
-        BOOL startDownloadingSettings = [[Settings sharedSettings] updateAppSettings];
+        BOOL startedDownloadingSettings = [[Settings sharedSettings] updateAppSettings];
         
-        if (![[HOPModelManager sharedModelManager] getLastLoggedInUser])
+        if (![HOPAccount isReloginPossible])
         {
             //Start settings download. If download is not started finish presetup
-            if (!startDownloadingSettings)
+            if (!startedDownloadingSettings)
                 [self finishPreSetup];
         }
         else
         {
             //Start settings download. If download is not started finish setup
-            if (!startDownloadingSettings)
+            if (!startedDownloadingSettings)
                 [self setup];
         }
     }
@@ -153,9 +150,11 @@
 - (void) finishPreSetup
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Pre setup finished");
-    if (![[HOPModelManager sharedModelManager] getLastLoggedInUser])
+    
+    if (![HOPAccount isReloginPossible])
     {
         OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"There is no logged in user");
+        
         if ([[NSUserDefaults standardUserDefaults] boolForKey: settingsKeyQRScannerShownAtStart])
             [[self mainViewController] showQRScanner]; //Show QR scanner if user wants to change settings by reading QR code
         else if ([[NSUserDefaults standardUserDefaults] boolForKey:settingsKeySplashScreenAllowsQRScannerGesture])
@@ -169,6 +168,7 @@
         [self setup];
     }
 }
+
 /**
  Initializes the open peer stack. After initialization succeeds, login screen is displayed, or user relogin started.
  @param inMainViewController MainViewController Input main view controller.
@@ -176,9 +176,7 @@
 - (void) setup
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Started setup");
-    //If authorized application id is missing, generate it 
-//    if ([[[HOPSettings sharedSettings] getAuthorizedApplicationId] length] == 0)
-//        [[HOPSettings sharedSettings] storeAuthorizedApplicationId:[[OpenPeer sharedOpenPeer] authorizedApplicationId]];
+
     [self refreshAuthorizedApplicationId];
     
     long secondsTillExpire = [HOPStack getExpiryForAuthorizedApplicationID:[[HOPSettings sharedSettings] getAuthorizedApplicationId]];
@@ -227,7 +225,7 @@
     
     self.stackDelegate = nil;
     self.mediaEngineDelegate = nil;
-    self.conversationThreadDelegate = nil;
+    self.conversationDelegate = nil;
     self.callDelegate = nil;
     self.accountDelegate = nil;
     self.identityDelegate = nil;
@@ -241,7 +239,7 @@
 {
     self.stackDelegate = [[StackDelegate alloc] init];
     self.mediaEngineDelegate = [[MediaEngineDelegate alloc] init];
-    self.conversationThreadDelegate = [[ConversationThreadDelegate alloc] init];
+    self.conversationDelegate = [[ConversationDelegate alloc] init];
     self.callDelegate = [[CallDelegate alloc] init];
     self.accountDelegate = [[AccountDelegate alloc] init];
     self.identityDelegate = [[IdentityDelegate alloc] init];
@@ -275,23 +273,26 @@
 
 - (void) prepareAppForBackground
 {
-    OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Preparing app for the background");
-    UIBackgroundTaskIdentifier bgTask = UIBackgroundTaskInvalid;
-    
-    bgTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^
-              {
-                  [[HOPBackgrounding sharedBackgrounding]notifyGoingToBackgroundNow];
-                  
-                  [[UIApplication sharedApplication] endBackgroundTask:bgTask];
-              }];
-    
-    [[OpenPeer sharedOpenPeer] setBackgroundingTaskId:bgTask];
-    
-    // Start the long-running task and return immediately.
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
-                   {
-                       [[HOPBackgrounding sharedBackgrounding] notifyGoingToBackground:[[OpenPeer sharedOpenPeer] backgroundingDelegate]];
-                   });
+    if ([[HOPStack sharedStack] isStackReady])
+    {
+        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelInsane, @"Preparing app for the background");
+        UIBackgroundTaskIdentifier bgTask = UIBackgroundTaskInvalid;
+        
+        bgTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^
+                  {
+                      [[HOPBackgrounding sharedBackgrounding]notifyGoingToBackgroundNow];
+                      
+                      [[UIApplication sharedApplication] endBackgroundTask:bgTask];
+                  }];
+        
+        [[OpenPeer sharedOpenPeer] setBackgroundingTaskId:bgTask];
+        
+        // Start the long-running task and return immediately.
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
+                       {
+                           [[HOPBackgrounding sharedBackgrounding] notifyGoingToBackground:[[OpenPeer sharedOpenPeer] backgroundingDelegate]];
+                       });
+    }
 }
 
 @end

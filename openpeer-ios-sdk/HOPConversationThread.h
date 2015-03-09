@@ -32,22 +32,24 @@
 #import <Foundation/Foundation.h>
 #import "HOPTypes.h"
 
-@class HOPContact;
-@class HOPRolodexContact;
+@class HOPCoreContact;
+@class HOPIdentity;
 @class HOPMessage;
 @class HOPAccount;
-@class HOPIdentity;
-@class HOPOpenPeerContact;
+@class HOPAccountIdentity;
+@class HOPContact;
 //HOP_NOTICE: Don't expose this till group conversations are not enabled
 @interface ContactInfo
 {
-  HOPContact* mContact;
+  HOPCoreContact* mContact;
   NSString* mProfileBundleEl;
 };
 
 @end
 
 @interface HOPConversationThread : NSObject
+
+@property (assign) HOPConversationThreadType conversationType;
 
 /**
 *  Creates a new conversation thread.
@@ -57,6 +59,9 @@
 *  @return HOPConversationThread object
 */
 + (id) conversationThreadWithIdentities:(NSArray*) identities;
+
+
++ (id) conversationThreadWithIdentities:(NSArray*) identities participants:(NSArray*) participants conversationThreadID:(NSString*) conversationThreadID  threadType:(HOPConversationThreadType) threadType;
 
 /**
  Returns list of all active conversation threads.
@@ -114,31 +119,26 @@
 
 /**
  Returns the array of contacts participating in the conversation thread.
- @returns Array of HOPContact objects
+ @returns Array of HOPCoreContact objects
  */
-- (NSArray*) getContacts;
+//- (NSArray*) getContacts;
 
 /**
  Adds array of contacts to the conversation thread.
- @param contacts  Array of HOPContact objects to be added to the conversation thread
+ @param contacts  Array of HOPCoreContact objects to be added to the conversation thread
  */
 - (void) addContacts: (NSArray*) contacts;
 
 /**
  Removes an array of contacts from the conversation thread.
- @param contacts Array of HOPContact objects to be removed from the conversation thread
+ @param contacts Array of HOPCoreContact objects to be removed from the conversation thread
  */
 - (void) removeContacts: (NSArray*) contacts;
 
-/**
- Returns list of HOPIdentity objects for associated with HOPContact object.
- @param coAn array for HOPIdentity objects
- */
-- (NSArray*) getIdentityContactListForContact:(HOPContact*) contact;
 
 /**
  Returns a state of the provided contact.
- @param contact HOPContact object
+ @param contact HOPCoreContact object
  @returns Contact connection state enum
  */
 - (HOPConversationThreadContactConnectionState) getContactConnectionState: (HOPContact*) contact;
@@ -157,7 +157,7 @@
  *
  *  @return Contact composing status 
  */
-- (HOPConversationThreadContactStatus) getContactStatus:(HOPContact*) contact;
+- (HOPComposingState) getComposingStateForContact:(HOPContact*) contact;
 
 
 /**
@@ -165,7 +165,7 @@
  *
  *  @param status  Contact composing status
  */
-- (void) setStatusInThread:(HOPConversationThreadContactStatus) status;
+- (void) setComposingStatusInThread:(HOPComposingState) status;
 
 /**
  Sends message to all contacts in the conversation thread. Deprecated.
@@ -197,6 +197,7 @@
  */
 - (BOOL) getMessageDeliveryState: (NSString*) messageID outDeliveryState:(HOPConversationThreadMessageDeliveryState*) outDeliveryState;
 
+- (void) setMessageDeliveryState: (NSString*) messageID deliveryState:(HOPConversationThreadMessageDeliveryState) deliveryState;
 /**
  *  Mark all received messages thus far as read
  */
@@ -209,7 +210,7 @@
  @param contact Message recepient
  @return NSString formated system message
  */
-+ (NSString*) createSystemMessage:(HOPSystemMessageType) systemMessageType messageType:(int) systemMessageType contact:(HOPContact*) contact;
+//+ (NSString*) createSystemMessage:(HOPSystemMessageType) systemMessageType messageType:(int) messageType contact:(HOPCoreContact*) contact;
 
 /**
  *  Returns system message type string.

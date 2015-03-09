@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2012-2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 #import "IconDownloader.h"
 
 #import <OpenpeerSDK/HOPAvatar+External.h>
-#import <OpenpeerSDK/HOPRolodexContact+External.h>
+#import <OpenpeerSDK/HOPIdentity+External.h>
 
 @interface ImageManager ()
 
@@ -117,12 +117,12 @@
     }
 }
 
-- (UIImage*) getAvatarImageForRolodexContact:(HOPRolodexContact*) rolodexContact
+- (UIImage*) getAvatarImageForIdentity:(HOPIdentity*) identity
 {
     UIImage* ret = nil;
-    if (rolodexContact)
+    if (identity)
     {
-        HOPAvatar* avatar = [rolodexContact getAvatarForWidth:[NSNumber numberWithFloat:AVATAR_WIDTH] height:[NSNumber numberWithFloat:AVATAR_HEIGHT]];
+        HOPAvatar* avatar = [identity getAvatarForWidth:[NSNumber numberWithFloat:AVATAR_WIDTH] height:[NSNumber numberWithFloat:AVATAR_HEIGHT]];
         if (avatar)
         {
             ret = [avatar getImage];

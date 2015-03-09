@@ -31,14 +31,14 @@
 
 #import <UIKit/UIKit.h>
 
-@class HOPMessageRecord;
+@class HOPMessage;
 @class TTTAttributedLabel;
 
 @interface ChatCell : UITableViewCell
 
-@property (nonatomic, weak) HOPMessageRecord *message;
+@property (nonatomic, weak) HOPMessage *message;
 @property (nonatomic, strong) TTTAttributedLabel *messageLabel;
 
-- (void) setMessage:(HOPMessageRecord*) message;
+- (void) setMessage:(HOPMessage*) message;
 + (CGSize) calcMessageHeight:(NSString *)message forScreenWidth:(float)width;
 @end

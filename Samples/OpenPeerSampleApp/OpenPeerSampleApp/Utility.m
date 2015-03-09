@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2012, SMB Phone Inc.
+ Copyright (c) 2012-2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -324,28 +324,6 @@ static const short _base64DecodingTable[256] = {
     return res;
 }
 
-+ (NSString*) getMessageDeliveryStateAsString:(HOPConversationThreadMessageDeliveryState) messageState
-{
-    NSString *res = nil;
-    
-    switch (messageState)
-    {
-        case HOPConversationThreadMessageDeliveryStateDiscovering:
-            res = NSLocalizedString(@"discovering", @"");
-            break;
-        case HOPConversationThreadMessageDeliveryStateUserNotAvailable:
-            res = NSLocalizedString(@"user not available", @"");
-            break;
-        case HOPConversationThreadMessageDeliveryStateDelivered:
-            res = NSLocalizedString(@"delivered", @"");
-            break;
-      case HOPConversationThreadMessageDeliveryStateRead:
-            res = NSLocalizedString(@"read", @"");
-            break;
-    }
-    return res;
-}
-
 + (NSString*) getFunctionNameForRequest:(NSString*) requestString
 {
     NSString* ret = @"";
@@ -599,6 +577,34 @@ static const short _base64DecodingTable[256] = {
     
     ret = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
+    
+    return ret;
+}
+
++ (NSDictionary*) dictionaryFromJSON:(NSString*) json
+{
+    NSDictionary* ret = nil;
+    if (json.length > 0)
+    {
+        NSData* data = [json dataUsingEncoding:NSUTF8StringEncoding];
+        if (data)
+        {
+            ret = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+        }
+    }
+    return ret;
+}
+
++ (NSString*) jsonFromDictionary:(NSDictionary*) dictionary
+{
+    NSString* ret = nil;
+    
+    if (dictionary.count > 0)
+    {
+        NSData* data = [NSJSONSerialization dataWithJSONObject:dictionary options:0 error:nil];
+        if (data)
+            ret = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    }
     
     return ret;
 }

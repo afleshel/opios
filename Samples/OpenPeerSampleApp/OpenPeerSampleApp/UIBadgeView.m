@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013, SMB Phone Inc.
+ Copyright (c) 2012-2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -120,7 +120,8 @@
             // add gradient
             
             CGContextSaveGState(context);
-            CGContextClip(context);
+            if (!CGContextIsPathEmpty(context))
+                CGContextClip(context);
             CGGradientRef gradient = CGGradientCreateWithColors(colorspace, (CFArrayRef)self.badgeBackgroundColors, NULL);
             CGPoint startPoint = bounds.origin;
             CGPoint endPoint = CGPointMake(bounds.origin.x, bounds.origin.y + bounds.size.height);
@@ -134,13 +135,15 @@
             CGContextDrawPath(context, kCGPathFill);   
             
             CGContextSaveGState(context);
-            CGContextClip(context);
+            if (!CGContextIsPathEmpty(context))
+                CGContextClip(context);
         }
 
         
         CGContextRestoreGState(context);
         
         CGPathRelease(thePath);
+        CGPathRelease(thePath2);
         CGColorSpaceRelease(colorspace);
         
         

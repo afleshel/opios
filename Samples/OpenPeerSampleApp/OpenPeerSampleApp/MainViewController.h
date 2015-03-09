@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2012, SMB Phone Inc.
+ Copyright (c) 2012-2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -31,7 +31,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Delegates.h"
-@class Session;
+@class HOPConversation;
 
 @class LoginViewController;
 @class WebLoginViewController;
@@ -59,11 +59,12 @@ typedef  enum
     EXISTING_SESSION_REFRESH_NOT_VISIBLE_CHAT,
     EXISTIG_SESSION_SHOW_CHAT,
     INCOMING_CALL_WHILE_OTHER_INPROGRESS,
+    REPLACE_EXISTING_SESSION,
     
     ERROR_CALL_ALREADY_IN_PROGRESS = 100
 }SessionTransitionStates;
 
-@interface MainViewController : UIViewController<UIActionSheetDelegate,UITabBarControllerDelegate,UIGestureRecognizerDelegate,LoginEventsDelegate>
+@interface MainViewController : UIViewController<UIActionSheetDelegate,UITabBarControllerDelegate,UIGestureRecognizerDelegate,LoginEventsDelegate,UINavigationControllerDelegate>
 
 @property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, weak) IBOutlet UILabel *activityLabel;
@@ -79,16 +80,18 @@ typedef  enum
 
 @property (nonatomic, strong) UITapGestureRecognizer *threeTapGestureRecognizer;
 
+- (void) popLastConversationViewController;
+
 - (void) showTabBarController;
 - (void) showWebLoginView:(WebLoginViewController*) webLoginViewController;
 - (void) closeWebLoginView:(WebLoginViewController*) webLoginViewController;
 
-- (void) showSessionViewControllerForSession:(Session*) session forIncomingCall:(BOOL) incomingCall forIncomingMessage:(BOOL) incomingMessage;
+- (BOOL) showSessionViewControllerForConversation:(HOPConversation*) conversation replaceConversation:(HOPConversation*) replaceConversation incomingCall:(BOOL) incomingCall incomingMessage:(BOOL) incomingMessage;
 - (void) removeSessionViewControllerForSession:(NSString*) sessionId;
 - (void) removeAllSessionViewControllers;
 - (void) updateSessionViewControllerId:(NSString*) oldSessionId newSesionId:(NSString*) newSesionId;
 
-- (void) showIncominCallForSession:(Session*) session;
+- (void) showIncominCallForConversation:(HOPConversation*) conversation;
 - (void) showNotification:(NSString*) message;
 
 - (void) removeSplashScreen;
@@ -99,4 +102,5 @@ typedef  enum
 - (void) showQRScanner;
 - (void) showSplashScreen;
 - (void) waitForUserGesture;
+- (void) changeKeyForViewController:(NSString*) oldKey newKey:(NSString*) newKey;
 @end

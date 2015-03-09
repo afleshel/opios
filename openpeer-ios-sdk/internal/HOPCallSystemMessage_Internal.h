@@ -40,8 +40,8 @@ using namespace openpeer::core;
     CallSystemMessagePtr callSystemMessagePtr;
 }
 
-- (id) initWithCoreCallSystemMessage:(CallSystemMessagePtr) inCallSystemMessagePtr;
+//- (id) initWithCoreCallSystemMessage:(CallSystemMessagePtr) inCallSystemMessagePtr;
 
 - (CallSystemMessagePtr) getCallSystemMessagePtr;
-
+- (void) setCallSystemMessagePtr:(CallSystemMessagePtr) inCallSystemMessagePtr;
 @end

@@ -32,18 +32,21 @@
 #import "HOPConversationRecord.h"
 #import "HOPConversationEvent.h"
 #import "HOPConversationThreadRecord.h"
-#import "HOPMessageRecord.h"
+#import "HOPMessage.h"
 #import "HOPOpenPeerAccount.h"
-#import "HOPOpenPeerContact.h"
+#import "HOPContact.h"
 
 
 @implementation HOPConversationRecord
 
 @dynamic creationTime;
 @dynamic lastActivity;
+@dynamic topic;
 @dynamic name;
 @dynamic sessionID;
 @dynamic type;
+@dynamic removed;
+@dynamic selfRemoved;
 @dynamic conversationThreadRecords;
 @dynamic events;
 @dynamic homeUser;

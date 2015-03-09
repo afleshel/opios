@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2012, SMB Phone Inc.
+ Copyright (c) 2012-2015, Hookflash Inc.
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -33,27 +33,29 @@
 #import "OpenPeer.h"
 #import <OpenpeerSDK/HOPCall.h>
 #import <OpenpeerSDK/HOPTypes.h>
-#import <OpenpeerSDK/HOPConversationThread.h>
-#import <OpenpeerSDK/HOPContact.h>
+//#import <OpenpeerSDK/HOPConversationThread.h>
+#import <OpenpeerSDK/HOPIdentity+External.h>
 #import "SessionManager.h"
 #import "MessageManager.h"
 #import "SoundsManager.h"
 
-#import "Session.h"
+//#import "Session.h"
 #import "MainViewController.h"
 #import "SessionViewController_iPhone.h"
 #import "Utility.h"
 #import <OpenpeerSDK/HOPMediaEngine.h>
+#import <OpenpeerSDK/HOPConversation.h>
+#import <OpenpeerSDK/HOPContact+External.h>
 @implementation CallDelegate
 
 - (void) onCallStateChanged:(HOPCall*) call callState:(HOPCallState) callState
 {
     OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"Call state: %@", [Utility getCallStateAsString:[call getState]]);
-    [[SessionManager sharedSessionManager] setLatestValidConversationThread:[call getConversationThread]];
-    NSString* sessionId = [[call getConversationThread] getThreadId];
+    //[[SessionManager sharedSessionManager] setLatestValidConversation:[call getConversation]];
+    HOPConversation* conversation = [call getConversation];
     dispatch_async(dispatch_get_main_queue(), ^{
 
-        SessionViewController_iPhone* sessionViewController = [[[[OpenPeer sharedOpenPeer] mainViewController] sessionViewControllersDictionary] objectForKey:sessionId];
+        SessionViewController_iPhone* sessionViewController = [[[[OpenPeer sharedOpenPeer] mainViewController] sessionViewControllersDictionary] objectForKey:[conversation getConversationID]];
         
         [sessionViewController updateCallState];
         
@@ -88,7 +90,7 @@
                 [[SessionManager sharedSessionManager] onCallOpened:call];
                 
                 if ([[call getCaller] isSelf])
-                    [[MessageManager sharedMessageManager] sendCallSystemMessage:HOPCallSystemMessageTypeCallAnswered reasonCode:0 session:[[[SessionManager sharedSessionManager] sessionsDictionary] objectForKey:sessionId]];
+                    [[MessageManager sharedMessageManager] sendCallSystemMessage:HOPCallSystemMessageTypeCallAnswered reasonCode:0 forConversation:conversation];
                 
                 [sessionViewController startTimer];
                 break;
@@ -124,7 +126,7 @@
                     {
                         reasonCode = 404;
                     }
-                    [[MessageManager sharedMessageManager] sendCallSystemMessage:HOPCallSystemMessageTypeCallHungup reasonCode:reasonCode session:[[[SessionManager sharedSessionManager] sessionsDictionary] objectForKey:sessionId]];
+                    [[MessageManager sharedMessageManager] sendCallSystemMessage:HOPCallSystemMessageTypeCallHungup reasonCode:reasonCode forConversation:conversation];
                 }
                 break;
                 

@@ -32,7 +32,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class HOPImage, HOPRolodexContact;
+@class HOPIdentity, HOPImage;
 
 @interface HOPAvatar : NSManagedObject
 
@@ -41,14 +41,14 @@
 @property (nonatomic, retain) NSString * url;
 @property (nonatomic, retain) NSNumber * width;
 @property (nonatomic, retain) HOPImage *avatarImage;
-@property (nonatomic, retain) NSSet *rolodexContacts;
+@property (nonatomic, retain) NSSet *identities;
 @end
 
 @interface HOPAvatar (CoreDataGeneratedAccessors)
 
-- (void)addRolodexContactsObject:(HOPRolodexContact *)value;
-- (void)removeRolodexContactsObject:(HOPRolodexContact *)value;
-- (void)addRolodexContacts:(NSSet *)values;
-- (void)removeRolodexContacts:(NSSet *)values;
+- (void)addIdentitiesObject:(HOPIdentity *)value;
+- (void)removeIdentitiesObject:(HOPIdentity *)value;
+- (void)addIdentities:(NSSet *)values;
+- (void)removeIdentities:(NSSet *)values;
 
 @end
