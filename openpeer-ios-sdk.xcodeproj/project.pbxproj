@@ -219,13 +219,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		00A06EB11AAD607C00878B94 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E236EC291930100B009FC1E6 /* webrtc_ios.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D9F32959024A3DE38441E273;
-			remoteInfo = webrtc;
-		};
 		00A06EB61AAD608B00878B94 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8792E8F41651A04800DEAC58 /* zsLib_ios.xcodeproj */;
@@ -373,19 +366,13 @@
 			remoteGlobalIDString = 87C981F817BE37CE002B947B;
 			remoteInfo = OpenPeerDataModel;
 		};
-		E204E84B1A7AE0C7003E73EF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E204E8321A7AE0A2003E73EF /* all_ios.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = D95ADB02FE982347C7965145;
-			remoteInfo = All;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		00243939178F52D300B79368 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		004A55BC1839DA9E00AEF378 /* ortclib_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ortclib_ios.xcodeproj; path = "../libs/ortc-lib/projects/xcode/ortclib_ios/ortclib_ios.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		004B22311A10798A00239AAC /* easysqlite_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = easysqlite_ios.xcodeproj; path = ../libs/easysqlite/projects/xcode/easysqlite_ios.xcodeproj; sourceTree = SOURCE_ROOT; };
+		0079305A1AAE6CAE00222754 /* all_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = all_ios.xcodeproj; path = ../../libs/webrtc/all_ios.xcodeproj; sourceTree = "<group>"; };
 		009A268519EDC50E00F277DB /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = "../libs/curl/curl/ios-appstore/lib/libcurl.a"; sourceTree = "<group>"; };
 		00A06F0B1AAD61EE00878B94 /* libresolv.9.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libresolv.9.dylib; path = usr/lib/libresolv.9.dylib; sourceTree = SDKROOT; };
 		00CF4C551A15C78800573A34 /* idnkit_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = idnkit_ios.xcodeproj; path = ../libs/idnkit/projects/xcode/idnkit_ios.xcodeproj; sourceTree = SOURCE_ROOT; };
@@ -549,7 +536,6 @@
 		87EE11081966D242002340AA /* HOPConversationRecord+External.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "HOPConversationRecord+External.mm"; sourceTree = "<group>"; };
 		87F11AF517C361AE00CFE85D /* HOPCache_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HOPCache_Internal.h; sourceTree = "<group>"; };
 		87FA4CE0165F891A00F7D973 /* HOPAccountIdentity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HOPAccountIdentity.h; sourceTree = "<group>"; };
-		E204E8321A7AE0A2003E73EF /* all_ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = all_ios.xcodeproj; path = "libs/op/libs/ortc-lib/libs/webrtc/all_ios.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		E204E84D1A7AE48E003E73EF /* libaudio_decoder_interface.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libaudio_decoder_interface.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E204E84E1A7AE48E003E73EF /* libaudio_encoder_interface.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libaudio_encoder_interface.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E204E8511A7AE4AE003E73EF /* libfield_trial_default.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libfield_trial_default.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -689,10 +675,9 @@
 			name = Libraries;
 			sourceTree = "<group>";
 		};
-		00A06EAC1AAD607B00878B94 /* Products */ = {
+		0079305B1AAE6CAE00222754 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				00A06EB21AAD607C00878B94 /* libwebrtc.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -957,6 +942,7 @@
 		8792E8F21651A01400DEAC58 /* Core Projects */ = {
 			isa = PBXGroup;
 			children = (
+				0079305A1AAE6CAE00222754 /* all_ios.xcodeproj */,
 				8792E9151651A0BB00DEAC58 /* hfcore_ios.xcodeproj */,
 				8792E9091651A0A600DEAC58 /* hfstack_ios.xcodeproj */,
 				004B22311A10798A00239AAC /* easysqlite_ios.xcodeproj */,
@@ -966,7 +952,6 @@
 				00CF4C551A15C78800573A34 /* idnkit_ios.xcodeproj */,
 				8792E8FD1651A08F00DEAC58 /* udns_ios.xcodeproj */,
 				8792E8F41651A04800DEAC58 /* zsLib_ios.xcodeproj */,
-				E204E8311A7AE07F003E73EF /* webrtc */,
 			);
 			name = "Core Projects";
 			path = "openpeer-ios-sdk";
@@ -1077,21 +1062,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		E204E8311A7AE07F003E73EF /* webrtc */ = {
-			isa = PBXGroup;
-			children = (
-				E204E8321A7AE0A2003E73EF /* all_ios.xcodeproj */,
-			);
-			name = webrtc;
-			sourceTree = "<group>";
-		};
-		E204E8331A7AE0A2003E73EF /* Products */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1192,7 +1162,6 @@
 				00A06EED1AAD619000878B94 /* PBXTargetDependency */,
 				00A06EEF1AAD619000878B94 /* PBXTargetDependency */,
 				00A06EF11AAD619000878B94 /* PBXTargetDependency */,
-				E204E84C1A7AE0C7003E73EF /* PBXTargetDependency */,
 				87C16C3F1979A9B00054A29C /* PBXTargetDependency */,
 			);
 			name = OpenPeerSDK;
@@ -1238,8 +1207,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = E204E8331A7AE0A2003E73EF /* Products */;
-					ProjectRef = E204E8321A7AE0A2003E73EF /* all_ios.xcodeproj */;
+					ProductGroup = 0079305B1AAE6CAE00222754 /* Products */;
+					ProjectRef = 0079305A1AAE6CAE00222754 /* all_ios.xcodeproj */;
 				},
 				{
 					ProductGroup = 00A06EC21AAD60C900878B94 /* Products */;
@@ -1288,13 +1257,6 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		00A06EB21AAD607C00878B94 /* libwebrtc.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libwebrtc.a;
-			remoteRef = 00A06EB11AAD607C00878B94 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		00A06EB71AAD608B00878B94 /* libzsLib_ios.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1540,11 +1502,6 @@
 			isa = PBXTargetDependency;
 			target = 87C981F817BE37CE002B947B /* OpenpeerDataModel */;
 			targetProxy = 87C9820D17BE38B1002B947B /* PBXContainerItemProxy */;
-		};
-		E204E84C1A7AE0C7003E73EF /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = All;
-			targetProxy = E204E84B1A7AE0C7003E73EF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

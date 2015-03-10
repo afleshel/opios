@@ -105,9 +105,7 @@
 		87272859166CC45B0089CBB6 /* LoginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87272858166CC45B0089CBB6 /* LoginManager.m */; };
 		87282CA31AA4814800F9192B /* iPhone_tabBar_3_bkgd.png in Resources */ = {isa = PBXBuildFile; fileRef = 8761FB6F1AA476AF00B643B1 /* iPhone_tabBar_3_bkgd.png */; };
 		87282CA41AA4814800F9192B /* iPhone_tabBar_3_bkgd@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8761FB701AA476AF00B643B1 /* iPhone_tabBar_3_bkgd@2x.png */; };
-		87282DC91AADD16400F9192B /* boost.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87282DC71AADD16400F9192B /* boost.a */; };
 		87282DCA1AADD16400F9192B /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87282DC81AADD16400F9192B /* libcurl.a */; };
-		87282DCB1AADD1FF00F9192B /* boost.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87282DC71AADD16400F9192B /* boost.a */; };
 		87282DCC1AADD1FF00F9192B /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87282DC81AADD16400F9192B /* libcurl.a */; };
 		87282DCE1AADD25500F9192B /* OpenpeerDataModel.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 87282DCD1AADD25500F9192B /* OpenpeerDataModel.bundle */; };
 		87282DD01AADDB2D00F9192B /* OpenpeerDataModel.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 87282DCD1AADD25500F9192B /* OpenpeerDataModel.bundle */; };
@@ -726,7 +724,6 @@
 		8727284F166CC1810089CBB6 /* MainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainViewController.xib; sourceTree = "<group>"; };
 		87272857166CC45A0089CBB6 /* LoginManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginManager.h; sourceTree = "<group>"; };
 		87272858166CC45B0089CBB6 /* LoginManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginManager.m; sourceTree = "<group>"; };
-		87282DC71AADD16400F9192B /* boost.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = boost.a; path = ../../OpenPeerSDK.framework/Versions/E/Libraries/boost.a; sourceTree = SOURCE_ROOT; };
 		87282DC81AADD16400F9192B /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = ../../OpenPeerSDK.framework/Versions/E/Libraries/libcurl.a; sourceTree = "<group>"; };
 		87282DCD1AADD25500F9192B /* OpenpeerDataModel.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = OpenpeerDataModel.bundle; path = ../../../OpenPeerSDK.framework/Versions/E/Resources/OpenpeerDataModel.bundle; sourceTree = "<group>"; };
 		872B1EB01918F7AD000E21C9 /* OpenPeerSampleApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = OpenPeerSampleApp.entitlements; sourceTree = "<group>"; };
@@ -1209,7 +1206,6 @@
 				87D4BD1F18675368008C2D30 /* CoreData.framework in Frameworks */,
 				87D4BD2018675368008C2D30 /* CoreGraphics.framework in Frameworks */,
 				87D4BD2118675368008C2D30 /* CoreImage.framework in Frameworks */,
-				87282DCB1AADD1FF00F9192B /* boost.a in Frameworks */,
 				87282DCC1AADD1FF00F9192B /* libcurl.a in Frameworks */,
 				8766359C1A6D2A82001A98BC /* Bolts.framework in Frameworks */,
 				8766359D1A6D2A82001A98BC /* ParseCrashReporting.framework in Frameworks */,
@@ -1522,13 +1518,11 @@
 		8727282B166CBF9B0089CBB6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				87EE5FE8166E917B002C5FA3 /* libresolv.dylib */,
 				876635A41A6D2C98001A98BC /* Accounts.framework */,
 				87E0FFB317BB8ADD00F30484 /* AddressBook.framework */,
 				87FF988D170EDB5C0017C627 /* AssetsLibrary.framework */,
 				874B135B1935F96800993F8D /* AudioToolbox.framework */,
 				874ADDB8166E13970095FE33 /* AVFoundation.framework */,
-				87282DC71AADD16400F9192B /* boost.a */,
 				87D4BDF318683B16008C2D30 /* CFNetwork.framework */,
 				874ADDB4166E138A0095FE33 /* CoreAudio.framework */,
 				871BC9A6179EECC400AEA4A6 /* CoreData.framework */,
