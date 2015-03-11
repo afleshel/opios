@@ -5,9 +5,9 @@
 	<key>outerFrameURL</key>
 	<string>http://identity.opp.me:5005/outer-new.html</string>
 	<key>identityProviderDomain</key>
-	<string>com-hookflash-sample.app.opp.me</string>
+	<string>com-hookflash-openpeersample.app.opp.me</string>
 	<key>identityFederateBaseURI</key>
-	<string>identity://facebook.com/</string>
+	<string>identity://twitter.com/</string>
 	<key>namespaceGrantServiceURL</key>
 	<string>http://identity.opp.me:5005/outernamespacegrant.html</string>
 	<key>lockBoxServiceDomain</key>
