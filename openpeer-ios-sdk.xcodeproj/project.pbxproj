@@ -366,6 +366,13 @@
 			remoteGlobalIDString = 87C981F817BE37CE002B947B;
 			remoteInfo = OpenPeerDataModel;
 		};
+		E29400251AB25F1C00D2A0BA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0079305A1AAE6CAE00222754 /* all_ios.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = D95ADB02FE982347C7965145;
+			remoteInfo = All;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -942,7 +949,6 @@
 		8792E8F21651A01400DEAC58 /* Core Projects */ = {
 			isa = PBXGroup;
 			children = (
-				0079305A1AAE6CAE00222754 /* all_ios.xcodeproj */,
 				8792E9151651A0BB00DEAC58 /* hfcore_ios.xcodeproj */,
 				8792E9091651A0A600DEAC58 /* hfstack_ios.xcodeproj */,
 				004B22311A10798A00239AAC /* easysqlite_ios.xcodeproj */,
@@ -952,6 +958,7 @@
 				00CF4C551A15C78800573A34 /* idnkit_ios.xcodeproj */,
 				8792E8FD1651A08F00DEAC58 /* udns_ios.xcodeproj */,
 				8792E8F41651A04800DEAC58 /* zsLib_ios.xcodeproj */,
+				E29400471AB25F7000D2A0BA /* webrtc */,
 			);
 			name = "Core Projects";
 			path = "openpeer-ios-sdk";
@@ -1062,6 +1069,14 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		E29400471AB25F7000D2A0BA /* webrtc */ = {
+			isa = PBXGroup;
+			children = (
+				0079305A1AAE6CAE00222754 /* all_ios.xcodeproj */,
+			);
+			name = webrtc;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1153,6 +1168,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				E29400261AB25F1C00D2A0BA /* PBXTargetDependency */,
 				00A06EE11AAD619000878B94 /* PBXTargetDependency */,
 				00A06EE31AAD619000878B94 /* PBXTargetDependency */,
 				00A06EE51AAD619000878B94 /* PBXTargetDependency */,
@@ -1502,6 +1518,11 @@
 			isa = PBXTargetDependency;
 			target = 87C981F817BE37CE002B947B /* OpenpeerDataModel */;
 			targetProxy = 87C9820D17BE38B1002B947B /* PBXContainerItemProxy */;
+		};
+		E29400261AB25F1C00D2A0BA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = All;
+			targetProxy = E29400251AB25F1C00D2A0BA /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
