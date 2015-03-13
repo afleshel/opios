@@ -10,32 +10,17 @@
 : ${CUSTOMER_SPECIFIC_RELEASE:=CustomerSpecific_Release.plist}
 
 sdkpath() {
-   echo Discovering SDK...
+  platform=$1
+  echo Discovering ${platform} SDK...
 
-	platform=$1
+  major_start=13
+  major_stop=4
 
-	SDKCheck[0]="9.1"
-	SDKCheck[1]="9.0.1"
-	SDKCheck[2]="9.0"
-	SDKCheck[3]="8.3.1"
-	SDKCheck[4]="8.3"
-	SDKCheck[5]="8.2.1"
-	SDKCheck[6]="8.2"
-	SDKCheck[7]="8.1.1"
-	SDKCheck[8]="8.1"
-    SDKCheck[9]="8.0"
-    SDKCheck[10]="7.2"
-    SDKCheck[11]="7.1"
-    SDKCheck[12]="7.0"
-    SDKCheck[13]="6.1"
-    SDKCheck[14]="6.0"
-    SDKCheck[15]="5.1"
-    SDKCheck[16]="5.0.1"
-    SDKCheck[17]="5.0"
-    SDKCheck[18]="4.3"
-    SDKCheck[19]="4.2"
-    SDKCheck[20]="4.1"
-    SDKCheck[21]="4.0"
+  minor_start=15
+  minor_stop=0
+
+  subminor_start=5
+  subminor_stop=0
 
     root="/Applications/Xcode.app/Contents/Developer/Platforms/${platform}.platform/Developer"
     oldRoot="/Developer/Platforms/${platform}.platform/Developer"
@@ -48,7 +33,7 @@ sdkpath() {
     if [ ! -d "${root}" ]
     then
         echo " "
-        echo "Oopsie.  You don't have an iOS SDK root in either of these locations: "
+        echo "Oopsie.  You don't have an SDK root in either of these locations: "
         echo "   ${root} "
         echo "   ${oldRoot}"
         echo " "
@@ -62,13 +47,35 @@ sdkpath() {
 
     SDK="unknown"
 
-    for value in "${SDKCheck[@]}"
+    for major in `seq ${major_start} ${major_stop}`
     do
-       if [ -d "${root}/SDKs/${platform}${value}.sdk" ]
-       then
-           SDK="${value}"
-           break
-       fi
+      for minor in `seq ${minor_start} ${minor_stop}`
+      do
+        for subminor in `seq ${subminor_start} ${subminor_stop}`
+        do
+          #echo Checking "${root}/SDKs/${platform}${major}.${minor}.${subminor}.sdk"
+          if [ -d "${root}/SDKs/${platform}${major}.${minor}.${subminor}.sdk" ]
+          then
+            SDK="${major}.${minor}.${subminor}"
+          echo Found SDK in location "${root}/SDKs/${platform}${SDK}.sdk"
+            return
+          fi
+        done
+        #echo Checking "${root}/SDKs/${platform}${major}.${minor}.sdk"
+        if [ -d "${root}/SDKs/${platform}${major}.${minor}.sdk" ]
+        then
+          SDK="${major}.${minor}"
+        echo Found SDK in location "${root}/SDKs/${platform}${SDK}.sdk"
+          return
+        fi
+      done
+      #echo Checking "${root}/SDKs/${platform}${major}.sdk"
+      if [ -d "${root}/SDKs/${platform}${major}.sdk" ]
+      then
+        SDK="${major}"
+      echo Found SDK in location "${root}/SDKs/${platform}${SDK}.sdk"
+        return
+      fi
     done
 
     if [ "${SDK}" == "unknown" ]
@@ -83,8 +90,6 @@ sdkpath() {
         echo " "
         exit 1
     fi
-
-    echo Found SDK in location "${root}/SDKs/${platform}${value}.sdk"
 }
 
 customertemplates() {
