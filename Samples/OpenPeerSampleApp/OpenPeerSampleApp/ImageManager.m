@@ -31,9 +31,18 @@
 
 #import "ImageManager.h"
 #import "IconDownloader.h"
+#import "OpenPeer.h"
+#import "MainViewController.h"
 
 #import <OpenpeerSDK/HOPAvatar+External.h>
 #import <OpenpeerSDK/HOPIdentity+External.h>
+#import <OpenpeerSDK/HOPMessage.h>
+#import <OpenpeerSDK/HOPModelManager.h>
+
+#import <SDWebImage/SDImageCache.h>
+#import <SDWebImage/UIImageView+WebCache.h>
+
+#import <Parse/Parse.h>
 
 @interface ImageManager ()
 
@@ -130,4 +139,93 @@
     }
     return ret;
 }
+
+- (void) storeImage:(UIImage*) image forKey:(NSString*) key
+{
+    if (image && key.length > 0)
+        [[SDImageCache sharedImageCache] storeImage:image forKey:key];
+}
+
+- (UIImage*) imageForKey:(NSString*) key
+{
+    UIImage* ret = nil;
+    
+    if (key.length)
+        ret = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:key];
+    
+    return ret;
+}
+
+//- (UIImage*) thumbnailForKey:(NSString*) key
+//{
+//    UIImage *resizedImage = [self resizedImageWithContentMode:UIViewContentModeScaleAspectFill
+//                                                       bounds:CGSizeMake(thumbnailSize, thumbnailSize)
+//                                         interpolationQuality:quality];
+//    
+//    // Crop out any part of the image that's larger than the thumbnail size
+//    // The cropped rect must be centered on the resized image
+//    // Round the origin points so that the size isn't altered when CGRectIntegral is later invoked
+//    CGRect cropRect = CGRectMake(round((resizedImage.size.width - 100) / 2),
+//                                 round((resizedImage.size.height - 100) / 2),
+//                                 thumbnailSize,
+//                                 thumbnailSize);
+//    UIImage *croppedImage = [resizedImage croppedImage:cropRect];
+//    
+//    return croppedImage;
+//}
+
+- (void) loadImageURL:(NSString*) url toImageView:(UIImageView*) imageView
+{
+    if (imageView && url.length > 0)
+        [imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+}
+
+- (void) downloadSharedImageForMessage:(HOPMessage*) message
+{
+    PFQuery *query = [PFQuery queryWithClassName:@"SharedPhoto"];
+    NSString* fileName = message.messageID;//[NSString stringWithFormat:@"%@.jpg",message.messageID];
+    [query whereKey:@"fileID" equalTo:fileName];
+    [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error)
+     {
+         if (!error) {
+             PFFile *file = [object objectForKey:@"imageFile"];
+             // file has not been downloaded yet, we just have a handle on this file
+             
+             [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
+              {
+                  UIImage* image = [UIImage imageWithData:data];
+                  if (image)
+                  {
+                      [[ImageManager sharedImageManager] storeImage:image forKey:message.messageID];
+                      message.visible = [NSNumber numberWithBool:YES];
+                      [[HOPModelManager sharedModelManager]saveContext];
+                  }
+              }];
+             
+             
+         }
+     }];
+}
+
+/*- (void) showFullscreenImage:(UITapGestureRecognizer*) gesture
+{
+    UIImageView *tempImage = [[UIImageView alloc]initWithImage:((UIImageView*)gesture.view).image];
+    self.imageView = tempImage;
+    
+    self.fullScreenView = [[UIScrollView alloc] initWithFrame:[[OpenPeer sharedOpenPeer] mainViewController].view.bounds];
+    self.fullScreenView.contentSize = CGSizeMake(self.imageView.frame.size.width , self.imageView.frame.size.height);
+    self.fullScreenView.maximumZoomScale = 1;
+    self.fullScreenView.minimumZoomScale = .37;
+    self.fullScreenView.clipsToBounds = YES;
+    self.fullScreenView.delegate = self;
+    [self.fullScreenView addSubview:self.imageView];
+    self.fullScreenView.zoomScale = .37;
+    
+    [[[OpenPeer sharedOpenPeer] mainViewController].view addSubview:self.fullScreenView];
+}
+
+-(UIView *) viewForZoomingInScrollView:(UIScrollView *)inScroll
+{
+    return self.imageView;
+}*/
 @end

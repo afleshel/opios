@@ -38,7 +38,7 @@
 @class VideoCallViewController;
 @class WaitingVideoViewController;
 
-@interface SessionViewController_iPhone : UIViewController<UINavigationControllerDelegate,ChatViewControllerDelegate,VideoCallViewControllerDelegate,UIActionSheetDelegate,SessionViewControllerDelegate>
+@interface SessionViewController_iPhone : UIViewController<UINavigationControllerDelegate,ChatViewControllerDelegate,VideoCallViewControllerDelegate,UIActionSheetDelegate,SessionViewControllerDelegate,UIImagePickerControllerDelegate>
 
 @property (nonatomic, strong) HOPConversation* conversation;
 @property (nonatomic, strong) ChatViewController* chatViewController;

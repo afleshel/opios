@@ -68,11 +68,13 @@
     HOPAvatar* avatar = [inContact getAvatarForWidth:[NSNumber numberWithFloat:AVATAR_WIDTH] height:[NSNumber numberWithFloat:AVATAR_HEIGHT]];
     if (avatar)
     {
-        UIImage* img = [avatar getImage];
-        if (!img)
-            [[ImageManager sharedImageManager] donwloadImageForAvatar:avatar tableView:table indexPath:indexPath];
-        else
-            self.displayImage.image = img;
+        //[self.displayImage sd_setImageWithURL:[NSURL URLWithString:avatar.url] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+        [[ImageManager sharedImageManager] loadImageURL:avatar.url toImageView:self.displayImage];
+//        UIImage* img = [avatar getImage];
+//        if (!img)
+//            [[ImageManager sharedImageManager] donwloadImageForAvatar:avatar tableView:table indexPath:indexPath];
+//        else
+//            self.displayImage.image = img;
     }
     
     self.displayImage.layer.cornerRadius = 5.0;

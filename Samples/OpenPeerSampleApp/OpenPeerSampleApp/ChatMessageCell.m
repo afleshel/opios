@@ -45,8 +45,8 @@
 
 @interface ChatMessageCell()
 
-@property (nonatomic, strong) UIFont *chatNameFont;
-@property (nonatomic, strong) UIFont *chatTimestampFont;
+//@property (nonatomic, strong) UIFont *chatNameFont;
+//@property (nonatomic, strong) UIFont *chatTimestampFont;
 @property (nonatomic, strong) NSString *unicodeMessageText;
 @property (nonatomic, strong) UILabel *messageStatus;
 @property (nonatomic, strong) UIImage *baloonImageLeft;
@@ -58,7 +58,7 @@
 
 @implementation ChatMessageCell
 
-@synthesize message;
+//@synthesize message;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -68,8 +68,8 @@
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.accessoryType = UITableViewCellAccessoryNone;
         self.backgroundColor = [UIColor clearColor];
-        self.chatNameFont =  [UIFont fontWithName:@"Helvetica-Bold" size:9.0];
-        self.chatTimestampFont = [UIFont fontWithName:@"Helvetica" size:9.0];
+//        self.chatNameFont =  [UIFont fontWithName:@"Helvetica-Bold" size:9.0];
+//        self.chatTimestampFont = [UIFont fontWithName:@"Helvetica" size:9.0];
         self.messageLabel = [[TTTAttributedLabel alloc] init];
         self.messageStatus = [[UILabel alloc] init];
         
@@ -236,7 +236,7 @@
     float labelHeight = 0;
     float headerLabelXpos;
     
-    if(self.message.showStatus.boolValue && message.outgoingMessageStatus >= HOPConversationThreadMessageDeliveryStateSent)
+    if(self.message.showStatus.boolValue && self.message.outgoingMessageStatus >= HOPConversationThreadMessageDeliveryStateSent)
     {
         NSString* statusString = [HOPConversation stringForMessageDeliveryState:(HOPConversationThreadMessageDeliveryState)self.message.outgoingMessageStatus];
         
@@ -301,7 +301,7 @@
             UIImageView* imageView = nil;
             CGRect rectEditedIcon = CGRectMake(0.0, 0.0, 0.0, 0.0);
             
-            if (message.edited.boolValue && !self.message.removed.boolValue)
+            if (self.message.edited.boolValue && !self.message.removed.boolValue)
             {
                 image = [UIImage imageNamed:@"chat_edited_message_icon.png"];
                 imageView = [[UIImageView alloc] initWithImage:image];
@@ -365,7 +365,7 @@
                 
                 bubbleXpos = self.frame.size.width - (messageSize.width + 2*TRAILING_SPACE + LEADING_SPACE + TRAILING_SPACE);
                 
-                if (message.edited.boolValue)
+                if (self.message.edited.boolValue)
                 {
                     // set header labels position
                     headerLabelXpos = self.frame.size.width  - rectEditedIcon.size.width - TRAILING_SPACE;
@@ -403,7 +403,7 @@
                 msgBaloonImg = self.baloonImageLeft;
             }
             
-            if (message.edited.boolValue)
+            if (self.message.edited.boolValue)
                 imageView.frame = rectEditedIcon;
             
             //Label message
@@ -451,7 +451,8 @@
 
 - (void) setMessage:(HOPMessage*) inMessage
 {
-    message = inMessage;
+    [super setMessage:inMessage];
+    //message = inMessage;
     
     if (!self.message.removed.boolValue)
     {

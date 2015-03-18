@@ -39,6 +39,9 @@
 @property (nonatomic, weak) HOPMessage *message;
 @property (nonatomic, strong) TTTAttributedLabel *messageLabel;
 
-- (void) setMessage:(HOPMessage*) message;
+@property (nonatomic, strong) UIFont *chatNameFont;
+@property (nonatomic, strong) UIFont *chatTimestampFont;
+
+- (void) setMessage:(HOPMessage*) inMessage;
 + (CGSize) calcMessageHeight:(NSString *)message forScreenWidth:(float)width;
 @end

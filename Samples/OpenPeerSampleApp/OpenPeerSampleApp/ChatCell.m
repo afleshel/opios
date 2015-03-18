@@ -30,14 +30,19 @@
  */
 
 #import "ChatCell.h"
+#import "Utility.h"
+#import <OpenPeerSDK/HOPMessage.h>
+#import <OpenPeerSDK/HOPContact+External.h>
 
 @implementation ChatCell
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (self) {
-        // Initialization code
+    if (self)
+    {
+        self.chatNameFont =  [UIFont fontWithName:@"Helvetica-Bold" size:9.0];
+        self.chatTimestampFont = [UIFont fontWithName:@"Helvetica" size:9.0];
     }
     return self;
 }
@@ -60,5 +65,24 @@
     
     CGSize calcSize = [message boundingRectWithSize: maxSize options: NSStringDrawingUsesLineFragmentOrigin attributes: @{ NSFontAttributeName: [UIFont systemFontOfSize:14.0] } context: nil].size;
     return calcSize;
+}
+
+- (void)setMessage:(HOPMessage *)inMessage
+{
+    _message = inMessage;
+    
+    BOOL isHomeUserSender = [inMessage.sender isSelf];
+    
+//    if (self.senderLabel)
+//    {
+//        NSString* sender  = [NSString stringWithFormat:@"%@ | %@",[inMessage.sender getName],[Utility formatedMessageTimeStampForDate:inMessage.date]];
+//        [self.senderLabel setFont:self.chatNameFont];
+//        [self.senderLabel setText:sender];
+//    }
+    
+//    if (isHomeUserSender)
+//    {
+//        
+//    }
 }
 @end

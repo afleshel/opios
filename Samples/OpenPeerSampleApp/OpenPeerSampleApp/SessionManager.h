@@ -79,4 +79,7 @@
 - (void) removeSelfFromConversation:(HOPConversation*) conversation;
 
 - (NSString*) getNavigationTitleForConversation:(HOPConversation*) conversation;
+
+- (void) shareImage:(UIImage*) image  forConversation:(HOPConversation*) conversation;
+
 @end

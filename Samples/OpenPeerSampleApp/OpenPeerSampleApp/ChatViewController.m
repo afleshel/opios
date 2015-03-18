@@ -33,6 +33,7 @@
 #import <UIKit/UIKit.h>
 
 #import "MessageManager.h"
+#import "SessionManager.h"
 #import "ChatMessageCell.h"
 #import <OpenPeerSDK/HOPModelManager.h>
 #import <OpenPeerSDK/HOPMessage+External.h>
@@ -42,6 +43,8 @@
 #import <OpenPeerSDK/HOPContact+External.h>
 #import "SystemMessageCell.h"
 #import "ChatCell.h"
+#import "NewChatCell.h"
+#import <SDWebImage/SDImageCache.h>
 
 @interface ChatViewController()
 
@@ -504,58 +507,55 @@
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //ChatCell* msgCell = nil;
     UITableViewCell* msgCell = nil;
-    HOPMessage* message = nil;
-    
-    message = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    HOPMessage* message = [self.fetchedResultsController objectAtIndexPath:indexPath];
 
-    if (!message)
-        return nil;
-    
-    BOOL isSystemMessage = [message.type isEqualToString:[HOPSystemMessage getMessageType]];
-    if (isSystemMessage)
+    if (message)
     {
-        msgCell = [tableView dequeueReusableCellWithIdentifier:@"MessageSystemCellIdentifier"];
-    }
-    else
-    {
-//        if (message.deleted.boolValue)
-//            msgCell = [tableView dequeueReusableCellWithIdentifier:@"DeletedMessageCellIdentifier"];
-//        else
-            msgCell = [tableView dequeueReusableCellWithIdentifier:@"MessageCellIdentifier"];
-    }
-    
-    //ChatMessageCell* msgCell = [tableView dequeueReusableCellWithIdentifier:@"MessageCellIdentifier"];
-    
-    if (msgCell == nil)
-    {
-//        if (!message.deleted.boolValue)
+        SystemMessageType type = [[MessageManager sharedMessageManager] systemMessageTypeForMessage:message];
+        
+        switch (type)
         {
-            if (isSystemMessage)
-                msgCell = [[SystemMessageCell alloc] initWithFrame:CGRectZero];
-            else
-                msgCell = [[ChatMessageCell alloc] initWithFrame:CGRectZero];
+            case SystemMessage_ConversationReplacement:
+                
+                break;
             
-            ((ChatCell*)msgCell).messageLabel.delegate = self;
+            case SystemMessage_CallStatus:
+                msgCell = [tableView dequeueReusableCellWithIdentifier:@"MessageSystemCellIdentifier"];
+                if (!msgCell)
+                    msgCell = [[SystemMessageCell alloc] initWithFrame:CGRectZero];
+                break;
+                
+            case SystemMessage_FileSharing:
+                msgCell = [tableView dequeueReusableCellWithIdentifier:@"MessageCellSharedFileIdentifier"];
+                if (!msgCell)
+                {
+                    [tableView registerNib:[UINib nibWithNibName:@"NewChatCell" bundle:nil] forCellReuseIdentifier:@"MessageCellSharedFileIdentifier"];
+                    msgCell = [tableView dequeueReusableCellWithIdentifier:@"MessageCellSharedFileIdentifier"];
+                    if (msgCell)
+                    {
+                        msgCell.imageView.contentMode = UIViewContentModeScaleAspectFit;
+                    }
+                }
+                break;
+                
+            default:
+                msgCell = [tableView dequeueReusableCellWithIdentifier:@"MessageCellIdentifier"];
+                if (!msgCell)
+                    msgCell = [[ChatMessageCell alloc] initWithFrame:CGRectZero];
+                break;
         }
-//        else
-//        {
-//            msgCell = [[UITableViewCell alloc] initWithFrame:CGRectZero];
-//            msgCell.backgroundColor = [UIColor clearColor];
-//            msgCell.textLabel.font = [UIFont fontWithName:@"Helvetica" size:13.0];
-//            msgCell.textLabel.textColor = [UIColor grayColor];
-//        }
+        
+        msgCell.backgroundColor = [UIColor clearColor];
+        ((ChatCell*)msgCell).messageLabel.delegate = self;
     }
-    
-    
+
     if ([[msgCell class] isSubclassOfClass:[ChatCell class]])
         [((ChatCell*)msgCell) setMessage:message];
-//    else
-//        msgCell.textLabel.text = @"This message has been removed.";
     
     return msgCell;
 }
+
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -565,10 +565,32 @@
     HOPMessage* message = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
     CGSize textSize;
-    if ([message.type isEqualToString:[HOPSystemMessage getMessageType]])
-        textSize= [ChatCell calcMessageHeight:@"system message" forScreenWidth:self.chatTableView.frame.size.width - 85];
-    else
-        textSize= [ChatCell calcMessageHeight:message.text forScreenWidth:self.chatTableView.frame.size.width - 85];
+    
+    SystemMessageType type = [[MessageManager sharedMessageManager] systemMessageTypeForMessage:message];
+    
+    switch (type)
+    {
+        case SystemMessage_ConversationReplacement:
+            textSize= [ChatCell calcMessageHeight:@"system message" forScreenWidth:self.chatTableView.frame.size.width - 85];
+            break;
+            
+        case SystemMessage_CallStatus:
+            textSize= [ChatCell calcMessageHeight:@"system message" forScreenWidth:self.chatTableView.frame.size.width - 85];
+            break;
+            
+        case SystemMessage_FileSharing:
+            textSize.height = 221;
+            break;
+            
+        default:
+            textSize= [ChatCell calcMessageHeight:message.text forScreenWidth:self.chatTableView.frame.size.width - 85];
+            break;
+    }
+    
+//    if ([message.type isEqualToString:[HOPSystemMessage getMessageType]])
+//        textSize= [ChatCell calcMessageHeight:@"system message" forScreenWidth:self.chatTableView.frame.size.width - 85];
+//    else
+//        textSize= [ChatCell calcMessageHeight:message.text forScreenWidth:self.chatTableView.frame.size.width - 85];
 
     textSize.height += 52;
     
@@ -576,6 +598,7 @@
     
     return res;
 }
+
 
 
 - (void) sendIMmessage:(NSString *)message

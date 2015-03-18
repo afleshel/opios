@@ -67,12 +67,12 @@
 
 - (void) setMessage:(HOPMessage*) inMessage
 {
-    message = inMessage;
+    [super setMessage:inMessage];
+    //message = inMessage;
     
     if ([inMessage.type isEqualToString:[HOPSystemMessage getMessageType]])
     {
         self.callSystemMessage = [HOPCallSystemMessage callSystemMessageFromJSON:inMessage.text];
-        
         self.messageText = [[SessionManager sharedSessionManager] getSystemMessage:message];
     }
 }
@@ -88,16 +88,9 @@
 
     // add message
     CGSize sizeOfTheMessage = [self.messageText sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:SYSTEM_MESSAGE_FONT_TYPE size:SYSTEM_MESSAGE_FONT_SIZE]}];
-//
-//    UILabel *lblSystemMessage = [[UILabel alloc] initWithFrame:CGRectMake(5, 10, sizeOfTheMessage.width + 2, sizeOfTheMessage.height + 2)];         
-//    lblSystemMessage.backgroundColor = [UIColor clearColor];
-//    lblSystemMessage.textColor = [UIColor whiteColor];
-//    lblSystemMessage.font = [UIFont fontWithName:SYSTEM_MESSAGE_FONT_TYPE size:SYSTEM_MESSAGE_FONT_SIZE];
-//    lblSystemMessage.text = self.messageText;
 
     CGRect f = CGRectMake(5, 10, sizeOfTheMessage.width + 2, sizeOfTheMessage.height + 2);//lblSystemMessage.frame;
     f.origin.x = roundf((self.frame.size.width - f.size.width)/2);
-//    lblSystemMessage.frame = f;
 
     // add image(if need it)
     NSString *imgPath = nil;
@@ -136,20 +129,17 @@
         CGContextSaveGState(context);
         CGContextTranslateCTM(context, 0, img.size.height);
         CGContextScaleCTM(context, 1.0, -1.0);
-//        CGContextDrawImage(context, CGRectMake(f.origin.x - 28, -8, img.size.width, img.size.height), img.CGImage);
         CGContextDrawImage(context, CGRectMake(imgX, -8, img.size.width, img.size.height), img.CGImage);
         CGContextRestoreGState(context);
         
-        textX = imgX + img.size.width + SPACE_BETWEEN_LABEL;//f.origin.x - 28 + img.size.width + 5.0;
+        textX = imgX + img.size.width + SPACE_BETWEEN_LABEL;
     }
 
 
     CGContextSetStrokeColorWithColor(context, [UIColor colorWithRed:89/255.0 green:125/255.0 blue:136/255.0 alpha:1.0].CGColor);
     CGContextMoveToPoint(context, 0, 18);
-//    CGContextAddLineToPoint(context, f.origin.x - 33, 18);
     CGContextAddLineToPoint(context, imgX - SPACE_BETWEEN_LABEL, 18);
     CGContextStrokePath(context);
-//    CGContextMoveToPoint(context, f.origin.x + f.size.width + 10, 18);
     CGContextMoveToPoint(context, textX + sizeOfTheMessage.width + SPACE_BETWEEN_LABEL, 18);
     CGContextAddLineToPoint(context, self.frame.size.width, 18);
     CGContextStrokePath(context);
@@ -160,7 +150,6 @@
         
         NSAttributedString * currentText=[[NSAttributedString alloc] initWithString:self.messageText attributes: attributes];
         
-        //CGSize attrSize = [currentText size];
         [currentText drawAtPoint:CGPointMake(textX ,10.0)];
     }
 }

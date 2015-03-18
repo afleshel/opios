@@ -44,13 +44,16 @@
 #import <OpenPeerSDK/HOPConversation.h>
 #import <OpenPeerSDK/HOPContact+External.h>
 
+
+
 #define ACTION_AUDIO_CALL           1
 #define ACTION_VIDEO_CALL           2
 #define ACTION_ADD_CONTACT          3
 #define ACTION_REMOVE_CONTACT       4
 #define ACTION_REMOVE_SELF          5
 #define ACTION_SHOW_CONTACT_INFO    6
-#define ACTION_CANCEL               7
+#define ACTION_SHARE_PHOTO          7
+#define ACTION_CANCEL               8
 
 
 @interface SessionViewController_iPhone ()
@@ -72,6 +75,7 @@
 @property (nonatomic, strong) NSDate* callStartedTime;
 @property (nonatomic, strong) AddParticipantsViewController* addParticipantsViewController;
 - (void) actionCallMenu;
+- (void) actionSharePhoto:(BOOL) fromLibrary;
 - (void) updateCallDuration;
 - (void) setRightBarButtonWithEndCall:(BOOL) withEndCall forWaitingView:(BOOL)forWaitingView ;
 - (void) popNavigation;
@@ -170,7 +174,6 @@
     self.videoCallViewController.view.frame = self.chatViewController.view.frame;
     [self.containerView addSubview:self.videoCallViewController.view];
     self.videoCallViewController.view.hidden = YES;
-    
     
 }
 
@@ -300,6 +303,9 @@
                 [self.availableActions addObject:[NSNumber numberWithInt:ACTION_SHOW_CONTACT_INFO]];
             }
             
+            [buttonTitles addObject:NSLocalizedString(@"Share Photo", @"")];
+            [self.availableActions addObject:[NSNumber numberWithInt:ACTION_SHARE_PHOTO]];
+            
             [buttonTitles addObject:NSLocalizedString(@"Cancel", @"")];
             [self.availableActions addObject:[NSNumber numberWithInt:ACTION_CANCEL]];
             
@@ -338,33 +344,55 @@
 #pragma mark - UIActionSheetDelegate
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex;
 {
-    int selectedAction = ((NSNumber*)self.availableActions[buttonIndex]).intValue;
-    switch (selectedAction)
+    if (actionSheet.tag != 77)
     {
-        case ACTION_AUDIO_CALL:
-            [[SessionManager sharedSessionManager] makeCallForConversation:self.conversation includeVideo:NO isRedial:NO];
-            break;
-        case ACTION_VIDEO_CALL:
-            if ([Utility hasCamera])
-                [[SessionManager sharedSessionManager] makeCallForConversation:self.conversation includeVideo:YES isRedial:NO];
-            break;
-        case ACTION_ADD_CONTACT:
-            [self showContactsChooserForAddingContacts:YES];
-            //[self closeSession:nil];
-            break;
-        case ACTION_REMOVE_CONTACT:
-            [self showContactsChooserForAddingContacts:NO];
-            //[self closeSession:nil];
-            break;
-        case ACTION_REMOVE_SELF:
-            [[SessionManager sharedSessionManager] removeSelfFromConversation:self.conversation];
-            //[self closeSession:nil];
-            break;
-        case ACTION_SHOW_CONTACT_INFO:
-            [self showContactInfo];
-            break;
-        default:
-            break;
+        int selectedAction = ((NSNumber*)self.availableActions[buttonIndex]).intValue;
+        switch (selectedAction)
+        {
+            case ACTION_AUDIO_CALL:
+                [[SessionManager sharedSessionManager] makeCallForConversation:self.conversation includeVideo:NO isRedial:NO];
+                break;
+            case ACTION_VIDEO_CALL:
+                if ([Utility hasCamera])
+                    [[SessionManager sharedSessionManager] makeCallForConversation:self.conversation includeVideo:YES isRedial:NO];
+                break;
+            case ACTION_ADD_CONTACT:
+                [self showContactsChooserForAddingContacts:YES];
+                //[self closeSession:nil];
+                break;
+            case ACTION_REMOVE_CONTACT:
+                [self showContactsChooserForAddingContacts:NO];
+                //[self closeSession:nil];
+                break;
+            case ACTION_REMOVE_SELF:
+                [[SessionManager sharedSessionManager] removeSelfFromConversation:self.conversation];
+                //[self closeSession:nil];
+                break;
+            case ACTION_SHARE_PHOTO:
+            {
+                UIActionSheet *action = [[UIActionSheet alloc] initWithTitle:NSLocalizedString(@"Share options", @"")
+                                                                    delegate:self
+                                                           cancelButtonTitle:@"Cancel"
+                                                      destructiveButtonTitle:nil
+                                                           otherButtonTitles:@"Take a photo", @"Photo library",nil];
+                action.tag = 77;
+                [action showFromRect:self.view.frame inView:self.view.superview animated:YES];
+            }
+                //[self actionSharePhoto];
+                break;
+            case ACTION_SHOW_CONTACT_INFO:
+                [self showContactInfo];
+                break;
+            default:
+                break;
+        }
+    }
+    else
+    {
+        if (buttonIndex == 0)
+            [self actionSharePhoto:NO];
+        else if (buttonIndex == 1)
+            [self actionSharePhoto:YES];
     }
 }
 
@@ -596,6 +624,37 @@
     self.labelTitle.text = [[SessionManager sharedSessionManager] getNavigationTitleForConversation:self.conversation];
     
     [self.chatViewController refreshMessages];
+}
+
+-(void)actionSharePhoto:(BOOL) fromlibrary
+{
+    UIImagePickerController* imagePicker = [[UIImagePickerController alloc] init];
+    
+    imagePicker.delegate = self;
+    
+    imagePicker.sourceType = fromlibrary ? UIImagePickerControllerSourceTypeSavedPhotosAlbum : UIImagePickerControllerSourceTypeCamera;
+//    if((UIButton *) sender == choosePhotoBtn) {
+//        imagePicker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+//    } else {
+//        imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+//    }
+    
+    [self presentViewController:imagePicker animated:YES completion:nil];
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    if (info)
+    {
+        UIImage *image = (UIImage *) [info valueForKey:UIImagePickerControllerOriginalImage];
+        [[SessionManager sharedSessionManager] shareImage:image forConversation:self.conversation];
+    }
+    [self dismissViewControllerAnimated:YES completion:nil];
+    
+}
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 @end
 

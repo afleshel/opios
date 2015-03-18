@@ -37,23 +37,19 @@
 
 typedef enum
 {
-    SystemMessage_EstablishSessionBetweenTwoPeers,
-    SystemMessage_IsContactAvailable,
-    SystemMessage_IsContactAvailable_Response,
-    SystemMessage_CallAgain,
-    SystemMessage_CheckAvailability,
-    SystemMessage_APNS_Request,
-    SystemMessage_APNS_Response,
-    
+    SystemMessage_ConversationReplacement,
+    SystemMessage_CallStatus,
+    SystemMessage_FileSharing,
     
     SystemMessage_None = 111
-}SystemMessageTypes;
+}SystemMessageType;
 
 @interface MessageManager : NSObject
 
 + (id) sharedMessageManager;
 
 - (HOPMessage*) createSystemMessageWithType:(HOPSystemMessageType) type messageType:(int) messageType reasonCode:(int)reasonCode andRecipient:(HOPContact*) contact conversation:(HOPConversation*) conversation;
+- (HOPMessage*) createSystemMessageForFileShareWithID:(NSString*) fileShareID size:(NSUInteger) size resolution:(CGSize) resolution conversation:(HOPConversation*) conversation;
 
 - (void) sendCallSystemMessage:(HOPCallSystemMessageType) callSystemMessage reasonCode:(int) reasonCode forConversation:(HOPConversation*) conversation;
 - (void) sendSystemForSwitchFromConversation:(HOPConversation*) conversation toConversation:(HOPConversation*) toConversation;
@@ -67,4 +63,6 @@ typedef enum
 - (void) resendMessage:(HOPMessage*) message conversation:(HOPConversation*) conversation;
 
 - (void)updateMessageStatus:(HOPMessage *)messageRecord;
+
+- (SystemMessageType) systemMessageTypeForMessage:(HOPMessage*) message;
 @end

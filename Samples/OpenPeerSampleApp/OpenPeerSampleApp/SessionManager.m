@@ -41,8 +41,16 @@
 #import "AppConsts.h"
 
 #import <OpenpeerSDK/Openpeer.h>
+#import <OpenpeerSDK/HOPMessage+External.h>
 #import "UIDevice+Networking.h"
 #import <OpenpeerSDK/HOPContact+External.h>
+
+#import "ImageManager.h"
+
+//#import <SDWebImage/SDImageCache.h>
+#import <Parse/Parse.h>
+
+
 @interface SessionManager()
 
 @property (nonatomic, assign) HOPConversation* conversationWithActiveCall;
@@ -500,4 +508,47 @@
     
     return ret;
 }
+
+- (void) shareImage:(UIImage*) image forConversation:(HOPConversation*) conversation
+{
+    if (image)
+    {
+        NSData *imageData = UIImageJPEGRepresentation(image,1);
+        if (imageData && imageData.length > 9000000)
+        {
+            imageData = UIImageJPEGRepresentation(image, 0.9);
+        }
+        
+        NSString* msgID = [HOPUtility getGUIDstring];
+        HOPMessage* msg = [[MessageManager sharedMessageManager] createSystemMessageForFileShareWithID:msgID size:imageData.length resolution:image.size conversation:conversation];
+        NSString* fileName = msgID;//[NSString stringWithFormat:@"%@.jpg",msgID];
+        
+        //[[SDImageCache sharedImageCache] storeImage:image forKey:msgID];
+        [[ImageManager sharedImageManager] storeImage:image forKey:msgID];
+        PFFile *imageFile = [PFFile fileWithName:fileName data:imageData];
+        
+        PFObject *userPhoto = [PFObject objectWithClassName:@"SharedPhoto"];
+        userPhoto[@"imageName"] = @"Shared Photo";
+        userPhoto[@"imageFile"] = imageFile;
+        userPhoto[@"peerURI"] = [((HOPContact*)conversation.participants[0]) getPeerURI];
+        userPhoto[@"fileID"] = fileName;//[NSString stringWithFormat:@"%@_%@",[((HOPContact*)self.conversation.participants[0]) getPeerURI],@"11"];
+        [userPhoto saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
+         {
+             //imageData = nil;
+             
+             if (succeeded)
+             {
+                 msg.visible = [NSNumber numberWithBool:YES];
+                 [conversation sendMessage:msg];
+                 [[HOPModelManager sharedModelManager]saveContext];
+             }
+             else
+             {
+                 NSLog(@"%@", error);
+             }
+         }];
+    }
+}
+
+
 @end

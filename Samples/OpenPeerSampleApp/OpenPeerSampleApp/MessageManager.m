@@ -32,6 +32,7 @@
 #import "MessageManager.h"
 #import "SessionManager.h"
 #import "ContactsManager.h"
+#import "ImageManager.h"
 #ifdef APNS_ENABLED
     #import "APNSManager.h"
 #endif
@@ -128,16 +129,6 @@ typedef enum
 }
 
 
-- (void) sendSystemMessageToCheckAvailability:(HOPConversation*) conversation
-{
-    for (HOPContact* contact in conversation.participants)
-    {
-        HOPMessage* messageRecord = [self createSystemMessageWithType:HOPSystemMessageTypeCall messageType:HOPCallSystemMessageTypeCallPlaced reasonCode:0 andRecipient:contact conversation:conversation];
-        if (messageRecord)
-            [conversation sendMessage:messageRecord];
-    }
-}
-
 //{"system":{"conversationSwitch":{"from":"conversationId1","to":"conversationId2"}}
 - (void) sendSystemForSwitchFromConversation:(HOPConversation*) conversation toConversation:(HOPConversation*) toConversation
 {
@@ -161,6 +152,32 @@ typedef enum
     }
 }
 
+//{"system":{"fileShare":{"objectId":""," ""fileType":"image","size":%d,"imageInfo":{"width":%d,"height":%d}}}"
+- (HOPMessage*) createSystemMessageForFileShareWithID:(NSString*) fileShareID size:(NSUInteger) size resolution:(CGSize) resolution conversation:(HOPConversation*) conversation
+{
+    HOPMessage* ret = nil;
+    NSDictionary* fileShareDict = [NSDictionary dictionaryWithObjectsAndKeys:fileShareID, @"objectId", @"image", @"fileType", [NSNumber numberWithInteger:size], @"size", [NSDictionary dictionaryWithObjectsAndKeys: [NSNumber numberWithFloat: resolution.width], @"width", [NSNumber numberWithFloat: resolution.height], @"height", nil],@"imageInfo",nil];
+    
+    if (fileShareDict)
+    {
+        NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:[NSDictionary dictionaryWithObjectsAndKeys:fileShareDict,@"fileShare", nil],@"system", nil];
+        
+        if (dict)
+        {
+            NSString* messageBody = [Utility jsonFromDictionary:dict];
+            if (messageBody.length > 0)
+            {
+                ret = [HOPMessage createMessage:messageBody type:[HOPSystemMessage getMessageType] date:[NSDate date] visible:NO conversation:conversation sender:[HOPContact getSelf] messageId:fileShareID validated:NO messageIDToReplace:@""];
+//                if (messageRecord)
+//                {
+//                    [toConversation sendMessage:messageRecord];
+//                }
+            }
+        }
+    }
+    
+    return ret;
+}
 //{"system":{"conversationSwitch":{"from":"conversationId1","to":"conversationId2"}}
 
 - (ApplicationMessageTypes) getSystemMessageType:(HOPMessage*) inMessage
@@ -218,6 +235,19 @@ typedef enum
                         
                         [[HOPModelManager sharedModelManager] saveContext];
                     }
+                }
+            } //{"system":{"fileShare":{"objectId":""," ""fileType":"image","size":%d,"imageInfo":{"width":%d,"height":%d}}}"
+            else if ([systemDict valueForKeyPath:@"system.fileShare"])
+            {
+                NSDictionary* dictFileShareSystem = [systemDict valueForKeyPath:@"system.fileShare"];
+                if (dictFileShareSystem.count > 0)
+                {
+                    NSString* fileShareID = [dictFileShareSystem objectForKey:@"objectId"];
+                    NSString* type = [dictFileShareSystem objectForKey:@"fileType"];
+                    NSNumber* fileSize = [dictFileShareSystem objectForKey:@"size"];
+                    NSDictionary* imageInfo = [dictFileShareSystem objectForKey:@"imageInfo"];
+                    
+                    [[ImageManager sharedImageManager] downloadSharedImageForMessage:inMessage];
                 }
             }
         }
@@ -394,5 +424,36 @@ typedef enum
     }
 }
 
+- (SystemMessageType) systemMessageTypeForMessage:(HOPMessage*) message
+{
+    SystemMessageType ret = SystemMessage_None;
+    
+    if (message)
+    {
+        BOOL isSystemMessage = [message.type isEqualToString:[HOPSystemMessage getMessageType]];
+        
+        if (isSystemMessage)
+        {
+            NSDictionary* systemDict = [Utility dictionaryFromJSON:message.text];
+            if (systemDict)
+            {
+                if ([systemDict valueForKeyPath:@"system.callStatus"])
+                {
+                    ret = SystemMessage_CallStatus;
+                }
+                else if ([systemDict valueForKeyPath:@"system.conversationSwitch"])
+                {
+                    ret = SystemMessage_ConversationReplacement;
+                }
+                else if ([systemDict valueForKeyPath:@"system.fileShare"])
+                {
+                    ret = SystemMessage_FileSharing;
+                }
+            }
+        }
+    }
+    
+    return ret;
+}
 
 @end

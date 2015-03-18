@@ -47,4 +47,15 @@
 - (void) donwloadImageForAvatar:(HOPAvatar*) avatar tableView:(UITableView*) inTableView indexPath:(NSIndexPath*) inIndexPath;
 
 - (UIImage*) getAvatarImageForIdentity:(HOPIdentity*) identity;
+
+- (void) uploadSharedImage:(UIImage*) image sharedImageID:(NSString*) sharedImageID;
+- (void) downloadSharedImageForMessage:(HOPMessage*) message;
+
+
+- (void) storeImage:(UIImage*) image forKey:(NSString*) key;
+- (UIImage*) imageForKey:(NSString*) key;
+- (UIImage*) thumbnailForKey:(NSString*) key;
+- (void) loadImageURL:(NSString*) url toImageView:(UIImageView*) imageView;
+
+- (void) showFullscreenImage:(UIImage*) image;
 @end

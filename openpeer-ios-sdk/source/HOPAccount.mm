@@ -255,11 +255,11 @@ using namespace openpeer::core;
         
         [[HOPModelManager sharedModelManager] saveContext];
     }
-    else
-    {
-        ZS_LOG_ERROR(Debug, [self log:@"Invalid account object!"]);
-        [NSException raise:NSInvalidArgumentException format:@"Invalid account object!"];
-    }
+//    else
+//    {
+//        ZS_LOG_ERROR(Debug, [self log:@"Invalid account object!"]);
+//        [NSException raise:NSInvalidArgumentException format:@"Invalid account object!"];
+//    }
 }
 
 - (void) destroyCoreObject
