@@ -4,3 +4,6 @@
 [submodule "libs/ZXingObjC"]
 	path = libs/ZXingObjC
 	url = https://github.com/openpeer/ZXingObjC
+[submodule "libs/SDWebImage"]
+	path = libs/SDWebImage
+	url = https://github.com/rs/SDWebImage.git
