@@ -77,7 +77,7 @@
 {
     if (conversation.numberOfUnreadMessages > 0)
     {
-        NSString* numberToDisplay = [NSString stringWithFormat:@"%d",conversation.numberOfUnreadMessages];
+        NSString* numberToDisplay = [NSString stringWithFormat:@"%lu",(unsigned long)conversation.numberOfUnreadMessages];
         self.badgeView.hidden = NO;
         self.badgeView.badgeText = numberToDisplay;
     }

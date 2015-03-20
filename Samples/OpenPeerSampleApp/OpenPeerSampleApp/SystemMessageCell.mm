@@ -50,7 +50,7 @@
 
 @implementation SystemMessageCell
 
-@synthesize message;
+//@synthesize message;
 
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -73,7 +73,7 @@
     if ([inMessage.type isEqualToString:[HOPSystemMessage getMessageType]])
     {
         self.callSystemMessage = [HOPCallSystemMessage callSystemMessageFromJSON:inMessage.text];
-        self.messageText = [[SessionManager sharedSessionManager] getSystemMessage:message];
+        self.messageText = [[SessionManager sharedSessionManager] getSystemMessage:self.message];
     }
 }
 

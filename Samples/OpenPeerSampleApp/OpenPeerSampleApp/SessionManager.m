@@ -433,19 +433,34 @@
 - (NSString* )getSystemMessage:(HOPMessage *)messageRecord
 {
     NSString* ret = nil;
-    HOPCallSystemMessage* callSystemMessage = [HOPCallSystemMessage callSystemMessageFromJSON:messageRecord.text];
     
-    switch (callSystemMessage.messageType) {
-        case HOPCallSystemMessageTypeCallPlaced:
-            ret = [NSString stringWithFormat:@"Call started: %@", [Utility getLocalDateFromUTCdate:messageRecord.date]];
-            break;
-        case HOPCallSystemMessageTypeCallHungup:
-            ret = [NSString stringWithFormat:@"%@: %@", [Utility stringForEndingCallReason:callSystemMessage.errorCode],[Utility getLocalDateFromUTCdate:messageRecord.date]];
-            break;
-        default:
-            break;
+    
+    NSDictionary* systemDict = [Utility dictionaryFromJSON:messageRecord.text];
+    if (systemDict)
+    {
+        if ([systemDict valueForKeyPath:@"system.callStatus"])
+        {
+            HOPCallSystemMessage* callSystemMessage = [HOPCallSystemMessage callSystemMessageFromJSON:messageRecord.text];
+            
+            switch (callSystemMessage.messageType) {
+                case HOPCallSystemMessageTypeCallPlaced:
+                    ret = [NSString stringWithFormat:@"Call started: %@", [Utility getLocalDateFromUTCdate:messageRecord.date]];
+                    break;
+                case HOPCallSystemMessageTypeCallHungup:
+                    ret = [NSString stringWithFormat:@"%@: %@", [Utility stringForEndingCallReason:callSystemMessage.errorCode],[Utility getLocalDateFromUTCdate:messageRecord.date]];
+                    break;
+                default:
+                    break;
+            }
+            
+        }
+        else if ([systemDict valueForKeyPath:@"system.fileShare"])
+        {
+            ret = @"Shared Photo";
+        }
     }
-    
+
+
     return ret;
 }
 
