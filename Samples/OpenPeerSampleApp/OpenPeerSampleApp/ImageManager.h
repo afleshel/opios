@@ -37,7 +37,7 @@
 @class HOPAvatar;
 @class HOPImage;
 @class HOPIdentity;
-
+@class HOPConversation;
 @interface ImageManager : NSObject
 
 + (id) sharedImageManager;
@@ -50,7 +50,7 @@
 
 - (void) uploadSharedImage:(UIImage*) image sharedImageID:(NSString*) sharedImageID;
 - (void) downloadSharedImageForMessage:(HOPMessage*) message;
-
+- (void) shareImage:(UIImage*) image forConversation:(HOPConversation*) conversation;
 
 - (void) storeImage:(UIImage*) image forKey:(NSString*) key;
 - (UIImage*) imageForKey:(NSString*) key;

@@ -138,6 +138,8 @@ extern NSString * const notifictionAppReturnedFromBackground;
 extern NSString * const notificationCrashReportSent;
 extern NSString * const notificationComposingStatusChanged;
 extern NSString * const notificationMessagesRead;
+extern NSString * const notificationFileUploadProgress;
+extern NSString * const notificationFileUploadDone;
 
 extern NSString * const notificationTypeApple;
 extern NSString * const notificationTypeAndroid;

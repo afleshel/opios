@@ -39,15 +39,29 @@
 {
     [super setMessage:inMessage];
     
+    BOOL registerForNotifications = NO;
     if (self.message && self.message.messageID.length > 0)
     {
         UIImage* img = [[ImageManager sharedImageManager] imageForKey:self.message.messageID];
         if (img)
         {
             self.imageView2.image = img;
+            if (![inMessage.outMessageStatus isEqualToString:@"Delivered"] && [self.message.sender isSelf])
+            {
+                registerForNotifications = YES;
+            }
         }
         else
+        {
+            registerForNotifications = YES;
             [[ImageManager sharedImageManager] downloadSharedImageForMessage:self.message];
+        }
+        
+        if (registerForNotifications)
+        {
+            [[NSNotificationCenter defaultCenter] removeObserver:self name:notificationFileUploadProgress object:nil];
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateProgressBar:) name:notificationFileUploadProgress object:nil];
+        }
         
         UIColor* textColor;
         
@@ -75,6 +89,36 @@
         [self.senderLabel setAttributedText:string];
         
         self.senderLabel.textAlignment = [inMessage.sender isSelf] ? NSTextAlignmentRight : NSTextAlignmentLeft;
+    }
+}
+
+- (void)updateProgressBar:(NSNotification*) notification
+{
+    NSDictionary* dict = notification.object;
+    if (dict)
+    {
+        NSString* messageID = [dict objectForKey:@"messageID"];
+        if ([messageID isEqualToString: self.message.messageID])
+        {
+            NSNumber* procent = [dict objectForKey:@"procent"];
+            if (procent)
+            {
+                NSString* progressMessage = /*![self.message.outMessageStatus isEqualToString:@"Delivered"] && */[self.message.sender isSelf] ? [NSString stringWithFormat:@"File upload in progress ... %d", procent.intValue] : [NSString stringWithFormat:@"Download in progress ... %d", procent.intValue];
+                if (progressMessage.length > 0)
+                {
+                    if (procent.intValue != 100)
+                    {
+                        self.messageDeliveryStatusLabel.hidden = NO;
+                        self.messageDeliveryStatusLabel.text = progressMessage;
+                    }
+                    else
+                    {
+                        self.messageDeliveryStatusLabel.text = [self.message.sender isSelf] ? @"Uploaded" : @"Downloaded";
+                        [[NSNotificationCenter defaultCenter] removeObserver:self name:notificationFileUploadProgress object:nil];
+                    }
+                }
+            }
+        }
     }
 }
 @end

@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		0012C552177D11DB0017FF5E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0012C551177D11DB0017FF5E /* libz.dylib */; };
 		0024393C178F55BF00B79368 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0024393B178F55BF00B79368 /* Security.framework */; };
+		52A8B4F71ABAC23600E82B55 /* ImageUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 52A8B4F61ABAC23600E82B55 /* ImageUploader.m */; };
+		52A8B4F81ABAC23600E82B55 /* ImageUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 52A8B4F61ABAC23600E82B55 /* ImageUploader.m */; };
 		870059EE184F563800B6B826 /* UIBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 870059ED184F563800B6B826 /* UIBadgeView.m */; };
 		870844D71AAF362100A65CD2 /* NewChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 870844D51AAF362100A65CD2 /* NewChatCell.m */; };
 		870844D81AAF362100A65CD2 /* NewChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 870844D51AAF362100A65CD2 /* NewChatCell.m */; };
@@ -659,6 +661,8 @@
 /* Begin PBXFileReference section */
 		0012C551177D11DB0017FF5E /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		0024393B178F55BF00B79368 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		52A8B4F51ABAC23600E82B55 /* ImageUploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageUploader.h; sourceTree = "<group>"; };
+		52A8B4F61ABAC23600E82B55 /* ImageUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageUploader.m; sourceTree = "<group>"; };
 		870059EC184F563800B6B826 /* UIBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIBadgeView.h; sourceTree = "<group>"; };
 		870059ED184F563800B6B826 /* UIBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIBadgeView.m; sourceTree = "<group>"; };
 		87005A091851C82C00B6B826 /* libsystem_pthread.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsystem_pthread.dylib; path = usr/lib/system/libsystem_pthread.dylib; sourceTree = SDKROOT; };
@@ -1307,6 +1311,8 @@
 				8799239D1917C85500FBD21E /* UIDevice+Networking.m */,
 				87F24B5D166FF0C900A5389F /* Utility.h */,
 				87F24B5E166FF0C900A5389F /* Utility.m */,
+				52A8B4F51ABAC23600E82B55 /* ImageUploader.h */,
+				52A8B4F61ABAC23600E82B55 /* ImageUploader.m */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -2709,6 +2715,7 @@
 				87F24B5F166FF0C900A5389F /* Utility.m in Sources */,
 				87F24B62167003F400A5389F /* ContactsManager.m in Sources */,
 				87E4DA05180D4E8D002CA2D4 /* SoundsManager.m in Sources */,
+				52A8B4F71ABAC23600E82B55 /* ImageUploader.m in Sources */,
 				871AA7F31941DA28003B4400 /* ActiveSessionsViewController.m in Sources */,
 				875CD7E2167A14810037396B /* SessionManager.m in Sources */,
 				8723870E19465A57002643D6 /* ActiveSessionTableViewCell.m in Sources */,
@@ -2806,6 +2813,7 @@
 				87D4BD1218675368008C2D30 /* LoggerSettingsViewController.m in Sources */,
 				8723870F19465A57002643D6 /* ActiveSessionTableViewCell.m in Sources */,
 				87D4BD1318675368008C2D30 /* InfoViewController.m in Sources */,
+				52A8B4F81ABAC23600E82B55 /* ImageUploader.m in Sources */,
 				87E0355F19AF52B4008A195C /* ChatCell.m in Sources */,
 				87D4BD1418675368008C2D30 /* IconDownloader.m in Sources */,
 			);

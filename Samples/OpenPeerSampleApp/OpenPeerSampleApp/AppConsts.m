@@ -138,6 +138,8 @@ NSString * const notificationRemoteSessionModeChanged = @"notificationRemoteSess
 NSString * const notificationCrashReportSent = @"notificationCrashReportSent";
 NSString * const notificationComposingStatusChanged = @"notificationComposingStatusChanged";
 NSString * const notificationMessagesRead = @"notificationMessagesRead";
+NSString * const notificationFileUploadProgress = @"notificationFileUploadProgress";
+NSString * const notificationFileUploadDone = @"notificationFileUploadDone";
 
 NSString * const notificationTypeApple = @"apns";
 NSString * const notificationTypeAndroid = @"apid";

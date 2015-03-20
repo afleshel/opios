@@ -57,7 +57,7 @@
 
 - (id) initSingleton;
 - (BOOL) setActiveCallConversation:(HOPConversation*) inConversation callActive:(BOOL) callActive;
-
+//- (void) fileUploadFinished:(NSNotification*) notification;
 @end
 
 @implementation SessionManager
@@ -85,6 +85,7 @@
     self = [super init];
     if (self)
     {
+        //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fileUploadFinished:) name:notificationFileUploadDone object:nil];
         //self.sessionsDictionary = [[NSMutableDictionary alloc] init];
 //        self.conversationsDictionaryForContacts = [[NSMutableDictionary alloc] init];
     }
@@ -509,46 +510,18 @@
     return ret;
 }
 
-- (void) shareImage:(UIImage*) image forConversation:(HOPConversation*) conversation
+- (void) fileUploadFinishedForMessageID:(NSString*) messageID
 {
-    if (image)
+    if (messageID.length > 0)
     {
-        NSData *imageData = UIImageJPEGRepresentation(image,1);
-        if (imageData && imageData.length > 9000000)
+        HOPMessage* messageToSend = [[HOPModelManager sharedModelManager] getMessageRecordByID:messageID];
+        if (messageToSend)
         {
-            imageData = UIImageJPEGRepresentation(image, 0.9);
+            HOPConversation* conversation = [messageToSend.session getConversation];
+            if (conversation)
+                [conversation sendMessage:messageToSend];
         }
-        
-        NSString* msgID = [HOPUtility getGUIDstring];
-        HOPMessage* msg = [[MessageManager sharedMessageManager] createSystemMessageForFileShareWithID:msgID size:imageData.length resolution:image.size conversation:conversation];
-        NSString* fileName = msgID;//[NSString stringWithFormat:@"%@.jpg",msgID];
-        
-        //[[SDImageCache sharedImageCache] storeImage:image forKey:msgID];
-        [[ImageManager sharedImageManager] storeImage:image forKey:msgID];
-        PFFile *imageFile = [PFFile fileWithName:fileName data:imageData];
-        
-        PFObject *userPhoto = [PFObject objectWithClassName:@"SharedPhoto"];
-        userPhoto[@"imageName"] = @"Shared Photo";
-        userPhoto[@"imageFile"] = imageFile;
-        userPhoto[@"peerURI"] = [((HOPContact*)conversation.participants[0]) getPeerURI];
-        userPhoto[@"fileID"] = fileName;//[NSString stringWithFormat:@"%@_%@",[((HOPContact*)self.conversation.participants[0]) getPeerURI],@"11"];
-        [userPhoto saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
-         {
-             //imageData = nil;
-             
-             if (succeeded)
-             {
-                 msg.visible = [NSNumber numberWithBool:YES];
-                 [conversation sendMessage:msg];
-                 [[HOPModelManager sharedModelManager]saveContext];
-             }
-             else
-             {
-                 NSLog(@"%@", error);
-             }
-         }];
     }
 }
-
 
 @end

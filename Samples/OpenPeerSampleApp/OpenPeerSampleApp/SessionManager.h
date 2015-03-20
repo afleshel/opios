@@ -80,6 +80,5 @@
 
 - (NSString*) getNavigationTitleForConversation:(HOPConversation*) conversation;
 
-- (void) shareImage:(UIImage*) image  forConversation:(HOPConversation*) conversation;
-
+- (void) fileUploadFinishedForMessageID:(NSString*) messageID;
 @end

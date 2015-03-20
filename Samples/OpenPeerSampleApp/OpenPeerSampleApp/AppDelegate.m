@@ -188,7 +188,7 @@
     {
         [[APNSManager sharedAPNSManager] handleAPNS:userInfo];
     }
-    if ([[HOPAccount sharedAccount] getState].state == HOPAccountStateReady)
+    if ( [[HOPAccount sharedAccount] isAccountReady] && [[HOPAccount sharedAccount] getState].state == HOPAccountStateReady)
         [[APNSManager sharedAPNSManager] getAllMessages];
 }
 

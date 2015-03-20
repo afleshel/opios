@@ -33,11 +33,16 @@
 #import "IconDownloader.h"
 #import "OpenPeer.h"
 #import "MainViewController.h"
-
+#import "SessionManager.h"
+#import  "MessageManager.h"
+#import "ImageUploader.h"
 #import <OpenpeerSDK/HOPAvatar+External.h>
 #import <OpenpeerSDK/HOPIdentity+External.h>
 #import <OpenpeerSDK/HOPMessage.h>
 #import <OpenpeerSDK/HOPModelManager.h>
+#import <OpenpeerSDK/HOPConversation.h>
+#import <OpenpeerSDK/HOPUtility.h>
+#import <OpenpeerSDK/HOPContact+External.h>
 
 #import <SDWebImage/SDImageCache.h>
 #import <SDWebImage/UIImageView+WebCache.h>
@@ -48,6 +53,8 @@
 
 @property (nonatomic,strong) NSMutableDictionary *dictionaryDownloadingInProgress;
 @property (nonatomic,strong) NSMutableArray *arrayOfInvalidUrls;
+@property (nonatomic, assign) UIBackgroundTaskIdentifier fileUploadBackgroundTaskId;
+@property (nonatomic,strong) NSMutableDictionary *dictionaryOfUploads;
 
 - (id) initSingleton;
 @end
@@ -74,6 +81,8 @@
     {
         self.dictionaryDownloadingInProgress = [[NSMutableDictionary alloc] init];
         self.arrayOfInvalidUrls = [[NSMutableArray alloc] init];
+        self.dictionaryOfUploads = [NSMutableDictionary new];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fileUploadFinished:) name:notificationFileUploadDone object:nil];
     }
     return self;
 }
@@ -200,11 +209,101 @@
                       message.visible = [NSNumber numberWithBool:YES];
                       [[HOPModelManager sharedModelManager]saveContext];
                   }
+              } progressBlock:^(int percentDone)
+             {
+                  if (percentDone%5 == 0)
+                  {
+                      NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:message.messageID, @"messageID", [NSNumber numberWithInt:percentDone], @"procent", nil];
+                      if (dict)
+                          [[NSNotificationCenter defaultCenter] postNotificationName:notificationFileUploadProgress object:dict];
+                  }
               }];
              
              
          }
      }];
+}
+
+- (void) shareImage:(UIImage*) image forConversation:(HOPConversation*) conversation
+{
+    if (image)
+    {
+//        NSData *imageData = UIImageJPEGRepresentation(image,1);
+//        if (imageData && imageData.length > 9000000)
+//        {
+//            imageData = UIImageJPEGRepresentation(image, 0.9);
+//        }
+        
+        float commpressionFactor = 0.9;
+        NSData *imageData = nil;
+        
+        do
+        {
+            imageData = UIImageJPEGRepresentation(image, commpressionFactor);
+            commpressionFactor -= 0.05;
+        }
+        while (imageData.length > 5000000);
+        if (imageData)
+        {
+            NSString* msgID = [HOPUtility getGUIDstring];
+            HOPMessage* msg = [[MessageManager sharedMessageManager] createSystemMessageForFileShareWithID:msgID size:imageData.length resolution:image.size conversation:conversation];
+            
+            if (msg)
+            {
+                [[ImageManager sharedImageManager] storeImage:image forKey:msgID];
+                
+                msg.visible = [NSNumber numberWithBool:YES];
+
+                [[HOPModelManager sharedModelManager]saveContext];
+                
+
+                FileUploader* fileUploader = [[FileUploader alloc] initWithDataToUpload:imageData fileID:msgID fileName:@"Shared Photo"];
+                if (fileUploader)
+                {
+                    [self.dictionaryOfUploads setObject:fileUploader forKey:msgID];
+                    [fileUploader upload];
+                }
+            }
+
+        }
+        //NSString* fileName = msgID;
+        
+        
+        /*PFFile *imageFile = [PFFile fileWithName:fileName data:imageData];
+        
+        PFObject *userPhoto = [PFObject objectWithClassName:@"SharedPhoto"];
+        userPhoto[@"imageName"] = @"Shared Photo";
+        userPhoto[@"imageFile"] = imageFile;
+        userPhoto[@"peerURI"] = [((HOPContact*)conversation.participants[0]) getPeerURI];
+        userPhoto[@"fileID"] = fileName;
+        [userPhoto saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
+         {
+             if (succeeded)
+             {
+                 msg.visible = [NSNumber numberWithBool:YES];
+                 [conversation sendMessage:msg];
+                 [[HOPModelManager sharedModelManager]saveContext];
+             }
+             else
+             {
+                 NSLog(@"%@", error);
+             }
+         }];*/
+    }
+}
+
+- (void) fileUploadFinished:(NSNotification*) notification
+{
+    NSDictionary* dict = notification.object;
+    if (dict.count > 0)
+    {
+        NSString* messageID = [dict objectForKey:@"messageID"];
+        if (messageID.length > 0)
+        {
+            [self.dictionaryOfUploads removeObjectForKey:messageID];
+            [[SessionManager sharedSessionManager] fileUploadFinishedForMessageID:messageID];
+        }
+    }
 }
 
 /*- (void) showFullscreenImage:(UITapGestureRecognizer*) gesture

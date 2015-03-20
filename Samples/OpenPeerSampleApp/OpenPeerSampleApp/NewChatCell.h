@@ -12,5 +12,6 @@
 @interface NewChatCell : ChatCell
 @property (weak, nonatomic) IBOutlet UIImageView *imageView2;
 @property (weak, nonatomic) IBOutlet UILabel *senderLabel;
+@property (nonatomic, weak) IBOutlet UILabel *messageDeliveryStatusLabel;
 //@property (weak, nonatomic) IBOutlet UILabel *upload_downloadLabel;
 @end

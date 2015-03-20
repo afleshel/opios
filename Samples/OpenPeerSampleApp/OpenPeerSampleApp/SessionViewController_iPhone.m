@@ -31,6 +31,7 @@
 
 #import "SessionViewController_iPhone.h"
 #import "SessionManager.h"
+#import "ImageManager.h"
 #import "ChatViewController.h"
 #import "AudioCallViewController.h"
 #import "VideoCallViewController.h"
@@ -647,7 +648,7 @@
     if (info)
     {
         UIImage *image = (UIImage *) [info valueForKey:UIImagePickerControllerOriginalImage];
-        [[SessionManager sharedSessionManager] shareImage:image forConversation:self.conversation];
+        [[ImageManager sharedImageManager] shareImage:image forConversation:self.conversation];
     }
     [self dismissViewControllerAnimated:YES completion:nil];
     

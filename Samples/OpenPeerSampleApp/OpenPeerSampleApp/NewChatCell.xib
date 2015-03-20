@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6751" systemVersion="13F1066" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
@@ -27,16 +27,26 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="e5a-jk-Gu2">
-                        <rect key="frame" x="8" y="35" width="304" height="178"/>
+                        <rect key="frame" x="8" y="35" width="304" height="161"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </imageView>
+                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Uploading ... 45%" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4au-Rj-DvB">
+                        <rect key="frame" x="164" y="200" width="148" height="13"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 <constraints>
+                    <constraint firstItem="4au-Rj-DvB" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="8jU-oG-bBm"/>
                     <constraint firstItem="U57-bG-bdp" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="IYG-TV-1Y0"/>
+                    <constraint firstItem="4au-Rj-DvB" firstAttribute="top" secondItem="e5a-jk-Gu2" secondAttribute="bottom" constant="4" id="OVl-zq-qjn"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="4au-Rj-DvB" secondAttribute="bottom" id="Oaf-A7-R7y"/>
                     <constraint firstItem="e5a-jk-Gu2" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="eyT-Tv-Z9S"/>
-                    <constraint firstItem="e5a-jk-Gu2" firstAttribute="bottom" secondItem="H2p-sc-9uM" secondAttribute="bottomMargin" id="fro-9C-Gw2"/>
+                    <constraint firstItem="4au-Rj-DvB" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="156" id="jnP-r9-0ka"/>
                     <constraint firstItem="U57-bG-bdp" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="pYr-MB-9aI"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="e5a-jk-Gu2" secondAttribute="bottom" constant="17" id="q63-xP-xNd"/>
                     <constraint firstItem="e5a-jk-Gu2" firstAttribute="top" secondItem="U57-bG-bdp" secondAttribute="bottom" constant="3" id="rTU-gN-K6b"/>
                     <constraint firstItem="U57-bG-bdp" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="ryk-UL-QE2"/>
                     <constraint firstItem="e5a-jk-Gu2" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="zFC-Ta-NcP"/>
@@ -44,9 +54,10 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="imageView2" destination="e5a-jk-Gu2" id="5CR-eB-qx6"/>
+                <outlet property="messageDeliveryStatusLabel" destination="4au-Rj-DvB" id="QDC-0W-Hbm"/>
                 <outlet property="senderLabel" destination="U57-bG-bdp" id="bcI-E9-9u4"/>
             </connections>
-            <point key="canvasLocation" x="-173" y="219"/>
+            <point key="canvasLocation" x="-173" y="217"/>
         </tableViewCell>
     </objects>
 </document>
