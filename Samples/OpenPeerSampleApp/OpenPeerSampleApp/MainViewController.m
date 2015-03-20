@@ -57,6 +57,7 @@
 #import "ActivityIndicatorViewController.h"
 
 #import "QRScannerViewController.h"
+#import "ImageViewController.h"
 
 //Private methods
 @interface MainViewController ()
@@ -763,5 +764,17 @@
             [controller.chatViewController refreshMessages];
         }
     }
+}
+
+- (void) showImage:(UITapGestureRecognizer*) gesture
+{
+    ImageViewController* imageViewController = [[ImageViewController alloc] initWithImage:((UIImageView*)gesture.view).image];
+    if (imageViewController)
+    {
+        UINavigationController* navigationController = (UINavigationController*)[[self.tabBarController viewControllers] objectAtIndex:self.tabBarController.selectedIndex];
+        if (navigationController)
+            [navigationController pushViewController:imageViewController animated:YES];
+    }
+    //UIImageView *tempImage = [[UIImageView alloc]initWithImage:((UIImageView*)gesture.view).image];
 }
 @end

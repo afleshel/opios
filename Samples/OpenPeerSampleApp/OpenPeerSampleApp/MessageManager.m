@@ -248,6 +248,8 @@ typedef enum
                     NSDictionary* imageInfo = [dictFileShareSystem objectForKey:@"imageInfo"];
                     
                     [[ImageManager sharedImageManager] downloadSharedImageForMessage:inMessage];
+                    
+                    [[[OpenPeer sharedOpenPeer] mainViewController] showSessionViewControllerForConversation:conversation replaceConversation:nil incomingCall:NO incomingMessage:YES];
                 }
             }
         }

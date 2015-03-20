@@ -604,6 +604,10 @@
 		87FF988E170EDB5D0017C627 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87FF988D170EDB5C0017C627 /* AssetsLibrary.framework */; };
 		87FF9890170EDB6D0017C627 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87FF988F170EDB6C0017C627 /* MobileCoreServices.framework */; };
 		87FF9892170EDB7D0017C627 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87FF9891170EDB7D0017C627 /* CoreImage.framework */; };
+		9401E87E1ABC74D300FC1588 /* ImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9401E87C1ABC74D200FC1588 /* ImageViewController.m */; };
+		9401E87F1ABC74D300FC1588 /* ImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9401E87C1ABC74D200FC1588 /* ImageViewController.m */; };
+		9401E8801ABC74D300FC1588 /* ImageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9401E87D1ABC74D200FC1588 /* ImageViewController.xib */; };
+		9401E8811ABC74D300FC1588 /* ImageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9401E87D1ABC74D200FC1588 /* ImageViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1195,6 +1199,9 @@
 		87FF988D170EDB5C0017C627 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		87FF988F170EDB6C0017C627 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		87FF9891170EDB7D0017C627 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
+		9401E87B1ABC74D200FC1588 /* ImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageViewController.h; sourceTree = "<group>"; };
+		9401E87C1ABC74D200FC1588 /* ImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageViewController.m; sourceTree = "<group>"; };
+		9401E87D1ABC74D200FC1588 /* ImageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImageViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1313,6 +1320,9 @@
 				87F24B5E166FF0C900A5389F /* Utility.m */,
 				52A8B4F51ABAC23600E82B55 /* ImageUploader.h */,
 				52A8B4F61ABAC23600E82B55 /* ImageUploader.m */,
+				9401E87B1ABC74D200FC1588 /* ImageViewController.h */,
+				9401E87C1ABC74D200FC1588 /* ImageViewController.m */,
+				9401E87D1ABC74D200FC1588 /* ImageViewController.xib */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -2423,6 +2433,7 @@
 				8722475F182D165A0027DA50 /* iPhone_audio_add_caller@2x.png in Resources */,
 				87E4D9FF180D3545002CA2D4 /* facebook_tag.png in Resources */,
 				8730D75D183398A5008D1D37 /* iPhone_Button-end-baritem@2x.png in Resources */,
+				9401E8801ABC74D300FC1588 /* ImageViewController.xib in Resources */,
 				87E0355019AF4ABC008A195C /* message_indicator_call_missed.png in Resources */,
 				8781C574196C86740030E113 /* table_cell_background@2x.png in Resources */,
 				8758C5F31978454800CB8099 /* iPhone_tabBar_favorites_inactive.png in Resources */,
@@ -2676,6 +2687,7 @@
 				87D4BDC918675368008C2D30 /* iPhone_loader_00026.png in Resources */,
 				8774AC6518981094006B91FA /* QRScannerViewController.xib in Resources */,
 				87D4BDCA18675368008C2D30 /* iPhone_loader_00025@2x.png in Resources */,
+				9401E8811ABC74D300FC1588 /* ImageViewController.xib in Resources */,
 				87D4BDCB18675368008C2D30 /* iPhone_tabBar_bkgd.png in Resources */,
 				87D4BDCC18675368008C2D30 /* iPhone_back_button@2x.png in Resources */,
 				87D4BDCD18675368008C2D30 /* iPhone_back_button.png in Resources */,
@@ -2717,6 +2729,7 @@
 				87E4DA05180D4E8D002CA2D4 /* SoundsManager.m in Sources */,
 				52A8B4F71ABAC23600E82B55 /* ImageUploader.m in Sources */,
 				871AA7F31941DA28003B4400 /* ActiveSessionsViewController.m in Sources */,
+				9401E87E1ABC74D300FC1588 /* ImageViewController.m in Sources */,
 				875CD7E2167A14810037396B /* SessionManager.m in Sources */,
 				8723870E19465A57002643D6 /* ActiveSessionTableViewCell.m in Sources */,
 				8730D76F1833A62A008D1D37 /* WaitingVideoViewController.m in Sources */,
@@ -2771,6 +2784,7 @@
 				87D4BCE618675368008C2D30 /* MediaEngineDelegate.m in Sources */,
 				87D4BCE718675368008C2D30 /* AppConsts.m in Sources */,
 				87D4BCE918675368008C2D30 /* CallDelegate.m in Sources */,
+				9401E87F1ABC74D300FC1588 /* ImageViewController.m in Sources */,
 				87D4BCEA18675368008C2D30 /* ImageManager.m in Sources */,
 				87D4BCEB18675368008C2D30 /* SplashViewController.m in Sources */,
 				87D4BCEC18675368008C2D30 /* ContactsViewController.m in Sources */,
@@ -2947,8 +2961,8 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = OpenPeerSampleApp/OpenPeerSampleApp.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Sergej Jovanovic (YGZ7PTJK96)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Sergej Jovanovic (YGZ7PTJK96)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/SampleWithSDK-cfapmiajcffhopakeyksjkbkpsoi/Build/Products/Debug-iphoneos",
@@ -2976,7 +2990,7 @@
 					"-lstdc++",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "8ae1ab8f-483b-4202-a0f0-dce3a68dc8d6";
+				PROVISIONING_PROFILE = "";
 				SUPPORTED_PLATFORMS = iphoneos;
 				VALID_ARCHS = "armv7 armv7s arm64";
 				WARNING_CFLAGS = (
@@ -2992,8 +3006,8 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = OpenPeerSampleApp/OpenPeerSampleApp.entitlements;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/SampleWithSDK-cfapmiajcffhopakeyksjkbkpsoi/Build/Products/Debug-iphoneos",
@@ -3021,7 +3035,7 @@
 					"-lstdc++",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "8ae1ab8f-483b-4202-a0f0-dce3a68dc8d6";
+				PROVISIONING_PROFILE = "";
 				SUPPORTED_PLATFORMS = iphoneos;
 				VALID_ARCHS = "armv7 armv7s arm64";
 				WARNING_CFLAGS = (
@@ -3078,7 +3092,7 @@
 					"-lstdc++",
 				);
 				PRODUCT_NAME = openpeersample;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "019839fd-ee47-4a76-a1a5-df337c0d3cbc";
 				SUPPORTED_PLATFORMS = iphoneos;
 				VALID_ARCHS = "armv7 armv7s arm64";
 				WARNING_CFLAGS = (
@@ -3131,7 +3145,7 @@
 					"-lstdc++",
 				);
 				PRODUCT_NAME = openpeersample;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "019839fd-ee47-4a76-a1a5-df337c0d3cbc";
 				SUPPORTED_PLATFORMS = iphoneos;
 				VALID_ARCHS = "armv7 armv7s arm64";
 				WARNING_CFLAGS = (

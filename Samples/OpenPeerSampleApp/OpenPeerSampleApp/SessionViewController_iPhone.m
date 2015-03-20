@@ -634,6 +634,12 @@
     imagePicker.delegate = self;
     
     imagePicker.sourceType = fromlibrary ? UIImagePickerControllerSourceTypeSavedPhotosAlbum : UIImagePickerControllerSourceTypeCamera;
+    if (!fromlibrary)
+    {
+        imagePicker.allowsEditing = YES;
+        imagePicker.showsCameraControls = YES;
+    }
+    
 //    if((UIButton *) sender == choosePhotoBtn) {
 //        imagePicker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
 //    } else {
@@ -647,7 +653,9 @@
 {
     if (info)
     {
-        UIImage *image = (UIImage *) [info valueForKey:UIImagePickerControllerOriginalImage];
+        UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
+        if (!image)
+            image = (UIImage *) [info valueForKey:UIImagePickerControllerOriginalImage];
         [[ImageManager sharedImageManager] shareImage:image forConversation:self.conversation];
     }
     [self dismissViewControllerAnimated:YES completion:nil];

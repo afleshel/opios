@@ -1,16 +1,41 @@
-//
-//  NewChatCell.m
-//  OpenPeerSampleApp
-//
-//  Created by Sergej on 3/10/15.
-//  Copyright (c) 2015 Hookflash. All rights reserved.
-//
+/*
+ 
+ Copyright (c) 2012-2015, Hookflash Inc.
+ All rights reserved.
+ 
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions are met:
+ 
+ 1. Redistributions of source code must retain the above copyright notice, this
+ list of conditions and the following disclaimer.
+ 2. Redistributions in binary form must reproduce the above copyright notice,
+ this list of conditions and the following disclaimer in the documentation
+ and/or other materials provided with the distribution.
+ 
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 
+ The views and conclusions contained in the software and documentation are those
+ of the authors and should not be interpreted as representing official policies,
+ either expressed or implied, of the FreeBSD Project.
+ 
+ */
 
 #import "NewChatCell.h"
-#import <OpenPeerSDK/HOPMessage.h>
+#import <OpenPeerSDK/HOPMessage+External.h>
 #import <OpenPeerSDK/HOPContact+External.h>
 #import "ImageManager.h"
 #import "Utility.h"
+#import "OpenPeer.h"
+#import "MainViewController.h"
 
 @implementation NewChatCell
 
@@ -24,7 +49,7 @@
     // [self.imageView setTranslatesAutoresizingMaskIntoConstraints:NO];
     
     
-    //[self.imageView2 addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:[ImageManager sharedImageManager] action:@selector(showFullscreenImage:)]];
+    [self.imageView2 addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:[[OpenPeer sharedOpenPeer] mainViewController] action:@selector(showImage:)]];
     
     //[self.imageView2 addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:[ImageManager sharedImageManager] action:@selector(showFullscreenImage:)]];
 }
@@ -89,6 +114,11 @@
         [self.senderLabel setAttributedText:string];
         
         self.senderLabel.textAlignment = [inMessage.sender isSelf] ? NSTextAlignmentRight : NSTextAlignmentLeft;
+        
+        if(self.message.showStatus.boolValue && self.message.outgoingMessageStatus >= HOPConversationThreadMessageDeliveryStateSent)
+            self.messageDeliveryStatusLabel.hidden = NO;
+        else
+            self.messageDeliveryStatusLabel.hidden = YES;
     }
 }
 
@@ -103,7 +133,7 @@
             NSNumber* procent = [dict objectForKey:@"procent"];
             if (procent)
             {
-                NSString* progressMessage = /*![self.message.outMessageStatus isEqualToString:@"Delivered"] && */[self.message.sender isSelf] ? [NSString stringWithFormat:@"File upload in progress ... %d", procent.intValue] : [NSString stringWithFormat:@"Download in progress ... %d", procent.intValue];
+                NSString* progressMessage = /*![self.message.outMessageStatus isEqualToString:@"Delivered"] && */[self.message.sender isSelf] ? [NSString stringWithFormat:@"File upload in progress ... %d%", procent.intValue] : [NSString stringWithFormat:@"Download in progress ... %d%", procent.intValue];
                 if (progressMessage.length > 0)
                 {
                     if (procent.intValue != 100)

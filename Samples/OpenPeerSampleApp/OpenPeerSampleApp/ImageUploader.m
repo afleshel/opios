@@ -1,10 +1,33 @@
-//
-//  ImageUploader.m
-//  OpenPeerSampleApp
-//
-//  Created by Sergej Jovanovic on 19/03/15.
-//  Copyright (c) 2015 Hookflash. All rights reserved.
-//
+/*
+ 
+ Copyright (c) 2012-2015, Hookflash Inc.
+ All rights reserved.
+ 
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions are met:
+ 
+ 1. Redistributions of source code must retain the above copyright notice, this
+ list of conditions and the following disclaimer.
+ 2. Redistributions in binary form must reproduce the above copyright notice,
+ this list of conditions and the following disclaimer in the documentation
+ and/or other materials provided with the distribution.
+ 
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 
+ The views and conclusions contained in the software and documentation are those
+ of the authors and should not be interpreted as representing official policies,
+ either expressed or implied, of the FreeBSD Project.
+ 
+ */
 
 #import "ImageUploader.h"
 #import <Parse/Parse.h>
@@ -57,75 +80,6 @@
     return self;
 }
 
-/*- (void)upload
-{
-    if (self.data && self.fileID.length > 0)
-    {
-        float commpressionFactor = 1.0;
-        NSData *imageData = nil;
-        if (imageData)
-        {
-            do
-            {
-                imageData = UIImageJPEGRepresentation(self.image, commpressionFactor);
-                commpressionFactor -= 0.05;
-            }
-            while (imageData.length > 5000000);
-        }
-
-        if (imageData)
-        {
-            PFFile *imageFile = [PFFile fileWithName:self.imageID data:imageData];
-        
-            if (imageFile)
-            {
-                // Request a background execution task to allow us to finish uploading the photo even if the app is backgrounded
-                self.uploadBackgroundTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^
-               {
-                   [[UIApplication sharedApplication] endBackgroundTask:self.uploadBackgroundTaskId];
-               }];
-                
-                [imageFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
-                {
-                    if (succeeded)
-                    {
-                        OPLog(HOPLoggerSeverityInformational, HOPLoggerLevelDebug, @"File upload has succeeded");
-                    
-                        PFObject *userPhoto = [PFObject objectWithClassName:@"SharedPhoto"];
-                    
-                        if (userPhoto)
-                        {
-                            userPhoto[@"imageName"] = self.imageName.length > 0 ? self.imageName : @"Shared Photo";
-                            userPhoto[@"imageFile"] = imageFile;
-                            userPhoto[@"fileID"] = self.imageID;
-                        
-                            [userPhoto saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
-                            {
-                                 if (succeeded)
-                                 {
-                                     //                             msg.visible = [NSNumber numberWithBool:YES];
-                                     //                             [conversation sendMessage:msg];
-                                     //                             [[HOPModelManager sharedModelManager]saveContext];
-                                 }
-                         } ];
-                        }
-                    }
-                    else
-                    {
-                        OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"File upload failed: %@", error);//NSLog(@"%@", error);
-                    }
-                    
-                    [[UIApplication sharedApplication] endBackgroundTask:self.uploadBackgroundTaskId];
-                } progressBlock:^(int percentDone)
-                {
-                    
-                }];
-            }
-
-        }
-    }
-}
- */
 - (void)upload
 {
     if (self.data && self.fileID.length > 0)

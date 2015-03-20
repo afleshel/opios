@@ -103,4 +103,6 @@ typedef  enum
 - (void) showSplashScreen;
 - (void) waitForUserGesture;
 - (void) changeKeyForViewController:(NSString*) oldKey newKey:(NSString*) newKey;
+
+- (void) showImage:(UITapGestureRecognizer*) gesture;
 @end
