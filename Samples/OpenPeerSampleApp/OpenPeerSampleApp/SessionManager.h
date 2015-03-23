@@ -81,4 +81,6 @@
 - (NSString*) getNavigationTitleForConversation:(HOPConversation*) conversation;
 
 - (void) fileUploadFinishedForMessageID:(NSString*) messageID;
+
+- (void) fileDownloadFinishedForMessageID:(NSString*) messageID;
 @end

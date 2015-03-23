@@ -85,7 +85,7 @@
     self = [super init];
     if (self)
     {
-        //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fileUploadFinished:) name:notificationFileUploadDone object:nil];
+        //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fileUploadFinished:) notificationFileUploaded object:nil];
         //self.sessionsDictionary = [[NSMutableDictionary alloc] init];
 //        self.conversationsDictionaryForContacts = [[NSMutableDictionary alloc] init];
     }
@@ -534,9 +534,23 @@
         {
             HOPConversation* conversation = [messageToSend.session getConversation];
             if (conversation)
+            {
                 [conversation sendMessage:messageToSend];
+            }
         }
     }
 }
 
+- (void) fileDownloadFinishedForMessageID:(NSString*) messageID
+{
+    if (messageID.length > 0)
+    {
+        HOPMessage* message = [[HOPModelManager sharedModelManager] getMessageRecordByID:messageID];
+        if (message)
+        {
+            message.visible = [NSNumber numberWithBool:YES];
+            [[HOPModelManager sharedModelManager] saveContext];
+        }
+    }
+}
 @end

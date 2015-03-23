@@ -29,39 +29,21 @@
  
  */
 
-#import "ImageUploader.h"
+#import "FileUploader.h"
 #import <Parse/Parse.h>
 
 @interface FileUploader ()
 
-//@property  (nonatomic, strong) UIImage* image;
-//@property  (nonatomic, copy) NSString* imageID;
-//@property  (nonatomic, copy) NSString* imageName;
-
 @property  (nonatomic, strong) NSData* data;
 @property  (nonatomic, copy) NSString* fileID;
 @property  (nonatomic, copy) NSString* fileName;
+@property (assign) int percentPrvious;
+
 @property (nonatomic, assign) UIBackgroundTaskIdentifier uploadBackgroundTaskId;
 @end
 
 @implementation FileUploader
 
-/*- (id) initWithImageForUpload:(UIImage*) imageForUpload imageID:(NSString*) imageID imageName:(NSString*) imageName
-{
-    self = [super init];
-    
-    if (self)
-    {
-        if (imageForUpload && [imageForUpload isKindOfClass:[UIImage class]])
-        {
-            self.image = imageForUpload;
-        }
-        self.imageID = imageID;
-        self.imageName = imageName;
-        self.uploadBackgroundTaskId = UIBackgroundTaskInvalid;
-    }
-    return self;
-}*/
 
 - (id) initWithDataToUpload:(NSData*) dataToUpload fileID:(NSString*) fileID fileName:(NSString*) fileName
 {
@@ -73,6 +55,7 @@
         {
             self.data = dataToUpload;
         }
+        self.percentPrvious = 0;
         self.fileID = fileID;
         self.fileName = fileName;
         self.uploadBackgroundTaskId = UIBackgroundTaskInvalid;
@@ -116,24 +99,32 @@
                                   {
                                       NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:self.fileID, @"messageID", nil];
                                       if (dict)
-                                          [[NSNotificationCenter defaultCenter] postNotificationName:notificationFileUploadDone object:dict];
+                                          [[NSNotificationCenter defaultCenter] postNotificationName:notificationFileUploaded object:dict];
                                   }
+                                  else
+                                  {
+                                      OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"Sending info about uploaded file has failed with error: %@", error.description.length > 0 ? error.description : @"Unknown error");                                  }
+                                  
+                                  [[UIApplication sharedApplication] endBackgroundTask:self.uploadBackgroundTaskId];
                               } ];
                          }
                      }
                      else
                      {
-                         OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"File upload failed: %@", error);//NSLog(@"%@", error);
+                         OPLog(HOPLoggerSeverityWarning, HOPLoggerLevelDebug, @"File upload failed: %@", error);
+                         [[UIApplication sharedApplication] endBackgroundTask:self.uploadBackgroundTaskId];
                      }
                      
-                     [[UIApplication sharedApplication] endBackgroundTask:self.uploadBackgroundTaskId];
                  } progressBlock:^(int percentDone)
                  {
-                     if (percentDone%5 == 0)
+
+                     if (percentDone%5 == 0 && percentDone > self.percentPrvious)
                      {
                          NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:self.fileID, @"messageID", [NSNumber numberWithInt:percentDone], @"procent", nil];
                          if (dict)
                              [[NSNotificationCenter defaultCenter] postNotificationName:notificationFileUploadProgress object:dict];
+                         
+                         self.percentPrvious = percentDone;
                      }
                  }];
             }

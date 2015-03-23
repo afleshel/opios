@@ -31,7 +31,7 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </imageView>
                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4au-Rj-DvB">
-                        <rect key="frame" x="164" y="200" width="148" height="13"/>
+                        <rect key="frame" x="132" y="200" width="180" height="13"/>
                         <fontDescription key="fontDescription" type="system" pointSize="11"/>
                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
@@ -44,7 +44,7 @@
                     <constraint firstItem="4au-Rj-DvB" firstAttribute="top" secondItem="e5a-jk-Gu2" secondAttribute="bottom" constant="4" id="OVl-zq-qjn"/>
                     <constraint firstAttribute="bottomMargin" secondItem="4au-Rj-DvB" secondAttribute="bottom" id="Oaf-A7-R7y"/>
                     <constraint firstItem="e5a-jk-Gu2" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="eyT-Tv-Z9S"/>
-                    <constraint firstItem="4au-Rj-DvB" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="156" id="jnP-r9-0ka"/>
+                    <constraint firstItem="4au-Rj-DvB" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="124" id="jnP-r9-0ka"/>
                     <constraint firstItem="U57-bG-bdp" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="pYr-MB-9aI"/>
                     <constraint firstAttribute="bottomMargin" secondItem="e5a-jk-Gu2" secondAttribute="bottom" constant="17" id="q63-xP-xNd"/>
                     <constraint firstItem="e5a-jk-Gu2" firstAttribute="top" secondItem="U57-bG-bdp" secondAttribute="bottom" constant="3" id="rTU-gN-K6b"/>
@@ -57,7 +57,7 @@
                 <outlet property="messageDeliveryStatusLabel" destination="4au-Rj-DvB" id="QDC-0W-Hbm"/>
                 <outlet property="senderLabel" destination="U57-bG-bdp" id="bcI-E9-9u4"/>
             </connections>
-            <point key="canvasLocation" x="-173" y="217"/>
+            <point key="canvasLocation" x="-173" y="216"/>
         </tableViewCell>
     </objects>
 </document>

@@ -133,7 +133,7 @@
             NSNumber* procent = [dict objectForKey:@"procent"];
             if (procent)
             {
-                NSString* progressMessage = /*![self.message.outMessageStatus isEqualToString:@"Delivered"] && */[self.message.sender isSelf] ? [NSString stringWithFormat:@"File upload in progress ... %d%", procent.intValue] : [NSString stringWithFormat:@"Download in progress ... %d%", procent.intValue];
+                NSString* progressMessage = /*![self.message.outMessageStatus isEqualToString:@"Delivered"] && */[self.message.sender isSelf] ? [NSString stringWithFormat:@"File upload in progress ... %d%%", procent.intValue] : [NSString stringWithFormat:@"Download in progress ... %d%%", procent.intValue];
                 if (progressMessage.length > 0)
                 {
                     if (procent.intValue != 100)

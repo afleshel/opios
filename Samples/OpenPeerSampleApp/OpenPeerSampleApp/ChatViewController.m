@@ -534,8 +534,12 @@
                     msgCell = [tableView dequeueReusableCellWithIdentifier:@"MessageCellSharedFileIdentifier"];
                     if (msgCell)
                     {
-                        msgCell.imageView.contentMode = UIViewContentModeScaleAspectFit;
+                        ((NewChatCell*)msgCell).imageView2.contentMode = UIViewContentModeScaleAspectFit;
                     }
+                }
+                else
+                {
+                    ((NewChatCell*)msgCell).imageView2.image = nil;
                 }
                 break;
                 

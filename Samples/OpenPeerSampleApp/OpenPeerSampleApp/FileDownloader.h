@@ -29,10 +29,10 @@
  
  */
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
-@interface ImageViewController : UIViewController<UIScrollViewDelegate>
+@interface FileDownloader : NSObject
 
-- (id)initWithImage:(UIImage*) image;
-
+- (id) initWithFileID:(NSString*) fileID;
+- (void) downloadFile;
 @end

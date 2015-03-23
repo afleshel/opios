@@ -35,7 +35,8 @@
 #import "MainViewController.h"
 #import "SessionManager.h"
 #import  "MessageManager.h"
-#import "ImageUploader.h"
+#import "FileUploader.h"
+#import "FileDownloader.h"
 #import <OpenpeerSDK/HOPAvatar+External.h>
 #import <OpenpeerSDK/HOPIdentity+External.h>
 #import <OpenpeerSDK/HOPMessage.h>
@@ -59,8 +60,13 @@
 @property (nonatomic,strong) NSMutableArray *arrayOfInvalidUrls;
 @property (nonatomic, assign) UIBackgroundTaskIdentifier fileUploadBackgroundTaskId;
 @property (nonatomic,strong) NSMutableDictionary *dictionaryOfUploads;
+@property (nonatomic,strong) NSMutableDictionary *dictionaryOfDownloads;
 
 - (id) initSingleton;
+
+- (void) onFileUploaded:(NSNotification*) notification;
+- (void) onFileDownloaded:(NSNotification*) notification;
+
 @end
 
 @implementation ImageManager
@@ -86,12 +92,14 @@
         self.dictionaryDownloadingInProgress = [[NSMutableDictionary alloc] init];
         self.arrayOfInvalidUrls = [[NSMutableArray alloc] init];
         self.dictionaryOfUploads = [NSMutableDictionary new];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fileUploadFinished:) name:notificationFileUploadDone object:nil];
+        self.dictionaryOfDownloads = [NSMutableDictionary new];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onFileUploaded:) name:notificationFileUploaded object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onFileDownloaded:) name:notificationFileDownloaded object:nil];
     }
     return self;
 }
 
-- (void) donwloadImageForAvatar:(HOPAvatar*) inAvatar tableView:(UITableView*) inTableView indexPath:(NSIndexPath*) inIndexPath
+/*- (void) donwloadImageForAvatar:(HOPAvatar*) inAvatar tableView:(UITableView*) inTableView indexPath:(NSIndexPath*) inIndexPath
 {
     //If image is already tried to be downloaded from this url and its failed don't try again
     if ([self.arrayOfInvalidUrls containsObject:inAvatar.url])
@@ -138,7 +146,7 @@
         [iconDownloader startDownloadForURL:avatar.url];
     }
 }
-
+*/
 - (UIImage*) getAvatarImageForIdentity:(HOPIdentity*) identity
 {
     UIImage* ret = nil;
@@ -147,7 +155,7 @@
         HOPAvatar* avatar = [identity getAvatarForWidth:[NSNumber numberWithFloat:AVATAR_WIDTH] height:[NSNumber numberWithFloat:AVATAR_HEIGHT]];
         if (avatar)
         {
-            ret = [avatar getImage];
+            ret = [self imageForKey:avatar.url];//[avatar getImage];
         }
     }
     return ret;
@@ -172,23 +180,6 @@
     return ret;
 }
 
-//- (UIImage*) thumbnailForKey:(NSString*) key
-//{
-//    UIImage *resizedImage = [self resizedImageWithContentMode:UIViewContentModeScaleAspectFill
-//                                                       bounds:CGSizeMake(thumbnailSize, thumbnailSize)
-//                                         interpolationQuality:quality];
-//    
-//    // Crop out any part of the image that's larger than the thumbnail size
-//    // The cropped rect must be centered on the resized image
-//    // Round the origin points so that the size isn't altered when CGRectIntegral is later invoked
-//    CGRect cropRect = CGRectMake(round((resizedImage.size.width - 100) / 2),
-//                                 round((resizedImage.size.height - 100) / 2),
-//                                 thumbnailSize,
-//                                 thumbnailSize);
-//    UIImage *croppedImage = [resizedImage croppedImage:cropRect];
-//    
-//    return croppedImage;
-//}
 
 - (void) loadImageURL:(NSString*) url toImageView:(UIImageView*) imageView
 {
@@ -198,52 +189,21 @@
 
 - (void) downloadSharedImageForMessage:(HOPMessage*) message
 {
-    PFQuery *query = [PFQuery queryWithClassName:@"SharedPhoto"];
-    NSString* fileName = message.messageID;//[NSString stringWithFormat:@"%@.jpg",message.messageID];
-    [query whereKey:@"fileID" equalTo:fileName];
-    [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error)
-     {
-         if (!error) {
-             PFFile *file = [object objectForKey:@"imageFile"];
-             // file has not been downloaded yet, we just have a handle on this file
-             
-             [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
-              {
-                  if (!error)
-                  {
-                      UIImage* image = [UIImage imageWithData:data];
-                      if (image)
-                      {
-                          [[ImageManager sharedImageManager] storeImage:image forKey:message.messageID];
-                          message.visible = [NSNumber numberWithBool:YES];
-                          [[HOPModelManager sharedModelManager]saveContext];
-                      }
-                  }
-              } progressBlock:^(int percentDone)
-             {
-                  if (percentDone%5 == 0)
-                  {
-                      NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:message.messageID, @"messageID", [NSNumber numberWithInt:percentDone], @"procent", nil];
-                      if (dict)
-                          [[NSNotificationCenter defaultCenter] postNotificationName:notificationFileUploadProgress object:dict];
-                  }
-              }];
-             
-             
-         }
-     }];
+    if (![self.dictionaryOfDownloads objectForKey:message.messageID])
+    {
+        FileDownloader* fileDownloader = [[FileDownloader alloc] initWithFileID:message.messageID];
+        if (fileDownloader)
+        {
+            [self.dictionaryOfDownloads setObject:fileDownloader forKey:message.messageID];
+            [fileDownloader downloadFile];
+        }
+    }
 }
 
 - (void) shareImage:(UIImage*) image forConversation:(HOPConversation*) conversation
 {
     if (image)
     {
-//        NSData *imageData = UIImageJPEGRepresentation(image,1);
-//        if (imageData && imageData.length > 9000000)
-//        {
-//            imageData = UIImageJPEGRepresentation(image, 0.9);
-//        }
-        
         float commpressionFactor = 0.9;
         NSData *imageData = nil;
         
@@ -276,33 +236,10 @@
             }
 
         }
-        //NSString* fileName = msgID;
-        
-        
-        /*PFFile *imageFile = [PFFile fileWithName:fileName data:imageData];
-        
-        PFObject *userPhoto = [PFObject objectWithClassName:@"SharedPhoto"];
-        userPhoto[@"imageName"] = @"Shared Photo";
-        userPhoto[@"imageFile"] = imageFile;
-        userPhoto[@"peerURI"] = [((HOPContact*)conversation.participants[0]) getPeerURI];
-        userPhoto[@"fileID"] = fileName;
-        [userPhoto saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
-         {
-             if (succeeded)
-             {
-                 msg.visible = [NSNumber numberWithBool:YES];
-                 [conversation sendMessage:msg];
-                 [[HOPModelManager sharedModelManager]saveContext];
-             }
-             else
-             {
-                 NSLog(@"%@", error);
-             }
-         }];*/
     }
 }
 
-- (void) fileUploadFinished:(NSNotification*) notification
+- (void) onFileUploaded:(NSNotification*) notification
 {
     NSDictionary* dict = notification.object;
     if (dict.count > 0)
@@ -316,27 +253,21 @@
     }
 }
 
-/*- (void) showFullscreenImage:(UITapGestureRecognizer*) gesture
+- (void) onFileDownloaded:(NSNotification*) notification
 {
-    UIImageView *tempImage = [[UIImageView alloc]initWithImage:((UIImageView*)gesture.view).image];
-    self.imageView = tempImage;
-    
-    self.fullScreenView = [[UIScrollView alloc] initWithFrame:[[OpenPeer sharedOpenPeer] mainViewController].view.bounds];
-    self.fullScreenView.contentSize = CGSizeMake(self.imageView.frame.size.width , self.imageView.frame.size.height);
-    self.fullScreenView.maximumZoomScale = 1;
-    self.fullScreenView.minimumZoomScale = .37;
-    self.fullScreenView.clipsToBounds = YES;
-    self.fullScreenView.delegate = self;
-    [self.fullScreenView addSubview:self.imageView];
-    self.fullScreenView.zoomScale = .37;
-    
-    [[[OpenPeer sharedOpenPeer] mainViewController].view addSubview:self.fullScreenView];
+    NSDictionary* dict = notification.object;
+    if (dict.count > 0)
+    {
+        NSString* messageID = [dict objectForKey:@"messageID"];
+        UIImage* image = [dict objectForKey:@"image"];
+        if (messageID.length > 0 && image)
+        {
+            [[ImageManager sharedImageManager] storeImage:image forKey:messageID];
+            [self.dictionaryOfUploads removeObjectForKey:messageID];
+            [[SessionManager sharedSessionManager] fileDownloadFinishedForMessageID:messageID];
+        }
+    }
 }
-
--(UIView *) viewForZoomingInScrollView:(UIScrollView *)inScroll
-{
-    return self.imageView;
-}*/
 @end
 
 @implementation UIImage (FixOrient)

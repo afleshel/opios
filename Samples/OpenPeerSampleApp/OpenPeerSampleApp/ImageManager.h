@@ -44,7 +44,7 @@
 
 - (id) init __attribute__((unavailable("ImageManager is singleton class.")));
 
-- (void) donwloadImageForAvatar:(HOPAvatar*) avatar tableView:(UITableView*) inTableView indexPath:(NSIndexPath*) inIndexPath;
+//- (void) donwloadImageForAvatar:(HOPAvatar*) avatar tableView:(UITableView*) inTableView indexPath:(NSIndexPath*) inIndexPath;
 
 - (UIImage*) getAvatarImageForIdentity:(HOPIdentity*) identity;
 
@@ -56,6 +56,4 @@
 - (UIImage*) imageForKey:(NSString*) key;
 - (UIImage*) thumbnailForKey:(NSString*) key;
 - (void) loadImageURL:(NSString*) url toImageView:(UIImageView*) imageView;
-
-- (void) showFullscreenImage:(UIImage*) image;
 @end

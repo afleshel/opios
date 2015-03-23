@@ -139,7 +139,8 @@ NSString * const notificationCrashReportSent = @"notificationCrashReportSent";
 NSString * const notificationComposingStatusChanged = @"notificationComposingStatusChanged";
 NSString * const notificationMessagesRead = @"notificationMessagesRead";
 NSString * const notificationFileUploadProgress = @"notificationFileUploadProgress";
-NSString * const notificationFileUploadDone = @"notificationFileUploadDone";
+NSString * const notificationFileUploaded = @"notificationFileUploaded";
+NSString * const notificationFileDownloaded = @"notificationFileDownloaded";
 
 NSString * const notificationTypeApple = @"apns";
 NSString * const notificationTypeAndroid = @"apid";
